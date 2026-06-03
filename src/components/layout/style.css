@@ -26,8 +26,10 @@
   font-weight: 500;
 }
 
-.link:hover {
-  border-radius: 5px;
-  background-color: #2196f3;
-  color: white;
+@media (hover: hover) and (pointer: fine) {
+  .link:hover {
+    border-radius: 5px;
+    background-color: #2196f3;
+    color: white;
+  }
 }

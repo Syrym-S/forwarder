@@ -39,15 +39,16 @@ const SideBar = ({ openMenu, setOpenMenu }) => {
         height: "100vh",
         width: {
           xs: openMenu ? "100%" : "0",
-          sm: "30%",
-          md: "20%",
+          sm: "20vw",
         },
         display: {
           xs: openMenu ? "block" : "none",
           sm: "block",
         },
-        position: "sticky",
-        top: 0,
+        position: {
+          xs: "fixed",
+        },
+        top: "10vh",
         left: 0,
         boxShadow: 3,
         bgcolor: "#fbfafa",
@@ -63,7 +64,7 @@ const SideBar = ({ openMenu, setOpenMenu }) => {
             <Typography
               component="p"
               sx={{
-                color: "#8b8a8a",
+                color: "color.slate",
                 padding: "3px 15px",
                 fontWeight: "light",
               }}

@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import axios from "axios";
 import { getLeads } from "./api";
+import { mockLeads } from "../../shared/const/mock-data";
 
 export const useLeadsStore = create((set) => ({
   leads: [],
@@ -19,6 +20,7 @@ export const useLeadsStore = create((set) => ({
       });
     } catch (e) {
       set({
+        leads: mockLeads,
         error: e.message,
         isLoading: false,
       });

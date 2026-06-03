@@ -17,7 +17,7 @@ const AppRouter = () => {
       element: <Dashboard />,
     },
     {
-      path: "/lead-item",
+      path: "/lead-item/:id",
       element: <LeadItem />,
     },
     {

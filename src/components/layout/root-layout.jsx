@@ -1,9 +1,10 @@
 import { Alert, AlertTitle, Box, Breadcrumbs, Typography } from "@mui/material";
 import React from "react";
+import Skeleton from "@mui/material/Skeleton";
 import { useLocation } from "react-router-dom";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 
-const RootLayout = ({ data = null, children, ...props }) => {
+const RootLayout = ({ data = null, isLoading, children, ...props }) => {
   const location = useLocation();
 
   if (!data) {
@@ -30,7 +31,19 @@ const RootLayout = ({ data = null, children, ...props }) => {
   }
 
   return (
-    <Box {...props}>
+    <Box
+      sx={{
+        width: "100%",
+        border: "1px solid black",
+        padding: "30px",
+        zIndex: 0,
+        paddingLeft: {
+          sm: "22vw",
+          md: "22vw",
+        },
+      }}
+      {...props}
+    >
       {/* <Typography
         sx={{
           fontSize: "15px",
