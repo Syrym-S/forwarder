@@ -12,6 +12,7 @@ const LeadsTable = (leads) => {
     <Paper sx={{ height: 400, my: "10px" }}>
       <DataGrid
         rows={leads.leads}
+        getRowId={(row) => row.id}
         columns={columns}
         initialState={{ pagination: { paginationModel } }}
         pageSizeOptions={[5, 10]}
