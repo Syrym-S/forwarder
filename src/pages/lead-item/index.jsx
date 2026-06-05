@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import RootLayout from "../../components/layout/root-layout";
 import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 import TripOriginIcon from "@mui/icons-material/TripOrigin";
@@ -10,6 +10,7 @@ import BusinessOutlinedIcon from "@mui/icons-material/BusinessOutlined";
 import { useParams } from "react-router-dom";
 import { Box, Chip, Container, Paper, Stack, Typography } from "@mui/material";
 import { mockLeads } from "../../shared/const/mock-data";
+import { useLeadsStore } from "../../app/store/leads-store";
 
 const Section = ({ icon, title, children }) => (
   <Paper
@@ -84,9 +85,14 @@ const InfoField = ({ label, value, accent = false }) => (
 
 const LeadItem = () => {
   const { id } = useParams();
-  const currentLead = mockLeads.find((lead) => lead.id === id);
+  const currentLead = useLeadsStore((state) => state.currentLead);
+  const getLeadItem = useLeadsStore((state) => state.getLeadItem);
 
-  console.log(currentLead);
+  useEffect(() => {
+    getLeadItem(id);
+  }, [id]);
+
+  if (!currentLead) return <>...Загрузка</>;
 
   return (
     <RootLayout data={currentLead}>
