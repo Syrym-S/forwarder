@@ -5,13 +5,15 @@ import { Container } from "@mui/material";
 
 const Dashboard = () => {
   return (
-    <Container
-      sx={{
-        padding: "30px",
-      }}
-    >
-      <Map />
-    </Container>
+    <RootLayout withoutDataCheck>
+      <Container
+        sx={{
+          padding: "30px",
+        }}
+      >
+        <Map />
+      </Container>
+    </RootLayout>
   );
 };
 

@@ -14,7 +14,6 @@ const Header = ({ openMenu, setOpenMenu }) => {
 
   const handleOpenProfile = () => {
     setOpenProfile(true);
-    navigate("/profile");
   };
   const handleCloseProfile = () => {
     setOpenProfile(false);
@@ -65,7 +64,6 @@ const Header = ({ openMenu, setOpenMenu }) => {
           }}
           onClick={handleOpenProfile}
         />
-        <></>
         <Profile open={openProfile} handleCloseProfile={handleCloseProfile} />
       </Box>
     </AppBar>

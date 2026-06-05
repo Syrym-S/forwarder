@@ -4,8 +4,10 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import LogoutModal from "./logout-modal";
 import ClickAwayListener from "@mui/material/ClickAwayListener";
 import { useState } from "react";
-import { Fade, IconButton, Typography } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { Fade, IconButton, Stack, Typography } from "@mui/material";
+import { NavLink, useNavigate } from "react-router-dom";
+import { Person2Rounded } from "@mui/icons-material";
+import CustomNavLink from "../../shared/ui/custom-nav-link";
 
 const Profile = ({ open, handleCloseProfile }) => {
   const [openModal, setOpenModal] = useState(false);
@@ -55,16 +57,29 @@ const Profile = ({ open, handleCloseProfile }) => {
             </IconButton>
           </Box>
 
-          <Box
+          <Stack
             sx={{
+              height: "100%",
               display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              color: "black",
+              paddingTop: "10px",
             }}
           >
-            USER INFO
-          </Box>
+            <Typography
+              sx={{
+                display: "flex",
+                gap: "10px",
+              }}
+            >
+              <Person2Rounded />
+              {/* <NavLink to={"/profile"}>Profile</NavLink>\ */}
+              <CustomNavLink
+                path={"/profile"}
+                label="Profile"
+                color="black"
+                variant="contained"
+              />
+            </Typography>
+          </Stack>
 
           <Box
             sx={{
@@ -84,7 +99,11 @@ const Profile = ({ open, handleCloseProfile }) => {
             </Typography>
             <LogoutIcon color="error" />
           </Box>
-          <LogoutModal open={openModal} handleOpenModal={handleOpenModal} />
+          <LogoutModal
+            open={openModal}
+            handleOpenModal={handleOpenModal}
+            handleCloseProfile={handleCloseProfile}
+          />
         </Box>
       </Fade>
     </Box>

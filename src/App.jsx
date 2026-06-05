@@ -10,7 +10,7 @@ function App() {
   const [openMenu, setOpenMenu] = useState(false);
 
   return (
-    <BrowserRouter>
+    <BrowserRouter basename="/forwarder">
       <Header openMenu={openMenu} setOpenMenu={setOpenMenu} />
 
       <Box style={{ display: "flex", width: "100%" }}>

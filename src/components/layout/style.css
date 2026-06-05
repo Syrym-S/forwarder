@@ -33,3 +33,17 @@
     color: white;
   }
 }
+
+.custom-link {
+  color: black;
+  transition: 0.2s;
+  display: block;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .custom-link:hover {
+    color: #2196f3;
+  }
+}

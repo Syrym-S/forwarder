@@ -4,15 +4,25 @@ import Skeleton from "@mui/material/Skeleton";
 import { useLocation } from "react-router-dom";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 
-const RootLayout = ({ data = null, isLoading, children, ...props }) => {
+const RootLayout = ({
+  data = null,
+  isLoading,
+  withoutDataCheck = false,
+  children,
+  ...props
+}) => {
   const location = useLocation();
 
-  if (!data) {
+  if (!data && !withoutDataCheck) {
     return (
       <Box
         sx={{
           padding: "30px",
           zIndex: 0,
+          paddingLeft: {
+            sm: "22vw",
+            md: "22vw",
+          },
         }}
       >
         <Alert

@@ -4,8 +4,14 @@ import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
 import DialogActions from "@mui/material/DialogActions";
 import Button from "@mui/material/Button";
+import { NavLink, useNavigation } from "react-router-dom";
 
-const LogoutModal = ({ open, handleOpenModal }) => {
+const LogoutModal = ({ open, handleOpenModal, handleCloseProfile }) => {
+  const handleLogout = () => {
+    handleOpenModal();
+    handleCloseProfile();
+  };
+
   return (
     <Dialog open={open}>
       <DialogTitle>Вы уверены, что хотите выйти?</DialogTitle>
@@ -22,10 +28,19 @@ const LogoutModal = ({ open, handleOpenModal }) => {
           }}
           variant="contained"
         >
-          Выйти
+          <NavLink
+            style={{
+              textDecoration: "none",
+              color: "white",
+            }}
+            onClick={handleLogout}
+            to={"/auth"}
+          >
+            Выйти
+          </NavLink>
         </Button>
         <Button
-          onClick={handleOpenModal}
+          onClick={handleLogout}
           sx={{
             fontSize: "1rem",
           }}
