@@ -1,7 +1,7 @@
 import React from "react";
 import RootLayout from "../../components/layout/root-layout";
 import Map from "../../components/dashboard/map";
-import { Container } from "@mui/material";
+import { Container, Switch } from "@mui/material";
 
 const Dashboard = () => {
   return (
@@ -12,6 +12,7 @@ const Dashboard = () => {
         }}
       >
         <Map />
+        <Switch />
       </Container>
     </RootLayout>
   );

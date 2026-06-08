@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import Pagination from "@mui/material/Pagination";
 import RootLayout from "../../components/layout/root-layout";
 import axios from "axios";
 import LeadCard from "../../components/leads/lead-card";
@@ -19,11 +20,27 @@ import { LeadCardSkeleton } from "../../shared/ui/lead-card-skeleton";
 import LeadsTable from "../../components/leads/leads-table";
 import { VIEWS } from "../../shared/const/leads";
 import AddLeadForm from "../../features/leads/add-lead-form";
+import { useSearchParams } from "react-router-dom";
 
 const ActiveLeads = () => {
   const [openForm, setOpenForm] = useState(false);
-  const [view, setView] = useState(VIEWS.table);
   const leads = useLeadsStore((state) => state.leads);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const page = Number(searchParams.get("page")) || 1;
+
+  const ITEMS_PER_PAGE = 5;
+
+  const paginatedLeads = leads.slice(
+    (page - 1) * ITEMS_PER_PAGE,
+    page * ITEMS_PER_PAGE,
+  );
+
+  const handlePageChange = (_, value) => {
+    setSearchParams({ page: value });
+  };
+
+  const pageCount = Math.ceil(leads.length / ITEMS_PER_PAGE);
+  const [view, setView] = useState(VIEWS.table);
   const isLoading = useLeadsStore((state) => state.isLoading);
   const fetchLeads = useLeadsStore((state) => state.fetchLeads);
 
@@ -35,9 +52,9 @@ const ActiveLeads = () => {
     setOpenForm(true);
   };
 
-  useEffect(() => {
-    fetchLeads();
-  }, []);
+  // useEffect(() => {
+  //   fetchLeads();
+  // }, []);
 
   if (isLoading)
     return (
@@ -71,7 +88,9 @@ const ActiveLeads = () => {
           <Tab label={<ViewListRoundedIcon />} value={VIEWS.table} />
           <Tab label={<GridViewRoundedIcon />} value={VIEWS.cards} />
         </Tabs>
-        <Button variant="outlined">Добавить</Button>
+        <Button variant="outlined" onClick={handleOpenForm}>
+          Добавить
+        </Button>
       </Box>
       {view === VIEWS.cards && (
         <Box
@@ -85,12 +104,13 @@ const ActiveLeads = () => {
             },
           }}
         >
-          {leads.map((lead) => (
+          {paginatedLeads.map((lead) => (
             <LeadCard key={lead.id} lead={lead} />
           ))}
         </Box>
       )}
-      {view === VIEWS.table && <LeadsTable leads={leads} />}
+      {view === VIEWS.table && <LeadsTable leads={paginatedLeads} />}
+      <Pagination count={pageCount} page={page} onChange={handlePageChange} />
       <AddLeadForm openForm={openForm} setOpenForm={setOpenForm} />
     </RootLayout>
   );

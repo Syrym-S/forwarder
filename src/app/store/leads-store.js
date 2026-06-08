@@ -47,4 +47,29 @@ export const useLeadsStore = create((set) => ({
       });
     }
   },
+  createLead: async (payload) => {
+    try {
+      set({ isLoading: true, error: null });
+
+      const newLead = {
+        ...payload,
+        id: Date.now(),
+        createdAt: new Date().toISOString(),
+      };
+
+      set((state) => ({
+        leads: [newLead, ...state.leads],
+        isLoading: false,
+      }));
+
+      return newLead;
+    } catch (e) {
+      set({
+        error: e,
+        isLoading: false,
+      });
+
+      throw e;
+    }
+  },
 }));

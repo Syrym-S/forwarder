@@ -11,6 +11,7 @@ import { useParams } from "react-router-dom";
 import { Box, Chip, Container, Paper, Stack, Typography } from "@mui/material";
 import { mockLeads } from "../../shared/const/mock-data";
 import { useLeadsStore } from "../../app/store/leads-store";
+import { MapContainer, TileLayer } from "react-leaflet";
 
 const Section = ({ icon, title, children }) => (
   <Paper
@@ -51,6 +52,8 @@ const Section = ({ icon, title, children }) => (
     {children}
   </Paper>
 );
+
+const position = [43.222, 76.8512];
 
 const InfoField = ({ label, value, accent = false }) => (
   <Box
@@ -96,6 +99,22 @@ const LeadItem = () => {
 
   return (
     <RootLayout data={currentLead}>
+      <MapContainer
+        center={position}
+        zoom={10}
+        scrollWheelZoom={true}
+        style={{
+          zIndex: 0,
+          borderRadius: "10px",
+          height: "500px",
+          width: "100%",
+        }}
+      >
+        <TileLayer
+          attribution="&copy; OpenStreetMap contributors"
+          url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
+        />
+      </MapContainer>
       <Container maxWidth="lg" sx={{ py: 4 }}>
         <Box
           sx={{

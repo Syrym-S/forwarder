@@ -5,6 +5,7 @@ import { BrowserRouter, useLocation } from "react-router-dom";
 import AppRouter from "./app/router/app-router";
 import { Box } from "@mui/material";
 import RootLayout from "./components/layout/root-layout";
+import { AppInitializer } from "./app/router/app-init";
 
 function App() {
   const [openMenu, setOpenMenu] = useState(false);
@@ -17,6 +18,7 @@ function App() {
         <Sidebar openMenu={openMenu} setOpenMenu={setOpenMenu} />
         <AppRouter />
       </Box>
+      <AppInitializer />
     </BrowserRouter>
   );
 }
