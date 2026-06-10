@@ -20,10 +20,11 @@ import {
 } from "@mui/material";
 import { mockLeads } from "../../shared/const/mock-data";
 import { useLeadsStore } from "../../app/store/leads-store";
-import { MapContainer, TileLayer } from "react-leaflet";
+import { MapContainer, Marker, Polyline, TileLayer } from "react-leaflet";
 import AddLeadForm from "../../features/leads/add-lead-form";
 import { useFormDefaultValues } from "../../shared/hooks/leads/use-form-default-values";
 import { mapCreateLeadFormToApi } from "../../components/lead-form/model/createLead.adapter";
+import LeadMap from "../../components/leads/lead-map";
 
 const Section = ({ icon, title, children }) => (
   <Paper
@@ -107,6 +108,11 @@ const LeadItem = () => {
 
   const defaultValues = useFormDefaultValues(leadData);
 
+  const start = [leadData?.from_location.lat, leadData?.from_location.lon];
+  const end = [leadData?.to_location.lat, leadData?.to_location.lon];
+
+  const route = [start, end];
+
   const openEditForm = () => {
     setOpenEdit(true);
   };
@@ -117,7 +123,14 @@ const LeadItem = () => {
 
   if (!leadData) return <>...Загрузка</>;
 
-  // console.log("leadData", leadData);
+  const from = {
+    lat: leadData?.from_location.lat,
+    lon: leadData?.from_location.lon,
+  };
+  const to = {
+    lat: leadData?.to_location.lat,
+    lon: leadData?.to_location.lon,
+  };
 
   return (
     <RootLayout data={leadData}>
@@ -175,22 +188,9 @@ const LeadItem = () => {
         defaultValues={defaultValues}
         isEdit
       />
-      <MapContainer
-        center={position}
-        zoom={10}
-        scrollWheelZoom={true}
-        style={{
-          zIndex: 0,
-          borderRadius: "10px",
-          height: "300px",
-          width: "100%",
-        }}
-      >
-        <TileLayer
-          attribution="&copy; OpenStreetMap contributors"
-          url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
-        />
-      </MapContainer>
+
+      <LeadMap from={from} to={to} />
+
       <Container maxWidth="lg" sx={{ py: 4 }}>
         <Section
           title="Заказчик"
@@ -211,7 +211,7 @@ const LeadItem = () => {
               alignItems: "center",
             }}
           >
-            <InfoField label="Откуда" value={leadData.from_location} />
+            <InfoField label="Откуда" value={leadData.from_location.city} />
 
             <ArrowRightAltRoundedIcon
               sx={{
@@ -221,7 +221,7 @@ const LeadItem = () => {
               }}
             />
 
-            <InfoField label="Куда" value={leadData.to_location} />
+            <InfoField label="Куда" value={leadData.to_location.city} />
           </Box>
         </Section>
 

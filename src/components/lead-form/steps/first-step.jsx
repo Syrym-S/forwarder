@@ -110,7 +110,7 @@ const FirstStep = ({ control, errors, form, setValue }) => {
         }}
       >
         <Controller
-          name="fromLocation"
+          name="from_location.address"
           control={control}
           rules={{
             required: "Укажите место отправления",
@@ -122,7 +122,6 @@ const FirstStep = ({ control, errors, form, setValue }) => {
           render={({ field }) => (
             <TextField
               {...field}
-              defaultValue={form.from_location}
               value={field.value}
               label="Откуда"
               fullWidth
@@ -139,7 +138,7 @@ const FirstStep = ({ control, errors, form, setValue }) => {
         />
 
         <Controller
-          name="toLocation"
+          name="to_location.address"
           control={control}
           rules={{
             required: "Укажите место назначения",
@@ -151,7 +150,6 @@ const FirstStep = ({ control, errors, form, setValue }) => {
           render={({ field }) => (
             <TextField
               {...field}
-              defaultValue={form.to_location}
               value={field.value}
               label="Куда"
               fullWidth
