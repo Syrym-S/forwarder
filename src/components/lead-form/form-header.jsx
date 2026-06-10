@@ -1,7 +1,7 @@
 import { Box, Chip, DialogTitle, Typography } from "@mui/material";
 import React from "react";
 
-const FormHeader = ({ activeStep, stepsCount }) => {
+const FormHeader = ({ isEdit, activeStep, stepsCount }) => {
   return (
     <DialogTitle
       sx={{
@@ -30,7 +30,7 @@ const FormHeader = ({ activeStep, stepsCount }) => {
               lineHeight: 1.3,
             }}
           >
-            Создание маршрута
+            {isEdit ? "Редактирование маршрута" : "Создание маршрута"}
           </Typography>
 
           <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>

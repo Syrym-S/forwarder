@@ -14,25 +14,25 @@ import { InfoBadge } from "../info-badge";
 
 export const CUSTOMERS = [
   {
-    id: 1,
+    id: "6a2686g4820346df4d024dc1",
     fullName: "Иванов Иван Иванович",
     iin: "990101300001",
     phone: "+7 701 111 11 11",
   },
   {
-    id: 2,
+    id: "6a2686g4820346df4d024dc2",
     fullName: "Петров Петр Петрович",
     iin: "980202300002",
     phone: "+7 702 222 22 22",
   },
   {
-    id: 3,
+    id: "6a2686g4820346df4d024dc3",
     fullName: "Сидоров Сидор Сидорович",
     iin: "970303300003",
     phone: "+7 703 333 33 33",
   },
   {
-    id: 4,
+    id: "6a2686g4820346df4d024dc4",
     fullName: "Абдуллин Ерлан",
     iin: "960404300004",
     phone: "+7 704 444 44 44",
@@ -42,7 +42,7 @@ export const CUSTOMERS = [
 export function ForthStep({ control, errors, setValue }) {
   const selectedCustomerId = useWatch({
     control,
-    name: "driverId",
+    name: "customer",
   });
 
   const [selectedCustomer, setSelectedCustomer] = useState(null);
@@ -55,7 +55,7 @@ export function ForthStep({ control, errors, setValue }) {
       description="Найдите и выберите заказщика, который заказал услугу"
     >
       <Controller
-        name="customerId"
+        name="customer"
         control={control}
         render={({ field }) => (
           <Stack spacing={2}>

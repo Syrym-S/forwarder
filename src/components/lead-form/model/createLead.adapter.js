@@ -31,19 +31,20 @@ function normalizeText(value) {
 }
 
 export function mapCreateLeadFormToApi(form) {
+  console.log("mapCreateLeadFormToApi", form);
   const fromLocation = normalizeText(form.fromLocation);
   const toLocation = normalizeText(form.toLocation);
 
   const payload = {
     forwarder: form.forwarderId,
 
-    from_country: "Казахстан",
-    from_region: "",
+    from_country: fromLocation,
+    from_region: fromLocation,
     from_city: fromLocation,
     from_address: fromLocation,
 
     to_country: "Казахстан",
-    to_region: "",
+    to_region: fromLocation,
     to_city: toLocation,
     to_address: toLocation,
 
@@ -61,18 +62,17 @@ export function mapCreateLeadFormToApi(form) {
   addNumberIfHasValue(payload, "to_lat", form.toLat);
   addNumberIfHasValue(payload, "to_lon", form.toLng);
 
-  addNumberIfHasValue(payload, "cargo_weight", form.weightKg);
-  addNumberIfHasValue(payload, "cargo_length", form.cargoLengthCm);
-  addNumberIfHasValue(payload, "cargo_width", form.cargoWidthCm);
-  addNumberIfHasValue(payload, "cargo_height", form.cargoHeightCm);
+  addNumberIfHasValue(payload, "cargo_weight", form.weight_kg);
+  addNumberIfHasValue(payload, "cargo_length", form.cargo_length_cm);
+  addNumberIfHasValue(payload, "cargo_width", form.cargo_width_cm);
+  addNumberIfHasValue(payload, "cargo_height", form.cargo_height_cm);
 
-  addNumberIfHasValue(payload, "price", form.price);
+  addNumberIfHasValue(payload, "summ", form.summ);
 
   return payload;
 }
 
 export function mapCreatedLeadToUi(form, response = {}) {
-  console.log(form);
   const id = response.id ?? `created-lead-${Date.now()}`;
 
   return {
@@ -82,18 +82,15 @@ export function mapCreatedLeadToUi(form, response = {}) {
 
     status: response.status ?? "started",
 
-    customer:
-      response.customer?.name ||
-      response.customer ||
-      "AKE Plast (АКЕ Пласт) ТОО",
+    customer: form.customer.id,
 
-    driver: form.driver?.fullName || "Не назначен",
+    driver: form.driver[0].id,
 
     description: form.comment || `Груз заявки #${id}`,
 
-    from_location: form.fromLocation,
+    from_city: form.fromLocation,
 
-    to_location: form.toLocation,
+    to_city: form.toLocation,
 
     transportation_price: Number(form.price) || 0,
 
@@ -113,6 +110,7 @@ export function mapCreatedLeadToUi(form, response = {}) {
       Number(form.cargoHeightCm || 0),
 
     context: null,
+    cargo_name: form.cargoType,
 
     cargo: {
       description: form.comment || `Груз заявки #${id}`,

@@ -1,3 +1,4 @@
+import { Box } from "@mui/material";
 import { NavLink } from "react-router-dom";
 
 const useLeadsColumns = (data) => {
@@ -23,6 +24,7 @@ const useLeadsColumns = (data) => {
       field: "driver",
       headerName: "Driver",
       width: 200,
+      renderCell: (row) => <Box>{row.driver || "-"}</Box>,
     },
     {
       field: "to_location",

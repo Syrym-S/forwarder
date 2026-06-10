@@ -5,6 +5,8 @@ import { CustomerMapView } from "../map-view";
 import Map from "../../dashboard/map";
 import { Controller } from "react-hook-form";
 import { useRouteMapPicker } from "../use-route-map-picker";
+import { useEffect } from "react";
+import dayjs from "dayjs";
 
 const FirstStep = ({ control, errors, form, setValue }) => {
   const map = useCustomerMap();
@@ -120,6 +122,8 @@ const FirstStep = ({ control, errors, form, setValue }) => {
           render={({ field }) => (
             <TextField
               {...field}
+              defaultValue={form.from_location}
+              value={field.value}
               label="Откуда"
               fullWidth
               size="small"
@@ -147,6 +151,8 @@ const FirstStep = ({ control, errors, form, setValue }) => {
           render={({ field }) => (
             <TextField
               {...field}
+              defaultValue={form.to_location}
+              value={field.value}
               label="Куда"
               fullWidth
               size="small"
@@ -167,6 +173,8 @@ const FirstStep = ({ control, errors, form, setValue }) => {
           render={({ field }) => (
             <TextField
               {...field}
+              defaultValue={dayjs(form.loading_date).format("YYYY-MM-DD")}
+              value={field.value}
               label="Дата загрузки"
               type="date"
               fullWidth

@@ -1,5 +1,5 @@
 import { Dialog, DialogContent, DialogTitle } from "@mui/material";
-import React, { act, useState } from "react";
+import React, { act, useEffect, useState } from "react";
 import FormHeader from "../../components/lead-form/form-header";
 import FormStepsTab from "../../components/lead-form/form-steps-tab";
 import FirstStep from "../../components/lead-form/steps/first-step";
@@ -18,35 +18,6 @@ import { ForthStep } from "../../components/lead-form/steps/forth-step";
 
 const steps = ["Маршрут", "Груз", "Водитель", "Заказщик", "Проверка"];
 
-const initialForm = {
-  // customer: 'AKE Plast (АКЕ Пласт) ТОО',
-  // contactName: 'Suleimenov Syrym',
-  // phone: '+7 777 777 77 77',
-
-  fromLocation: "",
-  fromLat: "",
-  fromLng: "",
-
-  toLocation: "",
-  toLat: "",
-  toLng: "",
-
-  loadingDate: "2026-06-10",
-
-  cargoType: "Не указан",
-  weightKg: "1200",
-  cargoLengthCm: "50",
-  cargoWidthCm: "50",
-  cargoHeightCm: "70",
-  price: "250000",
-  currency: "KZT",
-  vat: true,
-  comment: "",
-
-  forwarderId: "",
-  forwarder: null,
-};
-
 const stepFields = [
   ["fromLocation", "toLocation", "loadingDate"],
   [
@@ -61,8 +32,15 @@ const stepFields = [
   ["forwarderId"],
 ];
 
-const AddLeadForm = ({ openForm, setOpenForm }) => {
+const AddLeadForm = ({
+  editingItemId = null,
+  isEdit = false,
+  openForm,
+  setOpenForm,
+  defaultValues = {},
+}) => {
   const createLead = useLeadsStore((state) => state.createLead);
+  const updateLead = useLeadsStore((state) => state.updateLead);
   const [maxAvailableStep, setMaxAvailableStep] = useState(0);
   const [activeStep, setActiveStep] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -81,10 +59,14 @@ const AddLeadForm = ({ openForm, setOpenForm }) => {
     setValue,
     formState: { errors },
   } = useForm({
-    defaultValues: initialForm,
+    defaultValues: defaultValues,
     mode: "onChange",
     reValidateMode: "onChange",
   });
+
+  useEffect(() => {
+    reset(defaultValues);
+  }, [defaultValues, reset]);
 
   const formValues = useWatch({ control });
 
@@ -93,14 +75,17 @@ const AddLeadForm = ({ openForm, setOpenForm }) => {
 
   async function handleCreateRoute(data) {
     try {
-      console.log("data", data);
       setIsSubmitting(true);
 
-      // const payload = mapCreateLeadFormToApi(data);
+      const payload = mapCreateLeadFormToApi(data);
 
-      const createdLead = mapCreatedLeadToUi(data);
+      // const createdLead = mapCreatedLeadToUi(data);
 
-      await createLead(createdLead);
+      if (isEdit) {
+        await updateLead(editingItemId, payload);
+      } else {
+        await createLead(payload);
+      }
 
       // prependLead(createdLead);
 
@@ -109,8 +94,8 @@ const AddLeadForm = ({ openForm, setOpenForm }) => {
       setResultModal({
         open: true,
         type: "success",
-        title: "Перевозка создана",
-        message: `Лид успешно создан${data?.id ? `: ${response.id}` : ""}`,
+        title: isEdit ? "Перевозка отредактирована" : "Перевозка создана",
+        message: `Лид успешно ${isEdit ? "изменён" : "создан"} ${data?.id ? `: ${response.id}` : ""}`,
       });
     } catch (error) {
       setResultModal({
@@ -147,7 +132,9 @@ const AddLeadForm = ({ openForm, setOpenForm }) => {
           />
         );
       case 1:
-        return <SecondStep control={control} errors={errors} />;
+        return (
+          <SecondStep control={control} errors={errors} form={formValues} />
+        );
       case 2:
         return (
           <ThirdStep control={control} errors={errors} setValue={setValue} />
@@ -164,7 +151,7 @@ const AddLeadForm = ({ openForm, setOpenForm }) => {
   function handleClose() {
     setActiveStep(0);
     setMaxAvailableStep(0);
-    reset(initialForm);
+    reset(defaultValues);
     setOpenForm(false);
   }
 
@@ -190,13 +177,18 @@ const AddLeadForm = ({ openForm, setOpenForm }) => {
   return (
     <>
       <Dialog open={openForm} maxWidth="md" fullWidth>
-        <FormHeader activeStep={activeStep} stepsCount={steps.length} />
+        <FormHeader
+          isEdit={isEdit}
+          activeStep={activeStep}
+          stepsCount={steps.length}
+        />
         <DialogContent sx={{ px: 3 }}>
           <FormStepsTab steps={steps} activeStep={activeStep} />
 
           {renderContent(activeStep)}
 
           <FormNavButtons
+            isEdit={isEdit}
             isFirstStep={activeStep === 0}
             isLastStep={activeStep + 1 === steps.length}
             hasCurrentStepErrors={false}

@@ -2,6 +2,7 @@ import { Box, Button, DialogActions } from "@mui/material";
 import PropTypes from "prop-types";
 
 export function FormNavButtons({
+  isEdit,
   isFirstStep,
   isLastStep,
   hasCurrentStepErrors,
@@ -38,7 +39,7 @@ export function FormNavButtons({
             disabled={isSubmitting || hasCurrentStepErrors}
             onClick={onSubmit}
           >
-            {isSubmitting ? "Создание..." : "Создать маршрут"}
+            {isEdit ? "Сохранить" : "Создать маршрут"}
           </Button>
         ) : (
           <Button

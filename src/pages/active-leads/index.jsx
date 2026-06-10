@@ -25,15 +25,10 @@ import { useSearchParams } from "react-router-dom";
 const ActiveLeads = () => {
   const [openForm, setOpenForm] = useState(false);
   const leads = useLeadsStore((state) => state.leads);
+  const page = useLeadsStore((state) => state.page);
+  const ITEMS_PER_PAGE = useLeadsStore((state) => state.perPage);
+
   const [searchParams, setSearchParams] = useSearchParams();
-  const page = Number(searchParams.get("page")) || 1;
-
-  const ITEMS_PER_PAGE = 5;
-
-  const paginatedLeads = leads.slice(
-    (page - 1) * ITEMS_PER_PAGE,
-    page * ITEMS_PER_PAGE,
-  );
 
   const handlePageChange = (_, value) => {
     setSearchParams({ page: value });
@@ -104,12 +99,12 @@ const ActiveLeads = () => {
             },
           }}
         >
-          {paginatedLeads.map((lead) => (
+          {leads.map((lead) => (
             <LeadCard key={lead.id} lead={lead} />
           ))}
         </Box>
       )}
-      {view === VIEWS.table && <LeadsTable leads={paginatedLeads} />}
+      {view === VIEWS.table && <LeadsTable leads={leads} />}
       <Pagination count={pageCount} page={page} onChange={handlePageChange} />
       <AddLeadForm openForm={openForm} setOpenForm={setOpenForm} />
     </RootLayout>

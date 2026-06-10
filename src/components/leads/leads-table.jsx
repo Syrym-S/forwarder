@@ -7,7 +7,6 @@ const paginationModel = { page: 0, pageSize: 5 };
 const LeadsTable = (leads) => {
   const columns = useLeadsColumns(leads);
 
-  console.log(leads.leads);
   return (
     <Paper sx={{ height: 400, my: "10px" }}>
       <DataGrid

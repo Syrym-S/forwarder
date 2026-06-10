@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import RootLayout from "../../components/layout/root-layout";
 import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 import TripOriginIcon from "@mui/icons-material/TripOrigin";
@@ -7,11 +7,23 @@ import ArrowRightAltRoundedIcon from "@mui/icons-material/ArrowRightAltRounded";
 import RouteOutlinedIcon from "@mui/icons-material/RouteOutlined";
 import LocalShippingOutlinedIcon from "@mui/icons-material/LocalShippingOutlined";
 import BusinessOutlinedIcon from "@mui/icons-material/BusinessOutlined";
+import EditNoteRoundedIcon from "@mui/icons-material/EditNoteRounded";
 import { useParams } from "react-router-dom";
-import { Box, Chip, Container, Paper, Stack, Typography } from "@mui/material";
+import {
+  Box,
+  Chip,
+  Container,
+  Paper,
+  Stack,
+  Tooltip,
+  Typography,
+} from "@mui/material";
 import { mockLeads } from "../../shared/const/mock-data";
 import { useLeadsStore } from "../../app/store/leads-store";
 import { MapContainer, TileLayer } from "react-leaflet";
+import AddLeadForm from "../../features/leads/add-lead-form";
+import { useFormDefaultValues } from "../../shared/hooks/leads/use-form-default-values";
+import { mapCreateLeadFormToApi } from "../../components/lead-form/model/createLead.adapter";
 
 const Section = ({ icon, title, children }) => (
   <Paper
@@ -87,18 +99,82 @@ const InfoField = ({ label, value, accent = false }) => (
 );
 
 const LeadItem = () => {
+  const [openEdit, setOpenEdit] = useState(false);
+  const [fromCoords, setFromCoords] = useState(null);
   const { id } = useParams();
-  const currentLead = useLeadsStore((state) => state.currentLead);
   const getLeadItem = useLeadsStore((state) => state.getLeadItem);
+  const leadData = useLeadsStore((state) => state.currentLead);
+
+  const defaultValues = useFormDefaultValues(leadData);
+
+  const openEditForm = () => {
+    setOpenEdit(true);
+  };
 
   useEffect(() => {
     getLeadItem(id);
   }, [id]);
 
-  if (!currentLead) return <>...Загрузка</>;
+  if (!leadData) return <>...Загрузка</>;
+
+  // console.log("leadData", leadData);
 
   return (
-    <RootLayout data={currentLead}>
+    <RootLayout data={leadData}>
+      <Box
+        spacing={0.5}
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+        }}
+      >
+        <Stack>
+          <Typography variant="h5" fontWeight={700}>
+            Информация о лиде
+          </Typography>
+
+          <Typography
+            sx={{
+              color: "color.slate",
+            }}
+          >
+            Подробные данные по заявке
+          </Typography>
+        </Stack>
+
+        <Stack direction="row" spacing={1}>
+          <Chip
+            label={`Лид #${leadData.id}`}
+            color="primary"
+            variant="outlined"
+          />
+
+          <Chip
+            label={leadData.status}
+            sx={{
+              color: "color.slate_2",
+            }}
+          />
+          <Tooltip title="Редактировать">
+            <EditNoteRoundedIcon
+              onClick={openEditForm}
+              sx={{
+                fontSize: "2rem",
+                color: "primary.main",
+                cursor: "pointer",
+              }}
+            />
+          </Tooltip>
+        </Stack>
+      </Box>
+      <AddLeadForm
+        editingItemId={id}
+        openForm={openEdit}
+        setOpenForm={setOpenEdit}
+        defaultValues={defaultValues}
+        isEdit
+      />
       <MapContainer
         center={position}
         zoom={10}
@@ -106,7 +182,7 @@ const LeadItem = () => {
         style={{
           zIndex: 0,
           borderRadius: "10px",
-          height: "500px",
+          height: "300px",
           width: "100%",
         }}
       >
@@ -116,53 +192,11 @@ const LeadItem = () => {
         />
       </MapContainer>
       <Container maxWidth="lg" sx={{ py: 4 }}>
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "flex-start",
-            flexDirection: {
-              xs: "column",
-              md: "row",
-            },
-            mb: 4,
-          }}
-        >
-          <Stack spacing={0.5}>
-            <Typography variant="h5" fontWeight={700}>
-              Информация о лиде
-            </Typography>
-
-            <Typography
-              sx={{
-                color: "color.slate",
-              }}
-            >
-              Подробные данные по заявке
-            </Typography>
-          </Stack>
-
-          <Stack direction="row" spacing={1}>
-            <Chip
-              label={`Лид #${currentLead.id}`}
-              color="primary"
-              variant="outlined"
-            />
-
-            <Chip
-              label={currentLead.status}
-              sx={{
-                color: "color.slate_2",
-              }}
-            />
-          </Stack>
-        </Box>
-
         <Section
           title="Заказчик"
           icon={<BusinessOutlinedIcon color="primary" />}
         >
-          <InfoField label="Название" value={currentLead.customer} />
+          <InfoField label="Название" value={leadData.customer.name} />
         </Section>
 
         <Section title="Маршрут" icon={<RouteOutlinedIcon color="primary" />}>
@@ -177,7 +211,7 @@ const LeadItem = () => {
               alignItems: "center",
             }}
           >
-            <InfoField label="Откуда" value={currentLead.from_location} />
+            <InfoField label="Откуда" value={leadData.from_location} />
 
             <ArrowRightAltRoundedIcon
               sx={{
@@ -187,7 +221,7 @@ const LeadItem = () => {
               }}
             />
 
-            <InfoField label="Куда" value={currentLead.to_location} />
+            <InfoField label="Куда" value={leadData.to_location} />
           </Box>
         </Section>
 
@@ -206,29 +240,23 @@ const LeadItem = () => {
               mb: 2,
             }}
           >
-            <InfoField label="Тип" value={currentLead.cargo.type} />
+            <InfoField label="Тип" value={leadData.cargo.type} />
 
-            <InfoField
-              label="Вес"
-              value={`${currentLead.cargo.weight_kg} кг`}
-            />
+            <InfoField label="Вес" value={`${leadData.cargo.weight_kg} кг`} />
 
             <InfoField
               label="Цена"
-              value={`${currentLead.summ} ${currentLead.currency}`}
+              value={`${leadData.summ} ${leadData.currency}`}
             />
 
-            <InfoField label="Статус" value={currentLead.status} />
+            <InfoField label="Статус" value={leadData.status} />
           </Box>
 
-          <InfoField
-            label="Описание"
-            value={`Груз заявки #${currentLead.id}`}
-          />
+          <InfoField label="Описание" value={`Груз заявки #${leadData.id}`} />
         </Section>
 
         <Section title="Водитель" icon={<PersonOutlinedIcon color="primary" />}>
-          <InfoField label="ФИО" value={currentLead.driver_name} />
+          <InfoField label="ФИО" value={leadData.driver_name} />
         </Section>
       </Container>
     </RootLayout>

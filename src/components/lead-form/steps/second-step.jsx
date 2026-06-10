@@ -9,7 +9,7 @@ import PropTypes from "prop-types";
 import { Controller } from "react-hook-form";
 import { StepSection } from "../step-section";
 
-export function SecondStep({ control, errors }) {
+export function SecondStep({ control, errors, form }) {
   return (
     <StepSection title="Груз и оплата">
       <Box
@@ -23,7 +23,7 @@ export function SecondStep({ control, errors }) {
         }}
       >
         <Controller
-          name="cargoType"
+          name="cargo_type"
           control={control}
           render={({ field }) => (
             <TextField
@@ -42,7 +42,7 @@ export function SecondStep({ control, errors }) {
         />
 
         <Controller
-          name="weightKg"
+          name="weight_kg"
           control={control}
           rules={{
             required: "Укажите вес",
@@ -52,7 +52,13 @@ export function SecondStep({ control, errors }) {
           render={({ field }) => (
             <TextField
               {...field}
+              type="number"
               label="Вес, кг"
+              onChange={(e) => {
+                const value = e.target.value;
+
+                field.onChange(value === "" ? null : Number(value));
+              }}
               fullWidth
               size="small"
               error={Boolean(errors.weightKg)}
@@ -76,7 +82,7 @@ export function SecondStep({ control, errors }) {
           }}
         >
           <Controller
-            name="cargoLengthCm"
+            name="cargo_length_cm"
             control={control}
             rules={{
               required: "Укажите длину",
@@ -96,7 +102,7 @@ export function SecondStep({ control, errors }) {
           />
 
           <Controller
-            name="cargoWidthCm"
+            name="cargo_width_cm"
             control={control}
             rules={{
               required: "Укажите ширину",
@@ -116,7 +122,7 @@ export function SecondStep({ control, errors }) {
           />
 
           <Controller
-            name="cargoHeightCm"
+            name="cargo_height_cm"
             control={control}
             rules={{
               required: "Укажите высоту",
@@ -137,7 +143,7 @@ export function SecondStep({ control, errors }) {
         </Box>
 
         <Controller
-          name="price"
+          name="summ"
           control={control}
           rules={{
             required: "Укажите цену",

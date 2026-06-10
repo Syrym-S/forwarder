@@ -69,7 +69,7 @@ const LeadCard = ({ lead }) => {
                 fontWeight: 500,
               }}
             >
-              {lead.customer}
+              {/* {lead.customer} */}
             </Typography>
           </Box>
 

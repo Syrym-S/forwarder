@@ -1,27 +1,37 @@
 import { create } from "zustand";
 import axios from "axios";
-import { getLeadItemDetails, getLeads } from "./api";
-import { mockLeads } from "../../shared/const/mock-data";
+import {
+  createLeadApi,
+  getLeadItemDetails,
+  getLeads,
+  updateLeadApi,
+} from "./api";
+// import { mockLeads } from "../../shared/const/mock-data";
 
 export const useLeadsStore = create((set) => ({
   leads: [],
   currentLead: null,
   isLoading: false,
   error: null,
+  page: 1,
+  count: 0,
+  perPage: 5,
 
-  fetchLeads: async () => {
+  fetchLeads: async (params) => {
     try {
       set({ isLoading: true, error: null });
 
-      const response = await getLeads();
+      const response = await getLeads(params);
 
       set({
-        leads: response.data,
+        leads: response.data.results,
+        page: response.data.page,
+        count: response.data.count,
+        perPage: response.data.per_page,
         isLoading: false,
       });
     } catch (e) {
       set({
-        leads: mockLeads,
         error: e.message,
         isLoading: false,
       });
@@ -31,41 +41,57 @@ export const useLeadsStore = create((set) => ({
   getLeadItem: async (lead_id) => {
     try {
       set({ isLoading: true, error: null });
+
       const response = await getLeadItemDetails(lead_id);
 
       set({
-        currentLead: response.data,
+        currentLead: response.data.data,
         isLoading: false,
       });
     } catch (e) {
       set({
-        currentLead: mockLeads.find(
-          (lead) => String(lead.id) === String(lead_id),
-        ),
+        currentLead: null,
         isLoading: false,
-        error: e,
+        error: e.message,
       });
+
+      console.error(e);
     }
   },
   createLead: async (payload) => {
     try {
       set({ isLoading: true, error: null });
 
-      const newLead = {
-        ...payload,
-        id: Date.now(),
-        createdAt: new Date().toISOString(),
-      };
+      const response = await createLeadApi(payload);
 
       set((state) => ({
-        leads: [newLead, ...state.leads],
+        leads: [response.data, ...state.leads],
         isLoading: false,
       }));
 
-      return newLead;
+      return response.data;
     } catch (e) {
       set({
-        error: e,
+        error: e.message,
+        isLoading: false,
+      });
+
+      console.error("Payload:", payload);
+      console.error("Response:", error.response?.data);
+      throw e;
+    }
+  },
+  updateLead: async (id, payload) => {
+    try {
+      set({ isLoading: true, error: null });
+
+      const response = await updateLeadApi(id, payload);
+
+      set({ isLoading: false });
+      return response.data;
+    } catch (e) {
+      set({
+        error: e.message,
         isLoading: false,
       });
 

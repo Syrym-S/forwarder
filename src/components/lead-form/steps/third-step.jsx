@@ -14,7 +14,7 @@ import { InfoBadge } from "../info-badge";
 
 export const DRIVERS = [
   {
-    id: 1,
+    id: "6a2686b4860546df4d024dc2",
     fullName: "Иванов Иван Иванович",
     iin: "990101300001",
     companyName: "ТОО ТрансЛогистик",
@@ -22,7 +22,7 @@ export const DRIVERS = [
     phone: "+7 701 111 11 11",
   },
   {
-    id: 2,
+    id: "6a2686b4860346df4d024dc2",
     fullName: "Петров Петр Петрович",
     iin: "980202300002",
     companyName: "ТОО Cargo Express",
@@ -30,7 +30,7 @@ export const DRIVERS = [
     phone: "+7 702 222 22 22",
   },
   {
-    id: 3,
+    id: "6a2686g4860346df4d024dc2",
     fullName: "Сидоров Сидор Сидорович",
     iin: "970303300003",
     companyName: "ТОО Fast Delivery",
@@ -38,7 +38,7 @@ export const DRIVERS = [
     phone: "+7 703 333 33 33",
   },
   {
-    id: 4,
+    id: "6a2686g4820346df4d024dc2",
     fullName: "Абдуллин Ерлан",
     iin: "960404300004",
     companyName: "ТОО Kazakhstan Logistics",
@@ -50,7 +50,7 @@ export const DRIVERS = [
 export function ThirdStep({ control, errors, setValue }) {
   const selectedDriverId = useWatch({
     control,
-    name: "driverId",
+    name: "driver",
   });
 
   const [selectedDriver, setSelectedDriver] = useState([]);
@@ -63,7 +63,7 @@ export function ThirdStep({ control, errors, setValue }) {
       description="Найдите и выберите водителя, который будет закреплен за маршрутом"
     >
       <Controller
-        name="driverId"
+        name="driver"
         control={control}
         render={({ field }) => (
           <Stack spacing={2}>
