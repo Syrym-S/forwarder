@@ -138,25 +138,64 @@ const LeadItem = () => {
         spacing={0.5}
         sx={{
           display: "flex",
-          alignItems: "center",
+          alignItems: {
+            xs: "start",
+            sm: "center",
+          },
+          gap: "10px",
           justifyContent: "space-between",
+          flexDirection: {
+            xs: "column",
+            sm: "row",
+          },
         }}
       >
-        <Stack>
-          <Typography variant="h5" fontWeight={700}>
-            Информация о лиде
-          </Typography>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            width: "100%",
+          }}
+        >
+          <Stack>
+            <Typography variant="h5" fontWeight={700}>
+              Информация о лиде
+            </Typography>
 
-          <Typography
+            <Typography
+              sx={{
+                color: "color.slate",
+              }}
+            >
+              Подробные данные по заявке
+            </Typography>
+          </Stack>
+          <EditNoteRoundedIcon
+            onClick={openEditForm}
             sx={{
-              color: "color.slate",
+              display: {
+                xs: "block",
+                sm: "none",
+              },
+              fontSize: "3rem",
+              color: "primary.main",
+              cursor: "pointer",
             }}
-          >
-            Подробные данные по заявке
-          </Typography>
-        </Stack>
-
-        <Stack direction="row" spacing={1}>
+          />
+        </Box>
+        <Box
+          sx={{
+            display: "flex",
+            padding: "10px",
+            justifyContent: { xs: "space-between", sm: "end" },
+            gap: "10px",
+            width: {
+              xs: "100%",
+              sm: "fit-content",
+            },
+          }}
+          spacing={1}
+        >
           <Chip
             label={`Лид #${leadData.id}`}
             color="primary"
@@ -169,17 +208,30 @@ const LeadItem = () => {
               color: "color.slate_2",
             }}
           />
-          <Tooltip title="Редактировать">
-            <EditNoteRoundedIcon
-              onClick={openEditForm}
-              sx={{
-                fontSize: "2rem",
-                color: "primary.main",
-                cursor: "pointer",
-              }}
-            />
-          </Tooltip>
-        </Stack>
+          <Stack
+            sx={{
+              display: {
+                xs: "none",
+                sm: "block",
+              },
+            }}
+          >
+            <Tooltip title="Редактировать">
+              <EditNoteRoundedIcon
+                onClick={openEditForm}
+                sx={{
+                  display: {
+                    xs: "none",
+                    sm: "block",
+                  },
+                  fontSize: "2rem",
+                  color: "primary.main",
+                  cursor: "pointer",
+                }}
+              />
+            </Tooltip>
+          </Stack>
+        </Box>
       </Box>
       <AddLeadForm
         editingItemId={id}
@@ -189,7 +241,7 @@ const LeadItem = () => {
         isEdit
       />
 
-      <LeadMap from={from} to={to} />
+      <LeadMap from={from} to={to} id={id} />
 
       <Container maxWidth="lg" sx={{ py: 4 }}>
         <Section
