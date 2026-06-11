@@ -12,8 +12,6 @@ export function hasPoint(lat, lng) {
 export function getRouteMarkers(form) {
   const markers = [];
 
-  console.log("form", form);
-
   if (hasPoint(form.fromLat, form.fromLng)) {
     markers.push({
       id: "from",

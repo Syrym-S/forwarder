@@ -122,7 +122,6 @@ const FirstStep = ({ control, errors, form, setValue }) => {
           render={({ field }) => (
             <TextField
               {...field}
-              value={field.value}
               label="Откуда"
               fullWidth
               size="small"

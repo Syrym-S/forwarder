@@ -9,7 +9,7 @@ import PropTypes from "prop-types";
 import { Controller } from "react-hook-form";
 import { StepSection } from "../step-section";
 
-export function SecondStep({ control, errors, form }) {
+export function SecondStep({ control, errors, form, setValue }) {
   return (
     <StepSection title="Груз и оплата">
       <Box
@@ -23,7 +23,7 @@ export function SecondStep({ control, errors, form }) {
         }}
       >
         <Controller
-          name="cargo_type"
+          name="type"
           control={control}
           render={({ field }) => (
             <TextField
@@ -82,7 +82,7 @@ export function SecondStep({ control, errors, form }) {
           }}
         >
           <Controller
-            name="cargo_length_cm"
+            name="length_cm"
             control={control}
             rules={{
               required: "Укажите длину",
@@ -102,7 +102,7 @@ export function SecondStep({ control, errors, form }) {
           />
 
           <Controller
-            name="cargo_width_cm"
+            name="width_cm"
             control={control}
             rules={{
               required: "Укажите ширину",
@@ -122,7 +122,7 @@ export function SecondStep({ control, errors, form }) {
           />
 
           <Controller
-            name="cargo_height_cm"
+            name="height_cm"
             control={control}
             rules={{
               required: "Укажите высоту",

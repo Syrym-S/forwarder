@@ -133,7 +133,12 @@ const AddLeadForm = ({
         );
       case 1:
         return (
-          <SecondStep control={control} errors={errors} form={formValues} />
+          <SecondStep
+            control={control}
+            errors={errors}
+            form={formValues}
+            setValue={setValue}
+          />
         );
       case 2:
         return (

@@ -31,28 +31,47 @@ function normalizeText(value) {
 }
 
 export function mapCreateLeadFormToApi(form) {
-  console.log("mapCreateLeadFormToApi", form);
   const fromLocation = normalizeText(form.fromLocation);
   const toLocation = normalizeText(form.toLocation);
 
+  console.log("mapCreateLeadFormToApi", form);
+
   const payload = {
-    forwarder: form.forwarderId,
-
-    from_country: fromLocation,
-    from_region: fromLocation,
-    from_city: fromLocation,
-    from_address: fromLocation,
-
-    to_country: "Казахстан",
-    to_region: fromLocation,
-    to_city: toLocation,
-    to_address: toLocation,
-
-    cargo_name: form.cargoType || "Не указан",
-    cargo_type: form.cargoType || "Не указан",
-    currency: form.currency || "KZT",
-    vat: form.vat ? "с НДС" : "без НДС",
+    from_location: form.from_location,
+    to_location: form.to_location,
+    cargo: {
+      description: null,
+      height_cm: +form.height_cm,
+      length_cm: +form.length_cm,
+      name: form.name || "Не указан",
+      type: form.type,
+      weight_kg: form.weight_kg,
+      width_cm: form.width_cm,
+    },
+    from_city: form.from_location.city,
+    to_city: form.to_location.city,
+    cargo_name: form.name || "Не указан",
+    vat: form.vat,
   };
+
+  // const payload = {
+  //   forwarder: form.forwarderId,
+
+  //   from_country: fromLocation,
+  //   from_region: fromLocation,
+  //   from_city: fromLocation,
+  //   from_address: fromLocation,
+
+  //   to_country: "Казахстан",
+  //   to_region: fromLocation,
+  //   to_city: toLocation,
+  //   to_address: toLocation,
+
+  //   cargo_name: form.cargoType || "Не указан",
+  //   cargo_type: form.cargoType || "Не указан",
+  //   currency: form.currency || "KZT",
+  //   vat: form.vat ? "с НДС" : "без НДС",
+  // };
 
   addIfHasValue(payload, "loading_date", form.loadingDate);
   addIfHasValue(payload, "comment", normalizeText(form.comment));

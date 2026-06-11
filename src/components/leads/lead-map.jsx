@@ -24,8 +24,8 @@ const fetchRoute = async (start, end) => {
 };
 
 export default function LeadMap({ from, to, id }) {
-  const start = [from.lat, from.lon];
-  const end = [to.lat, to.lon];
+  const start = !from?.lat ? [43.241141, 76.871399] : [from?.lat, from?.lon];
+  const end = !to?.lat ? [43.241141, 76.871399] : [to?.lat, to?.lon];
 
   const [points, setPoints] = useState(null);
   const [route, setRoute] = useState([]);
@@ -109,10 +109,10 @@ export default function LeadMap({ from, to, id }) {
     >
       <TileLayer url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png" />
 
-      <Marker position={start} />
-      <Marker position={end} />
+      {/* <Marker position={start} />
+      <Marker position={end} /> */}
 
-      {route.length > 0 && (
+      {(route.length > 0 || !from.lat || !from?.lon) && (
         <Polyline positions={route} color="blue" weight={4} />
       )}
       {points && <Marker position={points} icon={driverIcon} />}
