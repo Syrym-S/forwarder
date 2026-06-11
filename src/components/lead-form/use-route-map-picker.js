@@ -31,7 +31,7 @@ export function useRouteMapPicker({ form, setValue }) {
   async function setFromPoint(lat, lng) {
     setValue("fromLat", lat, setValueOptions);
     setValue("fromLng", lng, setValueOptions);
-    setValue("fromLocation", "Определяем адрес...", setValueOptions);
+    setValue("from_location", "Определяем адрес...", setValueOptions);
 
     const address = await getAddressForPoint("from", lat, lng);
 
@@ -39,7 +39,7 @@ export function useRouteMapPicker({ form, setValue }) {
       return;
     }
 
-    setValue("fromLocation", address, setValueOptions);
+    setValue("from_location", address, setValueOptions);
   }
 
   async function setToPoint(lat, lng) {
@@ -120,7 +120,7 @@ export function useRouteMapPicker({ form, setValue }) {
     abortReverseGeocode("from");
     abortReverseGeocode("to");
 
-    setValue("fromLocation", "", setValueOptions);
+    setValue("from_location", "", setValueOptions);
     setValue("fromLat", "", setValueOptions);
     setValue("fromLng", "", setValueOptions);
 

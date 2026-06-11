@@ -21,6 +21,7 @@ import LeadsTable from "../../components/leads/leads-table";
 import { VIEWS } from "../../shared/const/leads";
 import AddLeadForm from "../../features/leads/add-lead-form";
 import { useSearchParams } from "react-router-dom";
+import AddLeadFormNew from "../../components/new-form/add-lead-form-new";
 
 const ActiveLeads = () => {
   const [openForm, setOpenForm] = useState(false);
@@ -106,7 +107,8 @@ const ActiveLeads = () => {
       )}
       {view === VIEWS.table && <LeadsTable leads={leads} />}
       <Pagination count={pageCount} page={page} onChange={handlePageChange} />
-      <AddLeadForm openForm={openForm} setOpenForm={setOpenForm} />
+      {/* <AddLeadForm openForm={openForm} setOpenForm={setOpenForm} /> */}
+      <AddLeadFormNew openForm={openForm} setOpenForm={setOpenForm} />
     </RootLayout>
   );
 };
