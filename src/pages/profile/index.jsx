@@ -165,10 +165,6 @@ const ProfilePage = () => {
                      </Typography>
                   </Box>
 
-                  {isProfileLoading && (
-                     <Alert severity='info'>Загружаем данные профиля...</Alert>
-                  )}
-
                   {profileLoadError && (
                      <Alert severity='error'>{profileLoadError}</Alert>
                   )}
@@ -325,7 +321,11 @@ const ProfilePage = () => {
                         variant='contained'
                         disabled={isSaving || isProfileLoading}
                      >
-                        {isSaving ? 'Сохранение...' : 'Сохранить'}
+                        {isSaving
+                           ? 'Сохранение...'
+                           : isProfileLoading
+                             ? 'Загрузка...'
+                             : 'Сохранить'}
                      </Button>
                   </Box>
                </Stack>
