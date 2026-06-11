@@ -21,7 +21,7 @@ const steps = [
 
 const AddLeadFormNew = ({ openForm, setOpenForm }) => {
   const [activeStep, setActiveStep] = useState(1);
-  const { control, handleSubmit, setValue } = useForm();
+  const { control, handleSubmit, setValue, formState: errors } = useForm();
 
   const formValues = useWatch({ control });
 
@@ -51,9 +51,17 @@ const AddLeadFormNew = ({ openForm, setOpenForm }) => {
           />
         );
       case 2:
-        return <LeadCargoStep />;
+        return (
+          <LeadCargoStep control={control} errors={errors} form={formValues} />
+        );
       case 3:
-        return <LeadDriverStep />;
+        return (
+          <LeadDriverStep
+            control={control}
+            errors={errors}
+            setValue={setValue}
+          />
+        );
       case 4:
         return <LeadCustomerStep />;
       case 5:
