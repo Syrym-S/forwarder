@@ -64,9 +64,9 @@ const AddLeadForm = ({
     reValidateMode: "onChange",
   });
 
-  useEffect(() => {
-    reset(defaultValues);
-  }, [defaultValues, reset]);
+  // useEffect(() => {
+  //   reset(defaultValues);
+  // }, [defaultValues, reset]);
 
   const formValues = useWatch({ control });
 
