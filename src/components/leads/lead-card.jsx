@@ -17,6 +17,7 @@ const LeadCard = ({ lead }) => {
   const navigate = useNavigate();
   const location = useLocation();
 
+  console.log(lead);
   const navigateToLeadItem = () => {
     navigate(`/lead-item/${lead.id}`);
   };
@@ -157,7 +158,7 @@ const LeadCard = ({ lead }) => {
                   lineHeight: 1.35,
                 }}
               >
-                {lead.from_location.trim()}
+                {lead.from_location.city}
               </Typography>
             </Box>
           </Box>
@@ -219,7 +220,7 @@ const LeadCard = ({ lead }) => {
                   lineHeight: 1.35,
                 }}
               >
-                {lead.to_location.trim()}
+                {lead.to_location.city || lead.to_location.city}
               </Typography>
             </Box>
           </Box>
