@@ -9,14 +9,24 @@ import { SecondStep } from "../../components/lead-form/steps/second-step";
 import { LastStep } from "../../components/lead-form/steps/last-step";
 import { CreateLeadResultModal } from "../../components/lead-form/create-lead-result-modal";
 import {
-  mapCreatedLeadToUi,
+  mapCreateLeadDocumentsToApiDocuments,
   mapCreateLeadFormToApi,
 } from "../../components/lead-form/model/createLead.adapter";
 import { useLeadsStore } from "../../app/store/leads-store";
 import { ThirdStep } from "../../components/lead-form/steps/third-step";
 import { ForthStep } from "../../components/lead-form/steps/forth-step";
 
-const steps = ["Маршрут", "Груз", "Водитель", "Заказщик", "Проверка"];
+import { DocumentsStep } from "../../components/lead-form/steps/documents-step";
+import { uploadLeadFileApi } from "../../app/store/api";
+
+const steps = [
+  "Маршрут",
+  "Груз",
+  "Водитель",
+  "Заказщик",
+  "Документы",
+  "Проверка",
+];
 
 const stepFields = [
   ["fromLocation", "toLocation", "loadingDate"],
@@ -30,6 +40,8 @@ const stepFields = [
     "currency",
   ],
   ["forwarderId"],
+  [],
+  [],
 ];
 
 const AddLeadForm = ({
@@ -59,35 +71,90 @@ const AddLeadForm = ({
     setValue,
     formState: { errors },
   } = useForm({
-    defaultValues: defaultValues,
+    defaultValues: {
+      documents: [],
+      ...defaultValues,
+    },
     mode: "onChange",
     reValidateMode: "onChange",
   });
 
   // useEffect(() => {
-  //   reset(defaultValues);
+  //    reset({
+  //       documents: [],
+  //       ...defaultValues,
+  //    });
   // }, [defaultValues, reset]);
 
   const formValues = useWatch({ control });
 
+  console.log(formValues);
+
   const isFirstStep = activeStep === 0;
   const isLastStep = activeStep === steps.length - 1;
+
+  function getCreatedLeadId(response) {
+    return (
+      response?.data?.id ||
+      response?.data?.lead_id ||
+      response?.id ||
+      response?.lead_id ||
+      response?.result?.id ||
+      null
+    );
+  }
+
+  async function uploadCreateLeadDocuments(leadId, documents = []) {
+    if (!leadId || !documents.length) {
+      return;
+    }
+
+    const documentsWithFiles = documents.filter((document) => document.file);
+
+    for (const document of documentsWithFiles) {
+      await uploadLeadFileApi(leadId, {
+        file: document.file,
+        name: document.name || document.fileName || "Документ",
+        context: document.context || "",
+      });
+    }
+  }
 
   async function handleCreateRoute(data) {
     try {
       setIsSubmitting(true);
 
+      console.log(data);
+
+      const documents = mapCreateLeadDocumentsToApiDocuments(data);
       const payload = mapCreateLeadFormToApi(data);
 
-      // const createdLead = mapCreatedLeadToUi(data);
+      let response = null;
+      let createdLeadId = editingItemId;
+      let documentsUploadFailed = false;
 
       if (isEdit) {
-        await updateLead(editingItemId, payload);
+        response = await updateLead(editingItemId, payload);
       } else {
-        await createLead(payload);
-      }
+        response = await createLead(payload);
+        createdLeadId = getCreatedLeadId(response);
 
-      // prependLead(createdLead);
+        if (documents.length > 0 && createdLeadId) {
+          try {
+            await uploadCreateLeadDocuments(createdLeadId, documents);
+          } catch (documentError) {
+            documentsUploadFailed = true;
+            console.error(
+              "Create lead documents upload failed:",
+              documentError,
+            );
+          }
+        }
+
+        if (documents.length > 0 && !createdLeadId) {
+          documentsUploadFailed = true;
+        }
+      }
 
       handleClose();
 
@@ -95,7 +162,11 @@ const AddLeadForm = ({
         open: true,
         type: "success",
         title: isEdit ? "Перевозка отредактирована" : "Перевозка создана",
-        message: `Лид успешно ${isEdit ? "изменён" : "создан"} ${data?.id ? `: ${response.id}` : ""}`,
+        message: documentsUploadFailed
+          ? "Лид создан, но часть документов не загрузилась"
+          : `Лид успешно ${isEdit ? "изменён" : "создан"}${
+              createdLeadId ? `: ${createdLeadId}` : ""
+            }`,
       });
     } catch (error) {
       setResultModal({
@@ -149,6 +220,9 @@ const AddLeadForm = ({
           <ForthStep control={control} errors={errors} setValue={setValue} />
         );
       case 4:
+        return <DocumentsStep form={formValues} setValue={setValue} />;
+
+      case 5:
         return <LastStep form={formValues} />;
     }
   };
@@ -156,7 +230,10 @@ const AddLeadForm = ({
   function handleClose() {
     setActiveStep(0);
     setMaxAvailableStep(0);
-    reset(defaultValues);
+    reset({
+      documents: [],
+      ...defaultValues,
+    });
     setOpenForm(false);
   }
 
@@ -197,7 +274,7 @@ const AddLeadForm = ({
             isFirstStep={activeStep === 0}
             isLastStep={activeStep + 1 === steps.length}
             hasCurrentStepErrors={false}
-            isSubmitting={false}
+            isSubmitting={isSubmitting}
             onClose={handleClose}
             onBack={handleBack}
             onNext={handleNext}

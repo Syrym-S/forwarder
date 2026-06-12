@@ -5,6 +5,9 @@ import TripOriginIcon from "@mui/icons-material/TripOrigin";
 import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
 import ArrowRightAltRoundedIcon from "@mui/icons-material/ArrowRightAltRounded";
 import RouteOutlinedIcon from "@mui/icons-material/RouteOutlined";
+import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
+import { LeadDocumentsSection } from "../../components/leads/documents/LeadDocumentsSection";
+
 import LocalShippingOutlinedIcon from "@mui/icons-material/LocalShippingOutlined";
 import BusinessOutlinedIcon from "@mui/icons-material/BusinessOutlined";
 import EditNoteRoundedIcon from "@mui/icons-material/EditNoteRounded";
@@ -25,6 +28,12 @@ import AddLeadForm from "../../features/leads/add-lead-form";
 import { useFormDefaultValues } from "../../shared/hooks/leads/use-form-default-values";
 import { mapCreateLeadFormToApi } from "../../components/lead-form/model/createLead.adapter";
 import LeadMap from "../../components/leads/lead-map";
+import {
+  deleteLeadFileApi,
+  getLeadFilesApi,
+  uploadLeadFileApi,
+} from "../../app/store/api";
+import { mapLeadFilesResponseFromApi } from "../../features/leads/model/lead-files.adapter";
 
 const Section = ({ icon, title, children }) => (
   <Paper
@@ -113,6 +122,11 @@ const LeadItem = () => {
 
   const route = [start, end];
 
+  const [documents, setDocuments] = useState([]);
+  const [isDocumentUploading, setIsDocumentUploading] = useState(false);
+  const [documentError, setDocumentError] = useState("");
+  const [deletingDocumentIds, setDeletingDocumentIds] = useState([]);
+
   const openEditForm = () => {
     setOpenEdit(true);
   };
@@ -120,8 +134,6 @@ const LeadItem = () => {
   useEffect(() => {
     getLeadItem(id);
   }, [id]);
-
-  if (!leadData) return <>...Загрузка</>;
 
   const from = {
     lat: leadData?.from_location.lat,
@@ -131,6 +143,108 @@ const LeadItem = () => {
     lat: leadData?.to_location.lat,
     lon: leadData?.to_location.lon,
   };
+
+  async function reloadLeadDocuments(leadId) {
+    const response = await getLeadFilesApi(leadId);
+    const mappedDocuments = mapLeadFilesResponseFromApi(response);
+
+    setDocuments(mappedDocuments);
+  }
+
+  async function handleAddDocument({ name, context, file }) {
+    if (!id || !file) return;
+
+    try {
+      setIsDocumentUploading(true);
+      setDocumentError("");
+
+      await uploadLeadFileApi(id, {
+        file,
+        name,
+        context,
+      });
+
+      await reloadLeadDocuments(id);
+    } catch (error) {
+      setDocumentError(
+        error.response?.data?.message ||
+          error.message ||
+          "Не удалось загрузить документ",
+      );
+    } finally {
+      setIsDocumentUploading(false);
+    }
+  }
+
+  async function handleDeleteDocument(documentId) {
+    const document = documents.find((item) => item.id === documentId);
+
+    if (!document?.path) {
+      setDocumentError("Не удалось определить файл для удаления");
+      return;
+    }
+
+    if (document.source && document.source !== "forwarder") {
+      setDocumentError("Можно удалить только файлы экспедитора");
+      return;
+    }
+
+    try {
+      setDocumentError("");
+      setDeletingDocumentIds((prevIds) => [...prevIds, documentId]);
+
+      await deleteLeadFileApi(id, document.path);
+      await reloadLeadDocuments(id);
+    } catch (error) {
+      setDocumentError(
+        error.response?.data?.message ||
+          error.message ||
+          "Не удалось удалить документ",
+      );
+    } finally {
+      setDeletingDocumentIds((prevIds) =>
+        prevIds.filter((itemId) => itemId !== documentId),
+      );
+    }
+  }
+
+  useEffect(() => {
+    let isCancelled = false;
+
+    async function loadDocuments() {
+      if (!id) {
+        return;
+      }
+
+      try {
+        setDocumentError("");
+
+        const response = await getLeadFilesApi(id);
+        const mappedDocuments = mapLeadFilesResponseFromApi(response);
+
+        if (!isCancelled) {
+          setDocuments(mappedDocuments);
+        }
+      } catch (error) {
+        if (!isCancelled) {
+          setDocuments([]);
+          setDocumentError(
+            error.response?.data?.message ||
+              error.message ||
+              "Не удалось загрузить документы",
+          );
+        }
+      }
+    }
+
+    loadDocuments();
+
+    return () => {
+      isCancelled = true;
+    };
+  }, [id]);
+
+  if (!leadData) return <>...Загрузка</>;
 
   return (
     <RootLayout data={leadData}>
@@ -309,6 +423,19 @@ const LeadItem = () => {
 
         <Section title="Водитель" icon={<PersonOutlinedIcon color="primary" />}>
           <InfoField label="ФИО" value={leadData.driver_name} />
+        </Section>
+        <Section
+          title="Документы"
+          icon={<DescriptionOutlinedIcon color="primary" />}
+        >
+          <LeadDocumentsSection
+            documents={documents}
+            onAddDocument={handleAddDocument}
+            onDeleteDocument={handleDeleteDocument}
+            isUploading={isDocumentUploading}
+            uploadError={documentError}
+            deletingDocumentIds={deletingDocumentIds}
+          />
         </Section>
       </Container>
     </RootLayout>

@@ -72,6 +72,8 @@ export function useRouteMapPicker({ form, setValue }) {
       lng: lng,
     };
 
+    console.log("to_location", to_location);
+
     setValue("to_location", to_location, setValueOptions);
   }
 

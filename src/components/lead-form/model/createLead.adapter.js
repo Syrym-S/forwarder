@@ -12,6 +12,20 @@ function toNumber(value) {
   return Number.isNaN(number) ? null : number;
 }
 
+export function mapCreateLeadDocumentsToApiDocuments(data) {
+  const documents = data?.documents || [];
+
+  return Array.isArray(documents)
+    ? documents
+        .filter((document) => document.file)
+        .map((document) => ({
+          name: document.name || document.fileName || "Документ",
+          context: document.context || "",
+          file: document.file,
+        }))
+    : [];
+}
+
 function addIfHasValue(target, key, value) {
   if (hasValue(value)) {
     target[key] = value;
@@ -31,10 +45,9 @@ function normalizeText(value) {
 }
 
 export function mapCreateLeadFormToApi(form) {
+  console.log("mapCreateLeadFormToApi", form);
   const fromLocation = normalizeText(form.fromLocation);
   const toLocation = normalizeText(form.toLocation);
-
-  console.log("mapCreateLeadFormToApi", form);
 
   const payload = {
     from_location: form.from_location,
@@ -53,25 +66,24 @@ export function mapCreateLeadFormToApi(form) {
     cargo_name: form.name || "Не указан",
     vat: form.vat,
   };
+  //   const payload = {
+  //     forwarder: form.forwarderId,
 
-  // const payload = {
-  //   forwarder: form.forwarderId,
+  //     from_country: fromLocation,
+  //     from_region: fromLocation,
+  //     from_city: fromLocation,
+  //     from_address: fromLocation,
 
-  //   from_country: fromLocation,
-  //   from_region: fromLocation,
-  //   from_city: fromLocation,
-  //   from_address: fromLocation,
+  //     to_country: "Казахстан",
+  //     to_region: fromLocation,
+  //     to_city: toLocation,
+  //     to_address: toLocation,
 
-  //   to_country: "Казахстан",
-  //   to_region: fromLocation,
-  //   to_city: toLocation,
-  //   to_address: toLocation,
-
-  //   cargo_name: form.cargoType || "Не указан",
-  //   cargo_type: form.cargoType || "Не указан",
-  //   currency: form.currency || "KZT",
-  //   vat: form.vat ? "с НДС" : "без НДС",
-  // };
+  //     cargo_name: form.cargoType || "Не указан",
+  //     cargo_type: form.cargoType || "Не указан",
+  //     currency: form.currency || "KZT",
+  //     vat: form.vat ? "с НДС" : "без НДС",
+  //   };
 
   addIfHasValue(payload, "loading_date", form.loadingDate);
   addIfHasValue(payload, "comment", normalizeText(form.comment));
