@@ -18,30 +18,13 @@ export const getLeads = async (params) => {
 };
 
 export const getHistoryLeads = async () => {
-  const finished_data = await axios.get(
-    `${BASE_URL}/forwarder/v1/leads/search`,
-    {
-      params: {
-        status: "finished",
-      },
-      headers: {
-        "X-WP-Nonce": APP_DATA.nonce,
-      },
+  const data = await axios.get(`${BASE_URL}/forwarder/v1/leads/history`, {
+    headers: {
+      "X-WP-Nonce": APP_DATA.nonce,
     },
-  );
-  const deleted_data = await axios.get(
-    `${BASE_URL}/forwarder/v1/leads/search`,
-    {
-      params: {
-        status: "finished",
-      },
-      headers: {
-        "X-WP-Nonce": APP_DATA.nonce,
-      },
-    },
-  );
+  });
 
-  return [...finished_data, ...deleted_data];
+  return data;
 };
 
 export const getLeadItemDetails = async (lead_id) => {
