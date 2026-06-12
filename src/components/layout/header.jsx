@@ -4,7 +4,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import './style.css';
 import Box from '@mui/material/Box';
-import { AppBar } from '@mui/material';
+import { AppBar, Button, Menu, MenuItem } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
 const Header = ({ openMenu, setOpenMenu }) => {
