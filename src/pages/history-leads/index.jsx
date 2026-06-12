@@ -24,22 +24,22 @@ import { useSearchParams } from "react-router-dom";
 
 const HistoryLeads = () => {
   const [openForm, setOpenForm] = useState(false);
-  const leads = useLeadsStore((state) => state.leads);
+  const historyLeads = useLeadsStore((state) => state.historyLeads);
   const [searchParams, setSearchParams] = useSearchParams();
   const page = Number(searchParams.get("page")) || 1;
 
   const ITEMS_PER_PAGE = 5;
 
-  const paginatedLeads = leads.slice(
-    (page - 1) * ITEMS_PER_PAGE,
-    page * ITEMS_PER_PAGE,
-  );
+  // const paginatedLeads = leads.slice(
+  //   (page - 1) * ITEMS_PER_PAGE,
+  //   page * ITEMS_PER_PAGE,
+  // );
 
   const handlePageChange = (_, value) => {
     setSearchParams({ page: value });
   };
 
-  const pageCount = Math.ceil(leads.length / ITEMS_PER_PAGE);
+  const pageCount = Math.ceil(historyLeads.length / ITEMS_PER_PAGE);
   const [view, setView] = useState(VIEWS.table);
   const isLoading = useLeadsStore((state) => state.isLoading);
   const fetchLeads = useLeadsStore((state) => state.fetchLeads);
@@ -71,7 +71,7 @@ const HistoryLeads = () => {
     );
 
   return (
-    <RootLayout data={leads} isLoading={isLoading}>
+    <RootLayout data={historyLeads} isLoading={isLoading}>
       <Box
         sx={{
           display: "flex",
@@ -104,12 +104,12 @@ const HistoryLeads = () => {
             },
           }}
         >
-          {paginatedLeads.map((lead) => (
+          {historyLeads.map((lead) => (
             <LeadCard key={lead.id} lead={lead} />
           ))}
         </Box>
       )}
-      {view === VIEWS.table && <LeadsTable leads={paginatedLeads} />}
+      {view === VIEWS.table && <LeadsTable leads={historyLeads} />}
       <Pagination count={pageCount} page={page} onChange={handlePageChange} />
       <AddLeadForm openForm={openForm} setOpenForm={setOpenForm} />
     </RootLayout>
