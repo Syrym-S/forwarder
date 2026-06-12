@@ -33,13 +33,23 @@ export function useRouteMapPicker({ form, setValue }) {
     setValue("fromLng", lng, setValueOptions);
     setValue("fromLocation", "Определяем адрес...", setValueOptions);
 
-    const address = await getAddressForPoint("from", lat, lng);
+    const locationInfo = await getAddressForPoint("from", lat, lng);
 
-    if (!address) {
+    if (!locationInfo) {
       return;
     }
+    const from_location = {
+      address: locationInfo.display_name,
+      city: locationInfo.address.city,
+      country: locationInfo.address.country,
+      region: locationInfo.address.city_district,
+      lat: lat,
+      lng: lng,
+    };
 
-    setValue("fromLocation", address, setValueOptions);
+    console.log(from_location);
+
+    setValue("from_location", from_location, setValueOptions);
   }
 
   async function setToPoint(lat, lng) {
@@ -47,13 +57,24 @@ export function useRouteMapPicker({ form, setValue }) {
     setValue("toLng", lng, setValueOptions);
     setValue("toLocation", "Определяем адрес...", setValueOptions);
 
-    const address = await getAddressForPoint("to", lat, lng);
+    const locationInfo = await getAddressForPoint("to", lat, lng);
 
-    if (!address) {
+    if (!locationInfo) {
       return;
     }
 
-    setValue("toLocation", address, setValueOptions);
+    const to_location = {
+      address: locationInfo.display_name,
+      city: locationInfo.address.city,
+      country: locationInfo.address.country,
+      region: locationInfo.address.city_district,
+      lat: lat,
+      lng: lng,
+    };
+
+    console.log("to_location", to_location);
+
+    setValue("to_location", to_location, setValueOptions);
   }
 
   function setPointLoading(point, isLoading) {
@@ -86,6 +107,7 @@ export function useRouteMapPicker({ form, setValue }) {
       if (reverseGeocodeControllersRef.current[point] !== controller) {
         return null;
       }
+      console.log(address);
 
       return address;
     } catch (error) {

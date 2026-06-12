@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   MapContainer,
   TileLayer,
@@ -10,84 +10,85 @@ import polyline from "@mapbox/polyline";
 import { Typography } from "@mui/material";
 
 import "leaflet/dist/leaflet.css";
-import { route } from "../../shared/const/mock-coordinates";
+import { useStore } from "zustand";
+import { useLeadsStore } from "../../app/store/leads-store";
 
-const MapTooltip = () => {
+const getRoute = async (start, end) => {
+  const response = await fetch(
+    `https://router.project-osrm.org/route/v1/driving/${start[1]},${start[0]};${end[1]},${end[0]}?overview=full&geometries=geojson`,
+  );
+
+  const data = await response.json();
+
+  return {
+    distance: data.routes[0].distance, // метры
+    duration: data.routes[0].duration, // секунды
+    coordinates: data.routes[0].geometry.coordinates.map(([lng, lat]) => [
+      lat,
+      lng,
+    ]),
+  };
+};
+
+const MapTooltip = ({ route }) => {
   return (
     <Tooltip sticky>
-      <Typography>{route.description}</Typography>
-      <Typography>{Math.round(route.distanceMeters / 1000)} км</Typography>
+      <Typography
+        style={{
+          width: "200px",
+        }}
+      >
+        Дистанция: {Math.round(route.distance / 1000)} км
+      </Typography>
       <Typography>
-        {Math.round(Number(route.duration.replace("s", "")) / 60)} мин
+        Длительность : {Math.round(Number(route.duration / 60))} мин
       </Typography>
     </Tooltip>
   );
 };
 
-const createMockRoutes = (baseCoordinates, count = 10) => {
-  return Array.from({ length: count }, (_, index) => {
-    const startOffsetLat =
-      (Math.random() - Math.floor(Math.random() * 10) + 1) * 1;
-    const startOffsetLng =
-      (Math.random() - Math.floor(Math.random() * 10) + 1) * 1;
-
-    const endOffsetLat =
-      (Math.random() - Math.floor(Math.random() * 10) + 1) * 1;
-    const endOffsetLng =
-      (Math.random() - Math.floor(Math.random() * 10) + 1) * 1;
-
-    const start = [
-      baseCoordinates[0][0] + startOffsetLat,
-      baseCoordinates[0][1] + startOffsetLng,
-    ];
-
-    const end = [
-      baseCoordinates[baseCoordinates.length - 1][0] + endOffsetLat,
-      baseCoordinates[baseCoordinates.length - 1][1] + endOffsetLng,
-    ];
-
-    const coordinates = baseCoordinates.map(([lat, lng], pointIndex) => {
-      const progress = pointIndex / (baseCoordinates.length - 1);
-
-      return [
-        lat + startOffsetLat * (1 - progress) + endOffsetLat * progress,
-        lng + startOffsetLng * (1 - progress) + endOffsetLng * progress,
-      ];
-    });
-
-    coordinates[0] = start;
-    coordinates[coordinates.length - 1] = end;
-
-    return {
-      start,
-      end,
-      coordinates,
-    };
-  });
-};
-
-const colors = [
-  "#1976d2",
-  "#2e7d32",
-  "#ed6c02",
-  "#9c27b0",
-  "#d32f2f",
-  "#0288d1",
-  "#7b1fa2",
-  "#388e3c",
-  "#f57c00",
-  "#455a64",
-];
-
 const Map = () => {
-  const coordinates = polyline.decode(route.polyline.encodedPolyline);
+  const leads = useLeadsStore((state) => state.leads);
+  const [routes, setRoutes] = useState([]);
 
-  const routes = createMockRoutes(coordinates, 10);
+  useEffect(() => {
+    const loadRoutes = async () => {
+      const result = await Promise.all(
+        leads
+          .filter(
+            (lead) =>
+              lead?.from_location?.lat &&
+              lead?.from_location?.lon &&
+              lead?.to_location?.lat &&
+              lead?.to_location?.lon,
+          )
+          .map(async (lead) => {
+            const coordinates = await getRoute(
+              [lead.from_location.lat, lead.from_location.lon],
+              [lead.to_location.lat, lead.to_location.lon],
+            );
+
+            return {
+              id: lead.id,
+              start: coordinates.coordinates[0],
+              end: coordinates.coordinates[coordinates.coordinates.length - 1],
+              coordinates: coordinates.coordinates,
+              distance: coordinates.distance,
+              duration: coordinates.duration,
+            };
+          }),
+      );
+
+      setRoutes(result);
+    };
+
+    loadRoutes();
+  }, [leads]);
 
   return (
     <MapContainer
-      center={coordinates[0]}
-      zoom={5}
+      center={[43.238949, 76.889709]}
+      zoom={13}
       scrollWheelZoom={false}
       style={{
         zIndex: 0,
@@ -101,20 +102,24 @@ const Map = () => {
         url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
       />
 
-      {routes.map((route, index) => (
-        <React.Fragment key={index}>
-          <Marker position={route.start} />
-          <Marker position={route.end} />
+      {routes.map((route) => {
+        return (
+          <React.Fragment key={route.id}>
+            <Marker position={route.start} />
+            <Marker position={route.end} />
 
-          <Polyline
-            positions={route.coordinates}
-            pathOptions={{
-              color: colors[index],
-              weight: 4,
-            }}
-          />
-        </React.Fragment>
-      ))}
+            <Polyline
+              positions={route.coordinates}
+              pathOptions={{
+                color: "blue",
+                weight: 4,
+              }}
+            >
+              <MapTooltip route={route} />
+            </Polyline>
+          </React.Fragment>
+        );
+      })}
     </MapContainer>
   );
 };
