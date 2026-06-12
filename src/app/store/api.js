@@ -115,3 +115,23 @@ export const deleteLeadFileApi = async (leadId, path) => {
 
   return data;
 };
+
+export const getDrivers = async () => {
+  const data = await axios.get(`${BASE_URL}/forwarder/v1/drivers`, {
+    headers: {
+      "X-WP-Nonce": APP_DATA.nonce,
+    },
+  });
+
+  return data;
+};
+
+export const getCustomers = async () => {
+  const data = await axios.get(`${BASE_URL}/forwarder/v1/customers`, {
+    headers: {
+      "X-WP-Nonce": APP_DATA.nonce,
+    },
+  });
+
+  return data;
+};

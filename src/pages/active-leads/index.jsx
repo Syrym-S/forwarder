@@ -21,6 +21,7 @@ import LeadsTable from "../../components/leads/leads-table";
 import { VIEWS } from "../../shared/const/leads";
 import AddLeadForm from "../../features/leads/add-lead-form";
 import { useSearchParams } from "react-router-dom";
+import { useFormDefaultValues } from "../../shared/hooks/leads/use-form-default-values";
 
 const ActiveLeads = () => {
   const [openForm, setOpenForm] = useState(false);
@@ -28,6 +29,7 @@ const ActiveLeads = () => {
   const page = useLeadsStore((state) => state.page);
   const ITEMS_PER_PAGE = useLeadsStore((state) => state.perPage);
 
+  const deafultValues = useFormDefaultValues();
   const [searchParams, setSearchParams] = useSearchParams();
 
   const handlePageChange = (_, value) => {
@@ -46,10 +48,6 @@ const ActiveLeads = () => {
   const handleOpenForm = () => {
     setOpenForm(true);
   };
-
-  // useEffect(() => {
-  //   fetchLeads();
-  // }, []);
 
   if (isLoading)
     return (
@@ -106,7 +104,11 @@ const ActiveLeads = () => {
       )}
       {view === VIEWS.table && <LeadsTable leads={leads} />}
       <Pagination count={pageCount} page={page} onChange={handlePageChange} />
-      <AddLeadForm openForm={openForm} setOpenForm={setOpenForm} />
+      <AddLeadForm
+        openForm={openForm}
+        setOpenForm={setOpenForm}
+        initialValues={deafultValues}
+      />
     </RootLayout>
   );
 };

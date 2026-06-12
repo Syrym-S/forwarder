@@ -246,6 +246,8 @@ const LeadItem = () => {
 
   if (!leadData) return <>...Загрузка</>;
 
+  console.log("leadData", leadData);
+
   return (
     <RootLayout data={leadData}>
       <Box
@@ -377,7 +379,10 @@ const LeadItem = () => {
               alignItems: "center",
             }}
           >
-            <InfoField label="Откуда" value={leadData.from_location.city} />
+            <InfoField
+              label="Откуда"
+              value={leadData.from_location?.address || "Битые данные"}
+            />
 
             <ArrowRightAltRoundedIcon
               sx={{
@@ -387,7 +392,10 @@ const LeadItem = () => {
               }}
             />
 
-            <InfoField label="Куда" value={leadData.to_location.city} />
+            <InfoField
+              label="Куда"
+              value={leadData.to_location?.address || "Битые данные"}
+            />
           </Box>
         </Section>
 
@@ -412,7 +420,7 @@ const LeadItem = () => {
 
             <InfoField
               label="Цена"
-              value={`${leadData.summ} ${leadData.currency}`}
+              value={`${leadData.cargo_price} ${leadData.currency}`}
             />
 
             <InfoField label="Статус" value={leadData.status} />

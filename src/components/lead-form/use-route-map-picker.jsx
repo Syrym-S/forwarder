@@ -31,7 +31,7 @@ export function useRouteMapPicker({ form, setValue }) {
   async function setFromPoint(lat, lng) {
     setValue("fromLat", lat, setValueOptions);
     setValue("fromLng", lng, setValueOptions);
-    setValue("fromLocation", "Определяем адрес...", setValueOptions);
+    // setValue("fromLocation", "Определяем адрес...", setValueOptions);
 
     const locationInfo = await getAddressForPoint("from", lat, lng);
 
@@ -55,7 +55,7 @@ export function useRouteMapPicker({ form, setValue }) {
   async function setToPoint(lat, lng) {
     setValue("toLat", lat, setValueOptions);
     setValue("toLng", lng, setValueOptions);
-    setValue("toLocation", "Определяем адрес...", setValueOptions);
+    // setValue("toLocation", "Определяем адрес...", setValueOptions);
 
     const locationInfo = await getAddressForPoint("to", lat, lng);
 
@@ -107,7 +107,6 @@ export function useRouteMapPicker({ form, setValue }) {
       if (reverseGeocodeControllersRef.current[point] !== controller) {
         return null;
       }
-      console.log(address);
 
       return address;
     } catch (error) {
@@ -142,11 +141,23 @@ export function useRouteMapPicker({ form, setValue }) {
     abortReverseGeocode("from");
     abortReverseGeocode("to");
 
-    setValue("fromLocation", "", setValueOptions);
+    setValue("from_location.address", "", setValueOptions);
+    setValue("from_location.city", null, setValueOptions);
+    setValue("from_location.country", null, setValueOptions);
+    setValue("from_location.region", null, setValueOptions);
+    setValue("from_location.lat", null, setValueOptions);
+    setValue("from_location.lng", null, setValueOptions);
+
     setValue("fromLat", "", setValueOptions);
     setValue("fromLng", "", setValueOptions);
 
-    setValue("toLocation", "", setValueOptions);
+    setValue("to_location.address", "", setValueOptions);
+    setValue("to_location.city", null, setValueOptions);
+    setValue("to_location.country", null, setValueOptions);
+    setValue("to_location.region", null, setValueOptions);
+    setValue("to_location.lat", null, setValueOptions);
+    setValue("to_location.lng", null, setValueOptions);
+
     setValue("toLat", "", setValueOptions);
     setValue("toLng", "", setValueOptions);
 

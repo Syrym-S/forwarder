@@ -24,6 +24,7 @@ export function SecondStep({ control, errors, form, setValue }) {
       >
         <Controller
           name="type"
+          defaultValue={"Не указан"}
           control={control}
           render={({ field }) => (
             <TextField
@@ -92,6 +93,7 @@ export function SecondStep({ control, errors, form, setValue }) {
             render={({ field }) => (
               <TextField
                 {...field}
+                type="number"
                 label="Длина, см"
                 fullWidth
                 size="small"
@@ -112,6 +114,7 @@ export function SecondStep({ control, errors, form, setValue }) {
             render={({ field }) => (
               <TextField
                 {...field}
+                type="number"
                 label="Ширина, см"
                 fullWidth
                 size="small"
@@ -132,6 +135,7 @@ export function SecondStep({ control, errors, form, setValue }) {
             render={({ field }) => (
               <TextField
                 {...field}
+                type="number"
                 label="Высота, см"
                 fullWidth
                 size="small"
@@ -153,6 +157,7 @@ export function SecondStep({ control, errors, form, setValue }) {
           render={({ field }) => (
             <TextField
               {...field}
+              type="number"
               label="Цена"
               fullWidth
               size="small"
@@ -163,6 +168,7 @@ export function SecondStep({ control, errors, form, setValue }) {
         />
 
         <Controller
+          defaultValue={"KZT"}
           name="currency"
           control={control}
           render={({ field }) => (

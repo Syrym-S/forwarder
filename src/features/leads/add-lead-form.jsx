@@ -18,6 +18,8 @@ import { ForthStep } from "../../components/lead-form/steps/forth-step";
 
 import { DocumentsStep } from "../../components/lead-form/steps/documents-step";
 import { uploadLeadFileApi } from "../../app/store/api";
+import { useCustomerStore } from "../../app/store/customer";
+import { useDriverStore } from "../../app/store/driver-store";
 
 const steps = [
   "Маршрут",
@@ -29,7 +31,8 @@ const steps = [
 ];
 
 const stepFields = [
-  ["fromLocation", "toLocation", "loadingDate"],
+  ["from_location.address", "to_location.address", "loadingDate"],
+  ,
   [
     "cargoType",
     "weightKg",
@@ -49,7 +52,7 @@ const AddLeadForm = ({
   isEdit = false,
   openForm,
   setOpenForm,
-  defaultValues = {},
+  initialValues,
 }) => {
   const createLead = useLeadsStore((state) => state.createLead);
   const updateLead = useLeadsStore((state) => state.updateLead);
@@ -63,6 +66,10 @@ const AddLeadForm = ({
     message: "",
   });
 
+  const defaultValues = {
+    ...initialValues,
+  };
+
   const {
     control,
     handleSubmit,
@@ -71,24 +78,14 @@ const AddLeadForm = ({
     setValue,
     formState: { errors },
   } = useForm({
-    defaultValues: {
-      documents: [],
-      ...defaultValues,
-    },
+    defaultValues,
     mode: "onChange",
     reValidateMode: "onChange",
   });
 
-  // useEffect(() => {
-  //    reset({
-  //       documents: [],
-  //       ...defaultValues,
-  //    });
-  // }, [defaultValues, reset]);
-
   const formValues = useWatch({ control });
 
-  console.log(formValues);
+  console.log("formValues", formValues);
 
   const isFirstStep = activeStep === 0;
   const isLastStep = activeStep === steps.length - 1;
@@ -124,10 +121,9 @@ const AddLeadForm = ({
     try {
       setIsSubmitting(true);
 
-      console.log(data);
-
-      const documents = mapCreateLeadDocumentsToApiDocuments(data);
       const payload = mapCreateLeadFormToApi(data);
+
+      console.log(payload);
 
       let response = null;
       let createdLeadId = editingItemId;
@@ -190,6 +186,14 @@ const AddLeadForm = ({
 
     await handleSubmit(handleCreateRoute)();
   }
+
+  const getCustomers = useCustomerStore((state) => state.getCustomers);
+  const getDrivers = useDriverStore((state) => state.getDrivers);
+
+  useEffect(() => {
+    getCustomers();
+    getDrivers();
+  }, []);
 
   const renderContent = (step) => {
     switch (step) {

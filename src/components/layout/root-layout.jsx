@@ -13,7 +13,7 @@ const RootLayout = ({
 }) => {
   const location = useLocation();
 
-  if ((!data && !withoutDataCheck) || data.length === 0) {
+  if ((!data && !withoutDataCheck) || data?.length === 0) {
     return (
       <Box
         sx={{

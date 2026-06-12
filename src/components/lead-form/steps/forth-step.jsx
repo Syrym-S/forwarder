@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Controller, useWatch } from "react-hook-form";
 import PropTypes from "prop-types";
 import {
@@ -11,43 +11,19 @@ import {
 } from "@mui/material";
 import { StepSection } from "../step-section";
 import { InfoBadge } from "../info-badge";
-
-export const CUSTOMERS = [
-  {
-    id: "6a2686g4820346df4d024dc1",
-    fullName: "Иванов Иван Иванович",
-    iin: "990101300001",
-    phone: "+7 701 111 11 11",
-  },
-  {
-    id: "6a2686g4820346df4d024dc2",
-    fullName: "Петров Петр Петрович",
-    iin: "980202300002",
-    phone: "+7 702 222 22 22",
-  },
-  {
-    id: "6a2686g4820346df4d024dc3",
-    fullName: "Сидоров Сидор Сидорович",
-    iin: "970303300003",
-    phone: "+7 703 333 33 33",
-  },
-  {
-    id: "6a2686g4820346df4d024dc4",
-    fullName: "Абдуллин Ерлан",
-    iin: "960404300004",
-    phone: "+7 704 444 44 44",
-  },
-];
+import { useCustomerStore } from "../../../app/store/customer";
 
 export function ForthStep({ control, errors, setValue }) {
-  const selectedCustomerId = useWatch({
+  const selectedCustomer = useWatch({
     control,
     name: "customer",
   });
 
-  const [selectedCustomer, setSelectedCustomer] = useState(null);
+  // const [selectedCustomer, setSelectedCustomer] = useState([]);
 
-  const options = useMemo(() => CUSTOMERS, []);
+  const customers = useCustomerStore((state) => state.customers);
+  const isLoading = useCustomerStore((state) => state.isLoading);
+  // const options = useMemo(() => CUSTOMERS, []);
 
   return (
     <StepSection
@@ -60,14 +36,13 @@ export function ForthStep({ control, errors, setValue }) {
         render={({ field }) => (
           <Stack spacing={2}>
             <Autocomplete
-              options={options}
-              value={selectedCustomer}
-              getOptionLabel={(option) => option?.fullName ?? ""}
+              disabled={isLoading}
+              options={customers}
+              defaultValue={selectedCustomer}
+              getOptionLabel={(option) => option?.name ?? ""}
               isOptionEqualToValue={(option, value) => option?.id === value?.id}
               onChange={(_, value) => {
-                setSelectedCustomer(value);
-
-                field.onChange(value?.id ?? "");
+                if (value?.length > 1) return;
 
                 setValue("customer", value, {
                   shouldDirty: true,
@@ -85,13 +60,13 @@ export function ForthStep({ control, errors, setValue }) {
                     gap: 2,
                   }}
                 >
-                  <Typography fontWeight={700}>{option.fullName}</Typography>
+                  <Typography fontWeight={700}>{option.name}</Typography>
                 </Box>
               )}
               renderInput={(params) => (
                 <TextField
                   {...params}
-                  label="Заказщик"
+                  label={isLoading ? "...Загрузка данных" : "Заказщик"}
                   placeholder="Выберите заказщика"
                   error={Boolean(errors.forwarderId)}
                   helperText={errors.forwarderId?.message}
@@ -110,14 +85,9 @@ export function ForthStep({ control, errors, setValue }) {
                   gap: 1.5,
                 }}
               >
-                <InfoBadge
-                  label="ФИО заказщица"
-                  value={selectedCustomer.fullName}
-                />
+                <InfoBadge label="Заказщик" value={selectedCustomer.name} />
 
-                <InfoBadge label="ИИН водителя" value={selectedCustomer.iin} />
-
-                <InfoBadge label="Телефон" value={selectedCustomer.phone} />
+                <InfoBadge label="Тип компании" value={selectedCustomer.type} />
               </Box>
             )}
           </Stack>

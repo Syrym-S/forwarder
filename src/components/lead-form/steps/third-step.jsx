@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Controller, useWatch } from "react-hook-form";
 import PropTypes from "prop-types";
 import {
@@ -11,51 +11,22 @@ import {
 } from "@mui/material";
 import { StepSection } from "../step-section";
 import { InfoBadge } from "../info-badge";
-
-export const DRIVERS = [
-  {
-    id: "6a2686b4860546df4d024dc2",
-    fullName: "Иванов Иван Иванович",
-    iin: "990101300001",
-    companyName: "ТОО ТрансЛогистик",
-    companyBin: "123456789012",
-    phone: "+7 701 111 11 11",
-  },
-  {
-    id: "6a2686b4860346df4d024dc2",
-    fullName: "Петров Петр Петрович",
-    iin: "980202300002",
-    companyName: "ТОО Cargo Express",
-    companyBin: "223456789012",
-    phone: "+7 702 222 22 22",
-  },
-  {
-    id: "6a2686g4860346df4d024dc2",
-    fullName: "Сидоров Сидор Сидорович",
-    iin: "970303300003",
-    companyName: "ТОО Fast Delivery",
-    companyBin: "323456789012",
-    phone: "+7 703 333 33 33",
-  },
-  {
-    id: "6a2686g4820346df4d024dc2",
-    fullName: "Абдуллин Ерлан",
-    iin: "960404300004",
-    companyName: "ТОО Kazakhstan Logistics",
-    companyBin: "423456789012",
-    phone: "+7 704 444 44 44",
-  },
-];
+import { useDriverStore } from "../../../app/store/driver-store";
 
 export function ThirdStep({ control, errors, setValue }) {
-  const selectedDriverId = useWatch({
+  const selectedDriver = useWatch({
     control,
     name: "driver",
   });
 
-  const [selectedDriver, setSelectedDriver] = useState([]);
+  // const [selectedDriver, setSelectedDriver] = useState([]);
 
-  const options = useMemo(() => DRIVERS, []);
+  const drivers = useDriverStore((state) => state.drivers);
+  const isLoading = useDriverStore((state) => state.isLoading);
+
+  // const options = useMemo(() => drivers, []);
+
+  // console.log(options)
 
   return (
     <StepSection
@@ -70,13 +41,11 @@ export function ThirdStep({ control, errors, setValue }) {
             <Autocomplete
               multiple
               limitTags={1}
-              options={options}
-              value={selectedDriver}
-              getOptionLabel={(option) => option?.fullName ?? ""}
+              defaultValue={selectedDriver}
+              options={drivers}
+              getOptionLabel={(option) => option?.fio ?? ""}
               isOptionEqualToValue={(option, value) => option?.id === value?.id}
               onChange={(_, value) => {
-                setSelectedDriver(value);
-
                 field.onChange(value?.id ?? "");
 
                 setValue("driver", value, {
@@ -84,27 +53,29 @@ export function ThirdStep({ control, errors, setValue }) {
                   shouldTouch: true,
                 });
               }}
-              renderOption={(props, option) => (
-                <Box
-                  component="li"
-                  {...props}
-                  sx={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                    gap: 2,
-                  }}
-                >
-                  <Typography fontWeight={700}>{option.fullName}</Typography>
+              renderOption={(props, option) => {
+                console.log(option);
 
-                  <Chip size="small" label={option.companyName} />
-                </Box>
-              )}
+                return (
+                  <Box
+                    component="li"
+                    {...props}
+                    sx={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      gap: 2,
+                    }}
+                  >
+                    <Typography fontWeight={700}>{option.fio}</Typography>
+                  </Box>
+                );
+              }}
               renderInput={(params) => (
                 <TextField
                   {...params}
-                  label="Водитель"
-                  placeholder="Выберите водитель"
+                  label={isLoading ? "...Загрузка данных" : "Водитель"}
+                  placeholder="Выберите водителя"
                   error={Boolean(errors.forwarderId)}
                   helperText={errors.forwarderId?.message}
                 />
@@ -124,22 +95,13 @@ export function ThirdStep({ control, errors, setValue }) {
               >
                 <InfoBadge
                   label="ФИО водителя"
-                  value={selectedDriver.fullName}
-                />
-
-                <InfoBadge label="ИИН водителя" value={selectedDriver.iin} />
-
-                <InfoBadge
-                  label="Компания"
-                  value={selectedDriver.companyName}
+                  value={selectedDriver[0]?.fio}
                 />
 
                 <InfoBadge
-                  label="БИН компании"
-                  value={selectedDriver.companyBin}
+                  label="Телефон"
+                  value={selectedDriver[0]?.phone || "Не указан"}
                 />
-
-                <InfoBadge label="Телефон" value={selectedDriver.phone} />
               </Box>
             )}
           </Stack>

@@ -119,21 +119,28 @@ const FirstStep = ({ control, errors, form, setValue }) => {
               message: "Минимум 3 символа",
             },
           }}
-          render={({ field }) => (
-            <TextField
-              {...field}
-              label="Откуда"
-              fullWidth
-              size="small"
-              disabled={loadingPoints.from}
-              error={Boolean(errors.fromLocation)}
-              helperText={errors.fromLocation?.message}
-              onChange={(event) => {
-                field.onChange(event);
-                clearFromPoint();
-              }}
-            />
-          )}
+          render={({ field }) => {
+            return (
+              <TextField
+                {...field}
+                label="Откуда"
+                slotProps={{
+                  inputLabel: {
+                    shrink: true,
+                  },
+                }}
+                fullWidth
+                size="small"
+                disabled={loadingPoints.from}
+                error={Boolean(errors.from_location?.address)}
+                helperText={errors.from_location?.address?.message}
+                onChange={(event) => {
+                  field.onChange(event);
+                  clearFromPoint();
+                }}
+              />
+            );
+          }}
         />
 
         <Controller
@@ -149,13 +156,17 @@ const FirstStep = ({ control, errors, form, setValue }) => {
           render={({ field }) => (
             <TextField
               {...field}
-              value={field.value}
+              slotProps={{
+                inputLabel: {
+                  shrink: true,
+                },
+              }}
               label="Куда"
               fullWidth
               size="small"
               disabled={loadingPoints.to}
-              error={Boolean(errors.toLocation)}
-              helperText={errors.toLocation?.message}
+              error={Boolean(errors.to_location?.address)}
+              helperText={errors.to_location?.address?.message}
               onChange={(event) => {
                 field.onChange(event);
                 clearToPoint();

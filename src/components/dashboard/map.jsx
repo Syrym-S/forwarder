@@ -20,6 +20,10 @@ const getRoute = async (start, end) => {
 
   const data = await response.json();
 
+  if (!data.routes?.length) {
+    return null;
+  }
+
   return {
     distance: data.routes[0].distance, // метры
     duration: data.routes[0].duration, // секунды
@@ -67,6 +71,8 @@ const Map = () => {
               [lead.from_location.lat, lead.from_location.lon],
               [lead.to_location.lat, lead.to_location.lon],
             );
+
+            if (!coordinates) return null;
 
             return {
               id: lead.id,

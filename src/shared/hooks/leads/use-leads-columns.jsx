@@ -30,11 +30,17 @@ const useLeadsColumns = (data) => {
       field: "to_location",
       headerName: "Куда",
       width: 200,
+      renderCell: ({ row }) => (
+        <Box>{row?.to_location?.address || "Битые данные"}</Box>
+      ),
     },
     {
       field: "from_location",
       headerName: "Откуда",
       width: 200,
+      renderCell: ({ row }) => (
+        <Box>{row?.from_location?.address || "Битые данные"}</Box>
+      ),
     },
   ];
 

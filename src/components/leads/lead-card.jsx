@@ -87,7 +87,7 @@ const LeadCard = ({ lead }) => {
             }}
           >
             <Chip
-              label={`Лид # ${lead.num || "—"}`}
+              label={`Лид # ${lead.id || "—"}`}
               color="primary"
               variant="outlined"
               size="small"
@@ -158,7 +158,7 @@ const LeadCard = ({ lead }) => {
                   lineHeight: 1.35,
                 }}
               >
-                {lead.from_location.city}
+                {lead.from_location.address || "Битые данные"}
               </Typography>
             </Box>
           </Box>
@@ -220,7 +220,7 @@ const LeadCard = ({ lead }) => {
                   lineHeight: 1.35,
                 }}
               >
-                {lead.to_location.city || lead.to_location.city}
+                {lead.to_location.address || "Битые данные"}
               </Typography>
             </Box>
           </Box>
