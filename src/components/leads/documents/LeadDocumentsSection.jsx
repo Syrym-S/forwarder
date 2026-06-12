@@ -11,8 +11,8 @@ import {
 import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
 import UploadFileOutlinedIcon from '@mui/icons-material/UploadFileOutlined';
 
-import { LeadDocumentCard } from '../components/documents/LeadDocumentCard';
-import { DocumentPreviewDialog } from '../components/documents/DocumentPreviewDialog';
+import { LeadDocumentCard } from './LeadDocumentCard';
+import { DocumentPreviewDialog } from './DocumentPreviewDialog';
 
 export function LeadDocumentsSection({
    documents,

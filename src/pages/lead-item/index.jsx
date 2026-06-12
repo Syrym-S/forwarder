@@ -31,6 +31,8 @@ import {
    uploadLeadFileApi,
 } from '../../app/store/api';
 import { mapLeadFilesResponseFromApi } from '../../features/leads/model/lead-files.adapter';
+import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
+import { LeadDocumentsSection } from '../../components/leads/documents/LeadDocumentsSection';
 
 const Section = ({ icon, title, children }) => (
    <Paper
