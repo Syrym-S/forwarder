@@ -5,15 +5,11 @@ import { getCoords } from "../../../components/lead-form/lib/geacode-address";
 
 export const useFormDefaultValues = (lead = null) => {
   return {
-    // status: lead.status,
-    // id: lead.id,
-    // num: lead.num,
     loading_date: lead?.created_at.date || null,
     driver: lead?.driver,
     summ: lead?.summ || null,
     currency: lead?.currency || null,
-    // transportation_price: lead.transportation_price,
-    // vat: lead.vat,
+    vat: lead?.vat,
     to_location: {
       address: lead?.to_location.address || null,
       city: lead?.to_location.city || null,
@@ -30,16 +26,14 @@ export const useFormDefaultValues = (lead = null) => {
       lon: lead?.from_location.lon || null,
       region: lead?.from_location.region || null,
     },
-    // gsm: lead.gsm,
     customer: lead?.customer,
     cargo_type: lead?.cargo.type || null,
-    // description: lead.description,
-    // context: lead.context,
+    comment: lead?.cargo.description || "",
     weight_kg: lead?.cargo.weight_kg || null,
-    // type: lead.type,
-    cargo_length_cm: lead?.cargo_length || null,
-    cargo_width_cm: lead?.cargo_width || null,
-    cargo_height_cm: lead?.cargo_height || null,
+    length_cm: lead?.cargo.length_cm || null,
+    width_cm: lead?.cargo.width_cm || null,
+    height_cm: lead?.cargo.height_cm || null,
+    cargo_price: lead?.cargo_price,
     documents: lead?.documents || [],
   };
 };

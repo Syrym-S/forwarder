@@ -19,14 +19,8 @@ export function ThirdStep({ control, errors, setValue }) {
     name: "driver",
   });
 
-  // const [selectedDriver, setSelectedDriver] = useState([]);
-
   const drivers = useDriverStore((state) => state.drivers);
   const isLoading = useDriverStore((state) => state.isLoading);
-
-  // const options = useMemo(() => drivers, []);
-
-  // console.log(options)
 
   return (
     <StepSection
@@ -39,13 +33,14 @@ export function ThirdStep({ control, errors, setValue }) {
         render={({ field }) => (
           <Stack spacing={2}>
             <Autocomplete
-              multiple
-              limitTags={1}
-              defaultValue={selectedDriver}
+              disabled={isLoading}
               options={drivers}
+              defaultValue={selectedDriver}
               getOptionLabel={(option) => option?.fio ?? ""}
               isOptionEqualToValue={(option, value) => option?.id === value?.id}
               onChange={(_, value) => {
+                if (value?.length > 1) return;
+
                 field.onChange(value?.id ?? "");
 
                 setValue("driver", value, {
@@ -93,14 +88,11 @@ export function ThirdStep({ control, errors, setValue }) {
                   gap: 1.5,
                 }}
               >
-                <InfoBadge
-                  label="ФИО водителя"
-                  value={selectedDriver[0]?.fio}
-                />
+                <InfoBadge label="ФИО водителя" value={selectedDriver.fio} />
 
                 <InfoBadge
                   label="Телефон"
-                  value={selectedDriver[0]?.phone || "Не указан"}
+                  value={selectedDriver.phone || "Не указан"}
                 />
               </Box>
             )}

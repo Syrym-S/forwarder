@@ -351,7 +351,7 @@ const LeadItem = () => {
         editingItemId={id}
         openForm={openEdit}
         setOpenForm={setOpenEdit}
-        defaultValues={defaultValues}
+        initialValues={defaultValues}
         isEdit
       />
 

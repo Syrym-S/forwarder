@@ -45,28 +45,6 @@ function normalizeText(value) {
 }
 
 export function mapCreateLeadFormToApi(form) {
-  // const fromLocation = normalizeText(form.fromLocation);
-  // const toLocation = normalizeText(form.toLocation);
-
-  // const payload = {
-  //   from_location: form.from_location,
-  //   to_location: form.to_location,
-  //   cargo: {
-  //     description: null,
-  //     height_cm: +form.height_cm,
-  //     length_cm: +form.length_cm,
-  //     name: form.name || "Не указан",
-  //     type: form.type,
-  //     weight_kg: +form.weight_kg,
-  //     width_cm: +form.width_cm,
-  //   },
-  //   from_city: form.from_location.city,
-  //   to_city: form.to_location.city,
-  //   cargo_name: form.name || "Не указан",
-  //   vat: form.vat,
-  //   driver: form.driver[0]?.id,
-  // };
-
   const documents = mapCreateLeadDocumentsToApiDocuments(form);
 
   const payload = {
@@ -82,6 +60,7 @@ export function mapCreateLeadFormToApi(form) {
 
     cargo_name: form.type || "Не указан",
     cargo_type: form.type || "Не указан",
+    currency: form.currency || "KZT",
   };
 
   addIfHasValue(payload, "loading_date", form.loadingDate);
@@ -99,7 +78,7 @@ export function mapCreateLeadFormToApi(form) {
   addNumberIfHasValue(payload, "cargo_length", form.length_cm);
   addNumberIfHasValue(payload, "cargo_width", form.width_cm);
   addNumberIfHasValue(payload, "cargo_height", form.height_cm);
-  addNumberIfHasValue(payload, "cargo_price", form.summ);
+  addNumberIfHasValue(payload, "cargo_price", form.cargo_price);
 
   return payload;
 }

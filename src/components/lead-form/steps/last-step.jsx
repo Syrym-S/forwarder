@@ -42,8 +42,8 @@ export function LastStep({ form }) {
           <InfoBadge
             label="Цена"
             value={
-              form.summ
-                ? `${form.summ} ${form.currency || "KZT"}`
+              form.cargo_price
+                ? `${form.cargo_price} ${form.currency || "KZT"}`
                 : "Цена не указана"
             }
             accent
@@ -64,11 +64,11 @@ export function LastStep({ form }) {
         >
           <InfoBadge
             label="ФИО водителя"
-            value={form.driver[0]?.fio || "Не выбран"}
+            value={form.driver?.fio || "Не выбран"}
           />
           <InfoBadge
             label="Номер телефона"
-            value={form.driver[0]?.phone || "Не указан"}
+            value={form.driver?.phone || "Не указан"}
           />
         </Box>
       </StepSection>

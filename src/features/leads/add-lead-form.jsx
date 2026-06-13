@@ -56,6 +56,7 @@ const AddLeadForm = ({
 }) => {
   const createLead = useLeadsStore((state) => state.createLead);
   const updateLead = useLeadsStore((state) => state.updateLead);
+  const getLeadItem = useLeadsStore((state) => state.getLeadItem);
   const [maxAvailableStep, setMaxAvailableStep] = useState(0);
   const [activeStep, setActiveStep] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -127,6 +128,7 @@ const AddLeadForm = ({
 
       if (isEdit) {
         response = await updateLead(editingItemId, payload);
+        await getLeadItem(editingItemId);
       } else {
         response = await createLead(payload);
         createdLeadId = getCreatedLeadId(response);
@@ -258,7 +260,7 @@ const AddLeadForm = ({
 
   return (
     <>
-      <Dialog open={openForm} maxWidth="md" fullWidth>
+      <Dialog open={openForm} onClose={handleClose} maxWidth="md" fullWidth>
         <FormHeader
           isEdit={isEdit}
           activeStep={activeStep}

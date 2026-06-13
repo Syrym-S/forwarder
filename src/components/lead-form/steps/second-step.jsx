@@ -147,7 +147,7 @@ export function SecondStep({ control, errors, form, setValue }) {
         </Box>
 
         <Controller
-          name="summ"
+          name="cargo_price"
           control={control}
           rules={{
             required: "Укажите цену",

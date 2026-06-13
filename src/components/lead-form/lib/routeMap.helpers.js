@@ -12,20 +12,33 @@ export function hasPoint(lat, lng) {
 export function getRouteMarkers(form) {
   const markers = [];
 
-  if (hasPoint(form.fromLat, form.fromLng)) {
+  if (
+    hasPoint(
+      form.from_location.lat,
+      form.from_location.lon || form.from_location.lng,
+    )
+  ) {
     markers.push({
       id: "from",
-      position: [Number(form.fromLat), Number(form.fromLng)],
+      position: [
+        Number(form.from_location.lat),
+        Number(form.from_location.lon || form.from_location.lng),
+      ],
       title: "Точка A",
       description: "Откуда",
       draggable: true,
     });
   }
 
-  if (hasPoint(form.toLat, form.toLng)) {
+  if (
+    hasPoint(form.to_location.lat, form.to_location.lon || form.to_location.lng)
+  ) {
     markers.push({
       id: "to",
-      position: [Number(form.toLat), Number(form.toLng)],
+      position: [
+        Number(form.to_location.lat),
+        Number(form.to_location.lon || form.to_location.lng),
+      ],
       title: "Точка B",
       description: "Куда",
       draggable: true,
@@ -36,15 +49,27 @@ export function getRouteMarkers(form) {
 }
 
 export function getRoutePoints(form) {
-  const hasFromPoint = hasPoint(form.fromLat, form.fromLng);
-  const hasToPoint = hasPoint(form.toLat, form.toLng);
+  const hasFromPoint = hasPoint(
+    form.from_location.lat,
+    form.from_location.lon || form.from_location.lng,
+  );
+  const hasToPoint = hasPoint(
+    form.to_location.lat,
+    form.to_location.lon || form.to_location.lng,
+  );
 
   if (!hasFromPoint || !hasToPoint) {
     return [];
   }
 
   return [
-    [Number(form.fromLat), Number(form.fromLng)],
-    [Number(form.toLat), Number(form.toLng)],
+    [
+      Number(form.from_location.lat),
+      Number(form.from_location.lon || form.from_location.lng),
+    ],
+    [
+      Number(form.to_location.lat),
+      Number(form.to_location.lon || form.to_location.lng),
+    ],
   ];
 }
