@@ -2,23 +2,20 @@ import axios from "axios";
 
 const BASE_URL = "https://forwarder.360logistics.kz/wp-json";
 
-export const getLeads = async (params) => {
-  const data = await axios.get(
-    `${BASE_URL}/forwarder/v1/leads`,
-
-    {
-      params,
-      headers: {
-        "X-WP-Nonce": APP_DATA.nonce,
-      },
+export const getLeads = async (params = {}) => {
+  const data = await axios.get(`${BASE_URL}/forwarder/v1/leads`, {
+    params,
+    headers: {
+      "X-WP-Nonce": APP_DATA.nonce,
     },
-  );
+  });
 
   return data;
 };
 
-export const getHistoryLeads = async () => {
+export const getHistoryLeads = async (params = {}) => {
   const data = await axios.get(`${BASE_URL}/forwarder/v1/leads/history`, {
+    params,
     headers: {
       "X-WP-Nonce": APP_DATA.nonce,
     },
@@ -28,15 +25,11 @@ export const getHistoryLeads = async () => {
 };
 
 export const getLeadItemDetails = async (lead_id) => {
-  const data = await axios.get(
-    `${BASE_URL}/forwarder/v1/lead/${lead_id}`,
-
-    {
-      headers: {
-        "X-WP-Nonce": APP_DATA.nonce,
-      },
+  const data = await axios.get(`${BASE_URL}/forwarder/v1/lead/${lead_id}`, {
+    headers: {
+      "X-WP-Nonce": APP_DATA.nonce,
     },
-  );
+  });
 
   return data;
 };

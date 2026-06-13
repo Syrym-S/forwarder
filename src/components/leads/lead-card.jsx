@@ -17,7 +17,6 @@ const LeadCard = ({ lead }) => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  console.log(lead);
   const navigateToLeadItem = () => {
     navigate(`/lead-item/${lead.id}`);
   };

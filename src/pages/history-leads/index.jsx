@@ -21,40 +21,36 @@ import LeadsTable from "../../components/leads/leads-table";
 import { VIEWS } from "../../shared/const/leads";
 import AddLeadForm from "../../features/leads/add-lead-form";
 import { useSearchParams } from "react-router-dom";
+import { useFormDefaultValues } from "../../shared/hooks/leads/use-form-default-values";
 
 const HistoryLeads = () => {
-  const [openForm, setOpenForm] = useState(false);
+  const [page, setPage] = useState(1);
+  const [view, setView] = useState(VIEWS.table);
+
   const historyLeads = useLeadsStore((state) => state.historyLeads);
+  const count = useLeadsStore((state) => state.count);
+  const perPage = 1;
+  const getHistoryLeads = useLeadsStore((state) => state.getHistoryLeads);
+  const isLoading = useLeadsStore((state) => state.isLoading);
   const [searchParams, setSearchParams] = useSearchParams();
-  const page = Number(searchParams.get("page")) || 1;
 
-  const ITEMS_PER_PAGE = 5;
+  const PAGE_COUNT = Math.ceil(count / perPage);
 
-  // const paginatedLeads = leads.slice(
-  //   (page - 1) * ITEMS_PER_PAGE,
-  //   page * ITEMS_PER_PAGE,
-  // );
+  const deafultValues = useFormDefaultValues();
 
   const handlePageChange = (_, value) => {
-    setSearchParams({ page: value });
+    setPage(value);
   };
-
-  const pageCount = Math.ceil(historyLeads.length / ITEMS_PER_PAGE);
-  const [view, setView] = useState(VIEWS.table);
-  const isLoading = useLeadsStore((state) => state.isLoading);
-  const fetchLeads = useLeadsStore((state) => state.fetchLeads);
 
   const handleChange = (event) => {
     setView(event.target.value);
   };
 
-  const handleOpenForm = () => {
-    setOpenForm(true);
-  };
-
-  // useEffect(() => {
-  //   fetchLeads();
-  // }, []);
+  useEffect(() => {
+    getHistoryLeads({
+      page: page,
+    });
+  }, [page]);
 
   if (isLoading)
     return (
@@ -88,9 +84,6 @@ const HistoryLeads = () => {
           <Tab label={<ViewListRoundedIcon />} value={VIEWS.table} />
           <Tab label={<GridViewRoundedIcon />} value={VIEWS.cards} />
         </Tabs>
-        <Button variant="outlined" onClick={handleOpenForm}>
-          Добавить
-        </Button>
       </Box>
       {view === VIEWS.cards && (
         <Box
@@ -104,14 +97,13 @@ const HistoryLeads = () => {
             },
           }}
         >
-          {historyLeads.map((lead) => (
+          {historyLeads.map((lead, index) => (
             <LeadCard key={lead.id} lead={lead} />
           ))}
         </Box>
       )}
       {view === VIEWS.table && <LeadsTable leads={historyLeads} />}
-      <Pagination count={pageCount} page={page} onChange={handlePageChange} />
-      <AddLeadForm openForm={openForm} setOpenForm={setOpenForm} />
+      <Pagination page={page} count={PAGE_COUNT} onChange={handlePageChange} />
     </RootLayout>
   );
 };

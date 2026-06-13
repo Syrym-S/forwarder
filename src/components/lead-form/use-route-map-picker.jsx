@@ -47,8 +47,6 @@ export function useRouteMapPicker({ form, setValue }) {
       lng: lng,
     };
 
-    console.log(from_location);
-
     setValue("from_location", from_location, setValueOptions);
   }
 
@@ -71,8 +69,6 @@ export function useRouteMapPicker({ form, setValue }) {
       lat: lat,
       lng: lng,
     };
-
-    console.log("to_location", to_location);
 
     setValue("to_location", to_location, setValueOptions);
   }

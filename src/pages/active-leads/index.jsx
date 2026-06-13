@@ -24,22 +24,24 @@ import { useSearchParams } from "react-router-dom";
 import { useFormDefaultValues } from "../../shared/hooks/leads/use-form-default-values";
 
 const ActiveLeads = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
   const [openForm, setOpenForm] = useState(false);
+  const [page, setPage] = useState(Number(searchParams.get("page")) || 1);
+  const [view, setView] = useState(VIEWS.table);
+
   const leads = useLeadsStore((state) => state.leads);
-  const page = useLeadsStore((state) => state.page);
-  const ITEMS_PER_PAGE = useLeadsStore((state) => state.perPage);
+  const count = useLeadsStore((state) => state.count);
+  const perPage = useLeadsStore((state) => state.perPage);
+  const fetchLeads = useLeadsStore((state) => state.fetchLeads);
+  const isLoading = useLeadsStore((state) => state.isLoading);
+
+  const PAGE_COUNT = Math.ceil(count / perPage);
 
   const deafultValues = useFormDefaultValues();
-  const [searchParams, setSearchParams] = useSearchParams();
 
   const handlePageChange = (_, value) => {
-    setSearchParams({ page: value });
+    setPage(value);
   };
-
-  const pageCount = Math.ceil(leads.length / ITEMS_PER_PAGE);
-  const [view, setView] = useState(VIEWS.table);
-  const isLoading = useLeadsStore((state) => state.isLoading);
-  const fetchLeads = useLeadsStore((state) => state.fetchLeads);
 
   const handleChange = (event) => {
     setView(event.target.value);
@@ -48,6 +50,12 @@ const ActiveLeads = () => {
   const handleOpenForm = () => {
     setOpenForm(true);
   };
+
+  useEffect(() => {
+    fetchLeads({
+      page: page,
+    });
+  }, [page]);
 
   if (isLoading)
     return (
@@ -97,13 +105,13 @@ const ActiveLeads = () => {
             },
           }}
         >
-          {leads.map((lead) => (
+          {leads.map((lead, index) => (
             <LeadCard key={lead.id} lead={lead} />
           ))}
         </Box>
       )}
       {view === VIEWS.table && <LeadsTable leads={leads} />}
-      <Pagination count={pageCount} page={page} onChange={handlePageChange} />
+      <Pagination page={page} count={PAGE_COUNT} onChange={handlePageChange} />
       <AddLeadForm
         openForm={openForm}
         setOpenForm={setOpenForm}

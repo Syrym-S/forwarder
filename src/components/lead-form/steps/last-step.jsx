@@ -4,8 +4,6 @@ import { StepSection } from "../step-section";
 import { InfoBadge } from "../info-badge";
 
 export function LastStep({ form }) {
-  console.log(form);
-
   return (
     <Box sx={{ display: "grid", gap: 2 }}>
       <StepSection title="Проверьте данные">

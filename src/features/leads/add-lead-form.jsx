@@ -85,8 +85,6 @@ const AddLeadForm = ({
 
   const formValues = useWatch({ control });
 
-  console.log("formValues", formValues);
-
   const isFirstStep = activeStep === 0;
   const isLastStep = activeStep === steps.length - 1;
 
@@ -122,8 +120,6 @@ const AddLeadForm = ({
       setIsSubmitting(true);
 
       const payload = mapCreateLeadFormToApi(data);
-
-      console.log(payload);
 
       let response = null;
       let createdLeadId = editingItemId;

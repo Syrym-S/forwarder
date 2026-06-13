@@ -3,11 +3,11 @@ import { useLeadsStore } from "../store/leads-store";
 
 export function AppInitializer() {
   const fetchLeads = useLeadsStore((state) => state.fetchLeads);
-  const getHistoryLead = useLeadsStore((state) => state.getHistoryLead);
+  const getHistoryLeads = useLeadsStore((state) => state.getHistoryLeads);
 
   useEffect(() => {
     fetchLeads();
-    getHistoryLead();
+    getHistoryLeads();
   }, []);
 
   return null;

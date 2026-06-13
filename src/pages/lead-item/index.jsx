@@ -246,8 +246,6 @@ const LeadItem = () => {
 
   if (!leadData) return <>...Загрузка</>;
 
-  console.log("leadData", leadData);
-
   return (
     <RootLayout data={leadData}>
       <Box

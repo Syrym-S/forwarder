@@ -15,9 +15,8 @@ export const useLeadsStore = create((set) => ({
   currentLead: null,
   isLoading: false,
   error: null,
-  page: 1,
   count: 0,
-  perPage: 5,
+  perPage: 1,
 
   fetchLeads: async (params) => {
     try {
@@ -27,7 +26,6 @@ export const useLeadsStore = create((set) => ({
 
       set({
         leads: response.data.results,
-        page: response.data.page,
         count: response.data.count,
         perPage: response.data.per_page,
         isLoading: false,
@@ -40,17 +38,17 @@ export const useLeadsStore = create((set) => ({
     }
   },
 
-  getHistoryLead: async () => {
+  getHistoryLeads: async (params) => {
     try {
       set({ isLoading: true, error: null });
 
-      const response = await getHistoryLeads();
+      const response = await getHistoryLeads(params);
 
       set({
         historyLeads: response.data.results,
         page: response.data.page,
         count: response.data.count,
-        perPage: response.data.per_page,
+        // perPage: response.data.per_page,
         isLoading: false,
       });
     } catch (e) {

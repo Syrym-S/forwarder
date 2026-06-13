@@ -4,8 +4,6 @@ import { cleanAddress } from "../../../components/lead-form/lib/clean-address";
 import { getCoords } from "../../../components/lead-form/lib/geacode-address";
 
 export const useFormDefaultValues = (lead = null) => {
-  console.log("lead", lead);
-
   return {
     // status: lead.status,
     // id: lead.id,

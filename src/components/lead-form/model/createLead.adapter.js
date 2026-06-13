@@ -45,7 +45,6 @@ function normalizeText(value) {
 }
 
 export function mapCreateLeadFormToApi(form) {
-  console.log("mapCreateLeadFormToApi", form);
   // const fromLocation = normalizeText(form.fromLocation);
   // const toLocation = normalizeText(form.toLocation);
 

@@ -24,7 +24,9 @@ const useLeadsColumns = (data) => {
       field: "driver",
       headerName: "Driver",
       width: 200,
-      renderCell: (row) => <Box>{row.driver || "-"}</Box>,
+      renderCell: ({ row }) => {
+        return <Box>{row.driver || "-"}</Box>;
+      },
     },
     {
       field: "to_location",
