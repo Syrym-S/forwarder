@@ -29,6 +29,14 @@ const menuItems = [
       { id: 2, path: "/drivers", lable: "Drivers" },
     ],
   },
+  {
+    id: 5,
+    label: "Тендера",
+    sub_items: [
+      { id: 1, path: "/tender-applications", lable: "Тендерные заявки" },
+      { id: 2, path: "/tender-forwarders", lable: "Тендера перевозчиков" },
+    ],
+  },
 ];
 
 const SideBar = ({ openMenu, setOpenMenu }) => {
@@ -36,7 +44,9 @@ const SideBar = ({ openMenu, setOpenMenu }) => {
     <Box
       sx={{
         transition: "0.2s",
-        height: "100vh",
+        paddingTop: "10vh",
+        height: "90vh",
+        overflowY: "auto",
         width: {
           xs: openMenu ? "100%" : "0",
           sm: "20vw",
@@ -54,7 +64,6 @@ const SideBar = ({ openMenu, setOpenMenu }) => {
         bgcolor: "#fbfafa",
         display: "flex",
         flexDirection: "column",
-        overflow: "hidden",
         zIndex: 1,
       }}
     >
