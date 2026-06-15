@@ -2,16 +2,21 @@ import { create } from "zustand";
 import axios from "axios";
 import {
   createLeadApi,
+  deleteLeadFileApi,
   getHistoryLeads,
+  getLeadFilesApi,
   getLeadItemDetails,
   getLeads,
   updateLeadApi,
+  uploadLeadFileApi,
 } from "./api";
 // import { mockLeads } from "../../shared/const/mock-data";
 
 export const useLeadsStore = create((set) => ({
   leads: [],
   historyLeads: [],
+  files: [],
+  uploadedFiles: [],
   currentLead: null,
   isLoading: false,
   error: null,
@@ -116,6 +121,73 @@ export const useLeadsStore = create((set) => ({
         isLoading: false,
       });
 
+      throw e;
+    }
+  },
+  getLeadFiles: async (lead_id) => {
+    try {
+      set({ isLoading: true, error: null });
+
+      const response = await getLeadFilesApi(lead_id);
+
+      set({
+        files: response.data.files,
+        isLoading: false,
+      });
+    } catch (e) {
+      set({
+        isLoading: false,
+        error: e.message,
+      });
+
+      console.error(e);
+    }
+  },
+  setUploadedFiles: (files) => set({ uploadedFiles: files }),
+
+  uploadLeadFile: async (id, payload) => {
+    try {
+      set({ isLoading: true, error: null });
+
+      const response = await uploadLeadFileApi(id, payload);
+
+      console.log(response);
+
+      set((state) => ({
+        isLoading: false,
+      }));
+
+      return response;
+    } catch (e) {
+      set({
+        error: e.message,
+        isLoading: false,
+      });
+
+      console.error("Payload:", payload);
+      console.error("Response:", e.response?.data);
+      throw e;
+    }
+  },
+  deleteLeadFile: async (lead_id, file_path) => {
+    try {
+      set({ isLoading: true, error: null });
+
+      const response = await deleteLeadFileApi(lead_id, file_path);
+
+      set((state) => ({
+        isLoading: false,
+      }));
+
+      return response;
+    } catch (e) {
+      set({
+        error: e.message,
+        isLoading: false,
+      });
+
+      console.error("Payload:", payload);
+      console.error("Response:", e.response?.data);
       throw e;
     }
   },

@@ -114,8 +114,11 @@ const LeadItem = () => {
   const { id } = useParams();
   const getLeadItem = useLeadsStore((state) => state.getLeadItem);
   const leadData = useLeadsStore((state) => state.currentLead);
+  const files = useLeadsStore((state) => state.files);
+  const getLeadFiles = useLeadsStore((state) => state.getLeadFiles);
+  const deleteLeadFile = useLeadsStore((state) => state.deleteLeadFile);
 
-  const defaultValues = useFormDefaultValues(leadData);
+  const defaultValues = useFormDefaultValues(leadData, files);
 
   const start = [leadData?.from_location.lat, leadData?.from_location.lon];
   const end = [leadData?.to_location.lat, leadData?.to_location.lon];
@@ -133,6 +136,7 @@ const LeadItem = () => {
 
   useEffect(() => {
     getLeadItem(id);
+    getLeadFiles(id);
   }, [id]);
 
   const from = {
@@ -165,6 +169,7 @@ const LeadItem = () => {
       });
 
       await reloadLeadDocuments(id);
+      await getLeadFiles(id);
     } catch (error) {
       setDocumentError(
         error.response?.data?.message ||
@@ -176,37 +181,42 @@ const LeadItem = () => {
     }
   }
 
-  async function handleDeleteDocument(documentId) {
-    const document = documents.find((item) => item.id === documentId);
+  const handleDeleteFileFromDB = async (lead_id, file_path) => {
+    await deleteLeadFile(lead_id, file_path);
+    await getLeadFiles(lead_id);
+  };
 
-    if (!document?.path) {
-      setDocumentError("Не удалось определить файл для удаления");
-      return;
-    }
+  // async function handleDeleteDocument(documentId) {
+  //   const document = documents.find((item) => item.id === documentId);
 
-    if (document.source && document.source !== "forwarder") {
-      setDocumentError("Можно удалить только файлы экспедитора");
-      return;
-    }
+  //   if (!document?.path) {
+  //     setDocumentError("Не удалось определить файл для удаления");
+  //     return;
+  //   }
 
-    try {
-      setDocumentError("");
-      setDeletingDocumentIds((prevIds) => [...prevIds, documentId]);
+  //   if (document.source && document.source !== "forwarder") {
+  //     setDocumentError("Можно удалить только файлы экспедитора");
+  //     return;
+  //   }
 
-      await deleteLeadFileApi(id, document.path);
-      await reloadLeadDocuments(id);
-    } catch (error) {
-      setDocumentError(
-        error.response?.data?.message ||
-          error.message ||
-          "Не удалось удалить документ",
-      );
-    } finally {
-      setDeletingDocumentIds((prevIds) =>
-        prevIds.filter((itemId) => itemId !== documentId),
-      );
-    }
-  }
+  //   try {
+  //     setDocumentError("");
+  //     setDeletingDocumentIds((prevIds) => [...prevIds, documentId]);
+
+  //     await deleteLeadFileApi(id, document.path);
+  //     await reloadLeadDocuments(id);
+  //   } catch (error) {
+  //     setDocumentError(
+  //       error.response?.data?.message ||
+  //         error.message ||
+  //         "Не удалось удалить документ",
+  //     );
+  //   } finally {
+  //     setDeletingDocumentIds((prevIds) =>
+  //       prevIds.filter((itemId) => itemId !== documentId),
+  //     );
+  //   }
+  // }
 
   useEffect(() => {
     let isCancelled = false;
@@ -243,6 +253,8 @@ const LeadItem = () => {
       isCancelled = true;
     };
   }, [id]);
+
+  useEffect(() => {}, [files]);
 
   if (!leadData) return <>...Загрузка</>;
 
@@ -435,9 +447,9 @@ const LeadItem = () => {
           icon={<DescriptionOutlinedIcon color="primary" />}
         >
           <LeadDocumentsSection
-            documents={documents}
+            documents={files}
             onAddDocument={handleAddDocument}
-            onDeleteDocument={handleDeleteDocument}
+            onDeleteDocument={handleDeleteFileFromDB}
             isUploading={isDocumentUploading}
             uploadError={documentError}
             deletingDocumentIds={deletingDocumentIds}

@@ -9,7 +9,9 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { useLeadsStore } from "../../../app/store/leads-store";
 
 function createLocalDocument({ name, context, file }) {
   return {
@@ -25,6 +27,9 @@ function createLocalDocument({ name, context, file }) {
 }
 
 export function DocumentsStep({ form, setValue }) {
+  const { id } = useParams();
+  const files = useLeadsStore((state) => state.files);
+  const getFiles = useLeadsStore((state) => state.getLeadFiles);
   const [selectedFileName, setSelectedFileName] = useState("");
 
   function handleFileChange(event) {
@@ -37,6 +42,9 @@ export function DocumentsStep({ form, setValue }) {
     event.preventDefault();
 
     const formData = new FormData(event.currentTarget);
+
+    console.log("event.currentTarget", event.currentTarget);
+
     const file = formData.get("file");
 
     if (!file || !file.name) {
@@ -57,6 +65,14 @@ export function DocumentsStep({ form, setValue }) {
     setSelectedFileName("");
     event.currentTarget.reset();
   }
+
+  useEffect(() => {
+    if (id) {
+      getFiles(id);
+    }
+  }, []);
+
+  if (!files) return <>...</>;
 
   function handleDeleteDocument(documentId) {
     setValue(
@@ -155,7 +171,88 @@ export function DocumentsStep({ form, setValue }) {
           </Button>
         </Box>
 
-        {form.documents?.length ? (
+        {files.length !== 0 ? (
+          files.map((document) => (
+            <Box
+              key={document.id}
+              sx={{
+                p: 1.5,
+                border: "1px solid",
+                borderColor: "divider",
+                borderRadius: 2,
+                backgroundColor: "grey.50",
+                display: "flex",
+                alignItems: "flex-start",
+                gap: 1.5,
+              }}
+            >
+              <Box
+                sx={{
+                  width: 42,
+                  height: 42,
+                  borderRadius: 2,
+                  backgroundColor: "primary.main",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  flexShrink: 0,
+                }}
+              >
+                <InsertDriveFileOutlinedIcon
+                  sx={{
+                    color: "common.white",
+                    fontSize: 24,
+                  }}
+                />
+              </Box>
+
+              <Box sx={{ flex: 1, minWidth: 0 }}>
+                <Typography
+                  sx={{
+                    fontSize: 13,
+                    fontWeight: 400,
+                    lineHeight: 1.35,
+                  }}
+                >
+                  {document.name || "Документ"}
+                </Typography>
+
+                <Typography
+                  color="text.secondary"
+                  sx={{
+                    mt: 0.25,
+                    fontSize: 12,
+                    fontWeight: 400,
+                    lineHeight: 1.35,
+                  }}
+                >
+                  {document.context || "Описание не указано"}
+                </Typography>
+
+                <Typography
+                  color="text.secondary"
+                  sx={{
+                    mt: 0.5,
+                    fontSize: 11,
+                    fontWeight: 400,
+                    lineHeight: 1.35,
+                    wordBreak: "break-word",
+                  }}
+                >
+                  {document.fileName || "Файл"}
+                </Typography>
+              </Box>
+
+              <IconButton
+                size="small"
+                color="error"
+                onClick={() => handleDeleteDocument(document.id)}
+              >
+                <DeleteOutlineOutlinedIcon fontSize="small" />
+              </IconButton>
+            </Box>
+          ))
+        ) : form.documents?.length ? (
           <Stack spacing={1}>
             {form.documents.map((document) => (
               <Box

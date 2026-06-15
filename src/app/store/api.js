@@ -74,12 +74,12 @@ export const getLeadFilesApi = async (leadId) => {
   return data;
 };
 
-export const uploadLeadFileApi = async (leadId, { file, name, context }) => {
+export const uploadLeadFileApi = async (leadId, payload) => {
   const formData = new FormData();
 
-  formData.append("file", file);
-  formData.append("name", name || file.name);
-  formData.append("context", context || "");
+  formData.append("file", payload.file);
+  formData.append("name", name || payload.name);
+  formData.append("context", payload.context || "");
 
   const data = await axios.post(
     `${BASE_URL}/forwarder/v1/leads/${leadId}/files/upload`,

@@ -20,6 +20,7 @@ import { DocumentsStep } from "../../components/lead-form/steps/documents-step";
 import { uploadLeadFileApi } from "../../app/store/api";
 import { useCustomerStore } from "../../app/store/customer";
 import { useDriverStore } from "../../app/store/driver-store";
+import DocumentUpload from "../../components/lead-form/steps/document-upload";
 
 const steps = [
   "Маршрут",
@@ -58,6 +59,7 @@ const AddLeadForm = ({
   const updateLead = useLeadsStore((state) => state.updateLead);
   const getLeadItem = useLeadsStore((state) => state.getLeadItem);
   const [maxAvailableStep, setMaxAvailableStep] = useState(0);
+  const [uploadedFiles, setUploadedFiles] = useState([]);
   const [activeStep, setActiveStep] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [resultModal, setResultModal] = useState({
@@ -68,6 +70,7 @@ const AddLeadForm = ({
   });
 
   const defaultValues = {
+    documents: [],
     ...initialValues,
   };
 
@@ -102,17 +105,12 @@ const AddLeadForm = ({
 
   async function uploadCreateLeadDocuments(leadId, documents = []) {
     if (!leadId || !documents.length) {
+      console.log("jjjj");
       return;
     }
 
-    const documentsWithFiles = documents.filter((document) => document.file);
-
-    for (const document of documentsWithFiles) {
-      await uploadLeadFileApi(leadId, {
-        file: document.file,
-        name: document.name || document.fileName || "Документ",
-        context: document.context || "",
-      });
+    for (const file of documents) {
+      await uploadLeadFileApi(leadId, file);
     }
   }
 
@@ -129,13 +127,26 @@ const AddLeadForm = ({
       if (isEdit) {
         response = await updateLead(editingItemId, payload);
         await getLeadItem(editingItemId);
-      } else {
-        response = await createLead(payload);
-        createdLeadId = getCreatedLeadId(response);
 
-        if (documents.length > 0 && createdLeadId) {
+        if (payload.documents.length > 0 && createdLeadId) {
           try {
-            await uploadCreateLeadDocuments(createdLeadId, documents);
+            await uploadCreateLeadDocuments(createdLeadId, payload.documents);
+          } catch (documentError) {
+            documentsUploadFailed = true;
+            console.error(
+              "Create lead documents upload failed:",
+              documentError,
+            );
+          }
+        }
+      } else {
+        const response = await createLead(payload);
+        const createdLeadId = getCreatedLeadId(response);
+        console.log("createdLeadId", createdLeadId);
+
+        if (payload.documents.length > 0 && createdLeadId) {
+          try {
+            await uploadCreateLeadDocuments(createdLeadId, payload.documents);
           } catch (documentError) {
             documentsUploadFailed = true;
             console.error(
@@ -145,9 +156,9 @@ const AddLeadForm = ({
           }
         }
 
-        if (documents.length > 0 && !createdLeadId) {
-          documentsUploadFailed = true;
-        }
+        // if (documents.length > 0 && !createdLeadId) {
+        //   documentsUploadFailed = true;
+        // }
       }
 
       handleClose();
@@ -222,7 +233,15 @@ const AddLeadForm = ({
           <ForthStep control={control} errors={errors} setValue={setValue} />
         );
       case 4:
-        return <DocumentsStep form={formValues} setValue={setValue} />;
+        // return <DocumentsStep form={formValues} setValue={setValue} />;
+        return (
+          <DocumentUpload
+            form={formValues}
+            setValue={setValue}
+            uploadedFiles={uploadedFiles}
+            setUploadedFiles={setUploadedFiles}
+          />
+        );
 
       case 5:
         return <LastStep form={formValues} />;

@@ -3,7 +3,7 @@ import { formatNominatimAddress } from "../../../components/lead-form/lib/geocod
 import { cleanAddress } from "../../../components/lead-form/lib/clean-address";
 import { getCoords } from "../../../components/lead-form/lib/geacode-address";
 
-export const useFormDefaultValues = (lead = null) => {
+export const useFormDefaultValues = (lead = null, files = []) => {
   return {
     loading_date: lead?.created_at.date || null,
     driver: lead?.driver,
@@ -34,6 +34,6 @@ export const useFormDefaultValues = (lead = null) => {
     width_cm: lead?.cargo.width_cm || null,
     height_cm: lead?.cargo.height_cm || null,
     cargo_price: lead?.cargo_price,
-    documents: lead?.documents || [],
+    documents: files || [],
   };
 };

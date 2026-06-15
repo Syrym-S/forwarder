@@ -45,6 +45,7 @@ function normalizeText(value) {
 }
 
 export function mapCreateLeadFormToApi(form) {
+  console.log(form);
   const documents = mapCreateLeadDocumentsToApiDocuments(form);
 
   const payload = {
@@ -67,7 +68,7 @@ export function mapCreateLeadFormToApi(form) {
   addIfHasValue(payload, "comment", normalizeText(form.comment));
   addIfHasValue(payload, "driver", form.driver[0]?.id);
   addIfHasValue(payload, "customer", form.customer?.id);
-  addIfHasValue(payload, "documents", documents);
+  addIfHasValue(payload, "documents", form.documents);
 
   addNumberIfHasValue(payload, "from_lat", form.fromLat);
   addNumberIfHasValue(payload, "from_lon", form.fromLng);
