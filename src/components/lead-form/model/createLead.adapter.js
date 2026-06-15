@@ -45,7 +45,6 @@ function normalizeText(value) {
 }
 
 export function mapCreateLeadFormToApi(form) {
-  console.log(form);
   const documents = mapCreateLeadDocumentsToApiDocuments(form);
 
   const payload = {
@@ -66,7 +65,7 @@ export function mapCreateLeadFormToApi(form) {
 
   addIfHasValue(payload, "loading_date", form.loadingDate);
   addIfHasValue(payload, "comment", normalizeText(form.comment));
-  addIfHasValue(payload, "driver", form.driver[0]?.id);
+  addIfHasValue(payload, "driver", form.driver?.id);
   addIfHasValue(payload, "customer", form.customer?.id);
   addIfHasValue(payload, "documents", form.documents);
 

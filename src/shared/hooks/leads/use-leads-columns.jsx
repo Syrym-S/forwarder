@@ -25,7 +25,7 @@ const useLeadsColumns = (data) => {
       headerName: "Driver",
       width: 200,
       renderCell: ({ row }) => {
-        return <Box>{row?.driver.fio || "-"}</Box>;
+        return <Box>{row?.driver?.fio || "-"}</Box>;
       },
     },
     {

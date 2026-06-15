@@ -105,7 +105,6 @@ const AddLeadForm = ({
 
   async function uploadCreateLeadDocuments(leadId, documents = []) {
     if (!leadId || !documents.length) {
-      console.log("jjjj");
       return;
     }
 
