@@ -10,13 +10,52 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { Controller, useForm } from "react-hook-form";
+import { Controller, useForm, useWatch } from "react-hook-form";
 import { useLeadsStore } from "../../app/store/leads-store";
+import { useTenderDefaultValues } from "../../shared/hooks/tender/use-tender-default-values";
+import { useTendersStore } from "../../app/store/tenders/tender-store";
+import { use, useEffect } from "react";
+
+const defaultValues = {
+  lead_id: "",
+  public_date_time: "",
+  end_date_time: "",
+  type: "shipper",
+  publication_type: "",
+  max_participants: 0,
+};
+
+const prepareTenderData = (form) => {
+  return {
+    lead_id: form?.lead_id || "",
+    public_date_time: form?.public_date_time || "",
+    end_date_time: form?.end_date_time || "",
+    type: "shipper",
+    publication_type: form?.publication_type ? "public" : "private",
+    max_participants: 0,
+  };
+};
 
 const TenderForm = ({ openForm, handleCloseForm }) => {
-  const { control } = useForm();
+  const { control, handleSubmit, setValue } = useForm({
+    defaultValues,
+    mode: "onChange",
+    reValidateMode: "onChange",
+  });
+  const formValues = useWatch({ control });
+
   const leads = useLeadsStore((state) => state.leads);
   const isLoading = useLeadsStore((state) => state.isLoading);
+  const createTender = useTendersStore((state) => state.createTender);
+
+  const onSubmit = async () => {
+    const payload = prepareTenderData(formValues);
+    await createTender(payload);
+  };
+
+  useEffect(() => {
+    console.log(formValues);
+  }, [formValues]);
 
   if (isLoading) return <>...</>;
 
@@ -32,14 +71,21 @@ const TenderForm = ({ openForm, handleCloseForm }) => {
         }}
       >
         <Controller
-          name="lead"
+          name="lead_id"
           control={control}
           render={({ field }) => (
             <Autocomplete
               options={leads || []}
               value={field.value || null}
-              onChange={(_, value) => field.onChange(value)}
-              getOptionLabel={(option) => option?.title || ""}
+              onChange={(_, value) => {
+                field.onChange(value);
+
+                setValue("lead_id", value.id, {
+                  shouldDirty: true,
+                  shouldTouch: true,
+                });
+              }}
+              getOptionLabel={(option) => option?.id || ""}
               renderInput={(params) => (
                 <TextField
                   {...params}
@@ -137,7 +183,13 @@ const TenderForm = ({ openForm, handleCloseForm }) => {
         <Controller
           name="max_participants"
           control={control}
-          render={(filed) => <TextField type="number" />}
+          render={(filed) => (
+            <TextField
+              type="number"
+              label="Количество учатсников"
+              helperText="0 - без лимит"
+            />
+          )}
         />
 
         <Box
@@ -150,7 +202,9 @@ const TenderForm = ({ openForm, handleCloseForm }) => {
             Отмена
           </Button>
 
-          <Button variant="contained">Создать</Button>
+          <Button variant="contained" onClick={onSubmit}>
+            Создать
+          </Button>
         </Box>
       </DialogContent>
     </Dialog>

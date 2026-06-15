@@ -49,8 +49,6 @@ export function ThirdStep({ control, errors, setValue }) {
                 });
               }}
               renderOption={(props, option) => {
-                console.log(option);
-
                 return (
                   <Box
                     component="li"
