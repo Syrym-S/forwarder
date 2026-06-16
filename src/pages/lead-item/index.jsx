@@ -34,6 +34,7 @@ import {
   uploadLeadFileApi,
 } from "../../app/store/api";
 import { mapLeadFilesResponseFromApi } from "../../features/leads/model/lead-files.adapter";
+import Loader from "../../components/layout/loader";
 
 const Section = ({ icon, title, children }) => (
   <Paper
@@ -256,7 +257,7 @@ const LeadItem = () => {
 
   useEffect(() => {}, [files]);
 
-  if (!leadData) return <>...Загрузка</>;
+  if (!leadData) return <Loader />;
 
   return (
     <RootLayout data={leadData}>

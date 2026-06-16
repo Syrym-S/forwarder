@@ -1,7 +1,82 @@
-import React from "react";
+import { useEffect, useState } from "react";
+import RootLayout from "../../components/layout/root-layout";
+import { Box, Button, Pagination } from "@mui/material";
+import TenderForm from "../../features/tenders/tender-form";
+import { useTendersStore } from "../../app/store/tenders/tender-store";
+import { VIEWS } from "../../shared/const/leads";
+import TenderCard from "../../components/tenders/tender-card";
+import Loader from "../../components/layout/loader";
 
 const TenderForwarders = () => {
-  return <div>TenderForwarders</div>;
+  const [view, setView] = useState(VIEWS.cards);
+  const [openForm, setOpenForm] = useState(false);
+  const [page, setPage] = useState(1);
+
+  const tenders = useTendersStore((state) => state.tenders);
+  const getTenders = useTendersStore((state) => state.getTenders);
+  const isLoading = useTendersStore((state) => state.isLoading);
+  const count = useTendersStore((state) => state.count);
+  const perPage = useTendersStore((state) => state.perPage);
+
+  const PAGE_COUNT = Math.ceil(count / perPage);
+
+  const handlePageChange = (_, value) => {
+    setPage(value);
+  };
+
+  const handleOpenForm = () => {
+    setOpenForm(true);
+  };
+
+  const handleCloseForm = () => {
+    setOpenForm(false);
+  };
+
+  useEffect(() => {
+    getTenders({
+      page: page,
+    });
+  }, [page]);
+
+  console.log(tenders);
+
+  if (isLoading) return <Loader />;
+
+  return (
+    <RootLayout withoutDataCheck>
+      <Button onClick={handleOpenForm} variant="outlined">
+        Создать тендер
+      </Button>
+
+      {openForm && (
+        <TenderForm openForm={openForm} handleCloseForm={handleCloseForm} />
+      )}
+
+      {view === VIEWS.cards && (
+        <Box
+          sx={{
+            display: "grid",
+            gap: 5,
+            my: "10px",
+            gridTemplateColumns: {
+              xs: "1fr",
+              md: "1fr 1fr",
+            },
+          }}
+        >
+          {tenders.map((tender) => (
+            <TenderCard key={tender.id} tender={tender} />
+          ))}
+
+          <Pagination
+            page={page}
+            count={PAGE_COUNT}
+            onChange={handlePageChange}
+          />
+        </Box>
+      )}
+    </RootLayout>
+  );
 };
 
 export default TenderForwarders;

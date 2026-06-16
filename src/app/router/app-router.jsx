@@ -8,9 +8,10 @@ import Factoring from "../../pages/factoring";
 import Account from "../../pages/account";
 import HistoryLeads from "../../pages/history-leads";
 import ActiveLeads from "../../pages/active-leads";
-import TenderApplications from "../../pages/tender-applications";
-import TenderForwarders from "../../pages/tender-forwarders";
 import { useRoutes } from "react-router-dom";
+import TenderForwarders from "../../pages/tender-forwarders";
+import TenderForwardersItem from "../../pages/tender-forwarders/tender-forwarders-item";
+import TenderApplications from "../../pages/tender-applications";
 
 const AppRouter = () => {
   const routes = useRoutes([
@@ -57,6 +58,10 @@ const AppRouter = () => {
     {
       path: "/tender-forwarders",
       element: <TenderForwarders />,
+    },
+    {
+      path: "/tender-forwarders/:id",
+      element: <TenderForwardersItem />,
     },
   ]);
   return routes;

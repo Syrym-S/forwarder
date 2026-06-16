@@ -22,6 +22,7 @@ import { VIEWS } from "../../shared/const/leads";
 import AddLeadForm from "../../features/leads/add-lead-form";
 import { useSearchParams } from "react-router-dom";
 import { useFormDefaultValues } from "../../shared/hooks/leads/use-form-default-values";
+import Loader from "../../components/layout/loader";
 
 const ActiveLeads = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -57,19 +58,7 @@ const ActiveLeads = () => {
     });
   }, [page]);
 
-  if (isLoading)
-    return (
-      <Box
-        sx={{
-          position: "fixed",
-          top: "50%",
-          left: "50%",
-          transform: "translate(-50%, -50%)",
-        }}
-      >
-        <CircularProgress aria-label="Loading…" />
-      </Box>
-    );
+  if (isLoading) return <Loader />;
 
   return (
     <RootLayout data={leads} isLoading={isLoading}>
@@ -105,7 +94,7 @@ const ActiveLeads = () => {
             },
           }}
         >
-          {leads.map((lead, index) => (
+          {leads.map((lead) => (
             <LeadCard key={lead.id} lead={lead} />
           ))}
         </Box>

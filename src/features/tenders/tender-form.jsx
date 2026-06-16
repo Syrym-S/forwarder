@@ -15,6 +15,7 @@ import { useLeadsStore } from "../../app/store/leads-store";
 import { useTenderDefaultValues } from "../../shared/hooks/tender/use-tender-default-values";
 import { useTendersStore } from "../../app/store/tenders/tender-store";
 import { use, useEffect } from "react";
+import dayjs from "dayjs";
 
 const defaultValues = {
   lead_id: "",
@@ -28,8 +29,10 @@ const defaultValues = {
 const prepareTenderData = (form) => {
   return {
     lead_id: form?.lead_id || "",
-    public_date_time: form?.public_date_time || "",
-    end_date_time: form?.end_date_time || "",
+    public_date_time:
+      dayjs(form?.public_date_time).format("YYYY-MM-DD HH:mm:ss") || "",
+    end_date_time:
+      dayjs(form?.end_date_time).format("YYYY-MM-DD HH:mm:ss") || "",
     type: "shipper",
     publication_type: form?.publication_type ? "public" : "private",
     max_participants: 0,
@@ -50,7 +53,13 @@ const TenderForm = ({ openForm, handleCloseForm }) => {
 
   const onSubmit = async () => {
     const payload = prepareTenderData(formValues);
-    await createTender(payload);
+
+    try {
+      await createTender(payload);
+      handleCloseForm();
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   useEffect(() => {
@@ -76,7 +85,7 @@ const TenderForm = ({ openForm, handleCloseForm }) => {
           render={({ field }) => (
             <Autocomplete
               options={leads || []}
-              value={field.value || null}
+              value={leads?.find((lead) => lead.id === field.value) || null}
               onChange={(_, value) => {
                 field.onChange(value);
 

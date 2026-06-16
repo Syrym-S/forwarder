@@ -4,7 +4,7 @@ export const useTenderDefaultValues = (form) => {
     public_date_time: form.public_date_time,
     end_date_time: form.end_date_time,
     type: "shipper",
-    publication_type: form.publication_type,
+    publication_type: form?.publication_type ? "public" : "private",
     max_participants: form.max_participants,
   };
 };
