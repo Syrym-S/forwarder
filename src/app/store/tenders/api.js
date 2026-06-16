@@ -56,3 +56,17 @@ export const deleteTenderApi = async (tender_id) => {
 
   return data;
 };
+
+export const cancelTenderApi = async (tender_id) => {
+  const data = await axios.post(
+    `${BASE_URL}/tender/${tender_id}/cancel`,
+    null,
+    {
+      headers: {
+        "X-WP-Nonce": APP_DATA.nonce,
+      },
+    },
+  );
+
+  return data;
+};

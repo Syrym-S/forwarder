@@ -25,6 +25,8 @@ import { useLeadsStore } from "../../../app/store/leads-store";
 import { LeadDocumentCard } from "../../../components/leads/documents/LeadDocumentCard";
 import TenderForm from "../../../features/tenders/tender-form";
 import { useTenderDefaultValues } from "../../../shared/hooks/tender/use-tender-default-values";
+import { TENDER_STATUS } from "../../../shared/const/tenders";
+import RenderStatus from "../../../shared/ui/render-status";
 
 const TenderForwardersItem = () => {
   const { id } = useParams();
@@ -37,11 +39,13 @@ const TenderForwardersItem = () => {
   const currentTender = useTendersStore((state) => state.currentTender);
   const getTenderDetails = useTendersStore((state) => state.getTenderDetails);
   const deleteTender = useTendersStore((state) => state.deleteTender);
+  const cancelTender = useTendersStore((state) => state.cancelTender);
   const isLoading = useTendersStore((state) => state.isLoading);
 
   const defaultValues = useTenderDefaultValues(currentTender);
 
   const isEmpty = files.length === 0;
+  const isCanceled = currentTender?.status === TENDER_STATUS.cancelled;
 
   const from = {
     lat: currentTender?.lead?.from_location.lat,
@@ -55,6 +59,11 @@ const TenderForwardersItem = () => {
   const handleDeleteTender = () => {
     deleteTender(id);
     navigate("/tender-forwarders");
+  };
+
+  const handleCancelTender = async () => {
+    await cancelTender(id);
+    await getTenderDetails(id);
   };
 
   const handleCloseForm = () => {
@@ -148,12 +157,7 @@ const TenderForwardersItem = () => {
             variant="outlined"
           />
 
-          <Chip
-            label={currentTender?.status}
-            sx={{
-              color: "color.slate_2",
-            }}
-          />
+          <RenderStatus status={currentTender?.status} />
           <Stack
             sx={{
               display: {
@@ -326,12 +330,20 @@ const TenderForwardersItem = () => {
           p: 4,
         }}
       >
-        <Button variant="contained" color="success">
-          Запустить тендер
-        </Button>
-        <Button variant="outlined" color="warning">
-          Отменить тендер
-        </Button>
+        {!isCanceled && (
+          <>
+            <Button variant="contained" color="success">
+              Запустить тендер
+            </Button>
+            <Button
+              onClick={handleCancelTender}
+              variant="outlined"
+              color="warning"
+            >
+              Отменить тендер
+            </Button>
+          </>
+        )}
         <Button onClick={handleDeleteTender} variant="outlined" color="error">
           Удалить тендер
         </Button>

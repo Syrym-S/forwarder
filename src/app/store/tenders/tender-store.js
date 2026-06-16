@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import {
+  cancelTenderApi,
   createTender,
   deleteTenderApi,
   getTenderDetailsApi,
@@ -85,6 +86,24 @@ export const useTendersStore = create((set) => ({
       set({
         isLoading: false,
       });
+    } catch (e) {
+      console.log(e);
+      set({
+        isLoading: false,
+      });
+    }
+  },
+  cancelTender: async (tender_id) => {
+    try {
+      set({
+        isLoading: true,
+      });
+      const response = await cancelTenderApi(tender_id);
+
+      set({
+        isLoading: false,
+      });
+      return response;
     } catch (e) {
       console.log(e);
       set({

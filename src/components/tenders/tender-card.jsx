@@ -1,6 +1,7 @@
 import { Box, Chip, Stack, Typography } from "@mui/material";
 import dayjs from "dayjs";
 import { useNavigate } from "react-router-dom";
+import RenderStatus from "../../shared/ui/render-status";
 
 const TenderCard = ({ tender }) => {
   const daysLeft = dayjs(tender.end_date_time).diff(dayjs(), "day");
@@ -87,16 +88,7 @@ const TenderCard = ({ tender }) => {
               }}
             />
 
-            <Chip
-              label={tender.status === "new" && "Новый"}
-              size="small"
-              sx={{
-                borderRadius: 999,
-                fontWeight: 500,
-                backgroundColor: "grey.100",
-                color: "color.slate",
-              }}
-            />
+            <RenderStatus status={tender?.status} />
           </Stack>
         </Box>
 
