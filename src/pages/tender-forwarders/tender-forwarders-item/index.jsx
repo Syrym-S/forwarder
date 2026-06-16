@@ -1,9 +1,10 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import RootLayout from "../../../components/layout/root-layout";
 import { useEffect, useState } from "react";
 import { useTendersStore } from "../../../app/store/tenders/tender-store";
 import {
   Box,
+  Button,
   Chip,
   Container,
   Paper,
@@ -27,6 +28,7 @@ import { useTenderDefaultValues } from "../../../shared/hooks/tender/use-tender-
 
 const TenderForwardersItem = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
 
   const [openForm, setOpenForm] = useState(false);
 
@@ -34,6 +36,7 @@ const TenderForwardersItem = () => {
   const getLeadFiles = useLeadsStore((state) => state.getLeadFiles);
   const currentTender = useTendersStore((state) => state.currentTender);
   const getTenderDetails = useTendersStore((state) => state.getTenderDetails);
+  const deleteTender = useTendersStore((state) => state.deleteTender);
   const isLoading = useTendersStore((state) => state.isLoading);
 
   const defaultValues = useTenderDefaultValues(currentTender);
@@ -47,6 +50,11 @@ const TenderForwardersItem = () => {
   const to = {
     lat: currentTender?.lead?.to_location.lat,
     lon: currentTender?.lead?.to_location.lon,
+  };
+
+  const handleDeleteTender = () => {
+    deleteTender(id);
+    navigate("/tender-forwarders");
   };
 
   const handleCloseForm = () => {
@@ -74,7 +82,6 @@ const TenderForwardersItem = () => {
   return (
     <RootLayout withoutDataCheck>
       <Box
-        spacing={0.5}
         sx={{
           display: "flex",
           alignItems: {
@@ -182,7 +189,7 @@ const TenderForwardersItem = () => {
         defaultValues={defaultValues}
       />
 
-      <Container maxWidth="lg" sx={{ py: 4 }}>
+      <Container maxWidth="lg" sx={{ py: 1 }}>
         <Section
           title="Данные перевозки"
           icon={<LocalShippingOutlinedIcon color="primary" />}
@@ -310,6 +317,25 @@ const TenderForwardersItem = () => {
             ))}
         </Section>
       </Container>
+
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "end",
+          gap: "10px",
+          p: 4,
+        }}
+      >
+        <Button variant="contained" color="success">
+          Запустить тендер
+        </Button>
+        <Button variant="outlined" color="warning">
+          Отменить тендер
+        </Button>
+        <Button onClick={handleDeleteTender} variant="outlined" color="error">
+          Удалить тендер
+        </Button>
+      </Box>
     </RootLayout>
   );
 };

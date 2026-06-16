@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import {
   createTender,
+  deleteTenderApi,
   getTenderDetailsApi,
   getTendersApi,
   updateTender,
@@ -71,6 +72,24 @@ export const useTendersStore = create((set) => ({
       return response;
     } catch (e) {
       console.log(e);
+    }
+  },
+
+  deleteTender: async (tender_id) => {
+    try {
+      set({
+        isLoading: true,
+      });
+      const data = await deleteTenderApi(tender_id);
+
+      set({
+        isLoading: false,
+      });
+    } catch (e) {
+      console.log(e);
+      set({
+        isLoading: false,
+      });
     }
   },
 }));

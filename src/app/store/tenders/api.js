@@ -46,3 +46,13 @@ export const updateTender = async (tender_id, payload) => {
 
   return data;
 };
+
+export const deleteTenderApi = async (tender_id) => {
+  const data = await axios.delete(`${BASE_URL}/tender/${tender_id}`, {
+    headers: {
+      "X-WP-Nonce": APP_DATA.nonce,
+    },
+  });
+
+  return data;
+};
