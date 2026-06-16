@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 import RootLayout from "../../../components/layout/root-layout";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useTendersStore } from "../../../app/store/tenders/tender-store";
 import {
   Box,
@@ -22,38 +22,52 @@ import InfoField from "../../../shared/ui/info-field";
 import Loader from "../../../components/layout/loader";
 import { useLeadsStore } from "../../../app/store/leads-store";
 import { LeadDocumentCard } from "../../../components/leads/documents/LeadDocumentCard";
+import TenderForm from "../../../features/tenders/tender-form";
+import { useTenderDefaultValues } from "../../../shared/hooks/tender/use-tender-default-values";
 
 const TenderForwardersItem = () => {
   const { id } = useParams();
 
+  const [openForm, setOpenForm] = useState(false);
+
   const files = useLeadsStore((state) => state.files);
   const getLeadFiles = useLeadsStore((state) => state.getLeadFiles);
-
   const currentTender = useTendersStore((state) => state.currentTender);
   const getTenderDetails = useTendersStore((state) => state.getTenderDetails);
   const isLoading = useTendersStore((state) => state.isLoading);
 
-  const leadData = currentTender?.lead;
+  const defaultValues = useTenderDefaultValues(currentTender);
+
   const isEmpty = files.length === 0;
 
   const from = {
-    lat: leadData?.from_location.lat,
-    lon: leadData?.from_location.lon,
+    lat: currentTender?.lead?.from_location.lat,
+    lon: currentTender?.lead?.from_location.lon,
   };
   const to = {
-    lat: leadData?.to_location.lat,
-    lon: leadData?.to_location.lon,
+    lat: currentTender?.lead?.to_location.lat,
+    lon: currentTender?.lead?.to_location.lon,
   };
+
+  const handleCloseForm = () => {
+    setOpenForm(false);
+  };
+
+  const handleOpenForm = () => {
+    setOpenForm(true);
+  };
+
+  console.log(currentTender);
 
   useEffect(() => {
     getTenderDetails(id);
   }, [id]);
 
   useEffect(() => {
-    if (leadData?.id) {
-      getLeadFiles(leadData.id);
+    if (currentTender?.lead?.id) {
+      getLeadFiles(currentTender?.lead?.id);
     }
-  }, [leadData?.id]);
+  }, [currentTender?.lead?.id]);
 
   if (isLoading) return <Loader />;
 
@@ -96,7 +110,7 @@ const TenderForwardersItem = () => {
             </Typography>
           </Stack>
           <EditNoteRoundedIcon
-            // onClick={openEditForm}
+            onClick={handleOpenForm}
             sx={{
               display: {
                 xs: "block",
@@ -122,13 +136,13 @@ const TenderForwardersItem = () => {
           spacing={1}
         >
           <Chip
-            label={`Тендер #${currentTender.id}`}
+            label={`Тендер #${currentTender?.id}`}
             color="primary"
             variant="outlined"
           />
 
           <Chip
-            label={currentTender.status}
+            label={currentTender?.status}
             sx={{
               color: "color.slate_2",
             }}
@@ -143,7 +157,7 @@ const TenderForwardersItem = () => {
           >
             <Tooltip title="Редактировать">
               <EditNoteRoundedIcon
-                // onClick={openEditForm}
+                onClick={handleOpenForm}
                 sx={{
                   display: {
                     xs: "none",
@@ -159,7 +173,14 @@ const TenderForwardersItem = () => {
         </Box>
       </Box>
 
-      <LeadMap from={from} to={to} id={leadData.id} />
+      <LeadMap from={from} to={to} id={currentTender?.lead?.id} />
+
+      <TenderForm
+        isEdit
+        openForm={openForm}
+        handleCloseForm={handleCloseForm}
+        defaultValues={defaultValues}
+      />
 
       <Container maxWidth="lg" sx={{ py: 4 }}>
         <Section
@@ -179,7 +200,9 @@ const TenderForwardersItem = () => {
           >
             <InfoField
               label="Откуда"
-              value={leadData.from_location?.address || "Битые данные"}
+              value={
+                currentTender?.lead?.from_location?.address || "Битые данные"
+              }
             />
 
             <ArrowRightAltRoundedIcon
@@ -192,7 +215,9 @@ const TenderForwardersItem = () => {
 
             <InfoField
               label="Куда"
-              value={leadData.to_location?.address || "Битые данные"}
+              value={
+                currentTender?.lead?.to_location?.address || "Битые данные"
+              }
             />
           </Box>
 
@@ -208,28 +233,31 @@ const TenderForwardersItem = () => {
                 mb: 2,
               }}
             >
-              <InfoField label="Тип груза" value={leadData.cargo.type} />
+              <InfoField
+                label="Тип груза"
+                value={currentTender?.lead?.cargo.type}
+              />
 
               <InfoField
                 label="Вес груза"
                 value={
-                  leadData.cargo.weight_kg
-                    ? `${leadData.cargo.weight_kg} кг`
+                  currentTender?.lead?.cargo.weight_kg
+                    ? `${currentTender?.lead?.cargo.weight_kg} кг`
                     : "Не указан"
                 }
               />
 
               <InfoField
                 label="Цена груза"
-                value={`${leadData.cargo_price} ${leadData.currency}`}
+                value={`${currentTender?.lead?.cargo_price} ${currentTender?.lead?.currency}`}
               />
 
-              <InfoField label="Статус" value={leadData.status} />
+              <InfoField label="Статус" value={currentTender?.lead?.status} />
             </Box>
 
             <InfoField
               label="Описание груза"
-              value={`Груз заявки #${leadData.id}`}
+              value={`Груз заявки #${currentTender?.lead?.id}`}
             />
           </Box>
         </Section>
@@ -254,7 +282,7 @@ const TenderForwardersItem = () => {
             <InfoField
               label="Тип публикации"
               value={
-                currentTender.publication_type === "public"
+                currentTender?.publication_type === "public"
                   ? "Публичный"
                   : "Приватный"
               }
@@ -262,11 +290,11 @@ const TenderForwardersItem = () => {
 
             <InfoField
               label="Макс. участников"
-              value={currentTender.max_participants_count}
+              value={currentTender?.max_participants_count}
             />
             <InfoField
               label="Участников"
-              value={currentTender.participants_count}
+              value={currentTender?.participants_count}
             />
           </Box>
         </Section>

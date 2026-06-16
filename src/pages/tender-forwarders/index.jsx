@@ -7,6 +7,15 @@ import { VIEWS } from "../../shared/const/leads";
 import TenderCard from "../../components/tenders/tender-card";
 import Loader from "../../components/layout/loader";
 
+const defaultValues = {
+  lead_id: "",
+  public_date_time: "",
+  end_date_time: "",
+  type: "shipper",
+  publication_type: "",
+  max_participants: "",
+};
+
 const TenderForwarders = () => {
   const [view, setView] = useState(VIEWS.cards);
   const [openForm, setOpenForm] = useState(false);
@@ -49,7 +58,11 @@ const TenderForwarders = () => {
       </Button>
 
       {openForm && (
-        <TenderForm openForm={openForm} handleCloseForm={handleCloseForm} />
+        <TenderForm
+          defaultValues={defaultValues}
+          openForm={openForm}
+          handleCloseForm={handleCloseForm}
+        />
       )}
 
       {view === VIEWS.cards && (

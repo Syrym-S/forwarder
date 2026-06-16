@@ -2,7 +2,7 @@ import axios from "axios";
 
 const BASE_URL = "https://forwarder.360logistics.kz/wp-json/forwarder/v1";
 
-export const getTenders = async (params) => {
+export const getTendersApi = async (params) => {
   const data = await axios.get(`${BASE_URL}/tenders`, {
     params,
     headers: {
@@ -13,7 +13,7 @@ export const getTenders = async (params) => {
   return data;
 };
 
-export const getTenderDetails = async (tender_id) => {
+export const getTenderDetailsApi = async (tender_id) => {
   const data = await axios.get(`${BASE_URL}/tender/${tender_id}`, {
     headers: {
       "X-WP-Nonce": APP_DATA.nonce,
@@ -29,6 +29,20 @@ export const createTender = async (payload) => {
       "X-WP-Nonce": APP_DATA.nonce,
     },
   });
+
+  return data;
+};
+
+export const updateTender = async (tender_id, payload) => {
+  const data = await axios.put(
+    `${BASE_URL}/tender/${tender_id}/update`,
+    payload,
+    {
+      headers: {
+        "X-WP-Nonce": APP_DATA.nonce,
+      },
+    },
+  );
 
   return data;
 };

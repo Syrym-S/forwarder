@@ -16,15 +16,8 @@ import { useTenderDefaultValues } from "../../shared/hooks/tender/use-tender-def
 import { useTendersStore } from "../../app/store/tenders/tender-store";
 import { use, useEffect } from "react";
 import dayjs from "dayjs";
-
-const defaultValues = {
-  lead_id: "",
-  public_date_time: "",
-  end_date_time: "",
-  type: "shipper",
-  publication_type: "",
-  max_participants: 0,
-};
+import Loader from "../../components/layout/loader";
+import { useParams } from "react-router-dom";
 
 const prepareTenderData = (form) => {
   return {
@@ -35,27 +28,44 @@ const prepareTenderData = (form) => {
       dayjs(form?.end_date_time).format("YYYY-MM-DD HH:mm:ss") || "",
     type: "shipper",
     publication_type: form?.publication_type ? "public" : "private",
-    max_participants: 0,
+    max_participants: form?.max_participants,
   };
 };
 
-const TenderForm = ({ openForm, handleCloseForm }) => {
+const TenderForm = ({
+  isEdit = false,
+  openForm,
+  handleCloseForm,
+  defaultValues = {},
+}) => {
+  const { id } = useParams();
+
   const { control, handleSubmit, setValue } = useForm({
     defaultValues,
     mode: "onChange",
     reValidateMode: "onChange",
   });
+
   const formValues = useWatch({ control });
 
   const leads = useLeadsStore((state) => state.leads);
   const isLoading = useLeadsStore((state) => state.isLoading);
+  const getTenders = useTendersStore((state) => state.getTenders);
+  const getTenderDetails = useTendersStore((state) => state.getTenderDetails);
   const createTender = useTendersStore((state) => state.createTender);
+  const updateTender = useTendersStore((state) => state.updateTender);
 
   const onSubmit = async () => {
     const payload = prepareTenderData(formValues);
 
     try {
-      await createTender(payload);
+      if (isEdit) {
+        await updateTender(id, payload);
+        await getTenderDetails(id);
+      } else {
+        await createTender(payload);
+        await getTenders();
+      }
       handleCloseForm();
     } catch (e) {
       console.log(e);
@@ -66,11 +76,13 @@ const TenderForm = ({ openForm, handleCloseForm }) => {
     console.log(formValues);
   }, [formValues]);
 
-  if (isLoading) return <>...</>;
+  if (isLoading) return <Loader />;
 
   return (
     <Dialog open={openForm} onClose={handleCloseForm} maxWidth="sm" fullWidth>
-      <DialogTitle>Создание тендера</DialogTitle>
+      <DialogTitle>
+        {isEdit ? "Редактирование тендера" : "Создание тендера"}
+      </DialogTitle>
 
       <DialogContent
         sx={{
@@ -84,6 +96,7 @@ const TenderForm = ({ openForm, handleCloseForm }) => {
           control={control}
           render={({ field }) => (
             <Autocomplete
+              disabled={isEdit}
               options={leads || []}
               value={leads?.find((lead) => lead.id === field.value) || null}
               onChange={(_, value) => {
@@ -127,7 +140,7 @@ const TenderForm = ({ openForm, handleCloseForm }) => {
           render={({ field }) => (
             <TextField
               {...field}
-              //   defaultValue={dayjs(form.loading_date).format("YYYY-MM-DD")}
+              defaultValue={dayjs(field.value).format("YYYY-MM-DD")}
               value={field.value}
               label="Дата публикации"
               type="date"
@@ -192,8 +205,13 @@ const TenderForm = ({ openForm, handleCloseForm }) => {
         <Controller
           name="max_participants"
           control={control}
-          render={(filed) => (
+          render={({ field }) => (
             <TextField
+              sx={{
+                display: !formValues.publication_type ? "none" : "flex",
+              }}
+              {...field}
+              value={field.value}
               type="number"
               label="Количество учатсников"
               helperText="0 - без лимит"
@@ -212,7 +230,7 @@ const TenderForm = ({ openForm, handleCloseForm }) => {
           </Button>
 
           <Button variant="contained" onClick={onSubmit}>
-            Создать
+            {isEdit ? "Cохранить" : "Создать"}
           </Button>
         </Box>
       </DialogContent>

@@ -1,5 +1,10 @@
 import { create } from "zustand";
-import { createTender, getTenderDetails, getTenders } from "./api";
+import {
+  createTender,
+  getTenderDetailsApi,
+  getTendersApi,
+  updateTender,
+} from "./api";
 import axios from "axios";
 
 export const useTendersStore = create((set) => ({
@@ -13,7 +18,7 @@ export const useTendersStore = create((set) => ({
     try {
       set({ isLoading: true });
 
-      const response = await getTenders(params);
+      const response = await getTendersApi(params);
 
       set({
         isLoading: false,
@@ -29,7 +34,7 @@ export const useTendersStore = create((set) => ({
     try {
       set({ isLoading: true });
 
-      const response = await getTenderDetails(id);
+      const response = await getTenderDetailsApi(id);
 
       set({ isLoading: false, currentTender: response.data });
     } catch (e) {
@@ -38,8 +43,31 @@ export const useTendersStore = create((set) => ({
   },
   createTender: async (payload) => {
     try {
+      set({
+        isLoading: true,
+      });
       const response = await createTender(payload);
 
+      set({
+        currentTender: response.data,
+        isLoading: false,
+      });
+      return response;
+    } catch (e) {
+      console.log(e);
+    }
+  },
+  updateTender: async (tender_id, payload) => {
+    try {
+      set({
+        isLoading: true,
+      });
+      const response = await updateTender(tender_id, payload);
+
+      set({
+        currentTender: response.data,
+        isLoading: false,
+      });
       return response;
     } catch (e) {
       console.log(e);

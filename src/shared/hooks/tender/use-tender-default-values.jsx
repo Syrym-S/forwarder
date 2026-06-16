@@ -1,10 +1,12 @@
+import dayjs from "dayjs";
+
 export const useTenderDefaultValues = (form) => {
   return {
-    lead_id: form.laed.id,
-    public_date_time: form.public_date_time,
-    end_date_time: form.end_date_time,
+    lead_id: form?.lead?.id,
+    public_date_time: dayjs(form?.public_date_time).format("YYYY-MM-DD"),
+    end_date_time: dayjs(form?.end_date_time).format("YYYY-MM-DD"),
     type: "shipper",
-    publication_type: form?.publication_type ? "public" : "private",
-    max_participants: form.max_participants,
+    publication_type: form?.publication_type === "public",
+    max_participants: form?.max_participants,
   };
 };
