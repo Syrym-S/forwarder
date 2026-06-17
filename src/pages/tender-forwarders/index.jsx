@@ -4,8 +4,8 @@ import { Box, Button, Pagination } from "@mui/material";
 import TenderForm from "../../features/tenders/tender-form";
 import { useTendersStore } from "../../app/store/tenders/tender-store";
 import { VIEWS } from "../../shared/const/leads";
-import TenderCard from "../../components/tenders/tender-card";
 import Loader from "../../components/layout/loader";
+import ForwardersTenderCard from "../../components/tenders/forwarders-tender-card";
 
 const defaultValues = {
   lead_id: "",
@@ -78,7 +78,7 @@ const TenderForwarders = () => {
           }}
         >
           {tenders.map((tender) => (
-            <TenderCard key={tender.id} tender={tender} />
+            <ForwardersTenderCard key={tender.id} tender={tender} />
           ))}
 
           <Pagination

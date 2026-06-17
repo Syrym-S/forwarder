@@ -1,9 +1,23 @@
-import { Box, Chip, Stack, Tooltip, Typography } from "@mui/material";
-import React from "react";
+import {
+  Box,
+  Button,
+  Chip,
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  Stack,
+  TextField,
+  Tooltip,
+  Typography,
+} from "@mui/material";
 import RenderStatus from "../../shared/ui/render-status";
 import EditNoteRoundedIcon from "@mui/icons-material/EditNoteRounded";
 
-const TenderDetailsHeading = ({ tender, handleOpenForm }) => {
+const TenderDetailsHeading = ({
+  tender,
+  handleOpenForm,
+  isCustomerTender = false,
+}) => {
   return (
     <Box
       sx={{
@@ -53,6 +67,7 @@ const TenderDetailsHeading = ({ tender, handleOpenForm }) => {
           }}
         />
       </Box>
+
       <Box
         sx={{
           display: "flex",
@@ -73,6 +88,7 @@ const TenderDetailsHeading = ({ tender, handleOpenForm }) => {
         />
 
         <RenderStatus status={tender?.status} />
+
         <Stack
           sx={{
             display: {
@@ -81,20 +97,22 @@ const TenderDetailsHeading = ({ tender, handleOpenForm }) => {
             },
           }}
         >
-          <Tooltip title="Редактировать">
-            <EditNoteRoundedIcon
-              onClick={handleOpenForm}
-              sx={{
-                display: {
-                  xs: "none",
-                  sm: "block",
-                },
-                fontSize: "2rem",
-                color: "primary.main",
-                cursor: "pointer",
-              }}
-            />
-          </Tooltip>
+          {!isCustomerTender && (
+            <Tooltip title="Редактировать">
+              <EditNoteRoundedIcon
+                onClick={handleOpenForm}
+                sx={{
+                  display: {
+                    xs: "none",
+                    sm: "block",
+                  },
+                  fontSize: "2rem",
+                  color: "primary.main",
+                  cursor: "pointer",
+                }}
+              />
+            </Tooltip>
+          )}
         </Stack>
       </Box>
     </Box>

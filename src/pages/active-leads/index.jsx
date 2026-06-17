@@ -20,14 +20,12 @@ import { LeadCardSkeleton } from "../../shared/ui/lead-card-skeleton";
 import LeadsTable from "../../components/leads/leads-table";
 import { VIEWS } from "../../shared/const/leads";
 import AddLeadForm from "../../features/leads/add-lead-form";
-import { useSearchParams } from "react-router-dom";
 import { useFormDefaultValues } from "../../shared/hooks/leads/use-form-default-values";
 import Loader from "../../components/layout/loader";
 
 const ActiveLeads = () => {
-  const [searchParams, setSearchParams] = useSearchParams();
   const [openForm, setOpenForm] = useState(false);
-  const [page, setPage] = useState(Number(searchParams.get("page")) || 1);
+  const [page, setPage] = useState(1);
   const [view, setView] = useState(VIEWS.table);
 
   const leads = useLeadsStore((state) => state.leads);
@@ -42,10 +40,6 @@ const ActiveLeads = () => {
 
   const handlePageChange = (_, value) => {
     setPage(value);
-  };
-
-  const handleChange = (event) => {
-    setView(event.target.value);
   };
 
   const handleOpenForm = () => {

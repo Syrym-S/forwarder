@@ -6,12 +6,10 @@ import {
   Polyline,
   Tooltip,
 } from "react-leaflet";
-import polyline from "@mapbox/polyline";
 import { Typography } from "@mui/material";
+import { useLeadsStore } from "../../app/store/leads-store";
 
 import "leaflet/dist/leaflet.css";
-import { useStore } from "zustand";
-import { useLeadsStore } from "../../app/store/leads-store";
 
 const getRoute = async (start, end) => {
   const response = await fetch(

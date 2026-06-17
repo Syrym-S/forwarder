@@ -12,9 +12,8 @@ import {
 } from "@mui/material";
 import { Controller, useForm, useWatch } from "react-hook-form";
 import { useLeadsStore } from "../../app/store/leads-store";
-import { useTenderDefaultValues } from "../../shared/hooks/tender/use-tender-default-values";
 import { useTendersStore } from "../../app/store/tenders/tender-store";
-import { use, useEffect } from "react";
+import { useEffect } from "react";
 import dayjs from "dayjs";
 import Loader from "../../components/layout/loader";
 import { useParams } from "react-router-dom";
@@ -40,7 +39,7 @@ const TenderForm = ({
 }) => {
   const { id } = useParams();
 
-  const { control, handleSubmit, setValue } = useForm({
+  const { control, setValue } = useForm({
     defaultValues,
     mode: "onChange",
     reValidateMode: "onChange",

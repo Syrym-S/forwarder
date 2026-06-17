@@ -12,6 +12,7 @@ import { useRoutes } from "react-router-dom";
 import TenderForwarders from "../../pages/tender-forwarders";
 import TenderForwardersItem from "../../pages/tender-forwarders/tender-forwarders-item";
 import TenderApplications from "../../pages/tender-applications";
+import TenderApplicationsItem from "../../pages/tender-applications/tender-applications-item";
 
 const AppRouter = () => {
   const routes = useRoutes([
@@ -54,6 +55,10 @@ const AppRouter = () => {
     {
       path: "/tender-applications",
       element: <TenderApplications />,
+    },
+    {
+      path: "/tender-applications/:id",
+      element: <TenderApplicationsItem />,
     },
     {
       path: "/tender-forwarders",

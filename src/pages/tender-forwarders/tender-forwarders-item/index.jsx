@@ -29,6 +29,7 @@ import TenderDetailsHeading from "../../../components/tenders/tender-details-hea
 import { LeadDocumentCard } from "../../../components/leads/documents/LeadDocumentCard";
 import { useTenderDefaultValues } from "../../../shared/hooks/tender/use-tender-default-values";
 import { TENDER_STATUS } from "../../../shared/const/tenders";
+import TenderBets from "../../../components/tenders/tender-bets";
 
 const TenderForwardersItem = () => {
   const { id } = useParams();
@@ -111,10 +112,7 @@ const TenderForwardersItem = () => {
         >
           <TenderParticipants tender={currentTender} />
 
-          <Section
-            title="Ставки"
-            // icon={<PeopleAltOutlinedIcon color="primary" />}
-          ></Section>
+          <TenderBets tender={currentTender} />
         </Box>
       </Container>
 

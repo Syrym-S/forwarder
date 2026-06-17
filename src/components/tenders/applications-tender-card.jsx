@@ -3,12 +3,12 @@ import dayjs from "dayjs";
 import { useNavigate } from "react-router-dom";
 import RenderStatus from "../../shared/ui/render-status";
 
-const TenderCard = ({ tender }) => {
+const ApplicationsTenderCard = ({ tender }) => {
   const daysLeft = dayjs(tender.end_date_time).diff(dayjs(), "day");
   const navigate = useNavigate();
 
   const navigateToDetailPage = () => {
-    navigate(`/tender-forwarders/${tender.id}`);
+    navigate(`/tender-applications/${tender.id}`);
   };
 
   return (
@@ -124,7 +124,7 @@ const TenderCard = ({ tender }) => {
               mb: 0.5,
             }}
           >
-            {tender.lead_id}
+            {tender.lead.id}
           </Typography>
         </Box>
 
@@ -248,4 +248,4 @@ const TenderCard = ({ tender }) => {
   );
 };
 
-export default TenderCard;
+export default ApplicationsTenderCard;

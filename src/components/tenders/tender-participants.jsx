@@ -138,7 +138,7 @@ const TenderParticipants = ({ tender }) => {
             gap: "10px",
           }}
         >
-          {tender.participants.map((participant) => (
+          {tender?.participants.map((participant) => (
             <ParticipantCard
               tender_id={tender.id}
               participant={participant}

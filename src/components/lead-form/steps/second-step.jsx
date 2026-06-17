@@ -9,7 +9,7 @@ import PropTypes from "prop-types";
 import { Controller } from "react-hook-form";
 import { StepSection } from "../step-section";
 
-export function SecondStep({ control, errors, form, setValue }) {
+export function SecondStep({ control, errors }) {
   return (
     <StepSection title="Груз и оплата">
       <Box
