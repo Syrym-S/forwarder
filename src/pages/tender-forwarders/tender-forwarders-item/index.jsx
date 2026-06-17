@@ -3,30 +3,32 @@ import RootLayout from "../../../components/layout/root-layout";
 import { useEffect, useState } from "react";
 import { useTendersStore } from "../../../app/store/tenders/tender-store";
 import {
+  Autocomplete,
   Box,
   Button,
   Chip,
   Container,
+  IconButton,
   Paper,
   Stack,
+  TextField,
   Tooltip,
   Typography,
 } from "@mui/material";
-import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
-import ArrowRightAltRoundedIcon from "@mui/icons-material/ArrowRightAltRounded";
-import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
-import EditNoteRoundedIcon from "@mui/icons-material/EditNoteRounded";
-import LocalShippingOutlinedIcon from "@mui/icons-material/LocalShippingOutlined";
 import LeadMap from "../../../components/leads/lead-map";
 import Section from "../../../shared/ui/section";
 import InfoField from "../../../shared/ui/info-field";
 import Loader from "../../../components/layout/loader";
-import { useLeadsStore } from "../../../app/store/leads-store";
-import { LeadDocumentCard } from "../../../components/leads/documents/LeadDocumentCard";
 import TenderForm from "../../../features/tenders/tender-form";
+import RenderStatus from "../../../shared/ui/render-status";
+import TenderParticipants from "../../../components/tenders/tender-participants";
+import LeadDocuments from "../../../components/tenders/lead-documents";
+import TenderInfo from "../../../components/tenders/tender-info";
+import TransportationInfo from "../../../components/tenders/transportation-info";
+import TenderDetailsHeading from "../../../components/tenders/tender-details-heading";
+import { LeadDocumentCard } from "../../../components/leads/documents/LeadDocumentCard";
 import { useTenderDefaultValues } from "../../../shared/hooks/tender/use-tender-default-values";
 import { TENDER_STATUS } from "../../../shared/const/tenders";
-import RenderStatus from "../../../shared/ui/render-status";
 
 const TenderForwardersItem = () => {
   const { id } = useParams();
@@ -34,8 +36,6 @@ const TenderForwardersItem = () => {
 
   const [openForm, setOpenForm] = useState(false);
 
-  const files = useLeadsStore((state) => state.files);
-  const getLeadFiles = useLeadsStore((state) => state.getLeadFiles);
   const currentTender = useTendersStore((state) => state.currentTender);
   const getTenderDetails = useTendersStore((state) => state.getTenderDetails);
   const deleteTender = useTendersStore((state) => state.deleteTender);
@@ -44,7 +44,6 @@ const TenderForwardersItem = () => {
 
   const defaultValues = useTenderDefaultValues(currentTender);
 
-  const isEmpty = files.length === 0;
   const isCanceled = currentTender?.status === TENDER_STATUS.cancelled;
 
   const from = {
@@ -74,115 +73,18 @@ const TenderForwardersItem = () => {
     setOpenForm(true);
   };
 
-  console.log(currentTender);
-
   useEffect(() => {
     getTenderDetails(id);
   }, [id]);
-
-  useEffect(() => {
-    if (currentTender?.lead?.id) {
-      getLeadFiles(currentTender?.lead?.id);
-    }
-  }, [currentTender?.lead?.id]);
 
   if (isLoading) return <Loader />;
 
   return (
     <RootLayout withoutDataCheck>
-      <Box
-        sx={{
-          display: "flex",
-          alignItems: {
-            xs: "start",
-            sm: "center",
-          },
-          gap: "10px",
-          justifyContent: "space-between",
-          flexDirection: {
-            xs: "column",
-            sm: "row",
-          },
-        }}
-      >
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            width: "100%",
-          }}
-        >
-          <Stack>
-            <Typography variant="h5" fontWeight={700}>
-              Информация о тендерной заявке
-            </Typography>
-
-            <Typography
-              sx={{
-                color: "color.slate",
-              }}
-            >
-              Подробные данные по заявке
-            </Typography>
-          </Stack>
-          <EditNoteRoundedIcon
-            onClick={handleOpenForm}
-            sx={{
-              display: {
-                xs: "block",
-                sm: "none",
-              },
-              fontSize: "3rem",
-              color: "primary.main",
-              cursor: "pointer",
-            }}
-          />
-        </Box>
-        <Box
-          sx={{
-            display: "flex",
-            padding: "10px",
-            justifyContent: { xs: "space-between", sm: "end" },
-            gap: "10px",
-            width: {
-              xs: "100%",
-              sm: "fit-content",
-            },
-          }}
-          spacing={1}
-        >
-          <Chip
-            label={`Тендер #${currentTender?.id}`}
-            color="primary"
-            variant="outlined"
-          />
-
-          <RenderStatus status={currentTender?.status} />
-          <Stack
-            sx={{
-              display: {
-                xs: "none",
-                sm: "block",
-              },
-            }}
-          >
-            <Tooltip title="Редактировать">
-              <EditNoteRoundedIcon
-                onClick={handleOpenForm}
-                sx={{
-                  display: {
-                    xs: "none",
-                    sm: "block",
-                  },
-                  fontSize: "2rem",
-                  color: "primary.main",
-                  cursor: "pointer",
-                }}
-              />
-            </Tooltip>
-          </Stack>
-        </Box>
-      </Box>
+      <TenderDetailsHeading
+        tender={currentTender}
+        handleOpenForm={handleOpenForm}
+      />
 
       <LeadMap from={from} to={to} id={currentTender?.lead?.id} />
 
@@ -194,132 +96,26 @@ const TenderForwardersItem = () => {
       />
 
       <Container maxWidth="lg" sx={{ py: 1 }}>
-        <Section
-          title="Данные перевозки"
-          icon={<LocalShippingOutlinedIcon color="primary" />}
+        <TransportationInfo tender={currentTender} />
+
+        <TenderInfo tender={currentTender} />
+
+        <LeadDocuments tender={currentTender} />
+
+        <Box
+          sx={{
+            display: "grid",
+            gridTemplateColumns: "1fr 1fr",
+            gap: "10px",
+          }}
         >
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: {
-                xs: "column",
-                sm: "row",
-              },
-              justifyContent: "space-between",
-              alignItems: "center",
-            }}
-          >
-            <InfoField
-              label="Откуда"
-              value={
-                currentTender?.lead?.from_location?.address || "Битые данные"
-              }
-            />
+          <TenderParticipants tender={currentTender} />
 
-            <ArrowRightAltRoundedIcon
-              sx={{
-                fontSize: 40,
-                color: "text.secondary",
-                justifySelf: "center",
-              }}
-            />
-
-            <InfoField
-              label="Куда"
-              value={
-                currentTender?.lead?.to_location?.address || "Битые данные"
-              }
-            />
-          </Box>
-
-          <Box sx={{ py: 4 }}>
-            <Box
-              sx={{
-                display: "grid",
-                gridTemplateColumns: {
-                  xs: "1fr",
-                  md: "repeat(4,1fr)",
-                },
-                gap: 2,
-                mb: 2,
-              }}
-            >
-              <InfoField
-                label="Тип груза"
-                value={currentTender?.lead?.cargo.type}
-              />
-
-              <InfoField
-                label="Вес груза"
-                value={
-                  currentTender?.lead?.cargo.weight_kg
-                    ? `${currentTender?.lead?.cargo.weight_kg} кг`
-                    : "Не указан"
-                }
-              />
-
-              <InfoField
-                label="Цена груза"
-                value={`${currentTender?.lead?.cargo_price} ${currentTender?.lead?.currency}`}
-              />
-
-              <InfoField label="Статус" value={currentTender?.lead?.status} />
-            </Box>
-
-            <InfoField
-              label="Описание груза"
-              value={`Груз заявки #${currentTender?.lead?.id}`}
-            />
-          </Box>
-        </Section>
-
-        <Section
-          title="Информация о тендере"
-          icon={<InfoOutlinedIcon color="primary" />}
-        >
-          <Box
-            sx={{
-              display: "grid",
-              gridTemplateColumns: {
-                xs: "1fr",
-                md: "repeat(3,1fr)",
-              },
-              gap: 2,
-              mb: 2,
-            }}
-          >
-            <InfoField label="Для кого" value={"-"} />
-
-            <InfoField
-              label="Тип публикации"
-              value={
-                currentTender?.publication_type === "public"
-                  ? "Публичный"
-                  : "Приватный"
-              }
-            />
-
-            <InfoField
-              label="Макс. участников"
-              value={currentTender?.max_participants_count}
-            />
-            <InfoField
-              label="Участников"
-              value={currentTender?.participants_count}
-            />
-          </Box>
-        </Section>
-
-        <Section
-          title="Документы лида"
-          icon={<DescriptionOutlinedIcon color="primary" />}
-        >
-          {isEmpty && "Cписок пуст"}
-          {!isEmpty &&
-            files.map((file) => (
-              <LeadDocumentCard key={file.path} document={file} />
-            ))}
-        </Section>
+          <Section
+            title="Ставки"
+            // icon={<PeopleAltOutlinedIcon color="primary" />}
+          ></Section>
+        </Box>
       </Container>
 
       <Box

@@ -1,5 +1,5 @@
 import { Dialog, DialogContent, DialogTitle } from "@mui/material";
-import React, { act, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import FormHeader from "../../components/lead-form/form-header";
 import FormStepsTab from "../../components/lead-form/form-steps-tab";
 import FirstStep from "../../components/lead-form/steps/first-step";
@@ -8,10 +8,7 @@ import { useForm, useWatch } from "react-hook-form";
 import { SecondStep } from "../../components/lead-form/steps/second-step";
 import { LastStep } from "../../components/lead-form/steps/last-step";
 import { CreateLeadResultModal } from "../../components/lead-form/create-lead-result-modal";
-import {
-  mapCreateLeadDocumentsToApiDocuments,
-  mapCreateLeadFormToApi,
-} from "../../components/lead-form/model/createLead.adapter";
+import { mapCreateLeadFormToApi } from "../../components/lead-form/model/createLead.adapter";
 import { useLeadsStore } from "../../app/store/leads-store";
 import { ThirdStep } from "../../components/lead-form/steps/third-step";
 import { ForthStep } from "../../components/lead-form/steps/forth-step";
@@ -33,7 +30,6 @@ const steps = [
 
 const stepFields = [
   ["from_location.address", "to_location.address", "loadingDate"],
-  ,
   [
     "cargoType",
     "weightKg",
@@ -58,7 +54,7 @@ const AddLeadForm = ({
   const createLead = useLeadsStore((state) => state.createLead);
   const updateLead = useLeadsStore((state) => state.updateLead);
   const getLeadItem = useLeadsStore((state) => state.getLeadItem);
-  const [maxAvailableStep, setMaxAvailableStep] = useState(0);
+  // const [maxAvailableStep, setMaxAvailableStep] = useState(0);
   const [uploadedFiles, setUploadedFiles] = useState([]);
   const [activeStep, setActiveStep] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -89,7 +85,7 @@ const AddLeadForm = ({
 
   const formValues = useWatch({ control });
 
-  const isFirstStep = activeStep === 0;
+  // const isFirstStep = activeStep === 0;
   const isLastStep = activeStep === steps.length - 1;
 
   function getCreatedLeadId(response) {
@@ -119,12 +115,12 @@ const AddLeadForm = ({
 
       const payload = mapCreateLeadFormToApi(data);
 
-      let response = null;
+      // let response = null;
       let createdLeadId = editingItemId;
       let documentsUploadFailed = false;
 
       if (isEdit) {
-        response = await updateLead(editingItemId, payload);
+        await updateLead(editingItemId, payload);
         await getLeadItem(editingItemId);
 
         if (payload.documents.length > 0 && createdLeadId) {
@@ -249,7 +245,7 @@ const AddLeadForm = ({
 
   function handleClose() {
     setActiveStep(0);
-    setMaxAvailableStep(0);
+    // setMaxAvailableStep(0);
     reset({
       documents: [],
       ...defaultValues,
@@ -272,7 +268,7 @@ const AddLeadForm = ({
 
     const nextStep = activeStep + 1;
 
-    setMaxAvailableStep((prevStep) => Math.max(prevStep, nextStep));
+    // setMaxAvailableStep((prevStep) => Math.max(prevStep, nextStep));
     setActiveStep(nextStep);
   }
 

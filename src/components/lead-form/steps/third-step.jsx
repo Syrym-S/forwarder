@@ -1,4 +1,3 @@
-import { useEffect, useMemo, useState } from "react";
 import { Controller, useWatch } from "react-hook-form";
 import PropTypes from "prop-types";
 import {
@@ -100,9 +99,3 @@ export function ThirdStep({ control, errors, setValue }) {
     </StepSection>
   );
 }
-
-ThirdStep.propTypes = {
-  setValue: PropTypes.func.isRequired,
-  control: PropTypes.object.isRequired,
-  errors: PropTypes.object.isRequired,
-};
