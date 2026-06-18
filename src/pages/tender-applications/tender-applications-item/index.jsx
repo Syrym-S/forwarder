@@ -35,6 +35,7 @@ import { useTenderDefaultValues } from "../../../shared/hooks/tender/use-tender-
 import { TENDER_STATUS } from "../../../shared/const/tenders";
 import TenderBets from "../../../components/tenders/tender-bets";
 import MakeBetForm from "../../../features/tenders/make-bet-form";
+import MakeBetBlock from "../../../components/tenders/make-bet-block";
 
 const TenderApplicationsItem = () => {
   const { id } = useParams();
@@ -48,7 +49,6 @@ const TenderApplicationsItem = () => {
   const getCustomerTenderDetails = useTendersStore(
     (state) => state.getCustomerTenderDetails,
   );
-  const cancelBet = useTendersStore((state) => state.cancelBet);
   const isLoading = useTendersStore((state) => state.isLoading);
 
   const defaultValues = useTenderDefaultValues(customerCurrentTender);
@@ -61,14 +61,8 @@ const TenderApplicationsItem = () => {
     lat: customerCurrentTender?.lead?.to_location.lat,
     lon: customerCurrentTender?.lead?.to_location.lon,
   };
-  const ownBet = customerCurrentTender?.bets.find((bet) => bet.is_own === true);
-  const isBetExist = !!ownBet;
 
-  const handleShowBetFiels = () => {
-    setShowBetField(true);
-  };
-
-  const handleHideBetFiels = () => {
+  const handleHideBetField = () => {
     setShowBetField(false);
   };
 
@@ -78,10 +72,6 @@ const TenderApplicationsItem = () => {
 
   const handleOpenForm = () => {
     setOpenForm(true);
-  };
-
-  const handleCancelBet = async (bet_index) => {
-    await cancelBet(customerCurrentTender.id, bet_index);
   };
 
   useEffect(() => {
@@ -114,7 +104,7 @@ const TenderApplicationsItem = () => {
 
         <LeadDocuments tender={customerCurrentTender} />
 
-        <Box
+        {/* <Box
           sx={{
             display: "flex",
             gap: 2,
@@ -133,27 +123,47 @@ const TenderApplicationsItem = () => {
             (bet, index) =>
               bet.is_own && (
                 <>
-                  <Button
-                    variant={"outlined"}
-                    color={"error"}
-                    onClick={() => handleCancelBet(index)}
-                  >
-                    {"Отменить ставку"}
-                  </Button>
-                  <TextField
-                    label={`${bet.amount} ${bet.currency}`}
-                    disabled
-                    size="sm"
-                  />
+                  {bet.status !== "closed" ? (
+                    <>
+                      {" "}
+                      <Button
+                        variant={"outlined"}
+                        color={"error"}
+                        onClick={() => handleCancelBet(index)}
+                      >
+                        {"Отменить ставку"}
+                      </Button>
+                      <TextField
+                        label={`${bet.amount} ${bet.currency}`}
+                        disabled
+                        size="sm"
+                      />
+                    </>
+                  ) : (
+                    <Chip
+                      variant="outlined"
+                      sx={{
+                        textDecoration: "line-through",
+                        textDecorationThickness: "1.5px",
+                        fontWeight: 600,
+                      }}
+                      label={`${bet.amount} ${bet.currency}`}
+                      color="error"
+                    />
+                  )}
                 </>
               ),
           )}
-        </Box>
+        </Box> */}
+        <MakeBetBlock
+          tender={customerCurrentTender}
+          setShowBetField={setShowBetField}
+        />
 
         <MakeBetForm
           tender={customerCurrentTender}
           showBetField={showBetField}
-          handleHideBetFiels={handleHideBetFiels}
+          handleHideBetField={handleHideBetField}
         />
       </Container>
     </RootLayout>

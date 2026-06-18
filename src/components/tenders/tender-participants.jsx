@@ -24,7 +24,8 @@ const TenderParticipants = ({ tender }) => {
   const getTenderDetails = useTendersStore((state) => state.getTenderDetails);
   const addParticipant = useTendersStore((state) => state.addParticipant);
 
-  const isEmpty = tender?.participants.length === 0;
+  const participants = tender?.participants ?? [];
+  const isEmpty = participants.length === 0;
 
   const handleAddParticipant = async () => {
     await addParticipant(tender.id, { participant_id: selectedDriver.id });

@@ -16,8 +16,11 @@ const defaultValues = {
   comment: "",
 };
 
-const MakeBetForm = ({ tender, showBetField, handleHideBetFiels }) => {
+const MakeBetForm = ({ tender, showBetField, handleHideBetField }) => {
   const makeBet = useTendersStore((state) => state.makeBet);
+  const getCustomerTenderDetails = useTendersStore(
+    (state) => state.getCustomerTenderDetails,
+  );
 
   const { control } = useForm({
     defaultValues,
@@ -29,12 +32,13 @@ const MakeBetForm = ({ tender, showBetField, handleHideBetFiels }) => {
 
   const submitBetForm = async () => {
     await makeBet(tender.id, formValues);
+    await getCustomerTenderDetails(tender.id);
   };
 
   return (
     <Dialog
       open={showBetField}
-      onClose={handleHideBetFiels}
+      onClose={handleHideBetField}
       fullWidth
       maxWidth="sm"
     >
@@ -112,7 +116,7 @@ const MakeBetForm = ({ tender, showBetField, handleHideBetFiels }) => {
             Сделать ставку
           </Button>
 
-          <Button variant="outlined" color="error" onClick={handleHideBetFiels}>
+          <Button variant="outlined" color="error" onClick={handleHideBetField}>
             Отмена
           </Button>
         </Box>
