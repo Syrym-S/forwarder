@@ -13,6 +13,8 @@ import UploadFileOutlinedIcon from "@mui/icons-material/UploadFileOutlined";
 
 import { LeadDocumentCard } from "./LeadDocumentCard";
 import { DocumentPreviewDialog } from "./DocumentPreviewDialog";
+import Loader from "../../layout/loader";
+import { useLeadsStore } from "../../../app/store/leads-store";
 
 export function LeadDocumentsSection({
   documents,
@@ -22,6 +24,7 @@ export function LeadDocumentsSection({
   uploadError = "",
   deletingDocumentIds = [],
 }) {
+  const isLoading = useLeadsStore((state) => state.isLoading);
   const [selectedDocument, setSelectedDocument] = useState(null);
   const [selectedFileName, setSelectedFileName] = useState("");
 
@@ -37,6 +40,8 @@ export function LeadDocumentsSection({
     const form = event.currentTarget;
     const formData = new FormData(event.currentTarget);
     const file = formData.get("file");
+
+    console.log("file", file);
 
     if (!file || !file.name || isUploading) {
       return;
@@ -145,6 +150,8 @@ export function LeadDocumentsSection({
           <Typography color="text.secondary" fontSize={14}>
             Документы не добавлены
           </Typography>
+        ) : isLoading ? (
+          <> ....Загрузка </>
         ) : (
           <Stack spacing={1}>
             {documents.map((document) => (

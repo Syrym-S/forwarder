@@ -7,7 +7,6 @@ import ArrowRightAltRoundedIcon from "@mui/icons-material/ArrowRightAltRounded";
 import RouteOutlinedIcon from "@mui/icons-material/RouteOutlined";
 import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
 import { LeadDocumentsSection } from "../../components/leads/documents/LeadDocumentsSection";
-
 import LocalShippingOutlinedIcon from "@mui/icons-material/LocalShippingOutlined";
 import BusinessOutlinedIcon from "@mui/icons-material/BusinessOutlined";
 import EditNoteRoundedIcon from "@mui/icons-material/EditNoteRounded";
@@ -21,18 +20,12 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
-import { mockLeads } from "../../shared/const/mock-data";
 import { useLeadsStore } from "../../app/store/leads-store";
 import { MapContainer, Marker, Polyline, TileLayer } from "react-leaflet";
 import AddLeadForm from "../../features/leads/add-lead-form";
 import { useFormDefaultValues } from "../../shared/hooks/leads/use-form-default-values";
-import { mapCreateLeadFormToApi } from "../../components/lead-form/model/createLead.adapter";
 import LeadMap from "../../components/leads/lead-map";
-import {
-  deleteLeadFileApi,
-  getLeadFilesApi,
-  uploadLeadFileApi,
-} from "../../app/store/api";
+import { getLeadFilesApi, uploadLeadFileApi } from "../../app/store/api";
 import { mapLeadFilesResponseFromApi } from "../../features/leads/model/lead-files.adapter";
 import Loader from "../../components/layout/loader";
 
@@ -76,8 +69,6 @@ const Section = ({ icon, title, children }) => (
   </Paper>
 );
 
-const position = [43.222, 76.8512];
-
 const InfoField = ({ label, value, accent = false }) => (
   <Box
     sx={{
@@ -111,7 +102,6 @@ const InfoField = ({ label, value, accent = false }) => (
 
 const LeadItem = () => {
   const [openEdit, setOpenEdit] = useState(false);
-  const [fromCoords, setFromCoords] = useState(null);
   const { id } = useParams();
   const getLeadItem = useLeadsStore((state) => state.getLeadItem);
   const leadData = useLeadsStore((state) => state.currentLead);
@@ -360,6 +350,7 @@ const LeadItem = () => {
           </Stack>
         </Box>
       </Box>
+
       <AddLeadForm
         editingItemId={id}
         openForm={openEdit}

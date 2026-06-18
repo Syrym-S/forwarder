@@ -13,17 +13,10 @@ import { useEffect, useState } from "react";
 import { useLeadsStore } from "../../../app/store/leads-store";
 import { useParams } from "react-router-dom";
 
-const DocumentUpload = ({
-  form,
-  setValue,
-  uploadedFiles,
-  setUploadedFiles,
-}) => {
+const DocumentUpload = ({ setValue, uploadedFiles, setUploadedFiles }) => {
   const { id } = useParams();
-  const [savedFiles, setSavedFiles] = useState([]);
   const [fileName, setFileName] = useState(null);
   const [fileContext, setFileContext] = useState(null);
-  const [deletedFiles, setDeletedFiles] = useState([]);
 
   const files = useLeadsStore((state) => state.files);
   const isLoading = useLeadsStore((state) => state.isLoading);
@@ -72,9 +65,7 @@ const DocumentUpload = ({
     setValue("documents", uploadedFiles, {
       shouldDirty: true,
     });
-
-    console.log(deletedFiles);
-  }, [uploadedFiles, deletedFiles]);
+  }, [uploadedFiles]);
 
   return (
     <Box sx={{ display: "grid", gap: 2 }}>

@@ -1,3 +1,5 @@
+"Нужно удалить потом";
+
 import { Box, Typography } from "@mui/material";
 import PropTypes from "prop-types";
 
@@ -23,7 +25,7 @@ const FormStepsTab = ({ steps, activeStep, maxAvailableStep = 4 }) => {
         return (
           <Box
             key={step}
-            onClick={() => onStepClick(index)}
+            // onClick={() => onStepClick(index)}
             role="button"
             tabIndex={isAvailable ? 0 : -1}
             sx={{

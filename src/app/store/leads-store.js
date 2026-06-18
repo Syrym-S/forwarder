@@ -153,9 +153,9 @@ export const useLeadsStore = create((set) => ({
 
       console.log(response);
 
-      set((state) => ({
+      set({
         isLoading: false,
-      }));
+      });
 
       return response;
     } catch (e) {
@@ -175,9 +175,9 @@ export const useLeadsStore = create((set) => ({
 
       const response = await deleteLeadFileApi(lead_id, file_path);
 
-      set((state) => ({
+      set({
         isLoading: false,
-      }));
+      });
 
       return response;
     } catch (e) {
@@ -186,7 +186,7 @@ export const useLeadsStore = create((set) => ({
         isLoading: false,
       });
 
-      console.error("Payload:", payload);
+      // console.error("Payload:", payload);
       console.error("Response:", e.response?.data);
       throw e;
     }

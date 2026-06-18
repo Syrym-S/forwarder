@@ -12,20 +12,22 @@ import { mapCreateLeadFormToApi } from "../../components/lead-form/model/createL
 import { useLeadsStore } from "../../app/store/leads-store";
 import { ThirdStep } from "../../components/lead-form/steps/third-step";
 import { ForthStep } from "../../components/lead-form/steps/forth-step";
-
 import { DocumentsStep } from "../../components/lead-form/steps/documents-step";
 import { uploadLeadFileApi } from "../../app/store/api";
 import { useCustomerStore } from "../../app/store/customer";
 import { useDriverStore } from "../../app/store/driver-store";
 import DocumentUpload from "../../components/lead-form/steps/document-upload";
+import PriceStep from "../../components/lead-form/steps/price-step";
+import LeadFormTabs from "../../components/lead-form/lead-form-tabs";
 
 const steps = [
-  "Маршрут",
-  "Груз",
-  "Водитель",
-  "Заказщик",
-  "Документы",
-  "Проверка",
+  { id: 1, label: "Маршрут" },
+  { id: 2, label: "Груз" },
+  { id: 3, label: "Водитель" },
+  { id: 4, label: "Заказщик" },
+  { id: 5, label: "Цены" },
+  { id: 6, label: "Документы" },
+  { id: 7, label: "Проверка" },
 ];
 
 const stepFields = [
@@ -54,7 +56,6 @@ const AddLeadForm = ({
   const createLead = useLeadsStore((state) => state.createLead);
   const updateLead = useLeadsStore((state) => state.updateLead);
   const getLeadItem = useLeadsStore((state) => state.getLeadItem);
-  // const [maxAvailableStep, setMaxAvailableStep] = useState(0);
   const [uploadedFiles, setUploadedFiles] = useState([]);
   const [activeStep, setActiveStep] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -85,7 +86,6 @@ const AddLeadForm = ({
 
   const formValues = useWatch({ control });
 
-  // const isFirstStep = activeStep === 0;
   const isLastStep = activeStep === steps.length - 1;
 
   function getCreatedLeadId(response) {
@@ -115,7 +115,6 @@ const AddLeadForm = ({
 
       const payload = mapCreateLeadFormToApi(data);
 
-      // let response = null;
       let createdLeadId = editingItemId;
       let documentsUploadFailed = false;
 
@@ -125,6 +124,7 @@ const AddLeadForm = ({
 
         if (payload.documents.length > 0 && createdLeadId) {
           try {
+            console.log("payload", payload);
             await uploadCreateLeadDocuments(createdLeadId, payload.documents);
           } catch (documentError) {
             documentsUploadFailed = true;
@@ -228,7 +228,9 @@ const AddLeadForm = ({
           <ForthStep control={control} errors={errors} setValue={setValue} />
         );
       case 4:
-        // return <DocumentsStep form={formValues} setValue={setValue} />;
+        return <PriceStep />;
+
+      case 5:
         return (
           <DocumentUpload
             form={formValues}
@@ -238,14 +240,13 @@ const AddLeadForm = ({
           />
         );
 
-      case 5:
+      case 6:
         return <LastStep form={formValues} />;
     }
   };
 
   function handleClose() {
     setActiveStep(0);
-    // setMaxAvailableStep(0);
     reset({
       documents: [],
       ...defaultValues,
@@ -268,7 +269,6 @@ const AddLeadForm = ({
 
     const nextStep = activeStep + 1;
 
-    // setMaxAvailableStep((prevStep) => Math.max(prevStep, nextStep));
     setActiveStep(nextStep);
   }
 
@@ -281,7 +281,7 @@ const AddLeadForm = ({
           stepsCount={steps.length}
         />
         <DialogContent sx={{ px: 3 }}>
-          <FormStepsTab steps={steps} activeStep={activeStep} />
+          <LeadFormTabs steps={steps} activeStep={activeStep} />
 
           {renderContent(activeStep)}
 

@@ -26,8 +26,3 @@ export function StepSection({ title, children }) {
     </Box>
   );
 }
-
-StepSection.propTypes = {
-  title: PropTypes.string.isRequired,
-  children: PropTypes.node.isRequired,
-};
