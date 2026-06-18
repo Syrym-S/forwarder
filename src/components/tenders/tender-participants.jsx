@@ -24,8 +24,8 @@ const TenderParticipants = ({ tender }) => {
   const getTenderDetails = useTendersStore((state) => state.getTenderDetails);
   const addParticipant = useTendersStore((state) => state.addParticipant);
 
-  const participants = tender?.participants ?? [];
-  const isEmpty = participants.length === 0;
+  const isEmpty = tender.participants_count === 0;
+  const isInLimit = tender.max_participants > tender.participants_count;
 
   const handleAddParticipant = async () => {
     await addParticipant(tender.id, { participant_id: selectedDriver.id });
@@ -61,13 +61,20 @@ const TenderParticipants = ({ tender }) => {
           }}
         >
           <Typography>Участники</Typography>
-          <Button
-            onClick={handleShowParticipantField}
-            variant="outlined"
-            startIcon={<ControlPointRoundedIcon color="primary" />}
-          >
-            Добавить участника
-          </Button>
+
+          {isInLimit ? (
+            <Button
+              onClick={handleShowParticipantField}
+              variant="outlined"
+              startIcon={<ControlPointRoundedIcon color="primary" />}
+            >
+              Добавить участника
+            </Button>
+          ) : (
+            <Button variant="outlined" disabled>
+              Максимально количество участников
+            </Button>
+          )}
         </Box>
       }
       icon={<PeopleAltOutlinedIcon color="primary" />}
@@ -139,7 +146,7 @@ const TenderParticipants = ({ tender }) => {
             gap: "10px",
           }}
         >
-          {tender?.participants.map((participant) => (
+          {tender?.participants?.map((participant) => (
             <ParticipantCard
               tender_id={tender.id}
               participant={participant}

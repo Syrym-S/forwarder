@@ -24,7 +24,11 @@ const TransportationInfo = ({ tender }) => {
       >
         <InfoField
           label="Откуда"
-          value={tender?.lead?.from_location?.city || "Битые данные"}
+          value={
+            tender?.lead?.from_location?.address ||
+            tender?.lead?.from_location?.city ||
+            "Битые данные"
+          }
         />
 
         <ArrowRightAltRoundedIcon
@@ -37,7 +41,11 @@ const TransportationInfo = ({ tender }) => {
 
         <InfoField
           label="Куда"
-          value={tender?.lead?.to_location?.city || "Битые данные"}
+          value={
+            tender?.lead?.to_location?.address ||
+            tender?.lead?.to_location?.city ||
+            "Битые данные"
+          }
         />
       </Box>
 
