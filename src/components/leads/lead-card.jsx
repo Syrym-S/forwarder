@@ -11,11 +11,10 @@ import {
 import TripOriginIcon from "@mui/icons-material/TripOrigin";
 import ArrowDownwardRoundedIcon from "@mui/icons-material/ArrowDownwardRounded";
 import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const LeadCard = ({ lead }) => {
   const navigate = useNavigate();
-  const location = useLocation();
 
   const navigateToLeadItem = () => {
     navigate(`/lead-item/${lead.id}`);

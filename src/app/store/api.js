@@ -14,6 +14,18 @@ export const getLeads = async (params = {}) => {
   return data;
 };
 
+export const searchLeadsApi = async (params = {}) => {
+  const data = await axios.get(`${BASE_URL}/forwarder/v1/leads/search`, {
+    params,
+    headers: {
+      // eslint-disable-next-line no-undef
+      "X-WP-Nonce": APP_DATA.nonce,
+    },
+  });
+
+  return data;
+};
+
 export const getHistoryLeads = async (params = {}) => {
   const data = await axios.get(`${BASE_URL}/forwarder/v1/leads/history`, {
     params,

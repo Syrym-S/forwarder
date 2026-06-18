@@ -68,12 +68,13 @@ const TenderForwarders = () => {
       {view === VIEWS.cards && (
         <Box
           sx={{
+            alignItems: "center",
             display: "grid",
             gap: 5,
             my: "10px",
             gridTemplateColumns: {
               xs: "1fr",
-              md: "1fr 1fr",
+              md: "1fr",
             },
           }}
         >

@@ -7,16 +7,19 @@ import {
   DialogContent,
   DialogTitle,
   FormControlLabel,
+  Stack,
   TextField,
   Typography,
 } from "@mui/material";
 import { Controller, useForm, useWatch } from "react-hook-form";
 import { useLeadsStore } from "../../app/store/leads-store";
 import { useTendersStore } from "../../app/store/tenders/tender-store";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import dayjs from "dayjs";
 import Loader from "../../components/layout/loader";
 import { useParams } from "react-router-dom";
+import RenderLeadOptions from "../../components/tenders/render-lead-options";
+import { useDriverStore } from "../../app/store/driver-store";
 
 const prepareTenderData = (form) => {
   return {
@@ -47,14 +50,22 @@ const TenderForm = ({
 
   const formValues = useWatch({ control });
 
-  const leads = useLeadsStore((state) => state.leads);
+  const searchedLeads = useLeadsStore((state) => state.searchedLeads);
+  const searchLeads = useLeadsStore((state) => state.searchLeads);
   const isLoading = useLeadsStore((state) => state.isLoading);
+  const isSearchLoading = useLeadsStore((state) => state.isSearchLoading);
   const getTenders = useTendersStore((state) => state.getTenders);
   const getTenderDetails = useTendersStore((state) => state.getTenderDetails);
   const createTender = useTendersStore((state) => state.createTender);
   const updateTender = useTendersStore((state) => state.updateTender);
+  const drivers = useDriverStore((state) => state.drivers);
+  const getDrivers = useDriverStore((state) => state.getDrivers);
+
+  const [inputValue, setInputValue] = useState("");
+  const [selectedLead, setSelectedLead] = useState();
 
   const onSubmit = async () => {
+    console.log(formValues);
     const payload = prepareTenderData(formValues);
 
     try {
@@ -72,8 +83,20 @@ const TenderForm = ({
   };
 
   useEffect(() => {
-    console.log(formValues);
-  }, [formValues]);
+    if (!inputValue) return;
+
+    const timer = setTimeout(async () => {
+      await searchLeads({
+        q: inputValue.trim(),
+      });
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  }, [inputValue]);
+
+  useEffect(() => {
+    getDrivers();
+  }, []);
 
   if (isLoading) return <Loader />;
 
@@ -95,9 +118,16 @@ const TenderForm = ({
           control={control}
           render={({ field }) => (
             <Autocomplete
+              value={selectedLead}
+              inputValue={inputValue}
+              loading={isSearchLoading}
               disabled={isEdit}
-              options={leads || []}
-              value={leads?.find((lead) => lead.id === field.value) || null}
+              options={searchedLeads}
+              noOptionsText={<>Ввидте два символа</>}
+              onInputChange={(_, value) => {
+                setInputValue(value);
+              }}
+              filterOptions={(items) => items}
               onChange={(_, value) => {
                 field.onChange(value);
 
@@ -105,8 +135,10 @@ const TenderForm = ({
                   shouldDirty: true,
                   shouldTouch: true,
                 });
+
+                setSelectedLead(value);
               }}
-              getOptionLabel={(option) => option?.id || ""}
+              getOptionLabel={(option) => `${option?.from} - ${option?.to}`}
               renderInput={(params) => (
                 <TextField
                   {...params}
@@ -116,18 +148,11 @@ const TenderForm = ({
               )}
               renderOption={(props, option) => {
                 return (
-                  <Box
-                    component="li"
+                  <RenderLeadOptions
+                    option={option}
+                    key={option.id}
                     {...props}
-                    sx={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      alignItems: "center",
-                      gap: 2,
-                    }}
-                  >
-                    <Typography fontWeight={700}>{option.id}</Typography>
-                  </Box>
+                  />
                 );
               }}
             />
@@ -232,6 +257,62 @@ const TenderForm = ({
             {isEdit ? "Cохранить" : "Создать"}
           </Button>
         </Box>
+
+        <Stack>
+          <Autocomplete
+            disabled={isLoading}
+            options={drivers}
+            getOptionLabel={(option) => option?.fio ?? ""}
+            isOptionEqualToValue={(option, value) => option?.id === value?.id}
+            // onChange={onDriverChange}
+            renderOption={(props, option) => {
+              return (
+                <Box
+                  component="li"
+                  {...props}
+                  sx={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    gap: 2,
+                  }}
+                >
+                  <Typography fontWeight={700}>{option.fio}</Typography>
+                </Box>
+              );
+            }}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label={isLoading ? "...Загрузка данных" : "Водитель"}
+                placeholder="Выберите водителя"
+              />
+            )}
+          />
+
+          <Box
+            sx={{
+              my: 1,
+              display: "flex",
+              gap: "10px",
+            }}
+          >
+            <Button
+              variant="contained"
+              color="primary"
+              // onClick={handleAddParticipant}
+            >
+              Добавить
+            </Button>
+            <Button
+              variant="outlined"
+              color="error"
+              // onClick={handleHideParticipantField}
+            >
+              Отмена
+            </Button>
+          </Box>
+        </Stack>
       </DialogContent>
     </Dialog>
   );

@@ -2,6 +2,9 @@ import { Box, Chip, Stack, Typography } from "@mui/material";
 import dayjs from "dayjs";
 import { useNavigate } from "react-router-dom";
 import RenderStatus from "../../shared/ui/render-status";
+import TripOriginIcon from "@mui/icons-material/TripOrigin";
+import ArrowDownwardRoundedIcon from "@mui/icons-material/ArrowDownwardRounded";
+import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
 
 const ForwardersTenderCard = ({ tender }) => {
   const daysLeft = dayjs(tender.end_date_time).diff(dayjs(), "day");
@@ -16,10 +19,11 @@ const ForwardersTenderCard = ({ tender }) => {
       onClick={navigateToDetailPage}
       tabIndex={0}
       sx={{
+        mx: "auto",
+        maxWidth: "700px",
         p: 3,
         border: "2px solid",
         borderColor: "divider",
-        maxWidth: 500,
         borderRadius: 4,
         backgroundColor: "background.paper",
         boxShadow: "0 2px 8px rgba(0, 0, 0, 0.06)",
@@ -80,126 +84,255 @@ const ForwardersTenderCard = ({ tender }) => {
               label={`Tender # ${tender.id || "—"}`}
               color="primary"
               variant="outlined"
-              size="small"
               sx={{
                 borderRadius: 999,
                 fontWeight: 600,
                 backgroundColor: "rgba(33, 150, 243, 0.04)",
               }}
             />
-
+            <Chip
+              color="success"
+              label={`Осталось дней ${daysLeft}`}
+              sx={{
+                borderRadius: 999,
+                fontWeight: 500,
+                // backgroundColor: "rgba(2, 114, 0, 0.1)",
+                // color: "#46E843",
+              }}
+            />
             <RenderStatus status={tender?.status} />
+          </Stack>
+        </Box>
+        <Box
+          sx={{
+            display: "grid",
+            gridTemplateColumns: "1fr 1fr 1fr",
+            gap: 2,
+          }}
+        >
+          <Stack
+            sx={{
+              p: 1.5,
+              border: "1px solid",
+              borderColor: "divider",
+              borderRadius: 2,
+              backgroundColor: "grey.50",
+              display: "flex",
+              justifyContent: "space-between",
+            }}
+          >
+            <Typography
+              variant="caption"
+              sx={{
+                fontSize: "0.8rem",
+                display: "block",
+                color: "text.secondary",
+                mb: 0.5,
+              }}
+            >
+              Лид ID
+            </Typography>
+
+            <Typography
+              variant="caption"
+              sx={{
+                fontSize: "0.8rem",
+                display: "block",
+                color: "text.secondary",
+                mb: 0.5,
+              }}
+            >
+              {tender.lead_id}
+            </Typography>
+          </Stack>
+
+          <Stack
+            sx={{
+              p: 1.5,
+              border: "1px solid",
+              borderColor: "divider",
+              borderRadius: 2,
+              backgroundColor: "grey.50",
+              display: "flex",
+              justifyContent: "space-between",
+            }}
+          >
+            <Typography
+              variant="caption"
+              sx={{
+                fontSize: "0.8rem",
+                display: "block",
+                color: "text.secondary",
+                mb: 0.5,
+              }}
+            >
+              Дата начала
+            </Typography>
+
+            <Typography
+              variant="caption"
+              sx={{
+                fontSize: "0.8rem",
+                display: "block",
+                color: "text.secondary",
+                mb: 0.5,
+              }}
+            >
+              {tender.public_date_time}
+            </Typography>
+          </Stack>
+
+          <Stack
+            sx={{
+              p: 1.5,
+              border: "1px solid",
+              borderColor: "divider",
+              borderRadius: 2,
+              backgroundColor: "grey.50",
+              display: "flex",
+              justifyContent: "space-between",
+            }}
+          >
+            <Typography
+              variant="caption"
+              sx={{
+                fontSize: "0.8rem",
+                display: "block",
+                color: "text.secondary",
+                mb: 0.5,
+              }}
+            >
+              Дата окончания
+            </Typography>
+
+            <Typography
+              variant="caption"
+              sx={{
+                fontSize: "0.8rem",
+                display: "block",
+                color: "text.secondary",
+                mb: 0.5,
+              }}
+            >
+              {tender.end_date_time}
+            </Typography>
           </Stack>
         </Box>
 
         <Box
           sx={{
-            p: 1.5,
-            border: "1px solid",
-            borderColor: "divider",
-            borderRadius: 2,
-            backgroundColor: "grey.50",
             display: "flex",
-            justifyContent: "space-between",
+            flexDirection: "column",
+            alignItems: "stretch",
+            gap: 1.5,
+            flexWrap: {
+              xs: "wrap",
+            },
           }}
         >
-          <Typography
-            variant="caption"
+          <Box
             sx={{
-              fontSize: "0.8rem",
-              display: "block",
-              color: "text.secondary",
-              mb: 0.5,
+              flex: 1,
+              minWidth: 220,
+              minHeight: 86,
+              p: 1.5,
+              border: "1px solid",
+              borderColor: "divider",
+              borderRadius: 2,
+              backgroundColor: "grey.50",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "flex-start",
             }}
           >
-            Лид ID
-          </Typography>
+            <Typography
+              variant="caption"
+              sx={{
+                display: "block",
+                color: "text.secondary",
+                mb: 0.5,
+              }}
+            >
+              Откуда
+            </Typography>
 
-          <Typography
-            variant="caption"
+            <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+              <TripOriginIcon sx={{ fontSize: 18, color: "primary.main" }} />
+
+              <Typography
+                fontWeight={500}
+                sx={{
+                  fontSize: 14,
+                  lineHeight: 1.35,
+                }}
+              >
+                {tender?.lead?.from_location.address || "Битые данные"}
+              </Typography>
+            </Box>
+          </Box>
+
+          <Box
             sx={{
-              fontSize: "0.8rem",
-              display: "block",
-              color: "text.secondary",
-              mb: 0.5,
+              display: {
+                xs: "none",
+                sm: "flex",
+              },
+              alignItems: "center",
+              justifyContent: "center",
+              px: 0.5,
             }}
           >
-            {tender.lead_id}
-          </Typography>
+            <ArrowDownwardRoundedIcon
+              sx={{
+                color: "text.secondary",
+                fontSize: 28,
+              }}
+            />
+          </Box>
+
+          <Box
+            sx={{
+              flex: 1,
+              minWidth: 220,
+              minHeight: 96,
+              p: 1.5,
+              border: "1px solid",
+              borderColor: "divider",
+              borderRadius: 2,
+              backgroundColor: "grey.50",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "flex-start",
+            }}
+          >
+            <Typography
+              variant="caption"
+              sx={{
+                display: "block",
+                color: "text.secondary",
+                mb: 0.5,
+              }}
+            >
+              Куда
+            </Typography>
+
+            <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+              <LocationOnOutlinedIcon
+                sx={{ fontSize: 18, color: "primary.main" }}
+              />
+
+              <Typography
+                fontWeight={500}
+                sx={{
+                  fontSize: 14,
+                  lineHeight: 1.35,
+                }}
+              >
+                {tender?.lead?.to_location.address || "Битые данные"}
+              </Typography>
+            </Box>
+          </Box>
         </Box>
-
-        <Box
-          sx={{
-            p: 1.5,
-            border: "1px solid",
-            borderColor: "divider",
-            borderRadius: 2,
-            backgroundColor: "grey.50",
-            display: "flex",
-            justifyContent: "space-between",
-          }}
-        >
-          <Typography
-            variant="caption"
-            sx={{
-              fontSize: "0.8rem",
-              display: "block",
-              color: "text.secondary",
-              mb: 0.5,
-            }}
-          >
-            Дата начала
-          </Typography>
-
-          <Typography
-            variant="caption"
-            sx={{
-              fontSize: "0.8rem",
-              display: "block",
-              color: "text.secondary",
-              mb: 0.5,
-            }}
-          >
-            {tender.public_date_time}
-          </Typography>
-        </Box>
-
-        <Box
-          sx={{
-            p: 1.5,
-            border: "1px solid",
-            borderColor: "divider",
-            borderRadius: 2,
-            backgroundColor: "grey.50",
-            display: "flex",
-            justifyContent: "space-between",
-          }}
-        >
-          <Typography
-            variant="caption"
-            sx={{
-              fontSize: "0.8rem",
-              display: "block",
-              color: "text.secondary",
-              mb: 0.5,
-            }}
-          >
-            Дата окончания
-          </Typography>
-
-          <Typography
-            variant="caption"
-            sx={{
-              fontSize: "0.8rem",
-              display: "block",
-              color: "text.secondary",
-              mb: 0.5,
-            }}
-          >
-            {tender.end_date_time}
-          </Typography>
-        </Box>
-
         <Box
           sx={{
             display: "flex",
@@ -232,17 +365,6 @@ const ForwardersTenderCard = ({ tender }) => {
             }}
           />
         </Box>
-        <Chip
-          color="success"
-          label={`Осталось дней ${daysLeft}`}
-          size="small"
-          sx={{
-            borderRadius: 999,
-            fontWeight: 500,
-            // backgroundColor: "rgba(2, 114, 0, 0.1)",
-            // color: "#46E843",
-          }}
-        />
       </Stack>
     </Box>
   );

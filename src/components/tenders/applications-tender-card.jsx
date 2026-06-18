@@ -92,7 +92,7 @@ const ApplicationsTenderCard = ({ tender }) => {
           </Stack>
         </Box>
 
-        <Box
+        <Stack
           sx={{
             p: 1.5,
             border: "1px solid",
@@ -126,9 +126,9 @@ const ApplicationsTenderCard = ({ tender }) => {
           >
             {tender.lead.id}
           </Typography>
-        </Box>
+        </Stack>
 
-        <Box
+        <Stack
           sx={{
             p: 1.5,
             border: "1px solid",
@@ -162,9 +162,9 @@ const ApplicationsTenderCard = ({ tender }) => {
           >
             {tender.public_date_time}
           </Typography>
-        </Box>
+        </Stack>
 
-        <Box
+        <Stack
           sx={{
             p: 1.5,
             border: "1px solid",
@@ -198,7 +198,7 @@ const ApplicationsTenderCard = ({ tender }) => {
           >
             {tender.end_date_time}
           </Typography>
-        </Box>
+        </Stack>
 
         <Box
           sx={{
@@ -232,6 +232,7 @@ const ApplicationsTenderCard = ({ tender }) => {
             }}
           />
         </Box>
+
         <Chip
           color="success"
           label={`Осталось дней ${daysLeft}`}

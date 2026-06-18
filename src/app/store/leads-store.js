@@ -6,18 +6,20 @@ import {
   getLeadFilesApi,
   getLeadItemDetails,
   getLeads,
+  searchLeadsApi,
   updateLeadApi,
   uploadLeadFileApi,
 } from "./api";
-// import { mockLeads } from "../../shared/const/mock-data";
 
 export const useLeadsStore = create((set) => ({
   leads: [],
+  searchedLeads: [],
   historyLeads: [],
   files: [],
   uploadedFiles: [],
   currentLead: null,
   isLoading: false,
+  isSearchLoading: false,
   error: null,
   count: 0,
   perPage: 1,
@@ -42,6 +44,25 @@ export const useLeadsStore = create((set) => ({
     }
   },
 
+  searchLeads: async (params) => {
+    try {
+      set({ isSearchLoading: true, error: null });
+
+      const response = await searchLeadsApi(params);
+
+      console.log(response);
+
+      set({
+        searchedLeads: response.data.results,
+        isSearchLoading: false,
+      });
+    } catch (e) {
+      set({
+        error: e.message,
+        isLoading: false,
+      });
+    }
+  },
   getHistoryLeads: async (params) => {
     try {
       set({ isLoading: true, error: null });

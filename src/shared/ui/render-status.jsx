@@ -5,6 +5,8 @@ const RenderStatus = ({ status }) => {
   switch (status) {
     case TENDER_STATUS.new:
       return <Chip label={"Новый"} variant="outlined" color="success" />;
+    case TENDER_STATUS.active:
+      return <Chip label={"Активный"} variant="outlined" color="success" />;
     case TENDER_STATUS.cancelled:
       return <Chip label={"Отменненый"} variant="outlined" color="error" />;
   }
