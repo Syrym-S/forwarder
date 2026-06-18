@@ -17,7 +17,7 @@ const CancelledBets = ({ bets }) => {
             gap: "10px",
           }}
         >
-          {bets.map(
+          {bets?.map(
             (bet) =>
               bet.is_own && (
                 <>

@@ -6,6 +6,7 @@ export const getLeads = async (params = {}) => {
   const data = await axios.get(`${BASE_URL}/forwarder/v1/leads`, {
     params,
     headers: {
+      // eslint-disable-next-line no-undef
       "X-WP-Nonce": APP_DATA.nonce,
     },
   });
@@ -17,6 +18,7 @@ export const getHistoryLeads = async (params = {}) => {
   const data = await axios.get(`${BASE_URL}/forwarder/v1/leads/history`, {
     params,
     headers: {
+      // eslint-disable-next-line no-undef
       "X-WP-Nonce": APP_DATA.nonce,
     },
   });
@@ -27,6 +29,7 @@ export const getHistoryLeads = async (params = {}) => {
 export const getLeadItemDetails = async (lead_id) => {
   const data = await axios.get(`${BASE_URL}/forwarder/v1/lead/${lead_id}`, {
     headers: {
+      // eslint-disable-next-line no-undef
       "X-WP-Nonce": APP_DATA.nonce,
     },
   });
@@ -40,6 +43,7 @@ export const createLeadApi = async (payload) => {
     payload,
     {
       headers: {
+        // eslint-disable-next-line no-undef
         "X-WP-Nonce": APP_DATA.nonce,
       },
     },
@@ -54,6 +58,7 @@ export const updateLeadApi = async (id, payload) => {
     payload,
     {
       headers: {
+        // eslint-disable-next-line no-undef
         "X-WP-Nonce": APP_DATA.nonce,
       },
     },
@@ -66,6 +71,7 @@ export const getLeadFilesApi = async (leadId) => {
     `${BASE_URL}/forwarder/v1/leads/${leadId}/files`,
     {
       headers: {
+        // eslint-disable-next-line no-undef
         "X-WP-Nonce": APP_DATA.nonce,
       },
     },
@@ -89,6 +95,7 @@ export const uploadLeadFileApi = async (leadId, payload) => {
     payload,
     {
       headers: {
+        // eslint-disable-next-line no-undef
         "X-WP-Nonce": APP_DATA.nonce,
         "Content-Type": "multipart/form-data",
       },
@@ -104,6 +111,7 @@ export const deleteLeadFileApi = async (leadId, path) => {
     { path },
     {
       headers: {
+        // eslint-disable-next-line no-undef
         "X-WP-Nonce": APP_DATA.nonce,
       },
     },
@@ -115,6 +123,7 @@ export const deleteLeadFileApi = async (leadId, path) => {
 export const getDrivers = async () => {
   const data = await axios.get(`${BASE_URL}/forwarder/v1/drivers`, {
     headers: {
+      // eslint-disable-next-line no-undef
       "X-WP-Nonce": APP_DATA.nonce,
     },
   });
@@ -125,6 +134,7 @@ export const getDrivers = async () => {
 export const getCustomers = async () => {
   const data = await axios.get(`${BASE_URL}/forwarder/v1/customers`, {
     headers: {
+      // eslint-disable-next-line no-undef
       "X-WP-Nonce": APP_DATA.nonce,
     },
   });
