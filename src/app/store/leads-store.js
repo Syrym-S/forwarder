@@ -6,9 +6,11 @@ import {
   getLeadFilesApi,
   getLeadItemDetails,
   getLeads,
+  rejectCargoApi,
   searchLeadsApi,
   updateLeadApi,
   uploadLeadFileApi,
+  verifyCargoApi,
 } from "./api";
 
 export const useLeadsStore = create((set) => ({
@@ -194,6 +196,50 @@ export const useLeadsStore = create((set) => ({
       set({ isLoading: true, error: null });
 
       const response = await deleteLeadFileApi(lead_id, file_path);
+
+      set({
+        isLoading: false,
+      });
+
+      return response;
+    } catch (e) {
+      set({
+        error: e.message,
+        isLoading: false,
+      });
+
+      // console.error("Payload:", payload);
+      console.error("Response:", e.response?.data);
+      throw e;
+    }
+  },
+  verifyCargo: async (lead_id, payload) => {
+    try {
+      set({ isLoading: true, error: null });
+
+      const response = await verifyCargoApi(lead_id, payload);
+
+      set({
+        isLoading: false,
+      });
+
+      return response;
+    } catch (e) {
+      set({
+        error: e.message,
+        isLoading: false,
+      });
+
+      // console.error("Payload:", payload);
+      console.error("Response:", e.response?.data);
+      throw e;
+    }
+  },
+  rejectCargo: async (lead_id, payload) => {
+    try {
+      set({ isLoading: true, error: null });
+
+      const response = await rejectCargoApi(lead_id, payload);
 
       set({
         isLoading: false,

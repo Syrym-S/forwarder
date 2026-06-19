@@ -153,3 +153,33 @@ export const getCustomers = async () => {
 
   return data;
 };
+
+export const verifyCargoApi = async (lead_id, payload) => {
+  const data = await axios.post(
+    `${BASE_URL}/forwarder/v1/leads/${lead_id}/verify-loading`,
+    payload,
+    {
+      headers: {
+        // eslint-disable-next-line no-undef
+        "X-WP-Nonce": APP_DATA.nonce,
+      },
+    },
+  );
+
+  return data;
+};
+
+export const rejectCargoApi = async (lead_id, payload) => {
+  const data = await axios.post(
+    `${BASE_URL}/forwarder/v1/leads/${lead_id}/reject-loading`,
+    payload,
+    {
+      headers: {
+        // eslint-disable-next-line no-undef
+        "X-WP-Nonce": APP_DATA.nonce,
+      },
+    },
+  );
+
+  return data;
+};

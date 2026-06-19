@@ -1,5 +1,13 @@
-export const TENDER_STATUS = {
+export const STATUS = {
   cancelled: "cancelled",
   new: "new",
   active: "active",
+  add_driver: "add_driver",
+  start_driver: "start_driver",
+  start_loading: "start_loading",
+  verification_loading: "verification_loading",
+  start_unloading: "start_unloading",
+  verification_unloading: " verification_unloading",
+  finished: "finished",
+  deleted: "deleted",
 };

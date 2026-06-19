@@ -50,7 +50,7 @@ const TenderApplications = () => {
             my: "10px",
             gridTemplateColumns: {
               xs: "1fr",
-              md: "1fr 1fr",
+              md: "1fr",
             },
           }}
         >

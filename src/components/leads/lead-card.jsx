@@ -12,6 +12,7 @@ import TripOriginIcon from "@mui/icons-material/TripOrigin";
 import ArrowDownwardRoundedIcon from "@mui/icons-material/ArrowDownwardRounded";
 import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
 import { useNavigate } from "react-router-dom";
+import RenderStatus from "../../shared/ui/render-status";
 
 const LeadCard = ({ lead }) => {
   const navigate = useNavigate();
@@ -96,7 +97,7 @@ const LeadCard = ({ lead }) => {
               }}
             />
 
-            <Chip
+            {/* <Chip
               label={lead.status}
               size="small"
               sx={{
@@ -105,7 +106,8 @@ const LeadCard = ({ lead }) => {
                 backgroundColor: "grey.100",
                 color: "color.slate",
               }}
-            />
+            /> */}
+            <RenderStatus status={lead.status} />
           </Stack>
         </Box>
 

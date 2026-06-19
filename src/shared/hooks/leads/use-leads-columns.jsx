@@ -1,13 +1,14 @@
 import { Box } from "@mui/material";
 import { NavLink } from "react-router-dom";
+import RenderStatus from "../../ui/render-status";
 
-const useLeadsColumns = (data) => {
+const useLeadsColumns = () => {
   const columns = [
     {
       field: "id",
       headerName: "ID",
       width: 200,
-      renderCell: (row) => (
+      renderCell: ({ row }) => (
         <NavLink
           to={`/lead-item/${row.id}`}
           style={{
@@ -18,7 +19,12 @@ const useLeadsColumns = (data) => {
         </NavLink>
       ),
     },
-    { field: "status", headerName: "Статус", width: 200 },
+    {
+      field: "status",
+      headerName: "Статус",
+      width: 200,
+      renderCell: ({ row }) => <RenderStatus status={row.status} />,
+    },
     { field: "num", headerName: "Номер", width: 200 },
     {
       field: "driver",

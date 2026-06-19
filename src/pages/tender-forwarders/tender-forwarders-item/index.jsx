@@ -28,7 +28,7 @@ import TransportationInfo from "../../../components/tenders/transportation-info"
 import TenderDetailsHeading from "../../../components/tenders/tender-details-heading";
 import { LeadDocumentCard } from "../../../components/leads/documents/LeadDocumentCard";
 import { useTenderDefaultValues } from "../../../shared/hooks/tender/use-tender-default-values";
-import { TENDER_STATUS } from "../../../shared/const/tenders";
+import { STATUS } from "../../../shared/const/tenders";
 import TenderBets from "../../../components/tenders/tender-bets";
 
 const TenderForwardersItem = () => {
@@ -45,7 +45,7 @@ const TenderForwardersItem = () => {
 
   const defaultValues = useTenderDefaultValues(currentTender);
 
-  const isCanceled = currentTender?.status === TENDER_STATUS.cancelled;
+  const isCanceled = currentTender?.status === STATUS.cancelled;
 
   const from = {
     lat: currentTender?.lead?.from_location.lat,

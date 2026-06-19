@@ -32,7 +32,7 @@ import TransportationInfo from "../../../components/tenders/transportation-info"
 import TenderDetailsHeading from "../../../components/tenders/tender-details-heading";
 import { LeadDocumentCard } from "../../../components/leads/documents/LeadDocumentCard";
 import { useTenderDefaultValues } from "../../../shared/hooks/tender/use-tender-default-values";
-import { TENDER_STATUS } from "../../../shared/const/tenders";
+import { STATUS } from "../../../shared/const/tenders";
 import TenderBets from "../../../components/tenders/tender-bets";
 import MakeBetForm from "../../../features/tenders/make-bet-form";
 import MakeBetBlock from "../../../components/tenders/make-bet-block";

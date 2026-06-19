@@ -13,6 +13,7 @@ import EditNoteRoundedIcon from "@mui/icons-material/EditNoteRounded";
 import { useParams } from "react-router-dom";
 import {
   Box,
+  Button,
   Chip,
   Container,
   Paper,
@@ -20,6 +21,7 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
+import InsertDriveFileOutlinedIcon from "@mui/icons-material/InsertDriveFileOutlined";
 import { useLeadsStore } from "../../app/store/leads-store";
 import { MapContainer, Marker, Polyline, TileLayer } from "react-leaflet";
 import AddLeadForm from "../../features/leads/add-lead-form";
@@ -28,6 +30,8 @@ import LeadMap from "../../components/leads/lead-map";
 import { getLeadFilesApi, uploadLeadFileApi } from "../../app/store/api";
 import { mapLeadFilesResponseFromApi } from "../../features/leads/model/lead-files.adapter";
 import Loader from "../../components/layout/loader";
+import RenderStatus from "../../shared/ui/render-status";
+import { DocumentPreview } from "../../components/leads/documents/DocumentPreview";
 
 const Section = ({ icon, title, children }) => (
   <Paper
@@ -108,6 +112,12 @@ const LeadItem = () => {
   const files = useLeadsStore((state) => state.files);
   const getLeadFiles = useLeadsStore((state) => state.getLeadFiles);
   const deleteLeadFile = useLeadsStore((state) => state.deleteLeadFile);
+  const verifyCargo = useLeadsStore((state) => state.verifyCargo);
+  const rejectCargo = useLeadsStore((state) => state.rejectCargo);
+
+  const cargoActions = leadData?.cargo_actions[0];
+  const filesFromDriver = cargoActions?.files;
+  const isVerified = cargoActions?.is_verified;
 
   const defaultValues = useFormDefaultValues(leadData, files);
 
@@ -175,6 +185,16 @@ const LeadItem = () => {
   const handleDeleteFileFromDB = async (lead_id, file_path) => {
     await deleteLeadFile(lead_id, file_path);
     await getLeadFiles(lead_id);
+  };
+
+  const handleVerifyCargo = async () => {
+    await getLeadItem(id);
+    await verifyCargo(id);
+  };
+
+  const handleRejectCargo = async () => {
+    await getLeadItem(id);
+    await rejectCargo(id);
   };
 
   // async function handleDeleteDocument(documentId) {
@@ -425,11 +445,118 @@ const LeadItem = () => {
               value={`${leadData.cargo_price} ${leadData.currency}`}
             />
 
-            <InfoField label="Статус" value={leadData.status} />
+            <InfoField
+              label="Статус"
+              value={<RenderStatus status={leadData.status} />}
+            />
           </Box>
 
           <InfoField label="Описание" value={`Груз заявки #${leadData.id}`} />
         </Section>
+
+        {filesFromDriver && (
+          <Section title="Подтверждение погрузки">
+            <Box
+              sx={{
+                display: "grid",
+                gridTemplateColumns: "1fr 1fr 1fr 1fr",
+                gap: 5,
+              }}
+            >
+              {filesFromDriver?.map((file) => (
+                <Box
+                  component="button"
+                  type="button"
+                  sx={{
+                    p: 1.5,
+                    border: "1px solid",
+                    borderColor: "divider",
+                    borderRadius: 2,
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "flex-start",
+                    justifyContent: "space-between",
+                    gap: 1.5,
+                    backgroundColor: "grey.50",
+                    textAlign: "left",
+                    color: "inherit",
+                    cursor: "pointer",
+                    transition: "0.2s ease",
+                    font: "inherit",
+                    "&:hover": {
+                      borderColor: "primary.light",
+                      backgroundColor: "rgba(33, 150, 243, 0.04)",
+                    },
+                  }}
+                >
+                  <Box
+                    sx={{
+                      display: "flex",
+                      gap: 3,
+                    }}
+                  >
+                    <Box
+                      sx={{
+                        width: 42,
+                        height: 42,
+                        borderRadius: 2,
+                        backgroundColor: "primary.main",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        flexShrink: 0,
+                      }}
+                    >
+                      <InsertDriveFileOutlinedIcon
+                        sx={{
+                          color: "common.white",
+                          fontSize: 24,
+                        }}
+                      />
+                    </Box>
+                    <Box sx={{ minWidth: 0, flex: 1 }}>
+                      <Typography
+                        sx={{
+                          fontSize: 13,
+                          fontWeight: 400,
+                          lineHeight: 1.35,
+                        }}
+                      >
+                        {file.name || "Документ"}
+                      </Typography>
+                    </Box>
+                  </Box>
+
+                  <DocumentPreview document={file} />
+                </Box>
+              ))}
+            </Box>
+            {!isVerified && (
+              <Box
+                sx={{
+                  my: 1,
+                  display: "flex",
+                  gap: 5,
+                }}
+              >
+                <Button
+                  color="success"
+                  variant="outlined"
+                  onClick={handleVerifyCargo}
+                >
+                  Подтвердить
+                </Button>
+                <Button
+                  color="error"
+                  variant="outlined"
+                  onClick={handleRejectCargo}
+                >
+                  Отклонить
+                </Button>
+              </Box>
+            )}
+          </Section>
+        )}
 
         <Section title="Водитель" icon={<PersonOutlinedIcon color="primary" />}>
           <InfoField label="ФИО" value={leadData.driver_name} />
