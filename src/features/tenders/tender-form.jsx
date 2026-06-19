@@ -20,6 +20,17 @@ import Loader from "../../components/layout/loader";
 import { useParams } from "react-router-dom";
 import RenderLeadOptions from "../../components/tenders/render-lead-options";
 import { useDriverStore } from "../../app/store/driver-store";
+import ChooseLeadStep from "./steps/choose-lead-step";
+import PublicationTypeStep from "./steps/publication-type-step";
+
+const steps = [
+  { id: 1, name: "Выброр лида" },
+  { id: 2, name: "Тип публикации" },
+];
+
+const stepFields = {
+  1: ["lead_id", "public_date_time", "end_date_time"],
+};
 
 const prepareTenderData = (form) => {
   return {
@@ -40,9 +51,10 @@ const TenderForm = ({
   handleCloseForm,
   defaultValues = {},
 }) => {
-  const { id } = useParams();
+  const [step, setStep] = useState(1);
 
-  const { control, setValue } = useForm({
+  const { id } = useParams();
+  const { control, setValue, trigger, getValues } = useForm({
     defaultValues,
     mode: "onChange",
     reValidateMode: "onChange",
@@ -50,30 +62,82 @@ const TenderForm = ({
 
   const formValues = useWatch({ control });
 
-  const searchedLeads = useLeadsStore((state) => state.searchedLeads);
-  const searchLeads = useLeadsStore((state) => state.searchLeads);
   const isLoading = useLeadsStore((state) => state.isLoading);
-  const isSearchLoading = useLeadsStore((state) => state.isSearchLoading);
   const getTenders = useTendersStore((state) => state.getTenders);
   const getTenderDetails = useTendersStore((state) => state.getTenderDetails);
   const createTender = useTendersStore((state) => state.createTender);
   const updateTender = useTendersStore((state) => state.updateTender);
-  const drivers = useDriverStore((state) => state.drivers);
   const getDrivers = useDriverStore((state) => state.getDrivers);
+  const addParticipant = useTendersStore((state) => state.addParticipant);
 
-  const [inputValue, setInputValue] = useState("");
-  const [selectedLead, setSelectedLead] = useState();
+  const [selectedDrivers, setSelectedDrivers] = useState([]);
+
+  const renderContent = (step) => {
+    switch (step) {
+      case 1:
+        return (
+          <ChooseLeadStep
+            control={control}
+            isEdit={isEdit}
+            setValue={setValue}
+            getValues={getValues}
+          />
+        );
+      case 2:
+        return (
+          <PublicationTypeStep
+            control={control}
+            formValues={formValues}
+            selectedDrivers={selectedDrivers}
+            setSelectedDrivers={setSelectedDrivers}
+          />
+        );
+    }
+  };
+
+  const isLastStep = steps.length === step;
+  const isFirstStep = step === 1;
+
+  const handleNextStep = async () => {
+    const isValid = await trigger(stepFields[step]);
+
+    console.log(isValid);
+
+    if (!isValid) return;
+
+    setStep((prev) => prev + 1);
+  };
+
+  const handlePrevStep = () => {
+    setStep((prev) => prev - 1);
+  };
 
   const onSubmit = async () => {
-    console.log(formValues);
     const payload = prepareTenderData(formValues);
 
     try {
       if (isEdit) {
         await updateTender(id, payload);
+
+        await Promise.allSettled(
+          selectedDrivers.map((driver) =>
+            addParticipant(id, {
+              participant_id: driver.id,
+            }),
+          ),
+        );
         await getTenderDetails(id);
+        await getTenders();
       } else {
-        await createTender(payload);
+        const response = await createTender(payload);
+
+        await Promise.allSettled(
+          selectedDrivers.map((driver) =>
+            addParticipant(response.data.id, {
+              participant_id: driver.id,
+            }),
+          ),
+        );
         await getTenders();
       }
       handleCloseForm();
@@ -81,18 +145,6 @@ const TenderForm = ({
       console.log(e);
     }
   };
-
-  useEffect(() => {
-    if (!inputValue) return;
-
-    const timer = setTimeout(async () => {
-      await searchLeads({
-        q: inputValue.trim(),
-      });
-    }, 1000);
-
-    return () => clearTimeout(timer);
-  }, [inputValue]);
 
   useEffect(() => {
     getDrivers();
@@ -113,152 +165,8 @@ const TenderForm = ({
           gap: "10px",
         }}
       >
-        <Controller
-          name="lead_id"
-          control={control}
-          render={({ field }) => (
-            <Autocomplete
-              value={selectedLead}
-              inputValue={inputValue}
-              loading={isSearchLoading}
-              disabled={isEdit}
-              options={searchedLeads}
-              noOptionsText={<>Ввидте два символа</>}
-              onInputChange={(_, value) => {
-                setInputValue(value);
-              }}
-              filterOptions={(items) => items}
-              onChange={(_, value) => {
-                field.onChange(value);
-
-                setValue("lead_id", value.id, {
-                  shouldDirty: true,
-                  shouldTouch: true,
-                });
-
-                setSelectedLead(value);
-              }}
-              getOptionLabel={(option) => `${option?.from} - ${option?.to}`}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  label="Лид"
-                  placeholder="Выбирите лида"
-                />
-              )}
-              renderOption={(props, option) => {
-                return (
-                  <RenderLeadOptions
-                    option={option}
-                    key={option.id}
-                    {...props}
-                  />
-                );
-              }}
-            />
-          )}
-        />
-        <Controller
-          name="public_date_time"
-          control={control}
-          render={({ field }) => (
-            <TextField
-              {...field}
-              defaultValue={dayjs(field.value).format("YYYY-MM-DD")}
-              value={field.value}
-              label="Дата публикации"
-              type="date"
-              fullWidth
-              slotProps={{
-                inputLabel: {
-                  shrink: true,
-                },
-              }}
-              sx={{
-                gridColumn: {
-                  xs: "auto",
-                  sm: "1 / -1",
-                },
-                marginTop: "10px",
-              }}
-            />
-          )}
-        />
-        <Controller
-          name="end_date_time"
-          control={control}
-          render={({ field }) => (
-            <TextField
-              {...field}
-              //   defaultValue={dayjs(form.loading_date).format("YYYY-MM-DD")}
-              value={field.value}
-              label="Дата окончания"
-              type="date"
-              fullWidth
-              slotProps={{
-                inputLabel: {
-                  shrink: true,
-                },
-              }}
-              sx={{
-                gridColumn: {
-                  xs: "auto",
-                  sm: "1 / -1",
-                },
-                marginTop: "10px",
-              }}
-            />
-          )}
-        />
-        <Controller
-          name="publication_type"
-          control={control}
-          render={({ field }) => (
-            <FormControlLabel
-              label="Публичный тендер"
-              control={
-                <Checkbox
-                  checked={field.value}
-                  onChange={(e) => field.onChange(e.target.checked)}
-                />
-              }
-            />
-          )}
-        />
-
-        <Controller
-          name="max_participants"
-          control={control}
-          render={({ field }) => (
-            <TextField
-              sx={{
-                display: !formValues.publication_type ? "none" : "flex",
-              }}
-              {...field}
-              value={field.value}
-              type="number"
-              label="Количество учатсников"
-              helperText="0 - без лимит"
-            />
-          )}
-        />
-
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-          }}
-        >
-          <Button variant="outlined" color="error" onClick={handleCloseForm}>
-            Отмена
-          </Button>
-
-          <Button variant="contained" onClick={onSubmit}>
-            {isEdit ? "Cохранить" : "Создать"}
-          </Button>
-        </Box>
-
-        <Stack>
+        {renderContent(step)}
+        {/* <Stack>
           <Autocomplete
             disabled={isLoading}
             options={drivers}
@@ -312,7 +220,34 @@ const TenderForm = ({
               Отмена
             </Button>
           </Box>
-        </Stack>
+        </Stack> */}
+
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+          }}
+        >
+          {isFirstStep ? (
+            <Button variant="outlined" color="error" onClick={handleCloseForm}>
+              Отмена
+            </Button>
+          ) : (
+            <Button variant="outlined" color="error" onClick={handlePrevStep}>
+              Назад
+            </Button>
+          )}
+
+          {isLastStep ? (
+            <Button variant="contained" onClick={onSubmit}>
+              {isEdit ? "Cохранить" : "Создать"}
+            </Button>
+          ) : (
+            <Button variant="contained" onClick={handleNextStep}>
+              Дальше
+            </Button>
+          )}
+        </Box>
       </DialogContent>
     </Dialog>
   );
