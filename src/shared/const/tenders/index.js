@@ -7,7 +7,7 @@ export const STATUS = {
   start_loading: "start_loading",
   verification_loading: "verification_loading",
   start_unloading: "start_unloading",
-  verification_unloading: " verification_unloading",
+  verification_unloading: "verification_unloading",
   finished: "finished",
   deleted: "deleted",
 };

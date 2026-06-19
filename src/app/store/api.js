@@ -183,3 +183,48 @@ export const rejectCargoApi = async (lead_id, payload) => {
 
   return data;
 };
+
+export const verifyCargoUnloadApi = async (lead_id, payload) => {
+  const data = await axios.post(
+    `${BASE_URL}/forwarder/v1/leads/${lead_id}/verify-unloading`,
+    payload,
+    {
+      headers: {
+        // eslint-disable-next-line no-undef
+        "X-WP-Nonce": APP_DATA.nonce,
+      },
+    },
+  );
+
+  return data;
+};
+
+export const rejectCargoUnloadApi = async (lead_id, payload) => {
+  const data = await axios.post(
+    `${BASE_URL}/forwarder/v1/leads/${lead_id}/reject-unloading`,
+    payload,
+    {
+      headers: {
+        // eslint-disable-next-line no-undef
+        "X-WP-Nonce": APP_DATA.nonce,
+      },
+    },
+  );
+
+  return data;
+};
+
+export const confirmLeadDeliveryApi = async (lead_id, payload) => {
+  const data = await axios.post(
+    `${BASE_URL}/forwarder/v1/leads/${lead_id}/confirm-delivery`,
+    payload,
+    {
+      headers: {
+        // eslint-disable-next-line no-undef
+        "X-WP-Nonce": APP_DATA.nonce,
+      },
+    },
+  );
+
+  return data;
+};

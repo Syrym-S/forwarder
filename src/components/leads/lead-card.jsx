@@ -89,7 +89,6 @@ const LeadCard = ({ lead }) => {
               label={`Лид # ${lead.id || "—"}`}
               color="primary"
               variant="outlined"
-              size="small"
               sx={{
                 borderRadius: 999,
                 fontWeight: 600,

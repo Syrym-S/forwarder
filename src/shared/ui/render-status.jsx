@@ -43,6 +43,8 @@ const RenderStatus = ({ status }) => {
       );
     case STATUS.deleted:
       return <Chip label={"Рейс удален"} variant="outlined" color="error" />;
+    default:
+      return <>Нет статуа</>;
   }
 };
 

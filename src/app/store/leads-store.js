@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import {
+  confirmLeadDeliveryApi,
   createLeadApi,
   deleteLeadFileApi,
   getHistoryLeads,
@@ -7,10 +8,12 @@ import {
   getLeadItemDetails,
   getLeads,
   rejectCargoApi,
+  rejectCargoUnloadApi,
   searchLeadsApi,
   updateLeadApi,
   uploadLeadFileApi,
   verifyCargoApi,
+  verifyCargoUnloadApi,
 } from "./api";
 
 export const useLeadsStore = create((set) => ({
@@ -240,6 +243,72 @@ export const useLeadsStore = create((set) => ({
       set({ isLoading: true, error: null });
 
       const response = await rejectCargoApi(lead_id, payload);
+
+      set({
+        isLoading: false,
+      });
+
+      return response;
+    } catch (e) {
+      set({
+        error: e.message,
+        isLoading: false,
+      });
+
+      // console.error("Payload:", payload);
+      console.error("Response:", e.response?.data);
+      throw e;
+    }
+  },
+  verifyCargoUnload: async (lead_id, payload) => {
+    try {
+      set({ isLoading: true, error: null });
+
+      const response = await verifyCargoUnloadApi(lead_id, payload);
+
+      set({
+        isLoading: false,
+      });
+
+      return response;
+    } catch (e) {
+      set({
+        error: e.message,
+        isLoading: false,
+      });
+
+      // console.error("Payload:", payload);
+      console.error("Response:", e.response?.data);
+      throw e;
+    }
+  },
+  rejectCargoUnload: async (lead_id, payload) => {
+    try {
+      set({ isLoading: true, error: null });
+
+      const response = await rejectCargoUnloadApi(lead_id, payload);
+
+      set({
+        isLoading: false,
+      });
+
+      return response;
+    } catch (e) {
+      set({
+        error: e.message,
+        isLoading: false,
+      });
+
+      // console.error("Payload:", payload);
+      console.error("Response:", e.response?.data);
+      throw e;
+    }
+  },
+  confirmLeadDelivery: async (lead_id, payload) => {
+    try {
+      set({ isLoading: true, error: null });
+
+      const response = await confirmLeadDeliveryApi(lead_id, payload);
 
       set({
         isLoading: false,
