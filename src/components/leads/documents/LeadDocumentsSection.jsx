@@ -151,7 +151,14 @@ export function LeadDocumentsSection({
         ) : isLoading ? (
           <> ....Загрузка </>
         ) : (
-          <Stack spacing={1}>
+          <Stack
+            spacing={1}
+            sx={{
+              display: "grid",
+              gridTemplateColumns: "1fr 1fr 1fr",
+              gap: 3,
+            }}
+          >
             {documents.map((document) => (
               <LeadDocumentCard
                 key={document.id}

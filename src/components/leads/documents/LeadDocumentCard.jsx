@@ -2,14 +2,17 @@ import { Box, IconButton, Typography } from "@mui/material";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import InsertDriveFileOutlinedIcon from "@mui/icons-material/InsertDriveFileOutlined";
 import { useParams } from "react-router-dom";
+import { getFileType } from "../../../shared/helpers/file/get-file-type";
 
 export function LeadDocumentCard({
+  isFileReadOnly = false,
   document,
   onOpen,
   onDelete,
   isDeleting = false,
 }) {
   const { id } = useParams();
+  const fileType = getFileType(document);
 
   return (
     <Box
@@ -23,6 +26,7 @@ export function LeadDocumentCard({
         borderColor: "divider",
         borderRadius: 2,
         display: "flex",
+        flexDirection: "column",
         alignItems: "flex-start",
         justifyContent: "space-between",
         gap: 1.5,
@@ -40,83 +44,122 @@ export function LeadDocumentCard({
     >
       <Box
         sx={{
-          width: 42,
-          height: 42,
-          borderRadius: 2,
-          backgroundColor: "primary.main",
+          gap: 3,
           display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          flexShrink: 0,
         }}
       >
-        <InsertDriveFileOutlinedIcon
+        <Box
           sx={{
-            color: "common.white",
-            fontSize: 24,
-          }}
-        />
-      </Box>
-
-      <Box sx={{ minWidth: 0, flex: 1 }}>
-        <Typography
-          sx={{
-            fontSize: 13,
-            fontWeight: 400,
-            lineHeight: 1.35,
+            width: 42,
+            height: 42,
+            borderRadius: 2,
+            backgroundColor: "primary.main",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            flexShrink: 0,
           }}
         >
-          {document.name || "Документ"}
-        </Typography>
+          <InsertDriveFileOutlinedIcon
+            sx={{
+              color: "common.white",
+              fontSize: 24,
+            }}
+          />
+        </Box>
 
-        <Typography
-          color="text.secondary"
-          sx={{
-            mt: 0.25,
-            fontSize: 12,
-            fontWeight: 400,
-            lineHeight: 1.35,
-          }}
-        >
-          {document.context || "Описание не указано"}
-        </Typography>
-
-        <Typography
-          color="text.secondary"
-          sx={{
-            mt: 0.5,
-            fontSize: 11,
-            fontWeight: 400,
-            lineHeight: 1.35,
-            wordBreak: "break-word",
-          }}
-        >
-          {document.fileName || "Файл"}
-        </Typography>
-      </Box>
-
-      <Box
-        sx={{
-          display: "flex",
-          gap: 0.5,
-          flexShrink: 0,
-        }}
-        onClick={(event) => {
-          event.preventDefault();
-          event.stopPropagation();
-        }}
-      >
-        {(!document.source || document.source === "forwarder") && (
-          <IconButton
-            size="small"
-            color="error"
-            disabled={isDeleting}
-            onClick={() => onDelete(id, document.path)}
+        <Box sx={{ minWidth: 0, flex: 1 }}>
+          <Typography
+            sx={{
+              fontSize: 13,
+              fontWeight: 400,
+              lineHeight: 1.35,
+            }}
           >
-            <DeleteOutlineOutlinedIcon fontSize="small" />
-          </IconButton>
-        )}
+            {document.name || "Документ"}
+          </Typography>
+
+          <Typography
+            color="text.secondary"
+            sx={{
+              mt: 0.25,
+              fontSize: 12,
+              fontWeight: 400,
+              lineHeight: 1.35,
+            }}
+          >
+            {document.context || "Описание не указано"}
+          </Typography>
+
+          <Typography
+            color="text.secondary"
+            sx={{
+              mt: 0.5,
+              fontSize: 11,
+              fontWeight: 400,
+              lineHeight: 1.35,
+              wordBreak: "break-word",
+            }}
+          >
+            {document.fileName || "Файл"}
+          </Typography>
+        </Box>
+
+        <Box
+          sx={{
+            display: "flex",
+            gap: 0.5,
+            flexShrink: 0,
+          }}
+          onClick={(event) => {
+            event.preventDefault();
+            event.stopPropagation();
+          }}
+        >
+          {!isFileReadOnly &&
+            (!document.source || document.source === "forwarder") && (
+              <IconButton
+                size="small"
+                color="error"
+                disabled={isDeleting}
+                onClick={() => onDelete(id, document.path)}
+              >
+                <DeleteOutlineOutlinedIcon fontSize="small" />
+              </IconButton>
+            )}
+        </Box>
       </Box>
+
+      {fileType === "image" && (
+        <Box
+          component="img"
+          title={document.name || "Документ лида"}
+          sx={{
+            display: "block",
+            borderRadius: 2,
+            width: "100%",
+            border: 0,
+            maxWidth: "100%",
+            objectFit: "contain",
+          }}
+          src={document.url}
+        />
+      )}
+
+      {fileType === "pdf" && (
+        <Box
+          component="iframe"
+          title={document.name || "Документ лида"}
+          sx={{
+            display: "block",
+            width: "100%",
+            border: 0,
+            maxWidth: "100%",
+            objectFit: "contain",
+          }}
+          src={document.url}
+        />
+      )}
     </Box>
   );
 }

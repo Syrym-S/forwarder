@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Pagination from "@mui/material/Pagination";
 import RootLayout from "../../components/layout/root-layout";
-import axios from "axios";
 import LeadCard from "../../components/leads/lead-card";
 import { Tabs, Tab, Button } from "@mui/material";
 import {
@@ -55,7 +54,7 @@ const ActiveLeads = () => {
   if (isLoading) return <Loader />;
 
   return (
-    <RootLayout data={leads} isLoading={isLoading}>
+    <RootLayout withoutDataCheck>
       <Box
         sx={{
           display: "flex",

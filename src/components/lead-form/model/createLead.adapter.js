@@ -45,8 +45,6 @@ function normalizeText(value) {
 }
 
 export function mapCreateLeadFormToApi(form) {
-  const documents = mapCreateLeadDocumentsToApiDocuments(form);
-
   const payload = {
     from_country: form.from_location.country,
     from_region: form.from_location.region,
