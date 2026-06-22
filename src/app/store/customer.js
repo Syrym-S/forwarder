@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { getCustomers } from "./api";
+import { getCustomers } from "./leads/api";
 
 export const useCustomerStore = create((set) => ({
   customers: [],

@@ -4,7 +4,7 @@ import InsertDriveFileOutlinedIcon from "@mui/icons-material/InsertDriveFileOutl
 import { Box, Button, Typography } from "@mui/material";
 import { DocumentPreview } from "../documents/DocumentPreview";
 import LeadFilePreview from "./lead-file-preview";
-import { useLeadsStore } from "../../../app/store/leads-store";
+import { useLeadsStore } from "../../../app/store/leads/leads-store";
 
 const CargoLoadVerification = ({
   filesFromDriver,

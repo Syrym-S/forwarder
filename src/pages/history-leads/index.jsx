@@ -14,7 +14,6 @@ import {
   Skeleton,
 } from "@mui/material";
 import ViewListRoundedIcon from "@mui/icons-material/ViewListRounded";
-import { useLeadsStore } from "../../app/store/leads-store";
 import GridViewRoundedIcon from "@mui/icons-material/GridViewRounded";
 import { LeadCardSkeleton } from "../../shared/ui/lead-card-skeleton";
 import LeadsTable from "../../components/leads/leads-table";
@@ -22,6 +21,7 @@ import { VIEWS } from "../../shared/const/leads";
 import AddLeadForm from "../../features/leads/add-lead-form";
 import { useSearchParams } from "react-router-dom";
 import { useFormDefaultValues } from "../../shared/hooks/leads/use-form-default-values";
+import { useLeadsStore } from "../../app/store/leads/leads-store";
 
 const HistoryLeads = () => {
   const [page, setPage] = useState(1);

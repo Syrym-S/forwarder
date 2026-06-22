@@ -4,6 +4,11 @@ import RenderStatus from "../../../shared/ui/render-status";
 import { STATUS } from "../../../shared/const/tenders";
 
 const LeadHeading = ({ leadData, openEditForm }) => {
+  const canBeEdited =
+    leadData.status !== STATUS.finished &&
+    leadData.status !== STATUS.cancelled &&
+    leadData.status !== STATUS.deleted;
+
   return (
     <Box
       spacing={0.5}
@@ -41,8 +46,7 @@ const LeadHeading = ({ leadData, openEditForm }) => {
             Подробные данные по заявке
           </Typography>
         </Stack>
-        {(leadData.status !== STATUS.finished ||
-          leadData.status !== STATUS.cancelled) && (
+        {canBeEdited && (
           <EditNoteRoundedIcon
             onClick={openEditForm}
             sx={{
@@ -50,7 +54,7 @@ const LeadHeading = ({ leadData, openEditForm }) => {
                 xs: "block",
                 sm: "none",
               },
-              fontSize: "3rem",
+              fontSize: "2.5rem",
               color: "primary.main",
               cursor: "pointer",
             }}
@@ -86,16 +90,11 @@ const LeadHeading = ({ leadData, openEditForm }) => {
           }}
         >
           <Tooltip title="Редактировать">
-            {(leadData.status !== STATUS.finished ||
-              leadData.status !== STATUS.cancelled) && (
+            {canBeEdited && (
               <EditNoteRoundedIcon
                 onClick={openEditForm}
                 sx={{
-                  display: {
-                    xs: "block",
-                    sm: "none",
-                  },
-                  fontSize: "3rem",
+                  fontSize: "2.5rem",
                   color: "primary.main",
                   cursor: "pointer",
                 }}

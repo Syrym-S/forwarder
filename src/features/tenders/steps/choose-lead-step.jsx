@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import { useLeadsStore } from "../../../app/store/leads-store";
 import dayjs from "dayjs";
 import { Controller } from "react-hook-form";
 import { Autocomplete, TextField } from "@mui/material";
 import RenderLeadOptions from "../../../components/tenders/render-lead-options";
+import { useLeadsStore } from "../../../app/store/leads/leads-store";
 
 const ChooseLeadStep = ({ control, setValue, isEdit, getValues }) => {
   const searchedLeads = useLeadsStore((state) => state.searchedLeads);

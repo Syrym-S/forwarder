@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useLeadsStore } from "../store/leads-store";
+import { useLeadsStore } from "../store/leads/leads-store";
 
 export function AppInitializer() {
   const fetchLeads = useLeadsStore((state) => state.fetchLeads);

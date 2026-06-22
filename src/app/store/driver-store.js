@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { getDrivers } from "./api";
+import { getDrivers } from "./leads/api";
 
 export const useDriverStore = create((set) => ({
   drivers: [],

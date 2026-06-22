@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { useLeadsStore } from "../../../app/store/leads-store";
+import { useLeadsStore } from "../../../app/store/leads/leads-store";
 
 function createLocalDocument({ name, context, file }) {
   return {

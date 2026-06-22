@@ -12,7 +12,6 @@ import {
   Typography,
 } from "@mui/material";
 import { Controller, useForm, useWatch } from "react-hook-form";
-import { useLeadsStore } from "../../app/store/leads-store";
 import { useTendersStore } from "../../app/store/tenders/tender-store";
 import { useEffect, useState } from "react";
 import dayjs from "dayjs";
@@ -22,6 +21,7 @@ import RenderLeadOptions from "../../components/tenders/render-lead-options";
 import { useDriverStore } from "../../app/store/driver-store";
 import ChooseLeadStep from "./steps/choose-lead-step";
 import PublicationTypeStep from "./steps/publication-type-step";
+import { useLeadsStore } from "../../app/store/leads/leads-store";
 
 const steps = [
   { id: 1, name: "Выброр лида" },

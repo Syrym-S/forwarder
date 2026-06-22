@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import Section from "../../shared/ui/section";
-import { useLeadsStore } from "../../app/store/leads-store";
 import { LeadDocumentCard } from "../leads/documents/LeadDocumentCard";
 import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
 import { Box, Dialog, DialogTitle } from "@mui/material";
 import FileModal from "./file-modal";
+import { useLeadsStore } from "../../app/store/leads/leads-store";
 
 const LeadDocuments = ({ tender }) => {
   const [currentFile, setCurrentFile] = useState(null);

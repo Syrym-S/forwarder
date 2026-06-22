@@ -10,8 +10,8 @@ import UploadFileOutlinedIcon from "@mui/icons-material/UploadFileOutlined";
 import InsertDriveFileOutlinedIcon from "@mui/icons-material/InsertDriveFileOutlined";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import { useEffect, useState } from "react";
-import { useLeadsStore } from "../../../app/store/leads-store";
 import { useParams } from "react-router-dom";
+import { useLeadsStore } from "../../../app/store/leads/leads-store";
 
 const DocumentUpload = ({ setValue, uploadedFiles, setUploadedFiles }) => {
   const { id } = useParams();

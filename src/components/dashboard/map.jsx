@@ -7,9 +7,9 @@ import {
   Tooltip,
 } from "react-leaflet";
 import { Typography } from "@mui/material";
-import { useLeadsStore } from "../../app/store/leads-store";
 
 import "leaflet/dist/leaflet.css";
+import { useLeadsStore } from "../../app/store/leads/leads-store";
 
 const getRoute = async (start, end) => {
   const response = await fetch(

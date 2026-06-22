@@ -16,12 +16,11 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
-import { useLeadsStore } from "../../app/store/leads-store";
 import { MapContainer, Marker, Polyline, TileLayer } from "react-leaflet";
 import AddLeadForm from "../../features/leads/add-lead-form";
 import { useFormDefaultValues } from "../../shared/hooks/leads/use-form-default-values";
 import LeadMap from "../../components/leads/lead-map";
-import { getLeadFilesApi, uploadLeadFileApi } from "../../app/store/api";
+import { getLeadFilesApi, uploadLeadFileApi } from "../../app/store/leads/api";
 import { mapLeadFilesResponseFromApi } from "../../features/leads/model/lead-files.adapter";
 import Loader from "../../components/layout/loader";
 import RenderStatus from "../../shared/ui/render-status";
@@ -35,10 +34,13 @@ import LeadDriverInfo from "../../components/leads/lead-item/lead-driver-info";
 import Section from "../../shared/ui/section";
 import CargoUnloadVerification from "../../components/leads/lead-item/cargo-unload-verification";
 import { STATUS } from "../../shared/const/tenders";
+import { useLeadsStore } from "../../app/store/leads/leads-store";
 
 const LeadItem = () => {
-  const [openEdit, setOpenEdit] = useState(false);
   const { id } = useParams();
+
+  const [openEdit, setOpenEdit] = useState(false);
+
   const getLeadItem = useLeadsStore((state) => state.getLeadItem);
   const leadData = useLeadsStore((state) => state.currentLead);
   const files = useLeadsStore((state) => state.files);

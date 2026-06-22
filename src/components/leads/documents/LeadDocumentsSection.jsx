@@ -14,7 +14,7 @@ import UploadFileOutlinedIcon from "@mui/icons-material/UploadFileOutlined";
 import { LeadDocumentCard } from "./LeadDocumentCard";
 import { DocumentPreviewDialog } from "./DocumentPreviewDialog";
 import Loader from "../../layout/loader";
-import { useLeadsStore } from "../../../app/store/leads-store";
+import { useLeadsStore } from "../../../app/store/leads/leads-store";
 
 export function LeadDocumentsSection({
   documents,
