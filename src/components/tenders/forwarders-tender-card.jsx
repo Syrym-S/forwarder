@@ -95,8 +95,6 @@ const ForwardersTenderCard = ({ tender }) => {
               sx={{
                 borderRadius: 999,
                 fontWeight: 500,
-                // backgroundColor: "rgba(2, 114, 0, 0.1)",
-                // color: "#46E843",
               }}
             />
             <RenderStatus status={tender?.status} />

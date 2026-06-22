@@ -80,7 +80,7 @@ const TransportationInfo = ({ tender }) => {
 
           <InfoField
             label="Статус"
-            value={<RenderStatus status={tender?.lead.status} />}
+            value={<RenderStatus status={tender?.lead?.status} />}
           />
         </Box>
 

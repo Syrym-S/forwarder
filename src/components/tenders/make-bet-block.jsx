@@ -1,10 +1,14 @@
 import { Box, Button, Chip, TextField, Typography } from "@mui/material";
-import React from "react";
+import React, { useState } from "react";
 import { useTendersStore } from "../../app/store/tenders/tender-store";
 import Section from "../../shared/ui/section";
 import CancelledBets from "./cancelled-bets";
+import PaidOutlinedIcon from "@mui/icons-material/PaidOutlined";
+import CancelBetModal from "../../features/tenders/confirm-actions/cancel-bet-modal";
 
 const MakeBetBlock = ({ tender, setShowBetField }) => {
+  const [openCancelModal, setOpenCancelModal] = useState(false);
+
   const getCustomerTenderDetails = useTendersStore(
     (state) => state.getCustomerTenderDetails,
   );
@@ -19,13 +23,20 @@ const MakeBetBlock = ({ tender, setShowBetField }) => {
     setShowBetField(true);
   };
 
+  const handleOpenCancelModal = () => {
+    setOpenCancelModal(true);
+  };
+  const handleCloseCancelModal = () => {
+    setOpenCancelModal(false);
+  };
+
   const handleCancelBet = async (bet_index) => {
     await cancelBet(tender.id, bet_index);
     await getCustomerTenderDetails(tender.id);
   };
 
   return (
-    <Box>
+    <Section title="Ваша ставка" icon={<PaidOutlinedIcon color="primary" />}>
       {!isBetExist && (
         <Button
           variant="contained"
@@ -51,10 +62,16 @@ const MakeBetBlock = ({ tender, setShowBetField }) => {
                     <Button
                       variant={"outlined"}
                       color={"error"}
-                      onClick={() => handleCancelBet(index)}
+                      onClick={handleOpenCancelModal}
                     >
                       {"Отменить ставку"}
                     </Button>
+                    <CancelBetModal
+                      bet={bet}
+                      confirmCancel={() => handleCancelBet(index)}
+                      openCancelModal={openCancelModal}
+                      handleCloseCancelModal={handleCloseCancelModal}
+                    />
                     <TextField
                       label="Текущая ставка"
                       value={`${bet.amount} ${bet.currency}`}
@@ -85,9 +102,7 @@ const MakeBetBlock = ({ tender, setShowBetField }) => {
             ),
         )}
       </Box>
-
-      <CancelledBets bets={tender?.bets} />
-    </Box>
+    </Section>
   );
 };
 

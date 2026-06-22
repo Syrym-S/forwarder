@@ -46,9 +46,7 @@ const RenderStatus = ({ status }) => {
     case STATUS.loss:
       return <Chip label={"Не принято"} variant="outlined" color="error" />;
     case STATUS.closed:
-      return (
-        <Chip label={"Закрытая ставка"} variant="container" color="error" />
-      );
+      return <Chip label={"Закрыто"} variant="container" color="error" />;
     case STATUS.winning:
       return (
         <Chip label={"Принятая ставка"} variant="outlined" color="error" />

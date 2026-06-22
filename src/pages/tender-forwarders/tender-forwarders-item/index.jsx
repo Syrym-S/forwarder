@@ -41,7 +41,6 @@ const TenderForwardersItem = () => {
   const getTenderDetails = useTendersStore((state) => state.getTenderDetails);
   const deleteTender = useTendersStore((state) => state.deleteTender);
   const cancelTender = useTendersStore((state) => state.cancelTender);
-  const isLoading = useTendersStore((state) => state.isLoading);
 
   const defaultValues = useTenderDefaultValues(currentTender);
 
@@ -78,7 +77,7 @@ const TenderForwardersItem = () => {
     getTenderDetails(id);
   }, [id]);
 
-  if (isLoading) return <Loader />;
+  if (!currentTender) return <Loader />;
 
   return (
     <RootLayout withoutDataCheck>

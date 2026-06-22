@@ -10,4 +10,5 @@ export const STATUS = {
   verification_unloading: "verification_unloading",
   finished: "finished",
   deleted: "deleted",
+  closed: "closed",
 };
