@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { MapContainer, TileLayer, Marker, Polyline } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
-import axios from "axios";
 import L from "leaflet";
 
 const driverIcon = L.divIcon({
@@ -45,13 +44,16 @@ export default function LeadMap({ from, to, id }) {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          // eslint-disable-next-line no-undef
           "X-WP-Nonce": APP_DATA.nonce,
         },
         body: JSON.stringify({
-          lead_id: "6a28f1dbcb12ca8c46005bb2",
+          lead_id: id,
           type: "add",
         }),
       }).then((r) => r.json());
+
+      console.log("addRes", addRes);
 
       const wsAdd = new WebSocket(
         `wss://geo.360logistics.kz/socket?token=${addRes.token}`,
@@ -69,13 +71,16 @@ export default function LeadMap({ from, to, id }) {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          // eslint-disable-next-line no-undef
           "X-WP-Nonce": APP_DATA.nonce,
         },
         body: JSON.stringify({
-          lead_id: "6a28f1dbcb12ca8c46005bb2",
+          lead_id: id,
           type: "admin",
         }),
       }).then((r) => r.json());
+
+      console.log("res", res);
 
       const ws = new WebSocket(
         `wss://geo.360logistics.kz/socket?token=${res.token}`,
@@ -109,8 +114,8 @@ export default function LeadMap({ from, to, id }) {
     >
       <TileLayer url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png" />
 
-      {/* <Marker position={start} />
-      <Marker position={end} /> */}
+      <Marker position={start} />
+      <Marker position={end} />
 
       {(route.length > 0 || !from.lat || !from?.lon) && (
         <Polyline positions={route} color="blue" weight={4} />

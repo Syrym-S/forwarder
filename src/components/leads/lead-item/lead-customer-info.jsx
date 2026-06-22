@@ -4,9 +4,14 @@ import Section from "../../../shared/ui/section";
 import InfoField from "../../../shared/ui/info-field";
 
 const LeadCustomerInfo = ({ leadData }) => {
+  const customer = leadData?.customer;
+
   return (
     <Section title="Заказчик" icon={<BusinessOutlinedIcon color="primary" />}>
-      <InfoField label="Название" value={leadData.customer.name} />
+      <InfoField
+        label={customer?.name ? "Имя" : ""}
+        value={customer?.name ? leadData.customer.name : "Заказщик не указан"}
+      />
     </Section>
   );
 };

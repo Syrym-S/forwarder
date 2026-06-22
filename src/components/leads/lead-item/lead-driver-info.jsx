@@ -4,9 +4,14 @@ import InfoField from "../../../shared/ui/info-field";
 import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 
 const LeadDriverInfo = ({ leadData }) => {
+  const driver = leadData?.driver;
+
   return (
     <Section title="Водитель" icon={<PersonOutlinedIcon color="primary" />}>
-      <InfoField label="ФИО" value={leadData.driver.fio} />
+      <InfoField
+        label={driver.fio ? "ФИО" : ""}
+        value={driver.fio ? driver.fio : "Водитель не указан"}
+      />
     </Section>
   );
 };

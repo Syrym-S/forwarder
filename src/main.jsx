@@ -4,6 +4,7 @@ import App from "./App";
 import "./index.css";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { theme } from "./app/theme/theme";
+import "./leaflet-icon";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
