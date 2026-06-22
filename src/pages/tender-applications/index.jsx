@@ -39,6 +39,8 @@ const TenderApplications = () => {
       {view === VIEWS.cards && (
         <Box
           sx={{
+            mx: "auto",
+            width: "60%",
             display: "grid",
             gap: 5,
             my: "10px",
@@ -51,10 +53,16 @@ const TenderApplications = () => {
           {customerTenders.map((tender) => (
             <ApplicationsTenderCard key={tender.id} tender={tender} />
           ))}
+          <Pagination
+            page={page}
+            count={PAGE_COUNT}
+            sx={{
+              mx: "auto",
+            }}
+            onChange={handlePageChange}
+          />
         </Box>
       )}
-
-      <Pagination page={page} count={PAGE_COUNT} onChange={handlePageChange} />
     </RootLayout>
   );
 };

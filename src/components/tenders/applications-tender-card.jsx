@@ -19,7 +19,6 @@ const ApplicationsTenderCard = ({ tender }) => {
       onClick={navigateToDetailPage}
       tabIndex={0}
       sx={{
-        mx: "auto",
         maxWidth: "700px",
         p: 3,
         border: "2px solid",

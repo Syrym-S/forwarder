@@ -51,9 +51,16 @@ const TenderForwarders = () => {
 
   return (
     <RootLayout withoutDataCheck>
-      <Button onClick={handleOpenForm} variant="outlined">
-        Создать тендер
-      </Button>
+      <Box
+        sx={{
+          width: "60%",
+          mx: "auto",
+        }}
+      >
+        <Button onClick={handleOpenForm} variant="outlined">
+          Создать тендер
+        </Button>
+      </Box>
 
       {openForm && (
         <TenderForm
@@ -66,6 +73,8 @@ const TenderForwarders = () => {
       {view === VIEWS.cards && (
         <Box
           sx={{
+            mx: "auto",
+            width: "60%",
             alignItems: "center",
             display: "grid",
             gap: 5,
@@ -81,6 +90,9 @@ const TenderForwarders = () => {
           ))}
 
           <Pagination
+            sx={{
+              mx: "auto",
+            }}
             page={page}
             count={PAGE_COUNT}
             onChange={handlePageChange}
