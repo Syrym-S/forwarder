@@ -10,9 +10,9 @@ import Section from "../../shared/ui/section";
 import PeopleAltOutlinedIcon from "@mui/icons-material/PeopleAltOutlined";
 import ControlPointRoundedIcon from "@mui/icons-material/ControlPointRounded";
 import { useEffect, useState } from "react";
-import { useDriverStore } from "../../app/store/driver-store";
 import { useTendersStore } from "../../app/store/tenders/tender-store";
 import ParticipantCard from "./participant-card";
+import { useDriverStore } from "../../app/store/drivers/driver-store";
 
 const TenderParticipants = ({ tender }) => {
   const [selectedDriver, setSelectedDriver] = useState({});

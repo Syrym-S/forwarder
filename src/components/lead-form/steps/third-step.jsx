@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import { StepSection } from "../step-section";
 import { InfoBadge } from "../info-badge";
-import { useDriverStore } from "../../../app/store/driver-store";
+import { useDriverStore } from "../../../app/store/drivers/driver-store";
 
 export function ThirdStep({ control, errors, setValue }) {
   const selectedDriver = useWatch({

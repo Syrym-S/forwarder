@@ -18,10 +18,10 @@ import dayjs from "dayjs";
 import Loader from "../../components/layout/loader";
 import { useParams } from "react-router-dom";
 import RenderLeadOptions from "../../components/tenders/render-lead-options";
-import { useDriverStore } from "../../app/store/driver-store";
 import ChooseLeadStep from "./steps/choose-lead-step";
 import PublicationTypeStep from "./steps/publication-type-step";
 import { useLeadsStore } from "../../app/store/leads/leads-store";
+import { useDriverStore } from "../../app/store/drivers/driver-store";
 
 const steps = [
   { id: 1, name: "Выброр лида" },

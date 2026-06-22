@@ -14,11 +14,11 @@ import { ForthStep } from "../../components/lead-form/steps/forth-step";
 import { DocumentsStep } from "../../components/lead-form/steps/documents-step";
 import { uploadLeadFileApi } from "../../app/store/leads/api";
 import { useCustomerStore } from "../../app/store/customer";
-import { useDriverStore } from "../../app/store/driver-store";
 import DocumentUpload from "../../components/lead-form/steps/document-upload";
 import PriceStep from "../../components/lead-form/steps/price-step";
 import LeadFormTabs from "../../components/lead-form/lead-form-tabs";
 import { useLeadsStore } from "../../app/store/leads/leads-store";
+import { useDriverStore } from "../../app/store/drivers/driver-store";
 
 const steps = [
   { id: 1, label: "Маршрут" },

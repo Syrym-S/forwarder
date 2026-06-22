@@ -11,9 +11,9 @@ import {
 } from "@mui/material";
 import React, { useState } from "react";
 import { Controller } from "react-hook-form";
-import { useDriverStore } from "../../../app/store/driver-store";
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 import { useTendersStore } from "../../../app/store/tenders/tender-store";
+import { useDriverStore } from "../../../app/store/drivers/driver-store";
 
 const PublicationTypeStep = ({
   control,
