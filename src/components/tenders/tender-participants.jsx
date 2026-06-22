@@ -46,7 +46,6 @@ const TenderParticipants = ({ tender }) => {
 
   useEffect(() => {
     getDrivers();
-    console.log(tender);
   }, []);
 
   return (

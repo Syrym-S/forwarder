@@ -101,8 +101,6 @@ const TenderForm = ({
   const handleNextStep = async () => {
     const isValid = await trigger(stepFields[step]);
 
-    console.log(isValid);
-
     if (!isValid) return;
 
     setStep((prev) => prev + 1);

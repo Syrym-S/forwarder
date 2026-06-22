@@ -124,7 +124,6 @@ const AddLeadForm = ({
 
         if (payload.documents.length > 0 && createdLeadId) {
           try {
-            console.log("payload", payload);
             await uploadCreateLeadDocuments(createdLeadId, payload.documents);
           } catch (documentError) {
             documentsUploadFailed = true;
@@ -137,7 +136,6 @@ const AddLeadForm = ({
       } else {
         const response = await createLead(payload);
         const createdLeadId = getCreatedLeadId(response);
-        console.log("createdLeadId", createdLeadId);
 
         if (payload.documents.length > 0 && createdLeadId) {
           try {

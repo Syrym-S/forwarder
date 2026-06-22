@@ -22,10 +22,6 @@ const TenderApplications = () => {
 
   const PAGE_COUNT = Math.ceil(customerCount / customerPerPage);
 
-  console.log("PAGE_COUNT", PAGE_COUNT);
-  console.log("customerCount", customerCount);
-  console.log("customerPerPage", customerPerPage);
-
   const handlePageChange = (_, value) => {
     setPage(value);
   };
@@ -35,8 +31,6 @@ const TenderApplications = () => {
       page: page,
     });
   }, [page]);
-
-  console.log(customerTenders);
 
   if (isLoading) return <Loader />;
 

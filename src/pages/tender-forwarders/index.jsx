@@ -47,8 +47,6 @@ const TenderForwarders = () => {
     });
   }, [page]);
 
-  console.log(tenders);
-
   if (isLoading) return <Loader />;
 
   return (

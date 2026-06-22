@@ -41,8 +41,6 @@ export function LeadDocumentsSection({
     const formData = new FormData(event.currentTarget);
     const file = formData.get("file");
 
-    console.log("file", file);
-
     if (!file || !file.name || isUploading) {
       return;
     }
