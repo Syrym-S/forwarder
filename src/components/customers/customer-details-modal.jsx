@@ -10,12 +10,12 @@ import {
   Typography,
 } from "@mui/material";
 import React from "react";
-import { useCustomerStore } from "../../app/store/customer";
 import Section from "../../shared/ui/section";
 import InfoField from "../../shared/ui/info-field";
 import Loader from "../layout/loader";
 import AirportShuttleOutlinedIcon from "@mui/icons-material/AirportShuttleOutlined";
 import HighlightOffOutlinedIcon from "@mui/icons-material/HighlightOffOutlined";
+import { useCustomerStore } from "../../app/store/customers/customers-store";
 
 const CustomerDetailsModal = ({ selectedCustomer, handleClear }) => {
   const customerDetails = useCustomerStore((state) => state.customerDetails);

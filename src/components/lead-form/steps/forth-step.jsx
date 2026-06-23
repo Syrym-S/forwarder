@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import { StepSection } from "../step-section";
 import { InfoBadge } from "../info-badge";
-import { useCustomerStore } from "../../../app/store/customer";
+import { useCustomerStore } from "../../../app/store/customers/customers-store";
 
 export function ForthStep({ control, errors, setValue }) {
   const selectedCustomer = useWatch({

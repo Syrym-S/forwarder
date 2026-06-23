@@ -9,13 +9,13 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { useCustomerStore } from "../../app/store/customer";
 import RootLayout from "../../components/layout/root-layout";
 import Loader from "../../components/layout/loader";
 import { useEffect, useState } from "react";
 import CustomerCard from "../../components/customers/customer-card";
 import { useSearchParams } from "react-router-dom";
 import CustomerDetailsModal from "../../components/customers/customer-details-modal";
+import { useCustomerStore } from "../../app/store/customers/customers-store";
 
 const Customers = () => {
   const [page, setPage] = useState(1);

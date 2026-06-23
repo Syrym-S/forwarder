@@ -13,12 +13,12 @@ import { ThirdStep } from "../../components/lead-form/steps/third-step";
 import { ForthStep } from "../../components/lead-form/steps/forth-step";
 import { DocumentsStep } from "../../components/lead-form/steps/documents-step";
 import { uploadLeadFileApi } from "../../app/store/leads/api";
-import { useCustomerStore } from "../../app/store/customer";
 import DocumentUpload from "../../components/lead-form/steps/document-upload";
 import PriceStep from "../../components/lead-form/steps/price-step";
 import LeadFormTabs from "../../components/lead-form/lead-form-tabs";
 import { useLeadsStore } from "../../app/store/leads/leads-store";
 import { useDriverStore } from "../../app/store/drivers/driver-store";
+import { useCustomerStore } from "../../app/store/customers/customers-store";
 
 const steps = [
   { id: 1, label: "Маршрут" },
@@ -56,6 +56,9 @@ const AddLeadForm = ({
   const createLead = useLeadsStore((state) => state.createLead);
   const updateLead = useLeadsStore((state) => state.updateLead);
   const getLeadItem = useLeadsStore((state) => state.getLeadItem);
+  const getCustomers = useCustomerStore((state) => state.getCustomers);
+  const getDrivers = useDriverStore((state) => state.getDrivers);
+
   const [uploadedFiles, setUploadedFiles] = useState([]);
   const [activeStep, setActiveStep] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -188,9 +191,6 @@ const AddLeadForm = ({
 
     await handleSubmit(handleCreateRoute)();
   }
-
-  const getCustomers = useCustomerStore((state) => state.getCustomers);
-  const getDrivers = useDriverStore((state) => state.getDrivers);
 
   useEffect(() => {
     getCustomers();
