@@ -3,7 +3,7 @@ import { getDriverDetailsApi, getDriversApi } from "./api";
 
 export const useDriverStore = create((set) => ({
   drivers: [],
-  currentDriver: null,
+  driverDetails: null,
   isLoading: false,
   error: null,
 
@@ -31,7 +31,7 @@ export const useDriverStore = create((set) => ({
       const response = await getDriverDetailsApi(driver_id);
 
       set({
-        currentDriver: response.data,
+        driverDetails: response.data,
         isLoading: false,
       });
     } catch (e) {

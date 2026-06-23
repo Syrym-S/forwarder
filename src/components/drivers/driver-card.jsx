@@ -1,18 +1,16 @@
 import { Box, Chip, Stack, Typography } from "@mui/material";
 import RenderStatus from "../../shared/ui/render-status";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import Section from "../../shared/ui/section";
+import InfoField from "../../shared/ui/info-field";
 
-const DriverCard = ({ driver }) => {
-  const navigate = useNavigate();
-
-  const navigateToDriverItem = () => {
-    navigate(`/drivers/${driver.id}`);
+const DriverCard = ({ driver, setSelectedDriver }) => {
+  const handleSetDriverDetails = () => {
+    setSelectedDriver(driver);
   };
 
   return (
     <Box
-      onClick={navigateToDriverItem}
+      onClick={handleSetDriverDetails}
       tabIndex={0}
       sx={{
         p: 3,
@@ -75,7 +73,7 @@ const DriverCard = ({ driver }) => {
             }}
           >
             <Chip
-              label={`Лид # ${driver.id || "—"}`}
+              label={`ID# ${driver.id || "—"}`}
               color="primary"
               variant="outlined"
               sx={{
@@ -86,6 +84,17 @@ const DriverCard = ({ driver }) => {
             />
           </Stack>
         </Box>
+      </Stack>
+
+      <Stack
+        sx={{
+          my: 1,
+          gap: 3,
+        }}
+      >
+        <InfoField label="Адресс" value={driver?.legal_address} />
+        <InfoField label="Email" value={driver?.email} />
+        <InfoField label="ИИН" value={driver?.iin} />
       </Stack>
     </Box>
   );
