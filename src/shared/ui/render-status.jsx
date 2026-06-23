@@ -51,6 +51,22 @@ const RenderStatus = ({ status }) => {
       return (
         <Chip label={"Принятая ставка"} variant="outlined" color="error" />
       );
+    case STATUS.await_paid:
+      return (
+        <Chip
+          label={"В ожидании оплаты"}
+          variant="outlined"
+          color="secondary"
+        />
+      );
+    case STATUS.verified_participant:
+      return (
+        <Chip
+          label={"Подтвержденный участник"}
+          variant="outlined"
+          color="error"
+        />
+      );
     default:
       return <>Нет статуа</>;
   }

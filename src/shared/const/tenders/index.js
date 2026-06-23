@@ -11,4 +11,6 @@ export const STATUS = {
   finished: "finished",
   deleted: "deleted",
   closed: "closed",
+  verified_participant: "verified_participant",
+  await_paid: "await_paid",
 };
