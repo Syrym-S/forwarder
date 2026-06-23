@@ -1,20 +1,28 @@
 import { create } from "zustand";
-import { getCustomers, getCustomerDetailsApi } from "./leads/api";
+import {
+  getCustomers,
+  getCustomerDetailsApi,
+  searchCustomerApi,
+} from "./leads/api";
 
 export const useCustomerStore = create((set) => ({
   customers: [],
   customerDetails: null,
   isLoading: false,
   error: null,
+  count: 0,
+  perPage: 1,
 
-  getCustomers: async () => {
+  getCustomers: async (params) => {
     try {
       set({ isLoading: true, error: null });
 
-      const response = await getCustomers();
+      const response = await getCustomers(params);
 
       set({
         customers: response.data.results,
+        count: response.data.count,
+        perPage: response.data.per_page,
         isLoading: false,
       });
     } catch (e) {
@@ -32,6 +40,24 @@ export const useCustomerStore = create((set) => ({
 
       set({
         customerDetails: response.data,
+        isLoading: false,
+      });
+    } catch (e) {
+      set({
+        error: e.message,
+        isLoading: false,
+      });
+    }
+  },
+
+  searchCustomers: async (params) => {
+    try {
+      set({ isLoading: true, error: null });
+
+      const response = await searchCustomerApi(params);
+
+      set({
+        customers: response.data.results,
         isLoading: false,
       });
     } catch (e) {

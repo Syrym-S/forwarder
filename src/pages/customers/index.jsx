@@ -1,4 +1,14 @@
-import { Box, Dialog, DialogTitle } from "@mui/material";
+import {
+  Autocomplete,
+  Box,
+  Button,
+  Dialog,
+  DialogTitle,
+  Pagination,
+  Stack,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { useCustomerStore } from "../../app/store/customer";
 import RootLayout from "../../components/layout/root-layout";
 import Loader from "../../components/layout/loader";
@@ -8,23 +18,38 @@ import { useSearchParams } from "react-router-dom";
 import CustomerDetailsModal from "../../components/customers/customer-details-modal";
 
 const Customers = () => {
+  const [page, setPage] = useState(1);
+  const [searchRequest, setSearchRequest] = useState("");
+  const [inputValue, setInputValue] = useState("");
   const [_, setSearchParams] = useSearchParams();
   const [selectedCustomer, setSelectedCustomer] = useState(null);
 
   const customers = useCustomerStore((state) => state.customers);
+  const isLoading = useCustomerStore((state) => state.isLoading);
   const getCustomers = useCustomerStore((state) => state.getCustomers);
   const getCustomerDetails = useCustomerStore(
     (state) => state.getCustomerDetails,
   );
+  const count = useCustomerStore((state) => state.count);
+  const perPage = useCustomerStore((state) => state.perPage);
+  const searchCustomers = useCustomerStore((state) => state.searchCustomers);
+
+  const PAGE_COUNT = Math.ceil(count / perPage);
 
   const handleClear = () => {
     setSelectedCustomer(null);
     setSearchParams("");
   };
 
+  const handlePageChange = (_, value) => {
+    setPage(value);
+  };
+
   useEffect(() => {
-    getCustomers();
-  }, []);
+    getCustomers({
+      page: page,
+    });
+  }, [page]);
 
   useEffect(() => {
     if (selectedCustomer) {
@@ -36,10 +61,80 @@ const Customers = () => {
     }
   }, [selectedCustomer]);
 
+  useEffect(() => {
+    const value = inputValue?.trim();
+
+    const timer = setTimeout(() => {
+      if (!value) {
+        getCustomers();
+        setSearchRequest("");
+
+        return;
+      }
+
+      searchCustomers({ q: value });
+      setSearchRequest(value);
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  }, [inputValue]);
+
   if (!customers) return <Loader />;
 
   return (
     <RootLayout withoutDataCheck>
+      <Stack sx={{ width: "60%", mx: "auto" }}>
+        <TextField
+          onChange={(e) => {
+            setInputValue(e.target.value);
+          }}
+          label="Поиск заказщика"
+          fullWidth
+          size="small"
+          sx={{
+            display: "block",
+            my: 1,
+          }}
+        />
+
+        {searchRequest && (
+          <Box
+            sx={{
+              display: "flex",
+              gap: 1,
+            }}
+          >
+            <Typography
+              component="span"
+              sx={{
+                fontWeight: "600",
+              }}
+            >
+              Результат по поиску:
+            </Typography>
+            <Typography
+              component="span"
+              sx={{
+                fontWeight: "300",
+                fontStyle: "italic",
+              }}
+            >
+              {searchRequest}
+            </Typography>
+
+            <Typography
+              sx={{
+                px: 1,
+                fontWeight: "400",
+                fontStyle: "italic",
+              }}
+            >
+              (Для поиска по БИН или ИИН ввидите 12 цифр)
+            </Typography>
+          </Box>
+        )}
+      </Stack>
+
       <Box
         sx={{
           width: "60%",
@@ -50,11 +145,17 @@ const Customers = () => {
         }}
       >
         {customers.map((customer) => (
-          <CustomerCard
-            key={customer.id}
-            customer={customer}
-            setSelectedCustomer={setSelectedCustomer}
-          />
+          <>
+            {isLoading ? (
+              <Loader />
+            ) : (
+              <CustomerCard
+                key={customer.id}
+                customer={customer}
+                setSelectedCustomer={setSelectedCustomer}
+              />
+            )}
+          </>
         ))}
 
         {selectedCustomer && (
@@ -63,6 +164,15 @@ const Customers = () => {
             handleClear={handleClear}
           />
         )}
+
+        <Pagination
+          sx={{
+            mx: "auto",
+          }}
+          page={page}
+          count={PAGE_COUNT}
+          onChange={handlePageChange}
+        />
       </Box>
     </RootLayout>
   );

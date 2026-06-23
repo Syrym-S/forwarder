@@ -143,8 +143,9 @@ export const getDrivers = async () => {
   return data;
 };
 
-export const getCustomers = async () => {
+export const getCustomers = async (params) => {
   const data = await axios.get(`${BASE_URL}/forwarder/v1/customers`, {
+    params,
     headers: {
       // eslint-disable-next-line no-undef
       "X-WP-Nonce": APP_DATA.nonce,
@@ -164,6 +165,18 @@ export const getCustomerDetailsApi = async (customer_id) => {
       },
     },
   );
+
+  return data;
+};
+
+export const searchCustomerApi = async (params) => {
+  const data = await axios.get(`${BASE_URL}/forwarder/v1/customers/search`, {
+    params,
+    headers: {
+      // eslint-disable-next-line no-undef
+      "X-WP-Nonce": APP_DATA.nonce,
+    },
+  });
 
   return data;
 };

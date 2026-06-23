@@ -1,20 +1,24 @@
 import { create } from "zustand";
-import { getDriverDetailsApi, getDriversApi } from "./api";
+import { getDriverDetailsApi, getDriversApi, searchDriverApi } from "./api";
 
 export const useDriverStore = create((set) => ({
   drivers: [],
   driverDetails: null,
   isLoading: false,
   error: null,
+  count: 0,
+  perPage: 1,
 
-  getDrivers: async () => {
+  getDrivers: async (params) => {
     try {
       set({ isLoading: true, error: null });
 
-      const response = await getDriversApi();
+      const response = await getDriversApi(params);
 
       set({
         drivers: response.data.results,
+        count: response.data.count,
+        perPage: response.data.per_page,
         isLoading: false,
       });
     } catch (e) {
@@ -32,6 +36,23 @@ export const useDriverStore = create((set) => ({
 
       set({
         driverDetails: response.data,
+        isLoading: false,
+      });
+    } catch (e) {
+      set({
+        error: e.message,
+        isLoading: false,
+      });
+    }
+  },
+  searchDriver: async (params) => {
+    try {
+      set({ isLoading: true, error: null });
+
+      const response = await searchDriverApi(params);
+
+      set({
+        drivers: response.data.results,
         isLoading: false,
       });
     } catch (e) {
