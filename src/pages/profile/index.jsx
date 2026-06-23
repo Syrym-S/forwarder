@@ -1,338 +1,371 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 
 import {
-   Alert,
-   Box,
-   Button,
-   Container,
-   Paper,
-   Stack,
-   TextField,
-   Typography,
-} from '@mui/material';
+  Alert,
+  Box,
+  Button,
+  Container,
+  Paper,
+  Stack,
+  TextField,
+  Typography,
+} from "@mui/material";
 
-import RootLayout from '../../components/layout/root-layout';
+import RootLayout from "../../components/layout/root-layout";
 import {
-   fetchForwarderProfile,
-   updateForwarderProfile,
-} from '../../features/profile-edit/profile-api';
+  fetchForwarderProfile,
+  updateForwarderProfile,
+} from "../../features/profile-edit/profile-api";
 import {
-   initialProfileForm,
-   mapProfileFormToChangedApi,
-   mapProfileFromApi,
-   validateProfileForm,
-} from '../../features/profile-edit/profile-form-helpers';
+  initialProfileForm,
+  mapProfileFormToChangedApi,
+  mapProfileFromApi,
+  validateProfileForm,
+} from "../../features/profile-edit/profile-form-helpers";
 
 const ProfilePage = () => {
-   const [form, setForm] = useState(initialProfileForm);
-   const [initialLoadedForm, setInitialLoadedForm] =
-      useState(initialProfileForm);
-   const [errors, setErrors] = useState({});
+  const [form, setForm] = useState(initialProfileForm);
+  const [initialLoadedForm, setInitialLoadedForm] =
+    useState(initialProfileForm);
+  const [errors, setErrors] = useState({});
 
-   const [isProfileLoading, setIsProfileLoading] = useState(false);
-   const [profileLoadError, setProfileLoadError] = useState('');
+  const [isProfileLoading, setIsProfileLoading] = useState(false);
+  const [profileLoadError, setProfileLoadError] = useState("");
 
-   const [isSaving, setIsSaving] = useState(false);
-   const [successMessage, setSuccessMessage] = useState('');
-   const [submitError, setSubmitError] = useState('');
+  const [isSaving, setIsSaving] = useState(false);
+  const [successMessage, setSuccessMessage] = useState("");
+  const [submitError, setSubmitError] = useState("");
 
-   function handleChange(event) {
-      const { name, value } = event.target;
+  function handleChange(event) {
+    const { name, value } = event.target;
 
-      setForm((prevForm) => ({
-         ...prevForm,
-         [name]: value,
-      }));
+    const uppercasedValue =
+      name === "personIssueCountry" ? value.toUpperCase() : value;
 
-      setErrors((prevErrors) => ({
-         ...prevErrors,
-         [name]: '',
-      }));
+    setForm((prevForm) => ({
+      ...prevForm,
+      [name]: uppercasedValue,
+    }));
 
-      setSuccessMessage('');
-      setSubmitError('');
-   }
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      [name]: "",
+    }));
 
-   async function handleSubmit(event) {
-      event.preventDefault();
+    setSuccessMessage("");
+    setSubmitError("");
+  }
 
-      const nextErrors = validateProfileForm(form);
+  async function handleSubmit(event) {
+    event.preventDefault();
 
-      setErrors(nextErrors);
+    const nextErrors = validateProfileForm(form);
 
-      if (Object.keys(nextErrors).length > 0) {
-         return;
-      }
+    setErrors(nextErrors);
 
-      const payload = mapProfileFormToChangedApi(form, initialLoadedForm);
+    if (Object.keys(nextErrors).length > 0) {
+      return;
+    }
 
-      if (Object.keys(payload).length === 0) {
-         setSubmitError('Нет изменений для сохранения');
-         return;
-      }
+    const payload = mapProfileFormToChangedApi(form, initialLoadedForm);
 
-      try {
-         setIsSaving(true);
-         setSubmitError('');
-         setSuccessMessage('');
+    console.log("payload", payload);
 
-         await updateForwarderProfile(payload);
+    if (Object.keys(payload).length === 0) {
+      setSubmitError("Нет изменений для сохранения");
+      return;
+    }
 
-         const nextInitialForm = {
-            ...form,
-            currentPassword: '',
-            newPassword: '',
-            newPasswordConfirm: '',
-         };
+    try {
+      setIsSaving(true);
+      setSubmitError("");
+      setSuccessMessage("");
 
-         setInitialLoadedForm(nextInitialForm);
-         setForm(nextInitialForm);
-         setSuccessMessage('Профиль успешно обновлен');
-      } catch (error) {
-         setSubmitError(
-            error.response?.data?.message ||
-               error.message ||
-               'Не удалось обновить профиль',
-         );
-      } finally {
-         setIsSaving(false);
-      }
-   }
+      await updateForwarderProfile(payload);
 
-   useEffect(() => {
-      let isCancelled = false;
-
-      async function loadProfile() {
-         try {
-            setIsProfileLoading(true);
-            setProfileLoadError('');
-
-            const profile = await fetchForwarderProfile();
-
-            if (!isCancelled) {
-               const mappedProfile = mapProfileFromApi(profile);
-
-               setForm(mappedProfile);
-               setInitialLoadedForm(mappedProfile);
-               setErrors({});
-               setSubmitError('');
-               setSuccessMessage('');
-            }
-         } catch (error) {
-            if (!isCancelled) {
-               setProfileLoadError(
-                  error.response?.data?.message ||
-                     error.message ||
-                     'Не удалось загрузить профиль',
-               );
-            }
-         } finally {
-            if (!isCancelled) {
-               setIsProfileLoading(false);
-            }
-         }
-      }
-
-      loadProfile();
-
-      return () => {
-         isCancelled = true;
+      const nextInitialForm = {
+        ...form,
+        currentPassword: "",
+        newPassword: "",
+        newPasswordConfirm: "",
       };
-   }, []);
 
-   return (
-      <RootLayout withoutDataCheck>
-         <Container maxWidth='md' sx={{ py: 3 }}>
-            <Paper
-               component='form'
-               onSubmit={handleSubmit}
-               sx={{
-                  p: {
-                     xs: 2,
-                     sm: 3,
-                  },
-                  borderRadius: 3,
-               }}
-            >
-               <Stack spacing={3}>
-                  <Box>
-                     <Typography variant='h6' fontWeight={600}>
-                        Профиль
-                     </Typography>
+      setInitialLoadedForm(nextInitialForm);
+      setForm(nextInitialForm);
+      setSuccessMessage("Профиль успешно обновлен");
+    } catch (error) {
+      setSubmitError(
+        error.response?.data?.message ||
+          error.message ||
+          "Не удалось обновить профиль",
+      );
+    } finally {
+      setIsSaving(false);
+    }
+  }
 
-                     <Typography color='text.secondary' fontSize={14}>
-                        Данные компании и контактного лица
-                     </Typography>
-                  </Box>
+  useEffect(() => {
+    let isCancelled = false;
 
-                  {profileLoadError && (
-                     <Alert severity='error'>{profileLoadError}</Alert>
-                  )}
+    async function loadProfile() {
+      try {
+        setIsProfileLoading(true);
+        setProfileLoadError("");
 
-                  {successMessage && (
-                     <Alert severity='success'>{successMessage}</Alert>
-                  )}
+        const profile = await fetchForwarderProfile();
 
-                  {submitError && <Alert severity='error'>{submitError}</Alert>}
+        if (!isCancelled) {
+          const mappedProfile = mapProfileFromApi(profile);
 
-                  <Stack spacing={2}>
-                     <Typography fontWeight={600}>Компания</Typography>
+          setForm(mappedProfile);
+          setInitialLoadedForm(mappedProfile);
+          setErrors({});
+          setSubmitError("");
+          setSuccessMessage("");
+        }
+      } catch (error) {
+        if (!isCancelled) {
+          setProfileLoadError(
+            error.response?.data?.message ||
+              error.message ||
+              "Не удалось загрузить профиль",
+          );
+        }
+      } finally {
+        if (!isCancelled) {
+          setIsProfileLoading(false);
+        }
+      }
+    }
 
-                     <TextField
-                        name='companyName'
-                        label='Название компании'
-                        value={form.companyName}
-                        onChange={handleChange}
-                        error={Boolean(errors.companyName)}
-                        helperText={errors.companyName}
-                        fullWidth
-                     />
+    loadProfile();
 
-                     <TextField
-                        name='companyBin'
-                        label='БИН'
-                        value={form.companyBin}
-                        onChange={handleChange}
-                        error={Boolean(errors.companyBin)}
-                        helperText={errors.companyBin}
-                        fullWidth
-                     />
+    return () => {
+      isCancelled = true;
+    };
+  }, []);
 
-                     <TextField
-                        name='companyAddress'
-                        label='Юридический адрес'
-                        value={form.companyAddress}
-                        onChange={handleChange}
-                        error={Boolean(errors.companyAddress)}
-                        helperText={errors.companyAddress}
-                        fullWidth
-                     />
-                  </Stack>
+  console.log("form", form);
 
-                  <Stack spacing={2}>
-                     <Typography fontWeight={600}>
-                        Банковские реквизиты
-                     </Typography>
+  return (
+    <RootLayout withoutDataCheck>
+      <Container maxWidth="md" sx={{ py: 3 }}>
+        <Paper
+          component="form"
+          onSubmit={handleSubmit}
+          sx={{
+            p: {
+              xs: 2,
+              sm: 3,
+            },
+            borderRadius: 3,
+          }}
+        >
+          <Stack spacing={3}>
+            <Box>
+              <Typography variant="h6" fontWeight={600}>
+                Профиль
+              </Typography>
 
-                     <TextField
-                        name='companyAccount'
-                        label='Расчетный счет'
-                        value={form.companyAccount}
-                        onChange={handleChange}
-                        error={Boolean(errors.companyAccount)}
-                        helperText={errors.companyAccount}
-                        fullWidth
-                     />
+              <Typography color="text.secondary" fontSize={14}>
+                Данные компании и контактного лица
+              </Typography>
+            </Box>
 
-                     <TextField
-                        name='companyBik'
-                        label='БИК'
-                        value={form.companyBik}
-                        onChange={handleChange}
-                        error={Boolean(errors.companyBik)}
-                        helperText={errors.companyBik}
-                        fullWidth
-                     />
-                  </Stack>
+            {profileLoadError && (
+              <Alert severity="error">{profileLoadError}</Alert>
+            )}
 
-                  <Stack spacing={2}>
-                     <Typography fontWeight={600}>Контактное лицо</Typography>
+            {successMessage && (
+              <Alert severity="success">{successMessage}</Alert>
+            )}
 
-                     <TextField
-                        name='personFio'
-                        label='ФИО'
-                        value={form.personFio}
-                        onChange={handleChange}
-                        fullWidth
-                     />
+            {submitError && <Alert severity="error">{submitError}</Alert>}
 
-                     <TextField
-                        name='personPhone'
-                        label='Телефон'
-                        value={form.personPhone}
-                        onChange={handleChange}
-                        fullWidth
-                     />
+            <Stack spacing={2}>
+              <Typography fontWeight={600}>Компания</Typography>
 
-                     <TextField
-                        name='personEmail'
-                        label='Email'
-                        value={form.personEmail}
-                        onChange={handleChange}
-                        error={Boolean(errors.personEmail)}
-                        helperText={errors.personEmail}
-                        fullWidth
-                     />
+              <TextField
+                name="companyName"
+                label="Название компании"
+                value={form.companyName}
+                onChange={handleChange}
+                error={Boolean(errors.companyName)}
+                helperText={errors.companyName}
+                fullWidth
+              />
 
-                     <TextField
-                        name='personIin'
-                        label='ИИН'
-                        value={form.personIin}
-                        onChange={handleChange}
-                        error={Boolean(errors.personIin)}
-                        helperText={errors.personIin}
-                        fullWidth
-                     />
-                  </Stack>
+              <TextField
+                name="companyBin"
+                label="БИН"
+                value={form.companyBin}
+                onChange={handleChange}
+                error={Boolean(errors.companyBin)}
+                helperText={errors.companyBin}
+                fullWidth
+              />
 
-                  <Stack spacing={2}>
-                     <Typography fontWeight={600}>Смена пароля</Typography>
+              <TextField
+                name="companyAddress"
+                label="Юридический адрес"
+                value={form.companyAddress}
+                onChange={handleChange}
+                error={Boolean(errors.companyAddress)}
+                helperText={errors.companyAddress}
+                fullWidth
+              />
+            </Stack>
 
-                     <TextField
-                        name='currentPassword'
-                        label='Текущий пароль'
-                        type='password'
-                        value={form.currentPassword}
-                        onChange={handleChange}
-                        error={Boolean(errors.currentPassword)}
-                        helperText={errors.currentPassword}
-                        fullWidth
-                        autoComplete='off'
-                     />
+            <Stack spacing={2}>
+              <Typography fontWeight={600}>Банковские реквизиты</Typography>
 
-                     <TextField
-                        name='newPassword'
-                        label='Новый пароль'
-                        type='password'
-                        value={form.newPassword}
-                        onChange={handleChange}
-                        error={Boolean(errors.newPassword)}
-                        helperText={errors.newPassword}
-                        fullWidth
-                        autoComplete='new-password'
-                     />
+              <TextField
+                name="companyAccount"
+                label="Расчетный счет"
+                value={form.companyAccount}
+                onChange={handleChange}
+                error={Boolean(errors.companyAccount)}
+                helperText={errors.companyAccount}
+                fullWidth
+              />
 
-                     <TextField
-                        name='newPasswordConfirm'
-                        label='Повторите новый пароль'
-                        type='password'
-                        value={form.newPasswordConfirm}
-                        onChange={handleChange}
-                        error={Boolean(errors.newPasswordConfirm)}
-                        helperText={errors.newPasswordConfirm}
-                        fullWidth
-                        autoComplete='new-password'
-                     />
-                  </Stack>
+              <TextField
+                name="companyBik"
+                label="БИК"
+                value={form.companyBik}
+                onChange={handleChange}
+                error={Boolean(errors.companyBik)}
+                helperText={errors.companyBik}
+                fullWidth
+              />
+            </Stack>
 
-                  <Box>
-                     <Button
-                        type='submit'
-                        variant='contained'
-                        disabled={isSaving || isProfileLoading}
-                     >
-                        {isSaving
-                           ? 'Сохранение...'
-                           : isProfileLoading
-                             ? 'Загрузка...'
-                             : 'Сохранить'}
-                     </Button>
-                  </Box>
-               </Stack>
-            </Paper>
-         </Container>
-      </RootLayout>
-   );
+            <Stack spacing={2}>
+              <Typography fontWeight={600}>Контактное лицо</Typography>
+
+              <TextField
+                name="personFio"
+                label="ФИО"
+                value={form.personFio}
+                onChange={handleChange}
+                fullWidth
+              />
+
+              <TextField
+                name="personPhone"
+                label="Телефон"
+                value={form.personPhone}
+                onChange={handleChange}
+                fullWidth
+              />
+
+              <TextField
+                name="personEmail"
+                label="Email"
+                value={form.personEmail}
+                onChange={handleChange}
+                error={Boolean(errors.personEmail)}
+                helperText={errors.personEmail}
+                fullWidth
+              />
+
+              <TextField
+                name="personIin"
+                label="ИИН"
+                value={form.personIin}
+                onChange={handleChange}
+                error={Boolean(errors.personIin)}
+                helperText={errors.personIin}
+                fullWidth
+              />
+            </Stack>
+
+            <Stack spacing={2}>
+              <Typography fontWeight={600}>Смена пароля</Typography>
+
+              <TextField
+                name="currentPassword"
+                label="Текущий пароль"
+                type="password"
+                value={form.currentPassword}
+                onChange={handleChange}
+                error={Boolean(errors.currentPassword)}
+                helperText={errors.currentPassword}
+                fullWidth
+                autoComplete="off"
+              />
+
+              <TextField
+                name="newPassword"
+                label="Новый пароль"
+                type="password"
+                value={form.newPassword}
+                onChange={handleChange}
+                error={Boolean(errors.newPassword)}
+                helperText={errors.newPassword}
+                fullWidth
+                autoComplete="new-password"
+              />
+
+              <TextField
+                name="newPasswordConfirm"
+                label="Повторите новый пароль"
+                type="password"
+                value={form.newPasswordConfirm}
+                onChange={handleChange}
+                error={Boolean(errors.newPasswordConfirm)}
+                helperText={errors.newPasswordConfirm}
+                fullWidth
+                autoComplete="new-password"
+              />
+            </Stack>
+
+            <Stack spacing={2}>
+              <TextField
+                name="personDocumentNumber"
+                label="Номер документа"
+                type="number"
+                value={form.personDocumentNumber}
+                onChange={handleChange}
+                error={Boolean(errors.documentNumber)}
+                helperText={errors.documentNumber}
+                fullWidth
+                //  autoComplete="new-password"
+              />
+
+              <TextField
+                name="personIssueCountry"
+                label="Страна"
+                value={form.personIssueCountry}
+                onChange={handleChange}
+                error={Boolean(errors.personIssueCountry)}
+                helperText={errors.personIssueCountry}
+                sx={{
+                  textTransform: "uppercase",
+                }}
+                fullWidth
+                //  autoComplete="new-password"
+              />
+            </Stack>
+
+            <Box>
+              <Button
+                type="submit"
+                variant="contained"
+                disabled={isSaving || isProfileLoading}
+              >
+                {isSaving
+                  ? "Сохранение..."
+                  : isProfileLoading
+                    ? "Загрузка..."
+                    : "Сохранить"}
+              </Button>
+            </Box>
+          </Stack>
+        </Paper>
+      </Container>
+    </RootLayout>
+  );
 };
 
 export default ProfilePage;
