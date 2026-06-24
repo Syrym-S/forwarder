@@ -16,7 +16,7 @@ const LeadRouteInfo = ({ leadData }) => {
             md: "1fr auto 1fr",
           },
           gap: 2,
-          alignItems: "center",
+          alignItems: "stretch",
         }}
       >
         <InfoField
@@ -24,13 +24,22 @@ const LeadRouteInfo = ({ leadData }) => {
           value={leadData.from_location?.address || "Битые данные"}
         />
 
-        <ArrowRightAltRoundedIcon
+        <Box
           sx={{
-            fontSize: 40,
-            color: "text.secondary",
-            justifySelf: "center",
+            height: "100%",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
           }}
-        />
+        >
+          <ArrowRightAltRoundedIcon
+            sx={{
+              fontSize: 40,
+              color: "text.secondary",
+              justifySelf: "center",
+            }}
+          />
+        </Box>
 
         <InfoField
           label="Куда"
