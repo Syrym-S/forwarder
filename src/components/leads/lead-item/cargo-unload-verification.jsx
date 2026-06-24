@@ -2,6 +2,9 @@ import React from "react";
 import Section from "../../../shared/ui/section";
 import { Box, Button, Typography } from "@mui/material";
 import InsertDriveFileOutlinedIcon from "@mui/icons-material/InsertDriveFileOutlined";
+import { useLeadsStore } from "../../../app/store/leads/leads-store";
+import NewReleasesIcon from "@mui/icons-material/NewReleases";
+import TaskAltOutlinedIcon from "@mui/icons-material/TaskAltOutlined";
 
 const CargoUnloadVerification = ({
   isUnloadVerified,
@@ -9,8 +12,21 @@ const CargoUnloadVerification = ({
   handleVerifyCargoUnload,
   handleRejectCargoUnload,
 }) => {
+  const isLoading = useLeadsStore((state) => state.isLoading);
+
   return (
-    <Section title="Подтверждение разгрузки">
+    <Section
+      icon={
+        isUnloadVerified ? (
+          <TaskAltOutlinedIcon color="success" />
+        ) : (
+          <NewReleasesIcon color="primary" />
+        )
+      }
+      title={
+        isUnloadVerified ? "Разгрузка подтверждена" : "Подтверждение разгрузки"
+      }
+    >
       <Box
         sx={{
           display: "grid",
@@ -96,6 +112,7 @@ const CargoUnloadVerification = ({
           }}
         >
           <Button
+            disabled={isLoading}
             color="success"
             variant="outlined"
             onClick={handleVerifyCargoUnload}
@@ -103,6 +120,7 @@ const CargoUnloadVerification = ({
             Подтвердить
           </Button>
           <Button
+            disabled={isLoading}
             color="error"
             variant="outlined"
             onClick={handleRejectCargoUnload}

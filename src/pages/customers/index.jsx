@@ -88,6 +88,7 @@ const Customers = () => {
           onChange={(e) => {
             setInputValue(e.target.value);
           }}
+          helperText="Для поиска по БИН или ИИН ввидите 12 цифр"
           label="Поиск заказщика"
           fullWidth
           size="small"
@@ -120,16 +121,6 @@ const Customers = () => {
               }}
             >
               {searchRequest}
-            </Typography>
-
-            <Typography
-              sx={{
-                px: 1,
-                fontWeight: "400",
-                fontStyle: "italic",
-              }}
-            >
-              (Для поиска по БИН или ИИН ввидите 12 цифр)
             </Typography>
           </Box>
         )}

@@ -126,8 +126,8 @@ const LeadItem = () => {
   };
 
   const handleVerifyCargo = async () => {
-    await getLeadItem(id);
     await verifyCargo(id);
+    await getLeadItem(id);
   };
 
   const handleRejectCargo = async () => {
@@ -149,38 +149,6 @@ const LeadItem = () => {
     await confirmLeadDelivery(id);
     await getLeadItem(id);
   };
-
-  // async function handleDeleteDocument(documentId) {
-  //   const document = documents.find((item) => item.id === documentId);
-
-  //   if (!document?.path) {
-  //     setDocumentError("Не удалось определить файл для удаления");
-  //     return;
-  //   }
-
-  //   if (document.source && document.source !== "forwarder") {
-  //     setDocumentError("Можно удалить только файлы экспедитора");
-  //     return;
-  //   }
-
-  //   try {
-  //     setDocumentError("");
-  //     setDeletingDocumentIds((prevIds) => [...prevIds, documentId]);
-
-  //     await deleteLeadFileApi(id, document.path);
-  //     await reloadLeadDocuments(id);
-  //   } catch (error) {
-  //     setDocumentError(
-  //       error.response?.data?.message ||
-  //         error.message ||
-  //         "Не удалось удалить документ",
-  //     );
-  //   } finally {
-  //     setDeletingDocumentIds((prevIds) =>
-  //       prevIds.filter((itemId) => itemId !== documentId),
-  //     );
-  //   }
-  // }
 
   useEffect(() => {
     let isCancelled = false;

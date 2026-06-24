@@ -5,6 +5,8 @@ import { Box, Button, Typography } from "@mui/material";
 import { DocumentPreview } from "../documents/DocumentPreview";
 import LeadFilePreview from "./lead-file-preview";
 import { useLeadsStore } from "../../../app/store/leads/leads-store";
+import NewReleasesIcon from "@mui/icons-material/NewReleases";
+import TaskAltOutlinedIcon from "@mui/icons-material/TaskAltOutlined";
 
 const CargoLoadVerification = ({
   filesFromDriver,
@@ -15,7 +17,16 @@ const CargoLoadVerification = ({
   const isLoading = useLeadsStore((state) => state.isLoading);
 
   return (
-    <Section title="Подтверждение погрузки">
+    <Section
+      icon={
+        isVerified ? (
+          <TaskAltOutlinedIcon color="success" />
+        ) : (
+          <NewReleasesIcon color="primary" />
+        )
+      }
+      title={isVerified ? "Погрузка подтверждена" : "Подтверждение погрузки"}
+    >
       <Box
         sx={{
           display: "grid",

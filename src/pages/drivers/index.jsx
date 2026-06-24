@@ -75,6 +75,7 @@ const Drivers = () => {
             setInputValue(e.target.value);
           }}
           label="Поиск водителя"
+          helperText="Для поиска по БИН или ИИН ввидите 12 цифр"
           fullWidth
           size="small"
           sx={{
@@ -106,16 +107,6 @@ const Drivers = () => {
               }}
             >
               {searchRequest}
-            </Typography>
-
-            <Typography
-              sx={{
-                px: 1,
-                fontWeight: "400",
-                fontStyle: "italic",
-              }}
-            >
-              (Для поиска по БИН или ИИН ввидите 12 цифр)
             </Typography>
           </Box>
         )}
