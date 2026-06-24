@@ -3,11 +3,18 @@ import React from "react";
 import RenderStatus from "../../shared/ui/render-status";
 import InfoField from "../../shared/ui/info-field";
 import dayjs from "dayjs";
+import { useNavigate } from "react-router-dom";
 
 const FactoringCard = ({ factoring }) => {
+  const navigate = useNavigate();
+
+  const handleNavigateToDetailsPage = () => {
+    navigate(`/factoring/${factoring?.index}`);
+  };
+
   return (
     <Box
-      // onClick={handleSetDriverDetails}
+      onClick={handleNavigateToDetailsPage}
       tabIndex={0}
       sx={{
         p: 3,
@@ -88,10 +95,46 @@ const FactoringCard = ({ factoring }) => {
             gap: 3,
           }}
         >
+          <InfoField
+            label={"Номерной индекс"}
+            value={factoring?.index || "0"}
+          />
           <InfoField label={"ID лида"} value={factoring?.lead_id} />
           <InfoField
             label={"Дата создания"}
             value={dayjs(factoring?.created_at.date).format("DD-MM-YYYY")}
+          />
+        </Box>
+        <Box
+          sx={{
+            display: "grid",
+            gridTemplateColumns: "repeat(2, 1fr)",
+            gap: 3,
+          }}
+        >
+          <InfoField
+            label={"Задолжность"}
+            value={`${factoring?.deb_summ} ${factoring?.deb_currency}`}
+          />
+          <InfoField
+            label={"Оплата за задолжность"}
+            value={`${factoring?.cred_summ} ${factoring?.currency}`}
+          />
+        </Box>
+        <Box
+          sx={{
+            display: "grid",
+            gridTemplateColumns: "repeat(2, 1fr)",
+            gap: 3,
+          }}
+        >
+          <InfoField
+            label={"Процент фактора"}
+            value={`${(factoring?.proc_factor * 100).toFixed(1)}%`}
+          />
+          <InfoField
+            label={"Процент сервиса"}
+            value={`${(factoring?.proc_service * 100).toFixed(1)}%`}
           />
         </Box>
       </Stack>

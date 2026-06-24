@@ -1,8 +1,13 @@
 import { create } from "zustand";
-import { createFactoringApi, getFactoringsApi } from "./api";
+import {
+  createFactoringApi,
+  getFactoringDetailsApi,
+  getFactoringsApi,
+} from "./api";
 
 export const useFactoringStore = create((set) => ({
   factorings: [],
+  factoringDetails: null,
   isLoading: false,
   error: null,
 
@@ -14,6 +19,28 @@ export const useFactoringStore = create((set) => ({
 
       set({
         factorings: response.data.data,
+        isLoading: false,
+      });
+
+      return response.data;
+    } catch (e) {
+      set({
+        error: e.message,
+        isLoading: false,
+      });
+
+      throw e;
+    }
+  },
+
+  getFactoringDetails: async (index) => {
+    try {
+      set({ isLoading: true, error: null });
+
+      const response = await getFactoringDetailsApi(index);
+
+      set({
+        factoringDetails: response.data,
         isLoading: false,
       });
 

@@ -13,6 +13,7 @@ import TenderForwarders from "../../pages/tender-forwarders";
 import TenderForwardersItem from "../../pages/tender-forwarders/tender-forwarders-item";
 import TenderApplications from "../../pages/tender-applications";
 import TenderApplicationsItem from "../../pages/tender-applications/tender-applications-item";
+import FactoringItem from "../../pages/factoring/factoring-item";
 
 const AppRouter = () => {
   const routes = useRoutes([
@@ -39,6 +40,10 @@ const AppRouter = () => {
     {
       path: "/factoring",
       element: <Factoring />,
+    },
+    {
+      path: "/factoring/:id",
+      element: <FactoringItem />,
     },
     {
       path: "/customers",

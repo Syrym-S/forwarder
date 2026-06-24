@@ -13,6 +13,17 @@ export const getFactoringsApi = async () => {
   return data;
 };
 
+export const getFactoringDetailsApi = async (index) => {
+  const data = await axios.get(`${BASE_URL}/forwarder/v1/factoring/${index}`, {
+    headers: {
+      // eslint-disable-next-line no-undef
+      "X-WP-Nonce": APP_DATA.nonce,
+    },
+  });
+
+  return data;
+};
+
 export const createFactoringApi = async (payload) => {
   const data = await axios.post(
     `${BASE_URL}/forwarder/v1/factoring/create`,
