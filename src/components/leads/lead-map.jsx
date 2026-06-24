@@ -53,8 +53,6 @@ export default function LeadMap({ from, to, id }) {
         }),
       }).then((r) => r.json());
 
-      console.log("addRes", addRes);
-
       const wsAdd = new WebSocket(
         `wss://geo.360logistics.kz/socket?token=${addRes.token}`,
       );
@@ -79,8 +77,6 @@ export default function LeadMap({ from, to, id }) {
           type: "admin",
         }),
       }).then((r) => r.json());
-
-      console.log("res", res);
 
       const ws = new WebSocket(
         `wss://geo.360logistics.kz/socket?token=${res.token}`,

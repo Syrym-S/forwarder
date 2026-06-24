@@ -42,8 +42,6 @@ const MakeBetForm = ({ tender, handleHideBetField }) => {
 
   const formValues = useWatch({ control });
 
-  console.log(formValues);
-
   const handleOpenConfirmModal = () => {
     setOpenConfirmModal(true);
   };

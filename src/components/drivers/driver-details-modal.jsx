@@ -24,8 +24,6 @@ const DriverDetailsModal = ({ selectedDriver, handleClear }) => {
 
   if (!driverDetails || isLoading) return <Loader />;
 
-  console.log(driverDetails);
-
   return (
     <Dialog
       open={!!selectedDriver}

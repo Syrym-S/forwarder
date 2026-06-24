@@ -71,8 +71,6 @@ const TenderApplicationsItem = () => {
     setOpenForm(false);
   };
 
-  console.log(customerCurrentTender?.lead?.id);
-
   const handleOpenForm = () => {
     setOpenForm(true);
   };

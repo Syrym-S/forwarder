@@ -69,8 +69,6 @@ const ProfilePage = () => {
 
     const payload = mapProfileFormToChangedApi(form, initialLoadedForm);
 
-    console.log("payload", payload);
-
     if (Object.keys(payload).length === 0) {
       setSubmitError("Нет изменений для сохранения");
       return;
@@ -144,8 +142,6 @@ const ProfilePage = () => {
       isCancelled = true;
     };
   }, []);
-
-  console.log("form", form);
 
   return (
     <RootLayout withoutDataCheck>

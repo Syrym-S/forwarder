@@ -26,7 +26,6 @@ const useFactoringColumns = () => {
       headerName: "Создано",
       width: 200,
       renderCell: ({ row }) => {
-        console.log("row", row);
         return <Box>{dayjs(row?.created_at?.date).format("DD-MM-YYYY")}</Box>;
       },
     },

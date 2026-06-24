@@ -56,8 +56,6 @@ export const useLeadsStore = create((set) => ({
 
       const response = await searchLeadsApi(params);
 
-      console.log(response);
-
       set({
         searchedLeads: response.data.results,
         isSearchLoading: false,
@@ -95,8 +93,6 @@ export const useLeadsStore = create((set) => ({
       set({ isSearchLoading: true, error: null });
 
       const response = await searchLeadsHistoryApi(params);
-
-      console.log(response);
 
       set({
         searchedLeads: response.data.results,
@@ -196,8 +192,6 @@ export const useLeadsStore = create((set) => ({
       set({ isLoading: true, error: null });
 
       const response = await uploadLeadFileApi(id, payload);
-
-      console.log(response);
 
       set({
         isLoading: false,

@@ -43,8 +43,6 @@ export function DocumentsStep({ form, setValue }) {
 
     const formData = new FormData(event.currentTarget);
 
-    console.log("event.currentTarget", event.currentTarget);
-
     const file = formData.get("file");
 
     if (!file || !file.name) {
