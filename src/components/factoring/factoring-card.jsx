@@ -2,6 +2,7 @@ import { Box, Chip, Stack, Typography } from "@mui/material";
 import React from "react";
 import RenderStatus from "../../shared/ui/render-status";
 import InfoField from "../../shared/ui/info-field";
+import dayjs from "dayjs";
 
 const FactoringCard = ({ factoring }) => {
   return (
@@ -88,7 +89,10 @@ const FactoringCard = ({ factoring }) => {
           }}
         >
           <InfoField label={"ID лида"} value={factoring?.lead_id} />
-          <InfoField label={"Дата создания"} value={factoring?.created_at.date} />
+          <InfoField
+            label={"Дата создания"}
+            value={dayjs(factoring?.created_at.date).format("DD-MM-YYYY")}
+          />
         </Box>
       </Stack>
     </Box>

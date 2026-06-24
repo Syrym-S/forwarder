@@ -5,6 +5,7 @@ import { Box, Button } from "@mui/material";
 import { useFactoringStore } from "../../app/store/factoring/factoring-store";
 import FactoringCard from "../../components/factoring/factoring-card";
 import Loader from "../../components/layout/loader";
+import FactoringTable from "../../components/factoring/factoring-table";
 
 const Factoring = () => {
   const factorings = useFactoringStore((state) => state.factorings);
@@ -33,18 +34,12 @@ const Factoring = () => {
       <Button variant="outlined" onClick={handleModalOpen}>
         Создать
       </Button>
-      <Box
-        sx={{
-          display: "grid",
-          gridTemplateColumns: "1fr",
-          gap: 3,
-          width: "60%",
-          mx: "auto",
-        }}
-      >
-        {factorings.map((factoring) => (
+      <Box>
+        {/* {factorings.map((factoring) => (
           <FactoringCard factoring={factoring} key={factoring.index} />
-        ))}
+        ))} */}
+
+        <FactoringTable factorings={factorings} />
       </Box>
       <CreateFactoringForm
         openFormModal={openFormModal}
