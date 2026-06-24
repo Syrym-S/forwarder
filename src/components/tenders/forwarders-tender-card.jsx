@@ -1,14 +1,25 @@
-import { Box, Chip, Stack, Typography } from "@mui/material";
+import { Box, Button, Chip, Stack, Typography } from "@mui/material";
 import dayjs from "dayjs";
 import { useNavigate } from "react-router-dom";
 import RenderStatus from "../../shared/ui/render-status";
 import TripOriginIcon from "@mui/icons-material/TripOrigin";
 import ArrowDownwardRoundedIcon from "@mui/icons-material/ArrowDownwardRounded";
 import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
+import { useTendersStore } from "../../app/store/tenders/tender-store";
+import { STATUS } from "../../shared/const/tenders";
 
 const ForwardersTenderCard = ({ tender }) => {
   const daysLeft = dayjs(tender.end_date_time).diff(dayjs(), "day");
+  const getTenderDetails = useTendersStore((state) => state.getTenderDetails);
+  const startTender = useTendersStore((state) => state.startTender);
   const navigate = useNavigate();
+
+  const handleStartTender = async () => {
+    await startTender(tender?.id);
+    await getTenderDetails(tender?.id);
+  };
+
+  const isNew = tender?.status === STATUS.new;
 
   const navigateToDetailPage = () => {
     navigate(`/tender-forwarders/${tender.id}`);
@@ -51,19 +62,6 @@ const ForwardersTenderCard = ({ tender }) => {
               sx={{ mb: 0.75 }}
             >
               Тендер
-            </Typography>
-
-            <Typography
-              sx={{
-                lineHeight: 1.3,
-                fontSize: {
-                  xs: "16px",
-                  sm: "18px",
-                },
-                fontWeight: 500,
-              }}
-            >
-              {/* {lead.customer} */}
             </Typography>
           </Box>
 
@@ -332,7 +330,8 @@ const ForwardersTenderCard = ({ tender }) => {
         </Box>
         <Box
           sx={{
-            display: "flex",
+            display: "grid",
+            gridTemplateColumns: "1fr 1fr 3fr",
             gap: "5px",
             flexWrap: "wrap",
           }}
@@ -341,7 +340,6 @@ const ForwardersTenderCard = ({ tender }) => {
             color="primary"
             variant="outlined"
             label={`Количество участников ${tender.participants_count}`}
-            size="small"
             sx={{
               borderRadius: 999,
               fontWeight: 500,
@@ -353,7 +351,6 @@ const ForwardersTenderCard = ({ tender }) => {
             color="primary"
             variant="outlined"
             label={`Максимальное количество участников ${tender.max_participants}`}
-            size="small"
             sx={{
               borderRadius: 999,
               fontWeight: 500,
@@ -361,6 +358,14 @@ const ForwardersTenderCard = ({ tender }) => {
               color: "primary.main",
             }}
           />
+          {isNew && (
+            <Chip
+              variant="сontained"
+              color="success"
+              label="Запустить"
+              onClick={handleStartTender}
+            />
+          )}
         </Box>
       </Stack>
     </Box>

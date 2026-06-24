@@ -11,6 +11,7 @@ import {
   getTenderDetailsApi,
   getTendersApi,
   makeBetApi,
+  startTenderApi,
   updateTender,
 } from "./api";
 
@@ -97,6 +98,24 @@ export const useTendersStore = create((set) => ({
       });
 
       return data;
+    } catch (e) {
+      console.log(e);
+      set({
+        isLoading: false,
+      });
+    }
+  },
+  startTender: async (tender_id) => {
+    try {
+      set({
+        isLoading: true,
+      });
+      const response = await startTenderApi(tender_id);
+
+      set({
+        isLoading: false,
+      });
+      return response;
     } catch (e) {
       console.log(e);
       set({

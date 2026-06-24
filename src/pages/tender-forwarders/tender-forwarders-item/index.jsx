@@ -40,11 +40,13 @@ const TenderForwardersItem = () => {
   const currentTender = useTendersStore((state) => state.currentTender);
   const getTenderDetails = useTendersStore((state) => state.getTenderDetails);
   const deleteTender = useTendersStore((state) => state.deleteTender);
+  const startTender = useTendersStore((state) => state.startTender);
   const cancelTender = useTendersStore((state) => state.cancelTender);
 
   const defaultValues = useTenderDefaultValues(currentTender);
 
   const isCanceled = currentTender?.status === STATUS.cancelled;
+  const isNew = currentTender?.status === STATUS.new;
 
   const from = {
     lat: currentTender?.lead?.from_location.lat,
@@ -58,6 +60,11 @@ const TenderForwardersItem = () => {
   const handleDeleteTender = () => {
     deleteTender(id);
     navigate("/tender-forwarders");
+  };
+
+  const handleStartTender = async () => {
+    await startTender(id);
+    await getTenderDetails(id);
   };
 
   const handleCancelTender = async () => {
@@ -123,11 +130,17 @@ const TenderForwardersItem = () => {
           p: 4,
         }}
       >
+        {isNew && (
+          <Button
+            variant="contained"
+            color="success"
+            onClick={handleStartTender}
+          >
+            Запустить тендер
+          </Button>
+        )}
         {!isCanceled && (
           <>
-            <Button variant="contained" color="success">
-              Запустить тендер
-            </Button>
             <Button
               onClick={handleCancelTender}
               variant="outlined"

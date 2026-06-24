@@ -64,6 +64,17 @@ export const deleteTenderApi = async (tender_id) => {
   return data;
 };
 
+export const startTenderApi = async (tender_id) => {
+  const data = await axios.post(`${BASE_URL}/tender/${tender_id}/start`, null, {
+    headers: {
+      // eslint-disable-next-line no-undef
+      "X-WP-Nonce": APP_DATA.nonce,
+    },
+  });
+
+  return data;
+};
+
 export const cancelTenderApi = async (tender_id) => {
   const data = await axios.post(
     `${BASE_URL}/tender/${tender_id}/cancel`,
