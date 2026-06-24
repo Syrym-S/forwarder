@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import RootLayout from "../../components/layout/root-layout";
 import CreateFactoringForm from "../../features/factoring/create-factoring-form";
-import { Box, Button, Tab, Tabs } from "@mui/material";
+import { Box, Button, Pagination, Tab, Tabs } from "@mui/material";
 import { useFactoringStore } from "../../app/store/factoring/factoring-store";
 import FactoringCard from "../../components/factoring/factoring-card";
 import Loader from "../../components/layout/loader";
@@ -13,12 +13,21 @@ import GridViewRoundedIcon from "@mui/icons-material/GridViewRounded";
 const Factoring = () => {
   const factorings = useFactoringStore((state) => state.factorings);
   const getFactorings = useFactoringStore((state) => state.getFactorings);
+  const count = useFactoringStore((state) => state.count);
+  const perPage = useFactoringStore((state) => state.perPage);
 
   const [openFormModal, setOpenFormModal] = useState(false);
   const [view, setView] = useState(VIEWS.table);
+  const [page, setPage] = useState(1);
+
+  const PAGE_COUNT = Math.ceil(count / perPage);
 
   const handleModalOpen = () => {
     setOpenFormModal(true);
+  };
+
+  const handlePageChange = (_, value) => {
+    setPage(value);
   };
 
   const handleModalClose = () => {
@@ -26,10 +35,10 @@ const Factoring = () => {
   };
 
   useEffect(() => {
-    getFactorings();
-  }, []);
-
-  console.log(factorings);
+    getFactorings({
+      page: page,
+    });
+  }, [page]);
 
   if (!factorings) return <Loader />;
 
@@ -40,6 +49,8 @@ const Factoring = () => {
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
+          mx: "auto",
+          width: view === VIEWS.cards ? "60%" : "100%",
         }}
       >
         <Tabs
@@ -73,6 +84,17 @@ const Factoring = () => {
       )}
 
       {view === VIEWS.table && <FactoringTable factorings={factorings} />}
+
+      <Pagination
+        sx={{
+          mx: "auto",
+          width: view === VIEWS.cards ? "60%" : "100%",
+        }}
+        page={page}
+        count={PAGE_COUNT}
+        onChange={handlePageChange}
+      />
+
       <CreateFactoringForm
         openFormModal={openFormModal}
         handleModalClose={handleModalClose}

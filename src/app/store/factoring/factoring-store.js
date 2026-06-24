@@ -10,15 +10,19 @@ export const useFactoringStore = create((set) => ({
   factoringDetails: null,
   isLoading: false,
   error: null,
+  count: 0,
+  perPage: 1,
 
-  getFactorings: async () => {
+  getFactorings: async (params) => {
     try {
       set({ isLoading: true, error: null });
 
-      const response = await getFactoringsApi();
+      const response = await getFactoringsApi(params);
 
       set({
         factorings: response.data.data,
+        count: response.data.total,
+        perPage: response.data.per_page,
         isLoading: false,
       });
 

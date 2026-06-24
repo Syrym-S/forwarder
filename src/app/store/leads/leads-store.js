@@ -10,6 +10,7 @@ import {
   rejectCargoApi,
   rejectCargoUnloadApi,
   searchLeadsApi,
+  searchLeadsHistoryApi,
   updateLeadApi,
   uploadLeadFileApi,
   verifyCargoApi,
@@ -80,6 +81,26 @@ export const useLeadsStore = create((set) => ({
         count: response.data.count,
         // perPage: response.data.per_page,
         isLoading: false,
+      });
+    } catch (e) {
+      set({
+        error: e.message,
+        isLoading: false,
+      });
+    }
+  },
+
+  searchHistoryLeads: async (params) => {
+    try {
+      set({ isSearchLoading: true, error: null });
+
+      const response = await searchLeadsHistoryApi(params);
+
+      console.log(response);
+
+      set({
+        searchedLeads: response.data.results,
+        isSearchLoading: false,
       });
     } catch (e) {
       set({

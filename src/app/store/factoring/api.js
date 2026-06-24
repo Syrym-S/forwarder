@@ -2,8 +2,9 @@ import axios from "axios";
 
 const BASE_URL = "https://forwarder.360logistics.kz/wp-json";
 
-export const getFactoringsApi = async () => {
+export const getFactoringsApi = async (params) => {
   const data = await axios.get(`${BASE_URL}/forwarder/v1/factorings`, {
+    params,
     headers: {
       // eslint-disable-next-line no-undef
       "X-WP-Nonce": APP_DATA.nonce,

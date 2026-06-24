@@ -27,8 +27,9 @@ const CreateFactoringForm = ({ openFormModal, handleModalClose }) => {
 
   const searchedLeads = useLeadsStore((state) => state.searchedLeads);
   const isSearchLoading = useLeadsStore((state) => state.isSearchLoading);
-  const searchLeads = useLeadsStore((state) => state.searchLeads);
+  const searchHistoryLeads = useLeadsStore((state) => state.searchHistoryLeads);
   const createFactoring = useFactoringStore((state) => state.createFactoring);
+  const getFactorings = useFactoringStore((state) => state.getFactorings);
 
   const { control, setValue } = useForm({
     mode: "onChange",
@@ -38,17 +39,18 @@ const CreateFactoringForm = ({ openFormModal, handleModalClose }) => {
 
   const formValues = useWatch({ control });
 
-  console.log(formValues);
-
   const handleSubmit = async () => {
     await createFactoring(formValues);
+    await getFactorings();
+
+    handleModalClose();
   };
 
   useEffect(() => {
     if (!inputValue) return;
 
     const timer = setTimeout(async () => {
-      await searchLeads({
+      await searchHistoryLeads({
         q: inputValue.trim(),
       });
     }, 1000);
