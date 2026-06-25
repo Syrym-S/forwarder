@@ -2,8 +2,9 @@ import axios from "axios";
 
 const BASE_URL = "https://forwarder.360logistics.kz/wp-json";
 
-export const getNotificationsApi = async () => {
+export const getNotificationsApi = async (params) => {
   const data = await axios.get(`${BASE_URL}/forwarder/v1/notifications`, {
+    params,
     headers: {
       // eslint-disable-next-line no-undef
       "X-WP-Nonce": APP_DATA.nonce,

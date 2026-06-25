@@ -4,6 +4,10 @@ import { getNotificationDetailsApi, getNotificationsApi } from "./api";
 export const useNotificationsStore = create((set) => ({
   notifications: [],
   notificationDetails: null,
+  isLoading: false,
+  error: null,
+  total: 0,
+  perPage: 1,
 
   getNotifications: async (params) => {
     try {
@@ -14,6 +18,8 @@ export const useNotificationsStore = create((set) => ({
       set({
         notifications: response.data.results,
         isLoading: false,
+        total: response.data.total,
+        perPage: response.data.per_page,
       });
     } catch (e) {
       set({
@@ -28,8 +34,6 @@ export const useNotificationsStore = create((set) => ({
       set({ isLoading: true, error: null });
 
       const response = await getNotificationDetailsApi(id);
-
-      console.log(response);
 
       set({
         notificationDetails: response.data.results,
