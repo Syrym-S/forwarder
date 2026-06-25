@@ -14,6 +14,18 @@ export const getFactoringsApi = async (params) => {
   return data;
 };
 
+export const searchFactorApi = async (params) => {
+  const data = await axios.get(`${BASE_URL}/forwarder/v1/factors/search`, {
+    params,
+    headers: {
+      // eslint-disable-next-line no-undef
+      "X-WP-Nonce": APP_DATA.nonce,
+    },
+  });
+
+  return data;
+};
+
 export const getFactoringDetailsApi = async (index) => {
   const data = await axios.get(`${BASE_URL}/forwarder/v1/factoring/${index}`, {
     headers: {

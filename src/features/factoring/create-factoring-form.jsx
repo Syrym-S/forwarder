@@ -13,19 +13,27 @@ import { useLeadsStore } from "../../app/store/leads/leads-store";
 import { Controller, useForm, useWatch } from "react-hook-form";
 import RenderLeadOptions from "../../components/tenders/render-lead-options";
 import { useFactoringStore } from "../../app/store/factoring/factoring-store";
+import RenderFactorOptions from "../../components/tenders/render-factor-options";
 
 const defaultValues = {
   lead_id: "6a3a6987de0328454f0e9152",
+  factor_id: null,
   debSumm: "",
   currency: "KZT",
   debCurrency: "KZT",
 };
 
 const CreateFactoringForm = ({ openFormModal, handleModalClose }) => {
-  const [inputValue, setInputValue] = useState("");
+  const [inputValueLead, setInputValueLead] = useState("");
+  const [inputValueFactor, setInputValueFactor] = useState("");
+
   const [selectedLead, setSelectedLead] = useState();
+  const [selectedFactor, setSelectedFactor] = useState();
 
   const searchedLeads = useLeadsStore((state) => state.searchedLeads);
+  const factors = useFactoringStore((state) => state.factors);
+  const isLoading = useFactoringStore((state) => state.isLoading);
+  const searchFactor = useFactoringStore((state) => state.searchFactor);
   const isSearchLoading = useLeadsStore((state) => state.isSearchLoading);
   const searchHistoryLeads = useLeadsStore((state) => state.searchHistoryLeads);
   const createFactoring = useFactoringStore((state) => state.createFactoring);
@@ -47,16 +55,28 @@ const CreateFactoringForm = ({ openFormModal, handleModalClose }) => {
   };
 
   useEffect(() => {
-    if (!inputValue) return;
+    if (!inputValueLead) return;
 
     const timer = setTimeout(async () => {
       await searchHistoryLeads({
-        q: inputValue.trim(),
+        q: inputValueLead.trim(),
       });
     }, 1000);
 
     return () => clearTimeout(timer);
-  }, [inputValue]);
+  }, [inputValueLead]);
+
+  useEffect(() => {
+    if (!inputValueFactor) return;
+
+    const timer = setTimeout(async () => {
+      await searchFactor({
+        q: inputValueFactor.trim(),
+      });
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  }, [inputValueFactor]);
 
   return (
     <Dialog
@@ -83,12 +103,12 @@ const CreateFactoringForm = ({ openFormModal, handleModalClose }) => {
             render={({ field, fieldState }) => (
               <Autocomplete
                 value={selectedLead}
-                inputValue={inputValue}
+                inputValue={inputValueLead}
                 loading={isSearchLoading}
                 options={searchedLeads}
                 noOptionsText={<>Ввидте два символа</>}
                 onInputChange={(_, value) => {
-                  setInputValue(value);
+                  setInputValueLead(value);
                 }}
                 filterOptions={(items) => items}
                 onChange={(_, value) => {
@@ -108,12 +128,64 @@ const CreateFactoringForm = ({ openFormModal, handleModalClose }) => {
                     label="Лид"
                     placeholder="Выбирите лида"
                     error={!!fieldState.error}
-                    helperText={fieldState.error?.message}
+                    helperText={
+                      fieldState.error
+                        ? fieldState.error?.message
+                        : "Поиск по городу"
+                    }
                   />
                 )}
                 renderOption={(props, option) => {
                   return (
                     <RenderLeadOptions
+                      option={option}
+                      key={option.id}
+                      {...props}
+                    />
+                  );
+                }}
+              />
+            )}
+          />
+
+          <Controller
+            name="factor_id"
+            control={control}
+            render={({ field, fieldState }) => (
+              <Autocomplete
+                value={selectedFactor}
+                inputValue={inputValueFactor}
+                loading={isLoading}
+                options={factors || []}
+                noOptionsText={<>Ввидте два символа</>}
+                onInputChange={(_, value) => {
+                  setInputValueFactor(value);
+                }}
+                filterOptions={(items) => items}
+                onChange={(_, value) => {
+                  field.onChange(value);
+
+                  setValue("factor_id", value.id, {
+                    shouldDirty: true,
+                    shouldTouch: true,
+                  });
+
+                  setSelectedFactor(value);
+                }}
+                getOptionLabel={(option) =>
+                  `[ФИО:${option?.fio}] | [Компания: ${option?.company_name}]`
+                }
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label="Фактор"
+                    placeholder="Выбор фактора"
+                    helperText="Поиск по БИН или ИИН , введите все 12 символов"
+                  />
+                )}
+                renderOption={(props, option) => {
+                  return (
+                    <RenderFactorOptions
                       option={option}
                       key={option.id}
                       {...props}

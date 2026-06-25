@@ -3,10 +3,12 @@ import {
   createFactoringApi,
   getFactoringDetailsApi,
   getFactoringsApi,
+  searchFactorApi,
 } from "./api";
 
 export const useFactoringStore = create((set) => ({
   factorings: [],
+  factors: [],
   factoringDetails: null,
   isLoading: false,
   error: null,
@@ -23,6 +25,28 @@ export const useFactoringStore = create((set) => ({
         factorings: response.data.data,
         count: response.data.total,
         perPage: response.data.per_page,
+        isLoading: false,
+      });
+
+      return response.data;
+    } catch (e) {
+      set({
+        error: e.message,
+        isLoading: false,
+      });
+
+      throw e;
+    }
+  },
+
+  searchFactor: async (params) => {
+    try {
+      set({ isLoading: true, error: null });
+
+      const response = await searchFactorApi(params);
+
+      set({
+        factors: response.data.results,
         isLoading: false,
       });
 
