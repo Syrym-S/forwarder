@@ -219,3 +219,33 @@ export const confirmLeadDeliveryApi = async (lead_id, payload) => {
 
   return data;
 };
+
+export const detachDriverApi = async (lead_id) => {
+  const data = await axios.post(
+    `${BASE_URL}/forwarder/v1/leads/${lead_id}/detach-driver`,
+    null,
+    {
+      headers: {
+        // eslint-disable-next-line no-undef
+        "X-WP-Nonce": APP_DATA.nonce,
+      },
+    },
+  );
+
+  return data;
+};
+
+export const detachCustomerApi = async (lead_id) => {
+  const data = await axios.post(
+    `${BASE_URL}/forwarder/v1/leads/${lead_id}/detach-customer`,
+    null,
+    {
+      headers: {
+        // eslint-disable-next-line no-undef
+        "X-WP-Nonce": APP_DATA.nonce,
+      },
+    },
+  );
+
+  return data;
+};

@@ -3,6 +3,8 @@ import {
   confirmLeadDeliveryApi,
   createLeadApi,
   deleteLeadFileApi,
+  detachCustomerApi,
+  detachDriverApi,
   getHistoryLeads,
   getLeadFilesApi,
   getLeadItemDetails,
@@ -324,6 +326,52 @@ export const useLeadsStore = create((set) => ({
       set({ isLoading: true, error: null });
 
       const response = await confirmLeadDeliveryApi(lead_id, payload);
+
+      set({
+        isLoading: false,
+      });
+
+      return response;
+    } catch (e) {
+      set({
+        error: e.message,
+        isLoading: false,
+      });
+
+      // console.error("Payload:", payload);
+      console.error("Response:", e.response?.data);
+      throw e;
+    }
+  },
+
+  detachDriver: async (lead_id) => {
+    try {
+      set({ isLoading: true, error: null });
+
+      const response = await detachDriverApi(lead_id);
+
+      set({
+        isLoading: false,
+      });
+
+      return response;
+    } catch (e) {
+      set({
+        error: e.message,
+        isLoading: false,
+      });
+
+      // console.error("Payload:", payload);
+      console.error("Response:", e.response?.data);
+      throw e;
+    }
+  },
+
+  detachCustomer: async (lead_id) => {
+    try {
+      set({ isLoading: true, error: null });
+
+      const response = await detachCustomerApi(lead_id);
 
       set({
         isLoading: false,

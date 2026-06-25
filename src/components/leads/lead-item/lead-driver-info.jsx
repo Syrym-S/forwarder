@@ -2,16 +2,47 @@ import React from "react";
 import Section from "../../../shared/ui/section";
 import InfoField from "../../../shared/ui/info-field";
 import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
+import { Box, Button } from "@mui/material";
+import { useLeadsStore } from "../../../app/store/leads/leads-store";
+import { STATUS } from "../../../shared/const/tenders";
 
 const LeadDriverInfo = ({ leadData }) => {
   const driver = leadData?.driver;
+  const isAddDriverStatus = leadData?.status === STATUS.add_driver;
+  const detachDriver = useLeadsStore((state) => state.detachDriver);
+  const getLeadItem = useLeadsStore((state) => state.getLeadItem);
+
+  const handleDetachDriver = async () => {
+    await detachDriver(leadData?.id);
+    await getLeadItem(leadData?.id);
+  };
+
+  if (!driver.fio && !driver.id)
+    return (
+      <Section title="Водитель" icon={<PersonOutlinedIcon color="primary" />}>
+        <InfoField label={""} value={"Водитель не указан"} />
+      </Section>
+    );
 
   return (
     <Section title="Водитель" icon={<PersonOutlinedIcon color="primary" />}>
-      <InfoField
-        label={driver.fio ? "ФИО" : ""}
-        value={driver.fio ? driver.fio : "Водитель не указан"}
-      />
+      {isAddDriverStatus && (
+        <Button color="error" variant="outlined" onClick={handleDetachDriver}>
+          Отвязать водителя
+        </Button>
+      )}
+      <Box
+        sx={{
+          py: 1,
+          display: "grid",
+          gridTemplateColumns: "repeat(3,1fr)",
+          gap: 3,
+        }}
+      >
+        <InfoField label={"ID водителя"} value={driver.id} />
+        <InfoField label={"ФИО"} value={driver.fio} />
+        <InfoField label={"Номер телефона"} value={driver.phone} />
+      </Box>
     </Section>
   );
 };
