@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import {
+  acceptFactoringApi,
   createFactoringApi,
   getFactoringDetailsApi,
   getFactoringsApi,
@@ -102,6 +103,27 @@ export const useFactoringStore = create((set) => ({
 
       console.error("Payload:", payload);
       console.error("Response:", e.response?.data);
+      throw e;
+    }
+  },
+
+  acceptFactoring: async (factoring_index) => {
+    try {
+      set({ isLoading: true, error: null });
+
+      const response = await acceptFactoringApi(factoring_index);
+
+      set({
+        isLoading: false,
+      });
+
+      return response.data;
+    } catch (e) {
+      set({
+        error: e.message,
+        isLoading: false,
+      });
+
       throw e;
     }
   },

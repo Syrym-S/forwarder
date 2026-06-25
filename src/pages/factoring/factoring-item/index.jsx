@@ -6,7 +6,7 @@ import Loader from "../../../components/layout/loader";
 import { useLeadsStore } from "../../../app/store/leads/leads-store";
 import FactoringDetailsHeading from "../../../components/factoring/factoring-details-heading";
 import LeadMap from "../../../components/leads/lead-map";
-import { Container } from "@mui/material";
+import { Button, Container } from "@mui/material";
 import FactoringFinancialInfo from "../../../components/factoring/factoring-financial-info";
 import FactoringCustomerInfo from "../../../components/factoring/factoring-customer-info";
 import TransportationInfo from "../../../components/tenders/transportation-info";
@@ -19,6 +19,7 @@ const FactoringItem = () => {
   const currentLead = useLeadsStore((state) => state.currentLead);
   const getLeadItem = useLeadsStore((state) => state.getLeadItem);
   const factoringDetails = useFactoringStore((state) => state.factoringDetails);
+  const acceptFactoring = useFactoringStore((state) => state.acceptFactoring);
   const getFactoringDetails = useFactoringStore(
     (state) => state.getFactoringDetails,
   );
@@ -30,6 +31,11 @@ const FactoringItem = () => {
   const to = {
     lat: currentLead?.to_location.lat,
     lon: currentLead?.to_location.lon,
+  };
+
+  const handleAcceptFactoring = async () => {
+    await acceptFactoring(id);
+    await getFactoringDetails(id);
   };
 
   useEffect(() => {
@@ -61,7 +67,14 @@ const FactoringItem = () => {
 
         <FactoringFinancialInfo factoring={factoringDetails} />
 
-        <FactoringCustomerInfo customer={factoringDetails?.customer} />
+        <FactoringCustomerInfo
+          customer={factoringDetails?.customer}
+          verified_customer={factoringDetails?.verified_customer}
+        />
+
+        {!factoringDetails?.verified_forwarder && (
+          <Button onClick={handleAcceptFactoring}>Подтвердить</Button>
+        )}
       </Container>
     </RootLayout>
   );

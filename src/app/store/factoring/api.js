@@ -51,3 +51,18 @@ export const createFactoringApi = async (payload) => {
 
   return data;
 };
+
+export const acceptFactoringApi = async (factoring_index) => {
+  const data = await axios.post(
+    `${BASE_URL}/forwarder/v1/factoring/${factoring_index}/accept`,
+    null,
+    {
+      headers: {
+        // eslint-disable-next-line no-undef
+        "X-WP-Nonce": APP_DATA.nonce,
+      },
+    },
+  );
+
+  return data;
+};

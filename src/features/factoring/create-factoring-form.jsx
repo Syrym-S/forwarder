@@ -151,7 +151,7 @@ const CreateFactoringForm = ({ openFormModal, handleModalClose }) => {
           <Controller
             name="factor_id"
             control={control}
-            render={({ field, fieldState }) => (
+            render={({ field }) => (
               <Autocomplete
                 value={selectedFactor}
                 inputValue={inputValueFactor}
