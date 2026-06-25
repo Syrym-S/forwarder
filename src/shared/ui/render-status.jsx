@@ -61,11 +61,7 @@ const RenderStatus = ({ status }) => {
       );
     case STATUS.verified_participant:
       return (
-        <Chip
-          label={"Подтвержденный участник"}
-          variant="outlined"
-          color="error"
-        />
+        <Chip label={"На подтверждении"} variant="outlined" color="warning" />
       );
     default:
       return <>Нет статуа</>;

@@ -1,6 +1,6 @@
 import { NavLink } from "react-router-dom";
 
-const CustomNavLink = ({ label, path, color, ...props }) => {
+const CustomNavLink = ({ label, path, ...props }) => {
   return (
     <NavLink className="custom-link" to={path} {...props}>
       {label}

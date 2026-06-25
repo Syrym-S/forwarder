@@ -4,7 +4,6 @@ import React from "react";
 const LeadFilePreview = ({ file }) => {
   if (!file) return null;
 
-  const pdfUrl = `https://forwarder.360logistics.kz/wp-content/uploads/${file.path}`;
   return (
     <Box
       sx={{
@@ -21,7 +20,7 @@ const LeadFilePreview = ({ file }) => {
     >
       <Box
         component="iframe"
-        src={`${pdfUrl}#view=FitH`}
+        src={file.url}
         title={file.name || file.path || "PDF preview"}
         sx={{
           display: "block",

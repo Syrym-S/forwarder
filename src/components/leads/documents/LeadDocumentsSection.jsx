@@ -10,11 +10,10 @@ import {
 } from "@mui/material";
 import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
 import UploadFileOutlinedIcon from "@mui/icons-material/UploadFileOutlined";
-
 import { LeadDocumentCard } from "./LeadDocumentCard";
-import { DocumentPreviewDialog } from "./DocumentPreviewDialog";
 import Loader from "../../layout/loader";
 import { useLeadsStore } from "../../../app/store/leads/leads-store";
+import FileModal from "../../tenders/file-modal";
 
 export function LeadDocumentsSection({
   documents,
@@ -156,6 +155,7 @@ export function LeadDocumentsSection({
             sx={{
               display: "grid",
               gridTemplateColumns: "1fr 1fr 1fr",
+              alignItems: "stretch",
               gap: 3,
             }}
           >
@@ -172,9 +172,9 @@ export function LeadDocumentsSection({
         )}
       </Stack>
 
-      <DocumentPreviewDialog
-        document={selectedDocument}
-        onClose={() => setSelectedDocument(null)}
+      <FileModal
+        currentFile={selectedDocument}
+        setCurrentFile={setSelectedDocument}
       />
     </>
   );

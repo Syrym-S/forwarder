@@ -13,9 +13,11 @@ import OpenInNewOutlinedIcon from "@mui/icons-material/OpenInNewOutlined";
 import DownloadOutlinedIcon from "@mui/icons-material/DownloadOutlined";
 import React from "react";
 import { getFileType } from "../../shared/helpers/file/get-file-type";
+import { ROLES } from "../../shared/const/roles";
 
 const FileModal = ({ currentFile, setCurrentFile }) => {
   const fileType = getFileType(currentFile);
+  // const isForwarderFile = currentFile?.source === ROLES.forwarder;
 
   const handleCloseModal = () => {
     setCurrentFile(null);
@@ -71,7 +73,12 @@ const FileModal = ({ currentFile, setCurrentFile }) => {
                     maxWidth: "100%",
                     objectFit: "contain",
                   }}
-                  src={currentFile.url}
+                  src={
+                    // !isForwarderFile
+                    //   ? `https://driver.360logistics.kz/wp-content/uploads/${currentFile.path}`
+                    //   :
+                    currentFile.url
+                  }
                 />
               )}
 
@@ -87,7 +94,12 @@ const FileModal = ({ currentFile, setCurrentFile }) => {
                     maxHeight: "80vh",
                     objectFit: "contain",
                   }}
-                  src={currentFile.url}
+                  src={
+                    // !isForwarderFile
+                    //   ? `https://driver.360logistics.kz/wp-content/uploads/${currentFile.path}`
+                    //   :
+                    currentFile.url
+                  }
                 />
               )}
             </>

@@ -1,6 +1,6 @@
 import React from "react";
 import { Box, Typography } from "@mui/material";
-import { NavLink, useLocation, useParams } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import "./style.css";
 
 const menuItems = [
@@ -62,7 +62,6 @@ const SideBar = ({ openMenu, setOpenMenu }) => {
         left: 0,
         boxShadow: 3,
         bgcolor: "#fbfafa",
-        display: "flex",
         flexDirection: "column",
         zIndex: 1,
       }}

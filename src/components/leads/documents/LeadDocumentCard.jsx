@@ -3,6 +3,7 @@ import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined
 import InsertDriveFileOutlinedIcon from "@mui/icons-material/InsertDriveFileOutlined";
 import { useParams } from "react-router-dom";
 import { getFileType } from "../../../shared/helpers/file/get-file-type";
+import { ROLES } from "../../../shared/const/roles";
 
 export function LeadDocumentCard({
   isFileReadOnly = false,
@@ -13,6 +14,7 @@ export function LeadDocumentCard({
 }) {
   const { id } = useParams();
   const fileType = getFileType(document);
+  const isForwarderFile = document?.source === ROLES.forwarder;
 
   return (
     <Box
@@ -28,7 +30,6 @@ export function LeadDocumentCard({
         display: "flex",
         flexDirection: "column",
         alignItems: "flex-start",
-        justifyContent: "space-between",
         gap: 1.5,
         backgroundColor: "grey.50",
         textAlign: "left",
@@ -45,7 +46,10 @@ export function LeadDocumentCard({
       <Box
         sx={{
           gap: 3,
-          display: "flex",
+          width: "100%",
+          display: "grid",
+          alignItems: "center",
+          gridTemplateColumns: "1fr 3fr 1fr",
         }}
       >
         <Box
@@ -68,7 +72,7 @@ export function LeadDocumentCard({
           />
         </Box>
 
-        <Box sx={{ minWidth: 0, flex: 1 }}>
+        <Box>
           <Typography
             sx={{
               fontSize: 13,
@@ -116,17 +120,19 @@ export function LeadDocumentCard({
             event.stopPropagation();
           }}
         >
-          {!isFileReadOnly &&
-            (!document.source || document.source === "forwarder") && (
-              <IconButton
-                size="small"
-                color="error"
-                disabled={isDeleting}
-                onClick={() => onDelete(id, document.path)}
-              >
-                <DeleteOutlineOutlinedIcon fontSize="small" />
-              </IconButton>
-            )}
+          {isForwarderFile && (
+            <IconButton
+              size="small"
+              color="error"
+              sx={{
+                height: "fit-content",
+              }}
+              disabled={isDeleting}
+              onClick={() => onDelete(id, document.path)}
+            >
+              <DeleteOutlineOutlinedIcon fontSize="small" />
+            </IconButton>
+          )}
         </Box>
       </Box>
 
@@ -140,8 +146,14 @@ export function LeadDocumentCard({
             width: "100%",
             border: 0,
             maxWidth: "100%",
+            maxHeight: 200,
             objectFit: "contain",
           }}
+          src={
+            !isForwarderFile
+              ? `https://driver.360logistics.kz/wp-content/uploads/${document.path}`
+              : document.url
+          }
           src={document.url}
         />
       )}
@@ -155,8 +167,13 @@ export function LeadDocumentCard({
             width: "100%",
             border: 0,
             maxWidth: "100%",
-            objectFit: "contain",
+            borderRadius: 2,
           }}
+          // src={
+          //   !isForwarderFile
+          //     ? `https://driver.360logistics.kz/wp-content/uploads/${document.path}`
+          //     : document.url
+          // }
           src={document.url}
         />
       )}

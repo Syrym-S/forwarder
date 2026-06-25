@@ -24,7 +24,6 @@ import { getLeadFilesApi, uploadLeadFileApi } from "../../app/store/leads/api";
 import { mapLeadFilesResponseFromApi } from "../../features/leads/model/lead-files.adapter";
 import Loader from "../../components/layout/loader";
 import RenderStatus from "../../shared/ui/render-status";
-import { DocumentPreview } from "../../components/leads/documents/DocumentPreview";
 import LeadHeading from "../../components/leads/lead-item/lead-heading";
 import LeadCustomerInfo from "../../components/leads/lead-item/lead-customer-info";
 import LeadRouteInfo from "../../components/leads/lead-item/lead-route-info";

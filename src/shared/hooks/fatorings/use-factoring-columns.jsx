@@ -2,6 +2,7 @@ import { Box } from "@mui/material";
 import { NavLink } from "react-router-dom";
 import RenderStatus from "../../ui/render-status";
 import dayjs from "dayjs";
+import CustomNavLink from "../../ui/custom-nav-link";
 
 const useFactoringColumns = () => {
   const columns = [
@@ -9,6 +10,9 @@ const useFactoringColumns = () => {
       field: "index",
       headerName: "№",
       width: 200,
+      renderCell: ({ row }) => (
+        <CustomNavLink label={row?.index} path={`/factoring/${row?.index}`} />
+      ),
     },
     {
       field: "status",
