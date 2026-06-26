@@ -22,7 +22,7 @@ const AppRouter = () => {
       element: <Dashboard />,
     },
     {
-      path: "/lead-item/:id",
+      path: "/leads/:id",
       element: <LeadItem />,
     },
     {
@@ -38,7 +38,7 @@ const AppRouter = () => {
       element: <Account />,
     },
     {
-      path: "/factoring",
+      path: "/factorings",
       element: <Factoring />,
     },
     {
@@ -62,7 +62,7 @@ const AppRouter = () => {
       element: <TenderApplications />,
     },
     {
-      path: "/tender-applications/:id",
+      path: "/tenders/:id",
       element: <TenderApplicationsItem />,
     },
     {

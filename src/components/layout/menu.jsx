@@ -18,7 +18,7 @@ const menuItems = [
     label: "Finance",
     sub_items: [
       { id: 1, path: "/account", lable: "Account" },
-      { id: 2, path: "/factoring", lable: "Factoring" },
+      { id: 2, path: "/factorings", lable: "Factoring" },
     ],
   },
   {

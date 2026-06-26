@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Pagination from "@mui/material/Pagination";
 import RootLayout from "../../components/layout/root-layout";
-import axios from "axios";
 import LeadCard from "../../components/leads/lead-card";
 import { Tabs, Tab, Button } from "@mui/material";
 import {
@@ -19,8 +18,6 @@ import { LeadCardSkeleton } from "../../shared/ui/lead-card-skeleton";
 import LeadsTable from "../../components/leads/leads-table";
 import { VIEWS } from "../../shared/const/leads";
 import AddLeadForm from "../../features/leads/add-lead-form";
-import { useSearchParams } from "react-router-dom";
-import { useFormDefaultValues } from "../../shared/hooks/leads/use-form-default-values";
 import { useLeadsStore } from "../../app/store/leads/leads-store";
 
 const HistoryLeads = () => {
@@ -32,18 +29,11 @@ const HistoryLeads = () => {
   const perPage = 1;
   const getHistoryLeads = useLeadsStore((state) => state.getHistoryLeads);
   const isLoading = useLeadsStore((state) => state.isLoading);
-  const [searchParams, setSearchParams] = useSearchParams();
 
   const PAGE_COUNT = Math.ceil(count / perPage);
 
-  const deafultValues = useFormDefaultValues();
-
   const handlePageChange = (_, value) => {
     setPage(value);
-  };
-
-  const handleChange = (event) => {
-    setView(event.target.value);
   };
 
   useEffect(() => {
@@ -97,7 +87,7 @@ const HistoryLeads = () => {
             },
           }}
         >
-          {historyLeads.map((lead, index) => (
+          {historyLeads.map((lead) => (
             <LeadCard key={lead.id} lead={lead} />
           ))}
         </Box>

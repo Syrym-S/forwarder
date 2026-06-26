@@ -10,7 +10,7 @@ const useLeadsColumns = () => {
       width: 200,
       renderCell: ({ row }) => (
         <NavLink
-          to={`/lead-item/${row.id}`}
+          to={`/leads/${row.id}`}
           style={{
             textDecoration: "none",
           }}

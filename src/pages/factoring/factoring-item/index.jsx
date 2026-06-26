@@ -6,7 +6,7 @@ import Loader from "../../../components/layout/loader";
 import { useLeadsStore } from "../../../app/store/leads/leads-store";
 import FactoringDetailsHeading from "../../../components/factoring/factoring-details-heading";
 import LeadMap from "../../../components/leads/lead-map";
-import { Button, Container } from "@mui/material";
+import { Box, Button, Container } from "@mui/material";
 import FactoringFinancialInfo from "../../../components/factoring/factoring-financial-info";
 import FactoringCustomerInfo from "../../../components/factoring/factoring-customer-info";
 import TransportationInfo from "../../../components/tenders/transportation-info";
@@ -71,6 +71,13 @@ const FactoringItem = () => {
           customer={factoringDetails?.customer}
           verified_customer={factoringDetails?.verified_customer}
         />
+
+        <Box
+          sx={{
+            display: "grid",
+            gridTemplateColumns: "1fr 1fr",
+          }}
+        ></Box>
 
         {!factoringDetails?.verified_forwarder && (
           <Button onClick={handleAcceptFactoring}>Подтвердить</Button>
