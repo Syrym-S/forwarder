@@ -6,12 +6,19 @@ import Loader from "../../../components/layout/loader";
 import { useLeadsStore } from "../../../app/store/leads/leads-store";
 import FactoringDetailsHeading from "../../../components/factoring/factoring-details-heading";
 import LeadMap from "../../../components/leads/lead-map";
-import { Box, Button, Container } from "@mui/material";
+import { Box, Button, Container, Stack } from "@mui/material";
 import FactoringFinancialInfo from "../../../components/factoring/factoring-financial-info";
 import FactoringCustomerInfo from "../../../components/factoring/factoring-customer-info";
 import TransportationInfo from "../../../components/tenders/transportation-info";
 import FactoringTransportationInfo from "../../../components/factoring/factoring-transportation-info";
 import FactoringCargoInfo from "../../../components/factoring/factoring-cargo-info";
+import Section from "../../../shared/ui/section";
+import { useProfileStore } from "../../../app/store/profile/profile-store";
+import InfoField from "../../../shared/ui/info-field";
+import ProfileDataTable from "../../../components/factoring/profile-data-table";
+import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
+import FactorDataTable from "../../../components/factoring/factor-data-table";
+import RememberMeOutlinedIcon from "@mui/icons-material/RememberMeOutlined";
 
 const FactoringItem = () => {
   const { id } = useParams();
@@ -23,6 +30,8 @@ const FactoringItem = () => {
   const getFactoringDetails = useFactoringStore(
     (state) => state.getFactoringDetails,
   );
+  const profileData = useProfileStore((state) => state.profileData);
+  const getProfileData = useProfileStore((state) => state.getProfileData);
 
   const from = {
     lat: currentLead?.from_location.lat,
@@ -49,10 +58,13 @@ const FactoringItem = () => {
   useEffect(() => {
     if (factoringDetails) {
       getLeadItem(factoringDetails?.lead_id);
+      getProfileData();
     }
   }, [factoringDetails]);
 
-  if (!factoringDetails || !currentLead) return <Loader />;
+  console.log(profileData);
+
+  if (!factoringDetails || !currentLead || !profileData) return <Loader />;
 
   return (
     <RootLayout withoutDataCheck>
@@ -76,8 +88,23 @@ const FactoringItem = () => {
           sx={{
             display: "grid",
             gridTemplateColumns: "1fr 1fr",
+            gap: 3,
           }}
-        ></Box>
+        >
+          <Section
+            icon={<AccountCircleOutlinedIcon color="primary" />}
+            title={"Мои данные"}
+          >
+            <ProfileDataTable />
+          </Section>
+
+          <Section
+            icon={<RememberMeOutlinedIcon color="primary" />}
+            title={"Данные Фактора"}
+          >
+            <FactorDataTable factor={factoringDetails?.factor} />
+          </Section>
+        </Box>
 
         {!factoringDetails?.verified_forwarder && (
           <Button onClick={handleAcceptFactoring}>Подтвердить</Button>
