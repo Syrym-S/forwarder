@@ -21,36 +21,22 @@ import { useNavigate } from "react-router-dom";
 import NotificationsNoneOutlinedIcon from "@mui/icons-material/NotificationsNoneOutlined";
 import NotificationsOffOutlinedIcon from "@mui/icons-material/NotificationsOffOutlined";
 import { useNotificationsStore } from "../../app/store/notifications/noti-store";
-import NotificationPopup from "./notification-popup";
-import Notifications from "./notifications-list";
-import NotificationsBlock from "./new-notification-block/notifications-block";
+import NotificationsBlock from "./notifications/notifications-block";
 
 const Header = ({ openMenu, setOpenMenu }) => {
   const navigate = useNavigate();
-  const notifications = useNotificationsStore((state) => state.notifications);
   const getNotifications = useNotificationsStore(
     (state) => state.getNotifications,
   );
 
-  const [selectedNotification, setSelectedNotification] = useState(null);
-  const [notificationsAnchorEl, setNotificationsAnchorEl] = useState(null);
   const [profileAnchorEl, setProfileAnchorEl] = useState(null);
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
 
-  const id = notificationsAnchorEl ? "simple-popover" : undefined;
   const isProfileMenuOpen = Boolean(profileAnchorEl);
-  const isNotificationsOpen = Boolean(notificationsAnchorEl);
   const userEmail = window?.APP_DATA?.user_email || "Пользователь";
 
   const handleToggleMenu = () => {
     setOpenMenu((prev) => !prev);
-  };
-  const handleNotificationsClick = (event) => {
-    setNotificationsAnchorEl(event.currentTarget);
-  };
-
-  const handleNotificationsClose = () => {
-    setNotificationsAnchorEl(null);
   };
 
   const handleOpenProfileMenu = (event) => {
@@ -113,12 +99,6 @@ const Header = ({ openMenu, setOpenMenu }) => {
       <Box>
         <NotificationsBlock />
 
-        {/* {selectedNotification && (
-          <NotificationPopup
-            selectedNotification={selectedNotification}
-            setSelectedNotification={setSelectedNotification}
-          />
-        )} */}
         <Button
           variant="outlined"
           startIcon={<AccountCircleIcon />}

@@ -36,7 +36,7 @@ export const useNotificationsStore = create((set) => ({
       const response = await getNotificationDetailsApi(id);
 
       set({
-        notificationDetails: response.data.results,
+        notificationDetails: response.data,
         isLoading: false,
       });
     } catch (e) {

@@ -9,6 +9,7 @@ import {
 import React, { useEffect, useState } from "react";
 import HighlightOffRoundedIcon from "@mui/icons-material/HighlightOffRounded";
 import { useNotificationsStore } from "../../../app/store/notifications/noti-store";
+import NotificationItem from "./notification-item";
 
 const NotificationsDrawer = ({
   openNotificationsDrawer,
@@ -36,6 +37,8 @@ const NotificationsDrawer = ({
       page: page,
     });
   }, [page]);
+
+  console.log(notifications);
 
   return (
     <Drawer
@@ -75,58 +78,13 @@ const NotificationsDrawer = ({
             gridTemplateColumns: "1fr",
           }}
         >
-          {notifications?.map((notification) => {
-            const isViewd = notification.is_viewed;
-
-            return (
-              <Box
-                onClick={() => {
-                  setSelectedNotification(notification);
-                  handleNotificationsClose();
-                  handleCloseDrawer();
-                }}
-                sx={{
-                  p: 1,
-                  backgroundColor: isViewd
-                    ? "white"
-                    : "rgba(144, 202, 249, 0.1)",
-                  border: "1px solid rgba(0,0,0,0.1)",
-                  cursor: !isViewd && "pointer",
-                }}
-              >
-                <Typography
-                  sx={{
-                    fontSize: "0.9rem",
-                    display: "flex",
-                    alignItems: "center",
-                    height: "fit-content",
-                  }}
-                >
-                  {!isViewd && (
-                    <Typography
-                      component="span"
-                      fontWeight="bold"
-                      sx={{
-                        color: "#2196f3",
-                        fontSize: "1.5rem",
-                      }}
-                    >
-                      •
-                    </Typography>
-                  )}
-                  {notification.theme}
-                </Typography>
-                <Typography
-                  sx={{
-                    fontSize: "0.7rem",
-                    color: "backgound.main",
-                  }}
-                >
-                  {notification.message}
-                </Typography>
-              </Box>
-            );
-          })}
+          {notifications?.map((notification) => (
+            <NotificationItem
+              notification={notification}
+              setSelectedNotification={setSelectedNotification}
+              handleNotificationsClose={handleNotificationsClose}
+            />
+          ))}
         </Box>
 
         <Pagination
