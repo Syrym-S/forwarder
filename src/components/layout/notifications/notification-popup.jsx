@@ -29,6 +29,10 @@ const NotificationPopup = ({
     (state) => state.getNotificationDetails,
   );
 
+  const handleNotificationPopupClose = () => {
+    setSelectedNotification(null);
+  };
+
   useEffect(() => {
     getNotificationDetails(selectedNotification.id);
   }, []);
@@ -38,7 +42,7 @@ const NotificationPopup = ({
   return (
     <Dialog
       open={!!selectedNotification}
-      onClose={() => setSelectedNotification(null)}
+      onClose={handleNotificationPopupClose}
       fullWidth
       maxWidth="sm"
       sx={{
@@ -65,6 +69,7 @@ const NotificationPopup = ({
                 <LocalPostOfficeOutlinedIcon />
                 <Typography>{notificationDetails?.message}</Typography>
                 <Button
+                  onClick={handleNotificationPopupClose}
                   sx={{ display: "block", ml: "auto" }}
                   component={RouterLink}
                   to={notificationDetails?.link}
