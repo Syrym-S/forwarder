@@ -201,7 +201,7 @@ const LeadItem = () => {
 
       <LeadMap from={from} to={to} id={id} />
 
-      <Container maxWidth="lg" sx={{ py: 4 }}>
+      <Container maxWidth="lg" sx={{ py: 4, px: 0 }}>
         <LeadCustomerInfo leadData={leadData} />
 
         <LeadRouteInfo leadData={leadData} />

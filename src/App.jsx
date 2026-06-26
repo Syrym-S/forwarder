@@ -70,7 +70,7 @@ function App() {
 
         <Snackbar
           open={!!newNotification}
-          autoHideDuration={3000}
+          autoHideDuration={5000}
           onClose={() => setNewNotification(null)}
           message={newNotification?.theme}
           anchorOrigin={{

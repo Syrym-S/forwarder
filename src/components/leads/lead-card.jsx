@@ -26,7 +26,10 @@ const LeadCard = ({ lead }) => {
       onClick={navigateToLeadItem}
       tabIndex={0}
       sx={{
-        p: 3,
+        p: {
+          xs: 1,
+          sm: 3,
+        },
         border: "2px solid",
         borderColor: "divider",
         borderRadius: 4,
@@ -50,7 +53,7 @@ const LeadCard = ({ lead }) => {
             flexWrap: "wrap",
           }}
         >
-          <Box>
+          {/* <Box>
             <Typography
               variant="body2"
               color="text.secondary"
@@ -69,9 +72,9 @@ const LeadCard = ({ lead }) => {
                 fontWeight: 500,
               }}
             >
-              {/* {lead.customer} */}
+              {/* {lead.customer} 
             </Typography>
-          </Box>
+          </Box> */}
 
           <Stack
             direction="row"
@@ -79,6 +82,10 @@ const LeadCard = ({ lead }) => {
             flexWrap="wrap"
             useFlexGap
             sx={{
+              flexDirection: {
+                xs: "column",
+                sm: "row",
+              },
               justifyContent: {
                 xs: "flex-start",
                 sm: "flex-end",
@@ -96,24 +103,19 @@ const LeadCard = ({ lead }) => {
               }}
             />
 
-            {/* <Chip
-              label={lead.status}
-              size="small"
-              sx={{
-                borderRadius: 999,
-                fontWeight: 500,
-                backgroundColor: "grey.100",
-                color: "color.slate",
-              }}
-            /> */}
             <RenderStatus status={lead.status} />
           </Stack>
         </Box>
 
         <Box
           sx={{
-            display: "flex",
-            flexDirection: "column",
+            display: {
+              xs: "grid",
+              sm: "flex",
+            },
+            gridTemplateColumns: {
+              xs: "1fr",
+            },
             alignItems: "stretch",
             gap: 1.5,
             flexWrap: {
@@ -124,7 +126,6 @@ const LeadCard = ({ lead }) => {
           <Box
             sx={{
               flex: 1,
-              minWidth: 220,
               minHeight: 86,
               p: 1.5,
               border: "1px solid",
@@ -184,8 +185,6 @@ const LeadCard = ({ lead }) => {
           <Box
             sx={{
               flex: 1,
-              minWidth: 220,
-              minHeight: 96,
               p: 1.5,
               border: "1px solid",
               borderColor: "divider",

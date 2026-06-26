@@ -35,7 +35,10 @@ const LeadDriverInfo = ({ leadData }) => {
         sx={{
           py: 1,
           display: "grid",
-          gridTemplateColumns: "repeat(3,1fr)",
+          gridTemplateColumns: {
+            xs: "1fr",
+            sx: "repeat(3,1fr)",
+          },
           gap: 3,
         }}
       >
