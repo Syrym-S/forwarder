@@ -12,8 +12,6 @@ import { useProfileStore } from "../../app/store/profile/profile-store";
 const ProfileDataTable = () => {
   const profileData = useProfileStore((state) => state.profileData);
 
-  console.log(profileData);
-
   const rows = [
     {
       label: "ФИО",

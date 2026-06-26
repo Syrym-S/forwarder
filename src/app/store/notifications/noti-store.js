@@ -1,5 +1,9 @@
 import { create } from "zustand";
-import { getNotificationDetailsApi, getNotificationsApi } from "./api";
+import {
+  getNotificationDetailsApi,
+  getNotificationsApi,
+  getNotificationsTokenApi,
+} from "./api";
 
 export const useNotificationsStore = create((set) => ({
   notifications: [],
@@ -39,6 +43,17 @@ export const useNotificationsStore = create((set) => ({
         notificationDetails: response.data,
         isLoading: false,
       });
+    } catch (e) {
+      set({
+        error: e.message,
+        isLoading: false,
+      });
+    }
+  },
+
+  getNotificationsToken: async () => {
+    try {
+      return await getNotificationsTokenApi();
     } catch (e) {
       set({
         error: e.message,

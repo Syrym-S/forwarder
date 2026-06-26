@@ -24,3 +24,14 @@ export const getNotificationDetailsApi = async (id) => {
 
   return data;
 };
+
+export const getNotificationsTokenApi = async () => {
+  const response = await axios.get(`${BASE_URL}/notif/v1/token`, {
+    headers: {
+      // eslint-disable-next-line no-undef
+      "X-WP-Nonce": APP_DATA.nonce,
+    },
+  });
+
+  return response.data;
+};

@@ -62,8 +62,6 @@ const FactoringItem = () => {
     }
   }, [factoringDetails]);
 
-  console.log(profileData);
-
   if (!factoringDetails || !currentLead || !profileData) return <Loader />;
 
   return (

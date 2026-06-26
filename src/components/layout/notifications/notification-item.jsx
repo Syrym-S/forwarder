@@ -8,7 +8,7 @@ const NotificationItem = ({
   setSelectedNotification,
   handleNotificationsClose,
 }) => {
-  const isViewd = notification.is_viewed;
+  const isViewd = notification?.is_viewed;
 
   return (
     <Box
@@ -45,7 +45,7 @@ const NotificationItem = ({
           </Typography>
         )}
         <RenderNotificationIcon type={notification?.type} />
-        {notification.theme}
+        {notification?.theme}
       </Typography>
       <Typography
         sx={{
@@ -53,7 +53,7 @@ const NotificationItem = ({
           color: "backgound.main",
         }}
       >
-        {notification.message}
+        {notification?.message}
       </Typography>
     </Box>
   );

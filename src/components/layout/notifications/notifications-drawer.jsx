@@ -38,8 +38,6 @@ const NotificationsDrawer = ({
     });
   }, [page]);
 
-  console.log(notifications);
-
   return (
     <Drawer
       anchor="right"
