@@ -9,6 +9,7 @@ import FactoringTable from "../../components/factoring/factoring-table";
 import { VIEWS } from "../../shared/const/leads";
 import ViewListRoundedIcon from "@mui/icons-material/ViewListRounded";
 import GridViewRoundedIcon from "@mui/icons-material/GridViewRounded";
+import ViewTabs from "../../shared/ui/view-tabs";
 
 const Factoring = () => {
   const factorings = useFactoringStore((state) => state.factorings);
@@ -21,6 +22,7 @@ const Factoring = () => {
   const [page, setPage] = useState(1);
 
   const PAGE_COUNT = Math.ceil(count / perPage);
+  const isCradsView = view === VIEWS.cards;
 
   const handleModalOpen = () => {
     setOpenFormModal(true);
@@ -44,30 +46,13 @@ const Factoring = () => {
 
   return (
     <RootLayout withoutDataCheck>
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          mx: "auto",
-          width: view === VIEWS.cards ? "60%" : "100%",
-        }}
-      >
-        <Tabs
-          value={view}
-          onChange={(_, newValue) => {
-            setView(newValue);
-          }}
-        >
-          <Tab label={<ViewListRoundedIcon />} value={VIEWS.table} />
-          <Tab label={<GridViewRoundedIcon />} value={VIEWS.cards} />
-        </Tabs>
-        <Button variant="outlined" onClick={handleModalOpen}>
-          Создать
-        </Button>
-      </Box>
+      <ViewTabs
+        view={view}
+        setView={setView}
+        handleOpenForm={handleModalOpen}
+      />
 
-      {view === VIEWS.cards && (
+      {isCradsView && (
         <Box
           sx={{
             width: "60%",
@@ -83,12 +68,12 @@ const Factoring = () => {
         </Box>
       )}
 
-      {view === VIEWS.table && <FactoringTable factorings={factorings} />}
+      {!isCradsView && <FactoringTable factorings={factorings} />}
 
       <Pagination
         sx={{
           mx: "auto",
-          width: view === VIEWS.cards ? "60%" : "100%",
+          width: isCradsView ? "60%" : "100%",
         }}
         page={page}
         count={PAGE_COUNT}

@@ -2,11 +2,14 @@ import {
   Autocomplete,
   Box,
   Button,
+  CircularProgress,
   Dialog,
   DialogContent,
   DialogTitle,
+  InputAdornment,
   MenuItem,
   TextField,
+  Typography,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useLeadsStore } from "../../app/store/leads/leads-store";
@@ -15,12 +18,14 @@ import RenderLeadOptions from "../../components/tenders/render-lead-options";
 import { useFactoringStore } from "../../app/store/factoring/factoring-store";
 import RenderFactorOptions from "../../components/tenders/render-factor-options";
 
+const stepFields = ["lead_id", "debSumm"];
+
 const defaultValues = {
-  lead_id: "6a3a6987de0328454f0e9152",
-  factor_id: null,
+  lead_id: "",
+  factor_id: "",
   debSumm: "",
   currency: "KZT",
-  debCurrency: "KZT",
+  debCurrency: "",
 };
 
 const CreateFactoringForm = ({ openFormModal, handleModalClose }) => {
@@ -38,8 +43,11 @@ const CreateFactoringForm = ({ openFormModal, handleModalClose }) => {
   const searchHistoryLeads = useLeadsStore((state) => state.searchHistoryLeads);
   const createFactoring = useFactoringStore((state) => state.createFactoring);
   const getFactorings = useFactoringStore((state) => state.getFactorings);
+  const getLeadItem = useLeadsStore((state) => state.getLeadItem);
+  const currentLead = useLeadsStore((state) => state.currentLead);
+  const isLeadLoading = useLeadsStore((state) => state.isLoading);
 
-  const { control, setValue } = useForm({
+  const { control, setValue, trigger, reset } = useForm({
     mode: "onChange",
     reValidateMode: "onChange",
     defaultValues,
@@ -48,14 +56,27 @@ const CreateFactoringForm = ({ openFormModal, handleModalClose }) => {
   const formValues = useWatch({ control });
 
   const handleSubmit = async () => {
+    const isValid = await trigger(stepFields);
+
+    if (!isValid) return;
+
     await createFactoring(formValues);
     await getFactorings();
 
+    reset();
+    setSelectedLead(null);
+    setSelectedFactor(null);
     handleModalClose();
   };
 
   useEffect(() => {
-    if (!inputValueLead) return;
+    if (selectedLead) {
+      getLeadItem(selectedLead?.id);
+    }
+  }, [selectedLead]);
+
+  useEffect(() => {
+    if (!inputValueLead || inputValueLead.length < 2) return;
 
     const timer = setTimeout(async () => {
       await searchHistoryLeads({
@@ -67,7 +88,7 @@ const CreateFactoringForm = ({ openFormModal, handleModalClose }) => {
   }, [inputValueLead]);
 
   useEffect(() => {
-    if (!inputValueFactor) return;
+    if (!inputValueFactor || inputValueFactor.length < 2) return;
 
     const timer = setTimeout(async () => {
       await searchFactor({
@@ -78,14 +99,51 @@ const CreateFactoringForm = ({ openFormModal, handleModalClose }) => {
     return () => clearTimeout(timer);
   }, [inputValueFactor]);
 
+  useEffect(() => {
+    if (!currentLead) return;
+
+    setValue("debSumm", currentLead.summ, {
+      shouldDirty: true,
+      shouldTouch: true,
+    });
+
+    setValue("debCurrency", currentLead.currency, {
+      shouldDirty: true,
+      shouldTouch: true,
+    });
+  }, [currentLead, setValue]);
+
   return (
     <Dialog
+      sx={{
+        "& .MuiDialog-paper": {
+          borderRadius: 5,
+        },
+      }}
       open={openFormModal}
       onClose={handleModalClose}
       maxWidth="sm"
       fullWidth
     >
-      <DialogTitle>Создание факторинга</DialogTitle>
+      <DialogTitle>
+        <Typography
+          sx={{
+            fontSize: "1.3rem",
+            fontWeight: "600",
+          }}
+        >
+          Создание факторинга
+        </Typography>
+        <Typography
+          sx={{
+            fontSize: "0.9rem",
+            fontWeight: "400",
+          }}
+        >
+          Выберите завершённый лид, фактор и укажите параметры факторинга
+        </Typography>
+      </DialogTitle>
+
       <DialogContent>
         <Box
           sx={{
@@ -113,6 +171,16 @@ const CreateFactoringForm = ({ openFormModal, handleModalClose }) => {
                 filterOptions={(items) => items}
                 onChange={(_, value) => {
                   field.onChange(value);
+
+                  if (!value) {
+                    setSelectedLead(null);
+
+                    setValue("lead_id", "");
+                    setValue("debSumm", "");
+                    setValue("debCurrency", "");
+
+                    return;
+                  }
 
                   setValue("lead_id", value.id, {
                     shouldDirty: true,
@@ -206,21 +274,45 @@ const CreateFactoringForm = ({ openFormModal, handleModalClose }) => {
             <Controller
               name="debSumm"
               control={control}
-              render={({ field }) => (
+              render={({ field, fieldState }) => (
                 <TextField
                   {...field}
                   type="number"
                   size="small"
                   label="Cумма дебеторской задолженности"
+                  slotProps={{
+                    inputLabel: {
+                      shrink: isLeadLoading || !!currentLead,
+                    },
+                    input: {
+                      startAdornment: isLeadLoading ? (
+                        <CircularProgress size={20} />
+                      ) : null,
+                    },
+                  }}
+                  disabled
+                  error={!!fieldState.error}
+                  helperText={fieldState.error?.message}
                 />
               )}
             />
             <Controller
-              name="currency"
+              name="debCurrency"
               control={control}
               render={({ field }) => (
                 <TextField
                   {...field}
+                  slotProps={{
+                    inputLabel: {
+                      shrink: isLeadLoading || !!currentLead,
+                    },
+                    input: {
+                      startAdornment: isLeadLoading ? (
+                        <CircularProgress size={20} />
+                      ) : null,
+                    },
+                  }}
+                  disabled
                   select
                   label="Валюта"
                   fullWidth
@@ -238,15 +330,16 @@ const CreateFactoringForm = ({ openFormModal, handleModalClose }) => {
         <Box
           sx={{
             display: "flex",
-            justifyContent: "space-between",
+            justifyContent: "flex-end",
+            gap: 3,
             my: 1,
           }}
         >
           <Button variant="outlined" color="error" onClick={handleModalClose}>
             Отмена
           </Button>
-          <Button variant="outlined" color="primary" onClick={handleSubmit}>
-            Создать
+          <Button variant="contained" color="primary" onClick={handleSubmit}>
+            Создать факторинг
           </Button>
         </Box>
       </DialogContent>

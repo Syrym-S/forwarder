@@ -164,61 +164,6 @@ const TenderForm = ({
         }}
       >
         {renderContent(step)}
-        {/* <Stack>
-          <Autocomplete
-            disabled={isLoading}
-            options={drivers}
-            getOptionLabel={(option) => option?.fio ?? ""}
-            isOptionEqualToValue={(option, value) => option?.id === value?.id}
-            // onChange={onDriverChange}
-            renderOption={(props, option) => {
-              return (
-                <Box
-                  component="li"
-                  {...props}
-                  sx={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                    gap: 2,
-                  }}
-                >
-                  <Typography fontWeight={700}>{option.fio}</Typography>
-                </Box>
-              );
-            }}
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                label={isLoading ? "...Загрузка данных" : "Водитель"}
-                placeholder="Выберите водителя"
-              />
-            )}
-          />
-
-          <Box
-            sx={{
-              my: 1,
-              display: "flex",
-              gap: "10px",
-            }}
-          >
-            <Button
-              variant="contained"
-              color="primary"
-              // onClick={handleAddParticipant}
-            >
-              Добавить
-            </Button>
-            <Button
-              variant="outlined"
-              color="error"
-              // onClick={handleHideParticipantField}
-            >
-              Отмена
-            </Button>
-          </Box>
-        </Stack> */}
 
         <Box
           sx={{
