@@ -35,3 +35,18 @@ export const getNotificationsTokenApi = async () => {
 
   return response.data;
 };
+
+export const markAllAsReadApi = async () => {
+  const response = await axios.post(
+    `${BASE_URL}/forwarder/v1/notifications/read-all`,
+    null,
+    {
+      headers: {
+        // eslint-disable-next-line no-undef
+        "X-WP-Nonce": APP_DATA.nonce,
+      },
+    },
+  );
+
+  return response.data;
+};

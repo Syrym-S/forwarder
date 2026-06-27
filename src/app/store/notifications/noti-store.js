@@ -3,6 +3,7 @@ import {
   getNotificationDetailsApi,
   getNotificationsApi,
   getNotificationsTokenApi,
+  markAllAsReadApi,
 } from "./api";
 
 export const useNotificationsStore = create((set) => ({
@@ -55,6 +56,22 @@ export const useNotificationsStore = create((set) => ({
     try {
       return await getNotificationsTokenApi();
     } catch (e) {
+      set({
+        error: e.message,
+        isLoading: false,
+      });
+    }
+  },
+
+  markAllAsRead: async () => {
+    try {
+      set({ isLoading: true, error: null });
+
+      await markAllAsReadApi();
+
+      set({ isLoading: false, error: null });
+    } catch (e) {
+      console.log(e);
       set({
         error: e.message,
         isLoading: false,

@@ -1,15 +1,18 @@
 import {
   Box,
   Button,
+  CircularProgress,
   Drawer,
   IconButton,
   Pagination,
+  Tooltip,
   Typography,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import HighlightOffRoundedIcon from "@mui/icons-material/HighlightOffRounded";
 import { useNotificationsStore } from "../../../app/store/notifications/noti-store";
 import NotificationItem from "./notification-item";
+import MarkEmailReadOutlinedIcon from "@mui/icons-material/MarkEmailReadOutlined";
 
 const NotificationsDrawer = ({
   openNotificationsDrawer,
@@ -25,11 +28,18 @@ const NotificationsDrawer = ({
   const getNotifications = useNotificationsStore(
     (state) => state.getNotifications,
   );
+  const isLoading = useNotificationsStore((state) => state.isLoading);
+  const markAllAsRead = useNotificationsStore((state) => state.markAllAsRead);
 
   const PAGE_COUNT = Math.ceil(total / perPage);
 
   const handlePageChange = (_, value) => {
     setPage(value);
+  };
+
+  const handleReadAllNotifications = async () => {
+    await markAllAsRead();
+    await getNotifications();
   };
 
   useEffect(() => {
@@ -65,24 +75,58 @@ const NotificationsDrawer = ({
           >
             Увидомления
           </Typography>
-          <IconButton onClick={handleCloseDrawer}>
-            <HighlightOffRoundedIcon color="error" />
-          </IconButton>
+
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              gap: 1,
+              cursor: "pointer",
+            }}
+          >
+            <IconButton
+              onClick={handleReadAllNotifications}
+              disabled={isLoading}
+            >
+              <Tooltip title="Отметить все прочитанным">
+                <MarkEmailReadOutlinedIcon color="primary" />
+              </Tooltip>
+            </IconButton>
+
+            <IconButton onClick={handleCloseDrawer}>
+              <HighlightOffRoundedIcon color="error" />
+            </IconButton>
+          </Box>
         </Box>
 
         <Box
           sx={{
+            minHeight: "100vh",
             display: "grid",
             gridTemplateColumns: "1fr",
           }}
         >
-          {notifications?.map((notification) => (
-            <NotificationItem
-              notification={notification}
-              setSelectedNotification={setSelectedNotification}
-              handleNotificationsClose={handleNotificationsClose}
-            />
-          ))}
+          {isLoading ? (
+            <Box
+              sx={{
+                height: "100%",
+                border: "1px solid rgba(0,0,0,0.1)",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <CircularProgress />
+            </Box>
+          ) : (
+            notifications?.map((notification) => (
+              <NotificationItem
+                notification={notification}
+                setSelectedNotification={setSelectedNotification}
+                handleNotificationsClose={handleNotificationsClose}
+              />
+            ))
+          )}
         </Box>
 
         <Pagination
