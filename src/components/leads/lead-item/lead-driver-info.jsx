@@ -2,20 +2,40 @@ import React from "react";
 import Section from "../../../shared/ui/section";
 import InfoField from "../../../shared/ui/info-field";
 import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
-import { Box, Button } from "@mui/material";
+import { Box, Button, CircularProgress } from "@mui/material";
 import { useLeadsStore } from "../../../app/store/leads/leads-store";
 import { STATUS } from "../../../shared/const/tenders";
 
 const LeadDriverInfo = ({ leadData }) => {
   const driver = leadData?.driver;
   const isAddDriverStatus = leadData?.status === STATUS.add_driver;
+
   const detachDriver = useLeadsStore((state) => state.detachDriver);
+  const isDriverDetachLoading = useLeadsStore(
+    (state) => state.isDriverDetachLoading,
+  );
+  const isLeadLoading = useLeadsStore((state) => state.isLoading);
   const getLeadItem = useLeadsStore((state) => state.getLeadItem);
 
   const handleDetachDriver = async () => {
     await detachDriver(leadData?.id);
     await getLeadItem(leadData?.id);
   };
+
+  if (isDriverDetachLoading || isLeadLoading)
+    return (
+      <Section title="Водитель" icon={<PersonOutlinedIcon color="primary" />}>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <CircularProgress size={30} />
+        </Box>
+      </Section>
+    );
 
   if (!driver.fio && !driver.id)
     return (

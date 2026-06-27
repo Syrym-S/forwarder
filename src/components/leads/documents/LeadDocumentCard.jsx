@@ -120,7 +120,7 @@ export function LeadDocumentCard({
             event.stopPropagation();
           }}
         >
-          {isForwarderFile && (
+          {isForwarderFile && !isFileReadOnly && (
             <IconButton
               size="small"
               color="error"

@@ -12,6 +12,8 @@ export const useFactoringStore = create((set) => ({
   factors: [],
   factoringDetails: null,
   isLoading: false,
+  isSearchLoading: false,
+  isConfirmLoading: false,
   error: null,
   count: 0,
   perPage: 1,
@@ -42,13 +44,13 @@ export const useFactoringStore = create((set) => ({
 
   searchFactor: async (params) => {
     try {
-      set({ isLoading: true, error: null });
+      set({ isSearchLoading: true, error: null });
 
       const response = await searchFactorApi(params);
 
       set({
         factors: response.data.results,
-        isLoading: false,
+        isSearchLoading: false,
       });
 
       return response.data;
@@ -109,12 +111,12 @@ export const useFactoringStore = create((set) => ({
 
   acceptFactoring: async (factoring_index) => {
     try {
-      set({ isLoading: true, error: null });
+      set({ isConfirmLoading: true, error: null });
 
       const response = await acceptFactoringApi(factoring_index);
 
       set({
-        isLoading: false,
+        isConfirmLoading: false,
       });
 
       return response.data;

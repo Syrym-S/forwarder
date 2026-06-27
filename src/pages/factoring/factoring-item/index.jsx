@@ -30,6 +30,9 @@ const FactoringItem = () => {
   const getFactoringDetails = useFactoringStore(
     (state) => state.getFactoringDetails,
   );
+  const isConfirmLoading = useFactoringStore((state) => state.isConfirmLoading);
+  const isLoading = useFactoringStore((state) => state.isLoading);
+
   const profileData = useProfileStore((state) => state.profileData);
   const getProfileData = useProfileStore((state) => state.getProfileData);
 
@@ -105,7 +108,14 @@ const FactoringItem = () => {
         </Box>
 
         {!factoringDetails?.verified_forwarder && (
-          <Button onClick={handleAcceptFactoring}>Подтвердить</Button>
+          <Button
+            disabled={isConfirmLoading || isLoading}
+            onClick={handleAcceptFactoring}
+          >
+            {isConfirmLoading || isLoading
+              ? "...Идет подтверждение"
+              : "Подтвердить"}
+          </Button>
         )}
       </Container>
     </RootLayout>

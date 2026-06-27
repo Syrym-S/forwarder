@@ -37,7 +37,7 @@ const CreateFactoringForm = ({ openFormModal, handleModalClose }) => {
 
   const searchedLeads = useLeadsStore((state) => state.searchedLeads);
   const factors = useFactoringStore((state) => state.factors);
-  const isLoading = useFactoringStore((state) => state.isLoading);
+  const isSeachLoading = useFactoringStore((state) => state.isSeachLoading);
   const searchFactor = useFactoringStore((state) => state.searchFactor);
   const isSearchLoading = useLeadsStore((state) => state.isSearchLoading);
   const searchHistoryLeads = useLeadsStore((state) => state.searchHistoryLeads);
@@ -223,7 +223,7 @@ const CreateFactoringForm = ({ openFormModal, handleModalClose }) => {
               <Autocomplete
                 value={selectedFactor}
                 inputValue={inputValueFactor}
-                loading={isLoading}
+                loading={isSeachLoading}
                 options={factors || []}
                 noOptionsText={<>Ввидте два символа</>}
                 onInputChange={(_, value) => {

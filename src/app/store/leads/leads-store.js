@@ -28,6 +28,8 @@ export const useLeadsStore = create((set) => ({
   currentLead: null,
   isLoading: false,
   isSearchLoading: false,
+  isDriverDetachLoading: false,
+  isCustomerDetachLoading: false,
   error: null,
   count: 0,
   perPage: 1,
@@ -346,19 +348,19 @@ export const useLeadsStore = create((set) => ({
 
   detachDriver: async (lead_id) => {
     try {
-      set({ isLoading: true, error: null });
+      set({ isDriverDetachLoading: true, error: null });
 
       const response = await detachDriverApi(lead_id);
 
       set({
-        isLoading: false,
+        isDriverDetachLoading: false,
       });
 
       return response;
     } catch (e) {
       set({
         error: e.message,
-        isLoading: false,
+        isDriverDetachLoading: false,
       });
 
       // console.error("Payload:", payload);
@@ -369,19 +371,19 @@ export const useLeadsStore = create((set) => ({
 
   detachCustomer: async (lead_id) => {
     try {
-      set({ isLoading: true, error: null });
+      set({ isCustomerDetachLoading: true, error: null });
 
       const response = await detachCustomerApi(lead_id);
 
       set({
-        isLoading: false,
+        isCustomerDetachLoading: false,
       });
 
       return response;
     } catch (e) {
       set({
         error: e.message,
-        isLoading: false,
+        isCustomerDetachLoading: false,
       });
 
       // console.error("Payload:", payload);

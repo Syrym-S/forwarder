@@ -2,7 +2,7 @@ import React from "react";
 import BusinessOutlinedIcon from "@mui/icons-material/BusinessOutlined";
 import Section from "../../../shared/ui/section";
 import InfoField from "../../../shared/ui/info-field";
-import { Box, Button } from "@mui/material";
+import { Box, Button, CircularProgress } from "@mui/material";
 import { useLeadsStore } from "../../../app/store/leads/leads-store";
 import { STATUS } from "../../../shared/const/tenders";
 
@@ -11,13 +11,36 @@ const LeadCustomerInfo = ({ leadData }) => {
 
   const isNewStatus = leadData?.status === STATUS.new;
   const isAddDriverStatus = leadData?.status === STATUS.add_driver;
+
   const detachCustomer = useLeadsStore((state) => state.detachCustomer);
+  const isLeadLoading = useLeadsStore((state) => state.isLoading);
+  const isCustomerDetachLoading = useLeadsStore(
+    (state) => state.isCustomerDetachLoading,
+  );
   const getLeadItem = useLeadsStore((state) => state.getLeadItem);
 
-  const handleDetachDriver = async () => {
+  const handleDetachCustomer = async () => {
     await detachCustomer(leadData?.id);
     await getLeadItem(leadData?.id);
   };
+
+  if (isCustomerDetachLoading || isLeadLoading)
+    return (
+      <Section
+        title="Данные о заказщике"
+        icon={<BusinessOutlinedIcon color="primary" />}
+      >
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <CircularProgress size={30} />
+        </Box>
+      </Section>
+    );
 
   if (!customer?.name)
     return (
@@ -35,7 +58,7 @@ const LeadCustomerInfo = ({ leadData }) => {
       icon={<BusinessOutlinedIcon color="primary" />}
     >
       {(isAddDriverStatus || isNewStatus) && (
-        <Button color="error" variant="outlined" onClick={handleDetachDriver}>
+        <Button color="error" variant="outlined" onClick={handleDetachCustomer}>
           Отвязать Заказщика
         </Button>
       )}

@@ -42,6 +42,7 @@ const LeadItem = () => {
 
   const getLeadItem = useLeadsStore((state) => state.getLeadItem);
   const leadData = useLeadsStore((state) => state.currentLead);
+  const isLoading = useLeadsStore((state) => state.isLoading);
   const files = useLeadsStore((state) => state.files);
   const getLeadFiles = useLeadsStore((state) => state.getLeadFiles);
   const deleteLeadFile = useLeadsStore((state) => state.deleteLeadFile);
@@ -246,9 +247,10 @@ const LeadItem = () => {
           <Button
             color="error"
             variant="outlined"
+            disabled={isLoading}
             onClick={handleConfirmDelivery}
           >
-            Завершить рейс
+            {isLoading ? "...Завершение рейса" : "Завершить рейс"}
           </Button>
         )}
       </Container>

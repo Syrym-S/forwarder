@@ -1,4 +1,11 @@
-import { Box, Button, Chip, TextField, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Chip,
+  CircularProgress,
+  TextField,
+  Typography,
+} from "@mui/material";
 import React, { useState } from "react";
 import { useTendersStore } from "../../app/store/tenders/tender-store";
 import Section from "../../shared/ui/section";
@@ -13,6 +20,7 @@ const MakeBetBlock = ({ tender, setShowBetField }) => {
     (state) => state.getCustomerTenderDetails,
   );
   const cancelBet = useTendersStore((state) => state.cancelBet);
+  const isLoading = useTendersStore((state) => state.isLoading);
 
   const ownBet = tender?.bets.find((bet) => bet.is_own === true);
   const isActive = tender?.bets.find((bet) => bet.status !== "closed");
@@ -34,6 +42,21 @@ const MakeBetBlock = ({ tender, setShowBetField }) => {
     await cancelBet(tender.id, bet_index);
     await getCustomerTenderDetails(tender.id);
   };
+
+  if (isLoading)
+    return (
+      <Section title="Ваша ставка" icon={<PaidOutlinedIcon color="primary" />}>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <CircularProgress size={30} />
+        </Box>
+      </Section>
+    );
 
   return (
     <Section title="Ваша ставка" icon={<PaidOutlinedIcon color="primary" />}>

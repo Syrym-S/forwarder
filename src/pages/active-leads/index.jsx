@@ -26,7 +26,7 @@ import ViewTabs from "../../shared/ui/view-tabs";
 const ActiveLeads = () => {
   const [openForm, setOpenForm] = useState(false);
   const [page, setPage] = useState(1);
-  const [view, setView] = useState(VIEWS.cards);
+  const [view, setView] = useState(VIEWS.table);
 
   const leads = useLeadsStore((state) => state.leads);
   const count = useLeadsStore((state) => state.count);

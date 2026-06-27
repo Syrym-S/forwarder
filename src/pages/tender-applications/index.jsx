@@ -16,7 +16,6 @@ const TenderApplications = () => {
   const getCustomerTenders = useTendersStore(
     (state) => state.getCustomerTenders,
   );
-  const isLoading = useTendersStore((state) => state.isLoading);
   const customerCount = useTendersStore((state) => state.customerCount);
   const customerPerPage = useTendersStore((state) => state.customerPerPage);
 
@@ -32,7 +31,9 @@ const TenderApplications = () => {
     });
   }, [page]);
 
-  if (isLoading) return <Loader />;
+  const isTenderEmplty = customerTenders.length === 0;
+
+  if (isTenderEmplty) return <Loader />;
 
   return (
     <RootLayout withoutDataCheck>

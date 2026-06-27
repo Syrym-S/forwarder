@@ -20,7 +20,9 @@ export const useTendersStore = create((set) => ({
   customerTenders: [],
   currentTender: null,
   customerCurrentTender: null,
-  isLoading: [],
+  isLoading: false,
+  isAddingLoading: false,
+  isBetsLoading: false,
   count: 0,
   perPage: 1,
   customerCount: 0,
@@ -143,14 +145,14 @@ export const useTendersStore = create((set) => ({
   },
   addParticipant: async (tender_id, payload) => {
     try {
-      set({ isLoading: true });
+      set({ isAddingLoading: true });
       const data = await addParticipantApi(tender_id, payload);
 
-      set({ isLoading: false });
+      set({ isAddingLoading: false });
 
       return data;
     } catch (e) {
-      set({ isLoading: false });
+      set({ isAddingLoading: false });
 
       console.log(e);
     }

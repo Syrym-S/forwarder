@@ -13,6 +13,7 @@ import ViewTabs from "../../shared/ui/view-tabs";
 
 const Factoring = () => {
   const factorings = useFactoringStore((state) => state.factorings);
+  const isLoading = useFactoringStore((state) => state.isLoading);
   const getFactorings = useFactoringStore((state) => state.getFactorings);
   const count = useFactoringStore((state) => state.count);
   const perPage = useFactoringStore((state) => state.perPage);
@@ -42,7 +43,7 @@ const Factoring = () => {
     });
   }, [page]);
 
-  if (!factorings) return <Loader />;
+  if (isLoading) return <Loader />;
 
   return (
     <RootLayout withoutDataCheck>

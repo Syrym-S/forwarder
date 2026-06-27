@@ -56,7 +56,7 @@ const CargoLoadVerification = ({
             variant="outlined"
             onClick={handleVerifyCargo}
           >
-            Подтвердить
+            {isLoading ? "Идет подтверждение" : "Подтвердить"}
           </Button>
           <Button
             disabled={isLoading}

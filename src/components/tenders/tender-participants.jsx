@@ -20,6 +20,8 @@ const TenderParticipants = ({ tender }) => {
 
   const drivers = useDriverStore((state) => state.drivers);
   const isLoading = useDriverStore((state) => state.isLoading);
+  const isAddingLoading = useTendersStore((state) => state.isAddingLoading);
+  const isParticipantsLoading = useTendersStore((state) => state.isLoading);
   const getDrivers = useDriverStore((state) => state.getDrivers);
   const getTenderDetails = useTendersStore((state) => state.getTenderDetails);
   const addParticipant = useTendersStore((state) => state.addParticipant);
@@ -119,13 +121,15 @@ const TenderParticipants = ({ tender }) => {
             }}
           >
             <Button
+              disabled={isAddingLoading}
               variant="contained"
               color="primary"
               onClick={handleAddParticipant}
             >
-              Добавить
+              {isAddingLoading ? "...Добавление" : "Добавить"}
             </Button>
             <Button
+              disabled={isAddingLoading}
               variant="outlined"
               color="error"
               onClick={handleHideParticipantField}
@@ -145,13 +149,17 @@ const TenderParticipants = ({ tender }) => {
             gap: "10px",
           }}
         >
-          {tender?.participants?.map((participant) => (
-            <ParticipantCard
-              tender_id={tender.id}
-              participant={participant}
-              key={participant.participant_id}
-            />
-          ))}
+          {isParticipantsLoading || isAddingLoading ? (
+            <>...Загрузка</>
+          ) : (
+            tender?.participants?.map((participant) => (
+              <ParticipantCard
+                tender_id={tender.id}
+                participant={participant}
+                key={participant.participant_id}
+              />
+            ))
+          )}
         </Box>
       )}
     </Section>
