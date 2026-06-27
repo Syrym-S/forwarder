@@ -44,8 +44,7 @@ const SideBar = ({ openMenu, setOpenMenu }) => {
     <Box
       sx={{
         transition: "0.2s",
-        paddingTop: "10vh",
-        height: "90vh",
+        height: "100vh",
         overflowY: "auto",
         width: {
           xs: openMenu ? "100%" : "0",
@@ -58,7 +57,6 @@ const SideBar = ({ openMenu, setOpenMenu }) => {
         position: {
           xs: "fixed",
         },
-        top: "10vh",
         left: 0,
         boxShadow: 3,
         bgcolor: "#fbfafa",

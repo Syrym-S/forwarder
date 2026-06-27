@@ -13,6 +13,7 @@ import ArrowDownwardRoundedIcon from "@mui/icons-material/ArrowDownwardRounded";
 import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
 import { useNavigate } from "react-router-dom";
 import RenderStatus from "../../shared/ui/render-status";
+import InfoField from "../../shared/ui/info-field";
 
 const LeadCard = ({ lead }) => {
   const navigate = useNavigate();
@@ -106,7 +107,6 @@ const LeadCard = ({ lead }) => {
             <RenderStatus status={lead.status} />
           </Stack>
         </Box>
-
         <Box
           sx={{
             display: {
@@ -162,7 +162,6 @@ const LeadCard = ({ lead }) => {
               </Typography>
             </Box>
           </Box>
-
           <Box
             sx={{
               display: {
@@ -178,10 +177,13 @@ const LeadCard = ({ lead }) => {
               sx={{
                 color: "text.secondary",
                 fontSize: 28,
+                transform: {
+                  xs: "none",
+                  sm: "rotate(-90deg)",
+                },
               }}
             />
           </Box>
-
           <Box
             sx={{
               flex: 1,
@@ -205,12 +207,10 @@ const LeadCard = ({ lead }) => {
             >
               Куда
             </Typography>
-
             <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
               <LocationOnOutlinedIcon
                 sx={{ fontSize: 18, color: "primary.main" }}
               />
-
               <Typography
                 fontWeight={500}
                 sx={{
@@ -223,7 +223,6 @@ const LeadCard = ({ lead }) => {
             </Box>
           </Box>
         </Box>
-
         <Box
           sx={{
             display: "grid",
@@ -234,11 +233,9 @@ const LeadCard = ({ lead }) => {
             gap: 1,
           }}
         >
-          <Box label="Вес" value={`${lead.cargo.weight_kg} кг`} />
-
-          <Box label="Тип" value={lead.cargo.type} />
-
-          <Box
+          <InfoField label="Вес" value={`${lead.cargo.weight_kg} кг`} />
+          <InfoField label="Тип" value={lead.cargo.type} />
+          <InfoField
             label="Цена"
             value={`${lead.summ} ${lead.currency}`}
             accent

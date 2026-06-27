@@ -21,6 +21,7 @@ import AddLeadForm from "../../features/leads/add-lead-form";
 import { useFormDefaultValues } from "../../shared/hooks/leads/use-form-default-values";
 import Loader from "../../components/layout/loader";
 import { useLeadsStore } from "../../app/store/leads/leads-store";
+import ViewTabs from "../../shared/ui/view-tabs";
 
 const ActiveLeads = () => {
   const [openForm, setOpenForm] = useState(false);
@@ -34,6 +35,7 @@ const ActiveLeads = () => {
   const isLoading = useLeadsStore((state) => state.isLoading);
 
   const PAGE_COUNT = Math.ceil(count / perPage);
+  const isCardsView = view === VIEWS.cards;
 
   const deafultValues = useFormDefaultValues();
 
@@ -55,35 +57,21 @@ const ActiveLeads = () => {
 
   return (
     <RootLayout withoutDataCheck>
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-        }}
-      >
-        <Tabs
-          value={view}
-          onChange={(_, newValue) => {
-            setView(newValue);
-          }}
-        >
-          <Tab label={<ViewListRoundedIcon />} value={VIEWS.table} />
-          <Tab label={<GridViewRoundedIcon />} value={VIEWS.cards} />
-        </Tabs>
-        <Button variant="outlined" onClick={handleOpenForm}>
-          Добавить
-        </Button>
-      </Box>
-      {view === VIEWS.cards && (
+      <ViewTabs view={view} setView={setView} handleOpenForm={handleOpenForm} />
+
+      {isCardsView && (
         <Box
           sx={{
+            width: {
+              xs: "100%",
+              sm: "60%",
+            },
+            mx: "auto",
             display: "grid",
             gap: 5,
             my: "10px",
             gridTemplateColumns: {
               xs: "1fr",
-              md: "1fr 1fr",
             },
           }}
         >
@@ -92,7 +80,7 @@ const ActiveLeads = () => {
           ))}
         </Box>
       )}
-      {view === VIEWS.table && <LeadsTable leads={leads} />}
+      {!isCardsView && <LeadsTable leads={leads} />}
       <Pagination page={page} count={PAGE_COUNT} onChange={handlePageChange} />
       <AddLeadForm
         openForm={openForm}

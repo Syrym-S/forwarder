@@ -12,13 +12,12 @@ import {
   Select,
   Skeleton,
 } from "@mui/material";
-import ViewListRoundedIcon from "@mui/icons-material/ViewListRounded";
-import GridViewRoundedIcon from "@mui/icons-material/GridViewRounded";
 import { LeadCardSkeleton } from "../../shared/ui/lead-card-skeleton";
 import LeadsTable from "../../components/leads/leads-table";
 import { VIEWS } from "../../shared/const/leads";
 import AddLeadForm from "../../features/leads/add-lead-form";
 import { useLeadsStore } from "../../app/store/leads/leads-store";
+import ViewTabs from "../../shared/ui/view-tabs";
 
 const HistoryLeads = () => {
   const [page, setPage] = useState(1);
@@ -29,6 +28,7 @@ const HistoryLeads = () => {
   const perPage = 1;
   const getHistoryLeads = useLeadsStore((state) => state.getHistoryLeads);
   const isLoading = useLeadsStore((state) => state.isLoading);
+  const isCradsView = view === VIEWS.cards;
 
   const PAGE_COUNT = Math.ceil(count / perPage);
 
@@ -58,33 +58,20 @@ const HistoryLeads = () => {
 
   return (
     <RootLayout data={historyLeads} isLoading={isLoading}>
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-        }}
-      >
-        <Tabs
-          value={view}
-          onChange={(_, newValue) => {
-            setView(newValue);
-          }}
-        >
-          <Tab label={<ViewListRoundedIcon />} value={VIEWS.table} />
-          <Tab label={<GridViewRoundedIcon />} value={VIEWS.cards} />
-        </Tabs>
-      </Box>
-      {view === VIEWS.cards && (
+      <ViewTabs view={view} setView={setView} withoutDataAdd />
+
+      {isCradsView && (
         <Box
           sx={{
             display: "grid",
             gap: 5,
             my: "10px",
-            gridTemplateColumns: {
-              xs: "1fr",
-              md: "1fr 1fr",
+            mx: "auto",
+            width: {
+              xs: "100%",
+              sm: "60%",
             },
+            gridTemplateColumns: "1fr",
           }}
         >
           {historyLeads.map((lead) => (
@@ -92,7 +79,9 @@ const HistoryLeads = () => {
           ))}
         </Box>
       )}
-      {view === VIEWS.table && <LeadsTable leads={historyLeads} />}
+
+      {!isCradsView && <LeadsTable leads={historyLeads} />}
+
       <Pagination page={page} count={PAGE_COUNT} onChange={handlePageChange} />
     </RootLayout>
   );
