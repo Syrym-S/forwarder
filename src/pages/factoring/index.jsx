@@ -10,6 +10,7 @@ import { VIEWS } from "../../shared/const/leads";
 import ViewListRoundedIcon from "@mui/icons-material/ViewListRounded";
 import GridViewRoundedIcon from "@mui/icons-material/GridViewRounded";
 import ViewTabs from "../../shared/ui/view-tabs";
+import PageLoader from "../../shared/ui/loaders/page-loader";
 
 const Factoring = () => {
   const factorings = useFactoringStore((state) => state.factorings);
@@ -43,7 +44,12 @@ const Factoring = () => {
     });
   }, [page]);
 
-  if (isLoading) return <Loader />;
+  if (isLoading)
+    return (
+      <RootLayout withoutDataCheck>
+        <PageLoader />
+      </RootLayout>
+    );
 
   return (
     <RootLayout withoutDataCheck>

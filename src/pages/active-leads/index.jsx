@@ -22,6 +22,7 @@ import { useFormDefaultValues } from "../../shared/hooks/leads/use-form-default-
 import Loader from "../../components/layout/loader";
 import { useLeadsStore } from "../../app/store/leads/leads-store";
 import ViewTabs from "../../shared/ui/view-tabs";
+import PageLoader from "../../shared/ui/loaders/page-loader";
 
 const ActiveLeads = () => {
   const [openForm, setOpenForm] = useState(false);
@@ -53,7 +54,12 @@ const ActiveLeads = () => {
     });
   }, [page]);
 
-  if (isLoading) return <Loader />;
+  if (isLoading)
+    return (
+      <RootLayout withoutDataCheck>
+        <PageLoader />
+      </RootLayout>
+    );
 
   return (
     <RootLayout withoutDataCheck>

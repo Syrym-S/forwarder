@@ -34,6 +34,7 @@ import Section from "../../shared/ui/section";
 import CargoUnloadVerification from "../../components/leads/lead-item/cargo-unload-verification";
 import { STATUS } from "../../shared/const/tenders";
 import { useLeadsStore } from "../../app/store/leads/leads-store";
+import PageLoader from "../../shared/ui/loaders/page-loader";
 
 const LeadItem = () => {
   const { id } = useParams();
@@ -186,7 +187,12 @@ const LeadItem = () => {
     };
   }, [id]);
 
-  if (!leadData) return <Loader />;
+  if (!leadData)
+    return (
+      <RootLayout withoutDataCheck>
+        <PageLoader />
+      </RootLayout>
+    );
 
   return (
     <RootLayout data={leadData}>

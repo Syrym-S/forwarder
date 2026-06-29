@@ -6,6 +6,7 @@ import { useTendersStore } from "../../app/store/tenders/tender-store";
 import { VIEWS } from "../../shared/const/leads";
 import Loader from "../../components/layout/loader";
 import ForwardersTenderCard from "../../components/tenders/forwarders-tender-card";
+import PageLoader from "../../shared/ui/loaders/page-loader";
 
 const defaultValues = {
   lead_id: "",
@@ -47,7 +48,12 @@ const TenderForwarders = () => {
     });
   }, [page]);
 
-  if (isLoading) return <Loader />;
+  if (isLoading)
+    return (
+      <RootLayout withoutDataCheck>
+        <PageLoader />
+      </RootLayout>
+    );
 
   return (
     <RootLayout withoutDataCheck>

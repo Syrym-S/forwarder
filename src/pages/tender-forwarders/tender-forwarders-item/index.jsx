@@ -30,6 +30,7 @@ import { LeadDocumentCard } from "../../../components/leads/documents/LeadDocume
 import { useTenderDefaultValues } from "../../../shared/hooks/tender/use-tender-default-values";
 import { STATUS } from "../../../shared/const/tenders";
 import TenderBets from "../../../components/tenders/tender-bets";
+import PageLoader from "../../../shared/ui/loaders/page-loader";
 
 const TenderForwardersItem = () => {
   const { id } = useParams();
@@ -84,7 +85,12 @@ const TenderForwardersItem = () => {
     getTenderDetails(id);
   }, [id]);
 
-  if (!currentTender) return <Loader />;
+  if (!currentTender)
+    return (
+      <RootLayout withoutDataCheck>
+        <PageLoader />
+      </RootLayout>
+    );
 
   return (
     <RootLayout withoutDataCheck>

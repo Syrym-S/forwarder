@@ -37,6 +37,7 @@ import TenderBets from "../../../components/tenders/tender-bets";
 import MakeBetForm from "../../../features/tenders/make-bet-form";
 import MakeBetBlock from "../../../components/tenders/make-bet-block";
 import CancelledBets from "../../../components/tenders/cancelled-bets";
+import PageLoader from "../../../shared/ui/loaders/page-loader";
 
 const TenderApplicationsItem = () => {
   const { id } = useParams();
@@ -79,7 +80,12 @@ const TenderApplicationsItem = () => {
     getCustomerTenderDetails(id);
   }, [id]);
 
-  if (!customerCurrentTender) return <Loader />;
+  if (!customerCurrentTender)
+    return (
+      <RootLayout withoutDataCheck>
+        <PageLoader />
+      </RootLayout>
+    );
 
   return (
     <RootLayout withoutDataCheck>

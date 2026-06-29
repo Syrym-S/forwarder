@@ -7,6 +7,7 @@ import { VIEWS } from "../../shared/const/leads";
 import Loader from "../../components/layout/loader";
 import ForwardersTenderCard from "../../components/tenders/forwarders-tender-card";
 import ApplicationsTenderCard from "../../components/tenders/applications-tender-card";
+import PageLoader from "../../shared/ui/loaders/page-loader";
 
 const TenderApplications = () => {
   const view = VIEWS.cards;
@@ -33,7 +34,12 @@ const TenderApplications = () => {
 
   const isTenderEmplty = customerTenders.length === 0;
 
-  if (isTenderEmplty) return <Loader />;
+  if (isTenderEmplty)
+    return (
+      <RootLayout withoutDataCheck>
+        <PageLoader />
+      </RootLayout>
+    );
 
   return (
     <RootLayout withoutDataCheck>

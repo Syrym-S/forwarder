@@ -6,6 +6,8 @@ import { Box, Pagination, Stack, TextField, Typography } from "@mui/material";
 import { useSearchParams } from "react-router-dom";
 import DriverDetailsModal from "../../components/drivers/driver-details-modal";
 import Loader from "../../components/layout/loader";
+import PageLoader from "../../shared/ui/loaders/page-loader";
+import EmptyListUI from "../../shared/ui/empty-list-ui";
 
 const Drivers = () => {
   const [page, setPage] = useState(1);
@@ -23,6 +25,7 @@ const Drivers = () => {
   const searchDriver = useDriverStore((state) => state.searchDriver);
 
   const PAGE_COUNT = Math.ceil(count / perPage);
+  const isEmpty = drivers?.length === 0;
 
   const handleClear = () => {
     setSelectedDriver(null);
@@ -132,17 +135,15 @@ const Drivers = () => {
       >
         {drivers.map((driver) => (
           <>
-            {isLoading ? (
-              <Loader />
-            ) : (
-              <DriverCard
-                key={driver.id}
-                driver={driver}
-                setSelectedDriver={setSelectedDriver}
-              />
-            )}
+            <DriverCard
+              key={driver.id}
+              driver={driver}
+              setSelectedDriver={setSelectedDriver}
+            />
           </>
         ))}
+
+        {isEmpty && <>{isLoading ? <PageLoader /> : <EmptyListUI />}</>}
 
         {selectedDriver && (
           <DriverDetailsModal

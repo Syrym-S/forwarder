@@ -19,6 +19,7 @@ import ProfileDataTable from "../../../components/factoring/profile-data-table";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 import FactorDataTable from "../../../components/factoring/factor-data-table";
 import RememberMeOutlinedIcon from "@mui/icons-material/RememberMeOutlined";
+import PageLoader from "../../../shared/ui/loaders/page-loader";
 
 const FactoringItem = () => {
   const { id } = useParams();
@@ -65,7 +66,12 @@ const FactoringItem = () => {
     }
   }, [factoringDetails]);
 
-  if (!factoringDetails || !currentLead || !profileData) return <Loader />;
+  if (!factoringDetails || !currentLead || !profileData)
+    return (
+      <RootLayout withoutDataCheck>
+        <PageLoader />
+      </RootLayout>
+    );
 
   return (
     <RootLayout withoutDataCheck>

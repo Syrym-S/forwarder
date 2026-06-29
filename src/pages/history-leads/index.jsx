@@ -18,6 +18,7 @@ import { VIEWS } from "../../shared/const/leads";
 import AddLeadForm from "../../features/leads/add-lead-form";
 import { useLeadsStore } from "../../app/store/leads/leads-store";
 import ViewTabs from "../../shared/ui/view-tabs";
+import PageLoader from "../../shared/ui/loaders/page-loader";
 
 const HistoryLeads = () => {
   const [page, setPage] = useState(1);
@@ -44,16 +45,9 @@ const HistoryLeads = () => {
 
   if (isLoading)
     return (
-      <Box
-        sx={{
-          position: "fixed",
-          top: "50%",
-          left: "50%",
-          transform: "translate(-50%, -50%)",
-        }}
-      >
-        <CircularProgress aria-label="Loading…" />
-      </Box>
+      <RootLayout withoutDataCheck>
+        <PageLoader />
+      </RootLayout>
     );
 
   return (

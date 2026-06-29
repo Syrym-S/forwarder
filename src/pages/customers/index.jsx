@@ -16,6 +16,8 @@ import CustomerCard from "../../components/customers/customer-card";
 import { useSearchParams } from "react-router-dom";
 import CustomerDetailsModal from "../../components/customers/customer-details-modal";
 import { useCustomerStore } from "../../app/store/customers/customers-store";
+import EmptyListUI from "../../shared/ui/empty-list-ui";
+import PageLoader from "../../shared/ui/loaders/page-loader";
 
 const Customers = () => {
   const [page, setPage] = useState(1);
@@ -81,8 +83,6 @@ const Customers = () => {
 
     return () => clearTimeout(timer);
   }, [inputValue]);
-
-  if (!customers) return <Loader />;
 
   return (
     <RootLayout withoutDataCheck>
@@ -150,17 +150,15 @@ const Customers = () => {
       >
         {customers.map((customer) => (
           <>
-            {isLoading ? (
-              <Loader />
-            ) : (
-              <CustomerCard
-                key={customer.id}
-                customer={customer}
-                setSelectedCustomer={setSelectedCustomer}
-              />
-            )}
+            <CustomerCard
+              key={customer.id}
+              customer={customer}
+              setSelectedCustomer={setSelectedCustomer}
+            />
           </>
         ))}
+
+        {isEmpty && <>{isLoading ? <PageLoader /> : <EmptyListUI />}</>}
 
         {selectedCustomer && (
           <CustomerDetailsModal
