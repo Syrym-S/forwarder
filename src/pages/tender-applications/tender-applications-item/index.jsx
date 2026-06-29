@@ -98,36 +98,40 @@ const TenderApplicationsItem = () => {
         defaultValues={defaultValues}
       />
 
-      <Container maxWidth="lg" sx={{ py: 1 }}>
-        <TransportationInfo tender={customerCurrentTender} />
+      <TransportationInfo tender={customerCurrentTender} />
 
-        <TenderInfo tender={customerCurrentTender} />
+      <TenderInfo tender={customerCurrentTender} />
 
-        <LeadDocuments tender={customerCurrentTender} />
+      <LeadDocuments tender={customerCurrentTender} />
 
-        <Box
-          sx={{
-            display: "grid",
-            gridTemplateColumns: "1fr 1fr",
-            gridTemplateRows: "1fr",
-            gap: 5,
-          }}
-        >
-          {showBetField ? (
-            <MakeBetForm
-              tender={customerCurrentTender}
-              handleHideBetField={handleHideBetField}
-            />
-          ) : (
-            <MakeBetBlock
-              tender={customerCurrentTender}
-              setShowBetField={setShowBetField}
-            />
-          )}
+      <Box
+        sx={{
+          display: "grid",
+          gridTemplateColumns: {
+            xs: "1fr",
+            sm: "1fr 1fr",
+          },
+          gridTemplateRows: "1fr",
+          gap: {
+            xs: 0,
+            sm: 5,
+          },
+        }}
+      >
+        {showBetField ? (
+          <MakeBetForm
+            tender={customerCurrentTender}
+            handleHideBetField={handleHideBetField}
+          />
+        ) : (
+          <MakeBetBlock
+            tender={customerCurrentTender}
+            setShowBetField={setShowBetField}
+          />
+        )}
 
-          <CancelledBets bets={customerCurrentTender?.bets} />
-        </Box>
-      </Container>
+        <CancelledBets bets={customerCurrentTender?.bets} />
+      </Box>
     </RootLayout>
   );
 };

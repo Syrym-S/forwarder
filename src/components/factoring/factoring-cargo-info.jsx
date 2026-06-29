@@ -15,7 +15,10 @@ const FactoringCargoInfo = ({ leadData }) => {
             xs: "1fr",
             md: "repeat(4,1fr)",
           },
-          gap: 2,
+          gap: {
+            xs: 1,
+            sm: 2,
+          },
           mb: 2,
         }}
       >

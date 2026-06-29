@@ -23,8 +23,14 @@ const FactoringCustomerInfo = ({ customer, verified_customer }) => {
       <Box
         sx={{
           display: "grid",
-          gap: 2,
-          gridTemplateColumns: "repeat(3, 1fr)",
+          gap: {
+            xs: 1,
+            sm: 2,
+          },
+          gridTemplateColumns: {
+            xs: "1fr",
+            sm: "repeat(3, 1fr)",
+          },
         }}
       >
         <InfoField label={"Имя"} value={customer.fullname} />

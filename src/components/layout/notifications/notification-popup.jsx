@@ -48,6 +48,20 @@ const NotificationPopup = ({
       sx={{
         p: 5,
       }}
+      slotProps={{
+        paper: {
+          sx: {
+            width: {
+              xs: "calc(100% - 6px)",
+              sm: "100%",
+            },
+            m: {
+              xs: 0,
+              sm: 2,
+            },
+          },
+        },
+      }}
     >
       <DialogTitle>{selectedNotification?.theme}</DialogTitle>
 
@@ -63,14 +77,43 @@ const NotificationPopup = ({
                 sx={{
                   display: "flex",
                   alignItems: "center",
+                  flexDirection: {
+                    xs: "column",
+                    sm: "row",
+                  },
                   gap: 1,
                 }}
               >
-                <LocalPostOfficeOutlinedIcon />
-                <Typography>{notificationDetails?.message}</Typography>
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 2,
+                  }}
+                >
+                  <LocalPostOfficeOutlinedIcon />
+                  <Typography
+                    sx={{
+                      fontSize: {
+                        xs: "0.8rem",
+                        sm: "0.9rem",
+                      },
+                    }}
+                  >
+                    {notificationDetails?.message}
+                  </Typography>
+                </Box>
                 <Button
                   onClick={handleNotificationPopupClose}
-                  sx={{ display: "block", ml: "auto" }}
+                  sx={{
+                    display: "block",
+                    ml: "auto",
+                    width: {
+                      xs: "100%",
+                      sm: "fit-content",
+                    },
+                    textAlign: "center",
+                  }}
                   component={RouterLink}
                   to={notificationDetails?.link}
                   variant="contained"

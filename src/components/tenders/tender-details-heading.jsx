@@ -54,24 +54,26 @@ const TenderDetailsHeading = ({
             Подробные данные по заявке
           </Typography>
         </Stack>
-        <EditNoteRoundedIcon
-          onClick={handleOpenForm}
-          sx={{
-            display: {
-              xs: "block",
-              sm: "none",
-            },
-            fontSize: "3rem",
-            color: "primary.main",
-            cursor: "pointer",
-          }}
-        />
+        {!isCustomerTender && (
+          <EditNoteRoundedIcon
+            onClick={handleOpenForm}
+            sx={{
+              display: {
+                xs: "block",
+                sm: "none",
+              },
+              fontSize: "3rem",
+              color: "primary.main",
+              cursor: "pointer",
+            }}
+          />
+        )}
       </Box>
 
       <Box
         sx={{
           display: "flex",
-          padding: "10px",
+          py: "10px",
           justifyContent: { xs: "space-between", sm: "end" },
           gap: "10px",
           width: {

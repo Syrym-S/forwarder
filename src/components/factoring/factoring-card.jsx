@@ -31,7 +31,7 @@ const FactoringCard = ({ factoring }) => {
         },
       }}
     >
-      <Stack spacing={2.5}>
+      <Stack spacing={1}>
         <Box
           sx={{
             display: "flex",
@@ -91,8 +91,14 @@ const FactoringCard = ({ factoring }) => {
         <Box
           sx={{
             display: "grid",
-            gridTemplateColumns: "repeat(3, 1fr)",
-            gap: 3,
+            gridTemplateColumns: {
+              xs: "1fr",
+              sm: "repeat(3, 1fr)",
+            },
+            gap: {
+              xs: 1,
+              sm: 3,
+            },
           }}
         >
           <InfoField
@@ -109,7 +115,10 @@ const FactoringCard = ({ factoring }) => {
           sx={{
             display: "grid",
             gridTemplateColumns: "repeat(2, 1fr)",
-            gap: 3,
+            gap: {
+              xs: 1,
+              sm: 3,
+            },
           }}
         >
           <InfoField
@@ -125,7 +134,10 @@ const FactoringCard = ({ factoring }) => {
           sx={{
             display: "grid",
             gridTemplateColumns: "repeat(2, 1fr)",
-            gap: 3,
+            gap: {
+              xs: 1,
+              sm: 3,
+            },
           }}
         >
           <InfoField

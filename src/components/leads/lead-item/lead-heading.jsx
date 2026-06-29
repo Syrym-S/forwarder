@@ -64,9 +64,12 @@ const LeadHeading = ({ leadData, openEditForm }) => {
       <Box
         sx={{
           display: "flex",
-          padding: "10px",
+          py: "10px",
           justifyContent: { xs: "space-between", sm: "end" },
-          gap: "10px",
+          gap: {
+            xs: "3px",
+            sm: "10px",
+          },
           width: {
             xs: "100%",
             sm: "fit-content",

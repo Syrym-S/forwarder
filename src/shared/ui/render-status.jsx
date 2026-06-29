@@ -1,37 +1,69 @@
 import { STATUS } from "../const/tenders";
 import { Chip } from "@mui/material";
 
+const RenderChip = ({ label, color, variant }) => {
+  return (
+    <Chip
+      label={label}
+      variant={variant}
+      color={color}
+      sx={{
+        fontSize: {
+          xs: "0.6rem",
+          sm: "0.8rem",
+        },
+      }}
+    />
+  );
+};
+
 const RenderStatus = ({ status }) => {
   switch (status) {
     case STATUS.new:
       return <Chip label={"Новый"} variant="contained" color="success" />;
     case STATUS.active:
-      return <Chip label={"Активный"} variant="outlined" color="success" />;
+      return (
+        <RenderChip label={"Активный"} variant="outlined" color="success" />
+      );
     case STATUS.cancelled:
-      return <Chip label={"Отменненый"} variant="outlined" color="error" />;
+      return (
+        <RenderChip label={"Отменненый"} variant="outlined" color="error" />
+      );
     case STATUS.add_driver:
       return (
-        <Chip label={"Водитель добавлен"} variant="outlined" color="warning" />
+        <RenderChip
+          label={"Водитель добавлен"}
+          variant="outlined"
+          color="warning"
+        />
       );
     case STATUS.start_driver:
       return (
-        <Chip label={"Поездка начата"} variant="contained" color="warning" />
+        <RenderChip
+          label={"Поездка начата"}
+          variant="contained"
+          color="warning"
+        />
       );
     case STATUS.start_loading:
-      return <Chip label={"Погрузка"} variant="outlined" color="warning" />;
+      return (
+        <RenderChip label={"Погрузка"} variant="outlined" color="warning" />
+      );
     case STATUS.verification_loading:
       return (
-        <Chip
+        <RenderChip
           label={"Погрузка подтверждена"}
           variant="contained"
           color="warning"
         />
       );
     case STATUS.start_unloading:
-      return <Chip label={"Разгрузка"} variant="outlined" color="success" />;
+      return (
+        <RenderChip label={"Разгрузка"} variant="outlined" color="success" />
+      );
     case STATUS.verification_unloading:
       return (
-        <Chip
+        <RenderChip
           label={"Разгрузка подтверждена"}
           variant="outlined"
           color="error"
@@ -39,21 +71,33 @@ const RenderStatus = ({ status }) => {
       );
     case STATUS.finished:
       return (
-        <Chip label={"Рейс завершен"} variant="outlined" color="success" />
+        <RenderChip
+          label={"Рейс завершен"}
+          variant="outlined"
+          color="success"
+        />
       );
     case STATUS.deleted:
-      return <Chip label={"Рейс удален"} variant="outlined" color="error" />;
+      return (
+        <RenderChip label={"Рейс удален"} variant="outlined" color="error" />
+      );
     case STATUS.loss:
-      return <Chip label={"Не принято"} variant="outlined" color="error" />;
+      return (
+        <RenderChip label={"Не принято"} variant="outlined" color="error" />
+      );
     case STATUS.closed:
-      return <Chip label={"Закрыто"} variant="container" color="error" />;
+      return <RenderChip label={"Закрыто"} variant="container" color="error" />;
     case STATUS.winning:
       return (
-        <Chip label={"Принятая ставка"} variant="outlined" color="error" />
+        <RenderChip
+          label={"Принятая ставка"}
+          variant="outlined"
+          color="error"
+        />
       );
     case STATUS.await_paid:
       return (
-        <Chip
+        <RenderChip
           label={"В ожидании оплаты"}
           variant="outlined"
           color="secondary"
@@ -61,7 +105,11 @@ const RenderStatus = ({ status }) => {
       );
     case STATUS.verified_participant:
       return (
-        <Chip label={"На подтверждении"} variant="outlined" color="warning" />
+        <RenderChip
+          label={"На подтверждении"}
+          variant="outlined"
+          color="warning"
+        />
       );
     default:
       return <>Нет статуа</>;

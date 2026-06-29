@@ -9,7 +9,7 @@ import ForwardersTenderCard from "../../components/tenders/forwarders-tender-car
 import ApplicationsTenderCard from "../../components/tenders/applications-tender-card";
 
 const TenderApplications = () => {
-  const [view, setView] = useState(VIEWS.cards);
+  const view = VIEWS.cards;
   const [page, setPage] = useState(1);
 
   const customerTenders = useTendersStore((state) => state.customerTenders);
@@ -40,14 +40,16 @@ const TenderApplications = () => {
       {view === VIEWS.cards && (
         <Box
           sx={{
+            width: {
+              xs: "100%",
+              sm: "60%",
+            },
             mx: "auto",
-            width: "60%",
             display: "grid",
             gap: 5,
             my: "10px",
             gridTemplateColumns: {
               xs: "1fr",
-              md: "1fr",
             },
           }}
         >

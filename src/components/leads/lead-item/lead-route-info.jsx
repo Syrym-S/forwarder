@@ -37,6 +37,9 @@ const LeadRouteInfo = ({ leadData }) => {
               fontSize: 40,
               color: "text.secondary",
               justifySelf: "center",
+              transform: {
+                xs: "rotate(90deg)",
+              },
             }}
           />
         </Box>

@@ -12,8 +12,14 @@ const FactoringFinancialInfo = ({ factoring }) => {
       <Box
         sx={{
           display: "grid",
-          gridTemplateColumns: "repeat(4, 1fr)",
-          gap: 3,
+          gridTemplateColumns: {
+            xs: "1fr",
+            sm: "repeat(4, 1fr)",
+          },
+          gap: {
+            xs: 1,
+            sm: 3,
+          },
         }}
       >
         <InfoField

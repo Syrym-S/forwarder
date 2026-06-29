@@ -37,6 +37,10 @@ const TransportationInfo = ({ tender }) => {
             fontSize: 40,
             color: "text.secondary",
             justifySelf: "center",
+            transform: {
+              xs: "rotate(90deg)",
+              sm: "rotate(0deg)",
+            },
           }}
         />
 

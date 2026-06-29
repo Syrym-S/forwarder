@@ -56,11 +56,17 @@ const Factoring = () => {
       {isCradsView && (
         <Box
           sx={{
-            width: "60%",
+            width: {
+              xs: "100%",
+              sm: "60%",
+            },
             mx: "auto",
             display: "grid",
-            gap: 2,
-            gridTemplateColumns: "1fr",
+            gap: 5,
+            my: "10px",
+            gridTemplateColumns: {
+              xs: "1fr",
+            },
           }}
         >
           {factorings.map((factoring) => (

@@ -73,51 +73,55 @@ const FactoringItem = () => {
 
       <LeadMap from={from} to={to} id={currentLead?.id} />
 
-      <Container maxWidth="lg" sx={{ py: 1 }}>
-        <FactoringTransportationInfo lead={currentLead} />
+      <FactoringTransportationInfo lead={currentLead} />
 
-        <FactoringCargoInfo leadData={currentLead} />
+      <FactoringCargoInfo leadData={currentLead} />
 
-        <FactoringFinancialInfo factoring={factoringDetails} />
+      <FactoringFinancialInfo factoring={factoringDetails} />
 
-        <FactoringCustomerInfo
-          customer={factoringDetails?.customer}
-          verified_customer={factoringDetails?.verified_customer}
-        />
+      <FactoringCustomerInfo
+        customer={factoringDetails?.customer}
+        verified_customer={factoringDetails?.verified_customer}
+      />
 
-        <Box
-          sx={{
-            display: "grid",
-            gridTemplateColumns: "1fr 1fr",
-            gap: 3,
-          }}
+      <Box
+        sx={{
+          display: "grid",
+          gridTemplateColumns: {
+            xs: "1fr",
+            sm: "1fr 1fr",
+          },
+          gap: {
+            xs: 1,
+            sm: 3,
+          },
+        }}
+      >
+        <Section
+          icon={<AccountCircleOutlinedIcon color="primary" />}
+          title={"Мои данные"}
         >
-          <Section
-            icon={<AccountCircleOutlinedIcon color="primary" />}
-            title={"Мои данные"}
-          >
-            <ProfileDataTable />
-          </Section>
+          <ProfileDataTable />
+        </Section>
 
-          <Section
-            icon={<RememberMeOutlinedIcon color="primary" />}
-            title={"Данные Фактора"}
-          >
-            <FactorDataTable factor={factoringDetails?.factor} />
-          </Section>
-        </Box>
+        <Section
+          icon={<RememberMeOutlinedIcon color="primary" />}
+          title={"Данные Фактора"}
+        >
+          <FactorDataTable factor={factoringDetails?.factor} />
+        </Section>
+      </Box>
 
-        {!factoringDetails?.verified_forwarder && (
-          <Button
-            disabled={isConfirmLoading || isLoading}
-            onClick={handleAcceptFactoring}
-          >
-            {isConfirmLoading || isLoading
-              ? "...Идет подтверждение"
-              : "Подтвердить"}
-          </Button>
-        )}
-      </Container>
+      {!factoringDetails?.verified_forwarder && (
+        <Button
+          disabled={isConfirmLoading || isLoading}
+          onClick={handleAcceptFactoring}
+        >
+          {isConfirmLoading || isLoading
+            ? "...Идет подтверждение"
+            : "Подтвердить"}
+        </Button>
+      )}
     </RootLayout>
   );
 };

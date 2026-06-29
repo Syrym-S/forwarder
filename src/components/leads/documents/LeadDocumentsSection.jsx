@@ -154,7 +154,10 @@ export function LeadDocumentsSection({
             spacing={1}
             sx={{
               display: "grid",
-              gridTemplateColumns: "1fr 1fr 1fr",
+              gridTemplateColumns: {
+                xs: "1fr",
+                sm: "repeat(3, 1fr)",
+              },
               alignItems: "stretch",
               gap: 3,
             }}

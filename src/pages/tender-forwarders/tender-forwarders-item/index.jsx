@@ -102,32 +102,39 @@ const TenderForwardersItem = () => {
         defaultValues={defaultValues}
       />
 
-      <Container maxWidth="lg" sx={{ py: 1 }}>
-        <TransportationInfo tender={currentTender} />
+      <TransportationInfo tender={currentTender} />
 
-        <TenderInfo tender={currentTender} />
+      <TenderInfo tender={currentTender} />
 
-        <LeadDocuments tender={currentTender} />
+      <LeadDocuments tender={currentTender} />
 
-        <Box
-          sx={{
-            display: "grid",
-            gridTemplateColumns: "1fr 1fr",
-            gap: "10px",
-          }}
-        >
-          <TenderParticipants tender={currentTender} />
+      <Box
+        sx={{
+          display: "grid",
+          gridTemplateColumns: {
+            xs: "1fr",
+            sm: "1fr 1fr",
+          },
+          gap: {
+            xs: 0,
+            sm: 3,
+          },
+        }}
+      >
+        <TenderParticipants tender={currentTender} />
 
-          <TenderBets tender={currentTender} />
-        </Box>
-      </Container>
+        <TenderBets tender={currentTender} />
+      </Box>
 
       <Box
         sx={{
           display: "flex",
           justifyContent: "end",
           gap: "10px",
-          p: 4,
+          p: {
+            xs: 0,
+            sm: 4,
+          },
         }}
       >
         {isNew && (

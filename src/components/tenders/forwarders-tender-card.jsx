@@ -1,25 +1,25 @@
 import { Box, Button, Chip, Stack, Typography } from "@mui/material";
-import dayjs from "dayjs";
+// import dayjs from "dayjs";
 import { useNavigate } from "react-router-dom";
 import RenderStatus from "../../shared/ui/render-status";
 import TripOriginIcon from "@mui/icons-material/TripOrigin";
 import ArrowDownwardRoundedIcon from "@mui/icons-material/ArrowDownwardRounded";
 import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
-import { useTendersStore } from "../../app/store/tenders/tender-store";
+// import { useTendersStore } from "../../app/store/tenders/tender-store";
 import { STATUS } from "../../shared/const/tenders";
 
 const ForwardersTenderCard = ({ tender }) => {
-  const daysLeft = dayjs(tender.end_date_time).diff(dayjs(), "day");
-  const getTenderDetails = useTendersStore((state) => state.getTenderDetails);
-  const startTender = useTendersStore((state) => state.startTender);
+  // const daysLeft = dayjs(tender.end_date_time).diff(dayjs(), "day");
+  // const getTenderDetails = useTendersStore((state) => state.getTenderDetails);
+  // const startTender = useTendersStore((state) => state.startTender);
   const navigate = useNavigate();
 
-  const handleStartTender = async () => {
-    await startTender(tender?.id);
-    await getTenderDetails(tender?.id);
-  };
+  // const handleStartTender = async () => {
+  //   await startTender(tender?.id);
+  //   await getTenderDetails(tender?.id);
+  // };
 
-  const isNew = tender?.status === STATUS.new;
+  // const isNew = tender?.status === STATUS.new;
 
   const navigateToDetailPage = () => {
     navigate(`/tender-forwarders/${tender.id}`);
@@ -30,7 +30,6 @@ const ForwardersTenderCard = ({ tender }) => {
       onClick={navigateToDetailPage}
       tabIndex={0}
       sx={{
-        maxWidth: "700px",
         p: 3,
         border: "2px solid",
         borderColor: "divider",
@@ -87,21 +86,16 @@ const ForwardersTenderCard = ({ tender }) => {
                 backgroundColor: "rgba(33, 150, 243, 0.04)",
               }}
             />
-            <Chip
-              color="success"
-              label={`Осталось дней ${daysLeft}`}
-              sx={{
-                borderRadius: 999,
-                fontWeight: 500,
-              }}
-            />
             <RenderStatus status={tender?.status} />
           </Stack>
         </Box>
         <Box
           sx={{
             display: "grid",
-            gridTemplateColumns: "1fr 1fr 1fr",
+            gridTemplateColumns: {
+              xs: "1fr",
+              sm: "repeat(3, 1fr)",
+            },
             gap: 2,
           }}
         >
@@ -330,7 +324,10 @@ const ForwardersTenderCard = ({ tender }) => {
         </Box>
         <Box
           sx={{
-            display: "grid",
+            display: {
+              xs: "flex",
+              sm: "grid",
+            },
             gridTemplateColumns: "1fr 1fr 3fr",
             gap: "5px",
             flexWrap: "wrap",
@@ -358,14 +355,15 @@ const ForwardersTenderCard = ({ tender }) => {
               color: "primary.main",
             }}
           />
-          {isNew && (
-            <Chip
+          {/* {isNew && (
+            <Button
               variant="сontained"
               color="success"
-              label="Запустить"
               onClick={handleStartTender}
-            />
-          )}
+            >
+              Запустить
+            </Button>
+          )} */}
         </Box>
       </Stack>
     </Box>

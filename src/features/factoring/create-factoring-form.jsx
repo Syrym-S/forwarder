@@ -267,7 +267,10 @@ const CreateFactoringForm = ({ openFormModal, handleModalClose }) => {
           <Box
             sx={{
               display: "grid",
-              gridTemplateColumns: "3fr 1fr",
+              gridTemplateColumns: {
+                xs: "2fr 1fr",
+                sm: "3fr 1fr",
+              },
               gap: 1,
             }}
           >

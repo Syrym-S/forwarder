@@ -17,7 +17,7 @@ const defaultValues = {
 };
 
 const TenderForwarders = () => {
-  const [view, setView] = useState(VIEWS.cards);
+  const view = VIEWS.cards;
   const [openForm, setOpenForm] = useState(false);
   const [page, setPage] = useState(1);
 
@@ -53,7 +53,10 @@ const TenderForwarders = () => {
     <RootLayout withoutDataCheck>
       <Box
         sx={{
-          width: "60%",
+          width: {
+            xs: "100%",
+            sm: "60%",
+          },
           mx: "auto",
         }}
       >
@@ -74,14 +77,16 @@ const TenderForwarders = () => {
         <Box
           sx={{
             mx: "auto",
-            width: "60%",
+            width: {
+              xs: "100%",
+              sm: "60%",
+            },
             alignItems: "center",
             display: "grid",
             gap: 5,
             my: "10px",
             gridTemplateColumns: {
               xs: "1fr",
-              md: "1fr",
             },
           }}
         >

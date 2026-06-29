@@ -33,7 +33,10 @@ const CargoUnloadVerification = ({
       <Box
         sx={{
           display: "grid",
-          gridTemplateColumns: "repeat(3, 1fr)",
+          gridTemplateColumns: {
+            xs: "1fr",
+            sm: "repeat(3, 1fr)",
+          },
           gap: 5,
         }}
       >

@@ -54,25 +54,13 @@ const FactoringDetailsHeading = ({
             Подробные данные
           </Typography>
         </Stack>
-        <EditNoteRoundedIcon
-          //   onClick={handleOpenForm}
-          sx={{
-            display: {
-              xs: "block",
-              sm: "none",
-            },
-            fontSize: "3rem",
-            color: "primary.main",
-            cursor: "pointer",
-          }}
-        />
       </Box>
 
       <Box
         sx={{
           display: "flex",
           padding: "10px",
-          justifyContent: { xs: "space-between", sm: "end" },
+          justifyContent: { xs: "start", sm: "end" },
           gap: "10px",
           width: {
             xs: "100%",
@@ -88,32 +76,6 @@ const FactoringDetailsHeading = ({
         />
 
         <RenderStatus status={factoring?.status} />
-
-        <Stack
-          sx={{
-            display: {
-              xs: "none",
-              sm: "block",
-            },
-          }}
-        >
-          {/* {!isCustomerTender && (
-            <Tooltip title="Редактировать">
-              <EditNoteRoundedIcon
-                onClick={handleOpenForm}
-                sx={{
-                  display: {
-                    xs: "none",
-                    sm: "block",
-                  },
-                  fontSize: "2rem",
-                  color: "primary.main",
-                  cursor: "pointer",
-                }}
-              />
-            </Tooltip>
-          )} */}
-        </Stack>
       </Box>
     </Box>
   );

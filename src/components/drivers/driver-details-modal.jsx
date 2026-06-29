@@ -67,8 +67,14 @@ const DriverDetailsModal = ({ selectedDriver, handleClear }) => {
           <Box
             sx={{
               display: "grid",
-              gridTemplateColumns: "repeat(3, 1fr)",
-              gap: 3,
+              gridTemplateColumns: {
+                xs: "1fr",
+                sm: "repeat(3, 1fr)",
+              },
+              gap: {
+                xs: 1,
+                sm: 3,
+              },
             }}
           >
             <InfoField

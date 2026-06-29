@@ -56,7 +56,10 @@ const NotificationsDrawer = ({
     >
       <Box
         sx={{
-          width: "30vw",
+          width: {
+            xs: "80vw",
+            sm: "30vw",
+          },
           py: 2,
         }}
       >
@@ -124,6 +127,7 @@ const NotificationsDrawer = ({
                 notification={notification}
                 setSelectedNotification={setSelectedNotification}
                 handleNotificationsClose={handleNotificationsClose}
+                handleCloseDrawer={handleCloseDrawer}
               />
             ))
           )}

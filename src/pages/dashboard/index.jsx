@@ -8,7 +8,10 @@ const Dashboard = () => {
     <RootLayout withoutDataCheck>
       <Container
         sx={{
-          padding: "30px",
+          padding: {
+            xs: "10px",
+            sm: "30px",
+          },
         }}
       >
         <Map />

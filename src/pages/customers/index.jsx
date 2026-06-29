@@ -35,6 +35,7 @@ const Customers = () => {
   const searchCustomers = useCustomerStore((state) => state.searchCustomers);
 
   const PAGE_COUNT = Math.ceil(count / perPage);
+  const isEmpty = customers?.length === 0;
 
   const handleClear = () => {
     setSelectedCustomer(null);
@@ -72,8 +73,10 @@ const Customers = () => {
         return;
       }
 
-      searchCustomers({ q: value });
-      setSearchRequest(value);
+      if (value.length >= 2) {
+        searchCustomers({ q: value });
+        setSearchRequest(value);
+      }
     }, 1000);
 
     return () => clearTimeout(timer);
@@ -83,7 +86,15 @@ const Customers = () => {
 
   return (
     <RootLayout withoutDataCheck>
-      <Stack sx={{ width: "60%", mx: "auto" }}>
+      <Stack
+        sx={{
+          width: {
+            xs: "100%",
+            sm: "60%",
+          },
+          mx: "auto",
+        }}
+      >
         <TextField
           onChange={(e) => {
             setInputValue(e.target.value);
@@ -128,10 +139,12 @@ const Customers = () => {
 
       <Box
         sx={{
-          width: "60%",
+          width: {
+            xs: "100%",
+            sm: "60%",
+          },
           mx: "auto",
           display: "grid",
-          gridTemplateColumns: "1fr",
           gap: 5,
         }}
       >
@@ -156,14 +169,16 @@ const Customers = () => {
           />
         )}
 
-        <Pagination
-          sx={{
-            mx: "auto",
-          }}
-          page={page}
-          count={PAGE_COUNT}
-          onChange={handlePageChange}
-        />
+        {!isEmpty && (
+          <Pagination
+            sx={{
+              mx: "auto",
+            }}
+            page={page}
+            count={PAGE_COUNT}
+            onChange={handlePageChange}
+          />
+        )}
       </Box>
     </RootLayout>
   );

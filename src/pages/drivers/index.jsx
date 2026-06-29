@@ -69,7 +69,15 @@ const Drivers = () => {
 
   return (
     <RootLayout withoutDataCheck>
-      <Stack sx={{ width: "60%", mx: "auto" }}>
+      <Stack
+        sx={{
+          width: {
+            xs: "100%",
+            sm: "60%",
+          },
+          mx: "auto",
+        }}
+      >
         <TextField
           onChange={(e) => {
             setInputValue(e.target.value);
@@ -113,11 +121,13 @@ const Drivers = () => {
       </Stack>
       <Box
         sx={{
-          display: "grid",
-          gridTemplateColumns: "1fr",
-          gap: 3,
-          width: "60%",
+          width: {
+            xs: "100%",
+            sm: "60%",
+          },
           mx: "auto",
+          display: "grid",
+          gap: 5,
         }}
       >
         {drivers.map((driver) => (

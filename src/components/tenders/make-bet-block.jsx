@@ -83,6 +83,12 @@ const MakeBetBlock = ({ tender, setShowBetField }) => {
                   <>
                     {" "}
                     <Button
+                      sx={{
+                        fontSize: {
+                          xs: "0.7rem",
+                          sm: "0.9rem",
+                        },
+                      }}
                       variant={"outlined"}
                       color={"error"}
                       onClick={handleOpenCancelModal}
@@ -103,6 +109,10 @@ const MakeBetBlock = ({ tender, setShowBetField }) => {
                         tabIndex: -1,
                       }}
                       sx={{
+                        fontSize: {
+                          xs: "0.7rem",
+                          sm: "0.9rem",
+                        },
                         color: "blue",
                         pointerEvents: "none",
                         "& .MuiOutlinedInput-notchedOutline": {

@@ -7,6 +7,7 @@ const NotificationItem = ({
   notification,
   setSelectedNotification,
   handleNotificationsClose,
+  handleCloseDrawer,
 }) => {
   const isViewd = notification?.is_viewed;
 
@@ -15,6 +16,7 @@ const NotificationItem = ({
       onClick={() => {
         setSelectedNotification(notification);
         handleNotificationsClose();
+        handleCloseDrawer();
       }}
       sx={{
         p: 1,
