@@ -33,7 +33,12 @@ export const useLeadsStore = create((set) => ({
   error: null,
   count: 0,
   perPage: 1,
+  history_count: 0,
+  history_perPage: 1,
 
+  clearCurrentLead: () => {
+    set({ currentLead: null, error: null });
+  },
   fetchLeads: async (params) => {
     try {
       set({ isLoading: true, error: null });
@@ -80,8 +85,8 @@ export const useLeadsStore = create((set) => ({
       set({
         historyLeads: response.data.results,
         page: response.data.page,
-        count: response.data.count,
-        // perPage: response.data.per_page,
+        history_count: response.data.count,
+        history_perPage: response.data.per_page,
         isLoading: false,
       });
     } catch (e) {

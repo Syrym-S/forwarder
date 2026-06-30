@@ -39,6 +39,7 @@ const LeadRouteInfo = ({ leadData }) => {
               justifySelf: "center",
               transform: {
                 xs: "rotate(90deg)",
+                sm: "rotate(0)",
               },
             }}
           />

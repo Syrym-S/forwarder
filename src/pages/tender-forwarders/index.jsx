@@ -27,6 +27,9 @@ const TenderForwarders = () => {
   const isLoading = useTendersStore((state) => state.isLoading);
   const count = useTendersStore((state) => state.count);
   const perPage = useTendersStore((state) => state.perPage);
+  const clearCurrentTender = useTendersStore(
+    (state) => state.clearCurrentTender,
+  );
 
   const PAGE_COUNT = Math.ceil(count / perPage);
 
@@ -47,6 +50,10 @@ const TenderForwarders = () => {
       page: page,
     });
   }, [page]);
+
+  useEffect(() => {
+    clearCurrentTender();
+  }, []);
 
   if (isLoading)
     return (

@@ -233,11 +233,14 @@ const LeadCard = ({ lead }) => {
             gap: 1,
           }}
         >
-          <InfoField label="Вес" value={`${lead.cargo.weight_kg} кг`} />
+          <InfoField
+            label="Вес"
+            value={lead.cargo.weight_kg ? `${lead.cargo.weight_kg} кг` : null}
+          />
           <InfoField label="Тип" value={lead.cargo.type} />
           <InfoField
             label="Цена"
-            value={`${lead.summ} ${lead.currency}`}
+            value={`${lead.summ === 0 ? lead.cargo_price : lead.summ} ${lead.currency}`}
             accent
             sx={{
               gridColumn: {

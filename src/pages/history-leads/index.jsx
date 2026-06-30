@@ -25,8 +25,8 @@ const HistoryLeads = () => {
   const [view, setView] = useState(VIEWS.cards);
 
   const historyLeads = useLeadsStore((state) => state.historyLeads);
-  const count = useLeadsStore((state) => state.count);
-  const perPage = 1;
+  const count = useLeadsStore((state) => state.history_count);
+  const perPage = useLeadsStore((state) => state.history_perPage);
   const getHistoryLeads = useLeadsStore((state) => state.getHistoryLeads);
   const isLoading = useLeadsStore((state) => state.isLoading);
   const isCradsView = view === VIEWS.cards;
@@ -76,7 +76,15 @@ const HistoryLeads = () => {
 
       {!isCradsView && <LeadsTable leads={historyLeads} />}
 
-      <Pagination page={page} count={PAGE_COUNT} onChange={handlePageChange} />
+      <Pagination
+        page={page}
+        count={PAGE_COUNT}
+        onChange={handlePageChange}
+        sx={{
+          width: "fit-content",
+          mx: "auto",
+        }}
+      />
     </RootLayout>
   );
 };

@@ -14,6 +14,10 @@ const TenderApplications = () => {
   const [page, setPage] = useState(1);
 
   const customerTenders = useTendersStore((state) => state.customerTenders);
+  const clearCurrentTender = useTendersStore(
+    (state) => state.clearCurrentTender,
+  );
+
   const getCustomerTenders = useTendersStore(
     (state) => state.getCustomerTenders,
   );
@@ -31,6 +35,10 @@ const TenderApplications = () => {
       page: page,
     });
   }, [page]);
+
+  useEffect(() => {
+    clearCurrentTender();
+  }, []);
 
   const isTenderEmplty = customerTenders.length === 0;
 

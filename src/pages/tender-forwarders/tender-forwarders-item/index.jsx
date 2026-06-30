@@ -39,6 +39,10 @@ const TenderForwardersItem = () => {
   const [openForm, setOpenForm] = useState(false);
 
   const currentTender = useTendersStore((state) => state.currentTender);
+  const isLoadingCurrentTenderLoading = useTendersStore(
+    (state) => state.isLoadingCurrentTenderLoading,
+  );
+
   const getTenderDetails = useTendersStore((state) => state.getTenderDetails);
   const deleteTender = useTendersStore((state) => state.deleteTender);
   const startTender = useTendersStore((state) => state.startTender);
@@ -85,7 +89,7 @@ const TenderForwardersItem = () => {
     getTenderDetails(id);
   }, [id]);
 
-  if (!currentTender)
+  if (!currentTender || isLoadingCurrentTenderLoading)
     return (
       <RootLayout withoutDataCheck>
         <PageLoader />

@@ -59,6 +59,7 @@ export function mapCreateLeadFormToApi(form) {
     cargo_name: form.type || "Не указан",
     cargo_type: form.type || "Не указан",
     currency: form.currency || "KZT",
+    price: form.price || 0,
   };
 
   addIfHasValue(payload, "loading_date", form.loadingDate);
@@ -76,7 +77,7 @@ export function mapCreateLeadFormToApi(form) {
   addNumberIfHasValue(payload, "cargo_length", form.length_cm);
   addNumberIfHasValue(payload, "cargo_width", form.width_cm);
   addNumberIfHasValue(payload, "cargo_height", form.height_cm);
-  addNumberIfHasValue(payload, "cargo_price", form.cargo_price);
+  addNumberIfHasValue(payload, "price", form.price);
 
   return payload;
 }
@@ -103,7 +104,7 @@ export function mapCreatedLeadToUi(form, response = {}) {
 
     transportation_price: Number(form.price) || 0,
 
-    summ: Number(form.price) || 0,
+    summ: Number(form.summ) || 0,
 
     currency: form.currency || "KZT",
 

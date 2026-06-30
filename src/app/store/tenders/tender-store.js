@@ -21,12 +21,18 @@ export const useTendersStore = create((set) => ({
   currentTender: null,
   customerCurrentTender: null,
   isLoading: false,
+  isLoadingCurrentTenderLoading: false,
   isAddingLoading: false,
   isBetsLoading: false,
   count: 0,
   perPage: 1,
   customerCount: 0,
   customerPerPage: 1,
+
+  clearCurrentTender: () => {
+    set({ currentTender: null, customerCurrentTender: null, error: null });
+    console.log("clearCurrentTender отработал");
+  },
 
   //Обработки своих созданных тендеров
   getTenders: async (params) => {
@@ -47,11 +53,14 @@ export const useTendersStore = create((set) => ({
   },
   getTenderDetails: async (id) => {
     try {
-      set({ isLoading: true });
+      set({ isLoadingCurrentTenderLoading: true });
 
       const response = await getTenderDetailsApi(id);
 
-      set({ isLoading: false, currentTender: response.data });
+      set({
+        isLoadingCurrentTenderLoading: false,
+        currentTender: response.data,
+      });
     } catch (e) {
       console.log(e);
     }

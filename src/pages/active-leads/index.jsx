@@ -33,9 +33,11 @@ const ActiveLeads = () => {
   const count = useLeadsStore((state) => state.count);
   const perPage = useLeadsStore((state) => state.perPage);
   const fetchLeads = useLeadsStore((state) => state.fetchLeads);
+  const clearCurrentLead = useLeadsStore((state) => state.clearCurrentLead);
   const isLoading = useLeadsStore((state) => state.isLoading);
 
   const PAGE_COUNT = Math.ceil(count / perPage);
+
   const isCardsView = view === VIEWS.cards;
 
   const deafultValues = useFormDefaultValues();
@@ -53,6 +55,10 @@ const ActiveLeads = () => {
       page: page,
     });
   }, [page]);
+
+  useEffect(() => {
+    clearCurrentLead();
+  }, []);
 
   if (isLoading)
     return (
@@ -87,7 +93,15 @@ const ActiveLeads = () => {
         </Box>
       )}
       {!isCardsView && <LeadsTable leads={leads} />}
-      <Pagination page={page} count={PAGE_COUNT} onChange={handlePageChange} />
+      <Pagination
+        page={page}
+        count={PAGE_COUNT}
+        onChange={handlePageChange}
+        sx={{
+          width: "fit-content",
+          mx: "auto",
+        }}
+      />
       <AddLeadForm
         openForm={openForm}
         setOpenForm={setOpenForm}

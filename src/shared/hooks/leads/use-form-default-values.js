@@ -1,7 +1,4 @@
 import React from "react";
-import { formatNominatimAddress } from "../../../components/lead-form/lib/geocoding.helpers";
-import { cleanAddress } from "../../../components/lead-form/lib/clean-address";
-import { getCoords } from "../../../components/lead-form/lib/geacode-address";
 
 export const useFormDefaultValues = (lead = null, files = []) => {
   return {

@@ -4,12 +4,13 @@ import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
 import DialogActions from "@mui/material/DialogActions";
 import Button from "@mui/material/Button";
-import { NavLink, useNavigation } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 const LogoutModal = ({ open, handleOpenModal, handleCloseProfile }) => {
   const handleLogout = () => {
     handleOpenModal();
     handleCloseProfile();
+    window.location.href = "/login";
   };
 
   return (
@@ -34,7 +35,6 @@ const LogoutModal = ({ open, handleOpenModal, handleCloseProfile }) => {
               color: "white",
             }}
             onClick={handleLogout}
-            to={"/auth"}
           >
             Выйти
           </NavLink>
