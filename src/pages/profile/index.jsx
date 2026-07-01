@@ -4,17 +4,21 @@ import {
   Alert,
   Box,
   Button,
+  CircularProgress,
   Container,
+  IconButton,
   Paper,
   Stack,
   TextField,
   Typography,
 } from "@mui/material";
-
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import RootLayout from "../../components/layout/root-layout";
 import {
+  deleteAvatarApi,
   fetchForwarderProfile,
   updateForwarderProfile,
+  uploadAvatarApi,
 } from "../../features/profile-edit/profile-api";
 import {
   initialProfileForm,
@@ -22,6 +26,7 @@ import {
   mapProfileFromApi,
   validateProfileForm,
 } from "../../features/profile-edit/profile-form-helpers";
+import PageLoader from "../../shared/ui/loaders/page-loader";
 
 const ProfilePage = () => {
   const [form, setForm] = useState(initialProfileForm);
@@ -35,6 +40,74 @@ const ProfilePage = () => {
   const [isSaving, setIsSaving] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
   const [submitError, setSubmitError] = useState("");
+  const [selectedImg, setSelectedImg] = useState(null);
+  const [preview, setPreview] = useState(null);
+
+  let isCancelled = false;
+
+  async function loadProfile() {
+    try {
+      setIsProfileLoading(true);
+      setProfileLoadError("");
+
+      const profile = await fetchForwarderProfile();
+
+      if (!isCancelled) {
+        const mappedProfile = mapProfileFromApi(profile);
+
+        setForm(mappedProfile);
+        setInitialLoadedForm(mappedProfile);
+        setErrors({});
+        setSubmitError("");
+        setSuccessMessage("");
+      }
+    } catch (error) {
+      if (!isCancelled) {
+        setProfileLoadError(
+          error.response?.data?.message ||
+            error.message ||
+            "Не удалось загрузить профиль",
+        );
+      }
+    } finally {
+      if (!isCancelled) {
+        setIsProfileLoading(false);
+      }
+    }
+  }
+
+  function handleFileChange(event) {
+    const file = event.target.files[0];
+
+    if (file) {
+      setSelectedImg(file);
+      setPreview(URL.createObjectURL(file));
+    }
+  }
+
+  async function handleClearAvatar() {
+    if (form.avatar) {
+      try {
+        setIsProfileLoading(true);
+        await deleteAvatarApi();
+        setSelectedImg("");
+        setPreview("");
+        setIsProfileLoading(false);
+      } catch (e) {
+        console.log(e);
+      }
+    }
+
+    loadProfile();
+  }
+
+  useEffect(() => {
+    return () => {
+      if (preview) {
+        URL.revokeObjectURL(preview);
+      }
+    };
+  }, [preview]);
 
   function handleChange(event) {
     const { name, value } = event.target;
@@ -69,7 +142,7 @@ const ProfilePage = () => {
 
     const payload = mapProfileFormToChangedApi(form, initialLoadedForm);
 
-    if (Object.keys(payload).length === 0) {
+    if (Object.keys(payload).length === 0 && !selectedImg) {
       setSubmitError("Нет изменений для сохранения");
       return;
     }
@@ -80,6 +153,15 @@ const ProfilePage = () => {
       setSuccessMessage("");
 
       await updateForwarderProfile(payload);
+      if (selectedImg) {
+        console.log(selectedImg);
+
+        await uploadAvatarApi({
+          file: selectedImg,
+          name: selectedImg.name,
+          context: "avatar",
+        });
+      }
 
       const nextInitialForm = {
         ...form,
@@ -91,6 +173,7 @@ const ProfilePage = () => {
       setInitialLoadedForm(nextInitialForm);
       setForm(nextInitialForm);
       setSuccessMessage("Профиль успешно обновлен");
+      loadProfile();
     } catch (error) {
       setSubmitError(
         error.response?.data?.message ||
@@ -166,6 +249,109 @@ const ProfilePage = () => {
               <Typography color="text.secondary" fontSize={14}>
                 Данные компании и контактного лица
               </Typography>
+            </Box>
+
+            <Box
+              sx={{
+                display: "flex",
+                gap: 1,
+                alignItems: "center",
+              }}
+            >
+              <IconButton>
+                {isProfileLoading ? (
+                  <Box
+                    sx={{
+                      width: 100,
+                      height: 100,
+                      borderRadius: "100%",
+                      border: "5px solid",
+                      borderColor: "primary.main",
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    <CircularProgress />
+                  </Box>
+                ) : !selectedImg && !form?.avatar ? (
+                  <AccountCircleIcon
+                    color="primary"
+                    sx={{
+                      fontSize: "7rem",
+                    }}
+                  />
+                ) : (
+                  <Box
+                    component="img"
+                    sx={{
+                      display: "block",
+                      borderRadius: "100%",
+                      width: "100px",
+                      height: "100px",
+                      border: 0,
+                      maxWidth: "100%",
+                      maxHeight: 200,
+                      objectFit: "contain",
+                    }}
+                    src={form?.avatar || preview}
+                  />
+                )}
+              </IconButton>
+
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  gap: 1,
+                }}
+              >
+                <Typography>Фото профиля</Typography>
+                <Typography>
+                  PNG или JPEG, размер от 400x400 до 600x600 px
+                </Typography>
+                <Box
+                  sx={{
+                    display: "flex",
+                    gap: 1,
+                    flexDirection: {
+                      xs: "column",
+                      sm: "row",
+                    },
+                  }}
+                >
+                  <Button
+                    variant="outlined"
+                    component="label"
+                    sx={{
+                      minHeight: 40,
+                      width: {
+                        xs: "100%",
+                        md: "auto",
+                      },
+                    }}
+                  >
+                    Загрузить фото
+                    <input
+                      name="file"
+                      type="file"
+                      hidden
+                      accept=".jpeg,.png"
+                      onChange={handleFileChange}
+                    />
+                  </Button>
+                  {(selectedImg || form.avatar) && (
+                    <Button
+                      color="error"
+                      variant="outlined"
+                      onClick={handleClearAvatar}
+                    >
+                      Удалить
+                    </Button>
+                  )}
+                </Box>
+              </Box>
             </Box>
 
             {profileLoadError && (

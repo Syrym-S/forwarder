@@ -55,6 +55,8 @@ export function mapProfileFromApi(profile) {
 
     personDocumentNumber: profile?.personDocumentNumber || "",
     personIssueCountry: profile?.personIssueCountry || "",
+
+    avatar: profile?.avatar || "",
   };
 }
 
