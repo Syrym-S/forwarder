@@ -14,6 +14,7 @@ import TenderForwardersItem from "../../pages/tender-forwarders/tender-forwarder
 import TenderApplications from "../../pages/tender-applications";
 import TenderApplicationsItem from "../../pages/tender-applications/tender-applications-item";
 import FactoringItem from "../../pages/factoring/factoring-item";
+import ReProfile from "../../pages/re-profile";
 
 const AppRouter = () => {
   const routes = useRoutes([
@@ -56,6 +57,10 @@ const AppRouter = () => {
     {
       path: "/profile",
       element: <Profile />,
+    },
+    {
+      path: "/re-profile",
+      element: <ReProfile />,
     },
     {
       path: "/tender-applications",
