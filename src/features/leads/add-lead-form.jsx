@@ -56,6 +56,7 @@ const AddLeadForm = ({
   const createLead = useLeadsStore((state) => state.createLead);
   const updateLead = useLeadsStore((state) => state.updateLead);
   const getLeadItem = useLeadsStore((state) => state.getLeadItem);
+  const clearCurrentLead = useLeadsStore((state) => state.clearCurrentLead);
   const getCustomers = useCustomerStore((state) => state.getCustomers);
   const getDrivers = useDriverStore((state) => state.getDrivers);
 
@@ -123,6 +124,7 @@ const AddLeadForm = ({
 
       if (isEdit) {
         await updateLead(editingItemId, payload);
+        clearCurrentLead();
         await getLeadItem(editingItemId);
 
         if (payload.documents.length > 0 && createdLeadId) {

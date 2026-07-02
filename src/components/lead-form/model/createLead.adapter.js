@@ -70,8 +70,12 @@ export function mapCreateLeadFormToApi(form) {
 
   addNumberIfHasValue(payload, "from_lat", form.fromLat);
   addNumberIfHasValue(payload, "from_lon", form.fromLng);
+  addNumberIfHasValue(payload, "from_lat", form.from_location.lat);
+  addNumberIfHasValue(payload, "from_lon", form.from_location.lon);
   addNumberIfHasValue(payload, "to_lat", form.toLat);
   addNumberIfHasValue(payload, "to_lon", form.toLng);
+  addNumberIfHasValue(payload, "to_lat", form.to_location.lat);
+  addNumberIfHasValue(payload, "to_lon", form.to_location.lon);
 
   addNumberIfHasValue(payload, "cargo_weight", form.weight_kg);
   addNumberIfHasValue(payload, "cargo_length", form.length_cm);
