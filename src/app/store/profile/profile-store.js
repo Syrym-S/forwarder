@@ -8,6 +8,7 @@ import {
 
 export const useProfileStore = create((set) => ({
   profileData: null,
+  uploadAvatarError: null,
   isProfileLoading: false,
   isAvatarLoading: false,
 
@@ -51,16 +52,16 @@ export const useProfileStore = create((set) => ({
 
   uploadAvatar: async (payload) => {
     try {
-      set({ isAvatarLoading: true, error: null });
+      set({ isAvatarLoading: true, uploadAvatarError: null });
 
       const response = await uploadAvatarApi(payload);
 
-      set({ isAvatarLoading: false, error: null });
+      set({ isAvatarLoading: false, uploadAvatarError: null });
 
       return response;
     } catch (e) {
       set({
-        error: e.message,
+        uploadAvatarError: e.response.data.message,
         isAvatarLoading: false,
       });
 

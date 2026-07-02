@@ -9,8 +9,10 @@ import EditDocumentDetails from "../../components/profile/edit-document-details"
 import { Box, Button } from "@mui/material";
 import { useProfileStore } from "../../app/store/profile/profile-store";
 import { mapProfileFormToChangedApi } from "../profile-edit/profile-form-helpers";
+import RenderErroMessage from "../../shared/ui/render-error-message";
 
 const EditProfileForm = ({ profileData }) => {
+  const uploadAvatarError = useProfileStore((state) => state.uploadAvatarError);
   const editProfileData = useProfileStore((state) => state.editProfileData);
   const getProfileData = useProfileStore((state) => state.getProfileData);
   const uploadAvatar = useProfileStore((state) => state.uploadAvatar);
@@ -18,7 +20,6 @@ const EditProfileForm = ({ profileData }) => {
 
   const [selectedImg, setSelectedImg] = useState(null);
   const [preview, setPreview] = useState(null);
-  const [submitError, setSubmitError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const {
@@ -42,27 +43,20 @@ const EditProfileForm = ({ profileData }) => {
 
   const handleClearAvatar = async () => {
     if (formValues.avatar) {
-      try {
-        await deleteAvatar();
-        setSelectedImg("");
-        setPreview("");
-      } catch (e) {
-        console.log(e);
-      }
+      await deleteAvatar();
+      setSelectedImg(null);
+      setPreview(null);
+      getProfileData();
+    } else {
+      setSelectedImg(null);
+      setPreview(null);
     }
-
-    getProfileData();
   };
 
   const onEditSubmit = async (data) => {
     setIsSubmitting(true);
 
     const payload = mapProfileFormToChangedApi(data);
-
-    if (!isDirty && !selectedImg) {
-      setSubmitError("Нет изменений для сохранения");
-      return;
-    }
 
     await editProfileData(payload);
 
@@ -83,8 +77,6 @@ const EditProfileForm = ({ profileData }) => {
 
   return (
     <>
-      {submitError && <Alert severity="error">{submitError}</Alert>}
-
       <UploadAvatar
         formValues={formValues}
         selectedImg={selectedImg}
@@ -92,6 +84,8 @@ const EditProfileForm = ({ profileData }) => {
         handleFileChange={handleFileChange}
         handleClearAvatar={handleClearAvatar}
       />
+
+      {uploadAvatarError && <RenderErroMessage error={uploadAvatarError} />}
 
       <EditCompanyFileds control={control} />
 
@@ -106,10 +100,15 @@ const EditProfileForm = ({ profileData }) => {
       <Box>
         <Button
           variant="contained"
+          color={uploadAvatarError ? "error" : "primary"}
           onClick={handleSubmit(onEditSubmit)}
-          disabled={(!isDirty && !selectedImg) || isSubmitting}
+          disabled={!isDirty && !selectedImg}
         >
-          {isSubmitting ? "Сохранение..." : "Сохранить"}
+          {isSubmitting && !uploadAvatarError
+            ? "Сохранение..."
+            : uploadAvatarError
+              ? "Попробовать еще раз"
+              : "Сохранить"}
         </Button>
       </Box>
     </>
