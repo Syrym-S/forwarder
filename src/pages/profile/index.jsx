@@ -27,8 +27,11 @@ import {
   validateProfileForm,
 } from "../../features/profile-edit/profile-form-helpers";
 import PageLoader from "../../shared/ui/loaders/page-loader";
+import { useProfileStore } from "../../app/store/profile/profile-store";
 
 const ProfilePage = () => {
+  const getProfileData = useProfileStore((state) => state.getProfileData);
+
   const [form, setForm] = useState(initialProfileForm);
   const [initialLoadedForm, setInitialLoadedForm] =
     useState(initialProfileForm);
@@ -49,6 +52,7 @@ const ProfilePage = () => {
     try {
       setIsProfileLoading(true);
       setProfileLoadError("");
+      getProfileData();
 
       const profile = await fetchForwarderProfile();
 
@@ -154,8 +158,6 @@ const ProfilePage = () => {
 
       await updateForwarderProfile(payload);
       if (selectedImg) {
-        console.log(selectedImg);
-
         await uploadAvatarApi({
           file: selectedImg,
           name: selectedImg.name,

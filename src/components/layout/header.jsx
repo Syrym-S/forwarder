@@ -22,12 +22,18 @@ import NotificationsNoneOutlinedIcon from "@mui/icons-material/NotificationsNone
 import NotificationsOffOutlinedIcon from "@mui/icons-material/NotificationsOffOutlined";
 import { useNotificationsStore } from "../../app/store/notifications/noti-store";
 import NotificationsBlock from "./notifications/notifications-block";
+import { useProfileStore } from "../../app/store/profile/profile-store";
 
 const Header = ({ openMenu, setOpenMenu }) => {
   const navigate = useNavigate();
+
+  const profileData = useProfileStore((state) => state.profileData);
+  const getProfileData = useProfileStore((state) => state.getProfileData);
   const getNotifications = useNotificationsStore(
     (state) => state.getNotifications,
   );
+
+  const profileAvatar = profileData?.avatar;
 
   const [profileAnchorEl, setProfileAnchorEl] = useState(null);
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
@@ -63,6 +69,7 @@ const Header = ({ openMenu, setOpenMenu }) => {
 
   useEffect(() => {
     getNotifications();
+    getProfileData();
   }, []);
 
   return (
@@ -101,7 +108,21 @@ const Header = ({ openMenu, setOpenMenu }) => {
 
         <Button
           variant="outlined"
-          startIcon={<AccountCircleIcon />}
+          startIcon={
+            profileAvatar ? (
+              <Box
+                component="img"
+                width={30}
+                height={30}
+                sx={{
+                  borderRadius: "100%",
+                }}
+                src={profileData?.avatar}
+              />
+            ) : (
+              <AccountCircleIcon />
+            )
+          }
           onClick={handleOpenProfileMenu}
           sx={{
             maxWidth: {

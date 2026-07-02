@@ -57,10 +57,6 @@ function App() {
     };
   }, []);
 
-  useEffect(() => {
-    console.log("newNotification", newNotification);
-  }, [newNotification]);
-
   return (
     <BrowserRouter basename="/forwarder">
       <Header openMenu={openMenu} setOpenMenu={setOpenMenu} />
