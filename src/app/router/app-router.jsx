@@ -54,12 +54,9 @@ const AppRouter = () => {
       path: "/drivers",
       element: <Drivers />,
     },
+
     {
       path: "/profile",
-      element: <Profile />,
-    },
-    {
-      path: "/re-profile",
       element: <ReProfile />,
     },
     {
