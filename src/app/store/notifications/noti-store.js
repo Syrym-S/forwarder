@@ -8,6 +8,7 @@ import {
 
 export const useNotificationsStore = create((set) => ({
   notifications: [],
+  newNotification: null,
   notificationDetails: null,
   isLoading: false,
   error: null,
@@ -20,8 +21,11 @@ export const useNotificationsStore = create((set) => ({
 
       const response = await getNotificationsApi(params);
 
+      const newNotification = response.data.results[0];
+
       set({
         notifications: response.data.results,
+        newNotification: newNotification.is_viewed ? null : newNotification,
         isLoading: false,
         total: response.data.total,
         perPage: response.data.per_page,
@@ -32,6 +36,10 @@ export const useNotificationsStore = create((set) => ({
         isLoading: false,
       });
     }
+  },
+
+  clearNewNotificationValue: () => {
+    set({ newNotification: null });
   },
 
   getNotificationDetails: async (id) => {
@@ -77,5 +85,15 @@ export const useNotificationsStore = create((set) => ({
         isLoading: false,
       });
     }
+  },
+
+  connectNotifications: async () => {
+    const tokenResponse = await getNotificationsTokenApi();
+
+    const socket = new WebSocket(
+      `wss://notification.360logistics.kz/socket?token=${tokenResponse.token}`,
+    );
+
+    return socket;
   },
 }));

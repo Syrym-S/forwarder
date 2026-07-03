@@ -8,16 +8,21 @@ import Loader from "../../components/layout/loader";
 import ForwardersTenderCard from "../../components/tenders/forwarders-tender-card";
 import ApplicationsTenderCard from "../../components/tenders/applications-tender-card";
 import PageLoader from "../../shared/ui/loaders/page-loader";
+import { useNotificationsStore } from "../../app/store/notifications/noti-store";
+import { NOTIFICATION_TYPE } from "../../shared/const/notification-types";
 
 const TenderApplications = () => {
   const view = VIEWS.cards;
+
   const [page, setPage] = useState(1);
 
+  const newNotification = useNotificationsStore(
+    (state) => state.newNotification,
+  );
   const customerTenders = useTendersStore((state) => state.customerTenders);
   const clearCurrentTender = useTendersStore(
     (state) => state.clearCurrentTender,
   );
-
   const getCustomerTenders = useTendersStore(
     (state) => state.getCustomerTenders,
   );
@@ -39,6 +44,12 @@ const TenderApplications = () => {
   useEffect(() => {
     clearCurrentTender();
   }, []);
+
+  useEffect(() => {
+    if (newNotification?.type === NOTIFICATION_TYPE.tender) {
+      getCustomerTenders();
+    }
+  }, [newNotification]);
 
   const isTenderEmplty = customerTenders.length === 0;
 

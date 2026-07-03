@@ -83,7 +83,6 @@ const ApplicationsTenderCard = ({ tender }) => {
               label={`Tender # ${tender.id || "—"}`}
               color="primary"
               variant="outlined"
-              size="small"
               sx={{
                 borderRadius: 999,
                 fontWeight: 600,
@@ -134,7 +133,7 @@ const ApplicationsTenderCard = ({ tender }) => {
                 mb: 0.5,
               }}
             >
-              {tender.lead_id}
+              {tender.lead.id}
             </Typography>
           </Stack>
 

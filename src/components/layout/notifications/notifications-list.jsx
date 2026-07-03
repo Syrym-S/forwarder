@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { useNotificationsStore } from "../../../app/store/notifications/noti-store";
 import { Box, Chip, CircularProgress, Paper, Typography } from "@mui/material";
 import NotificationsOffOutlinedIcon from "@mui/icons-material/NotificationsOffOutlined";
@@ -11,16 +10,9 @@ const NotificationsList = ({
   handleNotificationsClose,
   handleOpenDrawer,
 }) => {
-  const getNotifications = useNotificationsStore(
-    (state) => state.getNotifications,
-  );
   const isLoading = useNotificationsStore((state) => state.isLoading);
 
   const isEmpty = notifications.length === 0;
-
-  useEffect(() => {
-    getNotifications();
-  }, []);
 
   return (
     <Paper

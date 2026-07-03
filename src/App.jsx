@@ -23,12 +23,17 @@ const connectNotifications = async () => {
 };
 
 function App() {
+  const newNotification = useNotificationsStore(
+    (state) => state.newNotification,
+  );
   const getNotifications = useNotificationsStore(
     (state) => state.getNotifications,
   );
+  const clearNewNotificationValue = useNotificationsStore(
+    (state) => state.clearNewNotificationValue,
+  );
 
   const [openMenu, setOpenMenu] = useState(false);
-  const [newNotification, setNewNotification] = useState(null);
 
   const socketRef = useRef(null);
 
@@ -37,14 +42,8 @@ function App() {
       const socket = await connectNotifications();
 
       socket.onmessage = async () => {
+        console.log("getNotifications отрабатывает");
         await getNotifications();
-
-        const currentNotifications =
-          useNotificationsStore.getState().notifications[0];
-
-        if (!currentNotifications.is_viewed) {
-          setNewNotification(currentNotifications);
-        }
       };
 
       socketRef.current = socket;
@@ -57,6 +56,10 @@ function App() {
     };
   }, []);
 
+  useEffect(() => {
+    getNotifications();
+  }, []);
+
   return (
     <BrowserRouter basename="/forwarder">
       <Header openMenu={openMenu} setOpenMenu={setOpenMenu} />
@@ -67,7 +70,7 @@ function App() {
         <Snackbar
           open={!!newNotification}
           autoHideDuration={5000}
-          onClose={() => setNewNotification(null)}
+          onClose={clearNewNotificationValue}
           message={newNotification?.theme}
           anchorOrigin={{
             vertical: "bottom",
@@ -81,7 +84,7 @@ function App() {
                 py: 3,
                 height: 100,
                 width: 300,
-                backgroundColor: "rgba(144, 202, 249, 0.1)",
+                backgroundColor: "#1976d2",
                 borderBottom: "1px solid rgba(0,0,0,0.1)",
                 cursor: "pointer",
                 borderRadius: 2,
@@ -95,6 +98,7 @@ function App() {
                   alignItems: "center",
                   gap: 1,
                   height: "fit-content",
+                  color: "white",
                 }}
               >
                 <RenderNotificationIcon type={newNotification?.type} />
@@ -103,7 +107,7 @@ function App() {
               <Typography
                 sx={{
                   fontSize: "0.8rem",
-                  color: "backgound.main",
+                  color: "white",
                 }}
               >
                 {newNotification?.message}

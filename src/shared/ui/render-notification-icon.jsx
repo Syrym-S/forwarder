@@ -8,13 +8,13 @@ import FactoryOutlinedIcon from "@mui/icons-material/FactoryOutlined";
 const RenderNotificationIcon = ({ type }) => {
   switch (type) {
     case NOTIFICATION_TYPE.lead:
-      return <RouteOutlinedIcon color="primary" />;
+      return <RouteOutlinedIcon />;
     case NOTIFICATION_TYPE.shipping:
-      return <LocalShippingOutlinedIcon color="primary" />;
+      return <LocalShippingOutlinedIcon />;
     case NOTIFICATION_TYPE.tender:
-      return <ContentPasteOutlinedIcon color="primary" />;
+      return <ContentPasteOutlinedIcon />;
     case NOTIFICATION_TYPE.factor:
-      return <FactoryOutlinedIcon color="primary" />;
+      return <FactoryOutlinedIcon />;
     default:
       return <>Нет Типа</>;
   }

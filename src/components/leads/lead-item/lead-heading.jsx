@@ -2,12 +2,22 @@ import { Box, Chip, Stack, Tooltip, Typography } from "@mui/material";
 import EditNoteRoundedIcon from "@mui/icons-material/EditNoteRounded";
 import RenderStatus from "../../../shared/ui/render-status";
 import { STATUS } from "../../../shared/const/tenders";
+import { useNotificationsStore } from "../../../app/store/notifications/noti-store";
+import { useEffect } from "react";
+import { useLeadsStore } from "../../../app/store/leads/leads-store";
 
 const LeadHeading = ({ leadData, openEditForm }) => {
   const canBeEdited =
     leadData.status !== STATUS.finished &&
     leadData.status !== STATUS.cancelled &&
     leadData.status !== STATUS.deleted;
+
+  const notifications = useNotificationsStore((state) => state.notifications);
+  const getLeadItem = useLeadsStore((state) => state.getLeadItem);
+
+  useEffect(() => {
+    getLeadItem(leadData.id);
+  }, [notifications]);
 
   return (
     <Box
