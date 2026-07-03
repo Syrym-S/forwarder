@@ -30,7 +30,8 @@ export const useFormDefaultValues = (lead = null, files = []) => {
     length_cm: lead?.cargo.length_cm || null,
     width_cm: lead?.cargo.width_cm || null,
     height_cm: lead?.cargo.height_cm || null,
-    cargo_price: lead?.cargo_price,
+    price: lead?.summ,
+    transportation_price: lead?.transportation_price || null,
     documents: files || [],
   };
 };

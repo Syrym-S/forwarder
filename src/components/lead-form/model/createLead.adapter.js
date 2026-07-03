@@ -81,6 +81,11 @@ export function mapCreateLeadFormToApi(form) {
   addNumberIfHasValue(payload, "cargo_length", form.length_cm);
   addNumberIfHasValue(payload, "cargo_width", form.width_cm);
   addNumberIfHasValue(payload, "cargo_height", form.height_cm);
+  addNumberIfHasValue(
+    payload,
+    "transportation_price",
+    form.transportation_price,
+  );
   addNumberIfHasValue(payload, "price", form.price);
 
   return payload;

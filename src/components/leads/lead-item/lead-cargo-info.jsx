@@ -6,6 +6,8 @@ import LocalShippingOutlinedIcon from "@mui/icons-material/LocalShippingOutlined
 import RenderStatus from "../../../shared/ui/render-status";
 
 const LeadCargoInfo = ({ leadData }) => {
+  console.log(leadData);
+
   return (
     <Section title="Груз" icon={<LocalShippingOutlinedIcon color="primary" />}>
       <Box
@@ -32,7 +34,7 @@ const LeadCargoInfo = ({ leadData }) => {
 
         <InfoField
           label="Цена"
-          value={`${leadData.cargo_price} ${leadData.currency}`}
+          value={`${leadData.summ} ${leadData.currency}`}
         />
 
         <InfoField

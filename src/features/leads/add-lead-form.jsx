@@ -228,7 +228,7 @@ const AddLeadForm = ({
           <ForthStep control={control} errors={errors} setValue={setValue} />
         );
       case 4:
-        return <PriceStep />;
+        return <PriceStep control={control} />;
 
       case 5:
         return (
