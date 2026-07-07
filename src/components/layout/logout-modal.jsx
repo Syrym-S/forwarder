@@ -5,12 +5,13 @@ import DialogTitle from "@mui/material/DialogTitle";
 import DialogActions from "@mui/material/DialogActions";
 import Button from "@mui/material/Button";
 import { NavLink } from "react-router-dom";
+import { isStaging } from "../../app/client";
 
 const LogoutModal = ({ open, handleOpenModal, handleCloseProfile }) => {
   const handleLogout = () => {
     handleOpenModal();
     handleCloseProfile();
-    window.location.href = "/login";
+    window.location.replace(isStaging ? "/staging/auth/login" : "/auth/login");
   };
 
   return (
