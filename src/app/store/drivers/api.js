@@ -1,9 +1,7 @@
-import axios from "axios";
-
-const BASE_URL = "https://forwarder.360logistics.kz/wp-json";
+import { api } from "../../client";
 
 export const getDriversApi = async (params) => {
-  const data = await axios.get(`${BASE_URL}/forwarder/v1/drivers`, {
+  const data = await api.get(`/forwarder/v1/drivers`, {
     headers: {
       params,
       // eslint-disable-next-line no-undef
@@ -15,7 +13,7 @@ export const getDriversApi = async (params) => {
 };
 
 export const getDriverDetailsApi = async (driver_id) => {
-  const data = await axios.get(`${BASE_URL}/forwarder/v1/driver/${driver_id}`, {
+  const data = await api.get(`/forwarder/v1/driver/${driver_id}`, {
     headers: {
       // eslint-disable-next-line no-undef
       "X-WP-Nonce": APP_DATA.nonce,
@@ -26,7 +24,7 @@ export const getDriverDetailsApi = async (driver_id) => {
 };
 
 export const searchDriverApi = async (params) => {
-  const data = await axios.get(`${BASE_URL}/forwarder/v1/drivers/search`, {
+  const data = await api.get(`/forwarder/v1/drivers/search`, {
     params,
     headers: {
       // eslint-disable-next-line no-undef

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { MapContainer, TileLayer, Marker, Polyline } from "react-leaflet";
+import { api } from "../../app/client";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 
@@ -40,18 +41,20 @@ export default function LeadMap({ from, to, id }) {
 
   useEffect(() => {
     async function connect() {
-      const addRes = await fetch("/wp-json/geows/v1/token", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          // eslint-disable-next-line no-undef
-          "X-WP-Nonce": APP_DATA.nonce,
-        },
-        body: JSON.stringify({
-          lead_id: id,
-          type: "add",
-        }),
-      }).then((r) => r.json());
+      const addRes = await api
+        .post("/geows/v1/token", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            // eslint-disable-next-line no-undef
+            "X-WP-Nonce": APP_DATA.nonce,
+          },
+          body: JSON.stringify({
+            lead_id: id,
+            type: "add",
+          }),
+        })
+        .then((r) => r.json());
 
       const wsAdd = new WebSocket(
         `wss://geo.360logistics.kz/socket?token=${addRes.token}`,
@@ -65,18 +68,20 @@ export default function LeadMap({ from, to, id }) {
         );
       };
 
-      const res = await fetch("/wp-json/geows/v1/token", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          // eslint-disable-next-line no-undef
-          "X-WP-Nonce": APP_DATA.nonce,
-        },
-        body: JSON.stringify({
-          lead_id: id,
-          type: "admin",
-        }),
-      }).then((r) => r.json());
+      const res = await api
+        .pos("/geows/v1/token", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            // eslint-disable-next-line no-undef
+            "X-WP-Nonce": APP_DATA.nonce,
+          },
+          body: JSON.stringify({
+            lead_id: id,
+            type: "admin",
+          }),
+        })
+        .then((r) => r.json());
 
       const ws = new WebSocket(
         `wss://geo.360logistics.kz/socket?token=${res.token}`,

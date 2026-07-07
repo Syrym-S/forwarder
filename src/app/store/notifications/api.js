@@ -1,9 +1,7 @@
-import axios from "axios";
-
-const BASE_URL = "https://forwarder.360logistics.kz/wp-json";
+import { api } from "../../client";
 
 export const getNotificationsApi = async (params) => {
-  const data = await axios.get(`${BASE_URL}/forwarder/v1/notifications`, {
+  const data = await api.get(`/forwarder/v1/notifications`, {
     params,
     headers: {
       // eslint-disable-next-line no-undef
@@ -15,7 +13,7 @@ export const getNotificationsApi = async (params) => {
 };
 
 export const getNotificationDetailsApi = async (id) => {
-  const data = await axios.get(`${BASE_URL}/forwarder/v1/notifications/${id}`, {
+  const data = await api.get(`/forwarder/v1/notifications/${id}`, {
     headers: {
       // eslint-disable-next-line no-undef
       "X-WP-Nonce": APP_DATA.nonce,
@@ -26,7 +24,7 @@ export const getNotificationDetailsApi = async (id) => {
 };
 
 export const getNotificationsTokenApi = async () => {
-  const response = await axios.get(`${BASE_URL}/notif/v1/token`, {
+  const response = await api.get(`/notif/v1/token`, {
     headers: {
       // eslint-disable-next-line no-undef
       "X-WP-Nonce": APP_DATA.nonce,
@@ -37,8 +35,8 @@ export const getNotificationsTokenApi = async () => {
 };
 
 export const markAllAsReadApi = async () => {
-  const response = await axios.post(
-    `${BASE_URL}/forwarder/v1/notifications/read-all`,
+  const response = await api.post(
+    `/forwarder/v1/notifications/read-all`,
     null,
     {
       headers: {

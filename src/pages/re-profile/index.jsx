@@ -19,10 +19,6 @@ const ReProfile = () => {
     getProfileData();
   }, []);
 
-  useEffect(() => {
-    console.log(profileData);
-  }, [profileData]);
-
   if (!profileData)
     return (
       <RootLayout withoutDataCheck>

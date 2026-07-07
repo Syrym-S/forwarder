@@ -1,9 +1,7 @@
-import axios from "axios";
-
-const BASE_URL = "https://forwarder.360logistics.kz/wp-json";
+import { api } from "../../client";
 
 export const getLeads = async (params = {}) => {
-  const data = await axios.get(`${BASE_URL}/forwarder/v1/leads`, {
+  const data = await api.get(`/forwarder/v1/leads`, {
     params,
     headers: {
       // eslint-disable-next-line no-undef
@@ -15,7 +13,7 @@ export const getLeads = async (params = {}) => {
 };
 
 export const searchLeadsApi = async (params = {}) => {
-  const data = await axios.get(`${BASE_URL}/forwarder/v1/leads/search`, {
+  const data = await api.get(`/forwarder/v1/leads/search`, {
     params,
     headers: {
       // eslint-disable-next-line no-undef
@@ -27,22 +25,19 @@ export const searchLeadsApi = async (params = {}) => {
 };
 
 export const searchLeadsHistoryApi = async (params = {}) => {
-  const data = await axios.get(
-    `${BASE_URL}/forwarder/v1/leads/history/search`,
-    {
-      params,
-      headers: {
-        // eslint-disable-next-line no-undef
-        "X-WP-Nonce": APP_DATA.nonce,
-      },
+  const data = await api.get(`/forwarder/v1/leads/history/search`, {
+    params,
+    headers: {
+      // eslint-disable-next-line no-undef
+      "X-WP-Nonce": APP_DATA.nonce,
     },
-  );
+  });
 
   return data;
 };
 
 export const getHistoryLeads = async (params = {}) => {
-  const data = await axios.get(`${BASE_URL}/forwarder/v1/leads/history`, {
+  const data = await api.get(`/forwarder/v1/leads/history`, {
     params,
     headers: {
       // eslint-disable-next-line no-undef
@@ -54,7 +49,7 @@ export const getHistoryLeads = async (params = {}) => {
 };
 
 export const getLeadItemDetails = async (lead_id) => {
-  const data = await axios.get(`${BASE_URL}/forwarder/v1/lead/${lead_id}`, {
+  const data = await api.get(`/forwarder/v1/lead/${lead_id}`, {
     headers: {
       // eslint-disable-next-line no-undef
       "X-WP-Nonce": APP_DATA.nonce,
@@ -65,45 +60,34 @@ export const getLeadItemDetails = async (lead_id) => {
 };
 
 export const createLeadApi = async (payload) => {
-  const data = await axios.post(
-    `${BASE_URL}/forwarder/v1/leads/create`,
-    payload,
-    {
-      headers: {
-        // eslint-disable-next-line no-undef
-        "X-WP-Nonce": APP_DATA.nonce,
-      },
+  const data = await api.post(`/forwarder/v1/leads/create`, payload, {
+    headers: {
+      // eslint-disable-next-line no-undef
+      "X-WP-Nonce": APP_DATA.nonce,
     },
-  );
+  });
 
   return data;
 };
 
 export const updateLeadApi = async (id, payload) => {
-  const data = await axios.patch(
-    `${BASE_URL}/forwarder/v1/leads/${id}/update`,
-    payload,
-    {
-      headers: {
-        // eslint-disable-next-line no-undef
-        "X-WP-Nonce": APP_DATA.nonce,
-      },
+  const data = await api.patch(`/forwarder/v1/leads/${id}/update`, payload, {
+    headers: {
+      // eslint-disable-next-line no-undef
+      "X-WP-Nonce": APP_DATA.nonce,
     },
-  );
+  });
 
   return data;
 };
 
 export const getLeadFilesApi = async (leadId) => {
-  const data = await axios.get(
-    `${BASE_URL}/forwarder/v1/leads/${leadId}/files`,
-    {
-      headers: {
-        // eslint-disable-next-line no-undef
-        "X-WP-Nonce": APP_DATA.nonce,
-      },
+  const data = await api.get(`/forwarder/v1/leads/${leadId}/files`, {
+    headers: {
+      // eslint-disable-next-line no-undef
+      "X-WP-Nonce": APP_DATA.nonce,
     },
-  );
+  });
 
   return data;
 };
@@ -115,8 +99,8 @@ export const uploadLeadFileApi = async (leadId, payload) => {
   formData.append("name", name || payload.name);
   formData.append("context", payload.context || "");
 
-  const data = await axios.post(
-    `${BASE_URL}/forwarder/v1/leads/${leadId}/files/upload`,
+  const data = await api.post(
+    `/forwarder/v1/leads/${leadId}/files/upload`,
     payload,
     {
       headers: {
@@ -131,8 +115,8 @@ export const uploadLeadFileApi = async (leadId, payload) => {
 };
 
 export const deleteLeadFileApi = async (leadId, path) => {
-  const data = await axios.post(
-    `${BASE_URL}/forwarder/v1/leads/${leadId}/files/delete`,
+  const data = await api.post(
+    `/forwarder/v1/leads/${leadId}/files/delete`,
     { path },
     {
       headers: {
@@ -146,8 +130,8 @@ export const deleteLeadFileApi = async (leadId, path) => {
 };
 
 export const verifyCargoApi = async (lead_id, payload) => {
-  const data = await axios.post(
-    `${BASE_URL}/forwarder/v1/leads/${lead_id}/verify-loading`,
+  const data = await api.post(
+    `/forwarder/v1/leads/${lead_id}/verify-loading`,
     payload,
     {
       headers: {
@@ -161,8 +145,8 @@ export const verifyCargoApi = async (lead_id, payload) => {
 };
 
 export const rejectCargoApi = async (lead_id, payload) => {
-  const data = await axios.post(
-    `${BASE_URL}/forwarder/v1/leads/${lead_id}/reject-loading`,
+  const data = await api.post(
+    `/forwarder/v1/leads/${lead_id}/reject-loading`,
     payload,
     {
       headers: {
@@ -176,8 +160,8 @@ export const rejectCargoApi = async (lead_id, payload) => {
 };
 
 export const verifyCargoUnloadApi = async (lead_id, payload) => {
-  const data = await axios.post(
-    `${BASE_URL}/forwarder/v1/leads/${lead_id}/verify-unloading`,
+  const data = await api.post(
+    `/forwarder/v1/leads/${lead_id}/verify-unloading`,
     payload,
     {
       headers: {
@@ -191,8 +175,8 @@ export const verifyCargoUnloadApi = async (lead_id, payload) => {
 };
 
 export const rejectCargoUnloadApi = async (lead_id, payload) => {
-  const data = await axios.post(
-    `${BASE_URL}/forwarder/v1/leads/${lead_id}/reject-unloading`,
+  const data = await api.post(
+    `/forwarder/v1/leads/${lead_id}/reject-unloading`,
     payload,
     {
       headers: {
@@ -206,8 +190,8 @@ export const rejectCargoUnloadApi = async (lead_id, payload) => {
 };
 
 export const confirmLeadDeliveryApi = async (lead_id, payload) => {
-  const data = await axios.post(
-    `${BASE_URL}/forwarder/v1/leads/${lead_id}/confirm-delivery`,
+  const data = await api.post(
+    `/forwarder/v1/leads/${lead_id}/confirm-delivery`,
     payload,
     {
       headers: {
@@ -221,8 +205,8 @@ export const confirmLeadDeliveryApi = async (lead_id, payload) => {
 };
 
 export const detachDriverApi = async (lead_id) => {
-  const data = await axios.post(
-    `${BASE_URL}/forwarder/v1/leads/${lead_id}/detach-driver`,
+  const data = await api.post(
+    `forwarder/v1/leads/${lead_id}/detach-driver`,
     null,
     {
       headers: {
@@ -236,8 +220,8 @@ export const detachDriverApi = async (lead_id) => {
 };
 
 export const detachCustomerApi = async (lead_id) => {
-  const data = await axios.post(
-    `${BASE_URL}/forwarder/v1/leads/${lead_id}/detach-customer`,
+  const data = await api.post(
+    `/forwarder/v1/leads/${lead_id}/detach-customer`,
     null,
     {
       headers: {

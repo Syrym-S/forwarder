@@ -11,6 +11,7 @@ import { getNotificationsTokenApi } from "./app/store/notifications/api";
 import { useNotificationsStore } from "./app/store/notifications/noti-store";
 import NotificationItem from "./components/layout/notifications/notification-item";
 import RenderNotificationIcon from "./shared/ui/render-notification-icon";
+import { isStaging } from "./app/client";
 
 const connectNotifications = async () => {
   const tokenResponse = await getNotificationsTokenApi();
@@ -42,7 +43,6 @@ function App() {
       const socket = await connectNotifications();
 
       socket.onmessage = async () => {
-        console.log("getNotifications отрабатывает");
         await getNotifications();
       };
 
@@ -61,7 +61,7 @@ function App() {
   }, []);
 
   return (
-    <BrowserRouter basename="/forwarder">
+    <BrowserRouter basename={isStaging ? "/staging/forwarder" : "/forwarder"}>
       <Header openMenu={openMenu} setOpenMenu={setOpenMenu} />
       <Box style={{ display: "flex", width: "100%" }}>
         <Sidebar openMenu={openMenu} setOpenMenu={setOpenMenu} />

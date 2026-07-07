@@ -6,8 +6,6 @@ import LocalShippingOutlinedIcon from "@mui/icons-material/LocalShippingOutlined
 import RenderStatus from "../../../shared/ui/render-status";
 
 const LeadCargoInfo = ({ leadData }) => {
-  console.log(leadData);
-
   return (
     <Section title="Груз" icon={<LocalShippingOutlinedIcon color="primary" />}>
       <Box

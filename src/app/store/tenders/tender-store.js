@@ -31,7 +31,6 @@ export const useTendersStore = create((set) => ({
 
   clearCurrentTender: () => {
     set({ currentTender: null, customerCurrentTender: null, error: null });
-    console.log("clearCurrentTender отработал");
   },
 
   //Обработки своих созданных тендеров
