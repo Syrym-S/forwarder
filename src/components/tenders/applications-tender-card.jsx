@@ -138,7 +138,7 @@ const ApplicationsTenderCard = ({ tender }) => {
                   lineHeight: 1.35,
                 }}
               >
-                {tender.from_location || "Не указано"}
+                {tender?.lead?.from_location?.address || "Не указано"}
               </Typography>
             </Box>
           </Box>
@@ -200,7 +200,7 @@ const ApplicationsTenderCard = ({ tender }) => {
                   lineHeight: 1.35,
                 }}
               >
-                {tender.to_location || "Не указано"}
+                {tender?.lead?.to_location?.address || "Не указано"}
               </Typography>
             </Box>
           </Box>
@@ -219,8 +219,8 @@ const ApplicationsTenderCard = ({ tender }) => {
           <InfoBadge
             label="Вес"
             value={
-              tender.cargo?.weight_kg
-                ? `${tender.cargo.weight_kg} кг`
+              tender?.lead?.cargo?.weight_kg
+                ? `${tender?.lead?.cargo?.weight_kg} кг`
                 : "Не указано"
             }
             muted={isCancelled}
@@ -228,7 +228,7 @@ const ApplicationsTenderCard = ({ tender }) => {
 
           <InfoBadge
             label="Тип"
-            value={tender.cargo?.type || "Не указан"}
+            value={tender?.lead?.cargo?.type || "Не указан"}
             muted={isCancelled}
           />
 

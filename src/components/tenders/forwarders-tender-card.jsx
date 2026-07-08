@@ -130,7 +130,7 @@ const ForwardersTenderCard = ({ tender }) => {
                   lineHeight: 1.35,
                 }}
               >
-                {tender.from_location || "Не указано"}
+                {tender?.lead?.from_location?.address || "Не указано"}
               </Typography>
             </Box>
           </Box>
@@ -191,7 +191,7 @@ const ForwardersTenderCard = ({ tender }) => {
                   lineHeight: 1.35,
                 }}
               >
-                {tender.to_location || "Не указано"}
+                {tender?.lead?.to_location?.address || "Не указано"}
               </Typography>
             </Box>
           </Box>
@@ -210,13 +210,16 @@ const ForwardersTenderCard = ({ tender }) => {
           <InfoBadge
             label="Вес"
             value={
-              tender.cargo?.weight_kg
-                ? `${tender.cargo.weight_kg} кг`
+              tender?.lead?.cargo?.weight_kg
+                ? `${tender?.lead?.cargo?.weight_kg} кг`
                 : "Не указано"
             }
           />
 
-          <InfoBadge label="Тип" value={tender.cargo?.type || "Не указан"} />
+          <InfoBadge
+            label="Тип"
+            value={tender?.lead?.cargo?.type || "Не указан"}
+          />
         </Box>
       </Stack>
     </Box>
