@@ -5,9 +5,15 @@ import RenderStatus from "../../shared/ui/render-status";
 import TripOriginIcon from "@mui/icons-material/TripOrigin";
 import ArrowDownwardRoundedIcon from "@mui/icons-material/ArrowDownwardRounded";
 import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
+import ArrowRightAltRoundedIcon from "@mui/icons-material/ArrowRightAltRounded";
+import InfoBadge from "../../shared/ui/info-badge";
 
 const ApplicationsTenderCard = ({ tender }) => {
   const daysLeft = dayjs(tender.end_date_time).diff(dayjs(), "day");
+  const shouldShowTimeLeft =
+    tender.status !== "closed" && tender.status !== "cancelled";
+  const isCancelled = tender.status === "cancelled";
+
   const navigate = useNavigate();
 
   const navigateToDetailPage = () => {
@@ -63,161 +69,36 @@ const ApplicationsTenderCard = ({ tender }) => {
                 fontWeight: 500,
               }}
             >
-              {/* {lead.customer} */}
+              Тендер #{tender.id || "—"}
             </Typography>
           </Box>
 
           <Stack
             direction="row"
             spacing={1}
-            flexWrap="wrap"
             useFlexGap
             sx={{
+              flexWrap: "wrap",
               justifyContent: {
                 xs: "flex-start",
                 sm: "flex-end",
               },
             }}
           >
-            <Chip
-              label={`Tender # ${tender.id || "—"}`}
-              color="primary"
-              variant="outlined"
-              sx={{
-                borderRadius: 999,
-                fontWeight: 600,
-                backgroundColor: "rgba(33, 150, 243, 0.04)",
-              }}
-            />
+            {shouldShowTimeLeft && <TimeLeftBadge value={daysLeft} />}
 
-            <RenderStatus status={tender?.status} />
-          </Stack>
-        </Box>
-
-        <Box
-          sx={{
-            display: "grid",
-            gridTemplateColumns: "1fr 1fr 1fr",
-            gap: 2,
-          }}
-        >
-          <Stack
-            sx={{
-              p: 1.5,
-              border: "1px solid",
-              borderColor: "divider",
-              borderRadius: 2,
-              backgroundColor: "grey.50",
-              display: "flex",
-              justifyContent: "space-between",
-            }}
-          >
-            <Typography
-              variant="caption"
-              sx={{
-                fontSize: "0.8rem",
-                display: "block",
-                color: "text.secondary",
-                mb: 0.5,
-              }}
-            >
-              Лид ID
-            </Typography>
-
-            <Typography
-              variant="caption"
-              sx={{
-                fontSize: "0.8rem",
-                display: "block",
-                color: "text.secondary",
-                mb: 0.5,
-              }}
-            >
-              {tender.lead.id}
-            </Typography>
-          </Stack>
-
-          <Stack
-            sx={{
-              p: 1.5,
-              border: "1px solid",
-              borderColor: "divider",
-              borderRadius: 2,
-              backgroundColor: "grey.50",
-              display: "flex",
-              justifyContent: "space-between",
-            }}
-          >
-            <Typography
-              variant="caption"
-              sx={{
-                fontSize: "0.8rem",
-                display: "block",
-                color: "text.secondary",
-                mb: 0.5,
-              }}
-            >
-              Дата начала
-            </Typography>
-
-            <Typography
-              variant="caption"
-              sx={{
-                fontSize: "0.8rem",
-                display: "block",
-                color: "text.secondary",
-                mb: 0.5,
-              }}
-            >
-              {tender.public_date_time}
-            </Typography>
-          </Stack>
-
-          <Stack
-            sx={{
-              p: 1.5,
-              border: "1px solid",
-              borderColor: "divider",
-              borderRadius: 2,
-              backgroundColor: "grey.50",
-              display: "flex",
-              justifyContent: "space-between",
-            }}
-          >
-            <Typography
-              variant="caption"
-              sx={{
-                fontSize: "0.8rem",
-                display: "block",
-                color: "text.secondary",
-                mb: 0.5,
-              }}
-            >
-              Дата окончания
-            </Typography>
-
-            <Typography
-              variant="caption"
-              sx={{
-                fontSize: "0.8rem",
-                display: "block",
-                color: "text.secondary",
-                mb: 0.5,
-              }}
-            >
-              {tender.end_date_time}
-            </Typography>
+            <RenderStatus status={tender.status} />
           </Stack>
         </Box>
 
         <Box
           sx={{
             display: "flex",
-            flexDirection: "column",
             alignItems: "stretch",
             gap: 1.5,
             flexWrap: {
               xs: "wrap",
+              sm: "nowrap",
             },
           }}
         >
@@ -230,7 +111,7 @@ const ApplicationsTenderCard = ({ tender }) => {
               border: "1px solid",
               borderColor: "divider",
               borderRadius: 2,
-              backgroundColor: "grey.50",
+              backgroundColor: isCancelled ? "grey.200" : "grey.50",
               display: "flex",
               flexDirection: "column",
               justifyContent: "flex-start",
@@ -257,7 +138,7 @@ const ApplicationsTenderCard = ({ tender }) => {
                   lineHeight: 1.35,
                 }}
               >
-                {tender?.lead?.from_location.address || "Битые данные"}
+                {tender.from_location || "Не указано"}
               </Typography>
             </Box>
           </Box>
@@ -273,7 +154,7 @@ const ApplicationsTenderCard = ({ tender }) => {
               px: 0.5,
             }}
           >
-            <ArrowDownwardRoundedIcon
+            <ArrowRightAltRoundedIcon
               sx={{
                 color: "text.secondary",
                 fontSize: 28,
@@ -290,7 +171,7 @@ const ApplicationsTenderCard = ({ tender }) => {
               border: "1px solid",
               borderColor: "divider",
               borderRadius: 2,
-              backgroundColor: "grey.50",
+              backgroundColor: isCancelled ? "grey.200" : "grey.50",
               display: "flex",
               flexDirection: "column",
               justifyContent: "flex-start",
@@ -319,7 +200,7 @@ const ApplicationsTenderCard = ({ tender }) => {
                   lineHeight: 1.35,
                 }}
               >
-                {tender?.lead?.to_location.address || "Битые данные"}
+                {tender.to_location || "Не указано"}
               </Typography>
             </Box>
           </Box>
@@ -327,51 +208,83 @@ const ApplicationsTenderCard = ({ tender }) => {
 
         <Box
           sx={{
-            display: "flex",
-            gap: "5px",
-            flexWrap: "wrap",
+            display: "grid",
+            gridTemplateColumns: {
+              xs: "1fr 1fr",
+              md: "repeat(3, 1fr)",
+            },
+            gap: 1,
           }}
         >
-          <Chip
-            color="primary"
-            variant="outlined"
-            label={`Количество участников ${tender.participants_count}`}
-            size="small"
-            sx={{
-              borderRadius: 999,
-              fontWeight: 500,
-              backgroundColor: "grey.100",
-              color: "primary.main",
-            }}
+          <InfoBadge
+            label="Вес"
+            value={
+              tender.cargo?.weight_kg
+                ? `${tender.cargo.weight_kg} кг`
+                : "Не указано"
+            }
+            muted={isCancelled}
           />
-          <Chip
-            color="primary"
-            variant="outlined"
-            label={`Максимальное количество участников ${tender.max_participants}`}
-            size="small"
-            sx={{
-              borderRadius: 999,
-              fontWeight: 500,
-              backgroundColor: "grey.100",
-              color: "primary.main",
-            }}
-          />
-        </Box>
 
-        <Chip
-          color="success"
-          label={`Осталось дней ${daysLeft}`}
-          size="small"
-          sx={{
-            borderRadius: 999,
-            fontWeight: 500,
-            // backgroundColor: "rgba(2, 114, 0, 0.1)",
-            // color: "#46E843",
-          }}
-        />
+          <InfoBadge
+            label="Тип"
+            value={tender.cargo?.type || "Не указан"}
+            muted={isCancelled}
+          />
+
+          {/* <InfoBadge
+                  label='Цена'
+                  value={
+                     hasValue(tender.summ)
+                        ? `${tender.summ} ${tender.currency}`
+                        : 'Не указано'
+                  }
+                  accent
+                  muted={isCancelled}
+               /> */}
+        </Box>
       </Stack>
     </Box>
   );
 };
+
+function TimeLeftBadge({ value }) {
+  return (
+    <Box
+      sx={{
+        px: 1.25,
+        py: 0.45,
+        border: "1px solid",
+        borderColor: "divider",
+        borderRadius: 999,
+        backgroundColor: "grey.50",
+        display: "flex",
+        alignItems: "center",
+        gap: 0.75,
+      }}
+    >
+      <Typography
+        sx={{
+          fontSize: 11,
+          lineHeight: 1.2,
+          color: "text.secondary",
+        }}
+      >
+        Осталось
+      </Typography>
+
+      <Typography
+        sx={{
+          fontSize: 12,
+          lineHeight: 1.2,
+          fontWeight: 600,
+          color: "text.primary",
+        }}
+      >
+        {value || "Не указано"}
+      </Typography>
+    </Box>
+  );
+}
 
 export default ApplicationsTenderCard;

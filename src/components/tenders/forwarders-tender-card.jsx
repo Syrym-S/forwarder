@@ -1,25 +1,15 @@
 import { Box, Button, Chip, Stack, Typography } from "@mui/material";
-// import dayjs from "dayjs";
 import { useNavigate } from "react-router-dom";
 import RenderStatus from "../../shared/ui/render-status";
 import TripOriginIcon from "@mui/icons-material/TripOrigin";
 import ArrowDownwardRoundedIcon from "@mui/icons-material/ArrowDownwardRounded";
+import ArrowRightAltRoundedIcon from "@mui/icons-material/ArrowRightAltRounded";
 import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
-// import { useTendersStore } from "../../app/store/tenders/tender-store";
 import { STATUS } from "../../shared/const/tenders";
+import InfoBadge from "../../shared/ui/info-badge";
 
 const ForwardersTenderCard = ({ tender }) => {
-  // const daysLeft = dayjs(tender.end_date_time).diff(dayjs(), "day");
-  // const getTenderDetails = useTendersStore((state) => state.getTenderDetails);
-  // const startTender = useTendersStore((state) => state.startTender);
   const navigate = useNavigate();
-
-  // const handleStartTender = async () => {
-  //   await startTender(tender?.id);
-  //   await getTenderDetails(tender?.id);
-  // };
-
-  // const isNew = tender?.status === STATUS.new;
 
   const navigateToDetailPage = () => {
     navigate(`/tender-forwarders/${tender.id}`);
@@ -30,6 +20,7 @@ const ForwardersTenderCard = ({ tender }) => {
       onClick={navigateToDetailPage}
       tabIndex={0}
       sx={{
+        maxWidth: "700px",
         p: 3,
         border: "2px solid",
         borderColor: "divider",
@@ -62,160 +53,45 @@ const ForwardersTenderCard = ({ tender }) => {
             >
               Тендер
             </Typography>
+
+            <Typography
+              sx={{
+                lineHeight: 1.3,
+                fontSize: {
+                  xs: "16px",
+                  sm: "18px",
+                },
+                fontWeight: 500,
+              }}
+            >
+              Тендер #{tender.id || "—"}
+            </Typography>
           </Box>
 
           <Stack
             direction="row"
             spacing={1}
-            flexWrap="wrap"
             useFlexGap
             sx={{
+              flexWrap: "wrap",
               justifyContent: {
                 xs: "flex-start",
                 sm: "flex-end",
               },
             }}
           >
-            <Chip
-              label={`Tender # ${tender.id || "—"}`}
-              color="primary"
-              variant="outlined"
-              sx={{
-                borderRadius: 999,
-                fontWeight: 600,
-                backgroundColor: "rgba(33, 150, 243, 0.04)",
-              }}
-            />
-            <RenderStatus status={tender?.status} />
-          </Stack>
-        </Box>
-        <Box
-          sx={{
-            display: "grid",
-            gridTemplateColumns: {
-              xs: "1fr",
-              sm: "repeat(3, 1fr)",
-            },
-            gap: 2,
-          }}
-        >
-          <Stack
-            sx={{
-              p: 1.5,
-              border: "1px solid",
-              borderColor: "divider",
-              borderRadius: 2,
-              backgroundColor: "grey.50",
-              display: "flex",
-              justifyContent: "space-between",
-            }}
-          >
-            <Typography
-              variant="caption"
-              sx={{
-                fontSize: "0.8rem",
-                display: "block",
-                color: "text.secondary",
-                mb: 0.5,
-              }}
-            >
-              Лид ID
-            </Typography>
-
-            <Typography
-              variant="caption"
-              sx={{
-                fontSize: "0.8rem",
-                display: "block",
-                color: "text.secondary",
-                mb: 0.5,
-              }}
-            >
-              {tender.lead_id}
-            </Typography>
-          </Stack>
-
-          <Stack
-            sx={{
-              p: 1.5,
-              border: "1px solid",
-              borderColor: "divider",
-              borderRadius: 2,
-              backgroundColor: "grey.50",
-              display: "flex",
-              justifyContent: "space-between",
-            }}
-          >
-            <Typography
-              variant="caption"
-              sx={{
-                fontSize: "0.8rem",
-                display: "block",
-                color: "text.secondary",
-                mb: 0.5,
-              }}
-            >
-              Дата начала
-            </Typography>
-
-            <Typography
-              variant="caption"
-              sx={{
-                fontSize: "0.8rem",
-                display: "block",
-                color: "text.secondary",
-                mb: 0.5,
-              }}
-            >
-              {tender.public_date_time}
-            </Typography>
-          </Stack>
-
-          <Stack
-            sx={{
-              p: 1.5,
-              border: "1px solid",
-              borderColor: "divider",
-              borderRadius: 2,
-              backgroundColor: "grey.50",
-              display: "flex",
-              justifyContent: "space-between",
-            }}
-          >
-            <Typography
-              variant="caption"
-              sx={{
-                fontSize: "0.8rem",
-                display: "block",
-                color: "text.secondary",
-                mb: 0.5,
-              }}
-            >
-              Дата окончания
-            </Typography>
-
-            <Typography
-              variant="caption"
-              sx={{
-                fontSize: "0.8rem",
-                display: "block",
-                color: "text.secondary",
-                mb: 0.5,
-              }}
-            >
-              {tender.end_date_time}
-            </Typography>
+            <RenderStatus status={tender.status} />
           </Stack>
         </Box>
 
         <Box
           sx={{
             display: "flex",
-            flexDirection: "column",
             alignItems: "stretch",
             gap: 1.5,
             flexWrap: {
               xs: "wrap",
+              sm: "nowrap",
             },
           }}
         >
@@ -228,7 +104,6 @@ const ForwardersTenderCard = ({ tender }) => {
               border: "1px solid",
               borderColor: "divider",
               borderRadius: 2,
-              backgroundColor: "grey.50",
               display: "flex",
               flexDirection: "column",
               justifyContent: "flex-start",
@@ -255,7 +130,7 @@ const ForwardersTenderCard = ({ tender }) => {
                   lineHeight: 1.35,
                 }}
               >
-                {tender?.lead?.from_location.address || "Битые данные"}
+                {tender.from_location || "Не указано"}
               </Typography>
             </Box>
           </Box>
@@ -271,7 +146,7 @@ const ForwardersTenderCard = ({ tender }) => {
               px: 0.5,
             }}
           >
-            <ArrowDownwardRoundedIcon
+            <ArrowRightAltRoundedIcon
               sx={{
                 color: "text.secondary",
                 fontSize: 28,
@@ -288,7 +163,6 @@ const ForwardersTenderCard = ({ tender }) => {
               border: "1px solid",
               borderColor: "divider",
               borderRadius: 2,
-              backgroundColor: "grey.50",
               display: "flex",
               flexDirection: "column",
               justifyContent: "flex-start",
@@ -317,53 +191,32 @@ const ForwardersTenderCard = ({ tender }) => {
                   lineHeight: 1.35,
                 }}
               >
-                {tender?.lead?.to_location.address || "Битые данные"}
+                {tender.to_location || "Не указано"}
               </Typography>
             </Box>
           </Box>
         </Box>
+
         <Box
           sx={{
-            display: {
-              xs: "flex",
-              sm: "grid",
+            display: "grid",
+            gridTemplateColumns: {
+              xs: "1fr 1fr",
+              md: "repeat(3, 1fr)",
             },
-            gridTemplateColumns: "1fr 1fr 3fr",
-            gap: "5px",
-            flexWrap: "wrap",
+            gap: 1,
           }}
         >
-          <Chip
-            color="primary"
-            variant="outlined"
-            label={`Количество участников ${tender.participants_count}`}
-            sx={{
-              borderRadius: 999,
-              fontWeight: 500,
-              backgroundColor: "grey.100",
-              color: "primary.main",
-            }}
+          <InfoBadge
+            label="Вес"
+            value={
+              tender.cargo?.weight_kg
+                ? `${tender.cargo.weight_kg} кг`
+                : "Не указано"
+            }
           />
-          <Chip
-            color="primary"
-            variant="outlined"
-            label={`Максимальное количество участников ${tender.max_participants}`}
-            sx={{
-              borderRadius: 999,
-              fontWeight: 500,
-              backgroundColor: "grey.100",
-              color: "primary.main",
-            }}
-          />
-          {/* {isNew && (
-            <Button
-              variant="сontained"
-              color="success"
-              onClick={handleStartTender}
-            >
-              Запустить
-            </Button>
-          )} */}
+
+          <InfoBadge label="Тип" value={tender.cargo?.type || "Не указан"} />
         </Box>
       </Stack>
     </Box>
