@@ -80,6 +80,8 @@ const HistoryLeads = () => {
         page={page}
         count={PAGE_COUNT}
         onChange={handlePageChange}
+        color="primary"
+        shape="rounded"
         sx={{
           width: "fit-content",
           mx: "auto",

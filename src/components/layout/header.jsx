@@ -7,6 +7,7 @@ import Box from "@mui/material/Box";
 import {
   Alert,
   AppBar,
+  Avatar,
   Badge,
   Button,
   IconButton,
@@ -33,7 +34,7 @@ const Header = ({ openMenu, setOpenMenu }) => {
     (state) => state.getNotifications,
   );
 
-  const profileAvatar = profileData?.avatar;
+  // const profileAvatar = profileData?.avatar;
 
   const [profileAnchorEl, setProfileAnchorEl] = useState(null);
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
@@ -109,19 +110,21 @@ const Header = ({ openMenu, setOpenMenu }) => {
         <Button
           variant="outlined"
           startIcon={
-            profileAvatar ? (
-              <Box
-                component="img"
-                width={30}
-                height={30}
-                sx={{
-                  borderRadius: "100%",
-                }}
-                src={profileData?.avatar}
-              />
-            ) : (
-              <AccountCircleIcon />
-            )
+            <Avatar
+              src={profileData?.avatar || undefined}
+              sx={{
+                width: {
+                  xs: 24,
+                  sm: 28,
+                },
+                height: {
+                  xs: 24,
+                  sm: 28,
+                },
+                fontSize: 13,
+                flexShrink: 0,
+              }}
+            />
           }
           onClick={handleOpenProfileMenu}
           sx={{

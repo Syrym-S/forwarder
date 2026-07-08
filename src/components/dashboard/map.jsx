@@ -37,6 +37,37 @@ const MapTooltip = ({ route }) => {
     <Tooltip sticky>
       <Typography
         style={{
+          width: "fit-content",
+          fontSize: "0.7rem",
+        }}
+      >
+        <Typography
+          style={{
+            fontWeight: "600",
+          }}
+        >
+          Откуда:
+        </Typography>{" "}
+        {route.from}
+      </Typography>
+
+      <Typography
+        style={{
+          width: "fit-content",
+          fontSize: "0.7rem",
+        }}
+      >
+        <Typography
+          style={{
+            fontWeight: "600",
+          }}
+        >
+          Куда:
+        </Typography>{" "}
+        {route.from}
+      </Typography>
+      <Typography
+        style={{
           width: "200px",
         }}
       >
@@ -79,6 +110,8 @@ const Map = () => {
               coordinates: coordinates.coordinates,
               distance: coordinates.distance,
               duration: coordinates.duration,
+              from: lead?.from_location?.address,
+              to: lead?.to_location?.address,
             };
           }),
       );
@@ -93,7 +126,6 @@ const Map = () => {
     <MapContainer
       center={[43.238949, 76.889709]}
       zoom={13}
-      scrollWheelZoom={false}
       style={{
         zIndex: 0,
         borderRadius: "10px",

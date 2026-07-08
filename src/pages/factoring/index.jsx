@@ -86,8 +86,10 @@ const Factoring = () => {
       <Pagination
         sx={{
           mx: "auto",
-          width: isCradsView ? "60%" : "100%",
+          width: "fit-content",
         }}
+        color="primary"
+        shape="rounded"
         page={page}
         count={PAGE_COUNT}
         onChange={handlePageChange}

@@ -20,10 +20,12 @@ export const useTendersStore = create((set) => ({
   customerTenders: [],
   currentTender: null,
   customerCurrentTender: null,
+
   isLoading: false,
   isLoadingCurrentTenderLoading: false,
   isAddingLoading: false,
   isBetsLoading: false,
+
   count: 0,
   perPage: 1,
   customerCount: 0,

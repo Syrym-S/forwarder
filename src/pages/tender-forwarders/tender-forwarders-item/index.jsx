@@ -103,7 +103,16 @@ const TenderForwardersItem = () => {
         handleOpenForm={handleOpenForm}
       />
 
-      <LeadMap from={from} to={to} id={currentTender?.lead?.id} />
+      <Box
+        sx={{
+          boxShadow: 1,
+          borderRadius: 2,
+          overflow: "hidden",
+          my: 2,
+        }}
+      >
+        <LeadMap from={from} to={to} id={currentTender?.lead?.id} />
+      </Box>
 
       <TenderForm
         isEdit

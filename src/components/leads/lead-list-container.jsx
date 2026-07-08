@@ -56,9 +56,13 @@ const LeadListContainer = ({ view }) => {
       )}
       {!isCardsView && <LeadsTable leads={leads} />}
       <Pagination
+        color="primary"
+        shape="rounded"
         page={page}
         count={PAGE_COUNT}
         onChange={handlePageChange}
+        color="primary"
+        shape="rounded"
         sx={{
           width: "fit-content",
           mx: "auto",

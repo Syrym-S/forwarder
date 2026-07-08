@@ -4,6 +4,7 @@ const Section = ({ icon, title, children }) => (
   <Paper
     elevation={0}
     sx={{
+      boxShadow: 1,
       p: 3,
       border: "1px solid",
       borderColor: "divider",

@@ -4,29 +4,29 @@ import { NavLink } from "react-router-dom";
 import "./style.css";
 
 const menuItems = [
-  { id: 1, label: null, sub_items: [{ id: 1, path: "/", lable: "Dashboard" }] },
+  { id: 1, label: null, sub_items: [{ id: 1, path: "/", lable: "Маршруты" }] },
   {
     id: 2,
-    label: "TMS",
+    label: "Перевозки",
     sub_items: [
-      { id: 1, path: "/active-leads", lable: "Active Leads" },
-      { id: 2, path: "/history-leads", lable: "History Leads" },
+      { id: 1, path: "/active-leads", lable: "Активные перевозки" },
+      { id: 2, path: "/history-leads", lable: "История перевозок" },
     ],
   },
   {
     id: 3,
-    label: "Finance",
+    label: "Финансы",
     sub_items: [
       { id: 1, path: "/account", lable: "Account" },
-      { id: 2, path: "/factorings", lable: "Factoring" },
+      { id: 2, path: "/factorings", lable: "Факторинги" },
     ],
   },
   {
     id: 4,
-    label: "Catalog",
+    label: "Каталог",
     sub_items: [
-      { id: 1, path: "/customers", lable: "Customers" },
-      { id: 2, path: "/drivers", lable: "Drivers" },
+      { id: 1, path: "/customers", lable: "Заказщики" },
+      { id: 2, path: "/drivers", lable: "Водители" },
     ],
   },
   {

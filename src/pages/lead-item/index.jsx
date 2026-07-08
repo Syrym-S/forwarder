@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import RootLayout from "../../components/layout/root-layout";
 import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 import TripOriginIcon from "@mui/icons-material/TripOrigin";
@@ -35,7 +35,8 @@ import CargoUnloadVerification from "../../components/leads/lead-item/cargo-unlo
 import { STATUS } from "../../shared/const/tenders";
 import { useLeadsStore } from "../../app/store/leads/leads-store";
 import PageLoader from "../../shared/ui/loaders/page-loader";
-import { useNotificationsStore } from "../../app/store/notifications-store";
+import { useNotificationsStore } from "../../app/store/notifications/noti-store";
+import NotificationPopup from "../../components/layout/notifications/notification-popup";
 
 const LeadItem = () => {
   const { id } = useParams();
@@ -44,7 +45,7 @@ const LeadItem = () => {
 
   const getLeadItem = useLeadsStore((state) => state.getLeadItem);
   const leadData = useLeadsStore((state) => state.currentLead);
-  const isLoading = useLeadsStore((state) => state.isLoading);
+  const isConfirmLoading = useLeadsStore((state) => state.isConfirmLoading);
   const files = useLeadsStore((state) => state.files);
   const getLeadFiles = useLeadsStore((state) => state.getLeadFiles);
   const deleteLeadFile = useLeadsStore((state) => state.deleteLeadFile);
@@ -55,12 +56,8 @@ const LeadItem = () => {
   const confirmLeadDelivery = useLeadsStore(
     (state) => state.confirmLeadDelivery,
   );
-  const notifications = useNotificationsStore((state) => state.notifications);
-  const getNotifications = useNotificationsStore(
-    (state) => state.getNotifications,
-  );
-  const connectNotifications = useNotificationsStore(
-    (state) => state.connectNotifications,
+  const newNotification = useNotificationsStore(
+    (state) => state.newNotification,
   );
 
   const cargoActions = leadData?.cargo_actions[0];
@@ -195,28 +192,6 @@ const LeadItem = () => {
     };
   }, [id]);
 
-  const socketRef = useRef(null);
-
-  useEffect(() => {
-    const init = async () => {
-      const socket = await connectNotifications();
-
-      socket.onmessage = async () => {
-        await getNotifications();
-      };
-
-      socketRef.current = socket;
-    };
-
-    init();
-
-    return () => {
-      socketRef.current?.close();
-    };
-  }, []);
-
-  useEffect(() => {}, [notifications]);
-
   if (!leadData)
     return (
       <RootLayout withoutDataCheck>
@@ -236,11 +211,22 @@ const LeadItem = () => {
         isEdit
       />
 
-      <LeadMap from={from} to={to} id={id} />
+      <Box
+        sx={{
+          boxShadow: 1,
+          borderRadius: 2,
+          overflow: "hidden",
+        }}
+      >
+        <LeadMap from={from} to={to} id={id} />
+      </Box>
 
       <Container maxWidth="lg" sx={{ py: 4, px: 0 }}>
         <LeadCustomerInfo leadData={leadData} />
 
+        {newNotification && (
+          <NotificationPopup selectedNotification={newNotification} />
+        )}
         <LeadRouteInfo leadData={leadData} />
 
         <LeadCargoInfo leadData={leadData} />
@@ -283,10 +269,10 @@ const LeadItem = () => {
           <Button
             color="error"
             variant="outlined"
-            disabled={isLoading}
+            disabled={isConfirmLoading}
             onClick={handleConfirmDelivery}
           >
-            {isLoading ? "...Завершение рейса" : "Завершить рейс"}
+            {isConfirmLoading ? "...Завершение рейса" : "Завершить рейс"}
           </Button>
         )}
       </Container>

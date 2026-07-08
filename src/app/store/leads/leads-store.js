@@ -26,10 +26,15 @@ export const useLeadsStore = create((set) => ({
   files: [],
   uploadedFiles: [],
   currentLead: null,
+
   isLoading: false,
   isSearchLoading: false,
   isDriverDetachLoading: false,
   isCustomerDetachLoading: false,
+  isLoadLoading: false,
+  isUnloadLoading: false,
+  isConfirmLoading: false,
+
   error: null,
   count: 0,
   perPage: 1,
@@ -39,6 +44,7 @@ export const useLeadsStore = create((set) => ({
   clearCurrentLead: () => {
     set({ currentLead: null, error: null });
   },
+
   fetchLeads: async (params) => {
     try {
       set({ isLoading: true, error: null });
@@ -76,6 +82,7 @@ export const useLeadsStore = create((set) => ({
       });
     }
   },
+
   getHistoryLeads: async (params) => {
     try {
       set({ isLoading: true, error: null });
@@ -135,6 +142,7 @@ export const useLeadsStore = create((set) => ({
       console.error(e);
     }
   },
+
   createLead: async (payload) => {
     try {
       set({ isLoading: true, error: null });
@@ -158,6 +166,7 @@ export const useLeadsStore = create((set) => ({
       throw e;
     }
   },
+
   updateLead: async (id, payload) => {
     try {
       set({ isLoading: true, error: null });
@@ -175,6 +184,7 @@ export const useLeadsStore = create((set) => ({
       throw e;
     }
   },
+
   getLeadFiles: async (lead_id) => {
     try {
       set({ isLoading: true, error: null });
@@ -194,6 +204,7 @@ export const useLeadsStore = create((set) => ({
       console.error(e);
     }
   },
+
   setUploadedFiles: (files) => set({ uploadedFiles: files }),
 
   uploadLeadFile: async (id, payload) => {
@@ -218,6 +229,7 @@ export const useLeadsStore = create((set) => ({
       throw e;
     }
   },
+
   deleteLeadFile: async (lead_id, file_path) => {
     try {
       set({ isLoading: true, error: null });
@@ -240,21 +252,22 @@ export const useLeadsStore = create((set) => ({
       throw e;
     }
   },
+
   verifyCargo: async (lead_id, payload) => {
     try {
-      set({ isLoading: true, error: null });
+      set({ isLoadLoading: true, error: null });
 
       const response = await verifyCargoApi(lead_id, payload);
 
       set({
-        isLoading: false,
+        isLoadLoading: false,
       });
 
       return response;
     } catch (e) {
       set({
         error: e.message,
-        isLoading: false,
+        isLoadLoading: false,
       });
 
       // console.error("Payload:", payload);
@@ -262,21 +275,22 @@ export const useLeadsStore = create((set) => ({
       throw e;
     }
   },
+
   rejectCargo: async (lead_id, payload) => {
     try {
-      set({ isLoading: true, error: null });
+      set({ isLoadLoading: true, error: null });
 
       const response = await rejectCargoApi(lead_id, payload);
 
       set({
-        isLoading: false,
+        isLoadLoading: false,
       });
 
       return response;
     } catch (e) {
       set({
         error: e.message,
-        isLoading: false,
+        isLoadLoading: false,
       });
 
       // console.error("Payload:", payload);
@@ -284,21 +298,22 @@ export const useLeadsStore = create((set) => ({
       throw e;
     }
   },
+
   verifyCargoUnload: async (lead_id, payload) => {
     try {
-      set({ isLoading: true, error: null });
+      set({ isUnloadLoading: true, error: null });
 
       const response = await verifyCargoUnloadApi(lead_id, payload);
 
       set({
-        isLoading: false,
+        isUnloadLoading: false,
       });
 
       return response;
     } catch (e) {
       set({
         error: e.message,
-        isLoading: false,
+        isUnloadLoading: false,
       });
 
       // console.error("Payload:", payload);
@@ -306,21 +321,22 @@ export const useLeadsStore = create((set) => ({
       throw e;
     }
   },
+
   rejectCargoUnload: async (lead_id, payload) => {
     try {
-      set({ isLoading: true, error: null });
+      set({ isUnloadLoading: true, error: null });
 
       const response = await rejectCargoUnloadApi(lead_id, payload);
 
       set({
-        isLoading: false,
+        isUnloadLoading: false,
       });
 
       return response;
     } catch (e) {
       set({
         error: e.message,
-        isLoading: false,
+        isUnloadLoading: false,
       });
 
       // console.error("Payload:", payload);
@@ -328,21 +344,22 @@ export const useLeadsStore = create((set) => ({
       throw e;
     }
   },
+
   confirmLeadDelivery: async (lead_id, payload) => {
     try {
-      set({ isLoading: true, error: null });
+      set({ isConfirmLoading: true, error: null });
 
       const response = await confirmLeadDeliveryApi(lead_id, payload);
 
       set({
-        isLoading: false,
+        isConfirmLoading: false,
       });
 
       return response;
     } catch (e) {
       set({
         error: e.message,
-        isLoading: false,
+        isConfirmLoading: false,
       });
 
       // console.error("Payload:", payload);

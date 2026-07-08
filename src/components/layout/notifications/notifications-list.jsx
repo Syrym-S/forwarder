@@ -1,5 +1,13 @@
 import { useNotificationsStore } from "../../../app/store/notifications/noti-store";
-import { Box, Chip, CircularProgress, Paper, Typography } from "@mui/material";
+import {
+  Box,
+  Chip,
+  CircularProgress,
+  ListItemText,
+  MenuItem,
+  Paper,
+  Typography,
+} from "@mui/material";
 import NotificationsOffOutlinedIcon from "@mui/icons-material/NotificationsOffOutlined";
 import NotificationItem from "./notification-item";
 
@@ -18,7 +26,7 @@ const NotificationsList = ({
     <Paper
       sx={{
         width: 300,
-        height: 350,
+        height: isEmpty ? "fit-content" : 500,
         display: isLoading ? "" : "grid",
         gridTemplateColumns: "1fr",
       }}
@@ -32,7 +40,7 @@ const NotificationsList = ({
         <Typography
           sx={{
             fontWeight: "500",
-            fontSize: "1rem",
+            fontSize: "0.8rem",
           }}
         >
           Уведомления
@@ -40,7 +48,7 @@ const NotificationsList = ({
         <Typography
           sx={{
             fontWeight: "400",
-            fontSize: "0.7rem",
+            fontSize: "0.rem",
             color: "backgound.main",
           }}
         >
@@ -48,46 +56,60 @@ const NotificationsList = ({
         </Typography>
       </Box>
 
-      {isLoading ? (
-        <Box
-          sx={{
-            height: "80%",
-            border: "1px solid rgba(0,0,0,0.1)",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <CircularProgress />
-        </Box>
-      ) : isEmpty ? (
-        <Box
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <NotificationsOffOutlinedIcon
+      <Box
+        sx={{
+          height: "100%",
+          overflow: "hidden",
+          overflowY: "auto",
+        }}
+      >
+        {isLoading ? (
+          <Box
             sx={{
-              fontSize: "10rem",
-              color: "#D6D4D4",
+              height: "100%",
+              border: "1px solid rgba(0,0,0,0.1)",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
             }}
-          />
-          <Typography>Увидомлений нет</Typography>
-        </Box>
-      ) : (
-        notifications
-          ?.slice(0, 5)
-          .map((notification) => (
-            <NotificationItem
-              notification={notification}
-              setSelectedNotification={setSelectedNotification}
-              handleNotificationsClose={handleNotificationsClose}
+          >
+            <CircularProgress />
+          </Box>
+        ) : isEmpty ? (
+          <Box
+            style={{
+              height: 70,
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+              borderBottom: "1px solid ",
+            }}
+          >
+            <ListItemText
+              primary="Уведомлений пока нет"
+              secondary="Здесь будут отображаться новые события"
             />
-          ))
-      )}
+          </Box>
+        ) : (
+          <Box
+            sx={{
+              height: "100%",
+              display: "grid",
+              alignItems: "start",
+              gridTemplateColumns: "1fr",
+            }}
+          >
+            {notifications?.slice(0, 10).map((notification) => (
+              <NotificationItem
+                notification={notification}
+                setSelectedNotification={setSelectedNotification}
+                handleNotificationsClose={handleNotificationsClose}
+              />
+            ))}
+          </Box>
+        )}
+      </Box>
 
       <Box
         onClick={handleOpenDrawer}

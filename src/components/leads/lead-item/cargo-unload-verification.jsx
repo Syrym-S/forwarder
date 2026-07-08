@@ -15,7 +15,7 @@ const CargoUnloadVerification = ({
   handleRejectCargoUnload,
 }) => {
   const [currentFile, setCurrentFile] = useState(null);
-  const isLoading = useLeadsStore((state) => state.isLoading);
+  const isUnloadLoading = useLeadsStore((state) => state.isUnloadLoading);
 
   return (
     <Section
@@ -55,15 +55,15 @@ const CargoUnloadVerification = ({
           }}
         >
           <Button
-            disabled={isLoading}
+            disabled={isUnloadLoading}
             color="success"
             variant="outlined"
             onClick={handleVerifyCargoUnload}
           >
-            {isLoading ? "Идет подтверждение" : "Подтвердить"}
+            {isUnloadLoading ? "Идет подтверждение" : "Подтвердить"}
           </Button>
           <Button
-            disabled={isLoading}
+            disabled={isUnloadLoading}
             color="error"
             variant="outlined"
             onClick={handleRejectCargoUnload}

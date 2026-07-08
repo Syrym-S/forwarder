@@ -91,7 +91,7 @@ export const useNotificationsStore = create((set) => ({
     const tokenResponse = await getNotificationsTokenApi();
 
     const socket = new WebSocket(
-      `wss://notification.360logistics.kz/socket?token=${tokenResponse.token}`,
+      `wss://notification.360logistics.kz/staging/socket?token=${tokenResponse.token}`,
     );
 
     return socket;

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import RootLayout from "../../components/layout/root-layout";
-import { Box, Button, Pagination } from "@mui/material";
+import { Alert, Box, Button, Pagination, Typography } from "@mui/material";
 import TenderForm from "../../features/tenders/tender-form";
 import { useTendersStore } from "../../app/store/tenders/tender-store";
 import { VIEWS } from "../../shared/const/leads";
@@ -26,6 +26,8 @@ const TenderApplications = () => {
   const getCustomerTenders = useTendersStore(
     (state) => state.getCustomerTenders,
   );
+  const isLoading = useTendersStore((state) => state.isLoading);
+
   const customerCount = useTendersStore((state) => state.customerCount);
   const customerPerPage = useTendersStore((state) => state.customerPerPage);
 
@@ -53,10 +55,17 @@ const TenderApplications = () => {
 
   const isTenderEmplty = customerTenders.length === 0;
 
-  if (isTenderEmplty)
+  if (isLoading)
     return (
       <RootLayout withoutDataCheck>
         <PageLoader />
+      </RootLayout>
+    );
+
+  if (isTenderEmplty)
+    return (
+      <RootLayout withoutDataCheck>
+        <Alert severity="info">Доступных тендеров нет</Alert>
       </RootLayout>
     );
 
@@ -84,6 +93,8 @@ const TenderApplications = () => {
           <Pagination
             page={page}
             count={PAGE_COUNT}
+            color="primary"
+            shape="rounded"
             sx={{
               mx: "auto",
             }}

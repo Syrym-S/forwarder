@@ -112,6 +112,8 @@ const TenderForwarders = () => {
               mx: "auto",
             }}
             page={page}
+            color="primary"
+            shape="rounded"
             count={PAGE_COUNT}
             onChange={handlePageChange}
           />

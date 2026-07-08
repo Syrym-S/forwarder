@@ -172,6 +172,8 @@ const Customers = () => {
             sx={{
               mx: "auto",
             }}
+            color="primary"
+            shape="rounded"
             page={page}
             count={PAGE_COUNT}
             onChange={handlePageChange}

@@ -104,9 +104,9 @@ const NotificationsDrawer = ({
 
         <Box
           sx={{
-            minHeight: "100vh",
-            display: "grid",
-            gridTemplateColumns: "1fr",
+            minHeight: "90vh",
+            display: "flex",
+            flexDirection: "column",
           }}
         >
           {isLoading ? (
@@ -137,6 +137,8 @@ const NotificationsDrawer = ({
           page={page}
           count={PAGE_COUNT}
           onChange={handlePageChange}
+          color="primary"
+          shape="rounded"
           sx={{
             width: "fit-content",
             mx: "auto",

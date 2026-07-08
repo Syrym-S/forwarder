@@ -7,23 +7,16 @@ import AppRouter from "./app/router/app-router";
 import { Alert, Box, Popover, Snackbar, Typography } from "@mui/material";
 import RootLayout from "./components/layout/root-layout";
 import { AppInitializer } from "./app/router/app-init";
-import { getNotificationsTokenApi } from "./app/store/notifications/api";
 import { useNotificationsStore } from "./app/store/notifications/noti-store";
 import NotificationItem from "./components/layout/notifications/notification-item";
 import RenderNotificationIcon from "./shared/ui/render-notification-icon";
 import { isStaging } from "./app/client";
-
-const connectNotifications = async () => {
-  const tokenResponse = await getNotificationsTokenApi();
-
-  const socket = new WebSocket(
-    `wss://notification.360logistics.kz/socket?token=${tokenResponse.token}`,
-  );
-
-  return socket;
-};
+import NotificationPopup from "./components/layout/notifications/notification-popup";
 
 function App() {
+  const connectNotifications = useNotificationsStore(
+    (state) => state.connectNotifications,
+  );
   const newNotification = useNotificationsStore(
     (state) => state.newNotification,
   );
@@ -35,6 +28,11 @@ function App() {
   );
 
   const [openMenu, setOpenMenu] = useState(false);
+  const [notificationPopUpItem, setNotificationPopUpItem] = useState(null);
+
+  const handleOpenPopUp = () => {
+    setNotificationPopUpItem(newNotification);
+  };
 
   const socketRef = useRef(null);
 
@@ -72,6 +70,7 @@ function App() {
           autoHideDuration={5000}
           onClose={clearNewNotificationValue}
           message={newNotification?.theme}
+          onClick={handleOpenPopUp}
           anchorOrigin={{
             vertical: "bottom",
             horizontal: "right",
@@ -115,6 +114,13 @@ function App() {
             </Box>
           )}
         </Snackbar>
+
+        {notificationPopUpItem && (
+          <NotificationPopup
+            selectedNotification={notificationPopUpItem}
+            setSelectedNotification={setNotificationPopUpItem}
+          />
+        )}
       </Box>
       <NotificationsColumn />
       <AppInitializer />
