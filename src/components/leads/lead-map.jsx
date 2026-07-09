@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { MapContainer, TileLayer, Marker, Polyline } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
+import { isStaging } from "../../app/client";
 
 const driverIcon = L.divIcon({
   className: "driver-marker",
@@ -40,7 +41,11 @@ export default function LeadMap({ from, to, id }) {
 
   useEffect(() => {
     async function connect() {
-      const addRes = await fetch("/wp-json/geows/v1/token", {
+      const BASE_URL = isStaging
+        ? "/staging/wp-json/geows/v1/token"
+        : "/wp-json/geows/v1/token";
+
+      const addRes = await fetch(BASE_URL, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -65,7 +70,7 @@ export default function LeadMap({ from, to, id }) {
         );
       };
 
-      const res = await fetch("/wp-json/geows/v1/token", {
+      const res = await fetch(BASE_URL, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -216,66 +216,65 @@ const LeadItem = () => {
           boxShadow: 1,
           borderRadius: 2,
           overflow: "hidden",
+          my: 3,
         }}
       >
         <LeadMap from={from} to={to} id={id} />
       </Box>
 
-      <Container maxWidth="lg" sx={{ py: 4, px: 0 }}>
-        <LeadCustomerInfo leadData={leadData} />
+      <LeadCustomerInfo leadData={leadData} />
 
-        {newNotification && (
-          <NotificationPopup selectedNotification={newNotification} />
-        )}
-        <LeadRouteInfo leadData={leadData} />
+      {newNotification && (
+        <NotificationPopup selectedNotification={newNotification} />
+      )}
+      <LeadRouteInfo leadData={leadData} />
 
-        <LeadCargoInfo leadData={leadData} />
+      <LeadCargoInfo leadData={leadData} />
 
-        {filesFromDriver && (
-          <CargoLoadVerification
-            filesFromDriver={filesFromDriver}
-            isVerified={isVerified}
-            handleVerifyCargo={handleVerifyCargo}
-            handleRejectCargo={handleRejectCargo}
-          />
-        )}
+      {filesFromDriver && (
+        <CargoLoadVerification
+          filesFromDriver={filesFromDriver}
+          isVerified={isVerified}
+          handleVerifyCargo={handleVerifyCargo}
+          handleRejectCargo={handleRejectCargo}
+        />
+      )}
 
-        {filesFromDriverToUnload && (
-          <CargoUnloadVerification
-            isUnloadVerified={isUnloadVerified}
-            filesFromDriverToUnload={filesFromDriverToUnload}
-            handleVerifyCargoUnload={handleVerifyCargoUnload}
-            handleRejectCargoUnload={handleRejectCargoUnload}
-          />
-        )}
+      {filesFromDriverToUnload && (
+        <CargoUnloadVerification
+          isUnloadVerified={isUnloadVerified}
+          filesFromDriverToUnload={filesFromDriverToUnload}
+          handleVerifyCargoUnload={handleVerifyCargoUnload}
+          handleRejectCargoUnload={handleRejectCargoUnload}
+        />
+      )}
 
-        <LeadDriverInfo leadData={leadData} />
+      <LeadDriverInfo leadData={leadData} />
 
-        <Section
-          title="Документы"
-          icon={<DescriptionOutlinedIcon color="primary" />}
+      <Section
+        title="Документы"
+        icon={<DescriptionOutlinedIcon color="primary" />}
+      >
+        <LeadDocumentsSection
+          documents={files}
+          onAddDocument={handleAddDocument}
+          onDeleteDocument={handleDeleteFileFromDB}
+          isUploading={isDocumentUploading}
+          uploadError={documentError}
+          deletingDocumentIds={deletingDocumentIds}
+        />
+      </Section>
+
+      {leadData.status === STATUS.verification_unloading && (
+        <Button
+          color="error"
+          variant="outlined"
+          disabled={isConfirmLoading}
+          onClick={handleConfirmDelivery}
         >
-          <LeadDocumentsSection
-            documents={files}
-            onAddDocument={handleAddDocument}
-            onDeleteDocument={handleDeleteFileFromDB}
-            isUploading={isDocumentUploading}
-            uploadError={documentError}
-            deletingDocumentIds={deletingDocumentIds}
-          />
-        </Section>
-
-        {leadData.status === STATUS.verification_unloading && (
-          <Button
-            color="error"
-            variant="outlined"
-            disabled={isConfirmLoading}
-            onClick={handleConfirmDelivery}
-          >
-            {isConfirmLoading ? "...Завершение рейса" : "Завершить рейс"}
-          </Button>
-        )}
-      </Container>
+          {isConfirmLoading ? "...Завершение рейса" : "Завершить рейс"}
+        </Button>
+      )}
     </RootLayout>
   );
 };
