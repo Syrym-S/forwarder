@@ -26,6 +26,7 @@ import PageLoader from "../../shared/ui/loaders/page-loader";
 import { useNotificationsStore } from "../../app/store/notifications/noti-store";
 import { NOTIFICATION_TYPE } from "../../shared/const/notification-types";
 import LeadListContainer from "../../components/leads/lead-list-container";
+import { parserNotificationType } from "../../shared/helpers/notifications/parse-notification-type";
 
 const ActiveLeads = () => {
   const [openForm, setOpenForm] = useState(false);
@@ -37,6 +38,9 @@ const ActiveLeads = () => {
     (state) => state.newNotification,
   );
 
+  const { notification_type } = parserNotificationType(
+    newNotification?.type || "",
+  );
   const deafultValues = useFormDefaultValues();
 
   const handleOpenForm = () => {
@@ -48,7 +52,7 @@ const ActiveLeads = () => {
   }, []);
 
   useEffect(() => {
-    if (newNotification?.type === NOTIFICATION_TYPE.lead) {
+    if (notification_type === NOTIFICATION_TYPE.lead) {
       fetchLeads();
     }
   }, [newNotification]);

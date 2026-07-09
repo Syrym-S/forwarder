@@ -34,8 +34,6 @@ const Header = ({ openMenu, setOpenMenu }) => {
     (state) => state.getNotifications,
   );
 
-  // const profileAvatar = profileData?.avatar;
-
   const [profileAnchorEl, setProfileAnchorEl] = useState(null);
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
 
@@ -128,10 +126,8 @@ const Header = ({ openMenu, setOpenMenu }) => {
           }
           onClick={handleOpenProfileMenu}
           sx={{
-            maxWidth: {
-              xs: 180,
-              sm: 260,
-            },
+            width: "fit-content",
+            maxWidth: 260,
             textTransform: "none",
             overflow: "hidden",
             textOverflow: "ellipsis",

@@ -10,6 +10,7 @@ import ApplicationsTenderCard from "../../components/tenders/applications-tender
 import PageLoader from "../../shared/ui/loaders/page-loader";
 import { useNotificationsStore } from "../../app/store/notifications/noti-store";
 import { NOTIFICATION_TYPE } from "../../shared/const/notification-types";
+import { parserNotificationType } from "../../shared/helpers/notifications/parse-notification-type";
 
 const TenderApplications = () => {
   const view = VIEWS.cards;
@@ -33,6 +34,10 @@ const TenderApplications = () => {
 
   const PAGE_COUNT = Math.ceil(customerCount / customerPerPage);
 
+  const { notification_type } = parserNotificationType(
+    newNotification?.type || "",
+  );
+
   const handlePageChange = (_, value) => {
     setPage(value);
   };
@@ -48,7 +53,7 @@ const TenderApplications = () => {
   }, []);
 
   useEffect(() => {
-    if (newNotification?.type === NOTIFICATION_TYPE.tender) {
+    if (notification_type === NOTIFICATION_TYPE.tender) {
       getCustomerTenders();
     }
   }, [newNotification]);

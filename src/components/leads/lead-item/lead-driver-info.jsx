@@ -57,7 +57,7 @@ const LeadDriverInfo = ({ leadData }) => {
           display: "grid",
           gridTemplateColumns: {
             xs: "1fr",
-            sx: "repeat(3,1fr)",
+            sm: "repeat(3,1fr)",
           },
           gap: 3,
         }}

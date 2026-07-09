@@ -54,29 +54,6 @@ const LeadCard = ({ lead }) => {
             flexWrap: "wrap",
           }}
         >
-          {/* <Box>
-            <Typography
-              variant="body2"
-              color="text.secondary"
-              sx={{ mb: 0.75 }}
-            >
-              Заказчик
-            </Typography>
-
-            <Typography
-              sx={{
-                lineHeight: 1.3,
-                fontSize: {
-                  xs: "16px",
-                  sm: "18px",
-                },
-                fontWeight: 500,
-              }}
-            >
-              {/* {lead.customer} 
-            </Typography>
-          </Box> */}
-
           <Stack
             direction="row"
             spacing={1}
@@ -106,6 +83,15 @@ const LeadCard = ({ lead }) => {
 
             <RenderStatus status={lead.status} />
           </Stack>
+
+          <Chip
+            sx={{
+              borderRadius: 1,
+            }}
+            color="primary"
+            variant="outlined"
+            label={`Заказщий: ${lead.customer.name ? lead.customer.name : "Не указан"}`}
+          />
         </Box>
         <Box
           sx={{

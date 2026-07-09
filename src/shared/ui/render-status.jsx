@@ -20,7 +20,7 @@ const RenderChip = ({ label, color, variant }) => {
 const RenderStatus = ({ status }) => {
   switch (status) {
     case STATUS.new:
-      return <Chip label={"Новый"} variant="contained" color="success" />;
+      return <Chip label={"Новый"} variant="contained" color="info" />;
     case STATUS.active:
       return (
         <RenderChip label={"Активный"} variant="outlined" color="success" />
@@ -34,7 +34,7 @@ const RenderStatus = ({ status }) => {
         <RenderChip
           label={"Водитель добавлен"}
           variant="outlined"
-          color="warning"
+          color="info"
         />
       );
     case STATUS.start_driver:
@@ -42,7 +42,7 @@ const RenderStatus = ({ status }) => {
         <RenderChip
           label={"Поездка начата"}
           variant="contained"
-          color="warning"
+          color="primary"
         />
       );
     case STATUS.start_loading:
@@ -54,7 +54,7 @@ const RenderStatus = ({ status }) => {
         <RenderChip
           label={"Погрузка подтверждена"}
           variant="contained"
-          color="warning"
+          color="success"
         />
       );
     case STATUS.start_unloading:
@@ -66,7 +66,7 @@ const RenderStatus = ({ status }) => {
         <RenderChip
           label={"Разгрузка подтверждена"}
           variant="outlined"
-          color="error"
+          color="warning"
         />
       );
     case STATUS.finished:
