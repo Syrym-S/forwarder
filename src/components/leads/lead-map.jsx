@@ -30,6 +30,9 @@ export default function LeadMap({ from, to, id }) {
   const [points, setPoints] = useState(null);
   const [route, setRoute] = useState([]);
 
+  const [passedRoute, setPassedRoute] = useState([]);
+  const [routeHistory, setRouteHistory] = useState([]);
+
   useEffect(() => {
     const load = async () => {
       const result = await fetchRoute(start, end);
@@ -96,9 +99,19 @@ export default function LeadMap({ from, to, id }) {
 
         if (message.type === "get_points") {
           const lastPoint = message.data.at(-1);
+          const history = message.data.map((point) => [
+            point.latitude,
+            point.longitude,
+          ]);
+
+          setRouteHistory(history);
 
           if (lastPoint) {
+            const point = [lastPoint.latitude, lastPoint.longitude];
+
             setPoints([lastPoint.latitude, lastPoint.longitude]);
+
+            setPassedRoute((prev) => [...prev, point]);
           }
         }
       };
@@ -120,6 +133,28 @@ export default function LeadMap({ from, to, id }) {
 
       {(route.length > 0 || !from.lat || !from?.lon) && (
         <Polyline positions={route} color="blue" weight={4} />
+      )}
+
+      {passedRoute && (
+        <Polyline
+          positions={passedRoute}
+          pathOptions={{
+            color: "#1976d2",
+            weight: 5,
+            dashArray: "10 10",
+          }}
+        />
+      )}
+
+      {routeHistory && (
+        <Polyline
+          positions={routeHistory}
+          pathOptions={{
+            color: "#1976d2",
+            weight: 5,
+            dashArray: "10 10",
+          }}
+        />
       )}
       {points && <Marker position={points} icon={driverIcon} />}
     </MapContainer>
