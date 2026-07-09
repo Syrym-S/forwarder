@@ -233,3 +233,15 @@ export const detachCustomerApi = async (lead_id) => {
 
   return data;
 };
+
+export const getAcceptedLeadsApi = async (params = {}) => {
+  const data = await api.get(`/forwarder/v1/leads/accepted`, {
+    params,
+    headers: {
+      // eslint-disable-next-line no-undef
+      "X-WP-Nonce": APP_DATA.nonce,
+    },
+  });
+
+  return data;
+};
