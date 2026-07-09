@@ -17,34 +17,89 @@ import LocalPostOfficeOutlinedIcon from "@mui/icons-material/LocalPostOfficeOutl
 import InfoField from "../../../shared/ui/info-field";
 import CustomNavLink from "../../../shared/ui/custom-nav-link";
 import { Link as RouterLink } from "react-router-dom";
+import { parserNotificationType } from "../../../shared/helpers/notifications/parse-notification-type";
+import { useLeadsStore } from "../../../app/store/leads/leads-store";
+import { NOTIFICATION_TYPE } from "../../../shared/const/notification-types";
+import { LeadDocumentCard } from "../../leads/documents/LeadDocumentCard";
+import { STATUS } from "../../../shared/const/tenders";
+import PageLoader from "../../../shared/ui/loaders/page-loader";
 
 const NotificationPopup = ({
   selectedNotification,
   setSelectedNotification,
 }) => {
+  const currentLead = useLeadsStore((state) => state.currentLead);
+  const getLeadItem = useLeadsStore((state) => state.getLeadItem);
   const notificationDetails = useNotificationsStore(
     (state) => state.notificationDetails,
   );
   const getNotificationDetails = useNotificationsStore(
     (state) => state.getNotificationDetails,
   );
+  const isNotificationDetailsLoading = useNotificationsStore(
+    (state) => state.isNotificationDetailsLoading,
+  );
 
   const handleNotificationPopupClose = () => {
     setSelectedNotification(null);
   };
 
+  const { id, notification_type, action } = parserNotificationType(
+    notificationDetails?.type || "",
+  );
+
+  console.log(action === STATUS.start_unloading);
+  console.log("action", action);
+  console.log("STATUS.start_unloading", STATUS.start_unloading);
+
+  const loadCargoActions = currentLead?.cargo_actions[0];
+  const unloadCargoActions = currentLead?.cargo_actions[1];
+
   useEffect(() => {
     getNotificationDetails(selectedNotification.id);
   }, []);
 
-  if (!notificationDetails) return <Loader />;
+  useEffect(() => {
+    if (notification_type === NOTIFICATION_TYPE.lead) {
+      getLeadItem(id);
+    }
+  }, [id]);
+
+  if (isNotificationDetailsLoading)
+    return (
+      <Dialog
+        open={!!selectedNotification}
+        onClose={handleNotificationPopupClose}
+        fullWidth
+        maxWidth="md"
+        sx={{
+          p: 5,
+        }}
+        slotProps={{
+          paper: {
+            sx: {
+              width: {
+                xs: "calc(100% - 6px)",
+                sm: "100%",
+              },
+              m: {
+                xs: 0,
+                sm: 2,
+              },
+            },
+          },
+        }}
+      >
+        <PageLoader />
+      </Dialog>
+    );
 
   return (
     <Dialog
       open={!!selectedNotification}
       onClose={handleNotificationPopupClose}
       fullWidth
-      maxWidth="sm"
+      maxWidth="md"
       sx={{
         p: 5,
       }}
@@ -123,6 +178,37 @@ const NotificationPopup = ({
               </Box>
             }
           />
+          {action === "loading_started" && (
+            <Box
+              p={1}
+              sx={{
+                py: 1,
+                display: "grid",
+                gridTemplateColumns: "repeat(3,1fr)",
+                gap: 1,
+              }}
+            >
+              {loadCargoActions?.files?.map((file) => (
+                <LeadDocumentCard document={file} />
+              ))}
+            </Box>
+          )}
+
+          {action === "unloading_started" && (
+            <Box
+              p={1}
+              sx={{
+                py: 1,
+                display: "grid",
+                gridTemplateColumns: "repeat(3,1fr)",
+                gap: 1,
+              }}
+            >
+              {unloadCargoActions?.files?.map((file) => (
+                <LeadDocumentCard document={file} />
+              ))}
+            </Box>
+          )}
         </Section>
       </DialogContent>
     </Dialog>

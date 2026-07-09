@@ -4,9 +4,12 @@ import LocalShippingOutlinedIcon from "@mui/icons-material/LocalShippingOutlined
 import ContentPasteOutlinedIcon from "@mui/icons-material/ContentPasteOutlined";
 import RouteOutlinedIcon from "@mui/icons-material/RouteOutlined";
 import FactoryOutlinedIcon from "@mui/icons-material/FactoryOutlined";
+import { parserNotificationType } from "../helpers/notifications/parse-notification-type";
 
 const RenderNotificationIcon = ({ type }) => {
-  switch (type) {
+  const { notification_type } = parserNotificationType(type);
+
+  switch (notification_type) {
     case NOTIFICATION_TYPE.lead:
       return <RouteOutlinedIcon />;
     case NOTIFICATION_TYPE.shipping:

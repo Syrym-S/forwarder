@@ -10,7 +10,10 @@ export const useNotificationsStore = create((set) => ({
   notifications: [],
   newNotification: null,
   notificationDetails: null,
+
   isLoading: false,
+  isNotificationDetailsLoading: false,
+
   error: null,
   total: 0,
   perPage: 1,
@@ -44,18 +47,18 @@ export const useNotificationsStore = create((set) => ({
 
   getNotificationDetails: async (id) => {
     try {
-      set({ isLoading: true, error: null });
+      set({ isNotificationDetailsLoading: true, error: null });
 
       const response = await getNotificationDetailsApi(id);
 
       set({
         notificationDetails: response.data,
-        isLoading: false,
+        isNotificationDetailsLoading: false,
       });
     } catch (e) {
       set({
         error: e.message,
-        isLoading: false,
+        isNotificationDetailsLoading: false,
       });
     }
   },

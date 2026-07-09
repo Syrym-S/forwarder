@@ -1,8 +1,11 @@
 import { Chip } from "@mui/material";
 import { NOTIFICATION_TYPE } from "../const/notification-types";
+import { parserNotificationType } from "../helpers/notifications/parse-notification-type";
 
 const RenderNotificationType = ({ type }) => {
-  switch (type) {
+  const { notification_type } = parserNotificationType(type);
+
+  switch (notification_type) {
     case NOTIFICATION_TYPE.lead:
       return <Chip label={"ЛИД"} variant="contained" color="success" />;
     case NOTIFICATION_TYPE.shipping:
