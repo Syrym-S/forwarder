@@ -218,7 +218,7 @@ const NotificationPopup = ({
                   <LeadDocumentCard document={file} />
                 ))}
               </Box>
-              {!isLoadVerified && (
+              {!isLoadVerified && loadCargoActions && (
                 <Box
                   sx={{
                     my: 1,
@@ -263,7 +263,7 @@ const NotificationPopup = ({
                 ))}
               </Box>
 
-              {!isUnloadVerified && (
+              {!isUnloadVerified && unloadCargoActions && (
                 <Box
                   sx={{
                     my: 1,
