@@ -17,6 +17,7 @@ import {
   uploadLeadFileApi,
   verifyCargoApi,
   verifyCargoUnloadApi,
+  getAcceptedLeadsApi,
 } from "./api";
 
 export const useLeadsStore = create((set) => ({
@@ -25,6 +26,7 @@ export const useLeadsStore = create((set) => ({
   historyLeads: [],
   files: [],
   uploadedFiles: [],
+  acceptedLeads: [],
   currentLead: null,
 
   isLoading: false,
@@ -34,6 +36,8 @@ export const useLeadsStore = create((set) => ({
   isLoadLoading: false,
   isUnloadLoading: false,
   isConfirmLoading: false,
+  isAcceptedLeadsLoading: false,
+
 
   error: null,
   count: 0,
@@ -61,6 +65,29 @@ export const useLeadsStore = create((set) => ({
       set({
         error: e.message,
         isLoading: false,
+      });
+    }
+  },
+
+  fetchAcceptedLeads: async () => {
+    try {
+      set({ isAcceptedLeadsLoading: true, error: null });
+
+      const response = await getAcceptedLeadsApi();
+
+      set({
+        acceptedLeads:
+          response.data?.results ||
+          response.data?.data ||
+          response.data ||
+          [],
+        isAcceptedLeadsLoading: false,
+      });
+    } catch (e) {
+      set({
+        acceptedLeads: [],
+        error: e.message,
+        isAcceptedLeadsLoading: false,
       });
     }
   },

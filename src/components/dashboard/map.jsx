@@ -1,126 +1,245 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo, Fragment } from "react";
 import {
   MapContainer,
-  TileLayer,
   Marker,
   Polyline,
+  TileLayer,
   Tooltip,
+  useMap,
 } from "react-leaflet";
-import { Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 
 import "leaflet/dist/leaflet.css";
 import { useLeadsStore } from "../../app/store/leads/leads-store";
 
-const getRoute = async (start, end) => {
-  const response = await fetch(
-    `https://router.project-osrm.org/route/v1/driving/${start[1]},${start[0]};${end[1]},${end[0]}?overview=full&geometries=geojson`,
+const getLocationLatitude = (location) => {
+  return location?.lat ?? location?.latitude;
+};
+
+const getLocationLongitude = (location) => {
+  return location?.lon ?? location?.lng ?? location?.longitude;
+};
+
+const isValidCoordinate = (value) => {
+  return Number.isFinite(Number(value));
+};
+
+const hasRouteLocations = (lead) => {
+  const fromLat = getLocationLatitude(lead?.from_location);
+  const fromLng = getLocationLongitude(lead?.from_location);
+  const toLat = getLocationLatitude(lead?.to_location);
+  const toLng = getLocationLongitude(lead?.to_location);
+
+  return (
+    isValidCoordinate(fromLat) &&
+    isValidCoordinate(fromLng) &&
+    isValidCoordinate(toLat) &&
+    isValidCoordinate(toLng)
   );
+};
 
-  const data = await response.json();
+const getLocationPoint = (location) => {
+  return [
+    Number(getLocationLatitude(location)),
+    Number(getLocationLongitude(location)),
+  ];
+};
 
-  if (!data.routes?.length) {
+const getLocationAddress = (location) => {
+  return location?.address || "Адрес не указан";
+};
+
+const getRoute = async (start, end) => {
+  try {
+    const response = await fetch(
+      `https://router.project-osrm.org/route/v1/driving/${start[1]},${start[0]};${end[1]},${end[0]}?overview=full&geometries=geojson`,
+    );
+
+    const data = await response.json();
+
+    if (!data.routes?.length) {
+      return null;
+    }
+
+    return {
+      distance: data.routes[0].distance,
+      duration: data.routes[0].duration,
+      coordinates: data.routes[0].geometry.coordinates.map(([lng, lat]) => [
+        lat,
+        lng,
+      ]),
+    };
+  } catch (error) {
+    console.error("Failed to load route", error);
     return null;
   }
+};
 
-  return {
-    distance: data.routes[0].distance, // метры
-    duration: data.routes[0].duration, // секунды
-    coordinates: data.routes[0].geometry.coordinates.map(([lng, lat]) => [
-      lat,
-      lng,
-    ]),
-  };
+const formatDistance = (distance) => {
+  if (!Number.isFinite(Number(distance))) {
+    return "—";
+  }
+
+  return `${Math.round(Number(distance) / 1000)} км`;
+};
+
+const formatDuration = (duration) => {
+  if (!Number.isFinite(Number(duration))) {
+    return "—";
+  }
+
+  return `${Math.round(Number(duration) / 60)} мин`;
 };
 
 const MapTooltip = ({ route }) => {
   return (
     <Tooltip sticky>
-      <Typography
-        style={{
-          width: "fit-content",
-          fontSize: "0.7rem",
-        }}
-      >
-        <Typography
-          style={{
-            fontWeight: "600",
-          }}
-        >
-          Откуда:
-        </Typography>{" "}
-        {route.from}
-      </Typography>
+      <Box sx={{ minWidth: 200 }}>
+        <Box sx={{ mb: 0.75 }}>
+          <Typography
+            component="span"
+            sx={{
+              fontSize: "0.75rem",
+              fontWeight: 600,
+            }}
+          >
+            Откуда:
+          </Typography>{" "}
+          <Typography
+            component="span"
+            sx={{
+              fontSize: "0.75rem",
+            }}
+          >
+            {route.from}
+          </Typography>
+        </Box>
 
-      <Typography
-        style={{
-          width: "fit-content",
-          fontSize: "0.7rem",
-        }}
-      >
-        <Typography
-          style={{
-            fontWeight: "600",
-          }}
-        >
-          Куда:
-        </Typography>{" "}
-        {route.from}
-      </Typography>
-      <Typography
-        style={{
-          width: "200px",
-        }}
-      >
-        Дистанция: {Math.round(route.distance / 1000)} км
-      </Typography>
-      <Typography>
-        Длительность : {Math.round(Number(route.duration / 60))} мин
-      </Typography>
+        <Box sx={{ mb: 0.75 }}>
+          <Typography
+            component="span"
+            sx={{
+              fontSize: "0.75rem",
+              fontWeight: 600,
+            }}
+          >
+            Куда:
+          </Typography>{" "}
+          <Typography
+            component="span"
+            sx={{
+              fontSize: "0.75rem",
+            }}
+          >
+            {route.to}
+          </Typography>
+        </Box>
+
+        <Typography sx={{ fontSize: "0.75rem" }}>
+          Дистанция: {formatDistance(route.distance)}
+        </Typography>
+
+        <Typography sx={{ fontSize: "0.75rem" }}>
+          Длительность: {formatDuration(route.duration)}
+        </Typography>
+      </Box>
     </Tooltip>
   );
 };
 
-const Map = () => {
-  const leads = useLeadsStore((state) => state.leads);
+const FitSelectedRouteBounds = ({ route }) => {
+  const map = useMap();
+
+  useEffect(() => {
+    if (!route?.coordinates?.length) {
+      return;
+    }
+
+    map.fitBounds(route.coordinates, {
+      padding: [40, 40],
+      maxZoom: 13,
+    });
+  }, [map, route]);
+
+  return null;
+};
+
+const Map = ({
+  leads: leadsProp,
+  selectedLeadId,
+  highlightedLeadId,
+  onSelectLead,
+}) => {
+
+  const storeLeads = useLeadsStore((state) => state.leads);
+
+  const leads = leadsProp || storeLeads;
+
   const [routes, setRoutes] = useState([]);
 
   useEffect(() => {
+    let isMounted = true;
+
     const loadRoutes = async () => {
       const result = await Promise.all(
         leads
-          .filter(
-            (lead) =>
-              lead?.from_location?.lat &&
-              lead?.from_location?.lon &&
-              lead?.to_location?.lat &&
-              lead?.to_location?.lon,
-          )
+          .filter(hasRouteLocations)
           .map(async (lead) => {
-            const coordinates = await getRoute(
-              [lead.from_location.lat, lead.from_location.lon],
-              [lead.to_location.lat, lead.to_location.lon],
+            const route = await getRoute(
+              getLocationPoint(lead.from_location),
+              getLocationPoint(lead.to_location),
             );
 
-            if (!coordinates) return null;
+            if (!route) {
+              return null;
+            }
 
             return {
               id: lead.id,
-              start: coordinates.coordinates[0],
-              end: coordinates.coordinates[coordinates.coordinates.length - 1],
-              coordinates: coordinates.coordinates,
-              distance: coordinates.distance,
-              duration: coordinates.duration,
-              from: lead?.from_location?.address,
-              to: lead?.to_location?.address,
+              lead,
+              start: route.coordinates[0],
+              end: route.coordinates[route.coordinates.length - 1],
+              coordinates: route.coordinates,
+              distance: route.distance,
+              duration: route.duration,
+              from: getLocationAddress(lead.from_location),
+              to: getLocationAddress(lead.to_location),
             };
           }),
       );
 
-      setRoutes(result);
+      if (isMounted) {
+        setRoutes(result.filter(Boolean));
+      }
     };
 
     loadRoutes();
+
+    return () => {
+      isMounted = false;
+    };
   }, [leads]);
+
+  const selectedRoute = useMemo(() => {
+    if (!selectedLeadId) {
+      return null;
+    }
+
+    return routes.find((route) => String(route.id) === String(selectedLeadId));
+  }, [routes, selectedLeadId]);
+
+  const hasHighlightedRoute = useMemo(() => {
+    if (!highlightedLeadId) {
+      return false;
+    }
+
+    return routes.some((route) => String(route.id) === String(highlightedLeadId));
+  }, [routes, highlightedLeadId]);
+
+  const hasSelectedRoute = Boolean(selectedRoute);
+
+  // console.log("Map selectedLeadId:", selectedLeadId);
+  // console.log("Map routes:", routes);
 
   return (
     <MapContainer
@@ -138,22 +257,45 @@ const Map = () => {
         url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
       />
 
+      <FitSelectedRouteBounds route={selectedRoute} />
+
       {routes.map((route) => {
+        const isSelected = String(route.id) === String(selectedLeadId);
+        const isHighlighted = String(route.id) === String(highlightedLeadId);
+        const isDimmed = hasHighlightedRoute && !isHighlighted;
+
         return (
-          <React.Fragment key={route.id}>
-            <Marker position={route.start} />
-            <Marker position={route.end} />
+          <Fragment key={route.id}>
+            <Marker
+              position={route.start}
+              opacity={isDimmed ? 0.3 : 1}
+              eventHandlers={{
+                click: () => onSelectLead?.(route.id),
+              }}
+            />
+
+            <Marker
+              position={route.end}
+              opacity={isDimmed ? 0.3 : 1}
+              eventHandlers={{
+                click: () => onSelectLead?.(route.id),
+              }}
+            />
 
             <Polyline
               positions={route.coordinates}
               pathOptions={{
                 color: "blue",
-                weight: 4,
+                weight: isHighlighted ? 7 : 4,
+                opacity: isDimmed ? 0.15 : 0.95,
+              }}
+              eventHandlers={{
+                click: () => onSelectLead?.(route.id),
               }}
             >
               <MapTooltip route={route} />
             </Polyline>
-          </React.Fragment>
+          </Fragment>
         );
       })}
     </MapContainer>
