@@ -9,6 +9,7 @@ const ViewTabs = ({
   setView,
   handleOpenForm,
   withoutDataAdd = false,
+  isLeadsEmpty,
 }) => {
   const isCradsView = view === VIEWS.cards;
 
@@ -25,15 +26,17 @@ const ViewTabs = ({
         },
       }}
     >
-      <Tabs
-        value={view}
-        onChange={(_, newValue) => {
-          setView(newValue);
-        }}
-      >
-        <Tab label={<ViewListRoundedIcon />} value={VIEWS.table} />
-        <Tab label={<GridViewRoundedIcon />} value={VIEWS.cards} />
-      </Tabs>
+      {!isLeadsEmpty && (
+        <Tabs
+          value={view}
+          onChange={(_, newValue) => {
+            setView(newValue);
+          }}
+        >
+          <Tab label={<ViewListRoundedIcon />} value={VIEWS.table} />
+          <Tab label={<GridViewRoundedIcon />} value={VIEWS.cards} />
+        </Tabs>
+      )}
 
       {!withoutDataAdd && (
         <Button variant="outlined" onClick={handleOpenForm}>

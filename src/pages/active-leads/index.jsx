@@ -32,11 +32,14 @@ const ActiveLeads = () => {
   const [openForm, setOpenForm] = useState(false);
   const [view, setView] = useState(VIEWS.cards);
 
+  const leads = useLeadsStore((state) => state.leads);
   const fetchLeads = useLeadsStore((state) => state.fetchLeads);
   const clearCurrentLead = useLeadsStore((state) => state.clearCurrentLead);
   const newNotification = useNotificationsStore(
     (state) => state.newNotification,
   );
+
+  const isLeadsEmpty = leads.length === 0;
 
   const { notification_type } = parserNotificationType(
     newNotification?.type || "",
@@ -59,9 +62,14 @@ const ActiveLeads = () => {
 
   return (
     <RootLayout withoutDataCheck>
-      <ViewTabs view={view} setView={setView} handleOpenForm={handleOpenForm} />
+      <ViewTabs
+        isLeadsEmpty={isLeadsEmpty}
+        view={view}
+        setView={setView}
+        handleOpenForm={handleOpenForm}
+      />
 
-      <LeadListContainer view={view} />
+      <LeadListContainer isLeadsEmpty={isLeadsEmpty} view={view} />
 
       <AddLeadForm
         openForm={openForm}

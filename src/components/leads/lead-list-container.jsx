@@ -2,12 +2,12 @@ import { useEffect } from "react";
 import { useLeadsStore } from "../../app/store/leads/leads-store";
 import { useState } from "react";
 import { VIEWS } from "../../shared/const/leads";
-import { Box, Pagination } from "@mui/material";
+import { Alert, Box, Pagination } from "@mui/material";
 import LeadCard from "./lead-card";
 import LeadsTable from "./leads-table";
 import PageLoader from "../../shared/ui/loaders/page-loader";
 
-const LeadListContainer = ({ view }) => {
+const LeadListContainer = ({ view, isLeadsEmpty }) => {
   const [page, setPage] = useState(1);
 
   const leads = useLeadsStore((state) => state.leads);
@@ -33,6 +33,21 @@ const LeadListContainer = ({ view }) => {
 
   return (
     <>
+      {isLeadsEmpty && (
+        <Alert
+          severity="info"
+          sx={{
+            width: {
+              xs: "100%",
+              sm: "60%",
+            },
+            my: 1,
+            mx: "auto",
+          }}
+        >
+          Список пуст. Вы можете добавить лид!
+        </Alert>
+      )}
       {isCardsView && (
         <Box
           sx={{
@@ -55,19 +70,21 @@ const LeadListContainer = ({ view }) => {
         </Box>
       )}
       {!isCardsView && <LeadsTable leads={leads} />}
-      <Pagination
-        color="primary"
-        shape="rounded"
-        page={page}
-        count={PAGE_COUNT}
-        onChange={handlePageChange}
-        color="primary"
-        shape="rounded"
-        sx={{
-          width: "fit-content",
-          mx: "auto",
-        }}
-      />
+      {!isLeadsEmpty && (
+        <Pagination
+          color="primary"
+          shape="rounded"
+          page={page}
+          count={PAGE_COUNT}
+          onChange={handlePageChange}
+          color="primary"
+          shape="rounded"
+          sx={{
+            width: "fit-content",
+            mx: "auto",
+          }}
+        />
+      )}
     </>
   );
 };
