@@ -67,7 +67,6 @@ function App() {
 
         <Snackbar
           open={!!newNotification}
-          autoHideDuration={5000}
           onClose={clearNewNotificationValue}
           message={newNotification?.theme}
           onClick={handleOpenPopUp}

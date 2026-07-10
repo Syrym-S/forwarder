@@ -3,6 +3,7 @@ import { MapContainer, TileLayer, Marker, Polyline } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import { isStaging } from "../../app/client";
+import { CircularProgress } from "@mui/material";
 
 const driverIcon = L.divIcon({
   className: "driver-marker",
@@ -156,7 +157,11 @@ export default function LeadMap({ from, to, id }) {
           }}
         />
       )}
-      {points && <Marker position={points} icon={driverIcon} />}
+      {points ? (
+        <Marker position={points} icon={driverIcon} />
+      ) : (
+        <Marker icon={<CircularProgress />} />
+      )}
     </MapContainer>
   );
 }

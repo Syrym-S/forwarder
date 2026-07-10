@@ -37,6 +37,8 @@ import { useLeadsStore } from "../../app/store/leads/leads-store";
 import PageLoader from "../../shared/ui/loaders/page-loader";
 import { useNotificationsStore } from "../../app/store/notifications/noti-store";
 import NotificationPopup from "../../components/layout/notifications/notification-popup";
+import { parserNotificationType } from "../../shared/helpers/notifications/parse-notification-type";
+import { NOTIFICATION_TYPE } from "../../shared/const/notification-types";
 
 const LeadItem = () => {
   const { id } = useParams();
@@ -58,6 +60,10 @@ const LeadItem = () => {
   );
   const newNotification = useNotificationsStore(
     (state) => state.newNotification,
+  );
+
+  const { notification_type } = parserNotificationType(
+    newNotification?.type || "",
   );
 
   const cargoActions = leadData?.cargo_actions[0];
@@ -224,7 +230,7 @@ const LeadItem = () => {
 
       <LeadCustomerInfo leadData={leadData} />
 
-      {newNotification && (
+      {newNotification && notification_type === NOTIFICATION_TYPE.shipping && (
         <NotificationPopup selectedNotification={newNotification} />
       )}
       <LeadRouteInfo leadData={leadData} />

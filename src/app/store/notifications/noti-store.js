@@ -5,6 +5,7 @@ import {
   getNotificationsTokenApi,
   markAllAsReadApi,
 } from "./api";
+import { isStaging } from "../../client";
 
 export const useNotificationsStore = create((set) => ({
   notifications: [],
@@ -93,9 +94,11 @@ export const useNotificationsStore = create((set) => ({
   connectNotifications: async () => {
     const tokenResponse = await getNotificationsTokenApi();
 
-    const socket = new WebSocket(
-      `wss://notification.360logistics.kz/staging/socket?token=${tokenResponse.token}`,
-    );
+    const BASE_URL = isStaging
+      ? "wss://notification.360logistics.kz/staging/socket"
+      : "wss://notification.360logistics.kz/socket";
+
+    const socket = new WebSocket(`${BASE_URL}?token=${tokenResponse.token}`);
 
     return socket;
   },

@@ -24,6 +24,7 @@ const HistoryLeads = () => {
   const [page, setPage] = useState(1);
   const [view, setView] = useState(VIEWS.cards);
 
+  const clearCurrentLead = useLeadsStore((state) => state.clearCurrentLead);
   const historyLeads = useLeadsStore((state) => state.historyLeads);
   const count = useLeadsStore((state) => state.history_count);
   const perPage = useLeadsStore((state) => state.history_perPage);
@@ -42,6 +43,10 @@ const HistoryLeads = () => {
       page: page,
     });
   }, [page]);
+
+  useEffect(() => {
+    clearCurrentLead();
+  }, []);
 
   if (isLoading)
     return (

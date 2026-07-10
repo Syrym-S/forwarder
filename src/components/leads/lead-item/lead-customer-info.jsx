@@ -13,7 +13,6 @@ const LeadCustomerInfo = ({ leadData }) => {
   const isAddDriverStatus = leadData?.status === STATUS.add_driver;
 
   const detachCustomer = useLeadsStore((state) => state.detachCustomer);
-  const isLeadLoading = useLeadsStore((state) => state.isLoading);
   const isCustomerDetachLoading = useLeadsStore(
     (state) => state.isCustomerDetachLoading,
   );
@@ -24,7 +23,7 @@ const LeadCustomerInfo = ({ leadData }) => {
     await getLeadItem(leadData?.id);
   };
 
-  if (isCustomerDetachLoading || isLeadLoading)
+  if (isCustomerDetachLoading)
     return (
       <Section
         title="Данные о заказщике"

@@ -14,7 +14,6 @@ const LeadDriverInfo = ({ leadData }) => {
   const isDriverDetachLoading = useLeadsStore(
     (state) => state.isDriverDetachLoading,
   );
-  const isLeadLoading = useLeadsStore((state) => state.isLoading);
   const getLeadItem = useLeadsStore((state) => state.getLeadItem);
 
   const handleDetachDriver = async () => {
@@ -22,7 +21,7 @@ const LeadDriverInfo = ({ leadData }) => {
     await getLeadItem(leadData?.id);
   };
 
-  if (isDriverDetachLoading || isLeadLoading)
+  if (isDriverDetachLoading)
     return (
       <Section title="Водитель" icon={<PersonOutlinedIcon color="primary" />}>
         <Box
