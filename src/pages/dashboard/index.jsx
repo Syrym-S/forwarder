@@ -1,12 +1,12 @@
-import React from 'react';
-import { useState, useEffect } from 'react';
-import { Box, Container, Switch } from '@mui/material';
+import React from "react";
+import { useState, useEffect } from "react";
+import { Box, Container, Switch } from "@mui/material";
 
-import RootLayout from '../../components/layout/root-layout';
-import Map from '../../components/dashboard/map';
-import DashboardLeadsList from '../../components/dashboard/leads/dashboard-leads-list';
+import RootLayout from "../../components/layout/root-layout";
+import Map from "../../components/dashboard/map";
+import DashboardLeadsList from "../../components/dashboard/leads/dashboard-leads-list";
 
-import { useLeadsStore } from '../../app/store/leads/leads-store';
+import { useLeadsStore } from "../../app/store/leads/leads-store";
 
 const Dashboard = () => {
   const leads = useLeadsStore((state) => state.acceptedLeads);
@@ -21,7 +21,7 @@ const Dashboard = () => {
     setSelectedLeadId(leadId);
   };
 
-   const handleHoverLead = (leadId) => {
+  const handleHoverLead = (leadId) => {
     setHoveredLeadId(leadId);
   };
 
@@ -39,31 +39,31 @@ const Dashboard = () => {
         maxWidth={false}
         sx={{
           px: {
-            xs: '10px',
-            sm: '30px',
+            xs: "10px",
+            sm: "30px",
           },
           py: {
-            xs: '10px',
-            sm: '30px',
+            xs: "10px",
+            sm: "30px",
           },
         }}
       >
         <Box
           sx={{
-            display: 'grid',
+            display: "grid",
             gridTemplateColumns: {
-              xs: '1fr',
-              lg: 'minmax(0, 1.5fr) minmax(380px, 1fr)',
+              xs: "1fr",
+              lg: "minmax(0, 1.5fr) minmax(380px, 1fr)",
             },
             gap: 2,
-            alignItems: 'stretch',
+            alignItems: "stretch",
           }}
         >
           <Box
             sx={{
               boxShadow: 2,
               borderRadius: 2,
-              overflow: 'hidden',
+              overflow: "hidden",
               minWidth: 0,
             }}
           >
@@ -85,7 +85,6 @@ const Dashboard = () => {
             onLeaveLead={handleLeaveLead}
           />
         </Box>
-        <Switch />
       </Container>
     </RootLayout>
   );

@@ -20,6 +20,7 @@ const PublicationTypeStep = ({
   formValues,
   selectedDrivers,
   setSelectedDrivers,
+  setValue,
 }) => {
   const [selectedDriver, setSelectedDriver] = useState(null);
 
@@ -32,6 +33,10 @@ const PublicationTypeStep = ({
 
   const onDriverChange = (_, value) => {
     setSelectedDriver(value);
+
+    if (!isPublic) {
+      setValue("max_participants", 0);
+    }
   };
 
   const handleAddDriver = () => {
@@ -79,7 +84,7 @@ const PublicationTypeStep = ({
 
       <Stack>
         <Autocomplete
-          disabled={isLoading}
+          disabled={isPublic || isLoading}
           options={drivers}
           value={selectedDriver}
           getOptionLabel={(option) => option?.fio ?? ""}

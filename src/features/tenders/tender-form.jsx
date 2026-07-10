@@ -29,19 +29,19 @@ const steps = [
 ];
 
 const stepFields = {
-  1: ["lead_id", "public_date_time", "end_date_time"],
+  1: ["lead", "public_date_time", "end_date_time"],
 };
 
 const prepareTenderData = (form) => {
   return {
-    lead_id: form?.lead_id || "",
+    lead_id: form?.lead.id || "",
     public_date_time:
       dayjs(form?.public_date_time).format("YYYY-MM-DD HH:mm:ss") || "",
     end_date_time:
       dayjs(form?.end_date_time).format("YYYY-MM-DD HH:mm:ss") || "",
     type: "shipper",
     publication_type: form?.publication_type ? "public" : "private",
-    max_participants: form?.max_participants,
+    max_participants: form?.max_participants || 0,
   };
 };
 
@@ -90,6 +90,7 @@ const TenderForm = ({
             formValues={formValues}
             selectedDrivers={selectedDrivers}
             setSelectedDrivers={setSelectedDrivers}
+            setValue={setValue}
           />
         );
     }

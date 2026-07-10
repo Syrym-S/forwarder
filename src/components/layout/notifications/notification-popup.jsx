@@ -85,7 +85,7 @@ const NotificationPopup = ({
   }, []);
 
   useEffect(() => {
-    if (notification_type === NOTIFICATION_TYPE.lead) {
+    if (notification_type === NOTIFICATION_TYPE.shipping) {
       getLeadItem(id);
     }
   }, [id]);

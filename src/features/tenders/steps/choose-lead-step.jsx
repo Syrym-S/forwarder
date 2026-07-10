@@ -4,6 +4,7 @@ import { Controller } from "react-hook-form";
 import { Autocomplete, TextField } from "@mui/material";
 import RenderLeadOptions from "../../../components/tenders/render-lead-options";
 import { useLeadsStore } from "../../../app/store/leads/leads-store";
+import { STATUS } from "../../../shared/const/tenders";
 
 const ChooseLeadStep = ({ control, setValue, isEdit, getValues }) => {
   const searchedLeads = useLeadsStore((state) => state.searchedLeads);
@@ -27,10 +28,13 @@ const ChooseLeadStep = ({ control, setValue, isEdit, getValues }) => {
   return (
     <>
       <Controller
-        name="lead_id"
+        name="lead"
         control={control}
         rules={{
           required: "Выбор лида обязателен",
+          validate: (value) =>
+            value?.status === STATUS.new ||
+            "Нужно выбрать лид без назначенного водителя",
         }}
         render={({ field, fieldState }) => (
           <Autocomplete
@@ -47,9 +51,10 @@ const ChooseLeadStep = ({ control, setValue, isEdit, getValues }) => {
             onChange={(_, value) => {
               field.onChange(value);
 
-              setValue("lead_id", value.id, {
+              setValue("lead", value, {
                 shouldDirty: true,
                 shouldTouch: true,
+                shouldValidate: true,
               });
 
               setSelectedLead(value);
@@ -72,11 +77,21 @@ const ChooseLeadStep = ({ control, setValue, isEdit, getValues }) => {
           />
         )}
       />
+
       <Controller
         name="public_date_time"
         control={control}
         rules={{
           required: "Выберите дату начала",
+          validate: (value) => {
+            if (!value) return true;
+
+            return (
+              dayjs(value).isSame(dayjs(), "day") ||
+              dayjs(value).isAfter(dayjs(), "day") ||
+              "Дата не может быть раньше сегодняшнего дня"
+            );
+          },
         }}
         render={({ field, fieldState }) => (
           <TextField

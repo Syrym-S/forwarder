@@ -27,6 +27,7 @@ const TenderParticipants = ({ tender }) => {
   const addParticipant = useTendersStore((state) => state.addParticipant);
 
   const isEmpty = tender?.participants_count === 0;
+  const isPublic = tender?.publication_type === "public";
   const isInLimit = tender?.max_participants > tender?.participants_count;
 
   const handleAddParticipant = async () => {
@@ -63,7 +64,7 @@ const TenderParticipants = ({ tender }) => {
         >
           <Typography>Участники</Typography>
 
-          {isInLimit ? (
+          {isInLimit || !isPublic ? (
             <Button
               onClick={handleShowParticipantField}
               variant="outlined"

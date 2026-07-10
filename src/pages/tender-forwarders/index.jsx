@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import RootLayout from "../../components/layout/root-layout";
-import { Box, Button, Pagination } from "@mui/material";
+import { Alert, Box, Button, Pagination } from "@mui/material";
 import TenderForm from "../../features/tenders/tender-form";
 import { useTendersStore } from "../../app/store/tenders/tender-store";
 import { VIEWS } from "../../shared/const/leads";
@@ -9,12 +9,12 @@ import ForwardersTenderCard from "../../components/tenders/forwarders-tender-car
 import PageLoader from "../../shared/ui/loaders/page-loader";
 
 const defaultValues = {
-  lead_id: "",
+  lead: null,
   public_date_time: "",
   end_date_time: "",
   type: "shipper",
   publication_type: "",
-  max_participants: "",
+  max_participants: null,
 };
 
 const TenderForwarders = () => {
@@ -32,6 +32,7 @@ const TenderForwarders = () => {
   );
 
   const PAGE_COUNT = Math.ceil(count / perPage);
+  const isTendersEmpty = tenders.length === 0;
 
   const handlePageChange = (_, value) => {
     setPage(value);
@@ -86,6 +87,22 @@ const TenderForwarders = () => {
         />
       )}
 
+      {isTendersEmpty && (
+        <Alert
+          severity="info"
+          sx={{
+            width: {
+              xs: "100%",
+              sm: "60%",
+            },
+            my: 1,
+            mx: "auto",
+          }}
+        >
+          Список пуст. Добавьте тендер!
+        </Alert>
+      )}
+
       {view === VIEWS.cards && (
         <Box
           sx={{
@@ -107,16 +124,18 @@ const TenderForwarders = () => {
             <ForwardersTenderCard key={tender.id} tender={tender} />
           ))}
 
-          <Pagination
-            sx={{
-              mx: "auto",
-            }}
-            page={page}
-            color="primary"
-            shape="rounded"
-            count={PAGE_COUNT}
-            onChange={handlePageChange}
-          />
+          {!isTendersEmpty && (
+            <Pagination
+              sx={{
+                mx: "auto",
+              }}
+              page={page}
+              color="primary"
+              shape="rounded"
+              count={PAGE_COUNT}
+              onChange={handlePageChange}
+            />
+          )}
         </Box>
       )}
     </RootLayout>

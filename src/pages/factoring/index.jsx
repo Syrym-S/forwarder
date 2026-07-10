@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import RootLayout from "../../components/layout/root-layout";
 import CreateFactoringForm from "../../features/factoring/create-factoring-form";
-import { Box, Button, Pagination, Tab, Tabs } from "@mui/material";
+import { Alert, Box, Button, Pagination, Tab, Tabs } from "@mui/material";
 import { useFactoringStore } from "../../app/store/factoring/factoring-store";
 import FactoringCard from "../../components/factoring/factoring-card";
 import Loader from "../../components/layout/loader";
@@ -25,6 +25,7 @@ const Factoring = () => {
 
   const PAGE_COUNT = Math.ceil(count / perPage);
   const isCradsView = view === VIEWS.cards;
+  const isFactoringsEmpty = factorings.length === 0;
 
   const handleModalOpen = () => {
     setOpenFormModal(true);
@@ -48,6 +49,13 @@ const Factoring = () => {
     return (
       <RootLayout withoutDataCheck>
         <PageLoader />
+      </RootLayout>
+    );
+
+  if (isFactoringsEmpty)
+    return (
+      <RootLayout withoutDataCheck>
+        <Alert severity="info">Доступных факторингов нет</Alert>
       </RootLayout>
     );
 
