@@ -24,6 +24,7 @@ import NotificationsOffOutlinedIcon from "@mui/icons-material/NotificationsOffOu
 import { useNotificationsStore } from "../../app/store/notifications/noti-store";
 import NotificationsBlock from "./notifications/notifications-block";
 import { useProfileStore } from "../../app/store/profile/profile-store";
+import logo from "../../../assets/logo.png";
 
 const Header = ({ openMenu, setOpenMenu }) => {
   const navigate = useNavigate();
@@ -88,54 +89,91 @@ const Header = ({ openMenu, setOpenMenu }) => {
         zIndex: 2,
       }}
     >
-      <MenuIcon
+      <Box
         sx={{
-          transform: openMenu ? "rotate(90deg)" : "rotate(0)",
-          transition: "0.2s",
-          fontSize: "2rem",
-          visibility: {
-            xs: "visible",
-            sm: "hidden",
-          },
-          cursor: "pointer",
+          display: "flex",
+          gap: 1,
         }}
-        onClick={handleToggleMenu}
-      />
-
-      <Box>
+      >
+        <MenuIcon
+          sx={{
+            transform: openMenu ? "rotate(90deg)" : "rotate(0)",
+            transition: "0.2s",
+            fontSize: "2rem",
+            display: {
+              xs: "block",
+              sm: "none",
+            },
+            cursor: "pointer",
+          }}
+          onClick={handleToggleMenu}
+        />
+        <Box
+          component="img"
+          src={logo}
+          alt="Driver"
+          sx={{
+            height: 32,
+            width: "auto",
+            maxWidth: 150,
+            objectFit: "contain",
+            display: "block",
+          }}
+        />
+      </Box>
+      <Box
+        sx={{
+          display: "flex",
+          gap: 1,
+        }}
+      >
         <NotificationsBlock />
 
         <Button
           variant="outlined"
-          startIcon={
-            <Avatar
-              src={profileData?.avatar || undefined}
-              sx={{
-                width: {
-                  xs: 24,
-                  sm: 28,
-                },
-                height: {
-                  xs: 24,
-                  sm: 28,
-                },
-                fontSize: 13,
-                flexShrink: 0,
-              }}
-            />
-          }
           onClick={handleOpenProfileMenu}
           sx={{
+            display: "flex",
+            gap: 1,
             width: "fit-content",
             maxWidth: 260,
             textTransform: "none",
             overflow: "hidden",
             textOverflow: "ellipsis",
             whiteSpace: "nowrap",
+            px: {
+              xs: 0,
+              sm: 1,
+            },
           }}
           title={userEmail}
         >
-          {userEmail}
+          <Avatar
+            src={profileData?.avatar || undefined}
+            sx={{
+              width: {
+                xs: 24,
+                sm: 28,
+              },
+              height: {
+                xs: 24,
+                sm: 28,
+              },
+
+              fontSize: 13,
+              flexShrink: 0,
+            }}
+          />
+          <Typography
+            sx={{
+              display: {
+                xs: "none",
+                sm: "inline",
+              },
+            }}
+          >
+            {userEmail}
+          </Typography>
         </Button>
         <Menu
           anchorEl={profileAnchorEl}
