@@ -1,4 +1,5 @@
 import {
+  Autocomplete,
   Box,
   FormControlLabel,
   MenuItem,
@@ -8,8 +9,37 @@ import {
 import PropTypes from "prop-types";
 import { Controller } from "react-hook-form";
 import { StepSection } from "../step-section";
+import { useOptionsStore } from "../../../app/store/options";
+import { useEffect, useState } from "react";
 
 export function SecondStep({ control, errors }) {
+  const cargoTypes = useOptionsStore((state) => state.cargoTypes);
+  const getCargoTypes = useOptionsStore((state) => state.getCargoTypes);
+  const searchCargoType = useOptionsStore((state) => state.searchCargoType);
+  const isCargoTypesLoading = useOptionsStore(
+    (state) => state.isCargoTypesLoading,
+  );
+
+  const [inputValue, setInputValue] = useState("");
+
+  useEffect(() => {
+    getCargoTypes();
+  }, []);
+
+  useEffect(() => {
+    const value = inputValue?.trim();
+
+    const timer = setTimeout(() => {
+      if (!value) {
+        return;
+      }
+
+      searchCargoType({ q: value });
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  }, [inputValue]);
+
   return (
     <StepSection title="Груз и оплата">
       <Box
@@ -24,21 +54,36 @@ export function SecondStep({ control, errors }) {
       >
         <Controller
           name="type"
-          defaultValue={"Не указан"}
           control={control}
-          render={({ field }) => (
-            <TextField
-              {...field}
-              select
-              label="Тип груза"
-              fullWidth
-              size="small"
-            >
-              <MenuItem value="Не указан">Не указан</MenuItem>
-              <MenuItem value="Паллеты">Паллеты</MenuItem>
-              <MenuItem value="Коробки">Коробки</MenuItem>
-              <MenuItem value="Оборудование">Оборудование</MenuItem>
-            </TextField>
+          defaultValue={null}
+          render={({ field, fieldState }) => (
+            <Autocomplete
+              inputValue={inputValue}
+              options={cargoTypes}
+              loading={isCargoTypesLoading}
+              loadingText="Загрузка..."
+              value={
+                cargoTypes.find((item) => item.name === field.value) || null
+              }
+              onChange={(_, value) => {
+                field.onChange(value?.name || "");
+                setInputValue(value?.name || "");
+              }}
+              getOptionLabel={(option) => option.name}
+              isOptionEqualToValue={(option, value) => option.id === value.id}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label="Тип груза"
+                  size="small"
+                  error={!!fieldState.error}
+                  helperText={fieldState.error?.message}
+                  onChange={(e) => {
+                    setInputValue(e.target.value);
+                  }}
+                />
+              )}
+            />
           )}
         />
 
