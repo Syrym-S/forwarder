@@ -18,8 +18,12 @@ import CustomerDetailsModal from "../../components/customers/customer-details-mo
 import { useCustomerStore } from "../../app/store/customers/customers-store";
 import EmptyListUI from "../../shared/ui/empty-list-ui";
 import PageLoader from "../../shared/ui/loaders/page-loader";
+import CustomersTable from "../../components/customers/customer-table";
+import { VIEWS } from "../../shared/const/leads";
+import ViewTabs from "../../shared/ui/view-tabs";
 
 const Customers = () => {
+  const [view, setView] = useState(VIEWS.table);
   const [page, setPage] = useState(1);
   const [searchRequest, setSearchRequest] = useState("");
   const [inputValue, setInputValue] = useState("");
@@ -38,6 +42,7 @@ const Customers = () => {
 
   const PAGE_COUNT = Math.ceil(count / perPage);
   const isEmpty = customers?.length === 0;
+  const isCardsView = view === VIEWS.cards;
 
   const handleClear = () => {
     setSelectedCustomer(null);
@@ -86,16 +91,17 @@ const Customers = () => {
 
   return (
     <RootLayout withoutDataCheck>
+      <ViewTabs view={view} setView={setView} withoutDataAdd />
       <Stack
         sx={{
           width: {
             xs: "100%",
-            sm: "60%",
+            sm: isCardsView ? "60%" : "100%",
           },
           mx: "auto",
         }}
       >
-        <TextField
+        {/* <TextField
           onChange={(e) => {
             setInputValue(e.target.value);
           }}
@@ -107,7 +113,7 @@ const Customers = () => {
             display: "block",
             my: 1,
           }}
-        />
+        /> */}
 
         {searchRequest && (
           <Box
@@ -141,22 +147,25 @@ const Customers = () => {
         sx={{
           width: {
             xs: "100%",
-            sm: "60%",
+            sm: isCardsView ? "60%" : "100%",
           },
           mx: "auto",
           display: "grid",
           gap: 5,
         }}
       >
-        {customers.map((customer) => (
-          <>
-            <CustomerCard
-              key={customer.id}
-              customer={customer}
-              setSelectedCustomer={setSelectedCustomer}
-            />
-          </>
-        ))}
+        {isCardsView &&
+          customers.map((customer) => (
+            <>
+              <CustomerCard
+                key={customer.id}
+                customer={customer}
+                setSelectedCustomer={setSelectedCustomer}
+              />
+            </>
+          ))}
+
+        {!isCardsView && <CustomersTable customers={customers} />}
 
         {isEmpty && <>{isLoading ? <PageLoader /> : <EmptyListUI />}</>}
 

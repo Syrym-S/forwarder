@@ -20,7 +20,7 @@ const Factoring = () => {
   const perPage = useFactoringStore((state) => state.perPage);
 
   const [openFormModal, setOpenFormModal] = useState(false);
-  const [view, setView] = useState(VIEWS.cards);
+  const [view, setView] = useState(VIEWS.table);
   const [page, setPage] = useState(1);
 
   const PAGE_COUNT = Math.ceil(count / perPage);

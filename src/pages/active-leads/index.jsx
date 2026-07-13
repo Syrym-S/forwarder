@@ -30,7 +30,7 @@ import { parserNotificationType } from "../../shared/helpers/notifications/parse
 
 const ActiveLeads = () => {
   const [openForm, setOpenForm] = useState(false);
-  const [view, setView] = useState(VIEWS.cards);
+  const [view, setView] = useState(VIEWS.table);
 
   const leads = useLeadsStore((state) => state.leads);
   const fetchLeads = useLeadsStore((state) => state.fetchLeads);

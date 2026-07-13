@@ -7,6 +7,8 @@ import { VIEWS } from "../../shared/const/leads";
 import Loader from "../../components/layout/loader";
 import ForwardersTenderCard from "../../components/tenders/forwarders-tender-card";
 import PageLoader from "../../shared/ui/loaders/page-loader";
+import ViewTabs from "../../shared/ui/view-tabs";
+import ForwardersTenderTable from "../../components/tenders/forwarders-tender-table";
 
 const defaultValues = {
   lead: null,
@@ -18,7 +20,7 @@ const defaultValues = {
 };
 
 const TenderForwarders = () => {
-  const view = VIEWS.cards;
+  const [view, setView] = useState(VIEWS.table);
   const [openForm, setOpenForm] = useState(false);
   const [page, setPage] = useState(1);
 
@@ -33,6 +35,7 @@ const TenderForwarders = () => {
 
   const PAGE_COUNT = Math.ceil(count / perPage);
   const isTendersEmpty = tenders.length === 0;
+  const isCardsView = view === VIEWS.cards;
 
   const handlePageChange = (_, value) => {
     setPage(value);
@@ -65,19 +68,7 @@ const TenderForwarders = () => {
 
   return (
     <RootLayout withoutDataCheck>
-      <Box
-        sx={{
-          width: {
-            xs: "100%",
-            sm: "60%",
-          },
-          mx: "auto",
-        }}
-      >
-        <Button onClick={handleOpenForm} variant="outlined">
-          Создать тендер
-        </Button>
-      </Box>
+      <ViewTabs view={view} setView={setView} handleOpenForm={handleOpenForm} />
 
       {openForm && (
         <TenderForm
@@ -103,7 +94,7 @@ const TenderForwarders = () => {
         </Alert>
       )}
 
-      {view === VIEWS.cards && (
+      {isCardsView && (
         <Box
           sx={{
             mx: "auto",
@@ -123,20 +114,23 @@ const TenderForwarders = () => {
           {tenders.map((tender) => (
             <ForwardersTenderCard key={tender.id} tender={tender} />
           ))}
-
-          {!isTendersEmpty && (
-            <Pagination
-              sx={{
-                mx: "auto",
-              }}
-              page={page}
-              color="primary"
-              shape="rounded"
-              count={PAGE_COUNT}
-              onChange={handlePageChange}
-            />
-          )}
         </Box>
+      )}
+
+      {!isCardsView && <ForwardersTenderTable tenders={tenders} />}
+
+      {!isTendersEmpty && (
+        <Pagination
+          sx={{
+            mx: "auto",
+            width: "fit-content",
+          }}
+          page={page}
+          color="primary"
+          shape="rounded"
+          count={PAGE_COUNT}
+          onChange={handlePageChange}
+        />
       )}
     </RootLayout>
   );

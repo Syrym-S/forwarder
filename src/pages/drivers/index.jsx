@@ -8,9 +8,13 @@ import DriverDetailsModal from "../../components/drivers/driver-details-modal";
 import Loader from "../../components/layout/loader";
 import PageLoader from "../../shared/ui/loaders/page-loader";
 import EmptyListUI from "../../shared/ui/empty-list-ui";
+import { VIEWS } from "../../shared/const/leads";
+import ViewTabs from "../../shared/ui/view-tabs";
+import DriversTable from "../../components/drivers/driver-table";
 
 const Drivers = () => {
   const [page, setPage] = useState(1);
+  const [view, setView] = useState(VIEWS.table);
   const [searchRequest, setSearchRequest] = useState("");
   const [inputValue, setInputValue] = useState("");
   const [_, setSearchParams] = useSearchParams();
@@ -26,6 +30,7 @@ const Drivers = () => {
 
   const PAGE_COUNT = Math.ceil(count / perPage);
   const isEmpty = drivers?.length === 0;
+  const isCardsView = view === VIEWS.cards;
 
   const handleClear = () => {
     setSelectedDriver(null);
@@ -72,16 +77,18 @@ const Drivers = () => {
 
   return (
     <RootLayout withoutDataCheck>
+      <ViewTabs view={view} setView={setView} withoutDataAdd />
+
       <Stack
         sx={{
           width: {
             xs: "100%",
-            sm: "60%",
+            sm: isCardsView ? "60%" : "100%",
           },
           mx: "auto",
         }}
       >
-        <TextField
+        {/* <TextField
           onChange={(e) => {
             setInputValue(e.target.value);
           }}
@@ -93,9 +100,9 @@ const Drivers = () => {
             display: "block",
             my: 1,
           }}
-        />
+        /> */}
 
-        {searchRequest && (
+        {/* {searchRequest && (
           <Box
             sx={{
               display: "flex",
@@ -120,28 +127,31 @@ const Drivers = () => {
               {searchRequest}
             </Typography>
           </Box>
-        )}
+        )} */}
       </Stack>
       <Box
         sx={{
           width: {
             xs: "100%",
-            sm: "60%",
+            sm: isCardsView ? "60%" : "100%",
           },
           mx: "auto",
           display: "grid",
           gap: 5,
         }}
       >
-        {drivers.map((driver) => (
-          <>
-            <DriverCard
-              key={driver.id}
-              driver={driver}
-              setSelectedDriver={setSelectedDriver}
-            />
-          </>
-        ))}
+        {isCardsView &&
+          drivers.map((driver) => (
+            <>
+              <DriverCard
+                key={driver.id}
+                driver={driver}
+                setSelectedDriver={setSelectedDriver}
+              />
+            </>
+          ))}
+
+        {!isCardsView && <DriversTable drivers={drivers} />}
 
         {isEmpty && <>{isLoading ? <PageLoader /> : <EmptyListUI />}</>}
 

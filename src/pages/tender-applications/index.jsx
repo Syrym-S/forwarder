@@ -11,10 +11,11 @@ import PageLoader from "../../shared/ui/loaders/page-loader";
 import { useNotificationsStore } from "../../app/store/notifications/noti-store";
 import { NOTIFICATION_TYPE } from "../../shared/const/notification-types";
 import { parserNotificationType } from "../../shared/helpers/notifications/parse-notification-type";
+import ViewTabs from "../../shared/ui/view-tabs";
+import ApplicationsTenderTable from "../../components/tenders/applications-tender-table";
 
 const TenderApplications = () => {
-  const view = VIEWS.cards;
-
+  const [view, setView] = useState(VIEWS.table);
   const [page, setPage] = useState(1);
 
   const newNotification = useNotificationsStore(
@@ -33,6 +34,7 @@ const TenderApplications = () => {
   const customerPerPage = useTendersStore((state) => state.customerPerPage);
 
   const PAGE_COUNT = Math.ceil(customerCount / customerPerPage);
+  const isCardsView = view === VIEWS.cards;
 
   const { notification_type } = parserNotificationType(
     newNotification?.type || "",
@@ -76,7 +78,9 @@ const TenderApplications = () => {
 
   return (
     <RootLayout withoutDataCheck>
-      {view === VIEWS.cards && (
+      <ViewTabs view={view} setView={setView} withoutDataAdd />
+
+      {isCardsView && view === VIEWS.cards && (
         <Box
           sx={{
             width: {
@@ -95,18 +99,22 @@ const TenderApplications = () => {
           {customerTenders.map((tender) => (
             <ApplicationsTenderCard key={tender.id} tender={tender} />
           ))}
-          <Pagination
-            page={page}
-            count={PAGE_COUNT}
-            color="primary"
-            shape="rounded"
-            sx={{
-              mx: "auto",
-            }}
-            onChange={handlePageChange}
-          />
         </Box>
       )}
+
+      {!isCardsView && <ApplicationsTenderTable tenders={customerTenders} />}
+
+      <Pagination
+        page={page}
+        count={PAGE_COUNT}
+        color="primary"
+        shape="rounded"
+        sx={{
+          mx: "auto",
+          width: "fit-content",
+        }}
+        onChange={handlePageChange}
+      />
     </RootLayout>
   );
 };

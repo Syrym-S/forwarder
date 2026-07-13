@@ -43,6 +43,7 @@ const SideBar = ({ openMenu, setOpenMenu }) => {
   return (
     <Box
       sx={{
+        pt: 1,
         transition: "0.2s",
         height: "100vh",
         overflowY: "auto",

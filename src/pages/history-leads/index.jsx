@@ -22,7 +22,7 @@ import PageLoader from "../../shared/ui/loaders/page-loader";
 
 const HistoryLeads = () => {
   const [page, setPage] = useState(1);
-  const [view, setView] = useState(VIEWS.cards);
+  const [view, setView] = useState(VIEWS.table);
 
   const clearCurrentLead = useLeadsStore((state) => state.clearCurrentLead);
   const historyLeads = useLeadsStore((state) => state.historyLeads);
