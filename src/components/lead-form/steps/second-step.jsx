@@ -16,6 +16,8 @@ export function SecondStep({ control, errors }) {
   const cargoTypes = useOptionsStore((state) => state.cargoTypes);
   const getCargoTypes = useOptionsStore((state) => state.getCargoTypes);
   const searchCargoType = useOptionsStore((state) => state.searchCargoType);
+  const currencies = useOptionsStore((state) => state.currencies);
+  const getCurrencies = useOptionsStore((state) => state.getCurrencies);
   const isCargoTypesLoading = useOptionsStore(
     (state) => state.isCargoTypesLoading,
   );
@@ -24,6 +26,7 @@ export function SecondStep({ control, errors }) {
 
   useEffect(() => {
     getCargoTypes();
+    getCurrencies();
   }, []);
 
   useEffect(() => {
@@ -213,18 +216,28 @@ export function SecondStep({ control, errors }) {
         />
 
         <Controller
-          defaultValue={"KZT"}
           name="currency"
           control={control}
+          defaultValue="KZT"
           render={({ field }) => (
-            <TextField {...field} select label="Валюта" fullWidth size="small">
-              <MenuItem value="KZT">KZT</MenuItem>
-              <MenuItem value="USD">USD</MenuItem>
-              <MenuItem value="RUB">RUB</MenuItem>
-            </TextField>
+            <Autocomplete
+              options={currencies || []}
+              value={
+                currencies?.find((item) => item.code === field.value) ?? null
+              }
+              onChange={(_, newValue) => {
+                field.onChange(newValue?.code ?? "");
+              }}
+              getOptionLabel={(option) => option.code}
+              isOptionEqualToValue={(option, value) =>
+                option.code === value.code
+              }
+              renderInput={(params) => (
+                <TextField {...params} label="Валюта" size="small" />
+              )}
+            />
           )}
         />
-
         <Controller
           name="vat"
           control={control}

@@ -1,10 +1,12 @@
 import { create } from "zustand";
-import { getCargoTypesApi, searchCargoTypeApi } from "./api";
+import { getCargoTypesApi, getCurrenciesApi, searchCargoTypeApi } from "./api";
 
 export const useOptionsStore = create((set) => ({
   cargoTypes: [],
+  currencies: [],
 
   isCargoTypesLoading: false,
+  isCurrenciesLoading: false,
 
   count: 0,
   perPage: 1,
@@ -45,6 +47,26 @@ export const useOptionsStore = create((set) => ({
       set({
         error: e.message,
         isCargoTypesLoading: false,
+      });
+    }
+  },
+
+  getCurrencies: async (params) => {
+    try {
+      set({ isCurrenciesLoading: true, error: null });
+
+      const response = await getCurrenciesApi(params);
+
+      set({
+        currencies: response.data.results,
+        count: response.data.count,
+        perPage: response.data.per_page,
+        isCurrenciesLoading: false,
+      });
+    } catch (e) {
+      set({
+        error: e.message,
+        isCurrenciesLoading: false,
       });
     }
   },
