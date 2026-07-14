@@ -25,7 +25,8 @@ import ViewTabs from "../../shared/ui/view-tabs";
 const Customers = () => {
   const [view, setView] = useState(VIEWS.table);
   const [page, setPage] = useState(1);
-  const [searchRequest, setSearchRequest] = useState("");
+  //Позже венру если нужно будет , показывает по какому слово пошел запрос поиска
+  const [__, setSearchRequest] = useState("");
   const [inputValue, setInputValue] = useState("");
   const [_, setSearchParams] = useSearchParams();
   const [selectedCustomer, setSelectedCustomer] = useState(null);
@@ -89,10 +90,44 @@ const Customers = () => {
     return () => clearTimeout(timer);
   }, [inputValue]);
 
+  if (isLoading)
+    return (
+      <RootLayout withoutDataCheck>
+        <PageLoader />
+      </RootLayout>
+    );
+
   return (
     <RootLayout withoutDataCheck>
-      <ViewTabs view={view} setView={setView} withoutDataAdd />
-      <Stack
+      <Box
+        sx={{
+          mx: "auto",
+          width: {
+            xs: "100%",
+            sm: isCardsView ? "60%" : "100%",
+          },
+          display: "flex",
+          justifyContent: "space-between",
+        }}
+      >
+        <ViewTabs view={view} setView={setView} withoutDataAdd />
+        <TextField
+          onChange={(e) => {
+            setInputValue(e.target.value);
+          }}
+          label="Поиск заказщика"
+          fullWidth
+          size="small"
+          sx={{
+            display: "block",
+            my: 1,
+            width: "300px",
+            borderRadius: "50px",
+          }}
+        />
+      </Box>
+
+      {/* <Stack
         sx={{
           width: {
             xs: "100%",
@@ -101,20 +136,6 @@ const Customers = () => {
           mx: "auto",
         }}
       >
-        {/* <TextField
-          onChange={(e) => {
-            setInputValue(e.target.value);
-          }}
-          helperText="Для поиска по БИН или ИИН ввидите 12 цифр"
-          label="Поиск заказщика"
-          fullWidth
-          size="small"
-          sx={{
-            display: "block",
-            my: 1,
-          }}
-        /> */}
-
         {searchRequest && (
           <Box
             sx={{
@@ -141,7 +162,7 @@ const Customers = () => {
             </Typography>
           </Box>
         )}
-      </Stack>
+      </Stack> */}
 
       <Box
         sx={{

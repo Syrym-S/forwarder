@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Pagination from "@mui/material/Pagination";
 import RootLayout from "../../components/layout/root-layout";
 import LeadCard from "../../components/leads/lead-card";
-import { Tabs, Tab, Button } from "@mui/material";
+import { Tabs, Tab, Button, Autocomplete, TextField } from "@mui/material";
 import {
   Box,
   CircularProgress,
@@ -19,8 +19,12 @@ import AddLeadForm from "../../features/leads/add-lead-form";
 import { useLeadsStore } from "../../app/store/leads/leads-store";
 import ViewTabs from "../../shared/ui/view-tabs";
 import PageLoader from "../../shared/ui/loaders/page-loader";
+import { LEAD_STATUS_OPTIONS } from "../../shared/const/tenders";
+import { Controller, useForm } from "react-hook-form";
 
 const HistoryLeads = () => {
+  const { control } = useForm();
+
   const [page, setPage] = useState(1);
   const [view, setView] = useState(VIEWS.table);
 
@@ -30,7 +34,7 @@ const HistoryLeads = () => {
   const perPage = useLeadsStore((state) => state.history_perPage);
   const getHistoryLeads = useLeadsStore((state) => state.getHistoryLeads);
   const isLoading = useLeadsStore((state) => state.isLoading);
-  const isCradsView = view === VIEWS.cards;
+  const isCardsView = view === VIEWS.cards;
 
   const PAGE_COUNT = Math.ceil(count / perPage);
 
@@ -57,9 +61,53 @@ const HistoryLeads = () => {
 
   return (
     <RootLayout data={historyLeads} isLoading={isLoading}>
-      <ViewTabs view={view} setView={setView} withoutDataAdd />
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          gap: 3,
+          mx: "auto",
+          width: isCardsView ? "60%" : "100%",
+        }}
+      >
+        <ViewTabs view={view} setView={setView} withoutDataAdd />
 
-      {isCradsView && (
+        <Controller
+          name="status"
+          control={control}
+          defaultValue="new"
+          render={({ field }) => (
+            <Autocomplete
+              options={LEAD_STATUS_OPTIONS}
+              value={
+                LEAD_STATUS_OPTIONS.find(
+                  (option) => option.value === field.value,
+                ) ?? null
+              }
+              onChange={(_, newValue) => {
+                field.onChange(newValue?.value ?? "");
+              }}
+              getOptionLabel={(option) => option.label}
+              isOptionEqualToValue={(option, value) =>
+                option.value === value.value
+              }
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label="Статус"
+                  size="small"
+                  fullWidth
+                  sx={{
+                    width: 300,
+                  }}
+                />
+              )}
+            />
+          )}
+        />
+      </Box>
+
+      {isCardsView && (
         <Box
           sx={{
             display: "grid",
@@ -79,7 +127,7 @@ const HistoryLeads = () => {
         </Box>
       )}
 
-      {!isCradsView && <LeadsTable leads={historyLeads} />}
+      {!isCardsView && <LeadsTable leads={historyLeads} />}
 
       <Pagination
         page={page}

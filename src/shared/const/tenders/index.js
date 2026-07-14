@@ -14,3 +14,15 @@ export const STATUS = {
   verified_participant: "verified_participant",
   await_paid: "await_paid",
 };
+
+export const LEAD_STATUS_OPTIONS = [
+  { label: "Новый", value: "new" },
+  { label: "Водитель добавлен", value: "add_driver" },
+  { label: "Поездка начата", value: "start_driver" },
+  { label: "Погрузка", value: "start_loading" },
+  { label: "Погрузка подтверждена", value: "verification_loading" },
+  { label: "Разгрузка", value: "start_unloading" },
+  { label: "Разгрузка подтверждена", value: "verification_unloading" },
+  { label: "Рейс завершен", value: "finished" },
+  { label: "Рейс удален", value: "deleted" },
+];

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Pagination from "@mui/material/Pagination";
 import RootLayout from "../../components/layout/root-layout";
 import LeadCard from "../../components/leads/lead-card";
-import { Tabs, Tab, Button } from "@mui/material";
+import { Tabs, Tab, Button, Autocomplete, TextField } from "@mui/material";
 import {
   Box,
   CircularProgress,
@@ -27,8 +27,11 @@ import { useNotificationsStore } from "../../app/store/notifications/noti-store"
 import { NOTIFICATION_TYPE } from "../../shared/const/notification-types";
 import LeadListContainer from "../../components/leads/lead-list-container";
 import { parserNotificationType } from "../../shared/helpers/notifications/parse-notification-type";
+import { LEAD_STATUS_OPTIONS } from "../../shared/const/tenders";
+import { Controller, useForm } from "react-hook-form";
 
 const ActiveLeads = () => {
+  const { control } = useForm();
   const [openForm, setOpenForm] = useState(false);
   const [view, setView] = useState(VIEWS.table);
 
@@ -38,6 +41,7 @@ const ActiveLeads = () => {
   const newNotification = useNotificationsStore(
     (state) => state.newNotification,
   );
+  const isCardsView = view === VIEWS.cards;
 
   const isLeadsEmpty = leads.length === 0;
 
@@ -62,12 +66,56 @@ const ActiveLeads = () => {
 
   return (
     <RootLayout withoutDataCheck>
-      <ViewTabs
-        isLeadsEmpty={isLeadsEmpty}
-        view={view}
-        setView={setView}
-        handleOpenForm={handleOpenForm}
-      />
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          gap: 3,
+          mx: "auto",
+          width: isCardsView ? "60%" : "100%",
+        }}
+      >
+        <ViewTabs
+          isLeadsEmpty={isLeadsEmpty}
+          view={view}
+          setView={setView}
+          handleOpenForm={handleOpenForm}
+        />
+
+        <Controller
+          name="status"
+          control={control}
+          defaultValue="new"
+          render={({ field }) => (
+            <Autocomplete
+              options={LEAD_STATUS_OPTIONS}
+              value={
+                LEAD_STATUS_OPTIONS.find(
+                  (option) => option.value === field.value,
+                ) ?? null
+              }
+              onChange={(_, newValue) => {
+                field.onChange(newValue?.value ?? "");
+              }}
+              getOptionLabel={(option) => option.label}
+              isOptionEqualToValue={(option, value) =>
+                option.value === value.value
+              }
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label="Статус"
+                  size="small"
+                  fullWidth
+                  sx={{
+                    width: 300,
+                  }}
+                />
+              )}
+            />
+          )}
+        />
+      </Box>
 
       <LeadListContainer isLeadsEmpty={isLeadsEmpty} view={view} />
 

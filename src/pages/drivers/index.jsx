@@ -15,7 +15,8 @@ import DriversTable from "../../components/drivers/driver-table";
 const Drivers = () => {
   const [page, setPage] = useState(1);
   const [view, setView] = useState(VIEWS.table);
-  const [searchRequest, setSearchRequest] = useState("");
+  //Позже венру если нужно будет , показывает по какому слово пошел запрос поиска
+  const [__, setSearchRequest] = useState("");
   const [inputValue, setInputValue] = useState("");
   const [_, setSearchParams] = useSearchParams();
   const [selectedDriver, setSelectedDriver] = useState(null);
@@ -73,62 +74,43 @@ const Drivers = () => {
     return () => clearTimeout(timer);
   }, [inputValue]);
 
-  if (!drivers) return <Loader />;
+  if (isLoading)
+    return (
+      <RootLayout withoutDataCheck>
+        <PageLoader />
+      </RootLayout>
+    );
 
   return (
     <RootLayout withoutDataCheck>
-      <ViewTabs view={view} setView={setView} withoutDataAdd />
-
-      <Stack
+      <Box
         sx={{
+          mx: "auto",
           width: {
             xs: "100%",
             sm: isCardsView ? "60%" : "100%",
           },
-          mx: "auto",
+          display: "flex",
+          justifyContent: "space-between",
         }}
       >
-        {/* <TextField
+        <ViewTabs view={view} setView={setView} withoutDataAdd />
+        <TextField
           onChange={(e) => {
             setInputValue(e.target.value);
           }}
           label="Поиск водителя"
-          helperText="Для поиска по БИН или ИИН ввидите 12 цифр"
           fullWidth
           size="small"
           sx={{
             display: "block",
             my: 1,
+            width: "300px",
+            borderRadius: "50px",
           }}
-        /> */}
+        />
+      </Box>
 
-        {/* {searchRequest && (
-          <Box
-            sx={{
-              display: "flex",
-              gap: 1,
-            }}
-          >
-            <Typography
-              component="span"
-              sx={{
-                fontWeight: "600",
-              }}
-            >
-              Результат по поиску:
-            </Typography>
-            <Typography
-              component="span"
-              sx={{
-                fontWeight: "300",
-                fontStyle: "italic",
-              }}
-            >
-              {searchRequest}
-            </Typography>
-          </Box>
-        )} */}
-      </Stack>
       <Box
         sx={{
           width: {
