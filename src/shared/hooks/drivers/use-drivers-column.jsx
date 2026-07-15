@@ -8,16 +8,6 @@ const useDriversColumns = () => {
       field: "id",
       headerName: "ID",
       width: 200,
-      renderCell: ({ row }) => (
-        <NavLink
-          to={`/leads/${row.id}`}
-          style={{
-            textDecoration: "none",
-          }}
-        >
-          {row.id}
-        </NavLink>
-      ),
     },
     {
       field: "fio",

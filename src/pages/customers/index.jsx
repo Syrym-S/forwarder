@@ -21,10 +21,14 @@ import PageLoader from "../../shared/ui/loaders/page-loader";
 import CustomersTable from "../../components/customers/customer-table";
 import { VIEWS } from "../../shared/const/leads";
 import ViewTabs from "../../shared/ui/view-tabs";
+import AddCustomerForm from "../../features/customer/add-customer-form";
+import InviteLinkModal from "../../components/customers/invite-link-modal";
 
 const Customers = () => {
+  const [open, setOpen] = useState(false);
   const [view, setView] = useState(VIEWS.table);
   const [page, setPage] = useState(1);
+
   //Позже венру если нужно будет , показывает по какому слово пошел запрос поиска
   const [__, setSearchRequest] = useState("");
   const [inputValue, setInputValue] = useState("");
@@ -40,6 +44,8 @@ const Customers = () => {
   const count = useCustomerStore((state) => state.count);
   const perPage = useCustomerStore((state) => state.perPage);
   const searchCustomers = useCustomerStore((state) => state.searchCustomers);
+  const inviteLink = useCustomerStore((state) => state.inviteLink);
+  const clearInviteLink = useCustomerStore((state) => state.clearInviteLink);
 
   const PAGE_COUNT = Math.ceil(count / perPage);
   const isEmpty = customers?.length === 0;
@@ -48,6 +54,14 @@ const Customers = () => {
   const handleClear = () => {
     setSelectedCustomer(null);
     setSearchParams("");
+  };
+
+  const handleOpenForm = () => {
+    setOpen(true);
+  };
+
+  const handleCloseForm = () => {
+    setOpen(false);
   };
 
   const handlePageChange = (_, value) => {
@@ -107,10 +121,26 @@ const Customers = () => {
             sm: isCardsView ? "60%" : "100%",
           },
           display: "flex",
+          gap: 3,
           justifyContent: "space-between",
         }}
       >
-        <ViewTabs view={view} setView={setView} withoutDataAdd />
+        <ViewTabs
+          view={view}
+          setView={setView}
+          handleOpenForm={handleOpenForm}
+          buttonText="Пригласить заказщика"
+        />
+
+        {open && <AddCustomerForm open={open} handleClose={handleCloseForm} />}
+
+        {inviteLink && (
+          <InviteLinkModal
+            inviteLink={inviteLink}
+            clearInviteLink={clearInviteLink}
+          />
+        )}
+
         <TextField
           onChange={(e) => {
             setInputValue(e.target.value);

@@ -6,6 +6,7 @@ import { Alert, Box, Pagination } from "@mui/material";
 import LeadCard from "./lead-card";
 import LeadsTable from "./leads-table";
 import PageLoader from "../../shared/ui/loaders/page-loader";
+import LeadKanbanTable from "./lead-kanban-table";
 
 const LeadListContainer = ({ view, isLeadsEmpty }) => {
   const [page, setPage] = useState(1);
@@ -18,6 +19,8 @@ const LeadListContainer = ({ view, isLeadsEmpty }) => {
 
   const PAGE_COUNT = Math.ceil(count / perPage);
   const isCardsView = view === VIEWS.cards;
+  const isTableView = view === VIEWS.table;
+  const isKanbanView = view === VIEWS.kanban;
 
   const handlePageChange = (_, value) => {
     setPage(value);
@@ -69,7 +72,8 @@ const LeadListContainer = ({ view, isLeadsEmpty }) => {
           ))}
         </Box>
       )}
-      {!isCardsView && <LeadsTable leads={leads} />}
+      {isTableView && <LeadsTable leads={leads} />}
+      {isKanbanView && <LeadKanbanTable leads={leads} />}
       {!isLeadsEmpty && (
         <Pagination
           color="primary"

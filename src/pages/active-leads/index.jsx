@@ -72,7 +72,14 @@ const ActiveLeads = () => {
           alignItems: "center",
           gap: 3,
           mx: "auto",
-          width: isCardsView ? "60%" : "100%",
+          flexDirection: {
+            xs: "column",
+            sm: "row",
+          },
+          width: {
+            xs: "100%",
+            sm: isCardsView ? "60%" : "100%",
+          },
         }}
       >
         <ViewTabs
@@ -89,6 +96,12 @@ const ActiveLeads = () => {
           render={({ field }) => (
             <Autocomplete
               options={LEAD_STATUS_OPTIONS}
+              sx={{
+                width: {
+                  xs: "100%",
+                  sm: 300,
+                },
+              }}
               value={
                 LEAD_STATUS_OPTIONS.find(
                   (option) => option.value === field.value,
@@ -102,15 +115,7 @@ const ActiveLeads = () => {
                 option.value === value.value
               }
               renderInput={(params) => (
-                <TextField
-                  {...params}
-                  label="Статус"
-                  size="small"
-                  fullWidth
-                  sx={{
-                    width: 300,
-                  }}
-                />
+                <TextField {...params} label="Статус" size="small" fullWidth />
               )}
             />
           )}

@@ -1,8 +1,31 @@
 import React from "react";
 import { VIEWS } from "../const/leads";
-import { Box, Button, Tab, Tabs } from "@mui/material";
+import {
+  Box,
+  Button,
+  Tab,
+  Tabs,
+  ToggleButton,
+  ToggleButtonGroup,
+} from "@mui/material";
 import ViewListRoundedIcon from "@mui/icons-material/ViewListRounded";
 import GridViewRoundedIcon from "@mui/icons-material/GridViewRounded";
+import ViewKanbanOutlinedIcon from "@mui/icons-material/ViewKanbanOutlined";
+
+const tabs = [
+  {
+    value: VIEWS.table,
+    icon: <ViewListRoundedIcon fontSize="small" />,
+  },
+  {
+    value: VIEWS.cards,
+    icon: <GridViewRoundedIcon fontSize="small" />,
+  },
+  {
+    value: VIEWS.kanban,
+    icon: <ViewKanbanOutlinedIcon fontSize="small" />,
+  },
+];
 
 const ViewTabs = ({
   view,
@@ -10,6 +33,7 @@ const ViewTabs = ({
   handleOpenForm,
   withoutDataAdd = false,
   isLeadsEmpty,
+  buttonText = "Добавить",
 }) => {
   const isCradsView = view === VIEWS.cards;
 
@@ -27,20 +51,39 @@ const ViewTabs = ({
       }}
     >
       {!isLeadsEmpty && (
-        <Tabs
+        <ToggleButtonGroup
+          exclusive
           value={view}
           onChange={(_, newValue) => {
-            setView(newValue);
+            if (newValue !== null) {
+              setView(newValue);
+            }
+          }}
+          size="small"
+          color="primary"
+          aria-label="Переключение отображения экспедиторов"
+          sx={{
+            alignSelf: {
+              xs: "stretch",
+              sm: "auto",
+            },
+            "& .MuiToggleButton-root": {
+              px: 1.5,
+              minWidth: 40,
+            },
           }}
         >
-          <Tab label={<ViewListRoundedIcon />} value={VIEWS.table} />
-          <Tab label={<GridViewRoundedIcon />} value={VIEWS.cards} />
-        </Tabs>
+          {tabs.map((tab) => (
+            <ToggleButton key={tab.value} value={tab.value}>
+              {tab.icon}
+            </ToggleButton>
+          ))}
+        </ToggleButtonGroup>
       )}
 
       {!withoutDataAdd && (
         <Button variant="outlined" onClick={handleOpenForm}>
-          Добавить
+          {buttonText}
         </Button>
       )}
     </Box>

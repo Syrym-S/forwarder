@@ -1,8 +1,14 @@
 import { create } from "zustand";
-import { getCustomers, getCustomerDetailsApi, searchCustomerApi } from "./api";
+import {
+  getCustomers,
+  getCustomerDetailsApi,
+  searchCustomerApi,
+  createCustomerApi,
+} from "./api";
 
 export const useCustomerStore = create((set) => ({
   customers: [],
+  inviteLink: null,
   customerDetails: null,
   isLoading: false,
   error: null,
@@ -62,5 +68,27 @@ export const useCustomerStore = create((set) => ({
         isLoading: false,
       });
     }
+  },
+
+  createCustomer: async (payload) => {
+    try {
+      set({ isLoading: true, error: null });
+
+      const response = await createCustomerApi(payload);
+
+      set({
+        inviteLink: response.data.invite_link,
+        isLoading: false,
+      });
+    } catch (e) {
+      set({
+        error: e.message,
+        isLoading: false,
+      });
+    }
+  },
+
+  clearInviteLink: () => {
+    set({ inviteLink: null });
   },
 }));

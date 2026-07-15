@@ -21,3 +21,9 @@ export const searchCustomerApi = async (params) => {
 
   return data;
 };
+
+export const createCustomerApi = async (payload) => {
+  const data = await api.post(`/forwarder/v1/customers/create`, payload);
+
+  return data;
+};

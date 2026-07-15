@@ -1,6 +1,7 @@
 export const VIEWS = {
   table: "table",
   cards: "cards",
+  kanban: "kanban",
 };
 
 export const steps = ["Маршрут", "Груз", "Водитель", "Заказщик", "Проверка"];

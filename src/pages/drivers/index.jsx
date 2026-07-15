@@ -11,8 +11,11 @@ import EmptyListUI from "../../shared/ui/empty-list-ui";
 import { VIEWS } from "../../shared/const/leads";
 import ViewTabs from "../../shared/ui/view-tabs";
 import DriversTable from "../../components/drivers/driver-table";
+import AddDriverForm from "../../features/drivers/add-drivers-form";
+import InviteLinkModal from "../../components/customers/invite-link-modal";
 
 const Drivers = () => {
+  const [open, setOpen] = useState(false);
   const [page, setPage] = useState(1);
   const [view, setView] = useState(VIEWS.table);
   //Позже венру если нужно будет , показывает по какому слово пошел запрос поиска
@@ -28,6 +31,8 @@ const Drivers = () => {
   const count = useDriverStore((state) => state.count);
   const perPage = useDriverStore((state) => state.perPage);
   const searchDriver = useDriverStore((state) => state.searchDriver);
+  const inviteLink = useDriverStore((state) => state.inviteLink);
+  const clearInviteLink = useDriverStore((state) => state.clearInviteLink);
 
   const PAGE_COUNT = Math.ceil(count / perPage);
   const isEmpty = drivers?.length === 0;
@@ -36,6 +41,14 @@ const Drivers = () => {
   const handleClear = () => {
     setSelectedDriver(null);
     setSearchParams("");
+  };
+
+  const handleOpenForm = () => {
+    setOpen(true);
+  };
+
+  const handleCloseForm = () => {
+    setOpen(false);
   };
 
   const handlePageChange = (_, value) => {
@@ -91,10 +104,16 @@ const Drivers = () => {
             sm: isCardsView ? "60%" : "100%",
           },
           display: "flex",
+          gap: 3,
           justifyContent: "space-between",
         }}
       >
-        <ViewTabs view={view} setView={setView} withoutDataAdd />
+        <ViewTabs
+          view={view}
+          setView={setView}
+          handleOpenForm={handleOpenForm}
+          buttonText="Пригласить водителя"
+        />
         <TextField
           onChange={(e) => {
             setInputValue(e.target.value);
@@ -132,6 +151,15 @@ const Drivers = () => {
               />
             </>
           ))}
+
+        {open && <AddDriverForm open={open} onClose={handleCloseForm} />}
+
+        {inviteLink && (
+          <InviteLinkModal
+            inviteLink={inviteLink}
+            clearInviteLink={clearInviteLink}
+          />
+        )}
 
         {!isCardsView && <DriversTable drivers={drivers} />}
 

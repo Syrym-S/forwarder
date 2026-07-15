@@ -1,8 +1,14 @@
 import { create } from "zustand";
-import { getDriverDetailsApi, getDriversApi, searchDriverApi } from "./api";
+import {
+  createDriverApi,
+  getDriverDetailsApi,
+  getDriversApi,
+  searchDriverApi,
+} from "./api";
 
 export const useDriverStore = create((set) => ({
   drivers: [],
+  inviteLink: null,
   driverDetails: null,
   isLoading: false,
   error: null,
@@ -61,5 +67,26 @@ export const useDriverStore = create((set) => ({
         isLoading: false,
       });
     }
+  },
+  createDriver: async (payload) => {
+    try {
+      set({ isLoading: true, error: null });
+
+      const response = await createDriverApi(payload);
+
+      set({
+        inviteLink: response.data.invite_link,
+        isLoading: false,
+      });
+    } catch (e) {
+      set({
+        error: e.message,
+        isLoading: false,
+      });
+    }
+  },
+
+  clearInviteLink: () => {
+    set({ inviteLink: null });
   },
 }));

@@ -34,3 +34,9 @@ export const searchDriverApi = async (params) => {
 
   return data;
 };
+
+export const createDriverApi = async (payload) => {
+  const data = await api.post(`/forwarder/v1/drivers/create`, payload);
+
+  return data;
+};
