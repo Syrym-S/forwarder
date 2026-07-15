@@ -199,7 +199,11 @@ const AddDriverForm = ({ open, onClose }) => {
                     type="date"
                     fullWidth
                     size="small"
-                    InputLabelProps={{ shrink: true }}
+                    slotProps={{
+                      inputLabel: {
+                        shrink: true,
+                      },
+                    }}
                   />
                 )}
               />

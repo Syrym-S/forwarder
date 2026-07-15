@@ -95,37 +95,50 @@ const HistoryLeads = () => {
         <Controller
           name="status"
           control={control}
-          defaultValue="new"
+          defaultValue=""
           render={({ field }) => (
-            <Autocomplete
-              options={HISTORY_LEAD_STATUS_OPTIONS}
-              value={
-                HISTORY_LEAD_STATUS_OPTIONS.find(
-                  (option) => option.value === field.value,
-                ) ?? null
-              }
+            <FormControl
+              size="small"
               sx={{
                 width: {
                   xs: "100%",
                   sm: 300,
                 },
               }}
-              onChange={(_, newValue, reason) => {
-                if (reason === "clear") {
-                  getHistoryLeads();
-                }
-                field.onChange(newValue?.value ?? "");
+            >
+              <InputLabel>Статус</InputLabel>
 
-                setFilterStatus(newValue);
-              }}
-              getOptionLabel={(option) => option.label}
-              isOptionEqualToValue={(option, value) =>
-                option.value === value.value
-              }
-              renderInput={(params) => (
-                <TextField {...params} label="Статус" size="small" fullWidth />
-              )}
-            />
+              <Select
+                {...field}
+                label="Статус"
+                value={field.value ?? ""}
+                onChange={(event) => {
+                  const value = event.target.value;
+
+                  field.onChange(value);
+
+                  const selected =
+                    HISTORY_LEAD_STATUS_OPTIONS.find(
+                      (option) => option.value === value,
+                    ) ?? null;
+
+                  setFilterStatus(selected);
+
+                  if (!value) {
+                    getHistoryLeads();
+                  }
+                }}
+              >
+                <MenuItem value="">
+                  <em>Все</em>
+                </MenuItem>
+                {HISTORY_LEAD_STATUS_OPTIONS.map((option) => (
+                  <MenuItem key={option.value} value={option.value}>
+                    {option.label}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
           )}
         />
       </Box>

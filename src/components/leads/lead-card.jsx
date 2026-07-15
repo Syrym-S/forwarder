@@ -91,7 +91,7 @@ const LeadCard = ({ lead }) => {
             }}
             color="primary"
             variant="outlined"
-            label={`Заказщий: ${lead.customer.name ? lead.customer.name : "Не указан"}`}
+            label={`Заказщий: ${lead?.customer?.name ? lead.customer.name : "Не указан"}`}
           />
         </Box>
         <Box
@@ -145,7 +145,7 @@ const LeadCard = ({ lead }) => {
                   lineHeight: 1.35,
                 }}
               >
-                {lead.from_location.address || "Битые данные"}
+                {lead?.from_location?.address || "Битые данные"}
               </Typography>
             </Box>
           </Box>
@@ -205,7 +205,7 @@ const LeadCard = ({ lead }) => {
                   lineHeight: 1.35,
                 }}
               >
-                {lead.to_location.address || "Битые данные"}
+                {lead?.to_location?.address || "Битые данные"}
               </Typography>
             </Box>
           </Box>
@@ -222,12 +222,14 @@ const LeadCard = ({ lead }) => {
         >
           <InfoField
             label="Вес"
-            value={lead.cargo.weight_kg ? `${lead.cargo.weight_kg} кг` : null}
+            value={
+              lead?.cargo?.weight_kg ? `${lead?.cargo.weight_kg} кг` : null
+            }
           />
-          <InfoField label="Тип" value={lead.cargo.type} />
+          <InfoField label="Тип" value={lead?.cargo?.type} />
           <InfoField
             label="Цена"
-            value={`${lead.summ === 0 ? lead.cargo_price : lead.summ} ${lead.currency}`}
+            value={`${lead?.summ === 0 ? lead?.cargo_price : lead?.summ} ${lead?.currency}`}
             accent
             sx={{
               gridColumn: {

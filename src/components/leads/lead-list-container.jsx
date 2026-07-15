@@ -8,7 +8,7 @@ import LeadsTable from "./leads-table";
 import PageLoader from "../../shared/ui/loaders/page-loader";
 import LeadKanbanTable from "./lead-kanban-table";
 
-const LeadListContainer = ({ view, isLeadsEmpty }) => {
+const LeadListContainer = ({ view, isLeadsEmpty, filterStatus }) => {
   const [page, setPage] = useState(1);
 
   const leads = useLeadsStore((state) => state.leads);
@@ -36,21 +36,35 @@ const LeadListContainer = ({ view, isLeadsEmpty }) => {
 
   return (
     <>
-      {isLeadsEmpty && (
-        <Alert
-          severity="info"
-          sx={{
-            width: {
-              xs: "100%",
-              sm: "60%",
-            },
-            my: 1,
-            mx: "auto",
-          }}
-        >
-          Список пуст. Вы можете добавить лид!
-        </Alert>
-      )}
+      {isLeadsEmpty &&
+        (!filterStatus ? (
+          <Alert
+            severity="info"
+            sx={{
+              width: {
+                xs: "100%",
+                sm: "60%",
+              },
+              my: 1,
+              mx: "auto",
+            }}
+          >
+            Список пуст. Вы можете добавить лид!
+          </Alert>
+        ) : (
+          <Alert
+            severity="info"
+            sx={{
+              width: {
+                xs: "100%",
+                sm: "60%",
+              },
+              my: 1,
+            }}
+          >
+            По статусу "{filterStatus.label}" активных лидов нет!
+          </Alert>
+        ))}
       {isCardsView && (
         <Box
           sx={{

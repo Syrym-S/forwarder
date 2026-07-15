@@ -105,42 +105,57 @@ const ActiveLeads = () => {
         <Controller
           name="status"
           control={control}
-          defaultValue={filterStatus}
+          defaultValue=""
           render={({ field }) => (
-            <Autocomplete
-              options={ACTIVE_LEAD_STATUS_OPTIONS}
+            <FormControl
+              size="small"
               sx={{
                 width: {
                   xs: "100%",
                   sm: 300,
                 },
               }}
-              value={
-                ACTIVE_LEAD_STATUS_OPTIONS.find(
-                  (option) => option.value === field.value,
-                ) ?? null
-              }
-              onChange={(_, newValue, reason) => {
-                if (reason === "clear") {
-                  fetchLeads();
-                }
-                field.onChange(newValue?.value ?? "");
+            >
+              <InputLabel>Статус</InputLabel>
 
-                setFilterStatus(newValue);
-              }}
-              getOptionLabel={(option) => option.label}
-              isOptionEqualToValue={(option, value) =>
-                option.value === value.value
-              }
-              renderInput={(params) => (
-                <TextField {...params} label="Статус" size="small" fullWidth />
-              )}
-            />
+              <Select
+                {...field}
+                label="Статус"
+                value={field.value ?? ""}
+                onChange={(event) => {
+                  const value = event.target.value;
+
+                  field.onChange(value);
+
+                  const selected =
+                    ACTIVE_LEAD_STATUS_OPTIONS.find(
+                      (option) => option.value === value,
+                    ) ?? null;
+
+                  setFilterStatus(selected);
+
+                  if (!value) {
+                    fetchLeads();
+                  }
+                }}
+              >
+                <MenuItem value="">Все</MenuItem>
+                {ACTIVE_LEAD_STATUS_OPTIONS.map((option) => (
+                  <MenuItem key={option.value} value={option.value}>
+                    {option.label}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
           )}
         />
       </Box>
 
-      <LeadListContainer isLeadsEmpty={isLeadsEmpty} view={view} />
+      <LeadListContainer
+        filterStatus={filterStatus}
+        isLeadsEmpty={isLeadsEmpty}
+        view={view}
+      />
 
       <AddLeadForm
         openForm={openForm}
