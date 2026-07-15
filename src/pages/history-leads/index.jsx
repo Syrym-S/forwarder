@@ -19,10 +19,12 @@ import AddLeadForm from "../../features/leads/add-lead-form";
 import { useLeadsStore } from "../../app/store/leads/leads-store";
 import ViewTabs from "../../shared/ui/view-tabs";
 import PageLoader from "../../shared/ui/loaders/page-loader";
-import { LEAD_STATUS_OPTIONS } from "../../shared/const/tenders";
+import { HISTORY_LEAD_STATUS_OPTIONS } from "../../shared/const/tenders";
 import { Controller, useForm } from "react-hook-form";
 
 const HistoryLeads = () => {
+  const [filterStatus, setFilterStatus] = useState(null);
+
   const { control } = useForm();
 
   const [page, setPage] = useState(1);
@@ -34,8 +36,11 @@ const HistoryLeads = () => {
   const perPage = useLeadsStore((state) => state.history_perPage);
   const getHistoryLeads = useLeadsStore((state) => state.getHistoryLeads);
   const isLoading = useLeadsStore((state) => state.isLoading);
-  const isCardsView = view === VIEWS.cards;
+  const filterHistoryLeadsByStatus = useLeadsStore(
+    (state) => state.filterHistoryLeadsByStatus,
+  );
 
+  const isCardsView = view === VIEWS.cards;
   const PAGE_COUNT = Math.ceil(count / perPage);
 
   const handlePageChange = (_, value) => {
@@ -52,6 +57,14 @@ const HistoryLeads = () => {
     clearCurrentLead();
   }, []);
 
+  useEffect(() => {
+    if (filterStatus) {
+      filterHistoryLeadsByStatus({
+        status: filterStatus.value,
+      });
+    }
+  }, [filterStatus, filterHistoryLeadsByStatus]);
+
   if (isLoading)
     return (
       <RootLayout withoutDataCheck>
@@ -60,7 +73,7 @@ const HistoryLeads = () => {
     );
 
   return (
-    <RootLayout data={historyLeads} isLoading={isLoading}>
+    <RootLayout isLoading={isLoading} withoutDataCheck>
       <Box
         sx={{
           display: "flex",
@@ -85,9 +98,9 @@ const HistoryLeads = () => {
           defaultValue="new"
           render={({ field }) => (
             <Autocomplete
-              options={LEAD_STATUS_OPTIONS}
+              options={HISTORY_LEAD_STATUS_OPTIONS}
               value={
-                LEAD_STATUS_OPTIONS.find(
+                HISTORY_LEAD_STATUS_OPTIONS.find(
                   (option) => option.value === field.value,
                 ) ?? null
               }
@@ -97,8 +110,13 @@ const HistoryLeads = () => {
                   sm: 300,
                 },
               }}
-              onChange={(_, newValue) => {
+              onChange={(_, newValue, reason) => {
+                if (reason === "clear") {
+                  getHistoryLeads();
+                }
                 field.onChange(newValue?.value ?? "");
+
+                setFilterStatus(newValue);
               }}
               getOptionLabel={(option) => option.label}
               isOptionEqualToValue={(option, value) =>

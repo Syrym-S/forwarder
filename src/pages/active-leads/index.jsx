@@ -27,10 +27,11 @@ import { useNotificationsStore } from "../../app/store/notifications/noti-store"
 import { NOTIFICATION_TYPE } from "../../shared/const/notification-types";
 import LeadListContainer from "../../components/leads/lead-list-container";
 import { parserNotificationType } from "../../shared/helpers/notifications/parse-notification-type";
-import { LEAD_STATUS_OPTIONS } from "../../shared/const/tenders";
 import { Controller, useForm } from "react-hook-form";
+import { ACTIVE_LEAD_STATUS_OPTIONS } from "../../shared/const/tenders";
 
 const ActiveLeads = () => {
+  const [filterStatus, setFilterStatus] = useState(null);
   const { control } = useForm();
   const [openForm, setOpenForm] = useState(false);
   const [view, setView] = useState(VIEWS.table);
@@ -41,9 +42,13 @@ const ActiveLeads = () => {
   const newNotification = useNotificationsStore(
     (state) => state.newNotification,
   );
+  const filterActiveLeadsByStatus = useLeadsStore(
+    (state) => state.filterActiveLeadsByStatus,
+  );
+
   const isCardsView = view === VIEWS.cards;
 
-  const isLeadsEmpty = leads.length === 0;
+  const isLeadsEmpty = leads?.length === 0;
 
   const { notification_type } = parserNotificationType(
     newNotification?.type || "",
@@ -63,6 +68,14 @@ const ActiveLeads = () => {
       fetchLeads();
     }
   }, [newNotification]);
+
+  useEffect(() => {
+    if (filterStatus) {
+      filterActiveLeadsByStatus({
+        status: filterStatus.value,
+      });
+    }
+  }, [filterStatus, filterActiveLeadsByStatus]);
 
   return (
     <RootLayout withoutDataCheck>
@@ -92,10 +105,10 @@ const ActiveLeads = () => {
         <Controller
           name="status"
           control={control}
-          defaultValue="new"
+          defaultValue={filterStatus}
           render={({ field }) => (
             <Autocomplete
-              options={LEAD_STATUS_OPTIONS}
+              options={ACTIVE_LEAD_STATUS_OPTIONS}
               sx={{
                 width: {
                   xs: "100%",
@@ -103,12 +116,17 @@ const ActiveLeads = () => {
                 },
               }}
               value={
-                LEAD_STATUS_OPTIONS.find(
+                ACTIVE_LEAD_STATUS_OPTIONS.find(
                   (option) => option.value === field.value,
                 ) ?? null
               }
-              onChange={(_, newValue) => {
+              onChange={(_, newValue, reason) => {
+                if (reason === "clear") {
+                  fetchLeads();
+                }
                 field.onChange(newValue?.value ?? "");
+
+                setFilterStatus(newValue);
               }}
               getOptionLabel={(option) => option.label}
               isOptionEqualToValue={(option, value) =>

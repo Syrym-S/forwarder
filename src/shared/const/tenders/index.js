@@ -26,3 +26,18 @@ export const LEAD_STATUS_OPTIONS = [
   { label: "Рейс завершен", value: "finished" },
   { label: "Рейс удален", value: "deleted" },
 ];
+
+export const ACTIVE_LEAD_STATUS_OPTIONS = [
+  { label: "Новый", value: "new" },
+  { label: "Водитель добавлен", value: "add_driver" },
+  { label: "Поездка начата", value: "start_driver" },
+  { label: "Погрузка", value: "start_loading" },
+  { label: "Погрузка подтверждена", value: "verification_loading" },
+  { label: "Разгрузка", value: "start_unloading" },
+  { label: "Разгрузка подтверждена", value: "verification_unloading" },
+];
+
+export const HISTORY_LEAD_STATUS_OPTIONS = [
+  { label: "Рейс завершен", value: "finished" },
+  { label: "Рейс удален", value: "deleted" },
+];
