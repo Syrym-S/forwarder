@@ -57,26 +57,37 @@ function KanbanCard({ item }) {
           </Box>
         </Stack>
 
-        <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
-          <Chip
-            label={item.cargo?.name}
-            size="small"
-            variant="outlined"
-            color="primary"
-            sx={{
-              borderRadius: "4px",
-            }}
-          />
+        <Box
+          sx={{
+            pt: 1,
+            display: "flex",
+            flexWrap: "wrap",
+            gap: 1,
+          }}
+        >
+          {item.cargo?.name && (
+            <Chip
+              label={item.cargo?.name}
+              size="small"
+              variant="outlined"
+              color="primary"
+              sx={{
+                borderRadius: "4px",
+              }}
+            />
+          )}
 
-          <Chip
-            label={`${item.cargo?.weight_kg} кг`}
-            size="small"
-            variant="outlined"
-            color="primary"
-            sx={{
-              borderRadius: "4px",
-            }}
-          />
+          {item.cargo?.weight_kg && (
+            <Chip
+              label={`${item.cargo?.weight_kg} кг`}
+              size="small"
+              variant="outlined"
+              color="primary"
+              sx={{
+                borderRadius: "4px",
+              }}
+            />
+          )}
 
           <Chip
             label={`${Number(item.summ).toLocaleString()} ${item.currency}`}
@@ -86,7 +97,7 @@ function KanbanCard({ item }) {
               borderRadius: "4px",
             }}
           />
-        </Stack>
+        </Box>
       </CardContent>
     </Box>
   );

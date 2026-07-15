@@ -228,7 +228,7 @@ export function SecondStep({ control, errors }) {
               onChange={(_, newValue) => {
                 field.onChange(newValue?.code ?? "");
               }}
-              getOptionLabel={(option) => option.code}
+              getOptionLabel={(option) => `${option.code} - ${option.fullname}`}
               isOptionEqualToValue={(option, value) =>
                 option.code === value.code
               }

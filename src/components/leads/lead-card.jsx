@@ -31,6 +31,7 @@ const LeadCard = ({ lead }) => {
           xs: 1,
           sm: 3,
         },
+        maxWidth: "100%",
         border: "2px solid",
         borderColor: "divider",
         borderRadius: 4,

@@ -1,7 +1,11 @@
 import { Alert, AlertTitle, Box, Breadcrumbs, Typography } from "@mui/material";
-import React from "react";
+import React, { useEffect } from "react";
 import Skeleton from "@mui/material/Skeleton";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
+import ArrowBackIosNewRoundedIcon from "@mui/icons-material/ArrowBackIosNewRounded";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { usePageRoutesStore } from "../../app/store/page-routes/use-page-routes-store";
+import { renderRouteName } from "../../shared/helpers/render-route-name";
 
 const RootLayout = ({
   data = null,
@@ -9,6 +13,20 @@ const RootLayout = ({
   children,
   ...props
 }) => {
+  const navigate = useNavigate();
+  const { pathname } = useLocation();
+
+  const currentPath =
+    usePageRoutesStore((state) => state.currentPath) ??
+    pathname.replace("/", "");
+
+  const prevPath = usePageRoutesStore((state) => state.prevPath);
+  const setPath = usePageRoutesStore((state) => state.setPath);
+
+  useEffect(() => {
+    setPath(pathname.replace("/", ""));
+  }, [pathname, setPath]);
+
   if ((!data && !withoutDataCheck) || data?.length === 0) {
     return (
       <Box
@@ -49,21 +67,46 @@ const RootLayout = ({
       }}
       {...props}
     >
-      {/* <Typography
-        sx={{
-          fontSize: "15px",
-          color: "#a3a1a1",
-          display: "flex",
-          alignItems: "center",
-        }}
-      >
-        <ArrowBackIosIcon
+      <Box sx={{ mb: 3, display: "flex", alignItems: "center", gap: 1 }}>
+        <ArrowBackIosNewRoundedIcon sx={{ fontSize: 16 }} />
+
+        <Box
+          onClick={() => navigate(-1)}
+          underline="none"
+          color="inherit"
           sx={{
-            fontSize: "15px",
+            with: "50%",
+            textDecoration: "none",
+            cursor: "pointer",
+            transition: "color 0.2s ease",
           }}
-        />
-        {location.pathname.replaceAll("/", "").toUpperCase()}
-      </Typography> */}
+        >
+          <Breadcrumbs
+            separator="/"
+            sx={{
+              "& .MuiBreadcrumbs-ol": {
+                flexWrap: "nowrap",
+                alignItems: "center",
+                fontWeightL: "500",
+                color: "#1a1a1a",
+                "&:hover": {
+                  color: "#515151",
+                  textDecoration: "none",
+                },
+              },
+            }}
+          >
+            {prevPath && (
+              <Typography variant="body2" color="inherit">
+                {renderRouteName(prevPath)}
+              </Typography>
+            )}
+            <Typography variant="body2" color="inherit">
+              {renderRouteName(currentPath)}
+            </Typography>
+          </Breadcrumbs>
+        </Box>
+      </Box>
       {children}
     </Box>
   );

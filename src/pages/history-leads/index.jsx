@@ -65,9 +65,16 @@ const HistoryLeads = () => {
         sx={{
           display: "flex",
           alignItems: "center",
+          flexDirection: {
+            xs: "column",
+            sm: "row",
+          },
           gap: 3,
           mx: "auto",
-          width: isCardsView ? "60%" : "100%",
+          width: {
+            xs: "100%",
+            sm: isCardsView ? "60%" : "100%",
+          },
         }}
       >
         <ViewTabs view={view} setView={setView} withoutDataAdd />
@@ -84,6 +91,12 @@ const HistoryLeads = () => {
                   (option) => option.value === field.value,
                 ) ?? null
               }
+              sx={{
+                width: {
+                  xs: "100%",
+                  sm: 300,
+                },
+              }}
               onChange={(_, newValue) => {
                 field.onChange(newValue?.value ?? "");
               }}
@@ -92,15 +105,7 @@ const HistoryLeads = () => {
                 option.value === value.value
               }
               renderInput={(params) => (
-                <TextField
-                  {...params}
-                  label="Статус"
-                  size="small"
-                  fullWidth
-                  sx={{
-                    width: 300,
-                  }}
-                />
+                <TextField {...params} label="Статус" size="small" fullWidth />
               )}
             />
           )}

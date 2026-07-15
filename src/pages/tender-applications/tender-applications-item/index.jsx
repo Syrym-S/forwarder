@@ -95,7 +95,16 @@ const TenderApplicationsItem = () => {
         isCustomerTender
       />
 
-      <LeadMap from={from} to={to} id={customerCurrentTender?.lead?.id} />
+      <Box
+        sx={{
+          boxShadow: 1,
+          borderRadius: 2,
+          overflow: "hidden",
+          my: 3,
+        }}
+      >
+        <LeadMap from={from} to={to} id={customerCurrentTender?.lead?.id} />
+      </Box>
 
       <TenderForm
         isEdit

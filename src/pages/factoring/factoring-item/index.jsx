@@ -77,8 +77,16 @@ const FactoringItem = () => {
     <RootLayout withoutDataCheck>
       <FactoringDetailsHeading factoring={factoringDetails} />
 
-      <LeadMap from={from} to={to} id={currentLead?.id} />
-
+      <Box
+        sx={{
+          boxShadow: 1,
+          borderRadius: 2,
+          overflow: "hidden",
+          my: 3,
+        }}
+      >
+        <LeadMap from={from} to={to} id={currentLead?.id} />
+      </Box>
       <FactoringTransportationInfo lead={currentLead} />
 
       <FactoringCargoInfo leadData={currentLead} />
