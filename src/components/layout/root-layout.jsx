@@ -3,9 +3,10 @@ import React, { useEffect } from "react";
 import Skeleton from "@mui/material/Skeleton";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import ArrowBackIosNewRoundedIcon from "@mui/icons-material/ArrowBackIosNewRounded";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { usePageRoutesStore } from "../../app/store/page-routes/use-page-routes-store";
-import { renderRouteName } from "../../shared/helpers/render-route-name";
+import AppBreadcrumbs from "./app-breadcrumbs";
+// import { renderRouteName } from "../../shared/helpers/render-route-name";
 
 const RootLayout = ({
   data = null,
@@ -13,14 +14,14 @@ const RootLayout = ({
   children,
   ...props
 }) => {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const { pathname } = useLocation();
 
-  const currentPath =
-    usePageRoutesStore((state) => state.currentPath) ??
-    pathname.replace("/", "");
+  // const currentPath =
+  //   usePageRoutesStore((state) => state.currentPath) ??
+  //   pathname.replace("/", "");
 
-  const prevPath = usePageRoutesStore((state) => state.prevPath);
+  // const prevPath = usePageRoutesStore((state) => state.prevPath);
   const setPath = usePageRoutesStore((state) => state.setPath);
 
   useEffect(() => {
@@ -68,9 +69,8 @@ const RootLayout = ({
       {...props}
     >
       <Box sx={{ mb: 3, display: "flex", alignItems: "center", gap: 1 }}>
-        <ArrowBackIosNewRoundedIcon sx={{ fontSize: 16 }} />
-
-        <Box
+        <AppBreadcrumbs />
+        {/* <Box
           onClick={() => navigate(-1)}
           underline="none"
           color="inherit"
@@ -105,7 +105,7 @@ const RootLayout = ({
               {renderRouteName(currentPath)}
             </Typography>
           </Breadcrumbs>
-        </Box>
+        </Box> */}
       </Box>
       {children}
     </Box>

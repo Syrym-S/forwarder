@@ -1,4 +1,4 @@
-import { Controller, useForm } from "react-hook-form";
+import { Controller, useForm, useWatch } from "react-hook-form";
 import {
   Box,
   Button,
@@ -35,6 +35,12 @@ const AddDriverForm = ({ open, onClose }) => {
   const { control, handleSubmit } = useForm({
     defaultValues,
   });
+  const formValues = useWatch({ control });
+
+  const isIp = formValues.is_ip;
+  const isForeigner = formValues.is_foreigner;
+
+  console.log(isForeigner, isIp);
 
   const submitDriverCreate = async (data) => {
     await createDriver(data);
@@ -108,6 +114,7 @@ const AddDriverForm = ({ open, onClose }) => {
                     label="Название компании"
                     fullWidth
                     size="small"
+                    disabled={!isIp}
                   />
                 )}
               />
@@ -122,6 +129,7 @@ const AddDriverForm = ({ open, onClose }) => {
                     {...field}
                     label="БИН компании"
                     fullWidth
+                    disabled={!isIp}
                     size="small"
                   />
                 )}
@@ -135,6 +143,7 @@ const AddDriverForm = ({ open, onClose }) => {
                 render={({ field }) => (
                   <TextField
                     {...field}
+                    disabled={!isIp}
                     label="Юридический адрес"
                     fullWidth
                     size="small"
@@ -148,7 +157,13 @@ const AddDriverForm = ({ open, onClose }) => {
                 name="bik"
                 control={control}
                 render={({ field }) => (
-                  <TextField {...field} label="БИК" fullWidth size="small" />
+                  <TextField
+                    {...field}
+                    label="БИК"
+                    fullWidth
+                    size="small"
+                    disabled={!isIp}
+                  />
                 )}
               />
             </Grid>
@@ -158,7 +173,13 @@ const AddDriverForm = ({ open, onClose }) => {
                 name="iik"
                 control={control}
                 render={({ field }) => (
-                  <TextField {...field} label="ИИК" fullWidth size="small" />
+                  <TextField
+                    {...field}
+                    label="ИИК"
+                    fullWidth
+                    size="small"
+                    disabled={!isIp}
+                  />
                 )}
               />
             </Grid>
@@ -169,6 +190,7 @@ const AddDriverForm = ({ open, onClose }) => {
                 control={control}
                 render={({ field }) => (
                   <TextField
+                    disabled={isForeigner}
                     {...field}
                     label="Номер документа"
                     fullWidth
@@ -183,7 +205,13 @@ const AddDriverForm = ({ open, onClose }) => {
                 name="issue_country"
                 control={control}
                 render={({ field }) => (
-                  <TextField {...field} label="Страна" fullWidth size="small" />
+                  <TextField
+                    {...field}
+                    label="Страна"
+                    fullWidth
+                    size="small"
+                    disabled={isForeigner}
+                  />
                 )}
               />
             </Grid>
@@ -197,6 +225,7 @@ const AddDriverForm = ({ open, onClose }) => {
                     {...field}
                     label="Дата выдачи"
                     type="date"
+                    disabled={isForeigner}
                     fullWidth
                     size="small"
                     slotProps={{
