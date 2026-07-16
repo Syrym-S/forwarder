@@ -245,19 +245,3 @@ export const getAcceptedLeadsApi = async (params = {}) => {
 
   return data;
 };
-
-export const filterActiveLeadsByStatusApi = async (params) => {
-  const data = await api.get(`/forwarder/v1/leads/filter`, {
-    params,
-  });
-
-  return data;
-};
-
-export const filterHistoryLeadsByStatusApi = async (params) => {
-  const data = await api.get(`/forwarder/v1/leads/history/filter`, {
-    params,
-  });
-
-  return data;
-};

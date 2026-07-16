@@ -18,8 +18,6 @@ import {
   verifyCargoApi,
   verifyCargoUnloadApi,
   getAcceptedLeadsApi,
-  filterActiveLeadsByStatusApi,
-  filterHistoryLeadsByStatusApi,
 } from "./api";
 
 export const useLeadsStore = create((set) => ({
@@ -434,53 +432,6 @@ export const useLeadsStore = create((set) => ({
       });
 
       // console.error("Payload:", payload);
-      console.error("Response:", e.response?.data);
-      throw e;
-    }
-  },
-
-  filterActiveLeadsByStatus: async (params) => {
-    try {
-      set({ isLoading: true, error: null });
-
-      const response = await filterActiveLeadsByStatusApi(params);
-
-      console.log(response);
-
-      set({
-        leads: response.data.results,
-        isLoading: false,
-      });
-    } catch (e) {
-      set({
-        error: e.message,
-        isLoading: false,
-      });
-
-      // console.error("Payload:", payload);
-      console.error("Response:", e.response?.data);
-      throw e;
-    }
-  },
-
-  filterHistoryLeadsByStatus: async (params) => {
-    try {
-      set({ isLoading: true, error: null });
-
-      const response = await filterHistoryLeadsByStatusApi(params);
-
-      console.log(response);
-
-      set({
-        historyLeads: response.data.results,
-        isLoading: false,
-      });
-    } catch (e) {
-      set({
-        error: e.message,
-        isLoading: false,
-      });
-
       console.error("Response:", e.response?.data);
       throw e;
     }
