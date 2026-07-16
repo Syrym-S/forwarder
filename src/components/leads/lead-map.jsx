@@ -126,7 +126,7 @@ export default function LeadMap({ from, to, id }) {
     <MapContainer
       center={start}
       zoom={13}
-      style={{ height: "300px", width: "100%" }}
+      style={{ height: "300px", width: "100%", zIndex: 0 }}
     >
       <TileLayer url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png" />
 

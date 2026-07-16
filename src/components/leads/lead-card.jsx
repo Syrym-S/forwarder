@@ -91,7 +91,7 @@ const LeadCard = ({ lead }) => {
             }}
             color="primary"
             variant="outlined"
-            label={`Заказщий: ${lead?.customer?.name ? lead.customer.name : "Не указан"}`}
+            label={`Заказщий: ${lead?.customer?.name || lead?.customer || "Не указан"}`}
           />
         </Box>
         <Box
@@ -145,7 +145,7 @@ const LeadCard = ({ lead }) => {
                   lineHeight: 1.35,
                 }}
               >
-                {lead?.from_location?.address || "Битые данные"}
+                {lead?.from_location?.address || lead?.from || "Битые данные"}
               </Typography>
             </Box>
           </Box>
@@ -205,7 +205,7 @@ const LeadCard = ({ lead }) => {
                   lineHeight: 1.35,
                 }}
               >
-                {lead?.to_location?.address || "Битые данные"}
+                {lead?.to_location?.address || lead?.to || "Битые данные"}
               </Typography>
             </Box>
           </Box>

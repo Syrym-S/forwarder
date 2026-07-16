@@ -39,7 +39,7 @@ const useLeadsColumns = () => {
       headerName: "Куда",
       width: 200,
       renderCell: ({ row }) => (
-        <Box>{row?.to_location?.address || "Битые данные"}</Box>
+        <Box>{row?.to_location?.address || row?.to || "Битые данные"}</Box>
       ),
     },
     {
@@ -47,7 +47,7 @@ const useLeadsColumns = () => {
       headerName: "Откуда",
       width: 200,
       renderCell: ({ row }) => (
-        <Box>{row?.from_location?.address || "Битые данные"}</Box>
+        <Box>{row?.from_location?.address || row?.to || "Битые данные"}</Box>
       ),
     },
   ];

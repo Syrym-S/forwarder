@@ -27,12 +27,12 @@ import { useNotificationsStore } from "../../app/store/notifications/noti-store"
 import { NOTIFICATION_TYPE } from "../../shared/const/notification-types";
 import LeadListContainer from "../../components/leads/lead-list-container";
 import { parserNotificationType } from "../../shared/helpers/notifications/parse-notification-type";
-import { Controller, useForm } from "react-hook-form";
+import { Controller } from "react-hook-form";
 import { ACTIVE_LEAD_STATUS_OPTIONS } from "../../shared/const/tenders";
 
 const ActiveLeads = () => {
   const [filterStatus, setFilterStatus] = useState(null);
-  const { control } = useForm();
+  const [page, setPage] = useState(1);
   const [openForm, setOpenForm] = useState(false);
   const [view, setView] = useState(VIEWS.table);
 
@@ -45,6 +45,9 @@ const ActiveLeads = () => {
   const filterActiveLeadsByStatus = useLeadsStore(
     (state) => state.filterActiveLeadsByStatus,
   );
+  const count = useLeadsStore((state) => state.count);
+  const perPage = useLeadsStore((state) => state.perPage);
+  const isLoading = useLeadsStore((state) => state.isLoading);
 
   const isCardsView = view === VIEWS.cards;
 
@@ -57,6 +60,11 @@ const ActiveLeads = () => {
 
   const handleOpenForm = () => {
     setOpenForm(true);
+  };
+
+  const handlePageChange = (_, value) => {
+    setPage(value);
+    setFilterStatus(null);
   };
 
   useEffect(() => {
@@ -76,6 +84,12 @@ const ActiveLeads = () => {
       });
     }
   }, [filterStatus, filterActiveLeadsByStatus]);
+
+  useEffect(() => {
+    fetchLeads({
+      page: page,
+    });
+  }, [page]);
 
   return (
     <RootLayout withoutDataCheck>
@@ -102,59 +116,58 @@ const ActiveLeads = () => {
           handleOpenForm={handleOpenForm}
         />
 
-        <Controller
-          name="status"
-          control={control}
-          defaultValue=""
-          render={({ field }) => (
-            <FormControl
-              size="small"
-              sx={{
-                width: {
-                  xs: "100%",
-                  sm: 300,
-                },
-              }}
-            >
-              <InputLabel>Статус</InputLabel>
+        <FormControl
+          size="small"
+          sx={{
+            width: {
+              xs: "100%",
+              sm: 300,
+            },
+          }}
+        >
+          <InputLabel>Статус</InputLabel>
 
-              <Select
-                {...field}
-                label="Статус"
-                value={field.value ?? ""}
-                onChange={(event) => {
-                  const value = event.target.value;
+          <Select
+            label="Статус"
+            value={filterStatus?.label}
+            onChange={(event) => {
+              const value = event.target.value;
 
-                  field.onChange(value);
+              setFilterStatus(value);
 
-                  const selected =
-                    ACTIVE_LEAD_STATUS_OPTIONS.find(
-                      (option) => option.value === value,
-                    ) ?? null;
+              const selected =
+                ACTIVE_LEAD_STATUS_OPTIONS.find(
+                  (option) => option.value === value,
+                ) ?? null;
 
-                  setFilterStatus(selected);
+              setFilterStatus(selected);
 
-                  if (!value) {
-                    fetchLeads();
-                  }
-                }}
-              >
-                <MenuItem value="">Все</MenuItem>
-                {ACTIVE_LEAD_STATUS_OPTIONS.map((option) => (
-                  <MenuItem key={option.value} value={option.value}>
-                    {option.label}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-          )}
-        />
+              if (!value) {
+                fetchLeads();
+              }
+            }}
+          >
+            <MenuItem value="">Все</MenuItem>
+
+            {ACTIVE_LEAD_STATUS_OPTIONS.map((option) => (
+              <MenuItem key={option.value} value={option.value}>
+                {option.label}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
       </Box>
 
       <LeadListContainer
-        filterStatus={filterStatus}
-        isLeadsEmpty={isLeadsEmpty}
+        leads={leads}
         view={view}
+        isLeadsEmpty={isLeadsEmpty}
+        filterStatus={filterStatus}
+        page={page}
+        count={count}
+        perPage={perPage}
+        isLoading={isLoading}
+        handlePageChange={handlePageChange}
       />
 
       <AddLeadForm

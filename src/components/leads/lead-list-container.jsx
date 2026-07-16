@@ -1,6 +1,3 @@
-import { useEffect } from "react";
-import { useLeadsStore } from "../../app/store/leads/leads-store";
-import { useState } from "react";
 import { VIEWS } from "../../shared/const/leads";
 import { Alert, Box, Pagination } from "@mui/material";
 import LeadCard from "./lead-card";
@@ -8,29 +5,21 @@ import LeadsTable from "./leads-table";
 import PageLoader from "../../shared/ui/loaders/page-loader";
 import LeadKanbanTable from "./lead-kanban-table";
 
-const LeadListContainer = ({ view, isLeadsEmpty, filterStatus }) => {
-  const [page, setPage] = useState(1);
-
-  const leads = useLeadsStore((state) => state.leads);
-  const count = useLeadsStore((state) => state.count);
-  const perPage = useLeadsStore((state) => state.perPage);
-  const fetchLeads = useLeadsStore((state) => state.fetchLeads);
-  const isLoading = useLeadsStore((state) => state.isLoading);
-
+const LeadListContainer = ({
+  leads,
+  view,
+  isLeadsEmpty,
+  filterStatus,
+  page,
+  count,
+  perPage,
+  isLoading,
+  handlePageChange,
+}) => {
   const PAGE_COUNT = Math.ceil(count / perPage);
   const isCardsView = view === VIEWS.cards;
   const isTableView = view === VIEWS.table;
   const isKanbanView = view === VIEWS.kanban;
-
-  const handlePageChange = (_, value) => {
-    setPage(value);
-  };
-
-  useEffect(() => {
-    fetchLeads({
-      page: page,
-    });
-  }, [page]);
 
   if (isLoading) return <PageLoader />;
 

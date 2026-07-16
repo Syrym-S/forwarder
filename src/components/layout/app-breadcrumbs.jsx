@@ -21,9 +21,20 @@ export default function AppBreadcrumbs() {
             alignItems: "center",
             gap: 0.5,
             cursor: "pointer",
+            fontSize: {
+              xs: 13,
+              sm: 16,
+            },
           }}
         >
-          <ArrowBackIosNewRoundedIcon sx={{ fontSize: 16 }} />
+          <ArrowBackIosNewRoundedIcon
+            sx={{
+              fontSize: {
+                xs: 13,
+                sm: 16,
+              },
+            }}
+          />
           Назад
         </Link>
       )}
@@ -37,13 +48,29 @@ export default function AppBreadcrumbs() {
             : match.handle.breadcrumb;
 
         return last ? (
-          <Typography key={match.pathname}>{label}</Typography>
+          <Typography
+            key={match.pathname}
+            sx={{
+              fontSize: {
+                xs: 13,
+                sm: 16,
+              },
+            }}
+          >
+            {label}
+          </Typography>
         ) : (
           <Link
             key={match.pathname}
             component={RouterLink}
             to={match.pathname}
-            underline="hover"
+            sx={{
+              fontSize: {
+                xs: 13,
+                sm: 16,
+              },
+            }}
+            underline="none"
           >
             {label}
           </Link>

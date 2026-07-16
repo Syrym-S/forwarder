@@ -6,7 +6,6 @@ import ArrowBackIosNewRoundedIcon from "@mui/icons-material/ArrowBackIosNewRound
 import { Link, useLocation } from "react-router-dom";
 import { usePageRoutesStore } from "../../app/store/page-routes/use-page-routes-store";
 import AppBreadcrumbs from "./app-breadcrumbs";
-// import { renderRouteName } from "../../shared/helpers/render-route-name";
 
 const RootLayout = ({
   data = null,
@@ -14,14 +13,8 @@ const RootLayout = ({
   children,
   ...props
 }) => {
-  // const navigate = useNavigate();
   const { pathname } = useLocation();
 
-  // const currentPath =
-  //   usePageRoutesStore((state) => state.currentPath) ??
-  //   pathname.replace("/", "");
-
-  // const prevPath = usePageRoutesStore((state) => state.prevPath);
   const setPath = usePageRoutesStore((state) => state.setPath);
 
   useEffect(() => {
@@ -70,42 +63,6 @@ const RootLayout = ({
     >
       <Box sx={{ mb: 3, display: "flex", alignItems: "center", gap: 1 }}>
         <AppBreadcrumbs />
-        {/* <Box
-          onClick={() => navigate(-1)}
-          underline="none"
-          color="inherit"
-          sx={{
-            with: "50%",
-            textDecoration: "none",
-            cursor: "pointer",
-            transition: "color 0.2s ease",
-          }}
-        >
-          <Breadcrumbs
-            separator="/"
-            sx={{
-              "& .MuiBreadcrumbs-ol": {
-                flexWrap: "nowrap",
-                alignItems: "center",
-                fontWeightL: "500",
-                color: "#1a1a1a",
-                "&:hover": {
-                  color: "#515151",
-                  textDecoration: "none",
-                },
-              },
-            }}
-          >
-            {prevPath && (
-              <Typography variant="body2" color="inherit">
-                {renderRouteName(prevPath)}
-              </Typography>
-            )}
-            <Typography variant="body2" color="inherit">
-              {renderRouteName(currentPath)}
-            </Typography>
-          </Breadcrumbs>
-        </Box> */}
       </Box>
       {children}
     </Box>

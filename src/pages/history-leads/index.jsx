@@ -21,6 +21,7 @@ import ViewTabs from "../../shared/ui/view-tabs";
 import PageLoader from "../../shared/ui/loaders/page-loader";
 import { HISTORY_LEAD_STATUS_OPTIONS } from "../../shared/const/tenders";
 import { Controller, useForm } from "react-hook-form";
+import LeadListContainer from "../../components/leads/lead-list-container";
 
 const HistoryLeads = () => {
   const [filterStatus, setFilterStatus] = useState(null);
@@ -40,6 +41,7 @@ const HistoryLeads = () => {
     (state) => state.filterHistoryLeadsByStatus,
   );
 
+  const isLeadsEmpty = historyLeads?.length === 0;
   const isCardsView = view === VIEWS.cards;
   const PAGE_COUNT = Math.ceil(count / perPage);
 
@@ -65,15 +67,8 @@ const HistoryLeads = () => {
     }
   }, [filterStatus, filterHistoryLeadsByStatus]);
 
-  if (isLoading)
-    return (
-      <RootLayout withoutDataCheck>
-        <PageLoader />
-      </RootLayout>
-    );
-
   return (
-    <RootLayout isLoading={isLoading} withoutDataCheck>
+    <RootLayout withoutDataCheck>
       <Box
         sx={{
           display: "flex",
@@ -143,38 +138,16 @@ const HistoryLeads = () => {
         />
       </Box>
 
-      {isCardsView && (
-        <Box
-          sx={{
-            display: "grid",
-            gap: 5,
-            my: "10px",
-            mx: "auto",
-            width: {
-              xs: "100%",
-              sm: "60%",
-            },
-            gridTemplateColumns: "1fr",
-          }}
-        >
-          {historyLeads.map((lead) => (
-            <LeadCard key={lead.id} lead={lead} />
-          ))}
-        </Box>
-      )}
-
-      {!isCardsView && <LeadsTable leads={historyLeads} />}
-
-      <Pagination
+      <LeadListContainer
+        leads={historyLeads}
+        view={view}
+        isLeadsEmpty={isLeadsEmpty}
+        filterStatus={filterStatus}
         page={page}
-        count={PAGE_COUNT}
-        onChange={handlePageChange}
-        color="primary"
-        shape="rounded"
-        sx={{
-          width: "fit-content",
-          mx: "auto",
-        }}
+        count={count}
+        perPage={perPage}
+        isLoading={isLoading}
+        handlePageChange={handlePageChange}
       />
     </RootLayout>
   );
