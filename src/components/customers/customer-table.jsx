@@ -5,10 +5,8 @@ import useCustomersColumns from "../../shared/hooks/customers/use-customers-colu
 const CustomersTable = (customers) => {
   const columns = useCustomersColumns(customers);
 
-  console.log(customers);
-
   return (
-    <Paper sx={{ height: "70vh", my: "10px" }}>
+    <Paper sx={{ my: "10px" }}>
       <DataGrid
         rows={customers.customers}
         getRowId={(row) => row.id}

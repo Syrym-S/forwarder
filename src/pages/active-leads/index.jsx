@@ -123,6 +123,7 @@ const ActiveLeads = () => {
               xs: "100%",
               sm: 300,
             },
+            zIndex: 0,
           }}
         >
           <InputLabel>Статус</InputLabel>

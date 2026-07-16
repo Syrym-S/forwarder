@@ -7,7 +7,7 @@ const FactoringTable = ({ factorings }) => {
   const columns = useFactoringColumns(factorings);
 
   return (
-    <Paper sx={{ height: "70vh", my: "10px" }}>
+    <Paper sx={{ my: "10px" }}>
       <DataGrid
         rows={factorings}
         getRowId={(row) => row.index}

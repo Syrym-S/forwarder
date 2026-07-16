@@ -24,11 +24,17 @@ const useDriversColumns = () => {
       headerName: "ИИН",
       width: 200,
     },
-    { field: "company_name", headerName: "Компания", width: 200 },
+    {
+      field: "company_name",
+      headerName: "Компания",
+      width: 200,
+      renderCell: ({ row }) => <>{row?.company_name || "Не указан"}</>,
+    },
     {
       field: "legal_address",
       headerName: "Адресс",
       width: 200,
+      renderCell: ({ row }) => <>{row?.legal_address || "Не указан"}</>,
     },
   ];
 

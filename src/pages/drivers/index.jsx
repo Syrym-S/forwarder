@@ -104,6 +104,10 @@ const Drivers = () => {
             sm: isCardsView ? "60%" : "100%",
           },
           display: "flex",
+          flexDirection: {
+            xs: "column",
+            sm: "row",
+          },
           gap: 3,
           justifyContent: "space-between",
         }}
@@ -124,11 +128,17 @@ const Drivers = () => {
           sx={{
             display: "block",
             my: 1,
-            width: "300px",
+            width: {
+              xs: "100%",
+              sm: "300px",
+            },
             borderRadius: "50px",
+            zIndex: 0,
           }}
         />
       </Box>
+
+      {!isCardsView && <DriversTable drivers={drivers} />}
 
       <Box
         sx={{
@@ -160,8 +170,6 @@ const Drivers = () => {
             clearInviteLink={clearInviteLink}
           />
         )}
-
-        {!isCardsView && <DriversTable drivers={drivers} />}
 
         {isEmpty && <>{isLoading ? <PageLoader /> : <EmptyListUI />}</>}
 

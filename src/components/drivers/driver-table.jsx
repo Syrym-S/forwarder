@@ -6,13 +6,13 @@ const DriversTable = (drivers) => {
   const columns = useDriversColumns(drivers);
 
   return (
-    <Paper sx={{ height: "70vh", width: "90%", my: "10px" }}>
+    <Paper sx={{ my: "10px" }}>
       <DataGrid
         rows={drivers.drivers}
         getRowId={(row) => row.id}
         columns={columns}
         checkboxSelection
-        sx={{ border: 0, overflowX: "scroll" }}
+        sx={{ border: 0 }}
       />
     </Paper>
   );

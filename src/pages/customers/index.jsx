@@ -121,6 +121,10 @@ const Customers = () => {
             sm: isCardsView ? "60%" : "100%",
           },
           display: "flex",
+          flexDirection: {
+            xs: "column",
+            sm: "row",
+          },
           gap: 3,
           justifyContent: "space-between",
         }}
@@ -151,48 +155,16 @@ const Customers = () => {
           sx={{
             display: "block",
             my: 1,
-            width: "300px",
+            width: {
+              xs: "100%",
+              sm: "300px",
+            },
             borderRadius: "50px",
+            zIndex: 0,
           }}
         />
       </Box>
-
-      {/* <Stack
-        sx={{
-          width: {
-            xs: "100%",
-            sm: isCardsView ? "60%" : "100%",
-          },
-          mx: "auto",
-        }}
-      >
-        {searchRequest && (
-          <Box
-            sx={{
-              display: "flex",
-              gap: 1,
-            }}
-          >
-            <Typography
-              component="span"
-              sx={{
-                fontWeight: "600",
-              }}
-            >
-              Результат по поиску:
-            </Typography>
-            <Typography
-              component="span"
-              sx={{
-                fontWeight: "300",
-                fontStyle: "italic",
-              }}
-            >
-              {searchRequest}
-            </Typography>
-          </Box>
-        )}
-      </Stack> */}
+      {!isCardsView && <CustomersTable customers={customers} />}
 
       <Box
         sx={{
@@ -215,8 +187,6 @@ const Customers = () => {
               />
             </>
           ))}
-
-        {!isCardsView && <CustomersTable customers={customers} />}
 
         {isEmpty && <>{isLoading ? <PageLoader /> : <EmptyListUI />}</>}
 
