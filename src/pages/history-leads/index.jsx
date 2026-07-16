@@ -37,9 +37,6 @@ const HistoryLeads = () => {
   const perPage = useLeadsStore((state) => state.history_perPage);
   const getHistoryLeads = useLeadsStore((state) => state.getHistoryLeads);
   const isLoading = useLeadsStore((state) => state.isLoading);
-  const filterHistoryLeadsByStatus = useLeadsStore(
-    (state) => state.filterHistoryLeadsByStatus,
-  );
 
   const isLeadsEmpty = historyLeads?.length === 0;
   const isCardsView = view === VIEWS.cards;
@@ -52,20 +49,13 @@ const HistoryLeads = () => {
   useEffect(() => {
     getHistoryLeads({
       page: page,
+      filterStatus: filterStatus,
     });
-  }, [page]);
+  }, [page, filterStatus, getHistoryLeads]);
 
   useEffect(() => {
     clearCurrentLead();
   }, []);
-
-  useEffect(() => {
-    if (filterStatus) {
-      filterHistoryLeadsByStatus({
-        status: filterStatus.value,
-      });
-    }
-  }, [filterStatus, filterHistoryLeadsByStatus]);
 
   return (
     <RootLayout withoutDataCheck>

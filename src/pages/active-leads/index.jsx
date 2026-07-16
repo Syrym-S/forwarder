@@ -42,9 +42,6 @@ const ActiveLeads = () => {
   const newNotification = useNotificationsStore(
     (state) => state.newNotification,
   );
-  const filterActiveLeadsByStatus = useLeadsStore(
-    (state) => state.filterActiveLeadsByStatus,
-  );
   const count = useLeadsStore((state) => state.count);
   const perPage = useLeadsStore((state) => state.perPage);
   const isLoading = useLeadsStore((state) => state.isLoading);
@@ -64,7 +61,6 @@ const ActiveLeads = () => {
 
   const handlePageChange = (_, value) => {
     setPage(value);
-    setFilterStatus(null);
   };
 
   useEffect(() => {
@@ -75,21 +71,14 @@ const ActiveLeads = () => {
     if (notification_type === NOTIFICATION_TYPE.lead) {
       fetchLeads();
     }
-  }, [newNotification]);
-
-  useEffect(() => {
-    if (filterStatus) {
-      filterActiveLeadsByStatus({
-        status: filterStatus.value,
-      });
-    }
-  }, [filterStatus, filterActiveLeadsByStatus]);
+  }, [newNotification, notification_type, fetchLeads]);
 
   useEffect(() => {
     fetchLeads({
       page: page,
+      status: filterStatus,
     });
-  }, [page]);
+  }, [page, filterStatus, fetchLeads]);
 
   return (
     <RootLayout withoutDataCheck>
