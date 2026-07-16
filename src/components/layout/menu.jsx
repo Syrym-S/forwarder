@@ -19,6 +19,7 @@ const menuItems = [
     sub_items: [
       { id: 1, path: "/account", lable: "Account" },
       { id: 2, path: "/factorings", lable: "Факторинги" },
+      { id: 1, path: "/factor", lable: "Фактор" },
     ],
   },
   {

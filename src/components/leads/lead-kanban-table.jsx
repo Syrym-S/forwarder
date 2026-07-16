@@ -56,7 +56,6 @@ const LeadKanbanTable = ({ leads }) => {
           sx={{
             width: 400,
             minWidth: 400,
-            bgcolor: "#f7f8fa",
             borderRadius: 3,
             display: "flex",
             flexDirection: "column",
@@ -77,12 +76,16 @@ const LeadKanbanTable = ({ leads }) => {
                 border: "1px solid #bfbcbc",
                 width: "100%",
                 p: 2,
+                m: 1,
+                borderRadius: 3,
               }}
             >
               <Typography fontWeight={700}>{column.title}</Typography>
               <Chip
                 label={column.items.length}
                 size="small"
+                color="primary"
+                variant="outlined"
                 sx={{
                   fontWeight: 700,
                 }}

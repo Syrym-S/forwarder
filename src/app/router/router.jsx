@@ -17,6 +17,7 @@ import ReProfile from "../../pages/re-profile";
 import { createBrowserRouter } from "react-router-dom";
 import { isStaging } from "../client";
 import AppContentContainer from "./app-content-container";
+import Factor from "../../pages/factor";
 
 export const router = createBrowserRouter(
   [
@@ -121,6 +122,13 @@ export const router = createBrowserRouter(
           element: <TenderForwardersItem />,
           handle: {
             breadcrumb: ({ params }) => `Тендер / ${params.id}`,
+          },
+        },
+        {
+          path: "/factor",
+          element: <Factor />,
+          handle: {
+            breadcrumb: "Фактор",
           },
         },
       ],

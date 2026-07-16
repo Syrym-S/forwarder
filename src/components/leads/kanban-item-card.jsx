@@ -19,6 +19,7 @@ function KanbanCard({ item }) {
     <Box
       onClick={navigateToLeadItem}
       sx={{
+        m: 1,
         mb: 2,
         borderRadius: 3,
         border: "1px solid",
