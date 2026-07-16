@@ -12,6 +12,7 @@ import {
   TextField,
 } from "@mui/material";
 import { useDriverStore } from "../../app/store/drivers/driver-store";
+import { prepareDriverData } from "../../shared/helpers/prepare-driver-data";
 
 const defaultValues = {
   fio: "",
@@ -40,10 +41,9 @@ const AddDriverForm = ({ open, onClose }) => {
   const isIp = formValues.is_ip;
   const isForeigner = formValues.is_foreigner;
 
-  console.log(isForeigner, isIp);
-
   const submitDriverCreate = async (data) => {
-    await createDriver(data);
+    const preparedData = prepareDriverData(data);
+    await createDriver(preparedData);
 
     onClose();
   };
