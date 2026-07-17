@@ -81,29 +81,108 @@ const MakeBetBlock = ({ tender, setShowBetField }) => {
             bet.is_own && (
               <>
                 {bet.status !== STATUS.closed && (
-                  <>
-                    {bet.status !== STATUS.winning && (
-                      <Button
+                  <Box
+                    sx={{
+                      display: "flex",
+                      flexDirection: "column",
+                      width: "100%",
+                    }}
+                  >
+                    <Box
+                      sx={{
+                        display: "flex",
+                        gap: 2,
+                      }}
+                    >
+                      <Typography>
+                        Комментарий: {bet.comment === "" ? "-" : bet.comment}
+                      </Typography>
+                    </Box>
+
+                    <Box
+                      sx={{
+                        width: "100%",
+                        display: "grid",
+                        gridTemplateColumns: "1fr 1fr",
+                        gap: 1,
+                      }}
+                    >
+                      <Box
                         sx={{
-                          fontSize: {
-                            xs: "0.7rem",
-                            sm: "0.9rem",
-                          },
+                          border: "1px solid",
+                          borderColor: "divider",
+                          p: 2,
+                          borderRadius: 3,
                         }}
-                        variant={"outlined"}
-                        color={"error"}
-                        onClick={handleOpenCancelModal}
                       >
-                        {"Отменить ставку"}
-                      </Button>
-                    )}
+                        <Typography
+                          sx={{
+                            fontSize: "0.7rem",
+                          }}
+                        >
+                          Cумма
+                        </Typography>
+
+                        <Typography
+                          sx={{
+                            fontSize: "1.1rem",
+                            color: "#42a5f5",
+                          }}
+                        >
+                          {bet.amount} {bet.currency}
+                        </Typography>
+                      </Box>
+                      <Box
+                        sx={{
+                          border: "1px solid",
+                          borderColor: "divider",
+                          p: 2,
+                          borderRadius: 3,
+                        }}
+                      >
+                        <Typography
+                          sx={{
+                            fontSize: "0.7rem",
+                          }}
+                        >
+                          Cтатус
+                        </Typography>
+
+                        <Typography
+                          sx={{
+                            fontSize: "1.1rem",
+                          }}
+                        >
+                          {bet.status}
+                        </Typography>
+                      </Box>
+                      {bet.status !== STATUS.winning && (
+                        <Button
+                          sx={{
+                            fontSize: {
+                              xs: "0.7rem",
+                              sm: "0.9rem",
+                            },
+                            gridColumn: 2,
+                            borderRadius: 3,
+                          }}
+                          variant={"outlined"}
+                          color={"error"}
+                          onClick={handleOpenCancelModal}
+                        >
+                          {"Отменить ставку"}
+                        </Button>
+                      )}
+                    </Box>
+
                     <CancelBetModal
                       bet={bet}
                       confirmCancel={() => handleCancelBet(index)}
                       openCancelModal={openCancelModal}
                       handleCloseCancelModal={handleCloseCancelModal}
                     />
-                    <TextField
+
+                    {/* <TextField
                       label={
                         bet.status === STATUS.winning
                           ? "Ваша ставка победила"
@@ -136,8 +215,8 @@ const MakeBetBlock = ({ tender, setShowBetField }) => {
                       color={
                         bet.status === STATUS.winning ? "success" : "primary"
                       }
-                    />
-                  </>
+                    /> */}
+                  </Box>
                 )}
               </>
             ),

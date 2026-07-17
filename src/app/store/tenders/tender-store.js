@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import {
+  acceptBetApi,
   addParticipantApi,
   cancelBetApi,
   cancelTenderApi,
@@ -171,6 +172,20 @@ export const useTendersStore = create((set) => ({
     try {
       set({ isLoading: true });
       const data = await deleteParticipantApi(tender_id, participant_id);
+
+      set({ isLoading: false });
+
+      return data;
+    } catch (e) {
+      set({ isLoading: false });
+
+      console.log(e);
+    }
+  },
+  acceptBet: async (tender_id, bet_index) => {
+    try {
+      set({ isLoading: true });
+      const data = await acceptBetApi(tender_id, bet_index);
 
       set({ isLoading: false });
 

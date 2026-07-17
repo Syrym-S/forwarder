@@ -104,7 +104,7 @@ export const router = createBrowserRouter(
           },
         },
         {
-          path: "/tender-applications/:id",
+          path: "/tenders/:id", /// Линк с нотификации приходит так
           element: <TenderApplicationsItem />,
           handle: {
             breadcrumb: ({ params }) => `Тендерная заявка / ${params.id}`,
@@ -118,7 +118,7 @@ export const router = createBrowserRouter(
           },
         },
         {
-          path: "/tender-forwarders/:id",
+          path: "/tenders-driver/:id", /// Линк с нотификации приходит так
           element: <TenderForwardersItem />,
           handle: {
             breadcrumb: ({ params }) => `Тендер / ${params.id}`,

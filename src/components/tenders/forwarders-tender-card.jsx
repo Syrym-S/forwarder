@@ -12,7 +12,7 @@ const ForwardersTenderCard = ({ tender }) => {
   const navigate = useNavigate();
 
   const navigateToDetailPage = () => {
-    navigate(`/tender-forwarders/${tender.id}`);
+    navigate(`/tenders-driver/${tender.id}`);
   };
 
   return (

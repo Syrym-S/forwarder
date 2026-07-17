@@ -2,6 +2,9 @@ import {
   Autocomplete,
   Box,
   Button,
+  Dialog,
+  DialogContent,
+  DialogTitle,
   Stack,
   TextField,
   Typography,
@@ -15,7 +18,8 @@ import ParticipantCard from "./participant-card";
 import { useDriverStore } from "../../app/store/drivers/driver-store";
 
 const TenderParticipants = ({ tender }) => {
-  const [selectedDriver, setSelectedDriver] = useState({});
+  const [openConfirm, setOpenConfirm] = useState(false);
+  const [selectedDriver, setSelectedDriver] = useState(null);
   const [showParticipantField, setShowParticipantField] = useState(false);
 
   const drivers = useDriverStore((state) => state.drivers);
@@ -33,6 +37,14 @@ const TenderParticipants = ({ tender }) => {
   const handleAddParticipant = async () => {
     await addParticipant(tender.id, { participant_id: selectedDriver.id });
     await getTenderDetails(tender.id);
+  };
+
+  const handleOpenConfirmModal = async () => {
+    setOpenConfirm(true);
+  };
+
+  const handleCloseConfirmModal = async () => {
+    setOpenConfirm(false);
   };
 
   const onDriverChange = (_, value) => {
@@ -122,12 +134,12 @@ const TenderParticipants = ({ tender }) => {
             }}
           >
             <Button
-              disabled={isAddingLoading}
+              disabled={!selectedDriver}
               variant="contained"
               color="primary"
-              onClick={handleAddParticipant}
+              onClick={handleOpenConfirmModal}
             >
-              {isAddingLoading ? "...Добавление" : "Добавить"}
+              Добавить
             </Button>
             <Button
               disabled={isAddingLoading}
@@ -138,6 +150,33 @@ const TenderParticipants = ({ tender }) => {
               Отмена
             </Button>
           </Box>
+
+          <Dialog open={openConfirm} onClose={handleCloseConfirmModal}>
+            <DialogTitle>Добавление участника запустит тендер</DialogTitle>
+            <DialogContent
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+              }}
+            >
+              <Button
+                disabled={isAddingLoading}
+                variant="contained"
+                color="primary"
+                onClick={handleAddParticipant}
+              >
+                {isAddingLoading ? "...Добавление" : "Добавить"}
+              </Button>
+              <Button
+                disabled={isAddingLoading}
+                variant="outlined"
+                color="error"
+                onClick={handleCloseConfirmModal}
+              >
+                Отмена
+              </Button>
+            </DialogContent>
+          </Dialog>
         </Stack>
       )}
       {isEmpty && <>Список пустой</>}

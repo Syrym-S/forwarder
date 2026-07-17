@@ -95,3 +95,12 @@ export const cancelBetApi = async (tender_id, bet_index) => {
 
   return data;
 };
+
+export const acceptBetApi = async (tender_id, bet_index) => {
+  const data = await api.post(
+    `forwarder/v1/tender/${tender_id}/bet/${bet_index}/win`,
+    null,
+  );
+
+  return data;
+};

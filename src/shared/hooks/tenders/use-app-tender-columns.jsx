@@ -10,7 +10,7 @@ const useAppTenederColumns = () => {
       width: 200,
       renderCell: ({ row }) => (
         <NavLink
-          to={`/tender-applications/${row.id}`}
+          to={`/tenders/${row.id}`}
           style={{
             textDecoration: "none",
           }}

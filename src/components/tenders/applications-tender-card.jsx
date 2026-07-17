@@ -17,7 +17,7 @@ const ApplicationsTenderCard = ({ tender }) => {
   const navigate = useNavigate();
 
   const navigateToDetailPage = () => {
-    navigate(`/tender-applications/${tender.id}`);
+    navigate(`/tenders/${tender.id}`);
   };
 
   return (

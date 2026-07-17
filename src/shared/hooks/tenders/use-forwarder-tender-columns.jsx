@@ -10,7 +10,7 @@ const useForwarderTenderColumns = () => {
       width: 200,
       renderCell: ({ row }) => (
         <NavLink
-          to={`/tender-forwarders/${row.id}`}
+          to={`/tenders-driver/${row.id}`}
           style={{
             textDecoration: "none",
           }}
