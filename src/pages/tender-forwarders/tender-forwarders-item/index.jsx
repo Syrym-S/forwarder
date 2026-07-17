@@ -18,7 +18,6 @@ import {
 import LeadMap from "../../../components/leads/lead-map";
 import Section from "../../../shared/ui/section";
 import InfoField from "../../../shared/ui/info-field";
-import Loader from "../../../components/layout/loader";
 import TenderForm from "../../../features/tenders/tender-form";
 import RenderStatus from "../../../shared/ui/render-status";
 import TenderParticipants from "../../../components/tenders/tender-participants";
@@ -31,6 +30,7 @@ import { useTenderDefaultValues } from "../../../shared/hooks/tender/use-tender-
 import { STATUS } from "../../../shared/const/tenders";
 import TenderBets from "../../../components/tenders/tender-bets";
 import PageLoader from "../../../shared/ui/loaders/page-loader";
+import { useNotificationsStore } from "../../../app/store/notifications/noti-store";
 
 const TenderForwardersItem = () => {
   const { id } = useParams();
@@ -38,11 +38,13 @@ const TenderForwardersItem = () => {
 
   const [openForm, setOpenForm] = useState(false);
 
+  const newNotification = useNotificationsStore(
+    (state) => state.newNotification,
+  );
   const currentTender = useTendersStore((state) => state.currentTender);
   const isLoadingCurrentTenderLoading = useTendersStore(
     (state) => state.isLoadingCurrentTenderLoading,
   );
-
   const getTenderDetails = useTendersStore((state) => state.getTenderDetails);
   const deleteTender = useTendersStore((state) => state.deleteTender);
   const startTender = useTendersStore((state) => state.startTender);
@@ -87,7 +89,7 @@ const TenderForwardersItem = () => {
 
   useEffect(() => {
     getTenderDetails(id);
-  }, [id]);
+  }, [id, getTenderDetails, newNotification]);
 
   if (!currentTender || isLoadingCurrentTenderLoading)
     return (
@@ -114,12 +116,14 @@ const TenderForwardersItem = () => {
         <LeadMap from={from} to={to} id={currentTender?.lead?.id} />
       </Box>
 
-      <TenderForm
-        isEdit
-        openForm={openForm}
-        handleCloseForm={handleCloseForm}
-        defaultValues={defaultValues}
-      />
+      {openForm && (
+        <TenderForm
+          isEdit
+          openForm={openForm}
+          handleCloseForm={handleCloseForm}
+          defaultValues={defaultValues}
+        />
+      )}
 
       <TransportationInfo tender={currentTender} />
 

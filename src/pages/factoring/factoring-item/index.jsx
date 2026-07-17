@@ -20,6 +20,7 @@ import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined
 import FactorDataTable from "../../../components/factoring/factor-data-table";
 import RememberMeOutlinedIcon from "@mui/icons-material/RememberMeOutlined";
 import PageLoader from "../../../shared/ui/loaders/page-loader";
+import FactoringVerifications from "../../../components/factoring/factoring-verifications";
 
 const FactoringItem = () => {
   const { id } = useParams();
@@ -97,6 +98,8 @@ const FactoringItem = () => {
         customer={factoringDetails?.customer}
         verified_customer={factoringDetails?.verified_customer}
       />
+
+      <FactoringVerifications factoring={factoringDetails} />
 
       <Box
         sx={{

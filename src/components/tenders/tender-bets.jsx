@@ -6,7 +6,7 @@ import { BetCard } from "./bet-card";
 import { STATUS } from "../../shared/const/tenders";
 
 const TenderBets = ({ tender }) => {
-  const bets = tender?.bets || [];
+  const bets = tender?.bets?.filter((bet) => bet.status !== "closed") || [];
   const isEmpty = bets.length === 0;
   const isClosed = tender.status === STATUS.closed;
   const winningBet = tender?.bets?.find((bet) => bet.status === "winning");

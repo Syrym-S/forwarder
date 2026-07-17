@@ -22,7 +22,6 @@ import {
 import LeadMap from "../../../components/leads/lead-map";
 import Section from "../../../shared/ui/section";
 import InfoField from "../../../shared/ui/info-field";
-import Loader from "../../../components/layout/loader";
 import TenderForm from "../../../features/tenders/tender-form";
 import RenderStatus from "../../../shared/ui/render-status";
 import TenderParticipants from "../../../components/tenders/tender-participants";
@@ -31,7 +30,6 @@ import TenderInfo from "../../../components/tenders/tender-info";
 import TransportationInfo from "../../../components/tenders/transportation-info";
 import TenderDetailsHeading from "../../../components/tenders/tender-details-heading";
 import { LeadDocumentCard } from "../../../components/leads/documents/LeadDocumentCard";
-import { useTenderDefaultValues } from "../../../shared/hooks/tender/use-tender-default-values";
 import { STATUS } from "../../../shared/const/tenders";
 import TenderBets from "../../../components/tenders/tender-bets";
 import MakeBetForm from "../../../features/tenders/make-bet-form";
@@ -42,7 +40,6 @@ import PageLoader from "../../../shared/ui/loaders/page-loader";
 const TenderApplicationsItem = () => {
   const { id } = useParams();
 
-  const [openForm, setOpenForm] = useState(false);
   const [showBetField, setShowBetField] = useState();
 
   const customerCurrentTender = useTendersStore(
@@ -52,8 +49,6 @@ const TenderApplicationsItem = () => {
   const getCustomerTenderDetails = useTendersStore(
     (state) => state.getCustomerTenderDetails,
   );
-
-  const defaultValues = useTenderDefaultValues(customerCurrentTender);
 
   const from = {
     lat: customerCurrentTender?.lead?.from_location.lat,
@@ -66,14 +61,6 @@ const TenderApplicationsItem = () => {
 
   const handleHideBetField = () => {
     setShowBetField(false);
-  };
-
-  const handleCloseForm = () => {
-    setOpenForm(false);
-  };
-
-  const handleOpenForm = () => {
-    setOpenForm(true);
   };
 
   useEffect(() => {
@@ -89,11 +76,7 @@ const TenderApplicationsItem = () => {
 
   return (
     <RootLayout withoutDataCheck>
-      <TenderDetailsHeading
-        tender={customerCurrentTender}
-        handleOpenForm={handleOpenForm}
-        isCustomerTender
-      />
+      <TenderDetailsHeading tender={customerCurrentTender} isCustomerTender />
 
       <Box
         sx={{
@@ -105,13 +88,6 @@ const TenderApplicationsItem = () => {
       >
         <LeadMap from={from} to={to} id={customerCurrentTender?.lead?.id} />
       </Box>
-
-      <TenderForm
-        isEdit
-        openForm={openForm}
-        handleCloseForm={handleCloseForm}
-        defaultValues={defaultValues}
-      />
 
       <TransportationInfo tender={customerCurrentTender} />
 
