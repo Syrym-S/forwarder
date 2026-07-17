@@ -13,6 +13,7 @@ export const STATUS = {
   closed: "closed",
   verified_participant: "verified_participant",
   await_paid: "await_paid",
+  winning: "winning",
 };
 
 export const LEAD_STATUS_OPTIONS = [

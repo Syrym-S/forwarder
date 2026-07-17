@@ -104,7 +104,7 @@ export const router = createBrowserRouter(
           },
         },
         {
-          path: "/tenders/:id",
+          path: "/tender-applications/:id",
           element: <TenderApplicationsItem />,
           handle: {
             breadcrumb: ({ params }) => `Тендерная заявка / ${params.id}`,

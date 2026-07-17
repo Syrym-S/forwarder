@@ -12,6 +12,7 @@ import Section from "../../shared/ui/section";
 import CancelledBets from "./cancelled-bets";
 import PaidOutlinedIcon from "@mui/icons-material/PaidOutlined";
 import CancelBetModal from "../../features/tenders/confirm-actions/cancel-bet-modal";
+import { STATUS } from "../../shared/const/tenders";
 
 const MakeBetBlock = ({ tender, setShowBetField }) => {
   const [openCancelModal, setOpenCancelModal] = useState(false);
@@ -79,22 +80,23 @@ const MakeBetBlock = ({ tender, setShowBetField }) => {
           (bet, index) =>
             bet.is_own && (
               <>
-                {bet.status !== "closed" && (
+                {bet.status !== STATUS.closed && (
                   <>
-                    {" "}
-                    <Button
-                      sx={{
-                        fontSize: {
-                          xs: "0.7rem",
-                          sm: "0.9rem",
-                        },
-                      }}
-                      variant={"outlined"}
-                      color={"error"}
-                      onClick={handleOpenCancelModal}
-                    >
-                      {"Отменить ставку"}
-                    </Button>
+                    {bet.status !== STATUS.winning && (
+                      <Button
+                        sx={{
+                          fontSize: {
+                            xs: "0.7rem",
+                            sm: "0.9rem",
+                          },
+                        }}
+                        variant={"outlined"}
+                        color={"error"}
+                        onClick={handleOpenCancelModal}
+                      >
+                        {"Отменить ставку"}
+                      </Button>
+                    )}
                     <CancelBetModal
                       bet={bet}
                       confirmCancel={() => handleCancelBet(index)}
@@ -102,7 +104,11 @@ const MakeBetBlock = ({ tender, setShowBetField }) => {
                       handleCloseCancelModal={handleCloseCancelModal}
                     />
                     <TextField
-                      label="Текущая ставка"
+                      label={
+                        bet.status === STATUS.winning
+                          ? "Ваша ставка победила"
+                          : "Текущая ставка"
+                      }
                       value={`${bet.amount} ${bet.currency}`}
                       InputProps={{
                         readOnly: true,
@@ -127,7 +133,9 @@ const MakeBetBlock = ({ tender, setShowBetField }) => {
                         },
                       }}
                       size="sm"
-                      color="success"
+                      color={
+                        bet.status === STATUS.winning ? "success" : "primary"
+                      }
                     />
                   </>
                 )}
