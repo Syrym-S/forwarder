@@ -3,13 +3,13 @@ import RenderStatus from "../../shared/ui/render-status";
 import { useTendersStore } from "../../app/store/tenders/tender-store";
 import { STATUS } from "../../shared/const/tenders";
 
-export const BetCard = ({ tender, bet, index }) => {
+export const BetCard = ({ tender, bet }) => {
   const acceptBet = useTendersStore((state) => state.acceptBet);
   const getTenderDetails = useTendersStore((state) => state.getTenderDetails);
   const isWinning = bet.status === "winning";
 
   const handleAcceptBet = () => {
-    acceptBet(tender.id, index);
+    acceptBet(tender.id, bet.index);
     getTenderDetails(tender.id);
   };
 

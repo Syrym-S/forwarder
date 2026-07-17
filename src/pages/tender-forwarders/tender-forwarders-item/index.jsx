@@ -31,6 +31,7 @@ import { STATUS } from "../../../shared/const/tenders";
 import TenderBets from "../../../components/tenders/tender-bets";
 import PageLoader from "../../../shared/ui/loaders/page-loader";
 import { useNotificationsStore } from "../../../app/store/notifications/noti-store";
+import { parserNotificationType } from "../../../shared/helpers/notifications/parse-notification-type";
 
 const TenderForwardersItem = () => {
   const { id } = useParams();
@@ -52,9 +53,15 @@ const TenderForwardersItem = () => {
 
   const defaultValues = useTenderDefaultValues(currentTender);
 
+  const isClosed = currentTender?.status === STATUS.closed;
   const isCanceled = currentTender?.status === STATUS.cancelled;
   const isNew = currentTender?.status === STATUS.new;
 
+  const hasWinner = !!currentTender?.bets?.find(
+    (bet) => bet.status === "winning",
+  );
+
+  const { action } = parserNotificationType(newNotification?.type || "");
   const from = {
     lat: currentTender?.lead?.from_location.lat,
     lon: currentTender?.lead?.from_location.lon,
@@ -88,8 +95,17 @@ const TenderForwardersItem = () => {
   };
 
   useEffect(() => {
+    if (
+      action === "bet_added_by_driver" ||
+      action === "bet_cancelled_by_driver"
+    ) {
+      getTenderDetails(id);
+    }
+  }, [newNotification]);
+
+  useEffect(() => {
     getTenderDetails(id);
-  }, [id, getTenderDetails, newNotification]);
+  }, []);
 
   if (!currentTender || isLoadingCurrentTenderLoading)
     return (
@@ -169,20 +185,23 @@ const TenderForwardersItem = () => {
             Запустить тендер
           </Button>
         )}
-        {!isCanceled && (
-          <>
-            <Button
-              onClick={handleCancelTender}
-              variant="outlined"
-              color="warning"
-            >
-              Отменить тендер
-            </Button>
-          </>
+        {!isCanceled ||
+          (!isClosed && (
+            <>
+              <Button
+                onClick={handleCancelTender}
+                variant="outlined"
+                color="warning"
+              >
+                Отменить тендер
+              </Button>
+            </>
+          ))}
+        {!hasWinner && (
+          <Button onClick={handleDeleteTender} variant="outlined" color="error">
+            Удалить тендер
+          </Button>
         )}
-        <Button onClick={handleDeleteTender} variant="outlined" color="error">
-          Удалить тендер
-        </Button>
       </Box>
     </RootLayout>
   );

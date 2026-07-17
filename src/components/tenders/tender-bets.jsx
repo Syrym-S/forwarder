@@ -32,9 +32,7 @@ const TenderBets = ({ tender }) => {
                 <BetCard bet={winningBet} tender={tender} />
               </>
             ) : (
-              bets.map((bet, index) => (
-                <BetCard bet={bet} index={index} tender={tender} />
-              ))
+              bets.map((bet) => <BetCard bet={bet} tender={tender} />)
             )}
           </>
         )}
