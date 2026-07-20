@@ -39,7 +39,7 @@ const FormHeader = ({ isEdit, activeStep, stepsCount }) => {
         </Box>
 
         <Chip
-          label={`Шаг ${activeStep + 1} из ${stepsCount}`}
+          label={`Шаг ${activeStep} из ${stepsCount}`}
           color="primary"
           variant="outlined"
           size="small"

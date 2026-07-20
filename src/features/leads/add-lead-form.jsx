@@ -19,6 +19,7 @@ import LeadFormTabs from "../../components/lead-form/lead-form-tabs";
 import { useLeadsStore } from "../../app/store/leads/leads-store";
 import { useDriverStore } from "../../app/store/drivers/driver-store";
 import { useCustomerStore } from "../../app/store/customers/customers-store";
+import NewSecondStep from "../../components/lead-form/steps/new/new-second-step";
 
 const steps = [
   { id: 1, label: "Маршрут" },
@@ -61,7 +62,7 @@ const AddLeadForm = ({
   const getDrivers = useDriverStore((state) => state.getDrivers);
 
   const [uploadedFiles, setUploadedFiles] = useState([]);
-  const [activeStep, setActiveStep] = useState(0);
+  const [activeStep, setActiveStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [resultModal, setResultModal] = useState({
     open: false,
@@ -90,7 +91,7 @@ const AddLeadForm = ({
 
   const formValues = useWatch({ control });
 
-  const isLastStep = activeStep === steps.length - 1;
+  const isLastStep = activeStep === steps.length;
 
   function getCreatedLeadId(response) {
     return (
@@ -201,7 +202,7 @@ const AddLeadForm = ({
 
   const renderContent = (step) => {
     switch (step) {
-      case 0:
+      case 1:
         return (
           <FirstStep
             control={control}
@@ -210,27 +211,27 @@ const AddLeadForm = ({
             setValue={setValue}
           />
         );
-      case 1:
+      case 2:
         return (
-          <SecondStep
+          <NewSecondStep
             control={control}
             errors={errors}
             form={formValues}
             setValue={setValue}
           />
         );
-      case 2:
+      case 3:
         return (
           <ThirdStep control={control} errors={errors} setValue={setValue} />
         );
-      case 3:
+      case 4:
         return (
           <ForthStep control={control} errors={errors} setValue={setValue} />
         );
-      case 4:
+      case 5:
         return <PriceStep control={control} />;
 
-      case 5:
+      case 6:
         return (
           <DocumentUpload
             form={formValues}
@@ -240,13 +241,13 @@ const AddLeadForm = ({
           />
         );
 
-      case 6:
+      case 7:
         return <LastStep form={formValues} />;
     }
   };
 
   function handleClose() {
-    setActiveStep(0);
+    setActiveStep(1);
     reset({
       documents: [],
       ...defaultValues,
@@ -281,14 +282,19 @@ const AddLeadForm = ({
           stepsCount={steps.length}
         />
         <DialogContent sx={{ px: 3 }}>
-          <LeadFormTabs steps={steps} activeStep={activeStep} />
+          <LeadFormTabs
+            steps={steps}
+            activeStep={activeStep}
+            setActiveStep={setActiveStep}
+            isEdit={isEdit}
+          />
 
           {renderContent(activeStep)}
 
           <FormNavButtons
             isEdit={isEdit}
-            isFirstStep={activeStep === 0}
-            isLastStep={activeStep + 1 === steps.length}
+            isFirstStep={activeStep === 1}
+            isLastStep={activeStep === steps.length}
             hasCurrentStepErrors={false}
             isSubmitting={isSubmitting}
             onClose={handleClose}

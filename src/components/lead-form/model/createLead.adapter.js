@@ -56,10 +56,11 @@ export function mapCreateLeadFormToApi(form) {
     to_city: form.to_location.city,
     to_address: form.to_location.address,
 
-    cargo_name: form.type || "Не указан",
+    name: form.name || "Не указан",
     cargo_type: form.type || "Не указан",
     currency: form.currency || "KZT",
     price: form.price || 0,
+    cargos: form.cargos || [],
   };
 
   addIfHasValue(payload, "loading_date", form.loadingDate);

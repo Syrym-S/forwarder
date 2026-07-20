@@ -25,6 +25,7 @@ export const useFormDefaultValues = (lead = null, files = []) => {
     },
     customer: lead?.customer,
     cargo_type: lead?.cargo.type || null,
+    name: lead?.cargo?.name || null,
     comment: lead?.cargo.description || "",
     weight_kg: lead?.cargo.weight_kg || null,
     length_cm: lead?.cargo.length_cm || null,
@@ -33,5 +34,24 @@ export const useFormDefaultValues = (lead = null, files = []) => {
     price: lead?.summ,
     transportation_price: lead?.transportation_price || null,
     documents: files || [],
+    cargos: lead?.cargos?.map((cargo) => ({
+      cargo_type: cargo.type || null,
+      name: cargo.name || "",
+      comment: cargo.description || "",
+      weight_kg: cargo.weight_kg || null,
+      length_cm: cargo.length_cm || null,
+      width_cm: cargo.width_cm || null,
+      height_cm: cargo.height_cm || null,
+    })) || [
+      {
+        cargo_type: null,
+        name: "",
+        comment: "",
+        weight_kg: null,
+        length_cm: null,
+        width_cm: null,
+        height_cm: null,
+      },
+    ],
   };
 };

@@ -235,7 +235,9 @@ const LeadItem = () => {
       )}
       <LeadRouteInfo leadData={leadData} />
 
-      <LeadCargoInfo leadData={leadData} />
+      {leadData?.cargos?.map((cargo) => (
+        <LeadCargoInfo cargo={cargo} />
+      ))}
 
       {filesFromDriver && (
         <CargoLoadVerification
