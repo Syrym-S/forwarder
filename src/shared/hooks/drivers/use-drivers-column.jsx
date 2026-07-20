@@ -2,12 +2,22 @@ import { Box } from "@mui/material";
 import { NavLink } from "react-router-dom";
 import RenderStatus from "../../ui/render-status";
 
-const useDriversColumns = () => {
+const useDriversColumns = (setSelectedDriver) => {
   const columns = [
     {
       field: "id",
       headerName: "ID",
       width: 200,
+      renderCell: (row) => (
+        <Box
+          sx={{
+            cursor: "pointer",
+          }}
+          onClick={() => setSelectedDriver(row.row)}
+        >
+          {row.id}
+        </Box>
+      ),
     },
     {
       field: "fio",

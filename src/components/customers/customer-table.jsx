@@ -2,13 +2,13 @@ import { DataGrid } from "@mui/x-data-grid";
 import Paper from "@mui/material/Paper";
 import useCustomersColumns from "../../shared/hooks/customers/use-customers-columns";
 
-const CustomersTable = (customers) => {
-  const columns = useCustomersColumns(customers);
+const CustomersTable = ({ customers, setSelectedCustomer }) => {
+  const columns = useCustomersColumns(setSelectedCustomer);
 
   return (
     <Paper sx={{ my: "10px" }}>
       <DataGrid
-        rows={customers.customers}
+        rows={customers}
         getRowId={(row) => row.id}
         columns={columns}
         checkboxSelection
