@@ -46,6 +46,11 @@ const useDriversColumns = (setSelectedDriver) => {
       width: 200,
       renderCell: ({ row }) => <>{row?.legal_address || "Не указан"}</>,
     },
+    {
+      field: "invite_link",
+      headerName: "Пригласительная ссылка",
+      width: 200,
+    },
   ];
 
   return columns;

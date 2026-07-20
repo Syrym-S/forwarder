@@ -20,6 +20,9 @@ const DriverListContainer = ({ view }) => {
   const getDriverDetails = useDriverStore((state) => state.getDriverDetails);
   const drivers = useDriverStore((state) => state.drivers);
   const isLoading = useDriverStore((state) => state.isLoading);
+  const clearDriverDetails = useDriverStore(
+    (state) => state.clearDriverDetails,
+  );
 
   const isCardsView = view === VIEWS.cards;
   const isEmpty = drivers?.length === 0;
@@ -28,6 +31,7 @@ const DriverListContainer = ({ view }) => {
   const handleClear = () => {
     setSelectedDriver(null);
     setSearchParams("");
+    clearDriverDetails();
   };
 
   const handlePageChange = (_, value) => {

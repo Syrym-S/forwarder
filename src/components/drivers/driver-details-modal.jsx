@@ -17,12 +17,23 @@ import Loader from "../layout/loader";
 import AirportShuttleOutlinedIcon from "@mui/icons-material/AirportShuttleOutlined";
 import HighlightOffOutlinedIcon from "@mui/icons-material/HighlightOffOutlined";
 import { useDriverStore } from "../../app/store/drivers/driver-store";
+import ModalLoader from "../../shared/ui/loaders/modal-loader";
 
 const DriverDetailsModal = ({ selectedDriver, handleClear }) => {
   const driverDetails = useDriverStore((state) => state.driverDetails);
-  const isLoading = useDriverStore((state) => state.isLoading);
+  const isDetailsLoading = useDriverStore((state) => state.isDetailsLoading);
 
-  if (!driverDetails || isLoading) return <Loader />;
+  if (!driverDetails || isDetailsLoading)
+    return (
+      <Dialog
+        open={!!selectedDriver}
+        onClose={handleClear}
+        maxWidth="md"
+        fullWidth
+      >
+        <ModalLoader />
+      </Dialog>
+    );
 
   return (
     <Dialog

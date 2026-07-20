@@ -16,12 +16,23 @@ import Loader from "../layout/loader";
 import AirportShuttleOutlinedIcon from "@mui/icons-material/AirportShuttleOutlined";
 import HighlightOffOutlinedIcon from "@mui/icons-material/HighlightOffOutlined";
 import { useCustomerStore } from "../../app/store/customers/customers-store";
+import ModalLoader from "../../shared/ui/loaders/modal-loader";
 
 const CustomerDetailsModal = ({ selectedCustomer, handleClear }) => {
   const customerDetails = useCustomerStore((state) => state.customerDetails);
-  const isLoading = useCustomerStore((state) => state.isLoading);
+  const isDetailsLoading = useCustomerStore((state) => state.isLoading);
 
-  if (!customerDetails || isLoading) return <Loader />;
+  if (!customerDetails || isDetailsLoading)
+    return (
+      <Dialog
+        open={!!selectedCustomer}
+        onClose={handleClear}
+        maxWidth="md"
+        fullWidth
+      >
+        <ModalLoader />
+      </Dialog>
+    );
 
   return (
     <Dialog

@@ -13,6 +13,9 @@ const DriversTable = ({ drivers, setSelectedDriver }) => {
         columns={columns}
         checkboxSelection
         sx={{ border: 0 }}
+        pinnedColumns={{
+          left: ["invite_link"],
+        }}
       />
     </Paper>
   );

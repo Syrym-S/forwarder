@@ -8,9 +8,13 @@ import {
 
 export const useCustomerStore = create((set) => ({
   customers: [],
+
   inviteLink: null,
   customerDetails: null,
+
   isLoading: false,
+  isDetailsLoading: false,
+
   error: null,
   count: 0,
   perPage: 1,
@@ -34,20 +38,25 @@ export const useCustomerStore = create((set) => ({
       });
     }
   },
+
+  clearCustomerDetails: () => {
+    set({ customerDetails: null });
+  },
+
   getCustomerDetails: async (customer_id) => {
     try {
-      set({ isLoading: true, error: null });
+      set({ isDetailsLoading: true, error: null });
 
       const response = await getCustomerDetailsApi(customer_id);
 
       set({
         customerDetails: response.data,
-        isLoading: false,
+        isDetailsLoading: false,
       });
     } catch (e) {
       set({
         error: e.message,
-        isLoading: false,
+        isDetailsLoading: false,
       });
     }
   },

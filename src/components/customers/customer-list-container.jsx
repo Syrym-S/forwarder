@@ -23,6 +23,9 @@ const CustomerListContainer = ({ view }) => {
   const getCustomers = useCustomerStore((state) => state.getCustomers);
   const count = useCustomerStore((state) => state.count);
   const perPage = useCustomerStore((state) => state.perPage);
+  const clearCustomerDetails = useCustomerStore(
+    (state) => state.clearCustomerDetails,
+  );
 
   const isCardsView = view === VIEWS.cards;
   const isEmpty = customers?.length === 0;
@@ -31,6 +34,7 @@ const CustomerListContainer = ({ view }) => {
   const handleClear = () => {
     setSelectedCustomer(null);
     setSearchParams("");
+    clearCustomerDetails();
   };
 
   const handlePageChange = (_, value) => {
