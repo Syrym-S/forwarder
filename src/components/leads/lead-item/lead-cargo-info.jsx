@@ -6,7 +6,13 @@ import LocalShippingOutlinedIcon from "@mui/icons-material/LocalShippingOutlined
 import RenderStatus from "../../../shared/ui/render-status";
 import { useLeadsStore } from "../../../app/store/leads/leads-store";
 
-const LeadCargoInfo = ({ cargo, leadId, index, cargosCount }) => {
+const LeadCargoInfo = ({
+  cargo,
+  leadId,
+  index,
+  cargosCount,
+  isLeadsPage = false,
+}) => {
   const isLoading = useLeadsStore((state) => state.isLoading);
   const getLeadItem = useLeadsStore((state) => state.getLeadItem);
   const deleteCargo = useLeadsStore((state) => state.deleteCargo);
@@ -45,7 +51,7 @@ const LeadCargoInfo = ({ cargo, leadId, index, cargosCount }) => {
           mb: 2,
         }}
       >
-        <InfoField label="Тип" value={cargo?.type} />
+        <InfoField label="Тип" value={cargo?.сargo_type} />
 
         <InfoField
           label="Вес"
@@ -54,7 +60,7 @@ const LeadCargoInfo = ({ cargo, leadId, index, cargosCount }) => {
       </Box>
 
       <InfoField label="Описание" value={`${cargo?.description || "--"}`} />
-      {cargosCount !== 1 && (
+      {cargosCount !== 1 && isLeadsPage && (
         <Button
           onClick={handleDeleteCargo}
           color="error"

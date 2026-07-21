@@ -55,42 +55,9 @@ const TransportationInfo = ({ tender }) => {
       </Box>
 
       <Box sx={{ py: 4 }}>
-        <Box
-          sx={{
-            display: "grid",
-            gridTemplateColumns: {
-              xs: "1fr",
-              md: "repeat(4,1fr)",
-            },
-            gap: 2,
-            mb: 2,
-          }}
-        >
-          <InfoField label="Тип груза" value={tender?.lead?.cargo.type} />
-
-          <InfoField
-            label="Вес груза"
-            value={
-              tender?.lead?.cargo.weight_kg
-                ? `${tender?.lead?.cargo.weight_kg} кг`
-                : "Не указан"
-            }
-          />
-
-          <InfoField
-            label="Цена груза"
-            value={`${tender?.lead?.cargo_price} ${tender?.lead?.currency}`}
-          />
-
-          <InfoField
-            label="Статус"
-            value={<RenderStatus status={tender?.lead?.status} />}
-          />
-        </Box>
-
         <InfoField
-          label="Описание груза"
-          value={`Груз заявки #${tender?.lead?.id}`}
+          label="Статус"
+          value={<RenderStatus status={tender?.lead?.status} />}
         />
       </Box>
     </Section>

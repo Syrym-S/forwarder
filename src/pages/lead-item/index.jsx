@@ -246,6 +246,7 @@ const LeadItem = () => {
           cargo={cargo}
           leadId={leadData?.id}
           index={index}
+          isLeadsPage
         />
       ))}
 
