@@ -15,12 +15,17 @@ const PriceStep = ({ control }) => {
           gap: 2,
         }}
       >
-        <TextField
-          label="Цена заказщика (price)"
-          size="small"
-          disabled
-          fullWidth
-          value={"5000 KZT"}
+        <Controller
+          name="price"
+          control={control}
+          render={({ field }) => (
+            <TextField
+              {...field}
+              label="Цена заказщика"
+              size="small"
+              fullWidth
+            />
+          )}
         />
         <Controller
           name="transportation_price"

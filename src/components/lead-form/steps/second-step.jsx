@@ -273,7 +273,7 @@ const CargoStepFieldsContent = ({ index, control }) => {
       </Box>
 
       <Controller
-        name={`cargos.${index}.price`}
+        name={`cargos.${index}.cargo_price`}
         control={control}
         rules={{
           required: "Укажите цену",
@@ -292,7 +292,7 @@ const CargoStepFieldsContent = ({ index, control }) => {
       />
 
       <Controller
-        name="currency"
+        name={`cargos.${index}.currency`}
         control={control}
         defaultValue="KZT"
         render={({ field }) => (
@@ -314,7 +314,7 @@ const CargoStepFieldsContent = ({ index, control }) => {
       />
 
       <Controller
-        name="vat"
+        name={`cargos.${index}.vat`}
         control={control}
         render={({ field }) => (
           <FormControlLabel
@@ -330,7 +330,7 @@ const CargoStepFieldsContent = ({ index, control }) => {
       />
 
       <Controller
-        name="comment"
+        name={`cargos.${index}.comment`}
         control={control}
         render={({ field }) => (
           <TextField
