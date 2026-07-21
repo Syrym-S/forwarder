@@ -18,6 +18,7 @@ import {
   verifyCargoApi,
   verifyCargoUnloadApi,
   getAcceptedLeadsApi,
+  deleteCargoApi,
 } from "./api";
 
 export const useLeadsStore = create((set) => ({
@@ -37,6 +38,7 @@ export const useLeadsStore = create((set) => ({
   isUnloadLoading: false,
   isConfirmLoading: false,
   isAcceptedLeadsLoading: false,
+  isCargoDeleteLoading: false,
 
   error: null,
   count: 0,
@@ -429,6 +431,27 @@ export const useLeadsStore = create((set) => ({
       set({
         error: e.message,
         isCustomerDetachLoading: false,
+      });
+
+      // console.error("Payload:", payload);
+      console.error("Response:", e.response?.data);
+      throw e;
+    }
+  },
+
+  deleteCargo: async (lead_id, cargo_index) => {
+    try {
+      set({ isCargoDeleteLoading: true, error: null });
+
+      await deleteCargoApi(lead_id, cargo_index);
+
+      set({
+        isCargoDeleteLoading: false,
+      });
+    } catch (e) {
+      set({
+        error: e.message,
+        isCargoDeleteLoading: false,
       });
 
       // console.error("Payload:", payload);

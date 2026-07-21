@@ -101,6 +101,8 @@ const LeadItem = () => {
     lon: leadData?.to_location.lon,
   };
 
+  const cargosCount = leadData?.cargos?.length;
+
   async function reloadLeadDocuments(leadId) {
     const response = await getLeadFilesApi(leadId);
     const mappedDocuments = mapLeadFilesResponseFromApi(response);
@@ -235,10 +237,16 @@ const LeadItem = () => {
       {newNotification && notification_type === NOTIFICATION_TYPE.shipping && (
         <NotificationPopup selectedNotification={newNotification} />
       )}
+
       <LeadRouteInfo leadData={leadData} />
 
-      {leadData?.cargos?.map((cargo) => (
-        <LeadCargoInfo cargo={cargo} />
+      {leadData?.cargos?.map((cargo, index) => (
+        <LeadCargoInfo
+          cargosCount={cargosCount}
+          cargo={cargo}
+          leadId={leadData?.id}
+          index={index}
+        />
       ))}
 
       {filesFromDriver && (

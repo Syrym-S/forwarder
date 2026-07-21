@@ -245,3 +245,11 @@ export const getAcceptedLeadsApi = async (params = {}) => {
 
   return data;
 };
+
+export const deleteCargoApi = async (id, cargo_index) => {
+  const data = await api.delete(
+    `/forwarder/v1/lead/${id}/cargos/${cargo_index}`,
+  );
+
+  return data;
+};
