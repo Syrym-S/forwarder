@@ -32,6 +32,7 @@ import TenderBets from "../../../components/tenders/tender-bets";
 import PageLoader from "../../../shared/ui/loaders/page-loader";
 import { useNotificationsStore } from "../../../app/store/notifications/noti-store";
 import { parserNotificationType } from "../../../shared/helpers/notifications/parse-notification-type";
+import LeadCargoInfo from "../../../components/leads/lead-item/lead-cargo-info";
 
 const TenderForwardersItem = () => {
   const { id } = useParams();
@@ -62,6 +63,9 @@ const TenderForwardersItem = () => {
   );
 
   const { action } = parserNotificationType(newNotification?.type || "");
+
+  const cargosInfo = currentTender?.lead?.cargos;
+
   const from = {
     lat: currentTender?.lead?.from_location.lat,
     lon: currentTender?.lead?.from_location.lon,
@@ -144,6 +148,10 @@ const TenderForwardersItem = () => {
       <TransportationInfo tender={currentTender} />
 
       <TenderInfo tender={currentTender} />
+
+      {cargosInfo?.map((cargo) => (
+        <LeadCargoInfo cargo={cargo} />
+      ))}
 
       <LeadDocuments tender={currentTender} />
 

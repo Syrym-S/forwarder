@@ -5,7 +5,6 @@ import FormStepsTab from "../../components/lead-form/form-steps-tab";
 import FirstStep from "../../components/lead-form/steps/first-step";
 import { FormNavButtons } from "../../components/lead-form/form-nav-buttons";
 import { useForm, useWatch } from "react-hook-form";
-import { SecondStep } from "../../components/lead-form/steps/second-step";
 import { LastStep } from "../../components/lead-form/steps/last-step";
 import { CreateLeadResultModal } from "../../components/lead-form/create-lead-result-modal";
 import { mapCreateLeadFormToApi } from "../../components/lead-form/model/createLead.adapter";
@@ -19,7 +18,7 @@ import LeadFormTabs from "../../components/lead-form/lead-form-tabs";
 import { useLeadsStore } from "../../app/store/leads/leads-store";
 import { useDriverStore } from "../../app/store/drivers/driver-store";
 import { useCustomerStore } from "../../app/store/customers/customers-store";
-import NewSecondStep from "../../components/lead-form/steps/new/new-second-step";
+import SecondStep from "../../components/lead-form/steps/second-step";
 
 const steps = [
   { id: 1, label: "Маршрут" },
@@ -213,7 +212,7 @@ const AddLeadForm = ({
         );
       case 2:
         return (
-          <NewSecondStep
+          <SecondStep
             control={control}
             errors={errors}
             form={formValues}

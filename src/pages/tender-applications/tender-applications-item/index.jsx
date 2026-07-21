@@ -36,6 +36,7 @@ import MakeBetForm from "../../../features/tenders/make-bet-form";
 import MakeBetBlock from "../../../components/tenders/make-bet-block";
 import CancelledBets from "../../../components/tenders/cancelled-bets";
 import PageLoader from "../../../shared/ui/loaders/page-loader";
+import LeadCargoInfo from "../../../components/leads/lead-item/lead-cargo-info";
 
 const TenderApplicationsItem = () => {
   const { id } = useParams();
@@ -58,6 +59,8 @@ const TenderApplicationsItem = () => {
     lat: customerCurrentTender?.lead?.to_location.lat,
     lon: customerCurrentTender?.lead?.to_location.lon,
   };
+
+  const cargosInfo = customerCurrentTender?.lead?.cargos;
 
   const handleHideBetField = () => {
     setShowBetField(false);
@@ -92,6 +95,10 @@ const TenderApplicationsItem = () => {
       <TransportationInfo tender={customerCurrentTender} />
 
       <TenderInfo tender={customerCurrentTender} />
+
+      {cargosInfo?.map((cargo) => (
+        <LeadCargoInfo cargo={cargo} />
+      ))}
 
       <LeadDocuments tender={customerCurrentTender} />
 

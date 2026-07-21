@@ -60,35 +60,27 @@ const FactoringTransportationInfo = ({ lead }) => {
             display: "grid",
             gridTemplateColumns: {
               xs: "1fr",
-              md: "repeat(4,1fr)",
+              md: "repeat(3,1fr)",
             },
             gap: 2,
             mb: 2,
           }}
         >
-          <InfoField label="Тип груза" value={lead?.cargo.type} />
-
-          <InfoField
-            label="Вес груза"
-            value={
-              lead?.cargo.weight_kg
-                ? `${lead?.cargo.weight_kg} кг`
-                : "Не указан"
-            }
-          />
-
           <InfoField
             label="Цена груза"
-            value={`${lead?.cargo_price} ${lead?.currency}`}
+            value={`${lead?.cargo_price || lead?.summ} ${lead?.currency}`}
           />
 
           <InfoField
             label="Статус"
             value={<RenderStatus status={lead?.status} />}
           />
-        </Box>
 
-        <InfoField label="Описание груза" value={`Груз заявки #${lead?.id}`} />
+          <InfoField
+            label="Описание груза"
+            value={`Груз заявки #${lead?.id}`}
+          />
+        </Box>
       </Box>
     </Section>
   );

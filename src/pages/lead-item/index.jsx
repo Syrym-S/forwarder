@@ -76,9 +76,11 @@ const LeadItem = () => {
 
   const defaultValues = useFormDefaultValues(leadData, files);
 
+  // eslint-disable-next-line no-unused-vars
   const [documents, setDocuments] = useState([]);
   const [isDocumentUploading, setIsDocumentUploading] = useState(false);
   const [documentError, setDocumentError] = useState("");
+  // eslint-disable-next-line no-unused-vars
   const [deletingDocumentIds, setDeletingDocumentIds] = useState([]);
 
   const openEditForm = () => {

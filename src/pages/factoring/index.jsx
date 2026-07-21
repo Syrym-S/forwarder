@@ -11,11 +11,17 @@ import ViewListRoundedIcon from "@mui/icons-material/ViewListRounded";
 import GridViewRoundedIcon from "@mui/icons-material/GridViewRounded";
 import ViewTabs from "../../shared/ui/view-tabs";
 import PageLoader from "../../shared/ui/loaders/page-loader";
+import { useLeadsStore } from "../../app/store/leads/leads-store";
 
 const Factoring = () => {
   const factorings = useFactoringStore((state) => state.factorings);
   const isLoading = useFactoringStore((state) => state.isLoading);
   const getFactorings = useFactoringStore((state) => state.getFactorings);
+  const clearFactoringDetails = useFactoringStore(
+    (state) => state.clearFactoringDetails,
+  );
+  const clearCurrentLead = useLeadsStore((state) => state.clearCurrentLead);
+
   const count = useFactoringStore((state) => state.count);
   const perPage = useFactoringStore((state) => state.perPage);
 
@@ -44,6 +50,11 @@ const Factoring = () => {
       page: page,
     });
   }, [page]);
+
+  useEffect(() => {
+    clearFactoringDetails();
+    clearCurrentLead();
+  }, []);
 
   if (isLoading)
     return (

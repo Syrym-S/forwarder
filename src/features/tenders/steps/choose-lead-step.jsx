@@ -104,6 +104,9 @@ const ChooseLeadStep = ({ control, setValue, isEdit, getValues }) => {
             helperText={fieldState.error?.message}
             fullWidth
             slotProps={{
+              htmlInput: {
+                min: dayjs().format("YYYY-MM-DD"),
+              },
               inputLabel: {
                 shrink: true,
               },

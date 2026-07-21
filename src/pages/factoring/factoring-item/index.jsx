@@ -90,7 +90,9 @@ const FactoringItem = () => {
       </Box>
       <FactoringTransportationInfo lead={currentLead} />
 
-      <FactoringCargoInfo leadData={currentLead} />
+      {currentLead?.cargos?.map((cargo) => (
+        <FactoringCargoInfo cargo={cargo} />
+      ))}
 
       <FactoringFinancialInfo factoring={factoringDetails} />
 

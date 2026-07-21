@@ -86,6 +86,11 @@ export const useFactoringStore = create((set) => ({
     }
   },
 
+  clearFactoringDetails: () => {
+    console.log("clearFactoringDetails");
+    set({ factoringDetails: null });
+  },
+
   createFactoring: async (payload) => {
     try {
       set({ isLoading: true, error: null });
