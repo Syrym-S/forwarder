@@ -6,6 +6,7 @@ import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
 import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
 import { LeadDocumentsSection } from "../../components/leads/documents/LeadDocumentsSection";
 import { useParams } from "react-router-dom";
+import LocalShippingOutlinedIcon from "@mui/icons-material/LocalShippingOutlined";
 import {
   Box,
   Button,
@@ -240,15 +241,28 @@ const LeadItem = () => {
 
       <LeadRouteInfo leadData={leadData} />
 
-      {leadData?.cargos?.map((cargo, index) => (
-        <LeadCargoInfo
-          cargosCount={cargosCount}
-          cargo={cargo}
-          leadId={leadData?.id}
-          index={index}
-          isLeadsPage
-        />
-      ))}
+      <Section
+        title={`Груз`}
+        icon={<LocalShippingOutlinedIcon color="primary" />}
+      >
+        <Box
+          sx={{
+            display: "grid",
+            gridTemplateColumns: "1fr",
+            gap: 2,
+          }}
+        >
+          {leadData?.cargos?.map((cargo, index) => (
+            <LeadCargoInfo
+              cargosCount={cargosCount}
+              cargo={cargo}
+              leadId={leadData?.id}
+              index={index}
+              isLeadsPage
+            />
+          ))}
+        </Box>
+      </Section>
 
       {filesFromDriver && (
         <CargoLoadVerification

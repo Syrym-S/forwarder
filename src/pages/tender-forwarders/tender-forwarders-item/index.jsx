@@ -2,6 +2,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import RootLayout from "../../../components/layout/root-layout";
 import { useEffect, useState } from "react";
 import { useTendersStore } from "../../../app/store/tenders/tender-store";
+import LocalShippingOutlinedIcon from "@mui/icons-material/LocalShippingOutlined";
 import {
   Autocomplete,
   Box,
@@ -149,9 +150,22 @@ const TenderForwardersItem = () => {
 
       <TenderInfo tender={currentTender} />
 
-      {cargosInfo?.map((cargo) => (
-        <LeadCargoInfo cargo={cargo} />
-      ))}
+      <Section
+        title={`Груз`}
+        icon={<LocalShippingOutlinedIcon color="primary" />}
+      >
+        <Box
+          sx={{
+            display: "grid",
+            gridTemplateColumns: "1fr",
+            gap: 2,
+          }}
+        >
+          {cargosInfo?.map((cargo) => (
+            <LeadCargoInfo cargo={cargo} />
+          ))}
+        </Box>
+      </Section>
 
       <LeadDocuments tender={currentTender} />
 

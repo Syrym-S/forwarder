@@ -1,16 +1,28 @@
 import React from "react";
-import { Box } from "@mui/material";
-import LocalShippingOutlinedIcon from "@mui/icons-material/LocalShippingOutlined";
+import { Box, Typography } from "@mui/material";
 import RenderStatus from "../../shared/ui/render-status";
 import Section from "../../shared/ui/section";
 import InfoField from "../../shared/ui/info-field";
 
 const FactoringCargoInfo = ({ cargo }) => {
   return (
-    <Section
-      title={`Груз ${cargo?.name}`}
-      icon={<LocalShippingOutlinedIcon color="primary" />}
+    <Box
+      sx={{
+        border: "1px solid",
+        borderColor: "divider",
+        borderRadius: 2,
+        p: 2,
+      }}
     >
+      <Typography
+        fontWeight={600}
+        sx={{
+          py: 1,
+        }}
+      >
+        Груз {cargo.name}
+      </Typography>
+
       <Box
         sx={{
           display: "grid",
@@ -31,7 +43,7 @@ const FactoringCargoInfo = ({ cargo }) => {
       </Box>
 
       <InfoField label="Описание" value={`${cargo?.description || "--"}`} />
-    </Section>
+    </Box>
   );
 };
 

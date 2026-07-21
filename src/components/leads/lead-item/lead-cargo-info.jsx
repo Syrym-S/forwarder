@@ -1,8 +1,7 @@
 import React from "react";
 import Section from "../../../shared/ui/section";
-import { Box, Button, CircularProgress } from "@mui/material";
+import { Box, Button, CircularProgress, Typography } from "@mui/material";
 import InfoField from "../../../shared/ui/info-field";
-import LocalShippingOutlinedIcon from "@mui/icons-material/LocalShippingOutlined";
 import RenderStatus from "../../../shared/ui/render-status";
 import { useLeadsStore } from "../../../app/store/leads/leads-store";
 
@@ -13,33 +12,31 @@ const LeadCargoInfo = ({
   cargosCount,
   isLeadsPage = false,
 }) => {
-  const isLoading = useLeadsStore((state) => state.isLoading);
   const getLeadItem = useLeadsStore((state) => state.getLeadItem);
   const deleteCargo = useLeadsStore((state) => state.deleteCargo);
-  const isCargoDeleteLoading = useLeadsStore(
-    (state) => state.isCargoDeleteLoading,
-  );
 
   const handleDeleteCargo = async () => {
     await deleteCargo(leadId, index);
     await getLeadItem(leadId);
   };
 
-  if (isCargoDeleteLoading || isLoading)
-    return (
-      <Section
-        title={`Груз ${cargo?.name}`}
-        icon={<LocalShippingOutlinedIcon color="primary" />}
-      >
-        <CircularProgress />
-      </Section>
-    );
-
   return (
-    <Section
-      title={`Груз ${cargo?.name}`}
-      icon={<LocalShippingOutlinedIcon color="primary" />}
+    <Box
+      sx={{
+        border: "1px solid",
+        borderColor: "divider",
+        borderRadius: 2,
+        p: 2,
+      }}
     >
+      <Typography
+        fontWeight={600}
+        sx={{
+          py: 1,
+        }}
+      >
+        Груз {cargo.name}
+      </Typography>
       <Box
         sx={{
           display: "grid",
@@ -72,7 +69,7 @@ const LeadCargoInfo = ({
           Удалить груз
         </Button>
       )}
-    </Section>
+    </Box>
   );
 };
 

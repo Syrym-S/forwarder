@@ -21,6 +21,7 @@ import FactorDataTable from "../../../components/factoring/factor-data-table";
 import RememberMeOutlinedIcon from "@mui/icons-material/RememberMeOutlined";
 import PageLoader from "../../../shared/ui/loaders/page-loader";
 import FactoringVerifications from "../../../components/factoring/factoring-verifications";
+import LocalShippingOutlinedIcon from "@mui/icons-material/LocalShippingOutlined";
 
 const FactoringItem = () => {
   const { id } = useParams();
@@ -90,9 +91,22 @@ const FactoringItem = () => {
       </Box>
       <FactoringTransportationInfo lead={currentLead} />
 
-      {currentLead?.cargos?.map((cargo) => (
-        <FactoringCargoInfo cargo={cargo} />
-      ))}
+      <Section
+        title={`Груз`}
+        icon={<LocalShippingOutlinedIcon color="primary" />}
+      >
+        <Box
+          sx={{
+            display: "grid",
+            gridTemplateColumns: "1fr",
+            gap: 2,
+          }}
+        >
+          {currentLead?.cargos?.map((cargo) => (
+            <FactoringCargoInfo cargo={cargo} />
+          ))}
+        </Box>
+      </Section>
 
       <FactoringFinancialInfo factoring={factoringDetails} />
 
