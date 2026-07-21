@@ -36,14 +36,29 @@ const ParticipantCard = ({ tender_id, participant }) => {
           Дата добавления {dayjs(participant.date).format("YYYY/MM/DD")}
         </Typography>
 
-        <Typography
+        <Box
           sx={{
-            fontWeight: 400,
-            color: "color.slate_2",
+            display: "flex",
+            gap: 1,
           }}
         >
-          Участник с айди: {participant.participant_id}
-        </Typography>
+          <Typography
+            sx={{
+              fontWeight: 400,
+              color: "color.slate_2",
+            }}
+          >
+            Имя: {participant.fio}
+          </Typography>
+          <Typography
+            sx={{
+              fontWeight: 400,
+              color: "color.slate_2",
+            }}
+          >
+            ИИН: {participant.iin}
+          </Typography>
+        </Box>
       </Stack>
 
       <IconButton
