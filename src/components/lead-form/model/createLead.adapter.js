@@ -63,6 +63,7 @@ export function mapCreateLeadFormToApi(form) {
     cargos: form.cargos || [],
   };
 
+  addIfHasValue(payload, "waypoints", form.waypoints);
   addIfHasValue(payload, "loading_date", form.loadingDate);
   addIfHasValue(payload, "comment", normalizeText(form.comment));
   addIfHasValue(payload, "driver", form.driver?.id);

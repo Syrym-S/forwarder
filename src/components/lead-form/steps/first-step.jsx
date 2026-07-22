@@ -3,12 +3,34 @@ import { StepSection } from "../step-section";
 import { useCustomerMap } from "../use-customer-map";
 import { CustomerMapView } from "../map-view";
 import Map from "../../dashboard/map";
-import { Controller } from "react-hook-form";
+import { Controller, useFieldArray, useWatch } from "react-hook-form";
 import { useRouteMapPicker } from "../use-route-map-picker";
-import { useEffect } from "react";
 import dayjs from "dayjs";
 
 const FirstStep = ({ control, errors, form, setValue }) => {
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: "waypoints",
+  });
+
+  const waypoins = useWatch({
+    control,
+    name: "waypoints",
+  });
+
+  const hasWaypoint = waypoins.length !== 0;
+
+  const handleShowFiled = () => {
+    append({
+      address: null,
+      city: null,
+      country: null,
+      lat: null,
+      lon: null,
+      region: null,
+    });
+  };
+
   const map = useCustomerMap();
 
   const {
@@ -25,6 +47,7 @@ const FirstStep = ({ control, errors, form, setValue }) => {
     clearToPoint,
   } = useRouteMapPicker({
     form,
+    fields,
     setValue,
   });
 
@@ -54,7 +77,17 @@ const FirstStep = ({ control, errors, form, setValue }) => {
           >
             Откуда
           </Button>
-
+          {fields.map((_, index) => (
+            <Button
+              size="small"
+              variant={
+                activeMapPoint === `cross.${index}` ? "contained" : "outlined"
+              }
+              onClick={() => setActiveMapPoint(`cross.${index}`)}
+            >
+              Точка #{index + 1}
+            </Button>
+          ))}
           <Button
             size="small"
             variant={activeMapPoint === "to" ? "contained" : "outlined"}
@@ -64,15 +97,31 @@ const FirstStep = ({ control, errors, form, setValue }) => {
           </Button>
         </Box>
 
-        <Button
-          size="small"
-          color="error"
-          variant="outlined"
-          onClick={handleClearRoute}
-          disabled={isClearDisabled}
+        <Box
+          sx={{
+            display: "flex",
+            gap: 1,
+          }}
         >
-          Очистить маршрут
-        </Button>
+          <Button
+            size="small"
+            color="primary"
+            variant="outlined"
+            onClick={handleShowFiled}
+          >
+            Добавить точку пересечения
+          </Button>
+
+          <Button
+            size="small"
+            color="error"
+            variant="outlined"
+            onClick={handleClearRoute}
+            disabled={isClearDisabled}
+          >
+            Очистить маршрут
+          </Button>
+        </Box>
       </Box>
 
       <Box
@@ -104,7 +153,7 @@ const FirstStep = ({ control, errors, form, setValue }) => {
           display: "grid",
           gridTemplateColumns: {
             xs: "1fr",
-            sm: "1fr 1fr",
+            sm: hasWaypoint ? "1fr" : "1fr 1fr",
           },
           gap: 2,
         }}
@@ -142,6 +191,78 @@ const FirstStep = ({ control, errors, form, setValue }) => {
             );
           }}
         />
+
+        {fields.map((crossField, index) => (
+          <Box
+            sx={{
+              display: "flex",
+              gap: 1,
+            }}
+          >
+            <Controller
+              key={crossField.id}
+              name={`waypoints[${index}].address`}
+              control={control}
+              render={({ field }) => {
+                return (
+                  <TextField
+                    {...field}
+                    label={`Промежуточная точка #${index + 1}`}
+                    slotProps={{
+                      inputLabel: {
+                        shrink: true,
+                      },
+                    }}
+                    fullWidth
+                    size="small"
+                    error={Boolean(errors.cross_location?.address)}
+                    helperText={errors.cross_location?.address?.message}
+                    onChange={(event) => {
+                      field.onChange(event);
+                      clearFromPoint();
+                    }}
+                  />
+                );
+              }}
+            />
+            <Button
+              onClick={() => remove(index)}
+              color="error"
+              variant="outlined"
+            >
+              Убрать
+            </Button>
+          </Box>
+        ))}
+
+        {/* {isAddCrossPoint && (
+          <Controller
+            name="cross_location.address"
+            control={control}
+            render={({ field }) => {
+              return (
+                <TextField
+                  {...field}
+                  label="Пересекаемая точка"
+                  slotProps={{
+                    inputLabel: {
+                      shrink: true,
+                    },
+                  }}
+                  fullWidth
+                  size="small"
+                  disabled={!isAddCrossPoint}
+                  error={Boolean(errors.cross_location?.address)}
+                  helperText={errors.cross_location?.address?.message}
+                  onChange={(event) => {
+                    field.onChange(event);
+                    clearFromPoint();
+                  }}
+                />
+              );
+            }}
+          />
+        )} */}
 
         <Controller
           name="to_location.address"

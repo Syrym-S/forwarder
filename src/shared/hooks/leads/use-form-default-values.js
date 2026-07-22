@@ -15,6 +15,15 @@ export const useFormDefaultValues = (lead = null, files = []) => {
       lon: lead?.to_location.lon || null,
       region: lead?.to_location.region || null,
     },
+    waypoints:
+      lead?.waypoints?.map((waypoint) => ({
+        address: waypoint.address || null,
+        city: waypoint.city || "",
+        country: waypoint.country || "",
+        lat: waypoint.lat || null,
+        lon: waypoint.lon || null,
+        region: waypoint.region || null,
+      })) || [],
     from_location: {
       address: lead?.from_location.address || null,
       city: lead?.from_location.city || null,

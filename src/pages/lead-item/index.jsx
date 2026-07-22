@@ -102,6 +102,15 @@ const LeadItem = () => {
     lon: leadData?.to_location.lon,
   };
 
+  const waypoints = leadData?.waypoints?.map((waypoint) => {
+    return {
+      lat: waypoint.lat,
+      lon: waypoint.lon,
+    };
+  });
+
+  console.log("waypoints", waypoints);
+
   const cargosCount = leadData?.cargos?.length;
 
   async function reloadLeadDocuments(leadId) {
@@ -230,7 +239,7 @@ const LeadItem = () => {
           my: 3,
         }}
       >
-        <LeadMap from={from} to={to} id={id} />
+        <LeadMap waypoints={waypoints} from={from} to={to} id={id} />
       </Box>
 
       <LeadCustomerInfo leadData={leadData} />

@@ -48,6 +48,13 @@ const FactoringItem = () => {
     lon: currentLead?.to_location.lon,
   };
 
+  const waypoints = currentLead?.waypoints?.map((waypoint) => {
+    return {
+      lat: waypoint.lat,
+      lon: waypoint.lon,
+    };
+  });
+
   const handleAcceptFactoring = async () => {
     await acceptFactoring(id);
     await getFactoringDetails(id);
@@ -87,7 +94,12 @@ const FactoringItem = () => {
           my: 3,
         }}
       >
-        <LeadMap from={from} to={to} id={currentLead?.id} />
+        <LeadMap
+          from={from}
+          waypoints={waypoints}
+          to={to}
+          id={currentLead?.id}
+        />
       </Box>
       <FactoringTransportationInfo lead={currentLead} />
 

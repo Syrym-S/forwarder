@@ -14,8 +14,10 @@ const driverIcon = L.divIcon({
   popupAnchor: [0, -18],
 });
 
-const fetchRoute = async (start, end) => {
-  const url = `https://router.project-osrm.org/route/v1/driving/${start[1]},${start[0]};${end[1]},${end[0]}?overview=full&geometries=geojson`;
+const fetchRoute = async (points) => {
+  const coordinates = points.map(([lat, lon]) => `${lon},${lat}`).join(";");
+
+  const url = `https://router.project-osrm.org/route/v1/driving/${coordinates}?overview=full&geometries=geojson`;
 
   const res = await fetch(url);
   const data = await res.json();
@@ -25,9 +27,12 @@ const fetchRoute = async (start, end) => {
   return coords.map(([lng, lat]) => [lat, lng]);
 };
 
-export default function LeadMap({ from, to, id }) {
+export default function LeadMap({ from, waypoints, to, id }) {
   const start = !from?.lat ? [43.241141, 76.871399] : [from?.lat, from?.lon];
+  const cross = waypoints?.map((waypoint) => [waypoint.lat, waypoint.lon]);
   const end = !to?.lat ? [43.241141, 76.871399] : [to?.lat, to?.lon];
+
+  const routePoints = [start, ...cross, end];
 
   const [points, setPoints] = useState(null);
   const [route, setRoute] = useState([]);
@@ -37,7 +42,7 @@ export default function LeadMap({ from, to, id }) {
 
   useEffect(() => {
     const load = async () => {
-      const result = await fetchRoute(start, end);
+      const result = await fetchRoute(routePoints);
       setRoute(result);
     };
 
@@ -131,6 +136,11 @@ export default function LeadMap({ from, to, id }) {
       <TileLayer url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png" />
 
       <Marker position={start} />
+
+      {waypoints.map((waypoint) => (
+        <Marker position={[waypoint.lat, waypoint.lon]} />
+      ))}
+
       <Marker position={end} />
 
       {(route.length > 0 || !from.lat || !from?.lon) && (

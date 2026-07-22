@@ -61,6 +61,13 @@ const TenderApplicationsItem = () => {
     lon: customerCurrentTender?.lead?.to_location.lon,
   };
 
+  const waypoints = customerCurrentTender?.lead?.waypoints?.map((waypoint) => {
+    return {
+      lat: waypoint.lat,
+      lon: waypoint.lon,
+    };
+  });
+
   const cargosInfo = customerCurrentTender?.lead?.cargos;
 
   const handleHideBetField = () => {
@@ -90,7 +97,12 @@ const TenderApplicationsItem = () => {
           my: 3,
         }}
       >
-        <LeadMap from={from} to={to} id={customerCurrentTender?.lead?.id} />
+        <LeadMap
+          from={from}
+          waypoints={waypoints}
+          to={to}
+          id={customerCurrentTender?.lead?.id}
+        />
       </Box>
 
       <TransportationInfo tender={customerCurrentTender} />

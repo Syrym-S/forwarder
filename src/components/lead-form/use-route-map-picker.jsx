@@ -13,7 +13,9 @@ const setValueOptions = {
   shouldValidate: true,
 };
 
-export function useRouteMapPicker({ form, setValue }) {
+export function useRouteMapPicker({ form, fields, setValue }) {
+  const [count, setCount] = useState(0);
+
   const [activeMapPoint, setActiveMapPoint] = useState("from");
   const [loadingPoints, setLoadingPoints] = useState({
     from: false,
@@ -31,7 +33,6 @@ export function useRouteMapPicker({ form, setValue }) {
   async function setFromPoint(lat, lng) {
     setValue("fromLat", lat, setValueOptions);
     setValue("fromLng", lng, setValueOptions);
-    // setValue("fromLocation", "Определяем адрес...", setValueOptions);
 
     const locationInfo = await getAddressForPoint("from", lat, lng);
 
@@ -50,10 +51,31 @@ export function useRouteMapPicker({ form, setValue }) {
     setValue("from_location", from_location, setValueOptions);
   }
 
+  async function setCrossPoint(index, lat, lng) {
+    setValue(`waypoints[${index}].Lat`, lat, setValueOptions);
+    setValue(`waypoints[${index}].Lng`, lng, setValueOptions);
+
+    const locationInfo = await getAddressForPoint(`cross.${index}`, lat, lng);
+
+    if (!locationInfo) {
+      return;
+    }
+
+    const cross_location = {
+      address: locationInfo.display_name,
+      city: locationInfo.address.city,
+      country: locationInfo.address.country,
+      region: locationInfo.address.city_district,
+      lat,
+      lon: lng,
+    };
+
+    setValue(`waypoints[${index}]`, cross_location, setValueOptions);
+  }
+
   async function setToPoint(lat, lng) {
     setValue("toLat", lat, setValueOptions);
     setValue("toLng", lng, setValueOptions);
-    // setValue("toLocation", "Определяем адрес...", setValueOptions);
 
     const locationInfo = await getAddressForPoint("to", lat, lng);
 
@@ -126,7 +148,29 @@ export function useRouteMapPicker({ form, setValue }) {
 
     if (activeMapPoint === "from") {
       setFromPoint(lat, lng);
-      setActiveMapPoint("to");
+
+      if (fields.length > 0) {
+        setActiveMapPoint(`cross.0`);
+      } else {
+        setActiveMapPoint("to");
+      }
+
+      return;
+    }
+
+    if (activeMapPoint === `cross.${count}`) {
+      setCrossPoint(count, lat, lng);
+
+      const nextCount = count + 1;
+
+      setCount(nextCount);
+
+      if (nextCount < fields.length) {
+        setActiveMapPoint(`cross.${nextCount}`);
+      } else {
+        setActiveMapPoint("to");
+      }
+
       return;
     }
 
@@ -146,6 +190,8 @@ export function useRouteMapPicker({ form, setValue }) {
 
     setValue("fromLat", "", setValueOptions);
     setValue("fromLng", "", setValueOptions);
+
+    setValue("waypoints", [], setValueOptions);
 
     setValue("to_location.address", "", setValueOptions);
     setValue("to_location.city", null, setValueOptions);
@@ -171,6 +217,16 @@ export function useRouteMapPicker({ form, setValue }) {
     if (marker.id === "from") {
       setFromPoint(lat, lng);
       setActiveMapPoint("from");
+      return;
+    }
+
+    if (marker.id.startsWith("cross.")) {
+      const crossIndex = Number(marker.id.split(".")[1]);
+
+      setCount(crossIndex);
+      setCrossPoint(crossIndex, lat, lng);
+      setActiveMapPoint(`cross.${crossIndex}`);
+
       return;
     }
 

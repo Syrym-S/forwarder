@@ -30,6 +30,18 @@ export function getRouteMarkers(form) {
     });
   }
 
+  form.waypoints.map((waypoint, index) => {
+    if (hasPoint(waypoint.lat, waypoint.lon || waypoint.lng)) {
+      markers.push({
+        id: `cross.${index}`,
+        position: [Number(waypoint.lat), Number(waypoint.lon || waypoint.lng)],
+        title: `Точка ${index}`,
+        description: `Точка пересечения ${index}`,
+        draggable: true,
+      });
+    }
+  });
+
   if (
     hasPoint(form.to_location.lat, form.to_location.lon || form.to_location.lng)
   ) {
@@ -53,23 +65,38 @@ export function getRoutePoints(form) {
     form.from_location.lat,
     form.from_location.lon || form.from_location.lng,
   );
+
   const hasToPoint = hasPoint(
     form.to_location.lat,
     form.to_location.lon || form.to_location.lng,
   );
 
-  if (!hasFromPoint || !hasToPoint) {
+  if (!hasFromPoint) {
     return [];
   }
 
-  return [
+  const points = [
     [
       Number(form.from_location.lat),
       Number(form.from_location.lon || form.from_location.lng),
     ],
-    [
+  ];
+
+  form.waypoints.map((waypoint) => {
+    if (hasPoint(waypoint.lat, waypoint.lon || waypoint.lng)) {
+      console.log("push");
+      points.push([Number(waypoint.lat), Number(waypoint.lon || waypoint.lng)]);
+    } else {
+      console.log("Не пуш");
+    }
+  });
+
+  if (hasToPoint) {
+    points.push([
       Number(form.to_location.lat),
       Number(form.to_location.lon || form.to_location.lng),
-    ],
-  ];
+    ]);
+  }
+
+  return points;
 }

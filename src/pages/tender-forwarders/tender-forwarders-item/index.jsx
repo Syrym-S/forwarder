@@ -76,6 +76,13 @@ const TenderForwardersItem = () => {
     lon: currentTender?.lead?.to_location.lon,
   };
 
+  const waypoints = currentTender?.lead?.waypoints?.map((waypoint) => {
+    return {
+      lat: waypoint.lat,
+      lon: waypoint.lon,
+    };
+  });
+
   const handleDeleteTender = () => {
     deleteTender(id);
     navigate("/tender-forwarders");
@@ -134,7 +141,12 @@ const TenderForwardersItem = () => {
           my: 2,
         }}
       >
-        <LeadMap from={from} to={to} id={currentTender?.lead?.id} />
+        <LeadMap
+          from={from}
+          waypoints={waypoints}
+          to={to}
+          id={currentTender?.lead?.id}
+        />
       </Box>
 
       {openForm && (
