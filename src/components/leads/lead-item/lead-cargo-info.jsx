@@ -4,10 +4,11 @@ import { Box, Button, CircularProgress, Typography } from "@mui/material";
 import InfoField from "../../../shared/ui/info-field";
 import RenderStatus from "../../../shared/ui/render-status";
 import { useLeadsStore } from "../../../app/store/leads/leads-store";
+import { STATUS } from "../../../shared/const/tenders";
 
 const LeadCargoInfo = ({
   cargo,
-  leadId,
+  lead,
   index,
   cargosCount,
   isLeadsPage = false,
@@ -16,8 +17,8 @@ const LeadCargoInfo = ({
   const deleteCargo = useLeadsStore((state) => state.deleteCargo);
 
   const handleDeleteCargo = async () => {
-    await deleteCargo(leadId, index);
-    await getLeadItem(leadId);
+    await deleteCargo(lead.id, index);
+    await getLeadItem(lead.id);
   };
 
   return (
@@ -57,7 +58,7 @@ const LeadCargoInfo = ({
       </Box>
 
       <InfoField label="Описание" value={`${cargo?.description || "--"}`} />
-      {cargosCount !== 1 && isLeadsPage && (
+      {cargosCount !== 1 && isLeadsPage && lead.status === STATUS.new && (
         <Button
           onClick={handleDeleteCargo}
           color="error"

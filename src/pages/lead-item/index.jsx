@@ -265,7 +265,7 @@ const LeadItem = () => {
             <LeadCargoInfo
               cargosCount={cargosCount}
               cargo={cargo}
-              leadId={leadData?.id}
+              lead={leadData}
               index={index}
               isLeadsPage
             />
