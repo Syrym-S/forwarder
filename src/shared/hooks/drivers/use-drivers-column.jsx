@@ -1,4 +1,4 @@
-import { Box } from "@mui/material";
+import { Box, Tooltip, Typography } from "@mui/material";
 import { NavLink } from "react-router-dom";
 import RenderStatus from "../../ui/render-status";
 
@@ -50,6 +50,24 @@ const useDriversColumns = (setSelectedDriver) => {
       field: "invite_link",
       headerName: "Пригласительная ссылка",
       width: 200,
+      renderCell: ({ value }) => (
+        <Tooltip title="Нажмите, чтобы скопировать">
+          <Typography
+            component="span"
+            onClick={() => navigator.clipboard.writeText(value)}
+            sx={{
+              cursor: "pointer",
+              color: "primary.main",
+              textDecoration: "underline",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              whiteSpace: "nowrap",
+            }}
+          >
+            {value}
+          </Typography>
+        </Tooltip>
+      ),
     },
   ];
 
