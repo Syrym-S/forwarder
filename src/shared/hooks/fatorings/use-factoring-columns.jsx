@@ -7,11 +7,11 @@ import CustomNavLink from "../../ui/custom-nav-link";
 const useFactoringColumns = () => {
   const columns = [
     {
-      field: "index",
+      field: "id",
       headerName: "№",
       width: 200,
       renderCell: ({ row }) => (
-        <CustomNavLink label={row?.index} path={`/factoring/${row?.index}`} />
+        <CustomNavLink label={row?.id} path={`/factoring/${row?.id}`} />
       ),
     },
     {

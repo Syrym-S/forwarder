@@ -95,7 +95,7 @@ const Factoring = () => {
           }}
         >
           {factorings.map((factoring) => (
-            <FactoringCard factoring={factoring} key={factoring.index} />
+            <FactoringCard factoring={factoring} key={factoring.id} />
           ))}
         </Box>
       )}

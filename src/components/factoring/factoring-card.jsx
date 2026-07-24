@@ -9,7 +9,7 @@ const FactoringCard = ({ factoring }) => {
   const navigate = useNavigate();
 
   const handleNavigateToDetailsPage = () => {
-    navigate(`/factoring/${factoring?.index}`);
+    navigate(`/factoring/${factoring?.id}`);
   };
 
   return (
@@ -75,7 +75,7 @@ const FactoringCard = ({ factoring }) => {
             }}
           >
             <Chip
-              label={`Index# ${factoring?.index}`}
+              label={`Index# ${factoring?.id}`}
               color="primary"
               variant="outlined"
               sx={{
@@ -101,10 +101,7 @@ const FactoringCard = ({ factoring }) => {
             },
           }}
         >
-          <InfoField
-            label={"Номерной индекс"}
-            value={factoring?.index || "0"}
-          />
+          <InfoField label={"ID факторинга"} value={factoring?.id || "0"} />
           <InfoField label={"ID лида"} value={factoring?.lead_id} />
           <InfoField
             label={"Дата создания"}

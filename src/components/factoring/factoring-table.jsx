@@ -10,7 +10,7 @@ const FactoringTable = ({ factorings }) => {
     <Paper sx={{ my: "10px" }}>
       <DataGrid
         rows={factorings}
-        getRowId={(row) => row.index}
+        getRowId={(row) => row.id}
         columns={columns}
         checkboxSelection
         sx={{ border: 0 }}

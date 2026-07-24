@@ -102,7 +102,7 @@ const CreateFactoringForm = ({ openFormModal, handleModalClose }) => {
   useEffect(() => {
     if (!currentLead) return;
 
-    setValue("debSumm", currentLead.summ, {
+    setValue("debSumm", currentLead.price, {
       shouldDirty: true,
       shouldTouch: true,
     });
