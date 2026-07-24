@@ -45,6 +45,7 @@ const FirstStep = ({ control, errors, form, setValue }) => {
     handleClearRoute,
     clearFromPoint,
     clearToPoint,
+    setCount,
   } = useRouteMapPicker({
     form,
     fields,
@@ -73,7 +74,10 @@ const FirstStep = ({ control, errors, form, setValue }) => {
           <Button
             size="small"
             variant={activeMapPoint === "from" ? "contained" : "outlined"}
-            onClick={() => setActiveMapPoint("from")}
+            onClick={() => {
+              setActiveMapPoint("from");
+              setCount(0);
+            }}
           >
             Откуда
           </Button>
@@ -83,7 +87,10 @@ const FirstStep = ({ control, errors, form, setValue }) => {
               variant={
                 activeMapPoint === `cross.${index}` ? "contained" : "outlined"
               }
-              onClick={() => setActiveMapPoint(`cross.${index}`)}
+              onClick={() => {
+                setActiveMapPoint(`cross.${index}`);
+                setCount(index);
+              }}
             >
               Точка #{index + 1}
             </Button>

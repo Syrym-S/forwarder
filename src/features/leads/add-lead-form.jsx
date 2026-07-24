@@ -256,6 +256,13 @@ const AddLeadForm = ({
 
     const isStepValid = await trigger(fields);
 
+    if (
+      activeStep === 2 &&
+      (!formValues.cargos || formValues.cargos.length === 0)
+    ) {
+      return;
+    }
+
     if (!isStepValid) {
       return;
     }

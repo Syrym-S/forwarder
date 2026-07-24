@@ -178,6 +178,7 @@ export function useRouteMapPicker({ form, fields, setValue }) {
   }
 
   function handleClearRoute() {
+    setCount(0);
     abortReverseGeocode("from");
     abortReverseGeocode("to");
 
@@ -264,6 +265,7 @@ export function useRouteMapPicker({ form, fields, setValue }) {
 
   return {
     activeMapPoint,
+    setCount,
     loadingPoints,
     routeMarkers,
     routePoints,

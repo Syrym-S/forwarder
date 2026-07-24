@@ -35,8 +35,8 @@ export function getRouteMarkers(form) {
       markers.push({
         id: `cross.${index}`,
         position: [Number(waypoint.lat), Number(waypoint.lon || waypoint.lng)],
-        title: `Точка ${index}`,
-        description: `Точка пересечения ${index}`,
+        title: `Точка ${index + 1}`,
+        description: `Точка пересечения ${index + 1}`,
         draggable: true,
       });
     }
