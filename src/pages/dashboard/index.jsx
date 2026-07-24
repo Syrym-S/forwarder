@@ -7,6 +7,7 @@ import Map from "../../components/dashboard/map";
 import DashboardLeadsList from "../../components/dashboard/leads/dashboard-leads-list";
 
 import { useLeadsStore } from "../../app/store/leads/leads-store";
+import TendersMainContainer from "../../components/dashboard/tenders/tenders-main-container";
 
 const Dashboard = () => {
   const leads = useLeadsStore((state) => state.acceptedLeads);
@@ -85,6 +86,8 @@ const Dashboard = () => {
             onLeaveLead={handleLeaveLead}
           />
         </Box>
+
+        <TendersMainContainer />
       </Container>
     </RootLayout>
   );
