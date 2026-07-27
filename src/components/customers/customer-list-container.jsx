@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useCustomerStore } from "../../app/store/customers/customers-store";
 import { VIEWS } from "../../shared/const/leads";
 import { useSearchParams } from "react-router-dom";
-import { Box, Pagination } from "@mui/material";
+import { Alert, Box, Pagination } from "@mui/material";
 import RootLayout from "../layout/root-layout";
 import PageLoader from "../../shared/ui/loaders/page-loader";
 import CustomersTable from "./customer-table";
@@ -79,7 +79,20 @@ const CustomerListContainer = ({ view }) => {
           gap: 5,
         }}
       >
-        {isCardsView &&
+        {isCardsView && isEmpty ? (
+          <Alert
+            severity="info"
+            sx={{
+              width: {
+                xs: "100%",
+                sm: "60%",
+              },
+              my: 1,
+            }}
+          >
+            Список заказчиков пуст
+          </Alert>
+        ) : (
           customers.map((customer) => (
             <>
               <CustomerCard
@@ -88,9 +101,8 @@ const CustomerListContainer = ({ view }) => {
                 setSelectedCustomer={setSelectedCustomer}
               />
             </>
-          ))}
-
-        {isEmpty && <>{isLoading ? <PageLoader /> : <EmptyListUI />}</>}
+          ))
+        )}
 
         {selectedCustomer && (
           <CustomerDetailsModal

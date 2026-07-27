@@ -78,22 +78,6 @@ const TenderForwarders = () => {
         />
       )}
 
-      {isTendersEmpty && (
-        <Alert
-          severity="info"
-          sx={{
-            width: {
-              xs: "100%",
-              sm: "60%",
-            },
-            my: 1,
-            mx: "auto",
-          }}
-        >
-          Список пуст. Добавьте тендер!
-        </Alert>
-      )}
-
       {isCardsView && (
         <Box
           sx={{
@@ -111,9 +95,25 @@ const TenderForwarders = () => {
             },
           }}
         >
-          {tenders.map((tender) => (
-            <ForwardersTenderCard key={tender.id} tender={tender} />
-          ))}
+          {isTendersEmpty ? (
+            <Alert
+              severity="info"
+              sx={{
+                width: {
+                  xs: "100%",
+                  sm: "60%",
+                },
+                my: 1,
+                mx: "auto",
+              }}
+            >
+              Список пуст. Добавьте тендер!
+            </Alert>
+          ) : (
+            tenders.map((tender) => (
+              <ForwardersTenderCard key={tender.id} tender={tender} />
+            ))
+          )}
         </Box>
       )}
 

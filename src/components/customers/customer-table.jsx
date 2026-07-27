@@ -12,7 +12,10 @@ const CustomersTable = ({ customers, setSelectedCustomer }) => {
         getRowId={(row) => row.id}
         columns={columns}
         checkboxSelection
-        sx={{ border: 0 }}
+        sx={{ border: 0, minHeight: "80vh" }}
+        localeText={{
+          noRowsLabel: "Список заказчиков пуст",
+        }}
       />
     </Paper>
   );

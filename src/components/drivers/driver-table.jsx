@@ -12,7 +12,10 @@ const DriversTable = ({ drivers, setSelectedDriver }) => {
         getRowId={(row) => row.id}
         columns={columns}
         checkboxSelection
-        sx={{ border: 0 }}
+        sx={{ border: 0, minHeight: "80vh" }}
+        localeText={{
+          noRowsLabel: "Список водителей пуст",
+        }}
         pinnedColumns={{
           left: ["invite_link"],
         }}

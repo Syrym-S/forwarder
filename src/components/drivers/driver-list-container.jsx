@@ -1,4 +1,4 @@
-import { Box, Pagination } from "@mui/material";
+import { Alert, Box, Pagination } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import DriversTable from "./driver-table";
 import DriverCard from "./driver-card";
@@ -52,8 +52,6 @@ const DriverListContainer = ({ view }) => {
 
   return (
     <Box>
-      {isEmpty && <>{isLoading ? <PageLoader /> : <EmptyListUI />}</>}
-
       {!isCardsView && (
         <DriversTable drivers={drivers} setSelectedDriver={setSelectedDriver} />
       )}
@@ -70,15 +68,28 @@ const DriverListContainer = ({ view }) => {
             gap: 5,
           }}
         >
-          {drivers.map((driver) => (
-            <>
+          {isEmpty ? (
+            <Alert
+              severity="info"
+              sx={{
+                width: {
+                  xs: "100%",
+                  sm: "60%",
+                },
+                my: 1,
+              }}
+            >
+              Список заказчиков пуст
+            </Alert>
+          ) : (
+            drivers.map((driver) => (
               <DriverCard
                 key={driver.id}
                 driver={driver}
                 setSelectedDriver={setSelectedDriver}
               />
-            </>
-          ))}
+            ))
+          )}
         </Box>
       )}
 
@@ -89,17 +100,19 @@ const DriverListContainer = ({ view }) => {
         />
       )}
 
-      <Pagination
-        sx={{
-          mx: "auto",
-          width: "fit-content",
-        }}
-        color="primary"
-        shape="rounded"
-        page={page}
-        count={PAGE_COUNT}
-        onChange={handlePageChange}
-      />
+      {!isEmpty && (
+        <Pagination
+          sx={{
+            mx: "auto",
+            width: "fit-content",
+          }}
+          color="primary"
+          shape="rounded"
+          page={page}
+          count={PAGE_COUNT}
+          onChange={handlePageChange}
+        />
+      )}
     </Box>
   );
 };
