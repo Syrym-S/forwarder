@@ -12,7 +12,7 @@ const menuItems = [
         id: 1,
         path: "/",
         lable: "Маршруты",
-        tooltip_text: "Отображение всех маршрутов по карте",
+        tooltip_text: "Отображение всех маршрутов на карте",
       },
     ],
   },
@@ -25,13 +25,13 @@ const menuItems = [
         path: "/active-leads",
         lable: "Активные перевозки",
         tooltip_text:
-          "Созданные вами и заказщиками, активные перевозки. Создать лид",
+          "Созданные вами и заказчиками активные перевозки. Возможность создать лид",
       },
       {
         id: 2,
         path: "/history-leads",
         lable: "История перевозок",
-        tooltip_text: "Список завершенных и удаленных перевозок",
+        tooltip_text: "Список завершённых и удалённых перевозок",
       },
     ],
   },
@@ -39,15 +39,15 @@ const menuItems = [
     id: 3,
     label: "Финансы",
     sub_items: [
-      { id: 1, path: "/account", lable: "Account", tooltip_text: "Soon" },
+      { id: 1, path: "/account", lable: "Счёт", tooltip_text: "Скоро" },
       {
         id: 2,
         path: "/factorings",
         lable: "Факторинги",
         tooltip_text:
-          "Список созданных вами , заказщиками и факторами факторингов. Создать факторинг",
+          "Список факторингов, созданных вами, заказчиками и факторами. Возможность создать факторинг",
       },
-      { id: 1, path: "/factor", lable: "Фактор", tooltip_text: "Soon" },
+      { id: 3, path: "/factor", lable: "Фактор", tooltip_text: "Скоро" },
     ],
   },
   {
@@ -57,14 +57,14 @@ const menuItems = [
       {
         id: 1,
         path: "/customers",
-        lable: "Заказщики",
-        tooltip_text: "Списов всех заказщиков",
+        lable: "Заказчики",
+        tooltip_text: "Список всех заказчиков",
       },
       {
         id: 2,
         path: "/drivers",
         lable: "Водители",
-        tooltip_text: "Списов всех водителей",
+        tooltip_text: "Список всех водителей",
       },
     ],
   },
@@ -76,13 +76,13 @@ const menuItems = [
         id: 1,
         path: "/tender-applications",
         lable: "Тендерные заявки",
-        tooltip_text: "Cписок тендеров от заказщиков",
+        tooltip_text: "Список тендеров от заказчиков",
       },
       {
         id: 2,
         path: "/tender-forwarders",
-        lable: "Тендера перевозчиков",
-        tooltip_text: "Список тендеров созданных вами",
+        lable: "Тендеры перевозчиков",
+        tooltip_text: "Список тендеров, созданных вами",
       },
     ],
   },
@@ -129,7 +129,7 @@ const SideBar = ({ openMenu, setOpenMenu }) => {
             </Typography>
           )}
           {item.sub_items.map((sub_item) => (
-            <Tooltip title={sub_item.tooltip_text}>
+            <Tooltip title={sub_item.tooltip_text} disableInteractive>
               <NavLink
                 key={sub_item.id}
                 className={"link"}
