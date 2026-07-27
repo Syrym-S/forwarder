@@ -22,7 +22,10 @@ const NotificationItem = ({
         p: 1,
         backgroundColor: isViewd ? "white" : "rgba(144, 202, 249, 0.1)",
         borderBottom: "1px solid rgba(0,0,0,0.1)",
-        cursor: !isViewd && "pointer",
+        cursor: "pointer",
+        "&:hover": {
+          backgroundColor: "rgba(144, 202, 249, 0.1)",
+        },
       }}
     >
       <Typography

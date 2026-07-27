@@ -112,7 +112,7 @@ const NotificationsDrawer = ({
           {isLoading ? (
             <Box
               sx={{
-                height: "100%",
+                height: "100vh",
                 border: "1px solid rgba(0,0,0,0.1)",
                 display: "flex",
                 justifyContent: "center",
