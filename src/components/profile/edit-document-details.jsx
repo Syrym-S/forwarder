@@ -41,6 +41,18 @@ const EditDocumentDetails = ({ control }) => {
           />
         )}
       />
+
+      <TextField
+        name="employerDocument"
+        label="Документ о трудоустройстве сотрудника"
+        disabled
+      />
+
+      <TextField
+        name="registrationDocument"
+        label="Документ о регистрации юридического лица"
+        disabled
+      />
     </Stack>
   );
 };
