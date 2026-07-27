@@ -28,7 +28,9 @@ export const useLeadsStore = create((set) => ({
   files: [],
   uploadedFiles: [],
   acceptedLeads: [],
+
   currentLead: null,
+  notificationPopUpCurrentLead: null,
 
   isLoading: false,
   isSearchLoading: false,
@@ -48,6 +50,9 @@ export const useLeadsStore = create((set) => ({
 
   clearCurrentLead: () => {
     set({ currentLead: null, error: null });
+  },
+  clearNotificationPopUpCurrentLead: () => {
+    set({ notificationPopUpCurrentLead: null, error: null });
   },
 
   fetchLeads: async (params) => {
@@ -160,6 +165,27 @@ export const useLeadsStore = create((set) => ({
     } catch (e) {
       set({
         currentLead: null,
+        isLoading: false,
+        error: e.message,
+      });
+
+      console.error(e);
+    }
+  },
+
+  getNotificationPopUpLeadItem: async (lead_id) => {
+    try {
+      set({ isLoading: true, error: null });
+
+      const response = await getLeadItemDetails(lead_id);
+
+      set({
+        notificationPopUpCurrentLead: response.data.data,
+        isLoading: false,
+      });
+    } catch (e) {
+      set({
+        notificationPopUpCurrentLead: null,
         isLoading: false,
         error: e.message,
       });
