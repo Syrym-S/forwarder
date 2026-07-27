@@ -58,10 +58,12 @@ const getLocationAddress = (location) => {
   return location?.address || "Адрес не указан";
 };
 
-const getRoute = async (start, end) => {
+const getRoute = async (points) => {
   try {
+    const coordinates = points.map(([lat, lon]) => `${lon},${lat}`).join(";");
+
     const response = await fetch(
-      `https://router.project-osrm.org/route/v1/driving/${start[1]},${start[0]};${end[1]},${end[0]}?overview=full&geometries=geojson`,
+      `https://router.project-osrm.org/route/v1/driving/${coordinates}?overview=full&geometries=geojson`,
     );
 
     const data = await response.json();
@@ -196,10 +198,15 @@ const Map = ({
     const loadRoutes = async () => {
       const result = await Promise.all(
         leads.filter(hasRouteLocations).map(async (lead) => {
-          const route = await getRoute(
-            getLocationPoint(lead.from_location),
-            getLocationPoint(lead.to_location),
+          const cross = lead.waypoints.map((waypoint) =>
+            getLocationPoint(waypoint),
           );
+
+          const route = await getRoute([
+            getLocationPoint(lead.from_location),
+            ...cross,
+            getLocationPoint(lead.to_location),
+          ]);
 
           if (!route) {
             return null;
@@ -358,6 +365,10 @@ const Map = ({
                 click: () => onSelectLead?.(route.id),
               }}
             />
+
+            {route.lead.waypoints.map((waypoint) => (
+              <Marker position={[waypoint.lat, waypoint.lon]} />
+            ))}
 
             <Marker
               position={route.end}
