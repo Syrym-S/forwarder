@@ -12,7 +12,10 @@ const LeadsTable = (leads) => {
         getRowId={(row) => row.id}
         columns={columns}
         checkboxSelection
-        sx={{ border: 0 }}
+        sx={{ border: 0, minHeight: "80vh" }}
+        localeText={{
+          noRowsLabel: "Список лидов пуст",
+        }}
       />
     </Paper>
   );

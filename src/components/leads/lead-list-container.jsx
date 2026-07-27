@@ -25,35 +25,20 @@ const LeadListContainer = ({
 
   return (
     <>
-      {isLeadsEmpty &&
-        (!filterStatus ? (
-          <Alert
-            severity="info"
-            sx={{
-              width: {
-                xs: "100%",
-                sm: "60%",
-              },
-              my: 1,
-              mx: "auto",
-            }}
-          >
-            Список пуст. Вы можете добавить лид!
-          </Alert>
-        ) : (
-          <Alert
-            severity="info"
-            sx={{
-              width: {
-                xs: "100%",
-                sm: "60%",
-              },
-              my: 1,
-            }}
-          >
-            По статусу "{filterStatus.label}" активных лидов нет!
-          </Alert>
-        ))}
+      {isLeadsEmpty && filterStatus && (
+        <Alert
+          severity="info"
+          sx={{
+            width: {
+              xs: "100%",
+              sm: "60%",
+            },
+            my: 1,
+          }}
+        >
+          По статусу "{filterStatus.label}" активных лидов нет!
+        </Alert>
+      )}
       {isCardsView && (
         <Box
           sx={{
@@ -70,9 +55,22 @@ const LeadListContainer = ({
             },
           }}
         >
-          {leads.map((lead) => (
-            <LeadCard key={lead.id} lead={lead} />
-          ))}
+          {isLeadsEmpty ? (
+            <Alert
+              severity="info"
+              sx={{
+                width: {
+                  xs: "100%",
+                  sm: "60%",
+                },
+                my: 1,
+              }}
+            >
+              Список лидов пуст
+            </Alert>
+          ) : (
+            leads.map((lead) => <LeadCard key={lead.id} lead={lead} />)
+          )}
         </Box>
       )}
       {isTableView && <LeadsTable leads={leads} />}
