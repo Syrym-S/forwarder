@@ -109,8 +109,6 @@ const LeadItem = () => {
     };
   });
 
-  console.log("waypoints", waypoints);
-
   const cargosCount = leadData?.cargos?.length;
 
   async function reloadLeadDocuments(leadId) {

@@ -1,7 +1,31 @@
-import { Stack, TextField, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  FormHelperText,
+  IconButton,
+  Typography,
+  Stack,
+  TextField,
+} from "@mui/material";
 import { Controller } from "react-hook-form";
+import UploadFileIcon from "@mui/icons-material/UploadFile";
+import InsertDriveFileOutlinedIcon from "@mui/icons-material/InsertDriveFileOutlined";
+import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
+import LegalDocumentViewer from "./legal-document-viewer";
 
-const EditDocumentDetails = ({ control }) => {
+const EditDocumentDetails = ({
+  control,
+  legalDocuments,
+  setRegistrationDocumentsToUpload,
+  setEmployerDocumentToUpload,
+  isSubmitting,
+}) => {
+  const registrationDocument =
+    legalDocuments?.find((document) => document.context === "registration") ||
+    {};
+  const employerDocument =
+    legalDocuments?.find((document) => document.context === "employer") || {};
+
   return (
     <Stack spacing={2}>
       <Typography fontWeight={600}>Документ</Typography>
@@ -42,16 +66,288 @@ const EditDocumentDetails = ({ control }) => {
         )}
       />
 
-      <TextField
-        name="employerDocument"
-        label="Документ о трудоустройстве сотрудника"
-        disabled
+      <Controller
+        name="registration_document"
+        control={control}
+        render={({ field, fieldState: { error } }) => {
+          const file = field.value?.[0];
+
+          return (
+            <Box
+              sx={{
+                border: "1px solid",
+                my: 1,
+                borderColor: error ? "error.main" : "divider",
+                borderRadius: 2,
+                p: 2,
+                transition: "0.2s",
+                "&:hover": {
+                  borderColor: "primary.main",
+                  backgroundColor: "action.hover",
+                },
+              }}
+            >
+              <Box
+                sx={{ display: "flex", flexDirection: "column", width: "50%" }}
+              >
+                <Stack>
+                  <Typography
+                    sx={{
+                      color: "rgba(0, 0, 0, 0.6)",
+                      fontSize: "1rem",
+                      lineHeight: 1.4375,
+                      letterSpacing: "0.00938em",
+                      fontWeight: 400,
+                    }}
+                  >
+                    Документ о регистрации юридического лица
+                  </Typography>
+
+                  <Button
+                    component="label"
+                    variant="outlined"
+                    startIcon={<UploadFileIcon />}
+                  >
+                    Выбрать файл
+                    <input
+                      hidden
+                      type="file"
+                      accept=".pdf,.jpg,.jpeg,.png"
+                      onChange={(event) => {
+                        field.onChange(event.target.files);
+
+                        setRegistrationDocumentsToUpload(event.target.files);
+                      }}
+                    />
+                  </Button>
+                </Stack>
+
+                {registrationDocument && (
+                  <LegalDocumentViewer file={registrationDocument} />
+                )}
+              </Box>
+
+              {file && (
+                <Box
+                  sx={{
+                    mt: 2,
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 1.5,
+                    p: 1.5,
+                    border: "1px solid",
+                    borderColor: "divider",
+                    borderRadius: 2,
+                    backgroundColor: "background.paper",
+                  }}
+                >
+                  {file.type.startsWith("image/") ? (
+                    <Box
+                      component="img"
+                      src={URL.createObjectURL(file)}
+                      alt={file.name}
+                      sx={{
+                        width: 56,
+                        height: 56,
+                        borderRadius: 1,
+                        objectFit: "cover",
+                      }}
+                    />
+                  ) : (
+                    <Box
+                      sx={{
+                        width: 56,
+                        height: 56,
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        borderRadius: 1,
+                        backgroundColor: "action.hover",
+                      }}
+                    >
+                      <InsertDriveFileOutlinedIcon
+                        color="primary"
+                        fontSize="large"
+                      />
+                    </Box>
+                  )}
+
+                  <Box
+                    sx={{
+                      minWidth: 0,
+                      flex: 1,
+                    }}
+                  >
+                    <Typography
+                      variant="body2"
+                      fontWeight={500}
+                      noWrap
+                      title={file.name}
+                    >
+                      {file.name}
+                    </Typography>
+
+                    <Typography variant="caption" color="text.secondary">
+                      {(file.size / 1024 / 1024).toFixed(2)} MB
+                    </Typography>
+                  </Box>
+
+                  <IconButton
+                    disabled={isSubmitting}
+                    color="error"
+                    onClick={() => field.onChange(null)}
+                  >
+                    <DeleteOutlineOutlinedIcon />
+                  </IconButton>
+                </Box>
+              )}
+
+              {error && <FormHelperText error>{error.message}</FormHelperText>}
+            </Box>
+          );
+        }}
       />
 
-      <TextField
-        name="registrationDocument"
-        label="Документ о регистрации юридического лица"
-        disabled
+      <Controller
+        name="employer_document"
+        control={control}
+        render={({ field, fieldState: { error } }) => {
+          const file = field.value?.[0];
+
+          return (
+            <Box
+              sx={{
+                border: "1px solid",
+                my: 1,
+                borderColor: error ? "error.main" : "divider",
+                borderRadius: 2,
+                p: 2,
+                transition: "0.2s",
+                "&:hover": {
+                  borderColor: "primary.main",
+                  backgroundColor: "action.hover",
+                },
+              }}
+            >
+              <Box
+                sx={{ display: "flex", flexDirection: "column", width: "50%" }}
+              >
+                <Stack>
+                  <Typography
+                    sx={{
+                      color: "rgba(0, 0, 0, 0.6)",
+                      fontSize: "1rem",
+                      lineHeight: 1.4375,
+                      letterSpacing: "0.00938em",
+                      fontWeight: 400,
+                    }}
+                  >
+                    Документ о трудоустройстве сотрудника
+                  </Typography>
+
+                  <Button
+                    component="label"
+                    variant="outlined"
+                    startIcon={<UploadFileIcon />}
+                  >
+                    Выбрать файл
+                    <input
+                      hidden
+                      type="file"
+                      accept=".pdf,.jpg,.jpeg,.png"
+                      onChange={(event) => {
+                        field.onChange(event.target.files);
+
+                        setEmployerDocumentToUpload(event.target.files);
+                      }}
+                    />
+                  </Button>
+                </Stack>
+
+                {employerDocument && (
+                  <LegalDocumentViewer file={employerDocument} />
+                )}
+              </Box>
+
+              {file && (
+                <Box
+                  sx={{
+                    mt: 2,
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 1.5,
+                    p: 1.5,
+                    border: "1px solid",
+                    borderColor: "divider",
+                    borderRadius: 2,
+                    backgroundColor: "background.paper",
+                  }}
+                >
+                  {file.type.startsWith("image/") ? (
+                    <Box
+                      component="img"
+                      src={URL.createObjectURL(file)}
+                      alt={file.name}
+                      sx={{
+                        width: 56,
+                        height: 56,
+                        borderRadius: 1,
+                        objectFit: "cover",
+                      }}
+                    />
+                  ) : (
+                    <Box
+                      sx={{
+                        width: 56,
+                        height: 56,
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        borderRadius: 1,
+                        backgroundColor: "action.hover",
+                      }}
+                    >
+                      <InsertDriveFileOutlinedIcon
+                        color="primary"
+                        fontSize="large"
+                      />
+                    </Box>
+                  )}
+
+                  <Box
+                    sx={{
+                      minWidth: 0,
+                      flex: 1,
+                    }}
+                  >
+                    <Typography
+                      variant="body2"
+                      fontWeight={500}
+                      noWrap
+                      title={file.name}
+                    >
+                      {file.name}
+                    </Typography>
+
+                    <Typography variant="caption" color="text.secondary">
+                      {(file.size / 1024 / 1024).toFixed(2)} MB
+                    </Typography>
+                  </Box>
+
+                  <IconButton
+                    disabled={isSubmitting}
+                    color="error"
+                    onClick={() => field.onChange(null)}
+                  >
+                    <DeleteOutlineOutlinedIcon />
+                  </IconButton>
+                </Box>
+              )}
+
+              {error && <FormHelperText error>{error.message}</FormHelperText>}
+            </Box>
+          );
+        }}
       />
     </Stack>
   );

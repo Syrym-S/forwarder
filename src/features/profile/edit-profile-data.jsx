@@ -11,10 +11,19 @@ import { useProfileStore } from "../../app/store/profile/profile-store";
 import { mapProfileFormToChangedApi } from "../profile-edit/profile-form-helpers";
 import RenderErroMessage from "../../shared/ui/render-error-message";
 
-const EditProfileForm = ({ profileData }) => {
+const EditProfileForm = ({ profileData, legalDocuments }) => {
+  const [registrationDocumentsToUpload, setRegistrationDocumentsToUpload] =
+    useState(null);
+  const [employerDocumentToUpload, setEmployerDocumentToUpload] =
+    useState(null);
   const uploadAvatarError = useProfileStore((state) => state.uploadAvatarError);
+  const uploadLegalDocuments = useProfileStore(
+    (state) => state.uploadLegalDocuments,
+  );
+
   const editProfileData = useProfileStore((state) => state.editProfileData);
   const getProfileData = useProfileStore((state) => state.getProfileData);
+  const getLegalDocuments = useProfileStore((state) => state.getLegalDocuments);
   const uploadAvatar = useProfileStore((state) => state.uploadAvatar);
   const deleteAvatar = useProfileStore((state) => state.deleteAvatar);
 
@@ -25,6 +34,7 @@ const EditProfileForm = ({ profileData }) => {
   const {
     control,
     handleSubmit,
+    setValue,
     formState: { isDirty },
   } = useForm({
     values: profileData,
@@ -56,9 +66,32 @@ const EditProfileForm = ({ profileData }) => {
   const onEditSubmit = async (data) => {
     setIsSubmitting(true);
 
-    const payload = mapProfileFormToChangedApi(data);
+    const documents = [];
 
-    await editProfileData(payload);
+    if (registrationDocumentsToUpload) {
+      documents.push(registrationDocumentsToUpload[0]);
+    }
+
+    if (employerDocumentToUpload) {
+      documents.push(employerDocumentToUpload[0]);
+    }
+
+    const payload = mapProfileFormToChangedApi(data);
+    const initialPayload = mapProfileFormToChangedApi(profileData);
+
+    const isProfileChanged =
+      JSON.stringify(payload) !== JSON.stringify(initialPayload);
+
+    if (isProfileChanged) {
+      await editProfileData(payload);
+    }
+
+    if (documents.length > 0) {
+      await uploadLegalDocuments(
+        registrationDocumentsToUpload,
+        employerDocumentToUpload,
+      );
+    }
 
     if (selectedImg) {
       await uploadAvatar({
@@ -69,9 +102,14 @@ const EditProfileForm = ({ profileData }) => {
     }
 
     await getProfileData();
-    setSelectedImg("");
-    setPreview("");
+    await getLegalDocuments();
 
+    setSelectedImg(null);
+    setPreview(null);
+    setRegistrationDocumentsToUpload(null);
+    setValue("registration_document", null);
+    setValue("employer_document", null);
+    setEmployerDocumentToUpload(null);
     setIsSubmitting(false);
   };
 
@@ -95,7 +133,13 @@ const EditProfileForm = ({ profileData }) => {
 
       <EditPassword control={control} />
 
-      <EditDocumentDetails control={control} />
+      <EditDocumentDetails
+        isSubmitting={isSubmitting}
+        legalDocuments={legalDocuments}
+        setRegistrationDocumentsToUpload={setRegistrationDocumentsToUpload}
+        setEmployerDocumentToUpload={setEmployerDocumentToUpload}
+        control={control}
+      />
 
       <Box>
         <Button

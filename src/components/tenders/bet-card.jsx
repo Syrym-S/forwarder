@@ -13,8 +13,6 @@ export const BetCard = ({ tender, bet }) => {
     getTenderDetails(tender.id);
   };
 
-  console.log(bet);
-
   return (
     <Box
       sx={{

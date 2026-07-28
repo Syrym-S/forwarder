@@ -14,9 +14,12 @@ import PageLoader from "../../shared/ui/loaders/page-loader";
 const ReProfile = () => {
   const profileData = useProfileStore((state) => state.profileData);
   const getProfileData = useProfileStore((state) => state.getProfileData);
+  const legalDocuments = useProfileStore((state) => state.legalDocuments);
+  const getLegalDocuments = useProfileStore((state) => state.getLegalDocuments);
 
   useEffect(() => {
     getProfileData();
+    getLegalDocuments();
   }, []);
 
   if (!profileData)
@@ -49,7 +52,10 @@ const ReProfile = () => {
               </Typography>
             </Box>
 
-            <EditProfileForm profileData={profileData} />
+            <EditProfileForm
+              profileData={profileData}
+              legalDocuments={legalDocuments}
+            />
           </Stack>
         </Paper>
       </Container>

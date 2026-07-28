@@ -39,3 +39,38 @@ export async function deleteAvatarApi() {
 
   return response.data;
 }
+
+export async function getLegalDocumentsApi() {
+  const response = await api.get(`forwarder/profile/v1/documents`);
+
+  return response.data;
+}
+
+export async function uploadLegalDocumentsApi(
+  registrationDocumentsToUpload,
+  employerDocumentToUpload,
+) {
+  const formData = new FormData();
+
+  if (registrationDocumentsToUpload) {
+    formData.append("registration_document", registrationDocumentsToUpload[0]);
+    formData.append(
+      "registration_document_name",
+      "Документ о регистрации юридического лица",
+    );
+  }
+  if (employerDocumentToUpload) {
+    formData.append("employer_document", employerDocumentToUpload[0]);
+    formData.append(
+      "employer_document_name",
+      "Документ о трудоустройстве сотрудника с правам подписи или приказ о назначение первого руководителя",
+    );
+  }
+
+  const response = await api.post(
+    `forwarder/profile/v1/documents/upload`,
+    formData,
+  );
+
+  return response.data;
+}

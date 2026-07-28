@@ -2,15 +2,19 @@ import { create } from "zustand";
 import {
   deleteAvatarApi,
   editProfileApi,
+  getLegalDocumentsApi,
   getProfileDataApi,
   uploadAvatarApi,
+  uploadLegalDocumentsApi,
 } from "./api";
 
 export const useProfileStore = create((set) => ({
   profileData: null,
+  legalDocuments: null,
   uploadAvatarError: null,
   isProfileLoading: false,
   isAvatarLoading: false,
+  isLegalDocumentsLoading: false,
 
   getProfileData: async () => {
     try {
@@ -82,6 +86,57 @@ export const useProfileStore = create((set) => ({
       set({
         error: e.message,
         isAvatarLoading: false,
+      });
+
+      throw e;
+    }
+  },
+
+  getLegalDocuments: async () => {
+    try {
+      set({ isLegalDocumentsLoading: true, error: null });
+
+      const response = await getLegalDocumentsApi();
+
+      set({
+        legalDocuments: response.documents,
+        isLegalDocumentsLoading: false,
+        error: null,
+      });
+
+      return response;
+    } catch (e) {
+      set({
+        error: e.message,
+        isAvatarLisLegalDocumentsLoadingoading: false,
+      });
+
+      throw e;
+    }
+  },
+
+  uploadLegalDocuments: async (
+    registrationDocumentsToUpload,
+    employerDocumentToUpload,
+  ) => {
+    try {
+      set({ isLegalDocumentsLoading: true, error: null });
+
+      const response = await uploadLegalDocumentsApi(
+        registrationDocumentsToUpload,
+        employerDocumentToUpload,
+      );
+
+      set({
+        isLegalDocumentsLoading: false,
+        error: null,
+      });
+
+      return response;
+    } catch (e) {
+      set({
+        error: e.message,
+        isAvatarLisLegalDocumentsLoadingoading: false,
       });
 
       throw e;

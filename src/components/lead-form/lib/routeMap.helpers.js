@@ -84,10 +84,7 @@ export function getRoutePoints(form) {
 
   form.waypoints.map((waypoint) => {
     if (hasPoint(waypoint.lat, waypoint.lon || waypoint.lng)) {
-      console.log("push");
       points.push([Number(waypoint.lat), Number(waypoint.lon || waypoint.lng)]);
-    } else {
-      console.log("Не пуш");
     }
   });
 
