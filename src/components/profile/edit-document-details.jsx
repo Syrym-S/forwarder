@@ -15,7 +15,10 @@ import LegalDocumentViewer from "./legal-document-viewer";
 
 const EditDocumentDetails = ({
   control,
+  setValue,
   legalDocuments,
+  registrationDocumentsToUpload,
+  employerDocumentToUpload,
   setRegistrationDocumentsToUpload,
   setEmployerDocumentToUpload,
   isSubmitting,
@@ -66,289 +69,293 @@ const EditDocumentDetails = ({
         )}
       />
 
-      <Controller
-        name="registration_document"
-        control={control}
-        render={({ field, fieldState: { error } }) => {
-          const file = field.value?.[0];
+      <Box
+        sx={{
+          display: "grid",
+          gap: 1,
+          gridTemplateColumns: {
+            xs: "1fr",
+            md: "1fr 1fr",
+          },
+        }}
+      >
+        <Box
+          sx={{
+            border: "1px solid",
+            my: 1,
+            borderColor: "divider",
+            borderRadius: 2,
+            p: 2,
+            transition: "0.2s",
+            "&:hover": {
+              borderColor: "primary.main",
+              backgroundColor: "action.hover",
+            },
+          }}
+        >
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+            }}
+          >
+            <Stack>
+              <Typography
+                sx={{
+                  color: "rgba(0, 0, 0, 0.6)",
+                  fontSize: "1rem",
+                  lineHeight: 1.4375,
+                  letterSpacing: "0.00938em",
+                  fontWeight: 400,
+                }}
+              >
+                Документ о регистрации юридического лица
+              </Typography>
 
-          return (
+              <Button
+                component="label"
+                variant="outlined"
+                startIcon={<UploadFileIcon />}
+              >
+                Выбрать файл
+                <input
+                  hidden
+                  type="file"
+                  accept=".pdf,.jpg,.jpeg,.png"
+                  onChange={(event) => {
+                    console.log(event.target.files);
+                    setRegistrationDocumentsToUpload(event.target.files);
+                  }}
+                />
+              </Button>
+            </Stack>
+
+            {registrationDocument && (
+              <LegalDocumentViewer file={registrationDocument} />
+            )}
+          </Box>
+
+          {registrationDocumentsToUpload && (
             <Box
               sx={{
+                mt: 2,
+                display: "flex",
+                alignItems: "center",
+                gap: 1.5,
+                p: 1.5,
                 border: "1px solid",
-                my: 1,
-                borderColor: error ? "error.main" : "divider",
+                borderColor: "divider",
                 borderRadius: 2,
-                p: 2,
-                transition: "0.2s",
-                "&:hover": {
-                  borderColor: "primary.main",
-                  backgroundColor: "action.hover",
-                },
+                backgroundColor: "background.paper",
               }}
             >
-              <Box
-                sx={{ display: "flex", flexDirection: "column", width: "50%" }}
-              >
-                <Stack>
-                  <Typography
-                    sx={{
-                      color: "rgba(0, 0, 0, 0.6)",
-                      fontSize: "1rem",
-                      lineHeight: 1.4375,
-                      letterSpacing: "0.00938em",
-                      fontWeight: 400,
-                    }}
-                  >
-                    Документ о регистрации юридического лица
-                  </Typography>
-
-                  <Button
-                    component="label"
-                    variant="outlined"
-                    startIcon={<UploadFileIcon />}
-                  >
-                    Выбрать файл
-                    <input
-                      hidden
-                      type="file"
-                      accept=".pdf,.jpg,.jpeg,.png"
-                      onChange={(event) => {
-                        field.onChange(event.target.files);
-
-                        setRegistrationDocumentsToUpload(event.target.files);
-                      }}
-                    />
-                  </Button>
-                </Stack>
-
-                {registrationDocument && (
-                  <LegalDocumentViewer file={registrationDocument} />
-                )}
-              </Box>
-
-              {file && (
+              {registrationDocumentsToUpload[0]?.type?.startsWith("image/") ? (
+                <Box
+                  component="img"
+                  src={URL.createObjectURL(registrationDocumentsToUpload[0])}
+                  alt={registrationDocumentsToUpload[0].name}
+                  sx={{
+                    width: 56,
+                    height: 56,
+                    borderRadius: 1,
+                    objectFit: "cover",
+                  }}
+                />
+              ) : (
                 <Box
                   sx={{
-                    mt: 2,
+                    width: 56,
+                    height: 56,
                     display: "flex",
                     alignItems: "center",
-                    gap: 1.5,
-                    p: 1.5,
-                    border: "1px solid",
-                    borderColor: "divider",
-                    borderRadius: 2,
-                    backgroundColor: "background.paper",
+                    justifyContent: "center",
+                    borderRadius: 1,
+                    backgroundColor: "action.hover",
                   }}
                 >
-                  {file.type.startsWith("image/") ? (
-                    <Box
-                      component="img"
-                      src={URL.createObjectURL(file)}
-                      alt={file.name}
-                      sx={{
-                        width: 56,
-                        height: 56,
-                        borderRadius: 1,
-                        objectFit: "cover",
-                      }}
-                    />
-                  ) : (
-                    <Box
-                      sx={{
-                        width: 56,
-                        height: 56,
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        borderRadius: 1,
-                        backgroundColor: "action.hover",
-                      }}
-                    >
-                      <InsertDriveFileOutlinedIcon
-                        color="primary"
-                        fontSize="large"
-                      />
-                    </Box>
-                  )}
+                  <InsertDriveFileOutlinedIcon
+                    color="primary"
+                    fontSize="large"
+                  />
+                </Box>
+              )}
+              <Box
+                sx={{
+                  minWidth: 0,
+                  flex: 1,
+                }}
+              >
+                <Typography
+                  variant="body2"
+                  fontWeight={500}
+                  noWrap
+                  title={registrationDocumentsToUpload[0].name}
+                >
+                  {registrationDocumentsToUpload[0].name}
+                </Typography>
 
-                  <Box
-                    sx={{
-                      minWidth: 0,
-                      flex: 1,
-                    }}
-                  >
-                    <Typography
-                      variant="body2"
-                      fontWeight={500}
-                      noWrap
-                      title={file.name}
-                    >
-                      {file.name}
-                    </Typography>
+                <Typography variant="caption" color="text.secondary">
+                  {(
+                    registrationDocumentsToUpload[0].size /
+                    1024 /
+                    1024
+                  ).toFixed(2)}{" "}
+                  MB
+                </Typography>
+              </Box>
+              <IconButton
+                disabled={isSubmitting}
+                color="error"
+                onClick={() => {
+                  setRegistrationDocumentsToUpload(null);
+                }}
+              >
+                <DeleteOutlineOutlinedIcon />
+              </IconButton>
+            </Box>
+          )}
 
-                    <Typography variant="caption" color="text.secondary">
-                      {(file.size / 1024 / 1024).toFixed(2)} MB
-                    </Typography>
-                  </Box>
+          {/* {error && <FormHelperText error>{error.message}</FormHelperText>} */}
+        </Box>
 
-                  <IconButton
-                    disabled={isSubmitting}
-                    color="error"
-                    onClick={() => field.onChange(null)}
-                  >
-                    <DeleteOutlineOutlinedIcon />
-                  </IconButton>
+        <Box
+          sx={{
+            border: "1px solid",
+            my: 1,
+            borderColor: "divider",
+            borderRadius: 2,
+            p: 2,
+            transition: "0.2s",
+            "&:hover": {
+              borderColor: "primary.main",
+              backgroundColor: "action.hover",
+            },
+          }}
+        >
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+            }}
+          >
+            <Stack>
+              <Typography
+                sx={{
+                  color: "rgba(0, 0, 0, 0.6)",
+                  fontSize: "1rem",
+                  lineHeight: 1.4375,
+                  letterSpacing: "0.00938em",
+                  fontWeight: 400,
+                }}
+              >
+                Документ о трудоустройстве сотрудника
+              </Typography>
+
+              <Button
+                component="label"
+                variant="outlined"
+                startIcon={<UploadFileIcon />}
+              >
+                Выбрать файл
+                <input
+                  hidden
+                  type="file"
+                  accept=".pdf,.jpg,.jpeg,.png"
+                  onChange={(event) => {
+                    console.log("event", event.target.files);
+                    setEmployerDocumentToUpload(event.target.files);
+                  }}
+                />
+              </Button>
+            </Stack>
+
+            {employerDocument && (
+              <LegalDocumentViewer file={employerDocument} />
+            )}
+          </Box>
+
+          {employerDocumentToUpload && (
+            <Box
+              sx={{
+                mt: 2,
+                display: "flex",
+                alignItems: "center",
+                gap: 1.5,
+                p: 1.5,
+                border: "1px solid",
+                borderColor: "divider",
+                borderRadius: 2,
+                backgroundColor: "background.paper",
+              }}
+            >
+              {employerDocumentToUpload[0].type.startsWith("image/") ? (
+                <Box
+                  component="img"
+                  src={URL.createObjectURL(employerDocumentToUpload[0])}
+                  alt={employerDocumentToUpload[0].name}
+                  sx={{
+                    width: 56,
+                    height: 56,
+                    borderRadius: 1,
+                    objectFit: "cover",
+                  }}
+                />
+              ) : (
+                <Box
+                  sx={{
+                    width: 56,
+                    height: 56,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    borderRadius: 1,
+                    backgroundColor: "action.hover",
+                  }}
+                >
+                  <InsertDriveFileOutlinedIcon
+                    color="primary"
+                    fontSize="large"
+                  />
                 </Box>
               )}
 
-              {error && <FormHelperText error>{error.message}</FormHelperText>}
-            </Box>
-          );
-        }}
-      />
-
-      <Controller
-        name="employer_document"
-        control={control}
-        render={({ field, fieldState: { error } }) => {
-          const file = field.value?.[0];
-
-          return (
-            <Box
-              sx={{
-                border: "1px solid",
-                my: 1,
-                borderColor: error ? "error.main" : "divider",
-                borderRadius: 2,
-                p: 2,
-                transition: "0.2s",
-                "&:hover": {
-                  borderColor: "primary.main",
-                  backgroundColor: "action.hover",
-                },
-              }}
-            >
               <Box
-                sx={{ display: "flex", flexDirection: "column", width: "50%" }}
+                sx={{
+                  minWidth: 0,
+                  flex: 1,
+                }}
               >
-                <Stack>
-                  <Typography
-                    sx={{
-                      color: "rgba(0, 0, 0, 0.6)",
-                      fontSize: "1rem",
-                      lineHeight: 1.4375,
-                      letterSpacing: "0.00938em",
-                      fontWeight: 400,
-                    }}
-                  >
-                    Документ о трудоустройстве сотрудника
-                  </Typography>
+                <Typography
+                  variant="body2"
+                  fontWeight={500}
+                  noWrap
+                  title={employerDocumentToUpload[0].name}
+                >
+                  {employerDocumentToUpload[0].name}
+                </Typography>
 
-                  <Button
-                    component="label"
-                    variant="outlined"
-                    startIcon={<UploadFileIcon />}
-                  >
-                    Выбрать файл
-                    <input
-                      hidden
-                      type="file"
-                      accept=".pdf,.jpg,.jpeg,.png"
-                      onChange={(event) => {
-                        field.onChange(event.target.files);
-
-                        setEmployerDocumentToUpload(event.target.files);
-                      }}
-                    />
-                  </Button>
-                </Stack>
-
-                {employerDocument && (
-                  <LegalDocumentViewer file={employerDocument} />
-                )}
+                <Typography variant="caption" color="text.secondary">
+                  {(employerDocumentToUpload[0].size / 1024 / 1024).toFixed(2)}{" "}
+                  MB
+                </Typography>
               </Box>
 
-              {file && (
-                <Box
-                  sx={{
-                    mt: 2,
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 1.5,
-                    p: 1.5,
-                    border: "1px solid",
-                    borderColor: "divider",
-                    borderRadius: 2,
-                    backgroundColor: "background.paper",
-                  }}
-                >
-                  {file.type.startsWith("image/") ? (
-                    <Box
-                      component="img"
-                      src={URL.createObjectURL(file)}
-                      alt={file.name}
-                      sx={{
-                        width: 56,
-                        height: 56,
-                        borderRadius: 1,
-                        objectFit: "cover",
-                      }}
-                    />
-                  ) : (
-                    <Box
-                      sx={{
-                        width: 56,
-                        height: 56,
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        borderRadius: 1,
-                        backgroundColor: "action.hover",
-                      }}
-                    >
-                      <InsertDriveFileOutlinedIcon
-                        color="primary"
-                        fontSize="large"
-                      />
-                    </Box>
-                  )}
-
-                  <Box
-                    sx={{
-                      minWidth: 0,
-                      flex: 1,
-                    }}
-                  >
-                    <Typography
-                      variant="body2"
-                      fontWeight={500}
-                      noWrap
-                      title={file.name}
-                    >
-                      {file.name}
-                    </Typography>
-
-                    <Typography variant="caption" color="text.secondary">
-                      {(file.size / 1024 / 1024).toFixed(2)} MB
-                    </Typography>
-                  </Box>
-
-                  <IconButton
-                    disabled={isSubmitting}
-                    color="error"
-                    onClick={() => field.onChange(null)}
-                  >
-                    <DeleteOutlineOutlinedIcon />
-                  </IconButton>
-                </Box>
-              )}
-
-              {error && <FormHelperText error>{error.message}</FormHelperText>}
+              <IconButton
+                disabled={isSubmitting}
+                color="error"
+                onClick={() => {
+                  setValue("employer_document", null);
+                  setEmployerDocumentToUpload(null);
+                }}
+              >
+                <DeleteOutlineOutlinedIcon />
+              </IconButton>
             </Box>
-          );
-        }}
-      />
+          )}
+
+          {/* {error && <FormHelperText error>{error.message}</FormHelperText>} */}
+        </Box>
+      </Box>
     </Stack>
   );
 };

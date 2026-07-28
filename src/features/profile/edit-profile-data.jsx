@@ -6,7 +6,7 @@ import EditBankDetails from "../../components/profile/edit-bank-details";
 import EditContactPerson from "../../components/profile/edit-contact-person";
 import EditPassword from "../../components/profile/edit-password";
 import EditDocumentDetails from "../../components/profile/edit-document-details";
-import { Box, Button } from "@mui/material";
+import { Box, Button, CircularProgress } from "@mui/material";
 import { useProfileStore } from "../../app/store/profile/profile-store";
 import { mapProfileFormToChangedApi } from "../profile-edit/profile-form-helpers";
 import RenderErroMessage from "../../shared/ui/render-error-message";
@@ -66,53 +66,45 @@ const EditProfileForm = ({ profileData, legalDocuments }) => {
   const onEditSubmit = async (data) => {
     setIsSubmitting(true);
 
-    const documents = [];
+    try {
+      const payload = mapProfileFormToChangedApi(data, profileData);
 
-    if (registrationDocumentsToUpload) {
-      documents.push(registrationDocumentsToUpload[0]);
+      const isProfileChanged = Object.keys(payload).length > 0;
+
+      if (isProfileChanged) {
+        await editProfileData(payload);
+      }
+
+      if (registrationDocumentsToUpload || employerDocumentToUpload) {
+        await uploadLegalDocuments(
+          registrationDocumentsToUpload,
+          employerDocumentToUpload,
+        );
+      }
+
+      if (selectedImg) {
+        await uploadAvatar({
+          file: selectedImg,
+          name: selectedImg.name,
+          context: "avatar",
+        });
+      }
+
+      await getProfileData();
+      await getLegalDocuments();
+
+      setSelectedImg(null);
+      setPreview(null);
+
+      setValue("registration_document", null);
+      setValue("employer_document", null);
+
+      setRegistrationDocumentsToUpload(null);
+      setEmployerDocumentToUpload(null);
+    } finally {
+      setIsSubmitting(false);
     }
-
-    if (employerDocumentToUpload) {
-      documents.push(employerDocumentToUpload[0]);
-    }
-
-    const payload = mapProfileFormToChangedApi(data);
-    const initialPayload = mapProfileFormToChangedApi(profileData);
-
-    const isProfileChanged =
-      JSON.stringify(payload) !== JSON.stringify(initialPayload);
-
-    if (isProfileChanged) {
-      await editProfileData(payload);
-    }
-
-    if (documents.length > 0) {
-      await uploadLegalDocuments(
-        registrationDocumentsToUpload,
-        employerDocumentToUpload,
-      );
-    }
-
-    if (selectedImg) {
-      await uploadAvatar({
-        file: selectedImg,
-        name: selectedImg.name,
-        context: "avatar",
-      });
-    }
-
-    await getProfileData();
-    await getLegalDocuments();
-
-    setSelectedImg(null);
-    setPreview(null);
-    setRegistrationDocumentsToUpload(null);
-    setValue("registration_document", null);
-    setValue("employer_document", null);
-    setEmployerDocumentToUpload(null);
-    setIsSubmitting(false);
   };
-
   return (
     <>
       <UploadAvatar
@@ -134,8 +126,11 @@ const EditProfileForm = ({ profileData, legalDocuments }) => {
       <EditPassword control={control} />
 
       <EditDocumentDetails
+        setValue={setValue}
         isSubmitting={isSubmitting}
         legalDocuments={legalDocuments}
+        registrationDocumentsToUpload={registrationDocumentsToUpload}
+        employerDocumentToUpload={employerDocumentToUpload}
         setRegistrationDocumentsToUpload={setRegistrationDocumentsToUpload}
         setEmployerDocumentToUpload={setEmployerDocumentToUpload}
         control={control}
@@ -146,8 +141,15 @@ const EditProfileForm = ({ profileData, legalDocuments }) => {
           variant="contained"
           color={uploadAvatarError ? "error" : "primary"}
           onClick={handleSubmit(onEditSubmit)}
-          disabled={!isDirty && !selectedImg}
+          disabled={
+            (!isDirty &&
+              !selectedImg &&
+              !registrationDocumentsToUpload &&
+              !employerDocumentToUpload) ||
+            isSubmitting
+          }
         >
+          {isSubmitting && <CircularProgress />}
           {isSubmitting && !uploadAvatarError
             ? "Сохранение..."
             : uploadAvatarError

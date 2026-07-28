@@ -13,7 +13,6 @@ import TenderForwardersItem from "../../pages/tender-forwarders/tender-forwarder
 import TenderApplications from "../../pages/tender-applications";
 import TenderApplicationsItem from "../../pages/tender-applications/tender-applications-item";
 import FactoringItem from "../../pages/factoring/factoring-item";
-import ReProfile from "../../pages/re-profile";
 import { createBrowserRouter } from "react-router-dom";
 import { isStaging } from "../client";
 import AppContentContainer from "./app-content-container";
@@ -91,7 +90,7 @@ export const router = createBrowserRouter(
 
         {
           path: "/profile",
-          element: <ReProfile />,
+          element: <Profile />,
           handle: {
             breadcrumb: "Профиль",
           },
