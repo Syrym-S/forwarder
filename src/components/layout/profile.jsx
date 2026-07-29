@@ -5,7 +5,7 @@ import LogoutModal from "./logout-modal";
 import ClickAwayListener from "@mui/material/ClickAwayListener";
 import { useState } from "react";
 import { Fade, IconButton, Stack, Typography } from "@mui/material";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { Person2Rounded } from "@mui/icons-material";
 import CustomNavLink from "../../shared/ui/custom-nav-link";
 

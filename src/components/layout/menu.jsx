@@ -1,6 +1,17 @@
 import React from "react";
 import { Box, Tooltip, Typography } from "@mui/material";
 import { NavLink } from "react-router-dom";
+import LocalShippingOutlinedIcon from "@mui/icons-material/LocalShippingOutlined";
+import HistoryOutlined from "@mui/icons-material/HistoryOutlined";
+import ReceiptLongOutlined from "@mui/icons-material/ReceiptLongOutlined";
+import AccountBalanceOutlined from "@mui/icons-material/AccountBalanceOutlined";
+import HandshakeOutlined from "@mui/icons-material/HandshakeOutlined";
+import GroupsOutlined from "@mui/icons-material/GroupsOutlined";
+import DriveEtaOutlined from "@mui/icons-material/DriveEtaOutlined";
+import AssignmentOutlined from "@mui/icons-material/AssignmentOutlined";
+import RequestQuoteOutlined from "@mui/icons-material/RequestQuoteOutlined";
+import RouteOutlined from "@mui/icons-material/RouteOutlined";
+
 import "./style.css";
 
 const menuItems = [
@@ -12,6 +23,7 @@ const menuItems = [
         id: 1,
         path: "/",
         lable: "Маршруты",
+        icon: <RouteOutlined />,
         tooltip_text: "Отображение всех маршрутов на карте",
       },
     ],
@@ -24,6 +36,7 @@ const menuItems = [
         id: 1,
         path: "/active-leads",
         lable: "Активные перевозки",
+        icon: <LocalShippingOutlinedIcon />,
         tooltip_text:
           "Созданные вами и заказчиками активные перевозки. Возможность создать лид",
       },
@@ -31,6 +44,7 @@ const menuItems = [
         id: 2,
         path: "/history-leads",
         lable: "История перевозок",
+        icon: <HistoryOutlined />,
         tooltip_text: "Список завершённых и удалённых перевозок",
       },
     ],
@@ -39,15 +53,28 @@ const menuItems = [
     id: 3,
     label: "Финансы",
     sub_items: [
-      { id: 1, path: "/account", lable: "Счёт", tooltip_text: "Скоро" },
+      {
+        id: 1,
+        path: "/account",
+        lable: "Счёт",
+        icon: <ReceiptLongOutlined />,
+        tooltip_text: "Скоро",
+      },
       {
         id: 2,
         path: "/factorings",
         lable: "Факторинги",
+        icon: <AccountBalanceOutlined />,
         tooltip_text:
           "Список факторингов, созданных вами, заказчиками и факторами. Возможность создать факторинг",
       },
-      { id: 3, path: "/factor", lable: "Фактор", tooltip_text: "Скоро" },
+      {
+        id: 3,
+        path: "/factor",
+        lable: "Фактор",
+        icon: <HandshakeOutlined />,
+        tooltip_text: "Скоро",
+      },
     ],
   },
   {
@@ -58,12 +85,14 @@ const menuItems = [
         id: 1,
         path: "/customers",
         lable: "Заказчики",
+        icon: <GroupsOutlined />,
         tooltip_text: "Список всех заказчиков",
       },
       {
         id: 2,
         path: "/drivers",
         lable: "Водители",
+        icon: <DriveEtaOutlined />,
         tooltip_text: "Список всех водителей",
       },
     ],
@@ -76,12 +105,14 @@ const menuItems = [
         id: 1,
         path: "/tender-applications",
         lable: "Тендерные заявки",
+        icon: <AssignmentOutlined />,
         tooltip_text: "Список тендеров от заказчиков",
       },
       {
         id: 2,
         path: "/tender-forwarders",
         lable: "Тендеры перевозчиков",
+        icon: <RequestQuoteOutlined />,
         tooltip_text: "Список тендеров, созданных вами",
       },
     ],
@@ -137,9 +168,12 @@ const SideBar = ({ openMenu, setOpenMenu }) => {
                 style={({ isActive }) => ({
                   backgroundColor: isActive && "#e3e4e6",
                   borderRadius: isActive && "5px",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 2,
                 })}
               >
-                {sub_item.lable}
+                {sub_item.icon} {sub_item.lable}
               </NavLink>
             </Tooltip>
           ))}
