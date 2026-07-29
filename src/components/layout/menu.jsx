@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Tooltip, Typography } from "@mui/material";
+import { Box, Button, Tooltip, Typography } from "@mui/material";
 import { NavLink } from "react-router-dom";
 import LocalShippingOutlinedIcon from "@mui/icons-material/LocalShippingOutlined";
 import HistoryOutlined from "@mui/icons-material/HistoryOutlined";
@@ -11,6 +11,7 @@ import DriveEtaOutlined from "@mui/icons-material/DriveEtaOutlined";
 import AssignmentOutlined from "@mui/icons-material/AssignmentOutlined";
 import RequestQuoteOutlined from "@mui/icons-material/RequestQuoteOutlined";
 import RouteOutlined from "@mui/icons-material/RouteOutlined";
+import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
 
 import "./style.css";
 
@@ -123,62 +124,101 @@ const SideBar = ({ openMenu, setOpenMenu }) => {
   return (
     <Box
       sx={{
-        pt: 1,
-        transition: "0.2s",
         height: "100vh",
+        pt: 8,
+        transition: "0.2s",
         overflowY: "auto",
         width: {
           xs: openMenu ? "100%" : "0",
           sm: "20vw",
         },
         display: {
-          xs: openMenu ? "block" : "none",
-          sm: "block",
+          xs: openMenu ? "flex" : "none",
+          sm: "flex",
         },
-        position: {
-          xs: "fixed",
-        },
+        position: "fixed",
+        top: 0,
         left: 0,
         boxShadow: 3,
         bgcolor: "#fbfafa",
         flexDirection: "column",
+        justifyContent: "space-between",
         zIndex: 1,
       }}
     >
-      {menuItems.map((item) => (
-        <Box key={item.id} onClick={() => setOpenMenu(false)}>
-          {item.label && (
-            <Typography
-              component="p"
-              sx={{
-                color: "color.slate",
-                padding: "3px 15px",
-                fontWeight: "light",
-              }}
-            >
-              {item.label}
-            </Typography>
-          )}
-          {item.sub_items.map((sub_item) => (
-            <Tooltip title={sub_item.tooltip_text} disableInteractive>
-              <NavLink
-                key={sub_item.id}
-                className={"link"}
-                to={sub_item.path}
-                style={({ isActive }) => ({
-                  backgroundColor: isActive && "#e3e4e6",
-                  borderRadius: isActive && "5px",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 2,
-                })}
+      <Box>
+        {menuItems.map((item) => (
+          <Box key={item.id} onClick={() => setOpenMenu(false)}>
+            {item.label && (
+              <Typography
+                component="p"
+                sx={{
+                  color: "color.slate",
+                  padding: "3px 15px",
+                  fontWeight: "light",
+                }}
               >
-                {sub_item.icon} {sub_item.lable}
-              </NavLink>
-            </Tooltip>
-          ))}
-        </Box>
-      ))}
+                {item.label}
+              </Typography>
+            )}
+            {item.sub_items.map((sub_item) => (
+              <Tooltip title={sub_item.tooltip_text} disableInteractive>
+                <NavLink
+                  key={sub_item.id}
+                  className={"link"}
+                  to={sub_item.path}
+                  style={({ isActive }) => ({
+                    backgroundColor: isActive && "#e3e4e6",
+                    borderRadius: isActive && "5px",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 2,
+                  })}
+                >
+                  {sub_item.icon} {sub_item.lable}
+                </NavLink>
+              </Tooltip>
+            ))}
+          </Box>
+        ))}
+      </Box>
+
+      <Box
+        sx={{
+          p: 1,
+          m: 2,
+          background: "rgba(174, 174, 174, 0.2)",
+          borderRadius: 2,
+        }}
+      >
+        <Typography
+          sx={{
+            fontWeight: "600",
+            fontSize: 12,
+          }}
+        >
+          Нужна помощь?
+        </Typography>
+        <Typography
+          sx={{
+            fontWeight: "400",
+            fontSize: 12,
+          }}
+        >
+          Наша служба поддержки на связи 24/7
+        </Typography>
+
+        <Button
+          color="primary"
+          variant="contained"
+          sx={{
+            boxShadow: 0,
+          }}
+          startIcon={<NotificationsNoneIcon />}
+        >
+          Написать в поддержку
+        </Button>
+      </Box>
     </Box>
   );
 };
