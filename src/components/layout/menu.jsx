@@ -16,9 +16,6 @@ import PhoneOutlinedIcon from "@mui/icons-material/PhoneOutlined";
 import MarkunreadOutlinedIcon from "@mui/icons-material/MarkunreadOutlined";
 import "./style.css";
 
-const supportEmail = window?.APP_DATA?.support?.email;
-const supportPhone = window?.APP_DATA?.support?.phone;
-
 const menuItems = [
   {
     id: 1,
@@ -176,7 +173,8 @@ const SideBar = ({ openMenu, setOpenMenu }) => {
                     borderRadius: isActive && "5px",
                     display: "flex",
                     alignItems: "center",
-                    gap: 2,
+                    gap: 5,
+                    fontWeight: 200,
                   })}
                 >
                   {sub_item.icon} {sub_item.lable}
@@ -185,65 +183,6 @@ const SideBar = ({ openMenu, setOpenMenu }) => {
             ))}
           </Box>
         ))}
-      </Box>
-
-      <Box
-        sx={{
-          p: 1,
-          m: 2,
-          background: "rgba(174, 174, 174, 0.2)",
-          borderRadius: 2,
-        }}
-      >
-        <Typography
-          sx={{
-            fontWeight: "600",
-            fontSize: 12,
-          }}
-        >
-          Нужна помощь?
-        </Typography>
-        <Typography
-          sx={{
-            fontWeight: "400",
-            fontSize: 12,
-          }}
-        >
-          Наша служба поддержки на связи 24/7
-        </Typography>
-
-        <Box
-          sx={{
-            display: "grid",
-            gridTemplateColumns: "1fr",
-            gap: 1,
-            py: 1,
-          }}
-        >
-          <Button
-            color="primary"
-            variant="contained"
-            sx={{
-              boxShadow: 0,
-              fontSize: 12,
-            }}
-            startIcon={<MarkunreadOutlinedIcon />}
-          >
-            {supportEmail}
-          </Button>
-
-          <Button
-            color="primary"
-            variant="contained"
-            sx={{
-              boxShadow: 0,
-              fontSize: 12,
-            }}
-            startIcon={<PhoneOutlinedIcon />}
-          >
-            {supportPhone}
-          </Button>
-        </Box>
       </Box>
     </Box>
   );
