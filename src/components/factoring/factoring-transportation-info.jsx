@@ -68,7 +68,7 @@ const FactoringTransportationInfo = ({ lead }) => {
         >
           <InfoField
             label="Цена груза"
-            value={`${lead?.cargo_price || lead?.summ} ${lead?.currency}`}
+            value={`${lead?.price} ${lead?.currency}`}
           />
 
           <InfoField

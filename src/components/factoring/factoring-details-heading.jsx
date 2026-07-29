@@ -70,7 +70,7 @@ const FactoringDetailsHeading = ({
         spacing={1}
       >
         <Chip
-          label={`Факторинг #${factoring?.index}`}
+          label={`Факторинг #${factoring?.id}`}
           color="primary"
           variant="outlined"
         />

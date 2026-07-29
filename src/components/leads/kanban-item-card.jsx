@@ -90,14 +90,16 @@ function KanbanCard({ item }) {
             />
           )}
 
-          <Chip
-            label={`${Number(item.summ).toLocaleString()} ${item.currency}`}
-            size="small"
-            color="primary"
-            sx={{
-              borderRadius: "4px",
-            }}
-          />
+          {item?.price && (
+            <Chip
+              label={`${Number(item.price).toLocaleString()} ${item.currency}`}
+              size="small"
+              color="primary"
+              sx={{
+                borderRadius: "4px",
+              }}
+            />
+          )}
         </Box>
       </CardContent>
     </Box>

@@ -68,70 +68,74 @@ const TenderForwarders = () => {
 
   return (
     <RootLayout withoutDataCheck>
-      <ViewTabs view={view} setView={setView} handleOpenForm={handleOpenForm} />
-
-      {openForm && (
-        <TenderForm
-          defaultValues={defaultValues}
-          openForm={openForm}
-          handleCloseForm={handleCloseForm}
+      <Box>
+        <ViewTabs
+          view={view}
+          setView={setView}
+          handleOpenForm={handleOpenForm}
         />
-      )}
+        {openForm && (
+          <TenderForm
+            defaultValues={defaultValues}
+            openForm={openForm}
+            handleCloseForm={handleCloseForm}
+          />
+        )}
+        {isCardsView && (
+          <Box
+            sx={{
+              mx: "auto",
+              width: {
+                xs: "100%",
+                sm: "60%",
+              },
+              alignItems: "center",
+              display: "grid",
+              gap: 5,
+              my: "10px",
+              gridTemplateColumns: {
+                xs: "1fr",
+              },
+            }}
+          >
+            {isTendersEmpty ? (
+              <Alert
+                severity="info"
+                sx={{
+                  width: {
+                    xs: "100%",
+                    sm: "60%",
+                  },
+                  my: 1,
+                  mx: "auto",
+                }}
+              >
+                Список пуст. Добавьте тендер!
+              </Alert>
+            ) : (
+              tenders.map((tender) => (
+                <ForwardersTenderCard key={tender.id} tender={tender} />
+              ))
+            )}
+          </Box>
+        )}
+        {!isCardsView && <ForwardersTenderTable tenders={tenders} />}
 
-      {isCardsView && (
-        <Box
-          sx={{
-            mx: "auto",
-            width: {
-              xs: "100%",
-              sm: "60%",
-            },
-            alignItems: "center",
-            display: "grid",
-            gap: 5,
-            my: "10px",
-            gridTemplateColumns: {
-              xs: "1fr",
-            },
-          }}
-        >
-          {isTendersEmpty ? (
-            <Alert
-              severity="info"
-              sx={{
-                width: {
-                  xs: "100%",
-                  sm: "60%",
-                },
-                my: 1,
-                mx: "auto",
-              }}
-            >
-              Список пуст. Добавьте тендер!
-            </Alert>
-          ) : (
-            tenders.map((tender) => (
-              <ForwardersTenderCard key={tender.id} tender={tender} />
-            ))
-          )}
-        </Box>
-      )}
-
-      {!isCardsView && <ForwardersTenderTable tenders={tenders} />}
-
-      {!isTendersEmpty && (
-        <Pagination
-          sx={{
-            mx: "auto",
-            width: "fit-content",
-          }}
-          page={page}
-          color="primary"
-          shape="rounded"
-          count={PAGE_COUNT}
-          onChange={handlePageChange}
-        />
-      )}
+        {!isTendersEmpty && (
+          <Pagination
+            sx={{
+              my: 4,
+              mx: "auto",
+              width: "fit-content",
+            }}
+            page={page}
+            color="primary"
+            shape="rounded"
+            count={PAGE_COUNT}
+            onChange={handlePageChange}
+          />
+        )}
+      </Box>
     </RootLayout>
   );
 };

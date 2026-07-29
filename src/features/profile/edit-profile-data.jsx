@@ -149,7 +149,7 @@ const EditProfileForm = ({ profileData, legalDocuments }) => {
             isSubmitting
           }
         >
-          {isSubmitting && <CircularProgress />}
+          {isSubmitting && <CircularProgress size={16} />}
           {isSubmitting && !uploadAvatarError
             ? "Сохранение..."
             : uploadAvatarError

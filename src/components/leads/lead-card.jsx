@@ -229,7 +229,7 @@ const LeadCard = ({ lead }) => {
           <InfoField label="Тип" value={lead?.cargo?.type} />
           <InfoField
             label="Цена"
-            value={`${lead?.summ === 0 ? lead?.cargo_price : lead?.summ} ${lead?.currency}`}
+            value={lead?.price ? `${lead?.price} ${lead?.currency}` : null}
             accent
             sx={{
               gridColumn: {

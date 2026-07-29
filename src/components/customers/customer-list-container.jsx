@@ -28,6 +28,9 @@ const CustomerListContainer = ({ view }) => {
   );
 
   const isCardsView = view === VIEWS.cards;
+
+  console.log(view);
+
   const isEmpty = customers?.length === 0;
   const PAGE_COUNT = Math.ceil(count / perPage);
 
@@ -79,30 +82,31 @@ const CustomerListContainer = ({ view }) => {
           gap: 5,
         }}
       >
-        {isCardsView && isEmpty ? (
-          <Alert
-            severity="info"
-            sx={{
-              width: {
-                xs: "100%",
-                sm: "60%",
-              },
-              my: 1,
-            }}
-          >
-            Список заказчиков пуст
-          </Alert>
-        ) : (
-          customers.map((customer) => (
-            <>
-              <CustomerCard
-                key={customer.id}
-                customer={customer}
-                setSelectedCustomer={setSelectedCustomer}
-              />
-            </>
-          ))
-        )}
+        {isCardsView &&
+          (isEmpty ? (
+            <Alert
+              severity="info"
+              sx={{
+                width: {
+                  xs: "100%",
+                  sm: "60%",
+                },
+                my: 1,
+              }}
+            >
+              Список заказчиков пуст
+            </Alert>
+          ) : (
+            customers.map((customer) => (
+              <>
+                <CustomerCard
+                  key={customer.id}
+                  customer={customer}
+                  setSelectedCustomer={setSelectedCustomer}
+                />
+              </>
+            ))
+          ))}
 
         {selectedCustomer && (
           <CustomerDetailsModal

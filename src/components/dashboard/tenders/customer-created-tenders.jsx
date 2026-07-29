@@ -44,6 +44,7 @@ const CustomerCreatedTenders = () => {
     <Paper
       sx={{
         px: 2,
+        pb: 2,
         overflowY: "auto",
         position: "relative",
       }}

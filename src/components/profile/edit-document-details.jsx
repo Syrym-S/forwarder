@@ -117,7 +117,7 @@ const EditDocumentDetails = ({
                 variant="outlined"
                 startIcon={<UploadFileIcon />}
               >
-                Выбрать файл
+                Заменить документ
                 <input
                   hidden
                   type="file"
@@ -256,7 +256,7 @@ const EditDocumentDetails = ({
                 variant="outlined"
                 startIcon={<UploadFileIcon />}
               >
-                Выбрать файл
+                Заменить документ
                 <input
                   hidden
                   type="file"
