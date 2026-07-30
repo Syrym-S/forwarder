@@ -1,7 +1,9 @@
 import {
+  Alert,
   Autocomplete,
   Box,
   Button,
+  Snackbar,
   TextField,
   Typography,
 } from "@mui/material";
@@ -14,8 +16,10 @@ import { useRouteMapPicker } from "../use-route-map-picker";
 import dayjs from "dayjs";
 import { STATUS } from "../../../shared/const/tenders";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import { useLeadsStore } from "../../../app/store/leads/leads-store";
 
-const FirstStep = ({ control, errors, form, setValue, leadStatus }) => {
+const FirstStep = ({ control, errors, form, setValue }) => {
+  const currentLead = useLeadsStore((state) => state.currentLead);
   const { fields, append, remove } = useFieldArray({
     control,
     name: "waypoints",
@@ -28,7 +32,8 @@ const FirstStep = ({ control, errors, form, setValue, leadStatus }) => {
 
   const hasWaypoint = waypoins.length !== 0;
   const canEditStatus =
-    leadStatus === STATUS.new || leadStatus === STATUS.add_driver;
+    currentLead?.status === STATUS.new ||
+    currentLead?.status === STATUS.add_driver;
 
   const handleShowFiled = () => {
     append({
@@ -56,6 +61,9 @@ const FirstStep = ({ control, errors, form, setValue, leadStatus }) => {
     clearFromPoint,
     clearToPoint,
     setCount,
+    hasFromCityError,
+    hasCrossPointCityError,
+    hasToCityError,
   } = useRouteMapPicker({
     form,
     fields,
@@ -94,7 +102,7 @@ const FirstStep = ({ control, errors, form, setValue, leadStatus }) => {
           {fields.map((_, index) => (
             <Button
               size="small"
-              disabled={!canEditStatus}
+              disabled={currentLead && !canEditStatus}
               variant={
                 activeMapPoint === `cross.${index}` ? "contained" : "outlined"
               }
@@ -109,7 +117,7 @@ const FirstStep = ({ control, errors, form, setValue, leadStatus }) => {
           <Button
             size="small"
             variant={activeMapPoint === "to" ? "contained" : "outlined"}
-            disabled={!canEditStatus}
+            disabled={currentLead && !canEditStatus}
             onClick={() => setActiveMapPoint("to")}
           >
             Куда
@@ -127,7 +135,7 @@ const FirstStep = ({ control, errors, form, setValue, leadStatus }) => {
             color="primary"
             variant="outlined"
             onClick={handleShowFiled}
-            disabled={!canEditStatus}
+            disabled={currentLead && !canEditStatus}
           >
             Добавить точку пересечения
           </Button>
@@ -137,7 +145,7 @@ const FirstStep = ({ control, errors, form, setValue, leadStatus }) => {
             color="error"
             variant="outlined"
             onClick={handleClearRoute}
-            disabled={isClearDisabled || !canEditStatus}
+            disabled={isClearDisabled || (currentLead && !canEditStatus)}
           >
             Очистить маршрут
           </Button>
@@ -168,7 +176,7 @@ const FirstStep = ({ control, errors, form, setValue, leadStatus }) => {
         />
       </Box>
 
-      {!canEditStatus && (
+      {currentLead && !canEditStatus && (
         <Box
           sx={{
             display: "flex",
@@ -269,7 +277,7 @@ const FirstStep = ({ control, errors, form, setValue, leadStatus }) => {
               }}
             />
             <Button
-              disabled={!canEditStatus}
+              disabled={currentLead && !canEditStatus}
               onClick={() => remove(index)}
               color="error"
               variant="outlined"
@@ -338,6 +346,19 @@ const FirstStep = ({ control, errors, form, setValue, leadStatus }) => {
           )}
         />
       </Box>
+
+      <Snackbar
+        open={hasFromCityError || hasToCityError || hasCrossPointCityError}
+        autoHideDuration={1000}
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "right",
+        }}
+      >
+        <Alert severity="error" variant="filled" sx={{ width: "100%" }}>
+          На правильные параметры города. Попытайтесь выбрать другую точку
+        </Alert>
+      </Snackbar>
     </StepSection>
   );
 };

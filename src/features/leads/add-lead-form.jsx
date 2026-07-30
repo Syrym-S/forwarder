@@ -205,7 +205,6 @@ const AddLeadForm = ({
       case 1:
         return (
           <FirstStep
-            leadStatus={currentLead?.status}
             control={control}
             errors={errors}
             form={formValues}

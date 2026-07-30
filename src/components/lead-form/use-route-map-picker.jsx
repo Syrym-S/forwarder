@@ -16,6 +16,9 @@ const setValueOptions = {
 };
 
 export function useRouteMapPicker({ form, fields, setValue }) {
+  const [hasFromCityError, setHasFromCityError] = useState(false);
+  const [hasCrossPointCityError, setHasCrossPointCityError] = useState(false);
+  const [hasToCityError, setHasToCityError] = useState(false);
   const currentLead = useLeadsStore((state) => state.currentLead);
 
   const canEditStatus =
@@ -46,6 +49,13 @@ export function useRouteMapPicker({ form, fields, setValue }) {
     if (!locationInfo) {
       return;
     }
+
+    if (!locationInfo.address.city) {
+      setHasFromCityError(true);
+      clearFromPoint();
+      return;
+    }
+
     const from_location = {
       address: locationInfo.display_name,
       city: locationInfo.address.city,
@@ -56,6 +66,7 @@ export function useRouteMapPicker({ form, fields, setValue }) {
     };
 
     setValue("from_location", from_location, setValueOptions);
+    setHasFromCityError(false);
   }
 
   async function setCrossPoint(index, lat, lng) {
@@ -65,6 +76,13 @@ export function useRouteMapPicker({ form, fields, setValue }) {
     const locationInfo = await getAddressForPoint(`cross.${index}`, lat, lng);
 
     if (!locationInfo) {
+      return;
+    }
+
+    if (!locationInfo.address.city) {
+      setHasCrossPointCityError(true);
+      setActiveMapPoint(`cross.${index}`);
+      setCount(index);
       return;
     }
 
@@ -78,6 +96,7 @@ export function useRouteMapPicker({ form, fields, setValue }) {
     };
 
     setValue(`waypoints[${index}]`, cross_location, setValueOptions);
+    setHasCrossPointCityError(false);
   }
 
   async function setToPoint(lat, lng) {
@@ -87,6 +106,12 @@ export function useRouteMapPicker({ form, fields, setValue }) {
     const locationInfo = await getAddressForPoint("to", lat, lng);
 
     if (!locationInfo) {
+      return;
+    }
+
+    if (!locationInfo.address.city) {
+      setHasToCityError(true);
+      clearToPoint();
       return;
     }
 
@@ -100,6 +125,7 @@ export function useRouteMapPicker({ form, fields, setValue }) {
     };
 
     setValue("to_location", to_location, setValueOptions);
+    setHasToCityError(false);
   }
 
   function setPointLoading(point, isLoading) {
@@ -285,5 +311,8 @@ export function useRouteMapPicker({ form, fields, setValue }) {
     handleClearRoute,
     clearFromPoint,
     clearToPoint,
+    hasFromCityError,
+    hasCrossPointCityError,
+    hasToCityError,
   };
 }

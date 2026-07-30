@@ -10,6 +10,7 @@ import { Box, Button, CircularProgress } from "@mui/material";
 import { useProfileStore } from "../../app/store/profile/profile-store";
 import { mapProfileFormToChangedApi } from "../profile-edit/profile-form-helpers";
 import RenderErroMessage from "../../shared/ui/render-error-message";
+import RenderErrorContext from "../../shared/ui/errors/render-error-context";
 
 const EditProfileForm = ({ profileData, legalDocuments }) => {
   const [registrationDocumentsToUpload, setRegistrationDocumentsToUpload] =
@@ -20,6 +21,8 @@ const EditProfileForm = ({ profileData, legalDocuments }) => {
   const uploadLegalDocuments = useProfileStore(
     (state) => state.uploadLegalDocuments,
   );
+
+  console.log(uploadAvatarError);
 
   const editProfileData = useProfileStore((state) => state.editProfileData);
   const getProfileData = useProfileStore((state) => state.getProfileData);
@@ -115,7 +118,7 @@ const EditProfileForm = ({ profileData, legalDocuments }) => {
         handleClearAvatar={handleClearAvatar}
       />
 
-      {uploadAvatarError && <RenderErroMessage error={uploadAvatarError} />}
+      {uploadAvatarError && <RenderErrorContext error={uploadAvatarError} />}
 
       <EditCompanyFileds control={control} />
 
