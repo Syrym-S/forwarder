@@ -140,11 +140,12 @@ const SideBar = ({ openMenu, setOpenMenu }) => {
         position: "fixed",
         top: 0,
         left: 0,
-        boxShadow: 3,
-        bgcolor: "#fbfafa",
+        // bgcolor: "#fbfafa",
         flexDirection: "column",
         justifyContent: "space-between",
         zIndex: 1,
+        borderRight: "1px solid",
+        borderColor: "divider",
       }}
     >
       <Box>
@@ -154,9 +155,10 @@ const SideBar = ({ openMenu, setOpenMenu }) => {
               <Typography
                 component="p"
                 sx={{
-                  color: "color.slate",
+                  color: "#2b2a2a",
                   padding: "3px 15px",
                   fontWeight: "light",
+                  letterSpacing: "0.1em",
                 }}
               >
                 {item.label}
@@ -173,8 +175,9 @@ const SideBar = ({ openMenu, setOpenMenu }) => {
                     borderRadius: isActive && "5px",
                     display: "flex",
                     alignItems: "center",
-                    gap: 5,
+                    gap: "10px",
                     fontWeight: 200,
+                    letterSpacing: "0.075em",
                   })}
                 >
                   {sub_item.icon} {sub_item.lable}

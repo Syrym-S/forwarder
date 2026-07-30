@@ -17,7 +17,7 @@
 }
 
 .link {
-  color: black;
+  color: rgb(44, 44, 44);
   transition: 0.2s;
   display: block;
   margin: 3px 10px;
