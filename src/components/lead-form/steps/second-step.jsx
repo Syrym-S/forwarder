@@ -11,8 +11,9 @@ import { useState } from "react";
 import { useEffect } from "react";
 import { useOptionsStore } from "../../../app/store/options";
 import { StepSection } from "../step-section";
+import { STATUS } from "../../../shared/const/tenders";
 
-const SecondStep = ({ control, errors }) => {
+const SecondStep = ({ control, errors, leadStatus }) => {
   const { fields, append, remove } = useFieldArray({
     control,
     name: "cargos",
@@ -24,6 +25,8 @@ const SecondStep = ({ control, errors }) => {
   });
 
   const lastCargo = cargos?.[cargos.length - 1];
+  const canEditStatus =
+    leadStatus === STATUS.new || leadStatus === STATUS.add_driver;
 
   const canAddCargo = lastCargo?.name?.trim();
 
@@ -59,6 +62,7 @@ const SecondStep = ({ control, errors }) => {
               <Button
                 color="error"
                 variant="outlined"
+                disabled={leadStatus ? !canEditStatus : false}
                 onClick={() => remove(index)}
                 sx={{
                   my: 2,
@@ -72,7 +76,7 @@ const SecondStep = ({ control, errors }) => {
 
         <Button
           variant="outlined"
-          disabled={!canAddCargo}
+          disabled={leadStatus ? !canAddCargo : !canAddCargo && !canEditStatus}
           onClick={() =>
             append({
               cargo_type: null,

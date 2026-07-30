@@ -273,6 +273,7 @@ const LeadItem = () => {
 
       {filesFromDriver && (
         <CargoLoadVerification
+          leadStatus={leadData?.status}
           filesFromDriver={filesFromDriver}
           isVerified={isVerified}
           handleVerifyCargo={handleVerifyCargo}
@@ -282,6 +283,7 @@ const LeadItem = () => {
 
       {filesFromDriverToUnload && (
         <CargoUnloadVerification
+          leadStatus={leadData?.status}
           isUnloadVerified={isUnloadVerified}
           filesFromDriverToUnload={filesFromDriverToUnload}
           handleVerifyCargoUnload={handleVerifyCargoUnload}
@@ -296,6 +298,7 @@ const LeadItem = () => {
         icon={<DescriptionOutlinedIcon color="primary" />}
       >
         <LeadDocumentsSection
+          leadStatus={leadData?.status}
           documents={files}
           onAddDocument={handleAddDocument}
           onDeleteDocument={handleDeleteFileFromDB}

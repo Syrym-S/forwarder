@@ -6,6 +6,8 @@ import {
   hasPoint,
 } from "./lib/routeMap.helpers";
 import { reverseGeocode } from "./api/geocoding.api";
+import { useLeadsStore } from "../../app/store/leads/leads-store";
+import { STATUS } from "../../shared/const/tenders";
 
 const setValueOptions = {
   shouldDirty: true,
@@ -14,8 +16,13 @@ const setValueOptions = {
 };
 
 export function useRouteMapPicker({ form, fields, setValue }) {
-  const [count, setCount] = useState(0);
+  const currentLead = useLeadsStore((state) => state.currentLead);
 
+  const canEditStatus =
+    currentLead?.status === STATUS.new ||
+    currentLead?.status === STATUS.add_driver;
+
+  const [count, setCount] = useState(0);
   const [activeMapPoint, setActiveMapPoint] = useState("from");
   const [loadingPoints, setLoadingPoints] = useState({
     from: false,
@@ -143,6 +150,8 @@ export function useRouteMapPicker({ form, fields, setValue }) {
   }
 
   function handleRouteMapClick(latlng) {
+    if (currentLead && !canEditStatus) return false;
+
     const lat = Number(latlng.lat.toFixed(6));
     const lng = Number(latlng.lng.toFixed(6));
 

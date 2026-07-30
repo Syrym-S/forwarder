@@ -7,8 +7,10 @@ import NewReleasesIcon from "@mui/icons-material/NewReleases";
 import TaskAltOutlinedIcon from "@mui/icons-material/TaskAltOutlined";
 import { LeadDocumentCard } from "../documents/LeadDocumentCard";
 import FileModal from "../../tenders/file-modal";
+import { STATUS } from "../../../shared/const/tenders";
 
 const CargoUnloadVerification = ({
+  leadStatus,
   isUnloadVerified,
   filesFromDriverToUnload,
   handleVerifyCargoUnload,
@@ -55,7 +57,7 @@ const CargoUnloadVerification = ({
           }}
         >
           <Button
-            disabled={isUnloadLoading}
+            disabled={isUnloadLoading || leadStatus !== STATUS.start_unloading}
             color="success"
             variant="outlined"
             onClick={handleVerifyCargoUnload}
@@ -63,7 +65,7 @@ const CargoUnloadVerification = ({
             {isUnloadLoading ? "Идет подтверждение" : "Подтвердить"}
           </Button>
           <Button
-            disabled={isUnloadLoading}
+            disabled={isUnloadLoading || leadStatus !== STATUS.start_unloading}
             color="error"
             variant="outlined"
             onClick={handleRejectCargoUnload}

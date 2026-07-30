@@ -14,8 +14,10 @@ import { LeadDocumentCard } from "./LeadDocumentCard";
 import Loader from "../../layout/loader";
 import { useLeadsStore } from "../../../app/store/leads/leads-store";
 import FileModal from "../../tenders/file-modal";
+import { STATUS } from "../../../shared/const/tenders";
 
 export function LeadDocumentsSection({
+  leadStatus,
   documents,
   onAddDocument,
   onDeleteDocument,
@@ -57,89 +59,91 @@ export function LeadDocumentsSection({
   return (
     <>
       <Stack spacing={2}>
-        <Box
-          component="form"
-          onSubmit={handleSubmit}
-          sx={{
-            display: "grid",
-            gridTemplateColumns: {
-              xs: "1fr",
-              md: "1fr 1fr auto",
-            },
-            gap: 1,
-            alignItems: "flex-start",
-          }}
-        >
-          <TextField
-            name="name"
-            label="Название документа"
-            size="small"
-            fullWidth
-          />
-
-          <TextField name="context" label="Описание" size="small" fullWidth />
-
-          <Box>
-            <Button
-              component="label"
-              variant={selectedFileName ? "contained" : "outlined"}
-              startIcon={<UploadFileOutlinedIcon />}
-              sx={{
-                minHeight: 40,
-                width: {
-                  xs: "100%",
-                  md: "auto",
-                },
-              }}
-            >
-              {selectedFileName ? "Файл выбран" : "Файл"}
-
-              <input
-                name="file"
-                type="file"
-                hidden
-                accept=".pdf,.xls,.xlsx,.jpg,.jpeg,.png,.mp4,.mpeg,.mov,.avi,.mkv,application/pdf,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,image/jpeg,image/png,video/mp4,video/mpeg,video/quicktime,video/x-msvideo,video/x-matroska"
-                onChange={handleFileChange}
-              />
-            </Button>
-
-            {selectedFileName && (
-              <Typography
-                sx={{
-                  mt: 0.5,
-                  fontSize: 11,
-                  lineHeight: 1.3,
-                  color: "text.secondary",
-                  maxWidth: {
-                    xs: "100%",
-                    md: 180,
-                  },
-                  overflow: "hidden",
-                  textOverflow: "ellipsis",
-                  whiteSpace: "nowrap",
-                }}
-                title={selectedFileName}
-              >
-                {selectedFileName}
-              </Typography>
-            )}
-          </Box>
-
-          <Button
-            type="submit"
-            variant="contained"
-            disabled={isUploading}
+        {leadStatus !== STATUS.finished && leadStatus !== STATUS.deleted && (
+          <Box
+            component="form"
+            onSubmit={handleSubmit}
             sx={{
-              gridColumn: {
-                xs: "1",
-                md: "1 / -1",
+              display: "grid",
+              gridTemplateColumns: {
+                xs: "1fr",
+                md: "1fr 1fr auto",
               },
-              justifySelf: "flex-start",
+              gap: 1,
+              alignItems: "flex-start",
             }}
           >
-            {isUploading ? "Добавление..." : "Добавить документ"}
-          </Button>
-        </Box>
+            <TextField
+              name="name"
+              label="Название документа"
+              size="small"
+              fullWidth
+            />
+
+            <TextField name="context" label="Описание" size="small" fullWidth />
+
+            <Box>
+              <Button
+                component="label"
+                variant={selectedFileName ? "contained" : "outlined"}
+                startIcon={<UploadFileOutlinedIcon />}
+                sx={{
+                  minHeight: 40,
+                  width: {
+                    xs: "100%",
+                    md: "auto",
+                  },
+                }}
+              >
+                {selectedFileName ? "Файл выбран" : "Файл"}
+
+                <input
+                  name="file"
+                  type="file"
+                  hidden
+                  accept=".pdf,.xls,.xlsx,.jpg,.jpeg,.png,.mp4,.mpeg,.mov,.avi,.mkv,application/pdf,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,image/jpeg,image/png,video/mp4,video/mpeg,video/quicktime,video/x-msvideo,video/x-matroska"
+                  onChange={handleFileChange}
+                />
+              </Button>
+
+              {selectedFileName && (
+                <Typography
+                  sx={{
+                    mt: 0.5,
+                    fontSize: 11,
+                    lineHeight: 1.3,
+                    color: "text.secondary",
+                    maxWidth: {
+                      xs: "100%",
+                      md: 180,
+                    },
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    whiteSpace: "nowrap",
+                  }}
+                  title={selectedFileName}
+                >
+                  {selectedFileName}
+                </Typography>
+              )}
+            </Box>
+
+            <Button
+              type="submit"
+              variant="contained"
+              disabled={isUploading}
+              sx={{
+                gridColumn: {
+                  xs: "1",
+                  md: "1 / -1",
+                },
+                justifySelf: "flex-start",
+              }}
+            >
+              {isUploading ? "Добавление..." : "Добавить документ"}
+            </Button>
+          </Box>
+        )}
 
         {uploadError && <Alert severity="error">{uploadError}</Alert>}
 

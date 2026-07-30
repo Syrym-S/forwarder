@@ -8,8 +8,10 @@ import NewReleasesIcon from "@mui/icons-material/NewReleases";
 import TaskAltOutlinedIcon from "@mui/icons-material/TaskAltOutlined";
 import { LeadDocumentCard } from "../documents/LeadDocumentCard";
 import FileModal from "../../tenders/file-modal";
+import { STATUS } from "../../../shared/const/tenders";
 
 const CargoLoadVerification = ({
+  leadStatus,
   filesFromDriver,
   isVerified,
   handleVerifyCargo,
@@ -54,7 +56,7 @@ const CargoLoadVerification = ({
           }}
         >
           <Button
-            disabled={isLoadLoading}
+            disabled={isLoadLoading || leadStatus !== STATUS.start_loading}
             color="success"
             variant="outlined"
             onClick={handleVerifyCargo}
@@ -62,7 +64,7 @@ const CargoLoadVerification = ({
             {isLoadLoading ? "Идет подтверждение" : "Подтвердить"}
           </Button>
           <Button
-            disabled={isLoadLoading}
+            disabled={isLoadLoading || leadStatus !== STATUS.start_loading}
             color="error"
             variant="outlined"
             onClick={handleRejectCargo}

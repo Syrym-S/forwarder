@@ -13,6 +13,8 @@ const LeadCargoInfo = ({
   cargosCount,
   isLeadsPage = false,
 }) => {
+  const canEditStatus =
+    lead?.status === STATUS.new || lead?.status === STATUS.add_driver;
   const getLeadItem = useLeadsStore((state) => state.getLeadItem);
   const deleteCargo = useLeadsStore((state) => state.deleteCargo);
 
@@ -58,7 +60,7 @@ const LeadCargoInfo = ({
       </Box>
 
       <InfoField label="Описание" value={`${cargo?.description || "--"}`} />
-      {cargosCount !== 1 && isLeadsPage && lead.status === STATUS.new && (
+      {cargosCount !== 1 && isLeadsPage && canEditStatus && (
         <Button
           onClick={handleDeleteCargo}
           color="error"

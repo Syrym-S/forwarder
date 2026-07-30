@@ -53,6 +53,7 @@ const AddLeadForm = ({
   setOpenForm,
   initialValues,
 }) => {
+  const currentLead = useLeadsStore((state) => state.currentLead);
   const createLead = useLeadsStore((state) => state.createLead);
   const updateLead = useLeadsStore((state) => state.updateLead);
   const getLeadItem = useLeadsStore((state) => state.getLeadItem);
@@ -204,6 +205,7 @@ const AddLeadForm = ({
       case 1:
         return (
           <FirstStep
+            leadStatus={currentLead?.status}
             control={control}
             errors={errors}
             form={formValues}
@@ -211,7 +213,13 @@ const AddLeadForm = ({
           />
         );
       case 2:
-        return <SecondStep control={control} errors={errors} />;
+        return (
+          <SecondStep
+            control={control}
+            errors={errors}
+            leadStatus={currentLead?.status}
+          />
+        );
       case 3:
         return (
           <ThirdStep control={control} errors={errors} setValue={setValue} />

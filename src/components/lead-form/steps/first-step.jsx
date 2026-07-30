@@ -1,4 +1,10 @@
-import { Autocomplete, Box, Button, TextField } from "@mui/material";
+import {
+  Autocomplete,
+  Box,
+  Button,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { StepSection } from "../step-section";
 import { useCustomerMap } from "../use-customer-map";
 import { CustomerMapView } from "../map-view";
@@ -6,8 +12,10 @@ import Map from "../../dashboard/map";
 import { Controller, useFieldArray, useWatch } from "react-hook-form";
 import { useRouteMapPicker } from "../use-route-map-picker";
 import dayjs from "dayjs";
+import { STATUS } from "../../../shared/const/tenders";
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 
-const FirstStep = ({ control, errors, form, setValue }) => {
+const FirstStep = ({ control, errors, form, setValue, leadStatus }) => {
   const { fields, append, remove } = useFieldArray({
     control,
     name: "waypoints",
@@ -19,6 +27,8 @@ const FirstStep = ({ control, errors, form, setValue }) => {
   });
 
   const hasWaypoint = waypoins.length !== 0;
+  const canEditStatus =
+    leadStatus === STATUS.new || leadStatus === STATUS.add_driver;
 
   const handleShowFiled = () => {
     append({
@@ -84,6 +94,7 @@ const FirstStep = ({ control, errors, form, setValue }) => {
           {fields.map((_, index) => (
             <Button
               size="small"
+              disabled={!canEditStatus}
               variant={
                 activeMapPoint === `cross.${index}` ? "contained" : "outlined"
               }
@@ -98,6 +109,7 @@ const FirstStep = ({ control, errors, form, setValue }) => {
           <Button
             size="small"
             variant={activeMapPoint === "to" ? "contained" : "outlined"}
+            disabled={!canEditStatus}
             onClick={() => setActiveMapPoint("to")}
           >
             Куда
@@ -115,6 +127,7 @@ const FirstStep = ({ control, errors, form, setValue }) => {
             color="primary"
             variant="outlined"
             onClick={handleShowFiled}
+            disabled={!canEditStatus}
           >
             Добавить точку пересечения
           </Button>
@@ -124,7 +137,7 @@ const FirstStep = ({ control, errors, form, setValue }) => {
             color="error"
             variant="outlined"
             onClick={handleClearRoute}
-            disabled={isClearDisabled}
+            disabled={isClearDisabled || !canEditStatus}
           >
             Очистить маршрут
           </Button>
@@ -154,6 +167,28 @@ const FirstStep = ({ control, errors, form, setValue }) => {
           onMarkerDragEnd={handleRouteMarkerDragEnd}
         />
       </Box>
+
+      {!canEditStatus && (
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            gap: 1,
+            px: 2,
+            py: 1.5,
+            my: 1,
+            borderRadius: 2,
+            border: "1px solid",
+            borderColor: "divider",
+          }}
+        >
+          <LockOutlinedIcon color="error" fontSize="small" />
+
+          <Typography variant="body2" color="error">
+            По текущему статусу, нельзя редактировать маршрут
+          </Typography>
+        </Box>
+      )}
 
       <Box
         sx={{
@@ -187,7 +222,7 @@ const FirstStep = ({ control, errors, form, setValue }) => {
                 }}
                 fullWidth
                 size="small"
-                disabled={loadingPoints.from}
+                disabled={loadingPoints.from || !canEditStatus}
                 error={Boolean(errors.from_location?.address)}
                 helperText={errors.from_location?.address?.message}
                 onChange={(event) => {
@@ -222,6 +257,7 @@ const FirstStep = ({ control, errors, form, setValue }) => {
                     }}
                     fullWidth
                     size="small"
+                    disabled={!canEditStatus}
                     error={Boolean(errors.cross_location?.address)}
                     helperText={errors.cross_location?.address?.message}
                     onChange={(event) => {
@@ -233,6 +269,7 @@ const FirstStep = ({ control, errors, form, setValue }) => {
               }}
             />
             <Button
+              disabled={!canEditStatus}
               onClick={() => remove(index)}
               color="error"
               variant="outlined"
@@ -241,35 +278,6 @@ const FirstStep = ({ control, errors, form, setValue }) => {
             </Button>
           </Box>
         ))}
-
-        {/* {isAddCrossPoint && (
-          <Controller
-            name="cross_location.address"
-            control={control}
-            render={({ field }) => {
-              return (
-                <TextField
-                  {...field}
-                  label="Пересекаемая точка"
-                  slotProps={{
-                    inputLabel: {
-                      shrink: true,
-                    },
-                  }}
-                  fullWidth
-                  size="small"
-                  disabled={!isAddCrossPoint}
-                  error={Boolean(errors.cross_location?.address)}
-                  helperText={errors.cross_location?.address?.message}
-                  onChange={(event) => {
-                    field.onChange(event);
-                    clearFromPoint();
-                  }}
-                />
-              );
-            }}
-          />
-        )} */}
 
         <Controller
           name="to_location.address"
@@ -292,7 +300,7 @@ const FirstStep = ({ control, errors, form, setValue }) => {
               label="Куда"
               fullWidth
               size="small"
-              disabled={loadingPoints.to}
+              disabled={loadingPoints.to || !canEditStatus}
               error={Boolean(errors.to_location?.address)}
               helperText={errors.to_location?.address?.message}
               onChange={(event) => {
