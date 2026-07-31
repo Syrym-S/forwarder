@@ -12,8 +12,8 @@ import { STATUS } from "../../../shared/const/tenders";
 
 const CargoLoadVerification = ({
   leadStatus,
-  filesFromDriver,
-  isVerified,
+  filesFromDriverToLoad,
+  isLoadingVerified,
   handleVerifyCargo,
   handleRejectCargo,
 }) => {
@@ -23,13 +23,15 @@ const CargoLoadVerification = ({
   return (
     <Section
       icon={
-        isVerified ? (
+        isLoadingVerified ? (
           <TaskAltOutlinedIcon color="success" />
         ) : (
           <NewReleasesIcon color="primary" />
         )
       }
-      title={isVerified ? "Погрузка подтверждена" : "Подтверждение погрузки"}
+      title={
+        isLoadingVerified ? "Погрузка подтверждена" : "Подтверждение погрузки"
+      }
     >
       <Box
         sx={{
@@ -41,13 +43,13 @@ const CargoLoadVerification = ({
           gap: 5,
         }}
       >
-        {filesFromDriver?.map((file) => (
+        {filesFromDriverToLoad?.map((file) => (
           <LeadDocumentCard document={file} onOpen={setCurrentFile} />
         ))}
 
         <FileModal currentFile={currentFile} setCurrentFile={setCurrentFile} />
       </Box>
-      {!isVerified && (
+      {!isLoadingVerified && (
         <Box
           sx={{
             my: 1,

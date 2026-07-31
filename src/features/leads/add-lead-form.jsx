@@ -64,6 +64,7 @@ const AddLeadForm = ({
   const [uploadedFiles, setUploadedFiles] = useState([]);
   const [activeStep, setActiveStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [hasStepError, setHasStepError] = useState(false);
   const [resultModal, setResultModal] = useState({
     open: false,
     type: null,
@@ -259,9 +260,13 @@ const AddLeadForm = ({
   }
 
   async function handleNext() {
-    const fields = stepFields[activeStep] || [];
+    const fields = stepFields[activeStep - 1] || [];
 
     const isStepValid = await trigger(fields);
+
+    if (!isStepValid) {
+      return;
+    }
 
     if (
       activeStep === 2 &&
@@ -270,13 +275,7 @@ const AddLeadForm = ({
       return;
     }
 
-    if (!isStepValid) {
-      return;
-    }
-
-    const nextStep = activeStep + 1;
-
-    setActiveStep(nextStep);
+    setActiveStep((prevStep) => prevStep + 1);
   }
 
   return (
@@ -301,7 +300,7 @@ const AddLeadForm = ({
             isEdit={isEdit}
             isFirstStep={activeStep === 1}
             isLastStep={activeStep === steps.length}
-            hasCurrentStepErrors={false}
+            hasCurrentStepErrors={hasStepError}
             isSubmitting={isSubmitting}
             onClose={handleClose}
             onBack={handleBack}

@@ -67,13 +67,23 @@ const LeadItem = () => {
     newNotification?.type || "",
   );
 
-  const cargoActions = leadData?.cargo_actions[0];
-  const filesFromDriver = cargoActions?.files;
-  const isVerified = cargoActions?.is_verified;
+  const loadCargoActions = leadData?.cargo_actions?.filter(
+    (cargo_action) => cargo_action.stage === "loading",
+  );
+  const upToDateLoadCargoActions = loadCargoActions
+    ? loadCargoActions[loadCargoActions.length - 1]
+    : [];
+  const filesFromDriverToLoad = upToDateLoadCargoActions?.files;
+  const isLoadingVerified = upToDateLoadCargoActions?.is_verified;
 
-  const uploadCargoActions = leadData?.cargo_actions[1];
-  const filesFromDriverToUnload = uploadCargoActions?.files;
-  const isUnloadVerified = uploadCargoActions?.is_verified;
+  const unloadCargoActions = leadData?.cargo_actions?.filter(
+    (cargo_action) => cargo_action.stage === "unloading",
+  );
+  const upToDateUnloadCargoActions = unloadCargoActions
+    ? unloadCargoActions[unloadCargoActions.length - 1]
+    : [];
+  const filesFromDriverToUnload = upToDateUnloadCargoActions?.files;
+  const isUnloadVerified = upToDateUnloadCargoActions?.is_verified;
 
   const defaultValues = useFormDefaultValues(leadData, files);
 
@@ -271,11 +281,11 @@ const LeadItem = () => {
         </Box>
       </Section>
 
-      {filesFromDriver && (
+      {filesFromDriverToLoad && (
         <CargoLoadVerification
           leadStatus={leadData?.status}
-          filesFromDriver={filesFromDriver}
-          isVerified={isVerified}
+          filesFromDriverToLoad={filesFromDriverToLoad}
+          isLoadingVerified={isLoadingVerified}
           handleVerifyCargo={handleVerifyCargo}
           handleRejectCargo={handleRejectCargo}
         />
