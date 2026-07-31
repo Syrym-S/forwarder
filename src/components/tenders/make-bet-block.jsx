@@ -1,4 +1,5 @@
 import {
+  Alert,
   Box,
   Button,
   Chip,
@@ -13,6 +14,7 @@ import CancelledBets from "./cancelled-bets";
 import PaidOutlinedIcon from "@mui/icons-material/PaidOutlined";
 import CancelBetModal from "../../features/tenders/confirm-actions/cancel-bet-modal";
 import { STATUS } from "../../shared/const/tenders";
+import RenderStatus from "../../shared/ui/render-status";
 
 const MakeBetBlock = ({ tender, setShowBetField }) => {
   const [openCancelModal, setOpenCancelModal] = useState(false);
@@ -27,6 +29,8 @@ const MakeBetBlock = ({ tender, setShowBetField }) => {
   const isActive = tender?.bets.find((bet) => bet.status !== "closed");
 
   const isBetExist = !!ownBet && !!isActive;
+
+  const isTenderActive = tender?.status === STATUS.active;
 
   const handleShowBetField = () => {
     setShowBetField(true);
@@ -62,22 +66,40 @@ const MakeBetBlock = ({ tender, setShowBetField }) => {
   return (
     <Section title="Ваша ставка" icon={<PaidOutlinedIcon color="primary" />}>
       {!isBetExist && (
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={handleShowBetField}
-        >
-          {"Сделать ставку"}
-        </Button>
+        <>
+          <Button
+            disabled={!isTenderActive}
+            variant="contained"
+            color="primary"
+            onClick={handleShowBetField}
+          >
+            Сделать ставку
+          </Button>
+          {!isTenderActive && (
+            <Alert
+              severity="warning"
+              sx={{
+                fontSize: "0.8rem",
+                my: 1,
+              }}
+            >
+              Нельзя делать ставки, пока тендер не активен
+            </Alert>
+          )}
+        </>
       )}
       <Box
         sx={{
-          display: "flex",
+          display: "grid",
+          gridTemplateColumns: "1fr",
           gap: "10px",
         }}
       >
-        {tender?.bets.map(
-          (bet, index) =>
+        {tender?.bets.reverse().map((bet, index) => {
+          const canBeDeleted =
+            bet.status !== STATUS.winning && tender.status !== STATUS.closed;
+
+          return (
             bet.is_own && (
               <>
                 {bet.status !== STATUS.closed && (
@@ -111,8 +133,8 @@ const MakeBetBlock = ({ tender, setShowBetField }) => {
                         sx={{
                           border: "1px solid",
                           borderColor: "divider",
-                          p: 2,
-                          borderRadius: 3,
+                          p: 1,
+                          borderRadius: 1,
                         }}
                       >
                         <Typography
@@ -136,8 +158,8 @@ const MakeBetBlock = ({ tender, setShowBetField }) => {
                         sx={{
                           border: "1px solid",
                           borderColor: "divider",
-                          p: 2,
-                          borderRadius: 3,
+                          p: 1,
+                          borderRadius: 1,
                         }}
                       >
                         <Typography
@@ -153,10 +175,10 @@ const MakeBetBlock = ({ tender, setShowBetField }) => {
                             fontSize: "1.1rem",
                           }}
                         >
-                          {bet.status}
+                          <RenderStatus status={bet.status} />
                         </Typography>
                       </Box>
-                      {bet.status !== STATUS.winning && (
+                      {canBeDeleted && (
                         <Button
                           sx={{
                             fontSize: {
@@ -164,7 +186,7 @@ const MakeBetBlock = ({ tender, setShowBetField }) => {
                               sm: "0.9rem",
                             },
                             gridColumn: 2,
-                            borderRadius: 3,
+                            borderRadius: 1,
                           }}
                           variant={"outlined"}
                           color={"error"}
@@ -181,46 +203,12 @@ const MakeBetBlock = ({ tender, setShowBetField }) => {
                       openCancelModal={openCancelModal}
                       handleCloseCancelModal={handleCloseCancelModal}
                     />
-
-                    {/* <TextField
-                      label={
-                        bet.status === STATUS.winning
-                          ? "Ваша ставка победила"
-                          : "Текущая ставка"
-                      }
-                      value={`${bet.amount} ${bet.currency}`}
-                      InputProps={{
-                        readOnly: true,
-                        tabIndex: -1,
-                      }}
-                      sx={{
-                        fontSize: {
-                          xs: "0.7rem",
-                          sm: "0.9rem",
-                        },
-                        color: "blue",
-                        pointerEvents: "none",
-                        "& .MuiOutlinedInput-notchedOutline": {
-                          borderColor: "success.main",
-                        },
-                        "& .MuiInputLabel-root": {
-                          color: "success.main",
-                        },
-                        "& .MuiInputBase-input": {
-                          color: "success.main",
-                          cursor: "default",
-                        },
-                      }}
-                      size="sm"
-                      color={
-                        bet.status === STATUS.winning ? "success" : "primary"
-                      }
-                    /> */}
                   </Box>
                 )}
               </>
-            ),
-        )}
+            )
+          );
+        })}
       </Box>
     </Section>
   );

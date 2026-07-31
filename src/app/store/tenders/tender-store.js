@@ -32,6 +32,8 @@ export const useTendersStore = create((set) => ({
   customerCount: 0,
   customerPerPage: 1,
 
+  error: null,
+
   clearCurrentTender: () => {
     set({ currentTender: null, customerCurrentTender: null, error: null });
   },
@@ -72,11 +74,13 @@ export const useTendersStore = create((set) => ({
       set({
         isLoading: true,
       });
-      await createTender(payload);
+      const response = await createTender(payload);
 
       set({
         isLoading: false,
       });
+
+      return response;
     } catch (e) {
       console.log(e);
     }

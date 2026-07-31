@@ -1,4 +1,6 @@
 export const parserNotificationType = (type) => {
+  if (!type) return false;
+
   const parsedType = type.split(".");
 
   return {

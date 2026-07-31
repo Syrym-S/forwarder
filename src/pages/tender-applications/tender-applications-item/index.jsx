@@ -38,16 +38,21 @@ import MakeBetBlock from "../../../components/tenders/make-bet-block";
 import CancelledBets from "../../../components/tenders/cancelled-bets";
 import PageLoader from "../../../shared/ui/loaders/page-loader";
 import LeadCargoInfo from "../../../components/leads/lead-item/lead-cargo-info";
+import { useNotificationsStore } from "../../../app/store/notifications/noti-store";
+import { parserNotificationType } from "../../../shared/helpers/notifications/parse-notification-type";
+import { NOTIFICATION_TYPE } from "../../../shared/const/notification-types";
 
 const TenderApplicationsItem = () => {
   const { id } = useParams();
 
   const [showBetField, setShowBetField] = useState();
 
+  const newNotification = useNotificationsStore(
+    (state) => state.newNotification,
+  );
   const customerCurrentTender = useTendersStore(
     (state) => state.customerCurrentTender,
   );
-
   const getCustomerTenderDetails = useTendersStore(
     (state) => state.getCustomerTenderDetails,
   );
@@ -69,14 +74,23 @@ const TenderApplicationsItem = () => {
   });
 
   const cargosInfo = customerCurrentTender?.lead?.cargos;
+  const isTenderActive = customerCurrentTender?.status === STATUS.active;
 
   const handleHideBetField = () => {
     setShowBetField(false);
   };
 
+  const { notification_type } = parserNotificationType(newNotification?.type);
+
   useEffect(() => {
     getCustomerTenderDetails(id);
   }, [id]);
+
+  useEffect(() => {
+    if (notification_type === NOTIFICATION_TYPE.tender) {
+      getCustomerTenderDetails(id);
+    }
+  }, [newNotification]);
 
   if (!customerCurrentTender)
     return (
@@ -154,7 +168,7 @@ const TenderApplicationsItem = () => {
           />
         )}
 
-        <CancelledBets bets={customerCurrentTender?.bets} />
+        {isTenderActive && <CancelledBets bets={customerCurrentTender?.bets} />}
       </Box>
     </RootLayout>
   );

@@ -65,7 +65,7 @@ export const BetCard = ({ tender, bet }) => {
         }}
         display="block"
       >
-        ID УЧАСТНИКА {bet.participant_id}
+        {bet.fio} - ИИН:{bet.iin}
       </Typography>
     </Box>
   );

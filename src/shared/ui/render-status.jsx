@@ -83,17 +83,13 @@ const RenderStatus = ({ status }) => {
       );
     case STATUS.loss:
       return (
-        <RenderChip label={"Не принято"} variant="outlined" color="error" />
+        <RenderChip label={"Проиграна"} variant="outlined" color="error" />
       );
     case STATUS.closed:
       return <RenderChip label={"Закрыто"} variant="container" color="error" />;
     case STATUS.winning:
       return (
-        <RenderChip
-          label={"Принятая ставка"}
-          variant="outlined"
-          color="error"
-        />
+        <RenderChip label={"Выиграна"} variant="outlined" color="success" />
       );
     case STATUS.await_paid:
       return (

@@ -14,6 +14,7 @@ export const STATUS = {
   verified_participant: "verified_participant",
   await_paid: "await_paid",
   winning: "winning",
+  loss: "loss",
 };
 
 export const LEAD_STATUS_OPTIONS = [
