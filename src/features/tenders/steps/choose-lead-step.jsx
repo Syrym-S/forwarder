@@ -10,8 +10,11 @@ const ChooseLeadStep = ({ control, setValue, isEdit, getValues }) => {
   const searchedLeads = useLeadsStore((state) => state.searchedLeads);
   const isSearchLoading = useLeadsStore((state) => state.isSearchLoading);
   const searchLeads = useLeadsStore((state) => state.searchLeads);
+
   const [inputValue, setInputValue] = useState("");
   const [selectedLead, setSelectedLead] = useState();
+
+  const startDate = getValues("public_date_time");
 
   useEffect(() => {
     if (!inputValue) return;
@@ -127,8 +130,6 @@ const ChooseLeadStep = ({ control, setValue, isEdit, getValues }) => {
         rules={{
           required: "Укажите дату окончания",
           validate: (value) => {
-            const startDate = getValues("public_date_time");
-
             if (!startDate || !value) return true;
 
             return (
@@ -149,6 +150,9 @@ const ChooseLeadStep = ({ control, setValue, isEdit, getValues }) => {
             slotProps={{
               inputLabel: {
                 shrink: true,
+              },
+              htmlInput: {
+                min: dayjs(startDate).add(1, "day").format("YYYY-MM-DD"),
               },
             }}
             sx={{
