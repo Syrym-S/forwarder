@@ -12,12 +12,18 @@ import {
 } from "@mui/material";
 import RenderStatus from "../../shared/ui/render-status";
 import EditNoteRoundedIcon from "@mui/icons-material/EditNoteRounded";
+import { STATUS } from "../../shared/const/tenders";
 
 const TenderDetailsHeading = ({
   tender,
   handleOpenForm,
   isCustomerTender = false,
 }) => {
+  const tenderStatus = tender?.status;
+
+  const canEditStatus =
+    tenderStatus !== STATUS.closed && tenderStatus !== STATUS.cancelled;
+
   return (
     <Box
       sx={{
@@ -99,7 +105,7 @@ const TenderDetailsHeading = ({
             },
           }}
         >
-          {!isCustomerTender && (
+          {!isCustomerTender && canEditStatus && (
             <Tooltip title="Редактировать">
               <EditNoteRoundedIcon
                 onClick={handleOpenForm}

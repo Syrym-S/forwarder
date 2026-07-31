@@ -72,13 +72,11 @@ export const useTendersStore = create((set) => ({
       set({
         isLoading: true,
       });
-      const response = await createTender(payload);
+      await createTender(payload);
 
       set({
-        currentTender: response.data,
         isLoading: false,
       });
-      return response;
     } catch (e) {
       console.log(e);
     }
