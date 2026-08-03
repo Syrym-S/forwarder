@@ -1,4 +1,5 @@
 import {
+  Alert,
   Box,
   CircularProgress,
   Paper,
@@ -23,6 +24,8 @@ const CustomerCreatedTenders = () => {
     setChecked(event.target.checked);
   };
 
+  const isEmpty = tenders.length === 0;
+
   useEffect(() => {
     getCustomerTenders();
   }, []);
@@ -43,6 +46,7 @@ const CustomerCreatedTenders = () => {
   return (
     <Paper
       sx={{
+        height: "100%",
         px: 2,
         pb: 2,
         overflowY: "auto",
@@ -77,13 +81,36 @@ const CustomerCreatedTenders = () => {
         </Tooltip>
       </Box>
 
-      <Box sx={{ display: "grid", gridTemplateColumns: "1fr", gap: 2 }}>
-        {checked
-          ? tenders
-              .filter((tender) => tender.publication_type === "public")
-              .map((tender) => <CustomerTenderItem tender={tender} />)
-          : tenders.map((tender) => <CustomerTenderItem tender={tender} />)}
-      </Box>
+      {isEmpty && (
+        <Box
+          sx={{
+            display: "grid",
+            gridTemplateColumns: "1fr",
+            gap: 2,
+            height: "30vh",
+          }}
+        >
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <Alert severity="info">Список тендеров от заказщиков пуст!</Alert>
+          </Box>
+        </Box>
+      )}
+
+      {!isEmpty && (
+        <Box sx={{ display: "grid", gridTemplateColumns: "1fr", gap: 2 }}>
+          {checked
+            ? tenders
+                .filter((tender) => tender.publication_type === "public")
+                .map((tender) => <CustomerTenderItem tender={tender} />)
+            : tenders.map((tender) => <CustomerTenderItem tender={tender} />)}
+        </Box>
+      )}
     </Paper>
   );
 };

@@ -35,7 +35,14 @@ export function ThirdStep({ control, errors, setValue }) {
               disabled={isLoading}
               options={drivers}
               defaultValue={selectedDriver}
-              getOptionLabel={(option) => option?.fio ?? ""}
+              // getOptionLabel={(option) => option?.fio ?? ""}
+              renderValue={(value) => {
+                if (!value) return null;
+
+                return (
+                  <Chip variant="contained" color="primary" label={value.fio} />
+                );
+              }}
               isOptionEqualToValue={(option, value) => option?.id === value?.id}
               onChange={(_, value) => {
                 if (value?.length > 1) return;

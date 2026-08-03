@@ -4,6 +4,8 @@ import {
   Autocomplete,
   Box,
   Chip,
+  CircularProgress,
+  InputAdornment,
   Stack,
   TextField,
   Typography,
@@ -11,6 +13,7 @@ import {
 import { StepSection } from "../step-section";
 import { InfoBadge } from "../info-badge";
 import { useCustomerStore } from "../../../app/store/customers/customers-store";
+import { useEffect, useState } from "react";
 
 export function ForthStep({ control, errors, setValue }) {
   const selectedCustomer = useWatch({
@@ -18,11 +21,30 @@ export function ForthStep({ control, errors, setValue }) {
     name: "customer",
   });
 
-  // const [selectedCustomer, setSelectedCustomer] = useState([]);
+  const [inputValue, setInputValue] = useState("");
 
   const customers = useCustomerStore((state) => state.customers);
+  const getCustomers = useCustomerStore((state) => state.getCustomers);
+  const searchCustomers = useCustomerStore((state) => state.searchCustomers);
   const isLoading = useCustomerStore((state) => state.isLoading);
   // const options = useMemo(() => CUSTOMERS, []);
+
+  useEffect(() => {
+    const value = inputValue.trim();
+
+    const timer = setTimeout(() => {
+      if (!value) {
+        getCustomers();
+        return;
+      }
+
+      if (value.length >= 2) {
+        searchCustomers({ q: value });
+      }
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  }, [inputValue, getCustomers, searchCustomers]);
 
   return (
     <StepSection
@@ -35,17 +57,40 @@ export function ForthStep({ control, errors, setValue }) {
         render={({ field }) => (
           <Stack spacing={2}>
             <Autocomplete
-              disabled={isLoading}
               options={customers}
-              defaultValue={selectedCustomer}
-              getOptionLabel={(option) => option?.name ?? ""}
+              filterOptions={(options) => options}
+              value={field.value ?? null}
+              loading={isLoading}
               isOptionEqualToValue={(option, value) => option?.id === value?.id}
+              renderValue={(value) => {
+                if (!value) return null;
+
+                return (
+                  <Chip
+                    variant="contained"
+                    color="primary"
+                    label={value.name}
+                  />
+                );
+              }}
+              onInputChange={(_, newInputValue, reason) => {
+                if (reason === "input") {
+                  setInputValue(newInputValue);
+                }
+
+                if (reason === "clear") {
+                  setInputValue("");
+                }
+              }}
               onChange={(_, value) => {
-                if (value?.length > 1) return;
+                field.onChange(value);
+
+                setInputValue(value?.name ?? "");
 
                 setValue("customer", value, {
                   shouldDirty: true,
                   shouldTouch: true,
+                  shouldValidate: true,
                 });
               }}
               renderOption={(props, option) => (
@@ -65,10 +110,9 @@ export function ForthStep({ control, errors, setValue }) {
               renderInput={(params) => (
                 <TextField
                   {...params}
-                  label={isLoading ? "...Загрузка данных" : "Заказщик"}
                   placeholder="Выберите заказщика"
-                  error={Boolean(errors.forwarderId)}
-                  helperText={errors.forwarderId?.message}
+                  error={Boolean(errors.customer)}
+                  helperText={errors.customer?.message}
                 />
               )}
             />

@@ -1,6 +1,7 @@
 import {
   Box,
   Button,
+  CircularProgress,
   IconButton,
   Stack,
   TextField,
@@ -141,7 +142,7 @@ const DocumentUpload = ({ setValue, uploadedFiles, setUploadedFiles }) => {
         </Typography>
 
         {isLoading ? (
-          <>...</>
+          <CircularProgress />
         ) : (
           id &&
           files.map((file, index) => (
@@ -214,13 +215,15 @@ const DocumentUpload = ({ setValue, uploadedFiles, setUploadedFiles }) => {
                   {file?.fileName || "Файл"}
                 </Typography>
               </Box>
-              <IconButton
-                size="small"
-                color="error"
-                onClick={() => handleDeleteFileFromDB(id, file.path)}
-              >
-                <DeleteOutlineOutlinedIcon fontSize="small" />
-              </IconButton>
+              {file?.source === "forwarder" && (
+                <IconButton
+                  size="small"
+                  color="error"
+                  onClick={() => handleDeleteFileFromDB(id, file.path)}
+                >
+                  <DeleteOutlineOutlinedIcon fontSize="small" />
+                </IconButton>
+              )}
             </Box>
           ))
         )}

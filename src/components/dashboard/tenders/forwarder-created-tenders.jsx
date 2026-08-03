@@ -1,4 +1,5 @@
 import {
+  Alert,
   Box,
   CircularProgress,
   Paper,
@@ -21,6 +22,13 @@ const ForwarderCreatedTenders = () => {
   const handleChange = (event) => {
     setChecked(event.target.checked);
   };
+
+  const pulicTenders = tenders.filter(
+    (tender) => tender.publication_type === "public",
+  );
+
+  const isTendersEmpty = tenders.length === 0;
+  const isPulicTendersEmpty = pulicTenders.length === 0;
 
   useEffect(() => {
     getTenders();
@@ -76,11 +84,53 @@ const ForwarderCreatedTenders = () => {
         </Tooltip>
       </Box>
 
+      {isTendersEmpty && (
+        <Box
+          sx={{
+            display: "grid",
+            gridTemplateColumns: "1fr",
+            gap: 2,
+            height: "30vh",
+          }}
+        >
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <Alert severity="info">Список тендеров для водителей пуст!</Alert>
+          </Box>
+        </Box>
+      )}
+
+      {isPulicTendersEmpty && checked && (
+        <Box
+          sx={{
+            display: "grid",
+            gridTemplateColumns: "1fr",
+            gap: 2,
+            height: "30vh",
+          }}
+        >
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <Alert severity="info">Нет публичных тендеров!</Alert>
+          </Box>
+        </Box>
+      )}
+
       <Box sx={{ display: "grid", gridTemplateColumns: "1fr", gap: 2 }}>
         {checked
-          ? tenders
-              .filter((tender) => tender.publication_type === "public")
-              .map((tender) => <ForwarderTenderItem tender={tender} />)
+          ? pulicTenders.map((tender) => (
+              <ForwarderTenderItem tender={tender} />
+            ))
           : tenders.map((tender) => <ForwarderTenderItem tender={tender} />)}
       </Box>
     </Paper>

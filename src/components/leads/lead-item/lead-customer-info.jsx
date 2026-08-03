@@ -9,6 +9,8 @@ import { STATUS } from "../../../shared/const/tenders";
 const LeadCustomerInfo = ({ leadData }) => {
   const customer = leadData?.customer;
 
+  const createdByCustomer = leadData?.created_by === "customer";
+
   const isNewStatus = leadData?.status === STATUS.new;
   const isAddDriverStatus = leadData?.status === STATUS.add_driver;
 
@@ -57,7 +59,12 @@ const LeadCustomerInfo = ({ leadData }) => {
       icon={<BusinessOutlinedIcon color="primary" />}
     >
       {(isAddDriverStatus || isNewStatus) && (
-        <Button color="error" variant="outlined" onClick={handleDetachCustomer}>
+        <Button
+          color="error"
+          disabled={createdByCustomer}
+          variant="outlined"
+          onClick={handleDetachCustomer}
+        >
           Отвязать Заказщика
         </Button>
       )}
