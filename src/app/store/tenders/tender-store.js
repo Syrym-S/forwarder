@@ -11,6 +11,7 @@ import {
   getCustomerTendersApi,
   getTenderDetailsApi,
   getTendersApi,
+  getTendersHistoryApi,
   makeBetApi,
   startTenderApi,
   updateTender,
@@ -19,6 +20,7 @@ import {
 export const useTendersStore = create((set) => ({
   tenders: [],
   customerTenders: [],
+  tendersHistory: [],
   currentTender: null,
   customerCurrentTender: null,
 
@@ -31,6 +33,8 @@ export const useTendersStore = create((set) => ({
   perPage: 1,
   customerCount: 0,
   customerPerPage: 1,
+  historyCount: 0,
+  historyPerPage: 1,
 
   error: null,
 
@@ -254,6 +258,26 @@ export const useTendersStore = create((set) => ({
     } catch (e) {
       set({ isLoading: false });
 
+      console.log(e);
+    }
+  },
+
+  //Обработки истории тендеров
+  getTendersHistory: async (params) => {
+    try {
+      set({ isLoading: true });
+
+      const response = await getTendersHistoryApi(params);
+
+      console.log(response);
+
+      set({
+        isLoading: false,
+        historyCount: response.data.total,
+        historyPerPage: response.data.limit,
+        tendersHistory: response.data.data,
+      });
+    } catch (e) {
       console.log(e);
     }
   },

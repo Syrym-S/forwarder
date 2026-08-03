@@ -23,8 +23,9 @@ import ViewTabs from "../../shared/ui/view-tabs";
 import ApplicationsTenderTable from "../../components/tenders/applications-tender-table";
 import HistoryOutlined from "@mui/icons-material/HistoryOutlined";
 import { useNavigate } from "react-router-dom";
+import ContentPasteOutlinedIcon from "@mui/icons-material/ContentPasteOutlined";
 
-const TenderApplications = () => {
+const TenderHistory = () => {
   const [view, setView] = useState(VIEWS.table);
   const [page, setPage] = useState(1);
 
@@ -33,31 +34,32 @@ const TenderApplications = () => {
   const newNotification = useNotificationsStore(
     (state) => state.newNotification,
   );
-  const customerTenders = useTendersStore((state) => state.customerTenders);
+  const tendersHistory = useTendersStore((state) => state.tendersHistory);
   const clearCurrentTender = useTendersStore(
     (state) => state.clearCurrentTender,
   );
-  const getCustomerTenders = useTendersStore(
-    (state) => state.getCustomerTenders,
-  );
+  const getTendersHistory = useTendersStore((state) => state.getTendersHistory);
   const isLoading = useTendersStore((state) => state.isLoading);
+  const historyCount = useTendersStore((state) => state.historyCount);
+  const historyPerPage = useTendersStore((state) => state.historyPerPage);
 
-  const customerCount = useTendersStore((state) => state.customerCount);
-  const customerPerPage = useTendersStore((state) => state.customerPerPage);
-
-  const PAGE_COUNT = Math.ceil(customerCount / customerPerPage);
+  const PAGE_COUNT = Math.ceil(historyCount / historyPerPage);
   const isCardsView = view === VIEWS.cards;
 
   const { notification_type } = parserNotificationType(
     newNotification?.type || "",
   );
 
+  const handleNavigateToTenders = () => {
+    navigate("/tender-applications");
+  };
+
   const handlePageChange = (_, value) => {
     setPage(value);
   };
 
   useEffect(() => {
-    getCustomerTenders({
+    getTendersHistory({
       page: page,
     });
   }, [page]);
@@ -68,15 +70,11 @@ const TenderApplications = () => {
 
   useEffect(() => {
     if (notification_type === NOTIFICATION_TYPE.tender) {
-      getCustomerTenders();
+      getTendersHistory();
     }
   }, [newNotification]);
 
-  const isTenderEmplty = customerTenders.length === 0;
-
-  const handleNavigateToTenderHistory = () => {
-    navigate("/tenders-history");
-  };
+  const isTenderEmplty = tendersHistory.length === 0;
 
   if (isLoading)
     return (
@@ -95,59 +93,57 @@ const TenderApplications = () => {
         }}
       >
         <ViewTabs view={view} setView={setView} withoutDataAdd />
-        <Tooltip title="История участия в тендерах">
-          <IconButton onClick={handleNavigateToTenderHistory}>
-            <HistoryOutlined />
+
+        <Tooltip
+          title="Cписок активных тендеров"
+          onClick={handleNavigateToTenders}
+        >
+          <IconButton>
+            <ContentPasteOutlinedIcon />
           </IconButton>
         </Tooltip>
       </Box>
+      {isTenderEmplty && <Alert severity="info">Доступных тендеров нет</Alert>}
 
-      {isTenderEmplty ? (
-        <Alert severity="info">Доступных тендеров нет</Alert>
-      ) : (
-        isCardsView &&
-        view === VIEWS.cards && (
-          <>
-            <Box
-              sx={{
-                width: {
-                  xs: "100%",
-                  sm: "60%",
-                },
-                mx: "auto",
-                display: "grid",
-                gap: 5,
-                my: "10px",
-                gridTemplateColumns: {
-                  xs: "1fr",
-                },
-              }}
-            >
-              {customerTenders.map((tender) => (
-                <ApplicationsTenderCard key={tender.id} tender={tender} />
-              ))}
-            </Box>
-
-            {!isCardsView && (
-              <ApplicationsTenderTable tenders={customerTenders} />
-            )}
-
-            <Pagination
-              page={page}
-              count={PAGE_COUNT}
-              color="primary"
-              shape="rounded"
-              sx={{
-                mx: "auto",
-                width: "fit-content",
-              }}
-              onChange={handlePageChange}
-            />
-          </>
-        )
+      {isCardsView && view === VIEWS.cards && (
+        <>
+          <Box
+            sx={{
+              width: {
+                xs: "100%",
+                sm: "60%",
+              },
+              mx: "auto",
+              display: "grid",
+              gap: 5,
+              my: "10px",
+              gridTemplateColumns: {
+                xs: "1fr",
+              },
+            }}
+          >
+            {tendersHistory.map((tender) => (
+              <ApplicationsTenderCard key={tender.id} tender={tender} />
+            ))}
+          </Box>
+        </>
       )}
+      {!isCardsView && !isTenderEmplty && (
+        <ApplicationsTenderTable tenders={tendersHistory} />
+      )}
+      <Pagination
+        page={page}
+        count={PAGE_COUNT}
+        color="primary"
+        shape="rounded"
+        sx={{
+          mx: "auto",
+          width: "fit-content",
+        }}
+        onChange={handlePageChange}
+      />
     </RootLayout>
   );
 };
 
-export default TenderApplications;
+export default TenderHistory;

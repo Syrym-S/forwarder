@@ -104,3 +104,13 @@ export const acceptBetApi = async (tender_id, bet_index) => {
 
   return data;
 };
+
+//История тендеров
+
+export const getTendersHistoryApi = async (params) => {
+  const data = await api.get(`forwarder/v1/my-tenders/history`, {
+    params,
+  });
+
+  return data;
+};
