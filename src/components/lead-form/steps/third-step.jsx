@@ -11,6 +11,7 @@ import {
 import { StepSection } from "../step-section";
 import { InfoBadge } from "../info-badge";
 import { useDriverStore } from "../../../app/store/drivers/driver-store";
+import { useEffect, useState } from "react";
 
 export function ThirdStep({ control, errors, setValue }) {
   const selectedDriver = useWatch({
@@ -18,8 +19,29 @@ export function ThirdStep({ control, errors, setValue }) {
     name: "driver",
   });
 
+  const [inputValue, setInputValue] = useState("");
+
   const drivers = useDriverStore((state) => state.drivers);
+  const getDrivers = useDriverStore((state) => state.getDrivers);
+  const searchDriver = useDriverStore((state) => state.searchDriver);
   const isLoading = useDriverStore((state) => state.isLoading);
+
+  useEffect(() => {
+    const value = inputValue.trim();
+
+    const timer = setTimeout(() => {
+      if (!value) {
+        getDrivers();
+        return;
+      }
+
+      if (value.length >= 2) {
+        searchDriver({ q: value });
+      }
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  }, [inputValue, getDrivers, searchDriver]);
 
   return (
     <StepSection
@@ -32,51 +54,46 @@ export function ThirdStep({ control, errors, setValue }) {
         render={({ field }) => (
           <Stack spacing={2}>
             <Autocomplete
-              disabled={isLoading}
               options={drivers}
-              defaultValue={selectedDriver}
-              // getOptionLabel={(option) => option?.fio ?? ""}
-              renderValue={(value) => {
-                if (!value) return null;
-
-                return (
-                  <Chip variant="contained" color="primary" label={value.fio} />
-                );
-              }}
+              value={field.value ?? null}
+              loading={isLoading}
+              inputValue={inputValue}
               isOptionEqualToValue={(option, value) => option?.id === value?.id}
+              onInputChange={(_, newInputValue, reason) => {
+                if (reason === "input") {
+                  setInputValue(newInputValue);
+                }
+
+                if (reason === "clear") {
+                  setInputValue("");
+                }
+              }}
               onChange={(_, value) => {
-                if (value?.length > 1) return;
+                field.onChange(value);
 
-                field.onChange(value?.id ?? "");
-
-                setValue("driver", value, {
-                  shouldDirty: true,
-                  shouldTouch: true,
-                });
+                setInputValue(value?.fio ?? "");
               }}
-              renderOption={(props, option) => {
-                return (
-                  <Box
-                    component="li"
-                    {...props}
-                    sx={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      alignItems: "center",
-                      gap: 2,
-                    }}
-                  >
-                    <Typography fontWeight={700}>{option.fio}</Typography>
-                  </Box>
-                );
-              }}
+              getOptionLabel={(option) => option?.fio ?? ""}
+              renderOption={(props, option) => (
+                <Box
+                  component="li"
+                  {...props}
+                  sx={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    gap: 2,
+                  }}
+                >
+                  <Typography fontWeight={700}>{option.fio}</Typography>
+                </Box>
+              )}
               renderInput={(params) => (
                 <TextField
                   {...params}
-                  label={isLoading ? "...Загрузка данных" : "Водитель"}
                   placeholder="Выберите водителя"
-                  error={Boolean(errors.forwarderId)}
-                  helperText={errors.forwarderId?.message}
+                  error={Boolean(errors.driver)}
+                  helperText={errors.driver?.message}
                 />
               )}
             />
