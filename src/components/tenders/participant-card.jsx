@@ -2,8 +2,9 @@ import { Box, Button, IconButton, Stack, Typography } from "@mui/material";
 import DeleteOutlineRoundedIcon from "@mui/icons-material/DeleteOutlineRounded";
 import dayjs from "dayjs";
 import { useTendersStore } from "../../app/store/tenders/tender-store";
+import { STATUS } from "../../shared/const/tenders";
 
-const ParticipantCard = ({ tender_id, participant }) => {
+const ParticipantCard = ({ tender, tender_id, participant }) => {
   const deleteParticipant = useTendersStore((state) => state.deleteParticipant);
   const getTenderDetails = useTendersStore((state) => state.getTenderDetails);
 
@@ -61,13 +62,16 @@ const ParticipantCard = ({ tender_id, participant }) => {
         </Box>
       </Stack>
 
-      <IconButton
-        variant="outlined"
-        color="error"
-        onClick={handleDeleteParticipant}
-      >
-        <DeleteOutlineRoundedIcon />
-      </IconButton>
+      {tender.status !== STATUS.closed &&
+        tender.status !== STATUS.cancelled && (
+          <IconButton
+            variant="outlined"
+            color="error"
+            onClick={handleDeleteParticipant}
+          >
+            <DeleteOutlineRoundedIcon />
+          </IconButton>
+        )}
     </Box>
   );
 };

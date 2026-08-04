@@ -219,18 +219,15 @@ const TenderForwardersItem = () => {
             Запустить тендер
           </Button>
         )}
-        {!isCanceled ||
-          (!isClosed && (
-            <>
-              <Button
-                onClick={handleCancelTender}
-                variant="outlined"
-                color="warning"
-              >
-                Отменить тендер
-              </Button>
-            </>
-          ))}
+        {!isCanceled && !isClosed && (
+          <Button
+            onClick={handleCancelTender}
+            variant="outlined"
+            color="warning"
+          >
+            Отменить тендер
+          </Button>
+        )}
         {!hasWinner && (
           <Button onClick={handleDeleteTender} variant="outlined" color="error">
             Удалить тендер

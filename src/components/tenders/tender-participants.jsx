@@ -16,6 +16,7 @@ import { useEffect, useState } from "react";
 import { useTendersStore } from "../../app/store/tenders/tender-store";
 import ParticipantCard from "./participant-card";
 import { useDriverStore } from "../../app/store/drivers/driver-store";
+import { STATUS } from "../../shared/const/tenders";
 
 const TenderParticipants = ({ tender }) => {
   const [openConfirm, setOpenConfirm] = useState(false);
@@ -33,6 +34,8 @@ const TenderParticipants = ({ tender }) => {
   const isEmpty = tender?.participants_count === 0;
   const isPublic = tender?.publication_type === "public";
   const isInLimit = tender?.max_participants > tender?.participants_count;
+  const canAddParticipant =
+    tender?.status !== STATUS.cancelled && tender?.status !== STATUS.closed;
 
   const handleAddParticipant = async () => {
     await addParticipant(tender.id, { participant_id: selectedDriver.id });
@@ -80,7 +83,12 @@ const TenderParticipants = ({ tender }) => {
             <Button
               onClick={handleShowParticipantField}
               variant="outlined"
-              startIcon={<ControlPointRoundedIcon color="primary" />}
+              disabled={!canAddParticipant}
+              startIcon={
+                <ControlPointRoundedIcon
+                  color={canAddParticipant ? "primary" : ""}
+                />
+              }
             >
               Добавить участника
             </Button>
@@ -179,6 +187,7 @@ const TenderParticipants = ({ tender }) => {
           </Dialog>
         </Stack>
       )}
+
       {isEmpty && <>Список пустой</>}
 
       {!isEmpty && (
@@ -194,6 +203,7 @@ const TenderParticipants = ({ tender }) => {
           ) : (
             tender?.participants?.map((participant) => (
               <ParticipantCard
+                tender={tender}
                 tender_id={tender.id}
                 participant={participant}
                 key={participant.participant_id}
