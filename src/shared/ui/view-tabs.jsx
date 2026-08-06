@@ -63,7 +63,7 @@ const ViewTabs = ({
           color="primary"
           aria-label="Переключение отображения экспедиторов"
           sx={{
-            boxShadow: 0.5,
+            boxShadow: 1,
             background: "white",
             alignSelf: {
               xs: "stretch",
@@ -73,6 +73,15 @@ const ViewTabs = ({
               px: 1.5,
               minWidth: 40,
               minHeight: 40,
+
+              "&.Mui-selected": {
+                backgroundColor: "background.default",
+                color: "#4e6be0",
+              },
+
+              "&.Mui-selected:hover": {
+                backgroundColor: "#2d67d8",
+              },
             },
           }}
         >
@@ -85,7 +94,11 @@ const ViewTabs = ({
       )}
 
       {!withoutDataAdd && (
-        <Button variant="outlined" onClick={handleOpenForm}>
+        <Button
+          variant="outlined"
+          onClick={handleOpenForm}
+          sx={{ background: "white" }}
+        >
           {buttonText}
         </Button>
       )}

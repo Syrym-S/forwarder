@@ -120,6 +120,9 @@ const ActiveLeads = () => {
           <Select
             label="Статус"
             value={filterStatus?.label}
+            sx={{
+              boxShadow: 1,
+            }}
             onChange={(event) => {
               const value = event.target.value;
 

@@ -87,6 +87,15 @@ const LeadListContainer = ({
           sx={{
             width: "fit-content",
             mx: "auto",
+
+            "& .MuiPaginationItem-root": {
+              minWidth: 40,
+              height: 40,
+              borderRadius: 1,
+              fontWeight: 500,
+              background: "white",
+              boxShadow: 1,
+            },
           }}
         />
       )}

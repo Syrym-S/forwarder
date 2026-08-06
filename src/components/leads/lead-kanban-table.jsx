@@ -47,6 +47,7 @@ const LeadKanbanTable = ({ leads }) => {
         height: "80vh",
         display: "flex",
         overflowX: "auto",
+        gap: 1,
         py: 3,
       }}
     >
@@ -56,10 +57,11 @@ const LeadKanbanTable = ({ leads }) => {
           sx={{
             width: 400,
             minWidth: 400,
-            borderRadius: 3,
             display: "flex",
             flexDirection: "column",
             maxHeight: "100vh",
+            background: "white",
+            boxShadow: 1,
           }}
         >
           <Stack
@@ -73,11 +75,10 @@ const LeadKanbanTable = ({ leads }) => {
               spacing={1}
               alignItems="center"
               sx={{
-                border: "1px solid #bfbcbc",
+                borderBottom: "1px solid #bfbcbc",
                 width: "100%",
                 p: 2,
-                m: 1,
-                borderRadius: 3,
+                boxShadow: 1,
               }}
             >
               <Typography fontWeight={700}>{column.title}</Typography>
