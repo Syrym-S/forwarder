@@ -49,7 +49,7 @@ const HistoryLeads = () => {
   useEffect(() => {
     getHistoryLeads({
       page: page,
-      filterStatus: filterStatus,
+      status: filterStatus,
     });
   }, [page, filterStatus, getHistoryLeads]);
 
