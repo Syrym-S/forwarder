@@ -45,9 +45,7 @@ const ChooseLeadStep = ({ control, setValue, isEdit, getValues }) => {
             inputValue={inputValue}
             loading={isSearchLoading}
             disabled={isEdit}
-            options={searchedLeads.filter(
-              (tender) => tender.status === STATUS.new,
-            )}
+            options={searchedLeads}
             noOptionsText={<>Ввидте два символа</>}
             onInputChange={(_, value) => {
               setInputValue(value);

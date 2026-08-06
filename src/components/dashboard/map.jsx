@@ -105,8 +105,10 @@ const formatDuration = (duration) => {
 const MapTooltip = ({ route }) => {
   return (
     <Tooltip sticky>
-      <Box sx={{ minWidth: 200 }}>
-        <Box sx={{ mb: 0.75 }}>
+      <Box sx={{ minWidth: 250 }}>
+        <Box
+          sx={{ mb: 0.75, display: "flex", flexDirection: "column", gap: 1 }}
+        >
           <Typography
             component="span"
             sx={{
@@ -126,7 +128,9 @@ const MapTooltip = ({ route }) => {
           </Typography>
         </Box>
 
-        <Box sx={{ mb: 0.75 }}>
+        <Box
+          sx={{ mb: 0.75, display: "flex", flexDirection: "column", gap: 1 }}
+        >
           <Typography
             component="span"
             sx={{
@@ -366,9 +370,9 @@ const Map = ({
               }}
             />
 
-            {route.lead.waypoints.map((waypoint) => (
-              <Marker position={[waypoint.lat, waypoint.lon]} />
-            ))}
+            {route.lead.waypoints.map((waypoint) => {
+              return <Marker position={[waypoint.lat, waypoint.lon]} />;
+            })}
 
             <Marker
               position={route.end}

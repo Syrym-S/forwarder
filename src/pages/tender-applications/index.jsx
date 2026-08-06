@@ -72,7 +72,7 @@ const TenderApplications = () => {
     }
   }, [newNotification]);
 
-  const isTenderEmplty = customerTenders.length === 0;
+  const isTenderEmpty = customerTenders.length === 0;
 
   const handleNavigateToTenderHistory = () => {
     navigate("/tenders-history");
@@ -102,49 +102,46 @@ const TenderApplications = () => {
         </Tooltip>
       </Box>
 
-      {isTenderEmplty ? (
-        <Alert severity="info">Доступных тендеров нет</Alert>
-      ) : (
-        isCardsView &&
-        view === VIEWS.cards && (
-          <>
-            <Box
-              sx={{
-                width: {
-                  xs: "100%",
-                  sm: "60%",
-                },
-                mx: "auto",
-                display: "grid",
-                gap: 5,
-                my: "10px",
-                gridTemplateColumns: {
-                  xs: "1fr",
-                },
-              }}
-            >
-              {customerTenders.map((tender) => (
-                <ApplicationsTenderCard key={tender.id} tender={tender} />
-              ))}
-            </Box>
+      {isTenderEmpty && <Alert severity="info">Доступных тендеров нет</Alert>}
 
-            {!isCardsView && (
-              <ApplicationsTenderTable tenders={customerTenders} />
-            )}
+      {isCardsView && !isTenderEmpty && (
+        <Box
+          sx={{
+            width: {
+              xs: "100%",
+              sm: "60%",
+            },
+            mx: "auto",
+            display: "grid",
+            gap: 5,
+            my: "10px",
+            gridTemplateColumns: {
+              xs: "1fr",
+            },
+          }}
+        >
+          {customerTenders.map((tender) => (
+            <ApplicationsTenderCard key={tender.id} tender={tender} />
+          ))}
+        </Box>
+      )}
 
-            <Pagination
-              page={page}
-              count={PAGE_COUNT}
-              color="primary"
-              shape="rounded"
-              sx={{
-                mx: "auto",
-                width: "fit-content",
-              }}
-              onChange={handlePageChange}
-            />
-          </>
-        )
+      {!isCardsView && !isTenderEmpty && (
+        <ApplicationsTenderTable tenders={customerTenders} />
+      )}
+
+      {!isTenderEmpty && (
+        <Pagination
+          page={page}
+          count={PAGE_COUNT}
+          color="primary"
+          shape="rounded"
+          sx={{
+            mx: "auto",
+            width: "fit-content",
+          }}
+          onChange={handlePageChange}
+        />
       )}
     </RootLayout>
   );

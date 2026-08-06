@@ -89,6 +89,7 @@ const Factoring = () => {
             display: "grid",
             gap: 5,
             my: "10px",
+
             gridTemplateColumns: {
               xs: "1fr",
             },

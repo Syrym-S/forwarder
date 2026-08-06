@@ -57,7 +57,7 @@ export function mapCreateLeadFormToApi(form) {
     to_address: form.to_location.address,
 
     name: form.name || "Не указан",
-    cargo_type: form.type || "Не указан",
+    // cargo_type: form.type || "Не указан",
     currency: form.currency || "KZT",
     price: form.price || 0,
     cargos: form.cargos || [],
