@@ -17,10 +17,9 @@
 }
 
 .link {
-  color: rgb(44, 44, 44);
   transition: 0.2s;
   display: block;
-  margin: 3px 10px;
+  margin: 3px 0px;
   padding: 10px 25px;
   text-decoration: none;
   font-weight: 500;
@@ -28,9 +27,9 @@
 
 @media (hover: hover) and (pointer: fine) {
   .link:hover {
-    border-radius: 5px;
-    background-color: #2196f3;
-    color: white;
+    /* border-radius: 5px; */
+    /* background-color: #2196f3; */
+    color: rgb(15, 0, 185);
   }
 }
 

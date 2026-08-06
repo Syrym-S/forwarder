@@ -126,7 +126,7 @@ const SideBar = ({ openMenu, setOpenMenu }) => {
     <Box
       sx={{
         height: "100vh",
-        pt: 8,
+        pt: 10,
         transition: "0.2s",
         overflowY: "auto",
         width: {
@@ -140,12 +140,13 @@ const SideBar = ({ openMenu, setOpenMenu }) => {
         position: "fixed",
         top: 0,
         left: 0,
-        // bgcolor: "#fbfafa",
+        background:
+          "linear-gradient(135deg, rgb(149, 168, 245) 0%, rgba(55, 111, 252, 1) 100%)",
         flexDirection: "column",
         justifyContent: "space-between",
         zIndex: 1,
-        borderRight: "1px solid",
-        borderColor: "divider",
+        // borderRight: "1px solid",
+        // borderColor: "divider",
       }}
     >
       <Box>
@@ -166,22 +167,60 @@ const SideBar = ({ openMenu, setOpenMenu }) => {
             )}
             {item.sub_items.map((sub_item) => (
               <Tooltip title={sub_item.tooltip_text} disableInteractive>
-                <NavLink
+                <Box
+                  component={NavLink}
                   key={sub_item.id}
-                  className={"link"}
                   to={sub_item.path}
-                  style={({ isActive }) => ({
-                    backgroundColor: isActive && "#e3e4e6",
-                    borderRadius: isActive && "5px",
+                  className="link"
+                  sx={{
+                    position: "relative",
                     display: "flex",
                     alignItems: "center",
                     gap: "10px",
+                    ml: "15px",
+                    px: 2,
+                    py: 1.5,
                     fontWeight: 200,
-                    letterSpacing: "0.075em",
-                  })}
+                    letterSpacing: "0.1em",
+                    textDecoration: "none",
+                    color: "white",
+
+                    "&.active": {
+                      backgroundColor: "#e7f5fb",
+                      color: "#1a1a1a",
+
+                      borderTopLeftRadius: "50px",
+                      borderBottomLeftRadius: "50px",
+
+                      // Верхний вырез
+                      "&::before": {
+                        content: '""',
+                        position: "absolute",
+                        top: "-35px",
+                        right: "-5px",
+                        width: "40px",
+                        height: "40px",
+                        borderBottomRightRadius: "50px",
+                        boxShadow: "20px 20px 0 #e7f5fb",
+                      },
+
+                      // Нижний вырез
+                      "&::after": {
+                        content: '""',
+                        position: "absolute",
+                        bottom: "-35px",
+                        right: "-5px",
+                        width: "40px",
+                        height: "40px",
+                        borderTopRightRadius: "40px",
+                        boxShadow: "20px -20px 0 #e7f5fb",
+                      },
+                    },
+                  }}
                 >
-                  {sub_item.icon} {sub_item.lable}
-                </NavLink>
+                  {sub_item.icon}
+                  {sub_item.lable}
+                </Box>
               </Tooltip>
             ))}
           </Box>

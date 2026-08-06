@@ -6,7 +6,7 @@ const LeadsTable = (leads) => {
   const columns = useLeadsColumns(leads);
 
   return (
-    <Paper sx={{ my: "10px" }}>
+    <Paper sx={{ my: "10px", borderRadius: 0 }}>
       <DataGrid
         rows={leads.leads}
         getRowId={(row) => row.id}

@@ -56,7 +56,11 @@ const NotificationsBlock = () => {
         }}
       >
         <Badge badgeContent={notViewedCount} max={99} color="error">
-          <NotificationsNoneOutlinedIcon />
+          <NotificationsNoneOutlinedIcon
+            sx={{
+              color: "white",
+            }}
+          />
         </Badge>
       </IconButton>
 

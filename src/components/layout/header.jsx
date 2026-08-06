@@ -85,11 +85,10 @@ const Header = ({ openMenu, setOpenMenu }) => {
         alignItems: "center",
         justifyContent: "space-between",
         padding: "0 16px",
-        backgroundColor: "background.default",
+        background:
+          "linear-gradient(135deg, rgba(150, 169, 245, 1) 0%, rgba(55, 111, 252, 1) 100%)",
         zIndex: 2,
         boxShadow: 0,
-        borderBottom: "1px solid",
-        borderColor: "divider",
       }}
     >
       <Box
@@ -144,6 +143,7 @@ const Header = ({ openMenu, setOpenMenu }) => {
             overflow: "hidden",
             textOverflow: "ellipsis",
             whiteSpace: "nowrap",
+            border: "1px solid white",
             px: {
               xs: 0,
               sm: 1,
@@ -173,6 +173,7 @@ const Header = ({ openMenu, setOpenMenu }) => {
                 xs: "none",
                 sm: "inline",
               },
+              color: "white",
             }}
           >
             {userEmail}

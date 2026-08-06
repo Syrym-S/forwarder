@@ -63,6 +63,8 @@ const ViewTabs = ({
           color="primary"
           aria-label="Переключение отображения экспедиторов"
           sx={{
+            boxShadow: 0.5,
+            background: "white",
             alignSelf: {
               xs: "stretch",
               sm: "auto",
@@ -70,6 +72,7 @@ const ViewTabs = ({
             "& .MuiToggleButton-root": {
               px: 1.5,
               minWidth: 40,
+              minHeight: 40,
             },
           }}
         >
