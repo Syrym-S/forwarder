@@ -79,6 +79,8 @@ export const useDriverStore = create((set) => ({
     }
   },
   createDriver: async (payload) => {
+    console.log("payload", payload);
+
     try {
       set({ isLoading: true, error: null });
 

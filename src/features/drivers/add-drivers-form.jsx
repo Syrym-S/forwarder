@@ -39,6 +39,17 @@ const defaultValues = {
   password: "",
 };
 
+const generatePassword = (length = 12) => {
+  const chars =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*";
+
+  const randomValues = crypto.getRandomValues(new Uint32Array(length));
+
+  return Array.from(randomValues, (value) => chars[value % chars.length]).join(
+    "",
+  );
+};
+
 const AddDriverForm = ({ open, onClose, setSavedData }) => {
   const createDriver = useDriverStore((state) => state.createDriver);
   const [registrationDocumentsToUpload, setRegistrationDocumentsToUpload] =
@@ -48,16 +59,35 @@ const AddDriverForm = ({ open, onClose, setSavedData }) => {
   const { control, handleSubmit, setValue } = useForm({
     defaultValues,
   });
-  const formValues = useWatch({ control });
 
+  const formValues = useWatch({ control });
   const isIp = formValues.is_ip;
   const isForeigner = formValues.is_foreigner;
 
   const submitDriverCreate = async (data) => {
-    const preparedData = prepareDriverData(data);
-    await createDriver(preparedData);
-    setSavedData({ email: data.email, password: data.password });
+    const formData = new FormData();
 
+    if (registrationDocumentsToUpload) {
+      formData.append("registration_document", registrationDocumentsToUpload);
+
+      formData.append(
+        "registration_document_name",
+        "Свидетельство о госрегистрации",
+      );
+    }
+
+    if (employerDocumentToUpload) {
+      formData.append("employer_document", employerDocumentToUpload);
+
+      formData.append("employer_document_name", "Приказ о назначении");
+    }
+
+    const preparedData = prepareDriverData({
+      ...data,
+    });
+
+    await createDriver({ ...preparedData, ...formData });
+    setSavedData({ email: data.email, password: data.password });
     onClose();
   };
 
