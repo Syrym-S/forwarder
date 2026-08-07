@@ -22,8 +22,6 @@ const EditProfileForm = ({ profileData, legalDocuments }) => {
     (state) => state.uploadLegalDocuments,
   );
 
-  console.log(uploadAvatarError);
-
   const editProfileData = useProfileStore((state) => state.editProfileData);
   const getProfileData = useProfileStore((state) => state.getProfileData);
   const getLegalDocuments = useProfileStore((state) => state.getLegalDocuments);

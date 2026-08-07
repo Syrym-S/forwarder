@@ -13,6 +13,7 @@ import DriversTable from "../../components/drivers/driver-table";
 import AddDriverForm from "../../features/drivers/add-drivers-form";
 import InviteLinkModal from "../../components/customers/invite-link-modal";
 import DriverListContainer from "../../components/drivers/driver-list-container";
+import SavedDataModal from "../../components/drivers/saved-data-modal";
 
 const Drivers = () => {
   const [open, setOpen] = useState(false);
@@ -20,11 +21,12 @@ const Drivers = () => {
   //Позже венру если нужно будет , показывает по какому слово пошел запрос поиска
   const [__, setSearchRequest] = useState("");
   const [inputValue, setInputValue] = useState("");
+  const [savedData, setSavedData] = useState(null);
 
   const getDrivers = useDriverStore((state) => state.getDrivers);
   const searchDriver = useDriverStore((state) => state.searchDriver);
-  const inviteLink = useDriverStore((state) => state.inviteLink);
-  const clearInviteLink = useDriverStore((state) => state.clearInviteLink);
+  // const inviteLink = useDriverStore((state) => state.inviteLink);
+  // const clearInviteLink = useDriverStore((state) => state.clearInviteLink);
 
   const isCardsView = view === VIEWS.cards;
 
@@ -104,13 +106,16 @@ const Drivers = () => {
 
       <DriverListContainer view={view} />
 
-      {open && <AddDriverForm open={open} onClose={handleCloseForm} />}
-
-      {inviteLink && (
-        <InviteLinkModal
-          inviteLink={inviteLink}
-          clearInviteLink={clearInviteLink}
+      {open && (
+        <AddDriverForm
+          open={open}
+          onClose={handleCloseForm}
+          setSavedData={setSavedData}
         />
+      )}
+
+      {savedData && (
+        <SavedDataModal savedData={savedData} setSavedData={setSavedData} />
       )}
     </RootLayout>
   );

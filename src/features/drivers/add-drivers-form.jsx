@@ -9,10 +9,17 @@ import {
   DialogTitle,
   FormControlLabel,
   Grid,
+  IconButton,
+  Stack,
   TextField,
+  Typography,
 } from "@mui/material";
 import { useDriverStore } from "../../app/store/drivers/driver-store";
 import { prepareDriverData } from "../../shared/helpers/prepare-driver-data";
+import { useState } from "react";
+import UploadFileIcon from "@mui/icons-material/UploadFile";
+import InsertDriveFileOutlinedIcon from "@mui/icons-material/InsertDriveFileOutlined";
+import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 
 const defaultValues = {
   fio: "",
@@ -29,11 +36,16 @@ const defaultValues = {
   document_number: "",
   issue_country: "",
   document_issue_date: "",
+  password: "",
 };
 
-const AddDriverForm = ({ open, onClose }) => {
+const AddDriverForm = ({ open, onClose, setSavedData }) => {
   const createDriver = useDriverStore((state) => state.createDriver);
-  const { control, handleSubmit } = useForm({
+  const [registrationDocumentsToUpload, setRegistrationDocumentsToUpload] =
+    useState(null);
+  const [employerDocumentToUpload, setEmployerDocumentToUpload] =
+    useState(null);
+  const { control, handleSubmit, setValue } = useForm({
     defaultValues,
   });
   const formValues = useWatch({ control });
@@ -44,12 +56,13 @@ const AddDriverForm = ({ open, onClose }) => {
   const submitDriverCreate = async (data) => {
     const preparedData = prepareDriverData(data);
     await createDriver(preparedData);
+    setSavedData({ email: data.email, password: data.password });
 
     onClose();
   };
 
   return (
-    <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
+    <Dialog open={open} maxWidth="md" fullWidth>
       <DialogTitle>Данные водителя</DialogTitle>
 
       <DialogContent dividers>
@@ -69,6 +82,7 @@ const AddDriverForm = ({ open, onClose }) => {
                 )}
               />
             </Grid>
+
             <Grid size={{ xs: 12, sm: 6 }}>
               <Controller
                 name="iin"
@@ -238,6 +252,63 @@ const AddDriverForm = ({ open, onClose }) => {
               />
             </Grid>
 
+            <Grid
+              sx={{
+                display: "grid",
+                gap: 1,
+                gridTemplateColumns: "1fr 1fr",
+              }}
+              size={6}
+            >
+              <Grid>
+                <Controller
+                  name="password"
+                  control={control}
+                  rules={{
+                    required: "Введите пароль",
+                    minLength: {
+                      value: 6,
+                      message: "Пароль должен содержать минимум 6 символов",
+                    },
+                  }}
+                  render={({ field, fieldState: { error } }) => (
+                    <TextField
+                      {...field}
+                      type="password"
+                      label="Пароль"
+                      fullWidth
+                      size="small"
+                      error={!!error}
+                      helperText={error?.message}
+                    />
+                  )}
+                />
+              </Grid>
+
+              <Grid>
+                <Controller
+                  name="confirm_password"
+                  control={control}
+                  rules={{
+                    required: "Подтвердите пароль",
+                    validate: (value) =>
+                      value === formValues.password || "Пароли не совпадают",
+                  }}
+                  render={({ field, fieldState: { error } }) => (
+                    <TextField
+                      {...field}
+                      type="password"
+                      label="Подтверждение пароля"
+                      fullWidth
+                      size="small"
+                      error={!!error}
+                      helperText={error?.message}
+                    />
+                  )}
+                />
+              </Grid>
+            </Grid>
+
             <Grid size={12}>
               <Box display="flex" gap={3}>
                 <Controller
@@ -273,6 +344,297 @@ const AddDriverForm = ({ open, onClose }) => {
                 />
               </Box>
             </Grid>
+
+            <Box
+              sx={{
+                width: "100%",
+                display: "grid",
+                gap: 2,
+                gridTemplateColumns: {
+                  xs: "1fr",
+                  md: "1fr 1fr",
+                },
+              }}
+            >
+              <Box
+                sx={{
+                  border: "1px solid",
+                  my: 1,
+                  borderColor: "divider",
+                  borderRadius: 2,
+                  p: 2,
+                  transition: "0.2s",
+                  "&:hover": {
+                    borderColor: "primary.main",
+                    backgroundColor: "action.hover",
+                  },
+                }}
+              >
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                  }}
+                >
+                  <Stack>
+                    <Typography
+                      sx={{
+                        color: "rgba(0, 0, 0, 0.6)",
+                        fontSize: "1rem",
+                        lineHeight: 1.4375,
+                        letterSpacing: "0.00938em",
+                        fontWeight: 400,
+                      }}
+                    >
+                      Документ о регистрации юридического лица
+                    </Typography>
+
+                    <Button
+                      component="label"
+                      variant="outlined"
+                      startIcon={<UploadFileIcon />}
+                    >
+                      Заменить документ
+                      <input
+                        hidden
+                        type="file"
+                        accept=".pdf,.jpg,.jpeg,.png"
+                        onChange={(event) => {
+                          setRegistrationDocumentsToUpload(event.target.files);
+                        }}
+                      />
+                    </Button>
+                  </Stack>
+
+                  {/* {registrationDocument && (
+                    <LegalDocumentViewer file={registrationDocument} />
+                  )} */}
+                </Box>
+
+                {registrationDocumentsToUpload && (
+                  <Box
+                    sx={{
+                      mt: 2,
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 1.5,
+                      p: 1.5,
+                      border: "1px solid",
+                      borderColor: "divider",
+                      borderRadius: 2,
+                      backgroundColor: "background.paper",
+                    }}
+                  >
+                    {registrationDocumentsToUpload[0]?.type?.startsWith(
+                      "image/",
+                    ) ? (
+                      <Box
+                        component="img"
+                        src={URL.createObjectURL(
+                          registrationDocumentsToUpload[0],
+                        )}
+                        alt={registrationDocumentsToUpload[0].name}
+                        sx={{
+                          width: 56,
+                          height: 56,
+                          borderRadius: 1,
+                          objectFit: "cover",
+                        }}
+                      />
+                    ) : (
+                      <Box
+                        sx={{
+                          width: 56,
+                          height: 56,
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          borderRadius: 1,
+                          backgroundColor: "action.hover",
+                        }}
+                      >
+                        <InsertDriveFileOutlinedIcon
+                          color="primary"
+                          fontSize="large"
+                        />
+                      </Box>
+                    )}
+                    <Box
+                      sx={{
+                        minWidth: 0,
+                        flex: 1,
+                      }}
+                    >
+                      <Typography
+                        variant="body2"
+                        fontWeight={500}
+                        noWrap
+                        title={registrationDocumentsToUpload[0].name}
+                      >
+                        {registrationDocumentsToUpload[0].name}
+                      </Typography>
+
+                      <Typography variant="caption" color="text.secondary">
+                        {(
+                          registrationDocumentsToUpload[0].size /
+                          1024 /
+                          1024
+                        ).toFixed(2)}{" "}
+                        MB
+                      </Typography>
+                    </Box>
+                    <IconButton
+                      color="error"
+                      onClick={() => {
+                        setRegistrationDocumentsToUpload(null);
+                      }}
+                    >
+                      <DeleteOutlineOutlinedIcon />
+                    </IconButton>
+                  </Box>
+                )}
+
+                {/* {error && <FormHelperText error>{error.message}</FormHelperText>} */}
+              </Box>
+
+              <Box
+                sx={{
+                  border: "1px solid",
+                  my: 1,
+                  borderColor: "divider",
+                  borderRadius: 2,
+                  p: 2,
+                  transition: "0.2s",
+                  "&:hover": {
+                    borderColor: "primary.main",
+                    backgroundColor: "action.hover",
+                  },
+                }}
+              >
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                  }}
+                >
+                  <Stack>
+                    <Typography
+                      sx={{
+                        color: "rgba(0, 0, 0, 0.6)",
+                        fontSize: "1rem",
+                        lineHeight: 1.4375,
+                        letterSpacing: "0.00938em",
+                        fontWeight: 400,
+                      }}
+                    >
+                      Документ о трудоустройстве сотрудника
+                    </Typography>
+
+                    <Button
+                      component="label"
+                      variant="outlined"
+                      startIcon={<UploadFileIcon />}
+                    >
+                      Заменить документ
+                      <input
+                        hidden
+                        type="file"
+                        accept=".pdf,.jpg,.jpeg,.png"
+                        onChange={(event) => {
+                          console.log("event", event.target.files);
+                          setEmployerDocumentToUpload(event.target.files);
+                        }}
+                      />
+                    </Button>
+                  </Stack>
+                </Box>
+
+                {employerDocumentToUpload && (
+                  <Box
+                    sx={{
+                      mt: 2,
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 1.5,
+                      p: 1.5,
+                      border: "1px solid",
+                      borderColor: "divider",
+                      borderRadius: 2,
+                      backgroundColor: "background.paper",
+                    }}
+                  >
+                    {employerDocumentToUpload[0].type.startsWith("image/") ? (
+                      <Box
+                        component="img"
+                        src={URL.createObjectURL(employerDocumentToUpload[0])}
+                        alt={employerDocumentToUpload[0].name}
+                        sx={{
+                          width: 56,
+                          height: 56,
+                          borderRadius: 1,
+                          objectFit: "cover",
+                        }}
+                      />
+                    ) : (
+                      <Box
+                        sx={{
+                          width: 56,
+                          height: 56,
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          borderRadius: 1,
+                          backgroundColor: "action.hover",
+                        }}
+                      >
+                        <InsertDriveFileOutlinedIcon
+                          color="primary"
+                          fontSize="large"
+                        />
+                      </Box>
+                    )}
+
+                    <Box
+                      sx={{
+                        minWidth: 0,
+                        flex: 1,
+                      }}
+                    >
+                      <Typography
+                        variant="body2"
+                        fontWeight={500}
+                        noWrap
+                        title={employerDocumentToUpload[0].name}
+                      >
+                        {employerDocumentToUpload[0].name}
+                      </Typography>
+
+                      <Typography variant="caption" color="text.secondary">
+                        {(
+                          employerDocumentToUpload[0].size /
+                          1024 /
+                          1024
+                        ).toFixed(2)}{" "}
+                        MB
+                      </Typography>
+                    </Box>
+
+                    <IconButton
+                      // disabled={isSubmitting}
+                      color="error"
+                      onClick={() => {
+                        setValue("employer_document", null);
+                        setEmployerDocumentToUpload(null);
+                      }}
+                    >
+                      <DeleteOutlineOutlinedIcon />
+                    </IconButton>
+                  </Box>
+                )}
+
+                {/* {error && <FormHelperText error>{error.message}</FormHelperText>} */}
+              </Box>
+            </Box>
           </Grid>
         </Box>
       </DialogContent>
