@@ -107,6 +107,11 @@ const RenderStatus = ({ status }) => {
           color="warning"
         />
       );
+
+    case STATUS.approved:
+      return (
+        <RenderChip label={"Подтверждено"} variant="outlined" color="success" />
+      );
     default:
       return <>Нет статуа</>;
   }

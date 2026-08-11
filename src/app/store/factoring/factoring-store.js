@@ -2,6 +2,8 @@ import { create } from "zustand";
 import {
   acceptFactoringApi,
   createFactoringApi,
+  createFactoringLineApi,
+  getFactorDetailsApi,
   getFactoringDetailsApi,
   getFactoringsApi,
   searchFactorApi,
@@ -10,10 +12,15 @@ import {
 export const useFactoringStore = create((set) => ({
   factorings: [],
   factors: [],
+
   factoringDetails: null,
+  factorDetails: null,
+
   isLoading: false,
+  isFactorDetailsLoading: false,
   isSearchLoading: false,
   isConfirmLoading: false,
+
   error: null,
   count: 0,
   perPage: 1,
@@ -86,8 +93,31 @@ export const useFactoringStore = create((set) => ({
     }
   },
 
+  getFactorDetails: async (id) => {
+    try {
+      set({ isFactorDetailsLoading: true, error: null });
+
+      const response = await getFactorDetailsApi(id);
+
+      console.log(response);
+
+      set({
+        factorDetails: response.data,
+        isFactorDetailsLoading: false,
+      });
+
+      return response.data;
+    } catch (e) {
+      set({
+        error: e.message,
+        isFactorDetailsLoading: false,
+      });
+
+      throw e;
+    }
+  },
+
   clearFactoringDetails: () => {
-    console.log("clearFactoringDetails");
     set({ factoringDetails: null });
   },
 
@@ -96,6 +126,29 @@ export const useFactoringStore = create((set) => ({
       set({ isLoading: true, error: null });
 
       const response = await createFactoringApi(payload);
+
+      set({
+        isLoading: false,
+      });
+
+      return response.data;
+    } catch (e) {
+      set({
+        error: e.message,
+        isLoading: false,
+      });
+
+      console.error("Payload:", payload);
+      console.error("Response:", e.response?.data);
+      throw e;
+    }
+  },
+
+  createFactoringLine: async (payload) => {
+    try {
+      set({ isLoading: true, error: null });
+
+      const response = await createFactoringLineApi(payload);
 
       set({
         isLoading: false,

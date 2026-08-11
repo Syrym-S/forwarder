@@ -35,6 +35,12 @@ export const getFactoringDetailsApi = async (index) => {
   return data;
 };
 
+export const getFactorDetailsApi = async (id) => {
+  const data = await api.get(`/forwarder/v1/factor/${id}/factor-setting`);
+
+  return data;
+};
+
 export const createFactoringApi = async (payload) => {
   const data = await api.post(`/forwarder/v1/factoring/create`, payload, {
     headers: {
@@ -57,6 +63,12 @@ export const acceptFactoringApi = async (factoring_index) => {
       },
     },
   );
+
+  return data;
+};
+
+export const createFactoringLineApi = async (payload) => {
+  const data = await api.post(`/forwarder/v1/factoring/line/create`, payload);
 
   return data;
 };

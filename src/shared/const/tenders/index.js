@@ -15,6 +15,7 @@ export const STATUS = {
   await_paid: "await_paid",
   winning: "winning",
   loss: "loss",
+  approved: "approved",
 };
 
 export const LEAD_STATUS_OPTIONS = [

@@ -32,7 +32,7 @@ const FactorDataTable = ({ factor }) => {
     },
     {
       label: "БИН",
-      value: factor?.bin,
+      value: factor?.bin || factor?.company_bin,
     },
     {
       label: "Адрес компании",

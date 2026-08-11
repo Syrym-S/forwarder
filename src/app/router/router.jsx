@@ -18,6 +18,8 @@ import { isStaging } from "../client";
 import AppContentContainer from "./app-content-container";
 import Factor from "../../pages/factor";
 import TenderHistory from "../../pages/tender-history";
+import ApplicationHistory from "../../pages/application-history";
+import FactorItem from "../../pages/factor/factor-item";
 
 export const router = createBrowserRouter(
   [
@@ -136,6 +138,20 @@ export const router = createBrowserRouter(
           element: <Factor />,
           handle: {
             breadcrumb: "Фактор",
+          },
+        },
+        {
+          path: "/factor/:id",
+          element: <FactorItem />,
+          handle: {
+            breadcrumb: ({ params }) => `Фактор / ${params.id}`,
+          },
+        },
+        {
+          path: "application-history",
+          element: <ApplicationHistory />,
+          handle: {
+            breadcrumb: "История заявок",
           },
         },
       ],

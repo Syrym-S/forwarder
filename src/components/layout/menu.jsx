@@ -14,6 +14,8 @@ import RouteOutlined from "@mui/icons-material/RouteOutlined";
 import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
 import PhoneOutlinedIcon from "@mui/icons-material/PhoneOutlined";
 import MarkunreadOutlinedIcon from "@mui/icons-material/MarkunreadOutlined";
+import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
+import HistoryToggleOffIcon from "@mui/icons-material/HistoryToggleOff";
 import "./style.css";
 
 const menuItems = [
