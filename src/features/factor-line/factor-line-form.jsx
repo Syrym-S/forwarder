@@ -59,6 +59,12 @@ const FactorLineForm = ({ open, setOpenForm, setSuccessModal }) => {
     const preparedData = prepareData(data, factorDetails);
 
     createFactoringLine(preparedData);
+    reset({
+      factor_id: selectedFactor?.id ?? "",
+      summ_max: factorDetails.sum_default ?? "",
+      period_days: factorDetails.period_days ?? "",
+      currency: factorDetails.currency ?? "",
+    });
     setSuccessModal(true);
   };
 

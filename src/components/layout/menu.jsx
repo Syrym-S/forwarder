@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Box, Button, Tooltip, Typography } from "@mui/material";
 import { NavLink } from "react-router-dom";
 import LocalShippingOutlinedIcon from "@mui/icons-material/LocalShippingOutlined";
@@ -17,6 +17,87 @@ import MarkunreadOutlinedIcon from "@mui/icons-material/MarkunreadOutlined";
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import HistoryToggleOffIcon from "@mui/icons-material/HistoryToggleOff";
 import "./style.css";
+
+export function SupportContacts() {
+  const supportEmail = window?.APP_DATA?.support?.email;
+  const supportPhone = window?.APP_DATA?.support?.phone;
+
+  const [copied, setCopied] = useState(false);
+
+  const handleCopyPhone = async (event) => {
+    event.stopPropagation();
+
+    await navigator.clipboard.writeText(supportPhone);
+
+    setCopied(true);
+
+    setTimeout(() => {
+      setCopied(false);
+    }, 1500);
+  };
+
+  return (
+    <Box
+      sx={{
+        display: "grid",
+        gridTemplateColumns: "1fr",
+        gap: 1,
+        minWidth: 0,
+      }}
+    >
+      <Tooltip title={supportEmail} placement="top" arrow>
+        <Button
+          color="primary"
+          variant="contained"
+          component="a"
+          href={`mailto:${supportEmail}?subject=${encodeURIComponent(
+            "Обращение в поддержку",
+          )}&body=${encodeURIComponent("Здравствуйте! У меня возник вопрос.")}`}
+          sx={{
+            boxShadow: 0,
+            fontSize: 12,
+
+            "& .MuiButton-startIcon": {
+              flexShrink: 0,
+            },
+          }}
+          startIcon={<MarkunreadOutlinedIcon />}
+        >
+          <Box
+            component="span"
+            sx={{
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              whiteSpace: "nowrap",
+            }}
+          >
+            {supportEmail}
+          </Box>
+        </Button>
+      </Tooltip>
+
+      <Tooltip
+        title={copied ? "Скопировано" : "Скопировать номер"}
+        placement="top"
+        arrow
+        open={copied ? true : undefined}
+      >
+        <Button
+          color="primary"
+          variant="contained"
+          onClick={handleCopyPhone}
+          sx={{
+            boxShadow: 0,
+            fontSize: 12,
+          }}
+          startIcon={<PhoneOutlinedIcon />}
+        >
+          {supportPhone}
+        </Button>
+      </Tooltip>
+    </Box>
+  );
+}
 
 const menuItems = [
   {
@@ -189,6 +270,43 @@ const SideBar = ({ openMenu, setOpenMenu }) => {
             ))}
           </Box>
         ))}
+      </Box>
+
+      <Box
+        sx={{
+          m: 2,
+          p: 1,
+          background: "rgba(174, 174, 174, 0.2)",
+          borderRadius: 2,
+        }}
+      >
+        <Typography
+          sx={{
+            fontWeight: "600",
+            fontSize: 16,
+          }}
+        >
+          Нужна помощь?
+        </Typography>
+        <Typography
+          sx={{
+            fontWeight: "400",
+            fontSize: 14,
+          }}
+        >
+          Наша служба поддержки на связи 24/7
+        </Typography>
+
+        <Box
+          sx={{
+            display: "grid",
+            gridTemplateColumns: "1fr",
+            gap: 1,
+            py: 1,
+          }}
+        >
+          <SupportContacts />
+        </Box>
       </Box>
     </Box>
   );

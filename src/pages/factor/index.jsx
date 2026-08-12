@@ -8,8 +8,12 @@ import FactorLineContainer from "../../components/factor-line/factor-line-contai
 import { STATUS } from "../../shared/const/tenders";
 import { VIEWS } from "../../shared/const/leads";
 import { useFactorStore } from "../../app/store/factor/factor-store";
+import { useNotificationsStore } from "../../app/store/notifications/noti-store";
 
 const Factor = () => {
+  const newNotification = useNotificationsStore(
+    (state) => state.newNotification,
+  );
   const getFactoringsLine = useFactorStore((state) => state.getFactoringsLine);
 
   const [view, setView] = useState(VIEWS.table);
@@ -22,6 +26,10 @@ const Factor = () => {
   useEffect(() => {
     getFactoringsLine();
   }, []);
+
+  useEffect(() => {
+    getFactoringsLine();
+  }, [newNotification]);
 
   return (
     <RootLayout withoutDataCheck>

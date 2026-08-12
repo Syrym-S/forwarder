@@ -259,6 +259,7 @@ const FactorItem = () => {
           sx={{
             display: "grid",
             gridTemplateColumns: "1fr 1fr",
+            gap: 2,
           }}
         >
           {purchases?.map((purchase) => (

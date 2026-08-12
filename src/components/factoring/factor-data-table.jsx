@@ -16,11 +16,11 @@ const FactorDataTable = ({ factor }) => {
     },
     {
       label: "Email",
-      value: factor?.personEmail,
+      value: factor?.email,
     },
     {
       label: "ИИН",
-      value: factor?.personIin,
+      value: factor?.iin,
     },
     {
       label: "Номер",
@@ -36,7 +36,7 @@ const FactorDataTable = ({ factor }) => {
     },
     {
       label: "Адрес компании",
-      value: factor?.companyAddress,
+      value: factor?.company_address,
     },
   ];
 
