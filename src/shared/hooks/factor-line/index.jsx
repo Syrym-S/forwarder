@@ -1,6 +1,7 @@
 import { NavLink } from "react-router-dom";
 import RenderStatus from "../../ui/render-status";
 import { Box, LinearProgress, Stack, Typography } from "@mui/material";
+import { renderLineColor } from "../../helpers/factoring/render-progress-line-color";
 
 const useFactoringLineColumns = () => {
   return [
@@ -71,6 +72,11 @@ const useFactoringLineColumns = () => {
               sx={{
                 height: 8,
                 borderRadius: 4,
+                backgroundColor: "grey.200",
+                "& .MuiLinearProgress-bar": {
+                  backgroundColor: renderLineColor(usedPercent),
+                  borderRadius: 4,
+                },
               }}
             />
           </Stack>

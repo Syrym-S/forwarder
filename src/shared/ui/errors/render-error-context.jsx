@@ -11,6 +11,8 @@ const returnText = (error) => {
       return "Размер фото для профиля должна быть между 400x400 - 600x600";
     case "Only PNG and JPEG images are allowed":
       return "Фото должно быть формата PNG или JPEG";
+    default:
+      return error;
   }
 };
 const RenderErrorContext = ({ error }) => {

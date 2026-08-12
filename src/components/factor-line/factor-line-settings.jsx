@@ -10,12 +10,14 @@ import {
 import CheckCircleOutlineOutlinedIcon from "@mui/icons-material/CheckCircleOutlineOutlined";
 import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
 import { useFactoringStore } from "../../app/store/factoring/factoring-store";
+import RenderErrorContext from "../../shared/ui/errors/render-error-context";
 
 const FactorLineSettings = () => {
   const factorDetails = useFactoringStore((state) => state.factorDetails);
   const isFactorDetailsLoading = useFactoringStore(
     (state) => state.isFactorDetailsLoading,
   );
+  const error = useFactoringStore((state) => state.error);
 
   const items = [
     {
@@ -71,38 +73,42 @@ const FactorLineSettings = () => {
         <Box
           sx={{
             display: "grid",
-            gridTemplateColumns: "1fr 1fr",
+            gridTemplateColumns: error ? "1fr" : "1fr 1fr",
           }}
         >
-          {items.map((item) => (
-            <Box
-              key={item.label}
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-                p: 1.5,
-                borderRadius: 1.5,
-                bgcolor: "grey.50",
-              }}
-            >
-              <Typography variant="body2">{item.label}</Typography>
+          {error ? (
+            <RenderErrorContext error={error} />
+          ) : (
+            items.map((item) => (
+              <Box
+                key={item.label}
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  p: 1.5,
+                  borderRadius: 1.5,
+                  bgcolor: "grey.50",
+                }}
+              >
+                <Typography variant="body2">{item.label}</Typography>
 
-              <Chip
-                size="small"
-                icon={
-                  item.value ? (
-                    <CheckCircleOutlineOutlinedIcon />
-                  ) : (
-                    <CancelOutlinedIcon />
-                  )
-                }
-                label={item.value ? "Да" : "Нет"}
-                color={item.value ? "success" : "default"}
-                variant="outlined"
-              />
-            </Box>
-          ))}
+                <Chip
+                  size="small"
+                  icon={
+                    item.value ? (
+                      <CheckCircleOutlineOutlinedIcon />
+                    ) : (
+                      <CancelOutlinedIcon />
+                    )
+                  }
+                  label={item.value ? "Да" : "Нет"}
+                  color={item.value ? "success" : "default"}
+                  variant="outlined"
+                />
+              </Box>
+            ))
+          )}
         </Box>
       </CardContent>
     </Card>

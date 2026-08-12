@@ -12,6 +12,12 @@ export const getFactoringsApi = async (params) => {
   return data;
 };
 
+export const getFactorsApi = async () => {
+  const data = await api.get(`/forwarder/v1/factoring/factors`);
+
+  return data;
+};
+
 export const searchFactorApi = async (params) => {
   const data = await api.get(`/forwarder/v1/factors/search`, {
     params,

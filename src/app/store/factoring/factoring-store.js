@@ -6,6 +6,7 @@ import {
   getFactorDetailsApi,
   getFactoringDetailsApi,
   getFactoringsApi,
+  getFactorsApi,
   searchFactorApi,
 } from "./api";
 
@@ -17,6 +18,7 @@ export const useFactoringStore = create((set) => ({
   factorDetails: null,
 
   isLoading: false,
+  isFactorsLoading: false,
   isFactorDetailsLoading: false,
   isSearchLoading: false,
   isConfirmLoading: false,
@@ -43,6 +45,28 @@ export const useFactoringStore = create((set) => ({
       set({
         error: e.message,
         isLoading: false,
+      });
+
+      throw e;
+    }
+  },
+
+  getFactors: async () => {
+    try {
+      set({ isFactorsLoading: true });
+
+      const response = await getFactorsApi();
+
+      set({
+        factors: response.data.results,
+        isFactorsLoading: false,
+      });
+
+      return response.data;
+    } catch (e) {
+      set({
+        error: e.message,
+        isFactorsLoading: false,
       });
 
       throw e;
@@ -99,8 +123,6 @@ export const useFactoringStore = create((set) => ({
 
       const response = await getFactorDetailsApi(id);
 
-      console.log(response);
-
       set({
         factorDetails: response.data,
         isFactorDetailsLoading: false,
@@ -109,7 +131,7 @@ export const useFactoringStore = create((set) => ({
       return response.data;
     } catch (e) {
       set({
-        error: e.message,
+        error: e.response.data.message,
         isFactorDetailsLoading: false,
       });
 

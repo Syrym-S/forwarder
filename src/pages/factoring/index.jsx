@@ -12,6 +12,8 @@ import GridViewRoundedIcon from "@mui/icons-material/GridViewRounded";
 import ViewTabs from "../../shared/ui/view-tabs";
 import PageLoader from "../../shared/ui/loaders/page-loader";
 import { useLeadsStore } from "../../app/store/leads/leads-store";
+import FactorLineForm from "../../features/factor-line/factor-line-form";
+import SuccessModal from "../../components/factoring/factoring-form/success-modal";
 
 const Factoring = () => {
   const factorings = useFactoringStore((state) => state.factorings);
@@ -26,6 +28,8 @@ const Factoring = () => {
   const perPage = useFactoringStore((state) => state.perPage);
 
   const [openFormModal, setOpenFormModal] = useState(false);
+  const [openFactoringLineForm, setOpenFactoringLineForm] = useState(false);
+  const [successModal, setSuccessModal] = useState(false);
   const [view, setView] = useState(VIEWS.table);
   const [page, setPage] = useState(1);
 
@@ -115,10 +119,25 @@ const Factoring = () => {
         onChange={handlePageChange}
       />
 
-      <CreateFactoringForm
-        openFormModal={openFormModal}
-        handleModalClose={handleModalClose}
-      />
+      {openFormModal && (
+        <CreateFactoringForm
+          openFormModal={openFormModal}
+          handleModalClose={handleModalClose}
+          setOpenFactoringLineForm={setOpenFactoringLineForm}
+        />
+      )}
+
+      {openFactoringLineForm && (
+        <FactorLineForm
+          open={openFactoringLineForm}
+          setOpenForm={setOpenFactoringLineForm}
+          setSuccessModal={setSuccessModal}
+        />
+      )}
+
+      {successModal && (
+        <SuccessModal open={successModal} setOpen={setSuccessModal} />
+      )}
     </RootLayout>
   );
 };

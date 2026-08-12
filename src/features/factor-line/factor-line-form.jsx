@@ -31,15 +31,15 @@ const prepareData = (data, factorDetails) => {
   return result;
 };
 
-const FactorLineForm = ({ open, setOpenForm }) => {
+const FactorLineForm = ({ open, setOpenForm, setSuccessModal }) => {
   const [inputValueFactor, setInputValueFactor] = useState("");
   const [selectedFactor, setSelectedFactor] = useState();
 
   const factors = useFactoringStore((state) => state.factors);
   const factorDetails = useFactoringStore((state) => state.factorDetails);
   const getFactorDetails = useFactoringStore((state) => state.getFactorDetails);
-  const isSeachLoading = useFactoringStore((state) => state.isSeachLoading);
-  const searchFactor = useFactoringStore((state) => state.searchFactor);
+  const isFactorsLoading = useFactoringStore((state) => state.isFactorsLoading);
+  const getFactors = useFactoringStore((state) => state.getFactors);
   const createFactoringLine = useFactoringStore(
     (state) => state.createFactoringLine,
   );
@@ -54,12 +54,12 @@ const FactorLineForm = ({ open, setOpenForm }) => {
       currency: "",
     },
   });
-  createFactoringLine;
 
   const onSubmit = async (data) => {
     const preparedData = prepareData(data, factorDetails);
 
     createFactoringLine(preparedData);
+    setSuccessModal(true);
   };
 
   useEffect(() => {
@@ -74,22 +74,14 @@ const FactorLineForm = ({ open, setOpenForm }) => {
   }, [factorDetails, selectedFactor, reset]);
 
   useEffect(() => {
-    if (!inputValueFactor || inputValueFactor.length < 2) return;
-
-    const timer = setTimeout(async () => {
-      await searchFactor({
-        q: inputValueFactor.trim(),
-      });
-    }, 1000);
-
-    return () => clearTimeout(timer);
-  }, [inputValueFactor]);
-
-  useEffect(() => {
     if (selectedFactor) {
       getFactorDetails(selectedFactor.id);
     }
   }, [selectedFactor]);
+
+  useEffect(() => {
+    getFactors();
+  }, []);
 
   return (
     <Dialog
@@ -107,7 +99,7 @@ const FactorLineForm = ({ open, setOpenForm }) => {
             <Autocomplete
               value={selectedFactor}
               inputValue={inputValueFactor}
-              loading={isSeachLoading}
+              loading={isFactorsLoading}
               options={factors || []}
               noOptionsText={<>Ввидте два символа</>}
               onInputChange={(_, value) => {
