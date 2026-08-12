@@ -8,8 +8,6 @@ export default function AppBreadcrumbs() {
 
   const crumbs = matches.filter((match) => match.handle?.breadcrumb);
 
-  console.log;
-
   return (
     <Breadcrumbs>
       {crumbs.length > 1 && (

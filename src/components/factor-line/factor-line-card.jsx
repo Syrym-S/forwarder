@@ -26,6 +26,7 @@ const FactoringLineCard = ({ line }) => {
   const navigate = useNavigate();
   const {
     id,
+    factor,
     status,
     summ_max,
     summ_free,
@@ -36,7 +37,9 @@ const FactoringLineCard = ({ line }) => {
   } = line;
 
   const handleNavigateToDetailPage = () => {
-    navigate(`/factor/${id}`);
+    navigate(
+      `/factoring-lines/${id}/${factor.company_bin}-${factor.company_name}`,
+    );
   };
 
   const usedPercent =

@@ -14,7 +14,7 @@ const useFactoringLineColumns = () => {
         console.log(row);
         return (
           <NavLink
-            to={`/factor/${row.id}/${row.factor.company_bin}-${row.factor.company_name}`}
+            to={`/factoring-lines/${row.id}/${row.factor.company_bin}-${row.factor.company_name}`}
             style={{
               textDecoration: "none",
             }}

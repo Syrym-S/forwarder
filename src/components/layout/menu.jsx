@@ -74,7 +74,7 @@ const menuItems = [
       },
       {
         id: 3,
-        path: "/factor",
+        path: "/factoring-lines",
         lable: "Факторинговые компании",
         icon: <HandshakeOutlined />,
         tooltip_text:

@@ -20,12 +20,14 @@ import Factor from "../../pages/factor";
 import TenderHistory from "../../pages/tender-history";
 import ApplicationHistory from "../../pages/application-history";
 import FactorItem from "../../pages/factor/factor-item";
+import ErrorPage from "../../pages/error";
 
 export const router = createBrowserRouter(
   [
     {
       path: "/",
       element: <AppContentContainer />,
+      errorElement: <ErrorPage />,
       handle: {
         breadcrumb: "Главная",
       },
@@ -134,14 +136,14 @@ export const router = createBrowserRouter(
           },
         },
         {
-          path: "/factor",
+          path: "/factoring-lines",
           element: <Factor />,
           handle: {
             breadcrumb: "Факторинговые компании",
           },
         },
         {
-          path: "/factor/:id/:breadcrumbs",
+          path: "/factoring-lines/:id/:breadcrumbs",
           element: <FactorItem />,
           handle: {
             breadcrumb: ({ params }) =>
