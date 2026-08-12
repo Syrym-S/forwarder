@@ -5,10 +5,23 @@ import { useFactorStore } from "../../../app/store/factor/factor-store";
 import FactorDataTable from "../../../components/factoring/factor-data-table";
 import Section from "../../../shared/ui/section";
 import RememberMeOutlinedIcon from "@mui/icons-material/RememberMeOutlined";
-import { Box, LinearProgress, Stack, Typography } from "@mui/material";
+import {
+  Alert,
+  Box,
+  Chip,
+  LinearProgress,
+  Stack,
+  Typography,
+} from "@mui/material";
 import PageLoader from "../../../shared/ui/loaders/page-loader";
 import InfoBadge from "../../../shared/ui/info-badge";
 import dayjs from "dayjs";
+import { renderLineColor } from "../../../shared/helpers/factoring/render-progress-line-color";
+import RenderStatus from "../../../shared/ui/render-status";
+import FactoringPurchaseCard from "../../../components/factor-line/factoring-purchase-card";
+import HandshakeIcon from "@mui/icons-material/Handshake";
+import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
+import ShowChartOutlinedIcon from "@mui/icons-material/ShowChartOutlined";
 
 const FactorItem = () => {
   const { id } = useParams();
@@ -30,10 +43,9 @@ const FactorItem = () => {
         )
       : 0;
 
-  // const factorDetails = useFactoringStore((state) => state.factorDetails);
-  // const getFactorDetails = useFactoringStore(
-  //   (state) => state.getFactoringLineDetails,
-  // );
+  const purchases = factoringLineDetails?.purchases;
+
+  const isPurchasesEmpty = purchases?.length === 0;
 
   useEffect(() => {
     getFactoringLineDetails(id);
@@ -43,6 +55,69 @@ const FactorItem = () => {
 
   return (
     <RootLayout withoutDataCheck>
+      <Box
+        spacing={0.5}
+        sx={{
+          display: "flex",
+          alignItems: {
+            xs: "start",
+            sm: "center",
+          },
+          gap: "10px",
+          justifyContent: "space-between",
+          flexDirection: {
+            xs: "column",
+            sm: "row",
+          },
+        }}
+      >
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            width: "100%",
+          }}
+        >
+          <Stack>
+            <Typography variant="h5" fontWeight={700}>
+              Информация о факторинговой линии
+            </Typography>
+
+            <Typography
+              sx={{
+                color: "color.slate",
+              }}
+            >
+              Подробные данные по заявке
+            </Typography>
+          </Stack>
+        </Box>
+        <Box
+          sx={{
+            display: "flex",
+            py: "10px",
+            justifyContent: { xs: "space-between", sm: "end" },
+            gap: {
+              xs: "3px",
+              sm: "10px",
+            },
+            width: {
+              xs: "100%",
+              sm: "fit-content",
+            },
+          }}
+          spacing={1}
+        >
+          <Chip
+            label={`Линия #${factoringLineDetails?.id}`}
+            color="primary"
+            variant="outlined"
+          />
+
+          <RenderStatus status={factoringLineDetails?.status} />
+        </Box>
+      </Box>
+
       <Section
         icon={<RememberMeOutlinedIcon color="primary" />}
         title={"Данные Фактора"}
@@ -51,7 +126,7 @@ const FactorItem = () => {
       </Section>
 
       <Section
-        icon={<RememberMeOutlinedIcon color="primary" />}
+        icon={<ShowChartOutlinedIcon color="primary" />}
         title={"Прогресс"}
       >
         <Stack
@@ -120,6 +195,11 @@ const FactorItem = () => {
             sx={{
               height: 8,
               borderRadius: 4,
+              backgroundColor: "grey.200",
+              "& .MuiLinearProgress-bar": {
+                backgroundColor: renderLineColor(usedPercent),
+                borderRadius: 4,
+              },
             }}
           />
           <Typography variant="body2" fontWeight={600}>
@@ -129,7 +209,7 @@ const FactorItem = () => {
       </Section>
 
       <Section
-        icon={<RememberMeOutlinedIcon color="primary" />}
+        icon={<HandshakeIcon color="primary" />}
         title={"Условия факторинга"}
       >
         <Box
@@ -156,6 +236,34 @@ const FactorItem = () => {
             value={factoringLineDetails?.period_days}
           />
           <InfoBadge label="Валюта" value={factoringLineDetails?.currency} />
+        </Box>
+      </Section>
+
+      <Section
+        title="Покупки"
+        icon={<ShoppingCartOutlinedIcon color="primary" />}
+      >
+        {isPurchasesEmpty && (
+          <Alert
+            severity="info"
+            sx={{
+              width: "100%",
+              my: 1,
+            }}
+          >
+            Список покупок пуст
+          </Alert>
+        )}
+
+        <Box
+          sx={{
+            display: "grid",
+            gridTemplateColumns: "1fr 1fr",
+          }}
+        >
+          {purchases?.map((purchase) => (
+            <FactoringPurchaseCard data={purchase} />
+          ))}
         </Box>
       </Section>
     </RootLayout>

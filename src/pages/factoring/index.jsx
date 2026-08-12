@@ -79,6 +79,7 @@ const Factoring = () => {
       <ViewTabs
         view={view}
         setView={setView}
+        withoutKanban
         handleOpenForm={handleModalOpen}
       />
 

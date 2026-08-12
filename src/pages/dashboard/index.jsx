@@ -8,11 +8,22 @@ import DashboardLeadsList from "../../components/dashboard/leads/dashboard-leads
 
 import { useLeadsStore } from "../../app/store/leads/leads-store";
 import TendersMainContainer from "../../components/dashboard/tenders/tenders-main-container";
+import FactoringProgressBarContainer from "../../components/dashboard/factoring-line/factoring-progress-bar-container";
+import FactoringTable from "../../components/factoring/factoring-table";
+import { useFactoringStore } from "../../app/store/factoring/factoring-store";
 
 const Dashboard = () => {
   const leads = useLeadsStore((state) => state.acceptedLeads);
+  const factorings = useFactoringStore((state) => state.factorings);
+  const getFactorings = useFactoringStore((state) => state.getFactorings);
   const fetchAcceptedLeads = useLeadsStore((state) => state.fetchAcceptedLeads);
   const isLoading = useLeadsStore((state) => state.isAcceptedLeadsLoading);
+
+  const awaitingApproveFactorings = factorings?.filter(
+    (factoring) =>
+      factoring.status === "await_paid" ||
+      factoring.status === "verified_participant",
+  );
 
   const [selectedLeadId, setSelectedLeadId] = useState(null);
   const [hoveredLeadId, setHoveredLeadId] = useState(null);
@@ -32,6 +43,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     fetchAcceptedLeads();
+    getFactorings();
   }, [fetchAcceptedLeads]);
 
   return (
@@ -88,6 +100,10 @@ const Dashboard = () => {
         </Box>
 
         <TendersMainContainer />
+
+        <FactoringProgressBarContainer />
+
+        <FactoringTable factorings={awaitingApproveFactorings} />
       </Container>
     </RootLayout>
   );

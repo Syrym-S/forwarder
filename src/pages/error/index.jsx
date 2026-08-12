@@ -12,7 +12,7 @@ const ErrorPage = () => {
   const error = useRouteError();
   const navigate = useNavigate();
 
-  let message = "Произошла непредвиденная ошибка.";
+  let message = error.message;
 
   if (isRouteErrorResponse(error)) {
     if (error.status === 404) {

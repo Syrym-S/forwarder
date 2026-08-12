@@ -11,6 +11,7 @@ import {
 } from "@mui/material";
 import RenderStatus from "../../shared/ui/render-status";
 import { useNavigate } from "react-router-dom";
+import { renderLineColor } from "../../shared/helpers/factoring/render-progress-line-color";
 
 const formatAmount = (amount, currency) => {
   return `${new Intl.NumberFormat("ru-RU").format(amount)} ${currency}`;
@@ -151,6 +152,11 @@ const FactoringLineCard = ({ line }) => {
             sx={{
               height: 8,
               borderRadius: 4,
+              backgroundColor: "grey.200",
+              "& .MuiLinearProgress-bar": {
+                backgroundColor: renderLineColor(usedPercent),
+                borderRadius: 4,
+              },
             }}
           />
         </Box>
