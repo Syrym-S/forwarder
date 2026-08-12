@@ -34,6 +34,7 @@ const Factor = () => {
           view={view}
           setView={setView}
           handleOpenForm={handleOpenForm}
+          withoutKanban
         />
 
         {openForm && (

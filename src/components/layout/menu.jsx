@@ -75,9 +75,10 @@ const menuItems = [
       {
         id: 3,
         path: "/factor",
-        lable: "Фактор",
+        lable: "Факторинговые компании",
         icon: <HandshakeOutlined />,
-        tooltip_text: "Скоро",
+        tooltip_text:
+          "Список факторинговых линий. Возможность создать факторинг линию",
       },
     ],
   },

@@ -12,25 +12,11 @@ import ViewListRoundedIcon from "@mui/icons-material/ViewListRounded";
 import GridViewRoundedIcon from "@mui/icons-material/GridViewRounded";
 import ViewKanbanOutlinedIcon from "@mui/icons-material/ViewKanbanOutlined";
 
-const tabs = [
-  {
-    value: VIEWS.table,
-    icon: <ViewListRoundedIcon fontSize="small" />,
-  },
-  {
-    value: VIEWS.cards,
-    icon: <GridViewRoundedIcon fontSize="small" />,
-  },
-  {
-    value: VIEWS.kanban,
-    icon: <ViewKanbanOutlinedIcon fontSize="small" />,
-  },
-];
-
 const ViewTabs = ({
   view,
   setView,
   handleOpenForm,
+  withoutKanban = false,
   withoutDataAdd = false,
   isLeadsEmpty,
   buttonText = "Добавить",
@@ -73,11 +59,19 @@ const ViewTabs = ({
             },
           }}
         >
-          {tabs.map((tab) => (
-            <ToggleButton key={tab.value} value={tab.value}>
-              {tab.icon}
+          <ToggleButton key={VIEWS.table} value={VIEWS.table}>
+            <ViewListRoundedIcon fontSize="small" />
+          </ToggleButton>
+
+          <ToggleButton key={VIEWS.cards} value={VIEWS.cards}>
+            <GridViewRoundedIcon fontSize="small" />
+          </ToggleButton>
+
+          {!withoutKanban && (
+            <ToggleButton key={VIEWS.kanban} value={VIEWS.kanban}>
+              <ViewKanbanOutlinedIcon fontSize="small" />
             </ToggleButton>
-          ))}
+          )}
         </ToggleButtonGroup>
       )}
 

@@ -10,16 +10,19 @@ const useFactoringLineColumns = () => {
       headerName: "ID",
       flex: 1,
       minWidth: 150,
-      renderCell: ({ row }) => (
-        <NavLink
-          to={`/factor/${row.id}`}
-          style={{
-            textDecoration: "none",
-          }}
-        >
-          {row.id}
-        </NavLink>
-      ),
+      renderCell: ({ row }) => {
+        console.log(row);
+        return (
+          <NavLink
+            to={`/factor/${row.id}/${row.factor.company_bin}-${row.factor.company_name}`}
+            style={{
+              textDecoration: "none",
+            }}
+          >
+            {row.id}
+          </NavLink>
+        );
+      },
     },
     {
       field: "status",

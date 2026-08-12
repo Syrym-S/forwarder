@@ -8,6 +8,8 @@ export default function AppBreadcrumbs() {
 
   const crumbs = matches.filter((match) => match.handle?.breadcrumb);
 
+  console.log;
+
   return (
     <Breadcrumbs>
       {crumbs.length > 1 && (
@@ -50,11 +52,13 @@ export default function AppBreadcrumbs() {
         return last ? (
           <Typography
             key={match.pathname}
+            onClick={() => navigate(-1)}
             sx={{
               fontSize: {
                 xs: 13,
                 sm: 16,
               },
+              cursor: "pointer",
             }}
           >
             {label}

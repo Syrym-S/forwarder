@@ -66,7 +66,7 @@ export const router = createBrowserRouter(
           path: "/factorings",
           element: <Factoring />,
           handle: {
-            breadcrumb: "Фанторинги",
+            breadcrumb: "Факторинги",
           },
         },
         {
@@ -137,14 +137,15 @@ export const router = createBrowserRouter(
           path: "/factor",
           element: <Factor />,
           handle: {
-            breadcrumb: "Фактор",
+            breadcrumb: "Факторинговые компании",
           },
         },
         {
-          path: "/factor/:id",
+          path: "/factor/:id/:breadcrumbs",
           element: <FactorItem />,
           handle: {
-            breadcrumb: ({ params }) => `Фактор / ${params.id}`,
+            breadcrumb: ({ params }) =>
+              `Факторинговые компании / ${params.breadcrumbs}`,
           },
         },
         {
