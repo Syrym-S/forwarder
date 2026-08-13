@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import dayjs from "dayjs";
 import { Controller } from "react-hook-form";
-import { Autocomplete, TextField } from "@mui/material";
+import { Autocomplete, CircularProgress, TextField } from "@mui/material";
 import RenderLeadOptions from "../../../components/tenders/render-lead-options";
 import { useLeadsStore } from "../../../app/store/leads/leads-store";
 import { STATUS } from "../../../shared/const/tenders";
@@ -45,15 +45,22 @@ const ChooseLeadStep = ({ control, setValue, isEdit, getValues }) => {
             inputValue={inputValue}
             loading={isSearchLoading}
             disabled={isEdit}
-            options={searchedLeads}
+            options={isSearchLoading ? [] : [...searchedLeads]}
             noOptionsText={<>Ввидте два символа</>}
-            onInputChange={(_, value) => {
-              setInputValue(value);
+            onInputChange={(_, newInputValue, reason) => {
+              if (reason === "input") {
+                setInputValue(newInputValue);
+              }
+
+              if (reason === "clear") {
+                setInputValue("");
+              }
             }}
             filterOptions={(items) => items}
             onChange={(_, value) => {
               field.onChange(value);
 
+              setInputValue(value?.from ? `${value?.from} - ${value?.to}` : "");
               setValue("lead", value, {
                 shouldDirty: true,
                 shouldTouch: true,
