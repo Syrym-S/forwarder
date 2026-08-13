@@ -1,4 +1,4 @@
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { NavLink } from "react-router-dom";
 import RenderStatus from "../../ui/render-status";
 import dayjs from "dayjs";
@@ -24,6 +24,56 @@ const useFactoringColumns = () => {
       field: "lead_id",
       headerName: "ID лида",
       width: 200,
+    },
+    {
+      field: "factor",
+      headerName: "Фактор",
+      width: 200,
+      renderCell: ({ row }) => {
+        return (
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+            }}
+          >
+            <Typography
+              sx={{
+                fontSize: "0.9rem",
+              }}
+            >
+              {row.factor.company_name}
+            </Typography>
+            <Typography
+              sx={{
+                fontSize: "0.7em",
+                сolor: "divider",
+                fontWeight: 300,
+              }}
+            >
+              БИН: {row.factor.bin}
+            </Typography>
+            <Typography
+              sx={{
+                fontSize: "0.7rem",
+                сolor: "divider",
+                fontWeight: 300,
+              }}
+            >
+              {row.factor.fio}
+            </Typography>
+            <Typography
+              sx={{
+                fontSize: "0.7rem",
+                сolor: "divider",
+                fontWeight: 300,
+              }}
+            >
+              {row.factor.phone}
+            </Typography>
+          </Box>
+        );
+      },
     },
     {
       field: "created_at",

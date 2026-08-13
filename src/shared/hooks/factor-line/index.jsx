@@ -31,6 +31,56 @@ const useFactoringLineColumns = () => {
       renderCell: ({ row }) => <RenderStatus status={row.status} />,
     },
     {
+      field: "factor",
+      headerName: "Фактор",
+      width: 200,
+      renderCell: ({ row }) => {
+        return (
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+            }}
+          >
+            <Typography
+              sx={{
+                fontSize: "0.9rem",
+              }}
+            >
+              {row.factor.company_name}
+            </Typography>
+            <Typography
+              sx={{
+                fontSize: "0.7em",
+                сolor: "divider",
+                fontWeight: 300,
+              }}
+            >
+              БИН: {row.factor.company_bin}
+            </Typography>
+            <Typography
+              sx={{
+                fontSize: "0.7rem",
+                сolor: "divider",
+                fontWeight: 300,
+              }}
+            >
+              {row.factor.fio}
+            </Typography>
+            <Typography
+              sx={{
+                fontSize: "0.7rem",
+                сolor: "divider",
+                fontWeight: 300,
+              }}
+            >
+              {row.factor.phone}
+            </Typography>
+          </Box>
+        );
+      },
+    },
+    {
       field: "summ_current",
       headerName: "Текущая сумма",
       flex: 1,

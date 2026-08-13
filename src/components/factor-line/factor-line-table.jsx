@@ -12,6 +12,7 @@ const FactorLineTable = (factorLine) => {
         rows={factorLine.factorLine}
         getRowId={(row) => row.id}
         columns={columns}
+        rowHeight={70}
         checkboxSelection
         sx={{ border: 0, minHeight: "80vh" }}
         localeText={{

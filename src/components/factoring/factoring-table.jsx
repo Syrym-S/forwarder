@@ -13,6 +13,7 @@ const FactoringTable = ({ factorings }) => {
         getRowId={(row) => row.id}
         columns={columns}
         checkboxSelection
+        rowHeight={70}
         sx={{ border: 0 }}
       />
     </Paper>
