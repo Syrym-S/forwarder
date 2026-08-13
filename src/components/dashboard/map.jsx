@@ -7,7 +7,7 @@ import {
   Tooltip,
   useMap,
 } from "react-leaflet";
-import { Box, Typography } from "@mui/material";
+import { Box, CircularProgress, Typography } from "@mui/material";
 import "leaflet/dist/leaflet.css";
 import { useLeadsStore } from "../../app/store/leads/leads-store";
 import L from "leaflet";
@@ -185,6 +185,7 @@ const Map = ({
   highlightedLeadId,
   onSelectLead,
 }) => {
+  const isLoading = useLeadsStore((state) => state.isLoading);
   const storeLeads = useLeadsStore((state) => state.leads);
 
   const leads = leadsProp || storeLeads;
@@ -339,89 +340,131 @@ const Map = ({
   }, [routes, highlightedLeadId]);
 
   return (
-    <MapContainer
-      center={[43.238949, 76.889709]}
-      zoom={13}
-      style={{
-        zIndex: 0,
-        borderRadius: "10px",
-        height: "500px",
-        width: "100%",
+    <Box
+      sx={{
+        position: "relative",
       }}
     >
-      <TileLayer
-        attribution="&copy; OpenStreetMap contributors"
-        url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
-      />
-
-      <FitSelectedRouteBounds route={selectedRoute} />
-
-      {routes.map((route) => {
-        const isHighlighted = String(route.id) === String(highlightedLeadId);
-        const isDimmed = hasHighlightedRoute && !isHighlighted;
-
-        return (
-          <Fragment key={route.id}>
-            <Marker
-              position={route.start}
-              opacity={isDimmed ? 0.3 : 1}
-              eventHandlers={{
-                click: () => onSelectLead?.(route.id),
-              }}
-            />
-
-            {route.lead.waypoints.map((waypoint) => {
-              return <Marker position={[waypoint.lat, waypoint.lon]} />;
-            })}
-
-            <Marker
-              position={route.end}
-              opacity={isDimmed ? 0.3 : 1}
-              eventHandlers={{
-                click: () => onSelectLead?.(route.id),
-              }}
-            />
-
-            <Polyline
-              positions={route.coordinates}
-              pathOptions={{
-                color: "blue",
-                weight: isHighlighted ? 7 : 4,
-                opacity: isDimmed ? 0.15 : 0.95,
-              }}
-              eventHandlers={{
-                click: () => onSelectLead?.(route.id),
+      {isLoading && (
+        <Box
+          sx={{
+            position: "absolute",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            zIndex: 1,
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+            background: "rgba(255, 255, 255, 0.5)",
+          }}
+        >
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+              gap: 1,
+            }}
+          >
+            <CircularProgress />
+            <Typography
+              sx={{
+                fontWeight: 200,
+                fontSize: "0.7rem",
               }}
             >
-              <MapTooltip route={route} />
-            </Polyline>
+              Загрузка карты...
+            </Typography>
+          </Box>
+        </Box>
+      )}
+      <MapContainer
+        center={[43.238949, 76.889709]}
+        zoom={13}
+        style={{
+          zIndex: 0,
+          borderRadius: "10px",
+          height: "500px",
+          width: "100%",
+        }}
+      >
+        <TileLayer
+          attribution="&copy; OpenStreetMap contributors"
+          url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
+        />
 
-            {passedRoute && (
-              <Polyline
-                positions={passedRoute}
-                pathOptions={{
-                  color: "#1976d2",
-                  weight: 5,
-                  dashArray: "10 10",
+        <FitSelectedRouteBounds route={selectedRoute} />
+
+        {routes.map((route) => {
+          const isHighlighted = String(route.id) === String(highlightedLeadId);
+          const isDimmed = hasHighlightedRoute && !isHighlighted;
+
+          return (
+            <Fragment key={route.id}>
+              <Marker
+                position={route.start}
+                opacity={isDimmed ? 0.3 : 1}
+                eventHandlers={{
+                  click: () => onSelectLead?.(route.id),
                 }}
               />
-            )}
 
-            {routeHistory && (
-              <Polyline
-                positions={routeHistory}
-                pathOptions={{
-                  color: "#1976d2",
-                  weight: 5,
-                  dashArray: "10 10",
+              {route.lead.waypoints.map((waypoint) => {
+                return <Marker position={[waypoint.lat, waypoint.lon]} />;
+              })}
+
+              <Marker
+                position={route.end}
+                opacity={isDimmed ? 0.3 : 1}
+                eventHandlers={{
+                  click: () => onSelectLead?.(route.id),
                 }}
               />
-            )}
-            {points && <Marker position={points} icon={driverIcon} />}
-          </Fragment>
-        );
-      })}
-    </MapContainer>
+
+              <Polyline
+                positions={route.coordinates}
+                pathOptions={{
+                  color: "blue",
+                  weight: isHighlighted ? 7 : 4,
+                  opacity: isDimmed ? 0.15 : 0.95,
+                }}
+                eventHandlers={{
+                  click: () => onSelectLead?.(route.id),
+                }}
+              >
+                <MapTooltip route={route} />
+              </Polyline>
+
+              {passedRoute && (
+                <Polyline
+                  positions={passedRoute}
+                  pathOptions={{
+                    color: "#1976d2",
+                    weight: 5,
+                    dashArray: "10 10",
+                  }}
+                />
+              )}
+
+              {routeHistory && (
+                <Polyline
+                  positions={routeHistory}
+                  pathOptions={{
+                    color: "#1976d2",
+                    weight: 5,
+                    dashArray: "10 10",
+                  }}
+                />
+              )}
+              {points && <Marker position={points} icon={driverIcon} />}
+            </Fragment>
+          );
+        })}
+      </MapContainer>
+    </Box>
   );
 };
 
