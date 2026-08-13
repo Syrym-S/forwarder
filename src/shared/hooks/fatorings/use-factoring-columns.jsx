@@ -1,4 +1,4 @@
-import { Box, Typography } from "@mui/material";
+import { Box, Chip, Typography } from "@mui/material";
 import { NavLink } from "react-router-dom";
 import RenderStatus from "../../ui/render-status";
 import dayjs from "dayjs";
@@ -117,6 +117,42 @@ const useFactoringColumns = () => {
       width: 200,
       renderCell: ({ row }) => (
         <Box>{(row?.proc_service * 100).toFixed(1)} %</Box>
+      ),
+    },
+    {
+      field: "verified_customer",
+      headerName: "Подтверждение от заказщика",
+      width: 200,
+      renderCell: ({ row }) => (
+        <Chip
+          label={row?.verified_customer ? "Подтвержден" : "В ожидании"}
+          variant="contained"
+          color={row?.verified_customer ? "success" : "warning"}
+        />
+      ),
+    },
+    {
+      field: "verified_factor",
+      headerName: "Подтверждение от фактора",
+      width: 200,
+      renderCell: ({ row }) => (
+        <Chip
+          label={row?.verified_factor ? "Подтвержден" : "В ожидании"}
+          variant="contained"
+          color={row?.verified_factor ? "success" : "warning"}
+        />
+      ),
+    },
+    {
+      field: "verified_forwarder",
+      headerName: "Подтверждение от вас",
+      width: 200,
+      renderCell: ({ row }) => (
+        <Chip
+          label={row?.verified_forwarder ? "Подтвержден" : "В ожидании"}
+          variant="contained"
+          color={row?.verified_forwarder ? "success" : "warning"}
+        />
       ),
     },
   ];
