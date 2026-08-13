@@ -229,105 +229,112 @@ const LeadItem = () => {
 
   return (
     <RootLayout data={leadData}>
-      <LeadHeading leadData={leadData} openEditForm={openEditForm} />
-
-      <AddLeadForm
-        editingItemId={id}
-        openForm={openEdit}
-        setOpenForm={setOpenEdit}
-        initialValues={defaultValues}
-        isEdit
-      />
-
       <Box
         sx={{
-          boxShadow: 1,
-          borderRadius: 2,
-          overflow: "hidden",
-          my: 3,
+          px: 10,
         }}
       >
-        <LeadMap waypoints={waypoints} from={from} to={to} id={id} />
-      </Box>
+        <LeadHeading leadData={leadData} openEditForm={openEditForm} />
 
-      <LeadCustomerInfo leadData={leadData} />
+        <AddLeadForm
+          editingItemId={id}
+          openForm={openEdit}
+          setOpenForm={setOpenEdit}
+          initialValues={defaultValues}
+          isEdit
+        />
 
-      {newNotification && notification_type === NOTIFICATION_TYPE.shipping && (
-        <NotificationPopup selectedNotification={newNotification} />
-      )}
-
-      <LeadRouteInfo leadData={leadData} />
-
-      <Section
-        title={`Груз`}
-        icon={<LocalShippingOutlinedIcon color="primary" />}
-      >
         <Box
           sx={{
-            display: "grid",
-            gridTemplateColumns: "1fr",
-            gap: 2,
+            boxShadow: 1,
+            borderRadius: 2,
+            overflow: "hidden",
+            my: 3,
           }}
         >
-          {leadData?.cargos?.map((cargo, index) => (
-            <LeadCargoInfo
-              cargosCount={cargosCount}
-              cargo={cargo}
-              lead={leadData}
-              index={index}
-              isLeadsPage
-            />
-          ))}
+          <LeadMap waypoints={waypoints} from={from} to={to} id={id} />
         </Box>
-      </Section>
 
-      {filesFromDriverToLoad && (
-        <CargoLoadVerification
-          leadStatus={leadData?.status}
-          filesFromDriverToLoad={filesFromDriverToLoad}
-          isLoadingVerified={isLoadingVerified}
-          handleVerifyCargo={handleVerifyCargo}
-          handleRejectCargo={handleRejectCargo}
-        />
-      )}
+        <LeadCustomerInfo leadData={leadData} />
 
-      {filesFromDriverToUnload && (
-        <CargoUnloadVerification
-          leadStatus={leadData?.status}
-          isUnloadVerified={isUnloadVerified}
-          filesFromDriverToUnload={filesFromDriverToUnload}
-          handleVerifyCargoUnload={handleVerifyCargoUnload}
-          handleRejectCargoUnload={handleRejectCargoUnload}
-        />
-      )}
+        {newNotification &&
+          notification_type === NOTIFICATION_TYPE.shipping && (
+            <NotificationPopup selectedNotification={newNotification} />
+          )}
 
-      <LeadDriverInfo leadData={leadData} />
+        <LeadRouteInfo leadData={leadData} />
 
-      <Section
-        title="Документы"
-        icon={<DescriptionOutlinedIcon color="primary" />}
-      >
-        <LeadDocumentsSection
-          leadStatus={leadData?.status}
-          documents={files}
-          onAddDocument={handleAddDocument}
-          onDeleteDocument={handleDeleteFileFromDB}
-          isUploading={isDocumentUploading}
-          uploadError={documentError}
-          deletingDocumentIds={deletingDocumentIds}
-        />
-      </Section>
-
-      {leadData.status === STATUS.verification_unloading && (
-        <Button
-          color="error"
-          variant="outlined"
-          disabled={isConfirmLoading}
-          onClick={handleConfirmDelivery}
+        <Section
+          title={`Груз`}
+          icon={<LocalShippingOutlinedIcon color="primary" />}
         >
-          {isConfirmLoading ? "...Завершение рейса" : "Завершить рейс"}
-        </Button>
-      )}
+          <Box
+            sx={{
+              display: "grid",
+              gridTemplateColumns: "1fr",
+              gap: 2,
+            }}
+          >
+            {leadData?.cargos?.map((cargo, index) => (
+              <LeadCargoInfo
+                cargosCount={cargosCount}
+                cargo={cargo}
+                lead={leadData}
+                index={index}
+                isLeadsPage
+              />
+            ))}
+          </Box>
+        </Section>
+
+        {filesFromDriverToLoad && (
+          <CargoLoadVerification
+            leadStatus={leadData?.status}
+            filesFromDriverToLoad={filesFromDriverToLoad}
+            isLoadingVerified={isLoadingVerified}
+            handleVerifyCargo={handleVerifyCargo}
+            handleRejectCargo={handleRejectCargo}
+          />
+        )}
+
+        {filesFromDriverToUnload && (
+          <CargoUnloadVerification
+            leadStatus={leadData?.status}
+            isUnloadVerified={isUnloadVerified}
+            filesFromDriverToUnload={filesFromDriverToUnload}
+            handleVerifyCargoUnload={handleVerifyCargoUnload}
+            handleRejectCargoUnload={handleRejectCargoUnload}
+          />
+        )}
+
+        <LeadDriverInfo leadData={leadData} />
+
+        <Section
+          title="Документы"
+          icon={<DescriptionOutlinedIcon color="primary" />}
+        >
+          <LeadDocumentsSection
+            leadStatus={leadData?.status}
+            documents={files}
+            onAddDocument={handleAddDocument}
+            onDeleteDocument={handleDeleteFileFromDB}
+            isUploading={isDocumentUploading}
+            uploadError={documentError}
+            deletingDocumentIds={deletingDocumentIds}
+          />
+        </Section>
+
+        {leadData.status === STATUS.verification_unloading && (
+          <Button
+            color="error"
+            variant="outlined"
+            disabled={isConfirmLoading}
+            onClick={handleConfirmDelivery}
+          >
+            {isConfirmLoading ? "...Завершение рейса" : "Завершить рейс"}
+          </Button>
+        )}
+      </Box>
     </RootLayout>
   );
 };

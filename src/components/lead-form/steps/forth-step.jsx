@@ -27,7 +27,6 @@ export function ForthStep({ control, errors, setValue }) {
   const getCustomers = useCustomerStore((state) => state.getCustomers);
   const searchCustomers = useCustomerStore((state) => state.searchCustomers);
   const isLoading = useCustomerStore((state) => state.isLoading);
-  // const options = useMemo(() => CUSTOMERS, []);
 
   useEffect(() => {
     const value = inputValue.trim();
@@ -38,7 +37,7 @@ export function ForthStep({ control, errors, setValue }) {
         return;
       }
 
-      if (value.length >= 2) {
+      if (value.length >= 1) {
         searchCustomers({ q: value });
       }
     }, 1000);
@@ -57,6 +56,7 @@ export function ForthStep({ control, errors, setValue }) {
         render={({ field }) => (
           <Stack spacing={2}>
             <Autocomplete
+              inputValue={inputValue}
               options={customers}
               filterOptions={(options) => options}
               value={field.value ?? null}
@@ -85,7 +85,7 @@ export function ForthStep({ control, errors, setValue }) {
               onChange={(_, value) => {
                 field.onChange(value);
 
-                setInputValue(value?.name ?? "");
+                setInputValue("");
 
                 setValue("customer", value, {
                   shouldDirty: true,
@@ -98,13 +98,33 @@ export function ForthStep({ control, errors, setValue }) {
                   component="li"
                   {...props}
                   sx={{
+                    borderBottom: "1px solid",
+                    borderColor: "divider",
                     display: "flex",
+                    flexDirection: "column",
                     justifyContent: "space-between",
-                    alignItems: "center",
-                    gap: 2,
+                    alignItems: "start",
+                    gap: 1,
                   }}
                 >
-                  <Typography fontWeight={700}>{option.name}</Typography>
+                  <Typography
+                    sx={{
+                      fontSize: "1rem",
+                      width: "fit-content",
+                    }}
+                    fontWeight={700}
+                  >
+                    {option.name}
+                  </Typography>
+                  <Typography
+                    sx={{
+                      fontSize: "0.7rem",
+                      width: "fit-content",
+                    }}
+                    fontWeight={200}
+                  >
+                    БИН: {option.bin}
+                  </Typography>
                 </Box>
               )}
               renderInput={(params) => (

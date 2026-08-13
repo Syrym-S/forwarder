@@ -13,7 +13,7 @@ const LeadRouteInfo = ({ leadData }) => {
           display: "grid",
           gridTemplateColumns: {
             xs: "1fr",
-            md: "1fr auto 1fr",
+            md: "1fr",
           },
           gap: 2,
           alignItems: "stretch",
@@ -24,26 +24,12 @@ const LeadRouteInfo = ({ leadData }) => {
           value={leadData.from_location?.address || "Битые данные"}
         />
 
-        <Box
-          sx={{
-            height: "100%",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <ArrowRightAltRoundedIcon
-            sx={{
-              fontSize: 40,
-              color: "text.secondary",
-              justifySelf: "center",
-              transform: {
-                xs: "rotate(90deg)",
-                sm: "rotate(0)",
-              },
-            }}
+        {leadData?.waypoints?.map((point, index) => (
+          <InfoField
+            label={`Промежуточная точка ${index + 1}`}
+            value={point.address || "Битые данные"}
           />
-        </Box>
+        ))}
 
         <InfoField
           label="Куда"

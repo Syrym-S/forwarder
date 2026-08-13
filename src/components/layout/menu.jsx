@@ -107,7 +107,7 @@ const menuItems = [
       {
         id: 1,
         path: "/",
-        lable: "Маршруты",
+        lable: "Главная",
         icon: <RouteOutlined />,
         tooltip_text: "Отображение всех маршрутов на карте",
       },
@@ -224,7 +224,6 @@ const SideBar = ({ openMenu, setOpenMenu }) => {
         position: "fixed",
         top: 0,
         left: 0,
-        // bgcolor: "#fbfafa",
         flexDirection: "column",
         justifyContent: "space-between",
         zIndex: 1,

@@ -35,9 +35,7 @@ export function ThirdStep({ control, errors, setValue }) {
         return;
       }
 
-      if (value.length >= 2) {
-        searchDriver({ q: value });
-      }
+      searchDriver({ q: value });
     }, 1000);
 
     return () => clearTimeout(timer);
@@ -54,11 +52,19 @@ export function ThirdStep({ control, errors, setValue }) {
         render={({ field }) => (
           <Stack spacing={2}>
             <Autocomplete
+              inputValue={inputValue}
               options={drivers}
               value={field.value ?? null}
+              filterOptions={(options) => options}
               loading={isLoading}
-              inputValue={inputValue}
               isOptionEqualToValue={(option, value) => option?.id === value?.id}
+              renderValue={(value) => {
+                if (!value) return null;
+
+                return (
+                  <Chip variant="contained" color="primary" label={value.fio} />
+                );
+              }}
               onInputChange={(_, newInputValue, reason) => {
                 if (reason === "input") {
                   setInputValue(newInputValue);
@@ -71,7 +77,13 @@ export function ThirdStep({ control, errors, setValue }) {
               onChange={(_, value) => {
                 field.onChange(value);
 
-                setInputValue(value?.fio ?? "");
+                setInputValue("");
+
+                setValue("driver", value, {
+                  shouldDirty: true,
+                  shouldTouch: true,
+                  shouldValidate: true,
+                });
               }}
               getOptionLabel={(option) => option?.fio ?? ""}
               renderOption={(props, option) => (
@@ -79,13 +91,42 @@ export function ThirdStep({ control, errors, setValue }) {
                   component="li"
                   {...props}
                   sx={{
+                    borderBottom: "1px solid",
+                    borderColor: "divider",
                     display: "flex",
+                    flexDirection: "column",
                     justifyContent: "space-between",
-                    alignItems: "center",
-                    gap: 2,
+                    alignItems: "start",
+                    gap: 1,
                   }}
                 >
-                  <Typography fontWeight={700}>{option.fio}</Typography>
+                  <Typography
+                    sx={{
+                      fontSize: "1rem",
+                      width: "fit-content",
+                    }}
+                    fontWeight={700}
+                  >
+                    {option.fio}
+                  </Typography>
+                  <Typography
+                    sx={{
+                      fontSize: "0.7rem",
+                      width: "fit-content",
+                    }}
+                    fontWeight={200}
+                  >
+                    ИИН: {option.iin}
+                  </Typography>
+                  <Typography
+                    sx={{
+                      fontSize: "0.7rem",
+                      width: "fit-content",
+                    }}
+                    fontWeight={200}
+                  >
+                    {option.email}
+                  </Typography>
                 </Box>
               )}
               renderInput={(params) => (
