@@ -215,7 +215,10 @@ const FactorItem = () => {
         <Box
           sx={{
             display: "grid",
-            gridTemplateColumns: "1fr 1fr 1fr 1fr",
+            gridTemplateColumns: {
+              xs: "1fr 1fr",
+              sm: "1fr 1fr 1fr 1fr",
+            },
             gap: 3,
           }}
         >
@@ -258,7 +261,10 @@ const FactorItem = () => {
         <Box
           sx={{
             display: "grid",
-            gridTemplateColumns: "1fr 1fr",
+            gridTemplateColumns: {
+              xs: "1fr",
+              sm: "1fr 1fr",
+            },
             gap: 2,
           }}
         >

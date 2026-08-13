@@ -14,6 +14,9 @@ import PageLoader from "../../shared/ui/loaders/page-loader";
 import { useLeadsStore } from "../../app/store/leads/leads-store";
 import FactorLineForm from "../../features/factor-line/factor-line-form";
 import SuccessModal from "../../components/factoring/factoring-form/success-modal";
+import { useNotificationsStore } from "../../app/store/notifications/noti-store";
+import { parserNotificationType } from "../../shared/helpers/notifications/parse-notification-type";
+import { NOTIFICATION_TYPE } from "../../shared/const/notification-types";
 
 const Factoring = () => {
   const factorings = useFactoringStore((state) => state.factorings);
@@ -23,6 +26,9 @@ const Factoring = () => {
     (state) => state.clearFactoringDetails,
   );
   const clearCurrentLead = useLeadsStore((state) => state.clearCurrentLead);
+  const newNotification = useNotificationsStore(
+    (state) => state.newNotification,
+  );
 
   const count = useFactoringStore((state) => state.count);
   const perPage = useFactoringStore((state) => state.perPage);
@@ -59,6 +65,16 @@ const Factoring = () => {
     clearFactoringDetails();
     clearCurrentLead();
   }, []);
+
+  const { notification_type } = parserNotificationType(
+    newNotification?.type || "",
+  );
+
+  useEffect(() => {
+    if (notification_type === NOTIFICATION_TYPE.factor) {
+      getFactorings();
+    }
+  }, [newNotification, notification_type, getFactorings]);
 
   if (isLoading)
     return (

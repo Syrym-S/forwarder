@@ -9,6 +9,8 @@ import { STATUS } from "../../shared/const/tenders";
 import { VIEWS } from "../../shared/const/leads";
 import { useFactorStore } from "../../app/store/factor/factor-store";
 import { useNotificationsStore } from "../../app/store/notifications/noti-store";
+import { parserNotificationType } from "../../shared/helpers/notifications/parse-notification-type";
+import { NOTIFICATION_TYPE } from "../../shared/const/notification-types";
 
 const Factor = () => {
   const newNotification = useNotificationsStore(
@@ -23,13 +25,19 @@ const Factor = () => {
     setOpenForm(true);
   };
 
+  const { notification_type } = parserNotificationType(
+    newNotification?.type || "",
+  );
+
   useEffect(() => {
     getFactoringsLine();
   }, []);
 
   useEffect(() => {
-    getFactoringsLine();
-  }, [newNotification]);
+    if (notification_type === NOTIFICATION_TYPE.factor) {
+      getFactoringsLine();
+    }
+  }, [newNotification, notification_type, getFactoringsLine]);
 
   return (
     <RootLayout withoutDataCheck>
