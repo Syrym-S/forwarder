@@ -8,6 +8,7 @@ const RenderChip = ({ label, color, variant }) => {
       variant={variant}
       color={color}
       sx={{
+        width: "100%",
         fontSize: {
           xs: "0.6rem",
           sm: "0.8rem",
@@ -20,7 +21,7 @@ const RenderChip = ({ label, color, variant }) => {
 const RenderStatus = ({ status }) => {
   switch (status) {
     case STATUS.new:
-      return <Chip label={"Новый"} variant="contained" color="info" />;
+      return <RenderChip label={"Новый"} variant="contained" color="info" />;
     case STATUS.active:
       return (
         <RenderChip label={"Активный"} variant="outlined" color="success" />
@@ -45,6 +46,10 @@ const RenderStatus = ({ status }) => {
           color="primary"
         />
       );
+    case STATUS.loading:
+      return (
+        <RenderChip label={"Погрузка"} variant="contaned" color="primary" />
+      );
     case STATUS.start_loading:
       return (
         <RenderChip label={"Погрузка"} variant="outlined" color="warning" />
@@ -60,6 +65,10 @@ const RenderStatus = ({ status }) => {
     case STATUS.start_unloading:
       return (
         <RenderChip label={"Разгрузка"} variant="outlined" color="success" />
+      );
+    case STATUS.unloading:
+      return (
+        <RenderChip label={"Разгрузка"} variant="contaned" color="primary" />
       );
     case STATUS.verification_unloading:
       return (

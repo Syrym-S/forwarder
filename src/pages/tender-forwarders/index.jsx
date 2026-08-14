@@ -9,6 +9,7 @@ import ForwardersTenderCard from "../../components/tenders/forwarders-tender-car
 import PageLoader from "../../shared/ui/loaders/page-loader";
 import ViewTabs from "../../shared/ui/view-tabs";
 import ForwardersTenderTable from "../../components/tenders/forwarders-tender-table";
+import EmptyListUi from "../../shared/ui/common/empty-list-ui";
 
 const defaultValues = {
   lead: null,
@@ -34,7 +35,7 @@ const TenderForwarders = () => {
   );
 
   const PAGE_COUNT = Math.ceil(count / perPage);
-  const isTendersEmpty = tenders.length === 0;
+  const isTendersEmpty = true;
   const isCardsView = view === VIEWS.cards;
 
   const handlePageChange = (_, value) => {
@@ -74,6 +75,7 @@ const TenderForwarders = () => {
           setView={setView}
           handleOpenForm={handleOpenForm}
         />
+
         {openForm && (
           <TenderForm
             defaultValues={defaultValues}
@@ -81,6 +83,7 @@ const TenderForwarders = () => {
             handleCloseForm={handleCloseForm}
           />
         )}
+
         {isCardsView && (
           <Box
             sx={{
@@ -93,25 +96,11 @@ const TenderForwarders = () => {
               display: "grid",
               gap: 5,
               my: "10px",
-              gridTemplateColumns: {
-                xs: "1fr",
-              },
+              gridTemplateColumns: "1fr",
             }}
           >
             {isTendersEmpty ? (
-              <Alert
-                severity="info"
-                sx={{
-                  width: {
-                    xs: "100%",
-                    sm: "60%",
-                  },
-                  my: 1,
-                  mx: "auto",
-                }}
-              >
-                Список пуст. Добавьте тендер!
-              </Alert>
+              <EmptyListUi text="Список пуст. Добавьте тендер!" />
             ) : (
               tenders.map((tender) => (
                 <ForwardersTenderCard key={tender.id} tender={tender} />
@@ -119,6 +108,7 @@ const TenderForwarders = () => {
             )}
           </Box>
         )}
+
         {!isCardsView && <ForwardersTenderTable tenders={tenders} />}
 
         {!isTendersEmpty && (

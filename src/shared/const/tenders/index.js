@@ -18,6 +18,12 @@ export const STATUS = {
   approved: "approved",
 };
 
+export const WAYPOINT_TYPES = {
+  loading: "loading",
+  unloading: "unloading",
+  check_pass: "check_pass",
+};
+
 export const LEAD_STATUS_OPTIONS = [
   { label: "Новый", value: "new" },
   { label: "Водитель добавлен", value: "add_driver" },

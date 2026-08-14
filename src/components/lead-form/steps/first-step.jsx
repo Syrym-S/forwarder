@@ -3,6 +3,7 @@ import {
   Autocomplete,
   Box,
   Button,
+  MenuItem,
   Snackbar,
   TextField,
   Typography,
@@ -18,6 +19,10 @@ import { STATUS } from "../../../shared/const/tenders";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { useLeadsStore } from "../../../app/store/leads/leads-store";
 
+const waypointTypes = [
+  { id: 1, value: "loading", label: "Погрузка" },
+  { id: 2, value: "unloading", label: "Разгрузка" },
+];
 const FirstStep = ({ control, errors, form, setValue }) => {
   const currentLead = useLeadsStore((state) => state.currentLead);
   const { fields, append, remove } = useFieldArray({
@@ -275,6 +280,36 @@ const FirstStep = ({ control, errors, form, setValue }) => {
                   />
                 );
               }}
+            />
+            <Controller
+              key={crossField.id}
+              name={`waypoints[${index}].type`}
+              control={control}
+              defaultValue="loading"
+              render={({ field }) => (
+                <TextField
+                  {...field}
+                  select
+                  label="Тип"
+                  slotProps={{
+                    inputLabel: {
+                      shrink: true,
+                    },
+                  }}
+                  fullWidth
+                  size="small"
+                  error={Boolean(errors.waypoints?.[index]?.type)}
+                  helperText={errors.waypoints?.[index]?.type?.message}
+                  onChange={(event) => {
+                    field.onChange(event);
+                    clearFromPoint();
+                  }}
+                >
+                  {waypointTypes.map((type) => (
+                    <MenuItem value={type.value}>{type.label}</MenuItem>
+                  ))}
+                </TextField>
+              )}
             />
             <Button
               disabled={currentLead && !canEditStatus}

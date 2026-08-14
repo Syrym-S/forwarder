@@ -1,9 +1,11 @@
 import React from "react";
 import Section from "../../../shared/ui/section";
-import { Box } from "@mui/material";
+import { Box, Chip, Stack, Typography } from "@mui/material";
 import InfoField from "../../../shared/ui/info-field";
 import RouteOutlinedIcon from "@mui/icons-material/RouteOutlined";
 import ArrowRightAltRoundedIcon from "@mui/icons-material/ArrowRightAltRounded";
+import RenderStatus from "../../../shared/ui/render-status";
+import RenderType from "../../../shared/ui/render-type";
 
 const LeadRouteInfo = ({ leadData }) => {
   return (
@@ -27,7 +29,12 @@ const LeadRouteInfo = ({ leadData }) => {
         {leadData?.waypoints?.map((point, index) => (
           <InfoField
             label={`Промежуточная точка ${index + 1}`}
-            value={point.address || "Битые данные"}
+            value={
+              <Stack spacing={1}>
+                <Typography>{point.address || "Битые данные"}</Typography>
+                <RenderType type={point.type} />
+              </Stack>
+            }
           />
         ))}
 
