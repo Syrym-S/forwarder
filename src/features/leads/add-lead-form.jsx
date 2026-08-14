@@ -92,8 +92,6 @@ const AddLeadForm = ({
 
   const formValues = useWatch({ control });
 
-  console.log("formValues", formValues);
-
   const isLastStep = activeStep === steps.length;
 
   function getCreatedLeadId(response) {

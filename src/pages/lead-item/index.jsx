@@ -40,6 +40,7 @@ import { useNotificationsStore } from "../../app/store/notifications/noti-store"
 import NotificationPopup from "../../components/layout/notifications/notification-popup";
 import { parserNotificationType } from "../../shared/helpers/notifications/parse-notification-type";
 import { NOTIFICATION_TYPE } from "../../shared/const/notification-types";
+import LeadCargoFilesContainer from "../../components/leads/lead-cargo-files-container";
 
 const LeadItem = () => {
   const { id } = useParams();
@@ -52,10 +53,10 @@ const LeadItem = () => {
   const files = useLeadsStore((state) => state.files);
   const getLeadFiles = useLeadsStore((state) => state.getLeadFiles);
   const deleteLeadFile = useLeadsStore((state) => state.deleteLeadFile);
-  const verifyCargo = useLeadsStore((state) => state.verifyCargo);
-  const rejectCargo = useLeadsStore((state) => state.rejectCargo);
-  const verifyCargoUnload = useLeadsStore((state) => state.verifyCargoUnload);
-  const rejectCargoUnload = useLeadsStore((state) => state.rejectCargoUnload);
+  // const verifyCargo = useLeadsStore((state) => state.verifyCargo);
+  // const rejectCargo = useLeadsStore((state) => state.rejectCargo);
+  // const verifyCargoUnload = useLeadsStore((state) => state.verifyCargoUnload);
+  // const rejectCargoUnload = useLeadsStore((state) => state.rejectCargoUnload);
   const confirmLeadDelivery = useLeadsStore(
     (state) => state.confirmLeadDelivery,
   );
@@ -67,23 +68,24 @@ const LeadItem = () => {
     newNotification?.type || "",
   );
 
-  const loadCargoActions = leadData?.cargo_actions?.filter(
-    (cargo_action) => cargo_action.stage === "loading",
-  );
-  const upToDateLoadCargoActions = loadCargoActions
-    ? loadCargoActions[loadCargoActions.length - 1]
-    : [];
-  const filesFromDriverToLoad = upToDateLoadCargoActions?.files;
-  const isLoadingVerified = upToDateLoadCargoActions?.is_verified;
+  // const loadCargoActions = leadData?.cargo_actions?.filter(
+  //   (cargo_action) => cargo_action.stage === "loading",
+  // );
 
-  const unloadCargoActions = leadData?.cargo_actions?.filter(
-    (cargo_action) => cargo_action.stage === "unloading",
-  );
-  const upToDateUnloadCargoActions = unloadCargoActions
-    ? unloadCargoActions[unloadCargoActions.length - 1]
-    : [];
-  const filesFromDriverToUnload = upToDateUnloadCargoActions?.files;
-  const isUnloadVerified = upToDateUnloadCargoActions?.is_verified;
+  // const upToDateLoadCargoActions = loadCargoActions
+  //   ? loadCargoActions[loadCargoActions.length - 1]
+  //   : [];
+  // const filesFromDriverToLoad = upToDateLoadCargoActions?.files;
+  // const isLoadingVerified = upToDateLoadCargoActions?.is_verified;
+
+  // const unloadCargoActions = leadData?.cargo_actions?.filter(
+  //   (cargo_action) => cargo_action.stage === "unloading",
+  // );
+  // const upToDateUnloadCargoActions = unloadCargoActions
+  //   ? unloadCargoActions[unloadCargoActions.length - 1]
+  //   : [];
+  // const filesFromDriverToUnload = upToDateUnloadCargoActions?.files;
+  // const isUnloadVerified = upToDateUnloadCargoActions?.is_verified;
 
   const defaultValues = useFormDefaultValues(leadData, files);
 
@@ -159,25 +161,25 @@ const LeadItem = () => {
     await getLeadFiles(lead_id);
   };
 
-  const handleVerifyCargo = async () => {
-    await verifyCargo(id);
-    await getLeadItem(id);
-  };
+  // const handleVerifyCargo = async () => {
+  //   await verifyCargo(id);
+  //   await getLeadItem(id);
+  // };
 
-  const handleRejectCargo = async () => {
-    await rejectCargo(id);
-    await getLeadItem(id);
-  };
+  // const handleRejectCargo = async () => {
+  //   await rejectCargo(id);
+  //   await getLeadItem(id);
+  // };
 
-  const handleVerifyCargoUnload = async () => {
-    await verifyCargoUnload(id);
-    await getLeadItem(id);
-  };
+  // const handleVerifyCargoUnload = async () => {
+  //   await verifyCargoUnload(id);
+  //   await getLeadItem(id);
+  // };
 
-  const handleRejectCargoUnload = async () => {
-    await rejectCargoUnload(id);
-    await getLeadItem(id);
-  };
+  // const handleRejectCargoUnload = async () => {
+  //   await rejectCargoUnload(id);
+  //   await getLeadItem(id);
+  // };
 
   const handleConfirmDelivery = async () => {
     await confirmLeadDelivery(id);
@@ -287,7 +289,12 @@ const LeadItem = () => {
           </Box>
         </Section>
 
-        {filesFromDriverToLoad && (
+        <LeadCargoFilesContainer
+          leatData={leadData}
+          cargoActions={leadData?.cargo_actions}
+        />
+
+        {/* {filesFromDriverToLoad && (
           <CargoLoadVerification
             leadStatus={leadData?.status}
             filesFromDriverToLoad={filesFromDriverToLoad}
@@ -295,9 +302,9 @@ const LeadItem = () => {
             handleVerifyCargo={handleVerifyCargo}
             handleRejectCargo={handleRejectCargo}
           />
-        )}
+        )} */}
 
-        {filesFromDriverToUnload && (
+        {/* {filesFromDriverToUnload && (
           <CargoUnloadVerification
             leadStatus={leadData?.status}
             isUnloadVerified={isUnloadVerified}
@@ -305,7 +312,7 @@ const LeadItem = () => {
             handleVerifyCargoUnload={handleVerifyCargoUnload}
             handleRejectCargoUnload={handleRejectCargoUnload}
           />
-        )}
+        )} */}
 
         <LeadDriverInfo leadData={leadData} />
 
