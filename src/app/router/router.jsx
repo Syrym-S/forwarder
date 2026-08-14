@@ -75,7 +75,7 @@ export const router = createBrowserRouter(
           path: "/factoring/:id",
           element: <FactoringItem />,
           handle: {
-            breadcrumb: ({ params }) => `Факторинг / ${params.id}`,
+            breadcrumb: `Факторинг продажи`,
           },
         },
         {

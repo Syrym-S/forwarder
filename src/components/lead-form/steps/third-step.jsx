@@ -54,15 +54,21 @@ export function ThirdStep({ control, errors, setValue }) {
             <Autocomplete
               inputValue={inputValue}
               options={drivers}
-              value={field.value ?? null}
               filterOptions={(options) => options}
+              value={field.value ?? null}
               loading={isLoading}
               isOptionEqualToValue={(option, value) => option?.id === value?.id}
               renderValue={(value) => {
                 if (!value) return null;
 
                 return (
-                  <Chip variant="contained" color="primary" label={value.fio} />
+                  selectedDriver?.fio && (
+                    <Chip
+                      variant="contained"
+                      color="primary"
+                      label={value.fio}
+                    />
+                  )
                 );
               }}
               onInputChange={(_, newInputValue, reason) => {
@@ -85,7 +91,6 @@ export function ThirdStep({ control, errors, setValue }) {
                   shouldValidate: true,
                 });
               }}
-              getOptionLabel={(option) => option?.fio ?? ""}
               renderOption={(props, option) => (
                 <Box
                   component="li"
