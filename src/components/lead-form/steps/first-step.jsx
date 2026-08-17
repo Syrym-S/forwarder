@@ -20,8 +20,9 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { useLeadsStore } from "../../../app/store/leads/leads-store";
 
 const waypointTypes = [
-  { id: 1, value: "loading", label: "Погрузка" },
-  { id: 2, value: "unloading", label: "Разгрузка" },
+  { id: 1, value: "check_pass", label: "Транзит" },
+  { id: 2, value: "loading", label: "Погрузка" },
+  { id: 3, value: "unloading", label: "Разгрузка" },
 ];
 const FirstStep = ({ control, errors, form, setValue }) => {
   const currentLead = useLeadsStore((state) => state.currentLead);
@@ -285,7 +286,7 @@ const FirstStep = ({ control, errors, form, setValue }) => {
               key={crossField.id}
               name={`waypoints[${index}].type`}
               control={control}
-              defaultValue="loading"
+              defaultValue="check_pass"
               render={({ field }) => (
                 <TextField
                   {...field}
@@ -302,7 +303,6 @@ const FirstStep = ({ control, errors, form, setValue }) => {
                   helperText={errors.waypoints?.[index]?.type?.message}
                   onChange={(event) => {
                     field.onChange(event);
-                    clearFromPoint();
                   }}
                 >
                   {waypointTypes.map((type) => (

@@ -29,10 +29,8 @@ import LeadHeading from "../../components/leads/lead-item/lead-heading";
 import LeadCustomerInfo from "../../components/leads/lead-item/lead-customer-info";
 import LeadRouteInfo from "../../components/leads/lead-item/lead-route-info";
 import LeadCargoInfo from "../../components/leads/lead-item/lead-cargo-info";
-import CargoLoadVerification from "../../components/leads/lead-item/cargo-load-verification";
 import LeadDriverInfo from "../../components/leads/lead-item/lead-driver-info";
 import Section from "../../shared/ui/section";
-import CargoUnloadVerification from "../../components/leads/lead-item/cargo-unload-verification";
 import { STATUS } from "../../shared/const/tenders";
 import { useLeadsStore } from "../../app/store/leads/leads-store";
 import PageLoader from "../../shared/ui/loaders/page-loader";
@@ -53,10 +51,17 @@ const LeadItem = () => {
   const files = useLeadsStore((state) => state.files);
   const getLeadFiles = useLeadsStore((state) => state.getLeadFiles);
   const deleteLeadFile = useLeadsStore((state) => state.deleteLeadFile);
-  // const verifyCargo = useLeadsStore((state) => state.verifyCargo);
-  // const rejectCargo = useLeadsStore((state) => state.rejectCargo);
-  // const verifyCargoUnload = useLeadsStore((state) => state.verifyCargoUnload);
-  // const rejectCargoUnload = useLeadsStore((state) => state.rejectCargoUnload);
+
+  const leadPoints = [
+    leadData?.from_location,
+    ...(leadData?.waypoints || []),
+    leadData?.to_location,
+  ];
+
+  const isEditableStatus =
+    leadData?.status !== STATUS.finished && leadData?.status !== STATUS.deleted;
+  const isAllPassed = leadPoints.every((item) => item?.is_passed);
+
   const confirmLeadDelivery = useLeadsStore(
     (state) => state.confirmLeadDelivery,
   );
@@ -67,25 +72,6 @@ const LeadItem = () => {
   const { notification_type } = parserNotificationType(
     newNotification?.type || "",
   );
-
-  // const loadCargoActions = leadData?.cargo_actions?.filter(
-  //   (cargo_action) => cargo_action.stage === "loading",
-  // );
-
-  // const upToDateLoadCargoActions = loadCargoActions
-  //   ? loadCargoActions[loadCargoActions.length - 1]
-  //   : [];
-  // const filesFromDriverToLoad = upToDateLoadCargoActions?.files;
-  // const isLoadingVerified = upToDateLoadCargoActions?.is_verified;
-
-  // const unloadCargoActions = leadData?.cargo_actions?.filter(
-  //   (cargo_action) => cargo_action.stage === "unloading",
-  // );
-  // const upToDateUnloadCargoActions = unloadCargoActions
-  //   ? unloadCargoActions[unloadCargoActions.length - 1]
-  //   : [];
-  // const filesFromDriverToUnload = upToDateUnloadCargoActions?.files;
-  // const isUnloadVerified = upToDateUnloadCargoActions?.is_verified;
 
   const defaultValues = useFormDefaultValues(leadData, files);
 
@@ -160,26 +146,6 @@ const LeadItem = () => {
     await deleteLeadFile(lead_id, file_path);
     await getLeadFiles(lead_id);
   };
-
-  // const handleVerifyCargo = async () => {
-  //   await verifyCargo(id);
-  //   await getLeadItem(id);
-  // };
-
-  // const handleRejectCargo = async () => {
-  //   await rejectCargo(id);
-  //   await getLeadItem(id);
-  // };
-
-  // const handleVerifyCargoUnload = async () => {
-  //   await verifyCargoUnload(id);
-  //   await getLeadItem(id);
-  // };
-
-  // const handleRejectCargoUnload = async () => {
-  //   await rejectCargoUnload(id);
-  //   await getLeadItem(id);
-  // };
 
   const handleConfirmDelivery = async () => {
     await confirmLeadDelivery(id);
@@ -294,26 +260,6 @@ const LeadItem = () => {
           cargoActions={leadData?.cargo_actions}
         />
 
-        {/* {filesFromDriverToLoad && (
-          <CargoLoadVerification
-            leadStatus={leadData?.status}
-            filesFromDriverToLoad={filesFromDriverToLoad}
-            isLoadingVerified={isLoadingVerified}
-            handleVerifyCargo={handleVerifyCargo}
-            handleRejectCargo={handleRejectCargo}
-          />
-        )} */}
-
-        {/* {filesFromDriverToUnload && (
-          <CargoUnloadVerification
-            leadStatus={leadData?.status}
-            isUnloadVerified={isUnloadVerified}
-            filesFromDriverToUnload={filesFromDriverToUnload}
-            handleVerifyCargoUnload={handleVerifyCargoUnload}
-            handleRejectCargoUnload={handleRejectCargoUnload}
-          />
-        )} */}
-
         <LeadDriverInfo leadData={leadData} />
 
         <Section
@@ -331,7 +277,7 @@ const LeadItem = () => {
           />
         </Section>
 
-        {leadData.status === STATUS.verification_unloading && (
+        {isEditableStatus && isAllPassed && (
           <Button
             color="error"
             variant="outlined"

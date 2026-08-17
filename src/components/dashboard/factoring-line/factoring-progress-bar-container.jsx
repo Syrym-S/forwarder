@@ -1,4 +1,4 @@
-import { Box, CircularProgress, Paper, Typography } from "@mui/material";
+import { Alert, Box, CircularProgress, Paper, Typography } from "@mui/material";
 import React, { useEffect } from "react";
 import { useFactorStore } from "../../../app/store/factor/factor-store";
 import FactoringLineRingProgress from "./factoring-line-ring-progress";
@@ -13,6 +13,8 @@ const FactoringProgressBarContainer = () => {
   const approvedLines = factoringsLine?.filter(
     (line) => line.status === STATUS.approved,
   );
+
+  const isEmpty = approvedLines.length === 0;
 
   useEffect(() => {
     getFactoringsLine();
@@ -73,6 +75,8 @@ const FactoringProgressBarContainer = () => {
             gap: 2,
           }}
         >
+          {isEmpty && <Alert severity="info">Список пуст</Alert>}
+
           {approvedLines.map((line) => (
             <FactoringLineRingProgress line={line} />
           ))}

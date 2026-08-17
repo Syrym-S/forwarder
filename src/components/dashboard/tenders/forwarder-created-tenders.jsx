@@ -79,7 +79,13 @@ const ForwarderCreatedTenders = () => {
           Список тендеров для водителей
         </Typography>
 
-        <Tooltip title="Показать только публичные">
+        <Tooltip
+          title={
+            checked
+              ? "Показать только публичные: ВЫКЛ"
+              : "Показать только публичные: ВКЛ"
+          }
+        >
           <Switch onChange={handleChange} />
         </Tooltip>
       </Box>

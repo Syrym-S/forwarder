@@ -21,27 +21,86 @@ const LeadRouteInfo = ({ leadData }) => {
           alignItems: "stretch",
         }}
       >
-        <InfoField
-          label="Откуда"
-          value={leadData.from_location?.address || "Битые данные"}
-        />
+        <Box
+          sx={{
+            position: "relative",
+          }}
+        >
+          {leadData.from_location?.is_passed && (
+            <Chip
+              variant="contained"
+              color="primary"
+              size="small"
+              label="Точка пройдена"
+              sx={{
+                position: "absolute",
+                top: "-10px",
+                right: 5,
+              }}
+            />
+          )}
+          <InfoField
+            label={"Откуда"}
+            value={leadData.from_location?.address || "Битые данные"}
+            accent={leadData.from_location?.is_passed}
+          />
+        </Box>
 
         {leadData?.waypoints?.map((point, index) => (
-          <InfoField
-            label={`Промежуточная точка ${index + 1}`}
-            value={
-              <Stack spacing={1}>
-                <Typography>{point.address || "Битые данные"}</Typography>
-                <RenderType type={point.type} />
-              </Stack>
-            }
-          />
+          <Box
+            sx={{
+              position: "relative",
+            }}
+          >
+            {point.is_passed && (
+              <Chip
+                variant="contained"
+                color="primary"
+                size="small"
+                label="Точка пройдена"
+                sx={{
+                  position: "absolute",
+                  top: "-10px",
+                  right: 5,
+                }}
+              />
+            )}
+            <InfoField
+              label={`Промежуточная точка ${index + 1}`}
+              accent={point.is_passed}
+              value={
+                <Stack spacing={1}>
+                  <Typography>{point.address || "Битые данные"}</Typography>
+                  <RenderType type={point.type} />
+                </Stack>
+              }
+            />
+          </Box>
         ))}
-
-        <InfoField
-          label="Куда"
-          value={leadData.to_location?.address || "Битые данные"}
-        />
+        <Box
+          sx={{
+            position: "relative",
+          }}
+        >
+          {leadData.to_location?.is_passed && (
+            <Chip
+              variant="contained"
+              color="primary"
+              size="small"
+              label="Точка пройдена"
+              sx={{
+                position: "absolute",
+                top: "-10px",
+                right: 5,
+              }}
+            />
+          )}
+          <InfoField
+            label="Куда"
+            accent={leadData.to_location?.is_passed}
+            value={leadData.to_location?.address || "Битые данные"}
+          />
+        </Box>
       </Box>
     </Section>
   );

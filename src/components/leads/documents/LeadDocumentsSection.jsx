@@ -25,7 +25,10 @@ export function LeadDocumentsSection({
   uploadError = "",
   deletingDocumentIds = [],
 }) {
+  const isFilesEmpty = documents.length === 0;
+
   const isLoading = useLeadsStore((state) => state.isLoading);
+
   const [selectedDocument, setSelectedDocument] = useState(null);
   const [selectedFileName, setSelectedFileName] = useState("");
 
@@ -147,10 +150,8 @@ export function LeadDocumentsSection({
 
         {uploadError && <Alert severity="error">{uploadError}</Alert>}
 
-        {documents.length === 0 ? (
-          <Typography color="text.secondary" fontSize={14}>
-            Документы не добавлены
-          </Typography>
+        {isFilesEmpty ? (
+          <Alert severity="info">Список загруженных файлов пуст</Alert>
         ) : isLoading ? (
           <> ....Загрузка </>
         ) : (

@@ -75,12 +75,12 @@ export function LeadDocumentCard({
         <Box>
           <Typography
             sx={{
-              fontSize: 13,
+              fontSize: "0.7rem",
               fontWeight: 400,
               lineHeight: 1.35,
             }}
           >
-            {document.name || "Документ"}
+            {document.name?.slice(0, 20) + "..." || "Документ"}
           </Typography>
 
           <Typography
@@ -92,7 +92,9 @@ export function LeadDocumentCard({
               lineHeight: 1.35,
             }}
           >
-            {document.context || "Описание не указано"}
+            {document.context
+              ? document.context?.slice(0, 20) + "..."
+              : "Описание не указано"}
           </Typography>
 
           <Typography

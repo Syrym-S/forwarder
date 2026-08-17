@@ -34,6 +34,8 @@ const CargosVerificationContainer = ({ cargoAction }) => {
   const rejectCargoLoad = useLeadsStore((state) => state.rejectCargo);
   const verifyCargoUnload = useLeadsStore((state) => state.verifyCargoUnload);
   const rejectCargoUnload = useLeadsStore((state) => state.rejectCargoUnload);
+  const isLoadLoading = useLeadsStore((state) => state.isLoadLoading);
+  const isUnloadLoading = useLeadsStore((state) => state.isUnloadLoading);
 
   const isVerified = cargoAction.is_verified;
   const title = renderTitleText(cargoAction.stage, isVerified);
@@ -110,16 +112,17 @@ const CargosVerificationContainer = ({ cargoAction }) => {
           }}
         >
           <Button
-            // disabled={isLoadLoading || leadStatus !== STATUS.start_loading}
+            disabled={isLoadLoading || isUnloadLoading}
             color="success"
             variant="outlined"
             onClick={handleVerify}
           >
-            Подтвердить
-            {/* {isLoadLoading ? "Идет подтверждение" : "Подтвердить"} */}
+            {isLoadLoading || isUnloadLoading
+              ? "Идет подтверждение"
+              : "Подтвердить"}
           </Button>
           <Button
-            // disabled={isLoadLoading || leadData.status !== STATUS.start_loading}
+            disabled={isLoadLoading || isUnloadLoading}
             color="error"
             variant="outlined"
             onClick={handleReject}
