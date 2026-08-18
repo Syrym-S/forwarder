@@ -94,7 +94,7 @@ const TenderApplications = () => {
           justifyContent: "space-between",
         }}
       >
-        <ViewTabs view={view} setView={setView} withoutDataAdd />
+        <ViewTabs view={view} setView={setView} withoutKanban withoutDataAdd />
         <Tooltip title="История участия в тендерах">
           <IconButton onClick={handleNavigateToTenderHistory}>
             <HistoryOutlined />

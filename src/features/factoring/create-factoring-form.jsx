@@ -1,4 +1,5 @@
 import {
+  Alert,
   Autocomplete,
   Box,
   Button,
@@ -30,11 +31,7 @@ const defaultValues = {
   debCurrency: "",
 };
 
-const CreateFactoringForm = ({
-  openFormModal,
-  handleModalClose,
-  setOpenFactoringLineForm,
-}) => {
+const CreateFactoringForm = ({ openFormModal, handleModalClose }) => {
   const [step, setStep] = useState(1);
   const [selectedLead, setSelectedLead] = useState();
   const [selectedFactor, setSelectedFactor] = useState();
@@ -51,6 +48,7 @@ const CreateFactoringForm = ({
     (line) => line.status === "approved",
   );
   const newLine = selectedFactor?.lines?.find((line) => line.status === "new");
+  const canBeSubmitted = !approvedLine && isSettingsExist;
 
   const { control, setValue, trigger, reset } = useForm({
     mode: "onChange",
@@ -64,16 +62,17 @@ const CreateFactoringForm = ({
 
   const handleSubmit = async () => {
     const isValid = await trigger(stepFields);
-
     if (!isValid) return;
 
     await createFactoring(formValues);
-    await getFactorings();
 
     reset();
     setSelectedLead(null);
     setSelectedFactor(null);
+
     handleModalClose();
+
+    await getFactorings();
   };
 
   const handleNextStep = async () => {
@@ -125,15 +124,21 @@ const CreateFactoringForm = ({
             setValue={setValue}
           />
         );
+
       case 2:
-        if (selectedFactor.lines.length !== 0 && (approvedLine || newLine)) {
+        if (selectedFactor?.lines?.length && (approvedLine || newLine)) {
           return (
-            <FactoringSettingsInfoStep line={approvedLine || newLine || {}} />
+            <FactoringSettingsInfoStep
+              line={approvedLine || newLine}
+              approvedLine={approvedLine}
+            />
           );
-        } else {
-          handleModalClose();
-          setOpenFactoringLineForm(true);
         }
+
+        return null;
+
+      default:
+        return null;
     }
   };
 
@@ -169,6 +174,11 @@ const CreateFactoringForm = ({
       </DialogTitle>
 
       <DialogContent>
+        {canBeSubmitted && (
+          <Alert severity="error" sx={{ my: 1 }}>
+            Факторинг не может быть создан, так как линия ожидает подтверждения
+          </Alert>
+        )}
         {renderFormStep(step)}
 
         <Box
@@ -188,6 +198,7 @@ const CreateFactoringForm = ({
           </Button>
           <Button
             variant="contained"
+            disabled={canBeSubmitted}
             color="primary"
             onClick={isLast || !isSettingsExist ? handleSubmit : handleNextStep}
           >

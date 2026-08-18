@@ -73,6 +73,7 @@ const TenderForwarders = () => {
         <ViewTabs
           view={view}
           setView={setView}
+          withoutKanban
           handleOpenForm={handleOpenForm}
         />
 

@@ -199,7 +199,10 @@ const LeadItem = () => {
     <RootLayout data={leadData}>
       <Box
         sx={{
-          px: 10,
+          px: {
+            xs: 0,
+            md: 10,
+          },
         }}
       >
         <LeadHeading leadData={leadData} openEditForm={openEditForm} />

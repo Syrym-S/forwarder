@@ -190,14 +190,14 @@ const menuItems = [
       {
         id: 1,
         path: "/tender-applications",
-        lable: "Тендерные заявки",
+        lable: "Аукционные заявки",
         icon: <AssignmentOutlined />,
         tooltip_text: "Список тендеров от заказчиков",
       },
       {
         id: 2,
         path: "/tender-forwarders",
-        lable: "Тендеры перевозчиков",
+        lable: "Аукционные перевозчиков",
         icon: <RequestQuoteOutlined />,
         tooltip_text: "Список тендеров, созданных вами",
       },
@@ -209,6 +209,7 @@ const SideBar = ({ openMenu, setOpenMenu }) => {
   return (
     <Box
       sx={{
+        backgroundColor: "rgb(245, 247, 250)",
         height: "100vh",
         pt: 8,
         transition: "0.2s",

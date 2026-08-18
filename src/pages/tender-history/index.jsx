@@ -92,7 +92,7 @@ const TenderHistory = () => {
           justifyContent: "space-between",
         }}
       >
-        <ViewTabs view={view} setView={setView} withoutDataAdd />
+        <ViewTabs view={view} setView={setView} withoutDataAdd withoutKanban />
 
         <Tooltip
           title="Cписок активных тендеров"

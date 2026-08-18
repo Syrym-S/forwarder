@@ -160,11 +160,13 @@ const ActiveLeads = () => {
         handlePageChange={handlePageChange}
       />
 
-      <AddLeadForm
-        openForm={openForm}
-        setOpenForm={setOpenForm}
-        initialValues={deafultValues}
-      />
+      {openForm && (
+        <AddLeadForm
+          openForm={openForm}
+          setOpenForm={setOpenForm}
+          initialValues={deafultValues}
+        />
+      )}
     </RootLayout>
   );
 };

@@ -80,6 +80,7 @@ const Drivers = () => {
       >
         <ViewTabs
           view={view}
+          withoutKanban
           setView={setView}
           handleOpenForm={handleOpenForm}
           buttonText="Пригласить водителя"

@@ -21,7 +21,10 @@ const FactoringLineRingProgress = ({ line }) => {
     <Box
       onClick={handleNavigateToDetailPage}
       sx={{
-        width: "70%",
+        width: {
+          xs: "100%",
+          md: "70%",
+        },
         mx: "auto",
         cursor: "pointer",
         border: "1px solid",
@@ -51,7 +54,15 @@ const FactoringLineRingProgress = ({ line }) => {
       <Box
         sx={{
           display: "flex",
-          justifyContent: "space-around",
+          flexDirection: {
+            xs: "column",
+            md: "row",
+          },
+          justifyContent: {
+            xs: "center",
+            md: "space-around",
+          },
+          alignItems: "center",
         }}
       >
         <Box
@@ -109,9 +120,15 @@ const FactoringLineRingProgress = ({ line }) => {
         <Box
           sx={{
             display: "flex",
-            flexDirection: "column",
+            flexDirection: {
+              xs: "row",
+              md: "column",
+            },
             justifyContent: "center",
-            alignItems: "end",
+            alignItems: {
+              xs: "end",
+              md: "start",
+            },
             gap: 1,
           }}
         >
@@ -120,7 +137,16 @@ const FactoringLineRingProgress = ({ line }) => {
               Максимальная сумма
             </Typography>
 
-            <Typography variant="h6" fontWeight={600}>
+            <Typography
+              variant="h6"
+              fontWeight={600}
+              sx={{
+                fontSize: {
+                  xs: " 0.7rem",
+                  md: "1rem",
+                },
+              }}
+            >
               {line.summ_max.toLocaleString("ru-RU")} {line.currency}
             </Typography>
           </Box>
@@ -130,7 +156,16 @@ const FactoringLineRingProgress = ({ line }) => {
               Потрачено
             </Typography>
 
-            <Typography variant="h6" fontWeight={600}>
+            <Typography
+              variant="h6"
+              fontWeight={600}
+              sx={{
+                fontSize: {
+                  xs: " 0.7rem",
+                  md: "1rem",
+                },
+              }}
+            >
               {line.summ_current.toLocaleString("ru-RU")} {line.currency}
             </Typography>
           </Box>
@@ -140,7 +175,16 @@ const FactoringLineRingProgress = ({ line }) => {
               Свободно
             </Typography>
 
-            <Typography variant="h6" fontWeight={600}>
+            <Typography
+              variant="h6"
+              fontWeight={600}
+              sx={{
+                fontSize: {
+                  xs: " 0.7rem",
+                  md: "1rem",
+                },
+              }}
+            >
               {line.summ_free.toLocaleString("ru-RU")} {line.currency}
             </Typography>
           </Box>

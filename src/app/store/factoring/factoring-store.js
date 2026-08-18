@@ -156,13 +156,11 @@ export const useFactoringStore = create((set) => ({
       return response.data;
     } catch (e) {
       set({
-        error: e.message,
+        error: e.response.data.message,
         isLoading: false,
       });
 
-      console.error("Payload:", payload);
-      console.error("Response:", e.response?.data);
-      throw e;
+      return e;
     }
   },
 

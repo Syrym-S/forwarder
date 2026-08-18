@@ -75,7 +75,7 @@ const HistoryLeads = () => {
           },
         }}
       >
-        <ViewTabs view={view} setView={setView} withoutDataAdd />
+        <ViewTabs view={view} setView={setView} withoutDataAdd withoutKanban />
 
         <Controller
           name="status"

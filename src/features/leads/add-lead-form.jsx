@@ -1,5 +1,5 @@
 import { Dialog, DialogContent, DialogTitle } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import FormHeader from "../../components/lead-form/form-header";
 import FormStepsTab from "../../components/lead-form/form-steps-tab";
 import FirstStep from "../../components/lead-form/steps/first-step";
@@ -16,8 +16,6 @@ import DocumentUpload from "../../components/lead-form/steps/document-upload";
 import PriceStep from "../../components/lead-form/steps/price-step";
 import LeadFormTabs from "../../components/lead-form/lead-form-tabs";
 import { useLeadsStore } from "../../app/store/leads/leads-store";
-import { useDriverStore } from "../../app/store/drivers/driver-store";
-import { useCustomerStore } from "../../app/store/customers/customers-store";
 import SecondStep from "../../components/lead-form/steps/second-step";
 
 const steps = [
@@ -58,8 +56,6 @@ const AddLeadForm = ({
   const updateLead = useLeadsStore((state) => state.updateLead);
   const getLeadItem = useLeadsStore((state) => state.getLeadItem);
   const clearCurrentLead = useLeadsStore((state) => state.clearCurrentLead);
-  const getCustomers = useCustomerStore((state) => state.getCustomers);
-  const getDrivers = useDriverStore((state) => state.getDrivers);
 
   const [uploadedFiles, setUploadedFiles] = useState([]);
   const [activeStep, setActiveStep] = useState(1);
@@ -91,8 +87,6 @@ const AddLeadForm = ({
   });
 
   const formValues = useWatch({ control });
-
-  console.log("formValues", formValues);
 
   const isLastStep = activeStep === steps.length;
 
@@ -197,11 +191,6 @@ const AddLeadForm = ({
 
     await handleSubmit(handleCreateRoute)();
   }
-
-  useEffect(() => {
-    getCustomers();
-    getDrivers();
-  }, []);
 
   const renderContent = (step) => {
     switch (step) {

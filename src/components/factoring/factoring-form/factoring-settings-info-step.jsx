@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import FactoringLineCard from "../../factor-line/factor-line-card";
 import { useFactorStore } from "../../../app/store/factor/factor-store";
 import {
+  Alert,
   Box,
   CircularProgress,
   LinearProgress,
@@ -11,7 +12,7 @@ import {
 import RenderErrorContext from "../../../shared/ui/errors/render-error-context";
 import { renderLineColor } from "../../../shared/helpers/factoring/render-progress-line-color";
 
-const FactoringSettingsInfoStep = ({ line }) => {
+const FactoringSettingsInfoStep = ({ line, approvedLine }) => {
   const isLoading = useFactorStore((state) => state.isLoading);
   const factoringLineDetails = useFactorStore(
     (state) => state.factoringLineDetails,
@@ -69,6 +70,11 @@ const FactoringSettingsInfoStep = ({ line }) => {
           py: 1,
         }}
       >
+        {!approvedLine && (
+          <Alert severity="error">
+            Факторинг не может быть создан, так как линия ожидает подтверждения
+          </Alert>
+        )}
         <Box
           sx={{
             display: "flex",

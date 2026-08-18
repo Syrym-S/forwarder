@@ -18,7 +18,6 @@ import { isStaging } from "../client";
 import AppContentContainer from "./app-content-container";
 import Factor from "../../pages/factor";
 import TenderHistory from "../../pages/tender-history";
-import ApplicationHistory from "../../pages/application-history";
 import FactorItem from "../../pages/factor/factor-item";
 import ErrorPage from "../../pages/error";
 
@@ -148,13 +147,6 @@ export const router = createBrowserRouter(
           handle: {
             breadcrumb: ({ params }) =>
               `Факторинговые компании / ${params.breadcrumbs}`,
-          },
-        },
-        {
-          path: "application-history",
-          element: <ApplicationHistory />,
-          handle: {
-            breadcrumb: "История заявок",
           },
         },
       ],

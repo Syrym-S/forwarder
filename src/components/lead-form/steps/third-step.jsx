@@ -161,6 +161,15 @@ export function ThirdStep({ control, errors, setValue }) {
                   label="Телефон"
                   value={selectedDriver.phone || "Не указан"}
                 />
+
+                <InfoBadge
+                  label="Email"
+                  value={selectedDriver.email || "Не указан"}
+                />
+                <InfoBadge
+                  label="ИИН"
+                  value={selectedDriver.iin || "Не указан"}
+                />
               </Box>
             )}
           </Stack>

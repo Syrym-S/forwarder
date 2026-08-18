@@ -87,6 +87,7 @@ const Customers = () => {
       >
         <ViewTabs
           view={view}
+          withoutKanban
           setView={setView}
           handleOpenForm={handleOpenForm}
           buttonText="Пригласить заказщика"

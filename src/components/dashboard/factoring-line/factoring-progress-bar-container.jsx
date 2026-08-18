@@ -33,7 +33,7 @@ const FactoringProgressBarContainer = () => {
       <Box
         sx={{
           backgroundColor: "white",
-          position: "sticky",
+          // position: "sticky",
           top: 0,
           left: 0,
           display: "flex",

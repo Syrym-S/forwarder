@@ -26,8 +26,6 @@ export const useFactorStore = create((set) => ({
 
       const response = await getFactorLineDetailsApi(id);
 
-      console.log(response);
-
       set({ factoringLineDetails: response.data, isLoading: false });
     } catch (e) {
       console.log(e);

@@ -40,6 +40,7 @@ const FactorLineForm = ({ open, setOpenForm, setSuccessModal }) => {
   const getFactorDetails = useFactoringStore((state) => state.getFactorDetails);
   const isFactorsLoading = useFactoringStore((state) => state.isFactorsLoading);
   const getFactors = useFactoringStore((state) => state.getFactors);
+  const error = useFactoringStore((state) => state.error);
   const createFactoringLine = useFactoringStore(
     (state) => state.createFactoringLine,
   );
@@ -216,6 +217,7 @@ const FactorLineForm = ({ open, setOpenForm, setSuccessModal }) => {
           />
         </Box>
         <Button
+          disabled={error}
           variant="outlined"
           color="primary"
           onClick={handleSubmit(onSubmit)}

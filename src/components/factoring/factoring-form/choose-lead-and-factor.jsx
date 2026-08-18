@@ -43,6 +43,12 @@ const ChooseLeadAndFactor = ({
     return () => clearTimeout(timer);
   }, [inputValueLead]);
 
+  useEffect(() => {
+    searchHistoryLeads({
+      q: "Алматы",
+    });
+  }, []);
+
   return (
     <>
       <Box
@@ -65,8 +71,14 @@ const ChooseLeadAndFactor = ({
               loading={isSearchLoading}
               options={searchedLeads}
               noOptionsText={<>Ввидте два символа</>}
-              onInputChange={(_, value) => {
-                setInputValueLead(value);
+              onInputChange={(_, value, reason) => {
+                if (reason === "input") {
+                  setInputValueLead(value);
+                }
+
+                if (reason === "clear") {
+                  setInputValueLead("");
+                }
               }}
               filterOptions={(items) => items}
               onChange={(_, value) => {
@@ -88,6 +100,9 @@ const ChooseLeadAndFactor = ({
                 });
 
                 setSelectedLead(value);
+                setInputValueLead(
+                  value?.from ? `${value?.from} - ${value?.to}` : "",
+                );
               }}
               getOptionLabel={(option) => `${option?.from} - ${option?.to}`}
               renderInput={(params) => (

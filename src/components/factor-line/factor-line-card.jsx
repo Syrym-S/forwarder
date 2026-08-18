@@ -67,8 +67,8 @@ const FactoringLineCard = ({ line }) => {
     >
       <Box
         sx={{
-          display: "flex",
-          justifyContent: "space-between",
+          display: "grid",
+          gridTemplateColumns: "3fr 1fr",
         }}
       >
         <Typography variant="h6" fontWeight={600}>
@@ -78,7 +78,6 @@ const FactoringLineCard = ({ line }) => {
         <RenderStatus status={status} />
       </Box>
 
-      {/* Amounts */}
       <Stack spacing={2.5}>
         <Box>
           <Typography variant="body2" color="text.secondary" mb={0.5}>
