@@ -31,6 +31,7 @@ const NotificationPopup = ({
   setSelectedNotification,
 }) => {
   const currentLead = useLeadsStore((state) => state.currentLead);
+  const getLeadItem = useLeadsStore((state) => state.getLeadItem);
   const isLoading = useLeadsStore((state) => state.isLoading);
   const getNotificationPopUpLeadItem = useLeadsStore(
     (state) => state.getNotificationPopUpLeadItem,
@@ -54,6 +55,10 @@ const NotificationPopup = ({
     (state) => state.clearNotificationPopUpCurrentLead,
   );
 
+  const { id, notification_type } = parserNotificationType(
+    notificationDetails?.type || "",
+  );
+
   const handleNotificationPopupClose = () => {
     setSelectedNotification(null);
     clearNotificationPopUpCurrentLead();
@@ -67,6 +72,7 @@ const NotificationPopup = ({
   const handleRejectCargoLoad = async () => {
     await rejectCargo(id);
     await getNotificationPopUpLeadItem(id);
+    await getLeadItem(id);
   };
 
   const handleVerifyCargoUnload = async () => {
@@ -79,12 +85,11 @@ const NotificationPopup = ({
     await getNotificationPopUpLeadItem(id);
   };
 
-  const { id, notification_type, action } = parserNotificationType(
-    notificationDetails?.type || "",
-  );
-
   const loadCargoActions = currentLead?.cargo_actions[0];
   const unloadCargoActions = currentLead?.cargo_actions[1];
+
+  const newCargoActionFiles =
+    currentLead?.cargo_actions[currentLead?.cargo_actions.length - 1].files;
 
   const isLoadVerified = loadCargoActions?.is_verified;
   const isUnloadVerified = unloadCargoActions?.is_verified;
@@ -192,7 +197,52 @@ const NotificationPopup = ({
                 </Box>
               }
             />
-            {action === "loading_started" &&
+
+            {newCargoActionFiles && (
+              <>
+                <Box
+                  sx={{
+                    py: 1,
+                    display: "grid",
+                    gridTemplateColumns: {
+                      xs: "repeat(1,1fr)",
+                      sm: "repeat(2,1fr)",
+                      md: "repeat(3,1fr)",
+                    },
+                    gap: 1,
+                  }}
+                >
+                  {newCargoActionFiles.map((file) => (
+                    <LeadDocumentCard document={file} />
+                  ))}
+                </Box>
+                {/* <Box
+                  sx={{
+                    my: 1,
+                    display: "flex",
+                    gap: 5,
+                  }}
+                >
+                  <Button
+                    disabled={isLoadLoading}
+                    color="success"
+                    variant="outlined"
+                    onClick={handleVerifyCargoLoad}
+                  >
+                    {isLoadLoading ? "Идет подтверждение" : "Подтвердить"}
+                  </Button>
+                  <Button
+                    disabled={isLoadLoading}
+                    color="error"
+                    variant="outlined"
+                    onClick={handleRejectCargoLoad}
+                  >
+                    Отклонить
+                  </Button>
+                </Box> */}
+              </>
+            )}
+            {/* {action === "loading_started" &&
               (isLoading ? (
                 <Box
                   sx={{
@@ -249,9 +299,9 @@ const NotificationPopup = ({
                     </Box>
                   )}
                 </>
-              ))}
+              ))} */}
 
-            {action === "unloading_started" &&
+            {/* {action === "unloading_started" &&
               (isLoading ? (
                 <Box
                   sx={{
@@ -309,7 +359,7 @@ const NotificationPopup = ({
                     </Box>
                   )}
                 </>
-              ))}
+              ))} */}
           </Section>
         )}
       </DialogContent>

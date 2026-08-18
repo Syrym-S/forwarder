@@ -1,14 +1,15 @@
 import { useEffect, useMemo, useState } from "react";
 import {
+  Alert,
   Box,
+  CircularProgress,
   Divider,
   Pagination,
   Paper,
   Stack,
   Typography,
 } from "@mui/material";
-import DashboardLeadItem from "./dashboard-lead-item"
-
+import DashboardLeadItem from "./dashboard-lead-item";
 
 const DASHBOARD_LEADS_PER_PAGE = 5;
 
@@ -20,7 +21,6 @@ const DashboardLeadsList = ({
   onSelectLead,
   onHoverLead,
   onLeaveLead,
-
 }) => {
   const [page, setPage] = useState(1);
 
@@ -41,6 +41,7 @@ const DashboardLeadsList = ({
   };
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setPage(1);
   }, [leads.length]);
 
@@ -75,15 +76,22 @@ const DashboardLeadsList = ({
         }}
       >
         {isLoading && (
-          <Typography color="text.secondary" sx={{ py: 2 }}>
-            Загрузка лидов...
-          </Typography>
+          <Box
+            color="text.secondary"
+            sx={{
+              py: 2,
+              height: "100%",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <CircularProgress />
+          </Box>
         )}
 
         {!isLoading && !leads.length && (
-          <Typography color="text.secondary" sx={{ py: 2 }}>
-            Активных лидов пока нет
-          </Typography>
+          <Alert severity="info">Активных лидов пока нет</Alert>
         )}
 
         {!isLoading && Boolean(leads.length) && (

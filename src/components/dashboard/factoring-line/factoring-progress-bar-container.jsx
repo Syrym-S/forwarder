@@ -56,7 +56,7 @@ const FactoringProgressBarContainer = () => {
       {isLoading ? (
         <Box
           sx={{
-            height: "80%",
+            height: 300,
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
