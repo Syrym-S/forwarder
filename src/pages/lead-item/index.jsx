@@ -1,30 +1,17 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import RootLayout from "../../components/layout/root-layout";
-import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
-import TripOriginIcon from "@mui/icons-material/TripOrigin";
-import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
+
 import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
 import { LeadDocumentsSection } from "../../components/leads/documents/LeadDocumentsSection";
 import { useParams } from "react-router-dom";
 import LocalShippingOutlinedIcon from "@mui/icons-material/LocalShippingOutlined";
-import {
-  Box,
-  Button,
-  Chip,
-  Container,
-  Paper,
-  Stack,
-  Tooltip,
-  Typography,
-} from "@mui/material";
-import { MapContainer, Marker, Polyline, TileLayer } from "react-leaflet";
+import { Box, Button } from "@mui/material";
 import AddLeadForm from "../../features/leads/add-lead-form";
 import { useFormDefaultValues } from "../../shared/hooks/leads/use-form-default-values";
 import LeadMap from "../../components/leads/lead-map";
-import { getLeadFilesApi, uploadLeadFileApi } from "../../app/store/leads/api";
+import { uploadLeadFileApi } from "../../app/store/leads/api";
 import { mapLeadFilesResponseFromApi } from "../../features/leads/model/lead-files.adapter";
-import Loader from "../../components/layout/loader";
-import RenderStatus from "../../shared/ui/render-status";
+
 import LeadHeading from "../../components/leads/lead-item/lead-heading";
 import LeadCustomerInfo from "../../components/leads/lead-item/lead-customer-info";
 import LeadRouteInfo from "../../components/leads/lead-item/lead-route-info";
@@ -35,9 +22,7 @@ import { STATUS } from "../../shared/const/tenders";
 import { useLeadsStore } from "../../app/store/leads/leads-store";
 import PageLoader from "../../shared/ui/loaders/page-loader";
 import { useNotificationsStore } from "../../app/store/notifications/noti-store";
-import NotificationPopup from "../../components/layout/notifications/notification-popup";
 import { parserNotificationType } from "../../shared/helpers/notifications/parse-notification-type";
-import { NOTIFICATION_TYPE } from "../../shared/const/notification-types";
 import LeadCargoFilesContainer from "../../components/leads/lead-cargo-files-container";
 
 const LeadItem = () => {

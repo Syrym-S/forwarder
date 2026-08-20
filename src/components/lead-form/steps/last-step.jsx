@@ -1,9 +1,12 @@
-import { Box } from "@mui/material";
-import PropTypes from "prop-types";
+import { Box, Chip, Stack, Typography } from "@mui/material";
 import { StepSection } from "../step-section";
 import { InfoBadge } from "../info-badge";
+import RenderType from "../../../shared/ui/render-type";
 
 export function LastStep({ form }) {
+  const waypoints = form.waypoints;
+  const cargos = form.cargos;
+
   return (
     <Box sx={{ display: "grid", gap: 2 }}>
       <StepSection title="Проверьте данные">
@@ -14,40 +17,89 @@ export function LastStep({ form }) {
               xs: "1fr",
               sm: "1fr 1fr",
             },
-            gap: 1,
+            gap: 2,
           }}
         >
           <InfoBadge label="Откуда" value={form.to_location.address} />
 
+          {waypoints.map((waypoint, index) => (
+            <Box
+              sx={{
+                position: "relative",
+              }}
+            >
+              <Box
+                sx={{
+                  position: "absolute",
+                  top: "-15px",
+                  right: 5,
+                }}
+              >
+                <RenderType type={waypoint.type} size="small" />
+              </Box>
+
+              <InfoBadge
+                label={`Промежуточная точка ${index + 1}`}
+                accent={waypoint.is_passed}
+                value={
+                  <Stack spacing={1}>
+                    <Typography>
+                      {waypoint.address || "Битые данные"}
+                    </Typography>
+                  </Stack>
+                }
+              />
+            </Box>
+          ))}
+
           <InfoBadge label="Куда" value={form.from_location.address} />
 
           <InfoBadge label="Дата загрузки" value={form.loadingDate} />
+        </Box>
+      </StepSection>
 
-          <InfoBadge label="Тип груза" value={form.type} />
+      <StepSection title="Данные о грузах">
+        <Box
+          sx={{
+            display: "grid",
+            gap: 1,
+            gridTemplateColumns: "1fr",
+          }}
+        >
+          {cargos.map((cargo, index) => {
+            const hasMeasures =
+              cargo.height_cm || cargo.width_cm || cargo.length_cm;
 
-          <InfoBadge
-            label="Вес"
-            value={form.weight_kg ? `${form.weight_kg} кг` : "Не указан"}
-          />
+            return (
+              <StepSection title={`Груз ${index + 1}`}>
+                <Box
+                  sx={{
+                    display: "grid",
+                    gap: 1,
+                    gridTemplateColumns: "1fr",
+                  }}
+                >
+                  <InfoBadge label="Тип груза" value={cargo.type} />
 
-          <InfoBadge
-            label="Размеры"
-            value={
-              form.height_cm
-                ? `${form.height_cm} × ${form.width_cm} × ${form.height_cm} см`
-                : "Данные о размере не указаны"
-            }
-          />
+                  <InfoBadge
+                    label="Вес"
+                    value={
+                      cargo.weight_kg ? `${cargo.weight_kg} кг` : "Не указан"
+                    }
+                  />
 
-          <InfoBadge
-            label="Цена"
-            value={
-              form.cargo_price
-                ? `${form.cargo_price} ${form.currency || "KZT"}`
-                : "Цена не указана"
-            }
-            accent
-          />
+                  <InfoBadge
+                    label="Размеры"
+                    value={
+                      hasMeasures
+                        ? `Ширина: ${cargo.width_cm || "не указана"} см × Длина: ${cargo.length_cm || "не указана"} см × Высота: ${cargo.height_cm || "не указана"} см`
+                        : "Данные о размере не указаны"
+                    }
+                  />
+                </Box>
+              </StepSection>
+            );
+          })}
         </Box>
       </StepSection>
 

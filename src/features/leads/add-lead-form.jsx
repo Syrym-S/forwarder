@@ -10,7 +10,6 @@ import { CreateLeadResultModal } from "../../components/lead-form/create-lead-re
 import { mapCreateLeadFormToApi } from "../../components/lead-form/model/createLead.adapter";
 import { ThirdStep } from "../../components/lead-form/steps/third-step";
 import { ForthStep } from "../../components/lead-form/steps/forth-step";
-import { DocumentsStep } from "../../components/lead-form/steps/documents-step";
 import { uploadLeadFileApi } from "../../app/store/leads/api";
 import DocumentUpload from "../../components/lead-form/steps/document-upload";
 import PriceStep from "../../components/lead-form/steps/price-step";
@@ -233,7 +232,7 @@ const AddLeadForm = ({
         );
 
       case 7:
-        return <LastStep form={formValues} />;
+        return <LastStep form={formValues} isEdit={isEdit} />;
     }
   };
 

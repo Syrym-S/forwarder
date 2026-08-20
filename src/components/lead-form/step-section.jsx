@@ -1,5 +1,4 @@
 import { Box, Typography } from "@mui/material";
-import PropTypes from "prop-types";
 
 export function StepSection({ title, children }) {
   return (
