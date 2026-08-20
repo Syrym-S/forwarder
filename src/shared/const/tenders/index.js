@@ -21,7 +21,7 @@ export const STATUS = {
 export const WAYPOINT_TYPES = {
   loading: "loading",
   unloading: "unloading",
-  check_pass: "check_pass",
+  check_passes: "check_passes",
 };
 
 export const LEAD_STATUS_OPTIONS = [

@@ -22,14 +22,17 @@ const RenderStatus = ({ status }) => {
   switch (status) {
     case STATUS.new:
       return <RenderChip label={"Новый"} variant="contained" color="info" />;
+
     case STATUS.active:
       return (
         <RenderChip label={"Активный"} variant="outlined" color="success" />
       );
+
     case STATUS.cancelled:
       return (
         <RenderChip label={"Отменненый"} variant="outlined" color="error" />
       );
+
     case STATUS.add_driver:
       return (
         <RenderChip
@@ -38,6 +41,7 @@ const RenderStatus = ({ status }) => {
           color="info"
         />
       );
+
     case STATUS.start_driver:
       return (
         <RenderChip
@@ -46,14 +50,17 @@ const RenderStatus = ({ status }) => {
           color="primary"
         />
       );
+
     case STATUS.loading:
       return (
         <RenderChip label={"Погрузка"} variant="contaned" color="primary" />
       );
+
     case STATUS.start_loading:
       return (
         <RenderChip label={"Погрузка"} variant="outlined" color="warning" />
       );
+
     case STATUS.verification_loading:
       return (
         <RenderChip
@@ -62,14 +69,17 @@ const RenderStatus = ({ status }) => {
           color="success"
         />
       );
+
     case STATUS.start_unloading:
       return (
         <RenderChip label={"Разгрузка"} variant="outlined" color="success" />
       );
+
     case STATUS.unloading:
       return (
         <RenderChip label={"Разгрузка"} variant="contaned" color="primary" />
       );
+
     case STATUS.verification_unloading:
       return (
         <RenderChip
@@ -78,6 +88,7 @@ const RenderStatus = ({ status }) => {
           color="warning"
         />
       );
+
     case STATUS.finished:
       return (
         <RenderChip
@@ -86,20 +97,25 @@ const RenderStatus = ({ status }) => {
           color="success"
         />
       );
+
     case STATUS.deleted:
       return (
         <RenderChip label={"Рейс удален"} variant="outlined" color="error" />
       );
+
     case STATUS.loss:
       return (
         <RenderChip label={"Проиграна"} variant="outlined" color="error" />
       );
+
     case STATUS.closed:
       return <RenderChip label={"Закрыто"} variant="container" color="error" />;
+
     case STATUS.winning:
       return (
         <RenderChip label={"Выиграна"} variant="outlined" color="success" />
       );
+
     case STATUS.await_paid:
       return (
         <RenderChip
@@ -108,6 +124,7 @@ const RenderStatus = ({ status }) => {
           color="secondary"
         />
       );
+
     case STATUS.verified_participant:
       return (
         <RenderChip
@@ -121,6 +138,7 @@ const RenderStatus = ({ status }) => {
       return (
         <RenderChip label={"Подтверждено"} variant="outlined" color="success" />
       );
+
     default:
       return <>Нет статуа</>;
   }

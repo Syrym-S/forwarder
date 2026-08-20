@@ -86,10 +86,10 @@ const LeadItem = () => {
     setOpenEdit(true);
   };
 
-  useEffect(() => {
-    getLeadItem(id);
-    getLeadFiles(id);
-  }, [id]);
+  // useEffect(() => {
+  //   getLeadItem(id);
+  //   getLeadFiles(id);
+  // }, [id]);
 
   const from = {
     lat: leadData?.from_location.lat,
@@ -110,7 +110,7 @@ const LeadItem = () => {
   const cargosCount = leadData?.cargos?.length;
 
   async function reloadLeadDocuments(leadId) {
-    const response = await getLeadFilesApi(leadId);
+    const response = await getLeadFiles(leadId);
     const mappedDocuments = mapLeadFilesResponseFromApi(response);
 
     setDocuments(mappedDocuments);
@@ -130,7 +130,7 @@ const LeadItem = () => {
       });
 
       await reloadLeadDocuments(id);
-      await getLeadFiles(id);
+      // await getLeadFiles(id);
     } catch (error) {
       setDocumentError(
         error.response?.data?.message ||
@@ -163,7 +163,7 @@ const LeadItem = () => {
       try {
         setDocumentError("");
 
-        const response = await getLeadFilesApi(id);
+        const response = await getLeadFiles(id);
         const mappedDocuments = mapLeadFilesResponseFromApi(response);
 
         if (!isCancelled) {
@@ -181,6 +181,7 @@ const LeadItem = () => {
       }
     }
 
+    getLeadItem(id);
     loadDocuments();
 
     return () => {
@@ -228,10 +229,10 @@ const LeadItem = () => {
 
         <LeadCustomerInfo leadData={leadData} />
 
-        {newNotification &&
+        {/* {newNotification &&
           notification_type === NOTIFICATION_TYPE.shipping && (
             <NotificationPopup selectedNotification={newNotification} />
-          )}
+          )} */}
 
         <LeadRouteInfo leadData={leadData} />
 
@@ -271,7 +272,7 @@ const LeadItem = () => {
         >
           <LeadDocumentsSection
             leadStatus={leadData?.status}
-            documents={files}
+            documents={files.reverse()}
             onAddDocument={handleAddDocument}
             onDeleteDocument={handleDeleteFileFromDB}
             isUploading={isDocumentUploading}

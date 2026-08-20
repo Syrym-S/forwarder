@@ -47,8 +47,8 @@ const Drivers = () => {
 
     const timer = setTimeout(() => {
       if (!value) {
-        getDrivers();
         setSearchRequest("");
+        getDrivers();
 
         return;
       }

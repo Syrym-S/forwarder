@@ -32,12 +32,9 @@ const NotificationPopup = ({
 }) => {
   const currentLead = useLeadsStore((state) => state.currentLead);
   const getLeadItem = useLeadsStore((state) => state.getLeadItem);
-  const isLoading = useLeadsStore((state) => state.isLoading);
   const getNotificationPopUpLeadItem = useLeadsStore(
     (state) => state.getNotificationPopUpLeadItem,
   );
-  const isLoadLoading = useLeadsStore((state) => state.isLoadLoading);
-  const isUnloadLoading = useLeadsStore((state) => state.isUnloadLoading);
   const verifyCargo = useLeadsStore((state) => state.verifyCargo);
   const rejectCargo = useLeadsStore((state) => state.rejectCargo);
   const verifyCargoUnload = useLeadsStore((state) => state.verifyCargoUnload);
@@ -89,7 +86,7 @@ const NotificationPopup = ({
   const unloadCargoActions = currentLead?.cargo_actions[1];
 
   const newCargoActionFiles =
-    currentLead?.cargo_actions[currentLead?.cargo_actions.length - 1].files;
+    currentLead?.cargo_actions[currentLead?.cargo_actions.length - 1]?.files;
 
   const isLoadVerified = loadCargoActions?.is_verified;
   const isUnloadVerified = unloadCargoActions?.is_verified;

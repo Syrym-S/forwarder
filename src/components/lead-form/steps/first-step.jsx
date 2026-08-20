@@ -20,7 +20,7 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { useLeadsStore } from "../../../app/store/leads/leads-store";
 
 const waypointTypes = [
-  { id: 1, value: "check_pass", label: "Транзит" },
+  { id: 1, value: "check_passes", label: "Транзит" },
   { id: 2, value: "loading", label: "Погрузка" },
   { id: 3, value: "unloading", label: "Разгрузка" },
 ];

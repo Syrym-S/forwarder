@@ -5,6 +5,8 @@ import { STATUS } from "../../../shared/const/tenders";
 import { useNotificationsStore } from "../../../app/store/notifications/noti-store";
 import { useEffect } from "react";
 import { useLeadsStore } from "../../../app/store/leads/leads-store";
+import { parserNotificationType } from "../../../shared/helpers/notifications/parse-notification-type";
+import { NOTIFICATION_TYPE } from "../../../shared/const/notification-types";
 
 const LeadHeading = ({ leadData, openEditForm }) => {
   const canBeEdited =
@@ -12,12 +14,18 @@ const LeadHeading = ({ leadData, openEditForm }) => {
     leadData.status !== STATUS.cancelled &&
     leadData.status !== STATUS.deleted;
 
-  const notifications = useNotificationsStore((state) => state.notifications);
+  const newNotification = useNotificationsStore(
+    (state) => state.newNotification,
+  );
+
+  const { notification_type } = parserNotificationType;
   const getLeadItem = useLeadsStore((state) => state.getLeadItem);
 
   useEffect(() => {
-    getLeadItem(leadData.id);
-  }, [notifications]);
+    if (notification_type === NOTIFICATION_TYPE.shipping) {
+      getLeadItem(leadData.id);
+    }
+  }, [newNotification]);
 
   return (
     <Box

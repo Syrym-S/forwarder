@@ -97,7 +97,7 @@ const CargosVerificationContainer = ({ cargoAction }) => {
           gap: 5,
         }}
       >
-        {cargoAction.files.map((file) => (
+        {cargoAction?.files?.map((file) => (
           <LeadDocumentCard document={file} onOpen={setCurrentFile} />
         ))}
 
