@@ -367,6 +367,9 @@ const FirstStep = ({ control, errors, form, setValue }) => {
               fullWidth
               size="small"
               slotProps={{
+                htmlInput: {
+                  min: dayjs().format("YYYY-MM-DD"),
+                },
                 inputLabel: {
                   shrink: true,
                 },

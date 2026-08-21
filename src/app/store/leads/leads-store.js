@@ -19,6 +19,7 @@ import {
   verifyCargoUnloadApi,
   getAcceptedLeadsApi,
   deleteCargoApi,
+  shareLeadApi,
 } from "./api";
 
 export const useLeadsStore = create((set) => ({
@@ -481,6 +482,28 @@ export const useLeadsStore = create((set) => ({
       });
 
       // console.error("Payload:", payload);
+      console.error("Response:", e.response?.data);
+      throw e;
+    }
+  },
+
+  shareLead: async (lead_id) => {
+    try {
+      set({ isShareLoading: true, error: null });
+
+      const response = await shareLeadApi(lead_id);
+
+      set({
+        isShareLoading: false,
+      });
+
+      return response.data;
+    } catch (e) {
+      set({
+        error: e.message,
+        isCargoDeleteLoading: false,
+      });
+
       console.error("Response:", e.response?.data);
       throw e;
     }

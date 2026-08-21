@@ -1,7 +1,6 @@
-import { Dialog, DialogContent, DialogTitle } from "@mui/material";
-import React, { useState } from "react";
+import { Dialog, DialogContent } from "@mui/material";
+import { useState } from "react";
 import FormHeader from "../../components/lead-form/form-header";
-import FormStepsTab from "../../components/lead-form/form-steps-tab";
 import FirstStep from "../../components/lead-form/steps/first-step";
 import { FormNavButtons } from "../../components/lead-form/form-nav-buttons";
 import { useForm, useWatch } from "react-hook-form";
@@ -150,10 +149,6 @@ const AddLeadForm = ({
             );
           }
         }
-
-        // if (documents.length > 0 && !createdLeadId) {
-        //   documentsUploadFailed = true;
-        // }
       }
 
       handleClose();

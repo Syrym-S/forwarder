@@ -253,3 +253,9 @@ export const deleteCargoApi = async (id, cargo_index) => {
 
   return data;
 };
+
+export const shareLeadApi = async (id) => {
+  const data = await api.post(`/forwarder/v1/leads/${id}/share`, null);
+
+  return data;
+};

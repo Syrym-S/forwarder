@@ -143,6 +143,9 @@ const CargoStepFieldsContent = ({ index, control }) => {
       <Controller
         name={`cargos.${index}.name`}
         control={control}
+        rules={{
+          required: "Обятельно нужно указать название товара",
+        }}
         render={({ field }) => (
           <TextField {...field} label="Название груза" size="small" fullWidth />
         )}

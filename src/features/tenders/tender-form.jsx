@@ -130,8 +130,6 @@ const TenderForm = ({
       } else {
         const response = await createTender(payload);
 
-        console.log("response", response);
-
         await Promise.allSettled(
           selectedDrivers.map((driver) =>
             addParticipant(response.data.id, {

@@ -1,26 +1,17 @@
 import { useEffect, useState } from "react";
 import LogoutModal from "./logout-modal";
 import MenuIcon from "@mui/icons-material/Menu";
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import "./style.css";
 import Box from "@mui/material/Box";
 import {
-  Alert,
   AppBar,
   Avatar,
-  Badge,
   Button,
-  IconButton,
   Menu,
   MenuItem,
-  Paper,
-  Popover,
-  Snackbar,
   Typography,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import NotificationsNoneOutlinedIcon from "@mui/icons-material/NotificationsNoneOutlined";
-import NotificationsOffOutlinedIcon from "@mui/icons-material/NotificationsOffOutlined";
 import { useNotificationsStore } from "../../app/store/notifications/noti-store";
 import NotificationsBlock from "./notifications/notifications-block";
 import { useProfileStore } from "../../app/store/profile/profile-store";

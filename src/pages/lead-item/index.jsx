@@ -11,7 +11,6 @@ import { useFormDefaultValues } from "../../shared/hooks/leads/use-form-default-
 import LeadMap from "../../components/leads/lead-map";
 import { uploadLeadFileApi } from "../../app/store/leads/api";
 import { mapLeadFilesResponseFromApi } from "../../features/leads/model/lead-files.adapter";
-
 import LeadHeading from "../../components/leads/lead-item/lead-heading";
 import LeadCustomerInfo from "../../components/leads/lead-item/lead-customer-info";
 import LeadRouteInfo from "../../components/leads/lead-item/lead-route-info";
@@ -21,13 +20,13 @@ import Section from "../../shared/ui/section";
 import { STATUS } from "../../shared/const/tenders";
 import { useLeadsStore } from "../../app/store/leads/leads-store";
 import PageLoader from "../../shared/ui/loaders/page-loader";
-import { useNotificationsStore } from "../../app/store/notifications/noti-store";
-import { parserNotificationType } from "../../shared/helpers/notifications/parse-notification-type";
 import LeadCargoFilesContainer from "../../components/leads/lead-cargo-files-container";
+import ShareModal from "../../components/leads/lead-item/share-modal";
 
 const LeadItem = () => {
   const { id } = useParams();
 
+  const [openShareModal, setOpenShareModal] = useState(false);
   const [openEdit, setOpenEdit] = useState(false);
 
   const getLeadItem = useLeadsStore((state) => state.getLeadItem);
@@ -50,13 +49,6 @@ const LeadItem = () => {
   const confirmLeadDelivery = useLeadsStore(
     (state) => state.confirmLeadDelivery,
   );
-  const newNotification = useNotificationsStore(
-    (state) => state.newNotification,
-  );
-
-  const { notification_type } = parserNotificationType(
-    newNotification?.type || "",
-  );
 
   const defaultValues = useFormDefaultValues(leadData, files);
 
@@ -71,10 +63,13 @@ const LeadItem = () => {
     setOpenEdit(true);
   };
 
-  // useEffect(() => {
-  //   getLeadItem(id);
-  //   getLeadFiles(id);
-  // }, [id]);
+  const handleOpenShareModal = () => {
+    setOpenShareModal(true);
+  };
+
+  const handleCloseShareModal = () => {
+    setOpenShareModal(false);
+  };
 
   const from = {
     lat: leadData?.from_location.lat,
@@ -193,13 +188,39 @@ const LeadItem = () => {
       >
         <LeadHeading leadData={leadData} openEditForm={openEditForm} />
 
-        <AddLeadForm
-          editingItemId={id}
-          openForm={openEdit}
-          setOpenForm={setOpenEdit}
-          initialValues={defaultValues}
-          isEdit
-        />
+        {openEdit && (
+          <AddLeadForm
+            editingItemId={id}
+            openForm={openEdit}
+            setOpenForm={setOpenEdit}
+            initialValues={defaultValues}
+            isEdit
+          />
+        )}
+
+        <Box
+          sx={{
+            width: "100%",
+            display: "flex",
+            justifyContent: "end",
+          }}
+        >
+          <Button
+            color="primary"
+            variant="outlined"
+            onClick={handleOpenShareModal}
+          >
+            Поделиться
+          </Button>
+        </Box>
+
+        {openShareModal && (
+          <ShareModal
+            leadId={id}
+            openShareModal={openShareModal}
+            handleCloseShareModal={handleCloseShareModal}
+          />
+        )}
 
         <Box
           sx={{
