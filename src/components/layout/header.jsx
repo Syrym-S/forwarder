@@ -139,7 +139,6 @@ const Header = ({ openMenu, setOpenMenu }) => {
             display: "flex",
             gap: 1,
             width: "fit-content",
-            maxWidth: 260,
             textTransform: "none",
             overflow: "hidden",
             textOverflow: "ellipsis",

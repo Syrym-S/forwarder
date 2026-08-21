@@ -26,14 +26,16 @@ const NotificationsList = ({
     <Paper
       sx={{
         width: 300,
-        height: isEmpty ? "fit-content" : 500,
+        height: "fit-content",
         display: isLoading ? "" : "grid",
         gridTemplateColumns: "1fr",
+        gridTemplateRows: isEmpty ? "1fr 1fr 1fr" : "1fr 4fr 1fr",
       }}
     >
       <Box
         sx={{
           p: 2,
+          height: "fit-content",
           borderBottom: "1px solid rgba(0,0,0,0.1)",
         }}
       >
@@ -48,7 +50,6 @@ const NotificationsList = ({
         <Typography
           sx={{
             fontWeight: "400",
-            fontSize: "0.rem",
             color: "backgound.main",
           }}
         >
@@ -78,15 +79,17 @@ const NotificationsList = ({
         ) : isEmpty ? (
           <Box
             style={{
-              height: 70,
+              height: "100%",
               display: "flex",
               flexDirection: "column",
               justifyContent: "center",
               alignItems: "center",
-              borderBottom: "1px solid ",
             }}
           >
             <ListItemText
+              sx={{
+                display: "block",
+              }}
               primary="Уведомлений пока нет"
               secondary="Здесь будут отображаться новые события"
             />
@@ -115,8 +118,9 @@ const NotificationsList = ({
         onClick={handleOpenDrawer}
         sx={{
           p: 2,
+          height: "fit-content",
           cursor: "pointer",
-          borderBottom: "1px solid rgba(0,0,0,0.1)",
+          borderTop: "1px solid rgba(0,0,0,0.1)",
         }}
       >
         <Typography
