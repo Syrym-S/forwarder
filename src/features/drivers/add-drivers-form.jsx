@@ -1,5 +1,7 @@
 import { Controller, useForm, useWatch } from "react-hook-form";
+import { IMaskInput } from "react-imask";
 import {
+  Alert,
   Box,
   Button,
   Checkbox,
@@ -13,6 +15,7 @@ import {
   Stack,
   TextField,
   Typography,
+  InputAdornment,
 } from "@mui/material";
 import { useDriverStore } from "../../app/store/drivers/driver-store";
 import { prepareDriverData } from "../../shared/helpers/prepare-driver-data";
@@ -21,12 +24,14 @@ import UploadFileIcon from "@mui/icons-material/UploadFile";
 import InsertDriveFileOutlinedIcon from "@mui/icons-material/InsertDriveFileOutlined";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
+
 const defaultValues = {
   fio: "",
   iin: "",
   phone: "",
   email: "",
-  is_ip: false,
   is_foreigner: false,
   company_name: "",
   company_bin: "",
@@ -39,19 +44,14 @@ const defaultValues = {
   password: "",
 };
 
-const generatePassword = (length = 12) => {
-  const chars =
-    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*";
-
-  const randomValues = crypto.getRandomValues(new Uint32Array(length));
-
-  return Array.from(randomValues, (value) => chars[value % chars.length]).join(
-    "",
-  );
-};
-
 const AddDriverForm = ({ open, onClose, setSavedData }) => {
+  const getDrivers = useDriverStore((state) => state.getDrivers);
   const createDriver = useDriverStore((state) => state.createDriver);
+  const error = useDriverStore((state) => state.error);
+
+  const [showPassword, setShowPassword] = useState(false);
+
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [registrationDocumentsToUpload, setRegistrationDocumentsToUpload] =
     useState(null);
   const [employerDocumentToUpload, setEmployerDocumentToUpload] =
@@ -61,34 +61,45 @@ const AddDriverForm = ({ open, onClose, setSavedData }) => {
   });
 
   const formValues = useWatch({ control });
-  const isIp = formValues.is_ip;
   const isForeigner = formValues.is_foreigner;
 
   const submitDriverCreate = async (data) => {
+    const preparedData = prepareDriverData({
+      ...data,
+      registration_document_name: "Свидетельство о госрегистрации",
+      employer_document_name: "Приказ о назначении",
+    });
+
     const formData = new FormData();
 
-    if (registrationDocumentsToUpload) {
-      formData.append("registration_document", registrationDocumentsToUpload);
+    Object.entries(preparedData).forEach(([key, value]) => {
+      formData.append(key, value);
+    });
 
+    if (registrationDocumentsToUpload) {
       formData.append(
-        "registration_document_name",
-        "Свидетельство о госрегистрации",
+        "registration_document",
+        registrationDocumentsToUpload[0],
       );
     }
 
     if (employerDocumentToUpload) {
-      formData.append("employer_document", employerDocumentToUpload);
-
-      formData.append("employer_document_name", "Приказ о назначении");
+      formData.append("employer_document", employerDocumentToUpload[0]);
     }
 
-    const preparedData = prepareDriverData({
-      ...data,
-    });
+    try {
+      await createDriver(formData);
+      await getDrivers();
 
-    await createDriver({ ...preparedData, ...formData });
-    setSavedData({ email: data.email, password: data.password });
-    onClose();
+      setSavedData({
+        email: data.email,
+        password: data.password,
+      });
+
+      onClose();
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   return (
@@ -102,6 +113,16 @@ const AddDriverForm = ({ open, onClose, setSavedData }) => {
           onSubmit={handleSubmit(submitDriverCreate)}
           sx={{ mt: 1 }}
         >
+          {error && (
+            <Alert
+              severity="error"
+              sx={{
+                my: 2,
+              }}
+            >
+              {error}
+            </Alert>
+          )}
           <Grid container spacing={2}>
             <Grid size={{ xs: 12, sm: 6 }}>
               <Controller
@@ -133,6 +154,15 @@ const AddDriverForm = ({ open, onClose, setSavedData }) => {
                     label="Телефон"
                     fullWidth
                     size="small"
+                    slotProps={{
+                      input: {
+                        inputComponent: IMaskInput,
+                        inputProps: {
+                          mask: "+{7} (000) 000-00-00",
+                          unmask: false,
+                        },
+                      },
+                    }}
                   />
                 )}
               />
@@ -158,7 +188,6 @@ const AddDriverForm = ({ open, onClose, setSavedData }) => {
                     label="Название компании"
                     fullWidth
                     size="small"
-                    disabled={!isIp}
                   />
                 )}
               />
@@ -173,7 +202,6 @@ const AddDriverForm = ({ open, onClose, setSavedData }) => {
                     {...field}
                     label="БИН компании"
                     fullWidth
-                    disabled={!isIp}
                     size="small"
                   />
                 )}
@@ -187,7 +215,6 @@ const AddDriverForm = ({ open, onClose, setSavedData }) => {
                 render={({ field }) => (
                   <TextField
                     {...field}
-                    disabled={!isIp}
                     label="Юридический адрес"
                     fullWidth
                     size="small"
@@ -201,13 +228,7 @@ const AddDriverForm = ({ open, onClose, setSavedData }) => {
                 name="bik"
                 control={control}
                 render={({ field }) => (
-                  <TextField
-                    {...field}
-                    label="БИК"
-                    fullWidth
-                    size="small"
-                    disabled={!isIp}
-                  />
+                  <TextField {...field} label="БИК" fullWidth size="small" />
                 )}
               />
             </Grid>
@@ -217,13 +238,7 @@ const AddDriverForm = ({ open, onClose, setSavedData }) => {
                 name="iik"
                 control={control}
                 render={({ field }) => (
-                  <TextField
-                    {...field}
-                    label="ИИК"
-                    fullWidth
-                    size="small"
-                    disabled={!isIp}
-                  />
+                  <TextField {...field} label="ИИК" fullWidth size="small" />
                 )}
               />
             </Grid>
@@ -286,7 +301,7 @@ const AddDriverForm = ({ open, onClose, setSavedData }) => {
               sx={{
                 display: "grid",
                 gap: 1,
-                gridTemplateColumns: "1fr 1fr",
+                gridTemplateColumns: "1fr",
               }}
               size={6}
             >
@@ -296,20 +311,60 @@ const AddDriverForm = ({ open, onClose, setSavedData }) => {
                   control={control}
                   rules={{
                     required: "Введите пароль",
-                    minLength: {
-                      value: 6,
-                      message: "Пароль должен содержать минимум 6 символов",
+
+                    validate: (value) => {
+                      if (value.length < 6) {
+                        return "Пароль должен содержать минимум 6 символов";
+                      }
+
+                      if (!/[A-Z]/.test(value)) {
+                        return "Пароль должен содержать хотя бы одну заглавную букву";
+                      }
+
+                      if (!/[a-z]/.test(value)) {
+                        return "Пароль должен содержать хотя бы одну строчную букву";
+                      }
+
+                      if (!/\d/.test(value)) {
+                        return "Пароль должен содержать хотя бы одну цифру";
+                      }
+
+                      if (
+                        !/[!@#$%^&*(),.?":{}|<>_\-+=\\/[\];'`~]/.test(value)
+                      ) {
+                        return "Пароль должен содержать хотя бы один специальный символ";
+                      }
+
+                      return true;
                     },
                   }}
                   render={({ field, fieldState: { error } }) => (
                     <TextField
                       {...field}
-                      type="password"
+                      type={showPassword ? "text" : "password"}
                       label="Пароль"
                       fullWidth
                       size="small"
                       error={!!error}
                       helperText={error?.message}
+                      slotProps={{
+                        input: {
+                          endAdornment: (
+                            <InputAdornment position="end">
+                              <IconButton
+                                onClick={() => setShowPassword((prev) => !prev)}
+                                edge="end"
+                              >
+                                {showPassword ? (
+                                  <VisibilityOff />
+                                ) : (
+                                  <Visibility />
+                                )}
+                              </IconButton>
+                            </InputAdornment>
+                          ),
+                        },
+                      }}
                     />
                   )}
                 />
@@ -327,12 +382,32 @@ const AddDriverForm = ({ open, onClose, setSavedData }) => {
                   render={({ field, fieldState: { error } }) => (
                     <TextField
                       {...field}
-                      type="password"
+                      type={showConfirmPassword ? "text" : "password"}
                       label="Подтверждение пароля"
                       fullWidth
                       size="small"
                       error={!!error}
                       helperText={error?.message}
+                      slotProps={{
+                        input: {
+                          endAdornment: (
+                            <InputAdornment position="end">
+                              <IconButton
+                                onClick={() =>
+                                  setShowConfirmPassword((prev) => !prev)
+                                }
+                                edge="end"
+                              >
+                                {showConfirmPassword ? (
+                                  <VisibilityOff />
+                                ) : (
+                                  <Visibility />
+                                )}
+                              </IconButton>
+                            </InputAdornment>
+                          ),
+                        },
+                      }}
                     />
                   )}
                 />
@@ -341,22 +416,6 @@ const AddDriverForm = ({ open, onClose, setSavedData }) => {
 
             <Grid size={12}>
               <Box display="flex" gap={3}>
-                <Controller
-                  name="is_ip"
-                  control={control}
-                  render={({ field }) => (
-                    <FormControlLabel
-                      control={
-                        <Checkbox
-                          checked={field.value}
-                          onChange={(e) => field.onChange(e.target.checked)}
-                        />
-                      }
-                      label="ИП"
-                    />
-                  )}
-                />
-
                 <Controller
                   name="is_foreigner"
                   control={control}
@@ -435,10 +494,6 @@ const AddDriverForm = ({ open, onClose, setSavedData }) => {
                       />
                     </Button>
                   </Stack>
-
-                  {/* {registrationDocument && (
-                    <LegalDocumentViewer file={registrationDocument} />
-                  )} */}
                 </Box>
 
                 {registrationDocumentsToUpload && (

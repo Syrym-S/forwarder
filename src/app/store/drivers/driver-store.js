@@ -79,8 +79,6 @@ export const useDriverStore = create((set) => ({
     }
   },
   createDriver: async (payload) => {
-    console.log("payload", payload);
-
     try {
       set({ isLoading: true, error: null });
 
@@ -92,9 +90,11 @@ export const useDriverStore = create((set) => ({
       });
     } catch (e) {
       set({
-        error: e.message,
+        error: e.response.data.message,
         isLoading: false,
       });
+
+      throw e;
     }
   },
 

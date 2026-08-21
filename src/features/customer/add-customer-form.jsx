@@ -14,6 +14,7 @@ import {
 } from "@mui/material";
 import { Controller, useForm } from "react-hook-form";
 import { useCustomerStore } from "../../app/store/customers/customers-store";
+import { IMaskInput } from "react-imask";
 
 const ORGANIZATION_TYPES = [
   { label: "ТОО", value: "ТОО" },
@@ -42,7 +43,10 @@ const AddCustomerForm = ({ open, handleClose }) => {
   });
 
   const submitCustomerHandle = async (data) => {
-    await createCustomer(data);
+    await createCustomer({
+      ...data,
+      person_phone: data.person_phone.replace(/\D/g, ""),
+    });
 
     handleClose();
   };
@@ -216,6 +220,18 @@ const AddCustomerForm = ({ open, handleClose }) => {
                       label="Номер телефона"
                       error={!!fieldState.error}
                       helperText={fieldState.error?.message}
+                      slotProps={{
+                        input: {
+                          inputComponent: IMaskInput,
+                          inputProps: {
+                            mask: "+{7} (000) 000-00-00",
+                            unmask: false,
+                            onAccept: (value, mask) => {
+                              field.onChange(mask.unmaskedValue);
+                            },
+                          },
+                        },
+                      }}
                     />
                   )}
                 />

@@ -7,12 +7,10 @@ export const prepareDriverData = (data) => {
         return true;
       }
 
-      // boolean всегда отправляем
       if (typeof value === "boolean") {
         return true;
       }
 
-      // остальные только если заполнены
       return value !== "" && value !== null && value !== undefined;
     }),
   );
