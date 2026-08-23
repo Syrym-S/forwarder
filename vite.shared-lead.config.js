@@ -7,7 +7,7 @@ export default defineConfig({
 
   root: "./shared",
 
-  base: "assets/js/shared",
+  base: "/assets/js/shared/",
 
   publicDir: "../public",
 

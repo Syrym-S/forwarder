@@ -114,8 +114,8 @@ const Header = () => {
       >
         <Box
           component="img"
-          alt="Driver"
           src={logo}
+          alt="logo"
           sx={{
             height: 32,
             width: "auto",

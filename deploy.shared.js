@@ -15,15 +15,9 @@ const config = {
   password: process.env.FTP_PASSWORD,
   host: process.env.FTP_HOST,
   port: parseInt(process.env.FTP_PORT || "21", 10),
-
-  // Отдельная shared сборка
-  localRoot: join(__dirname, "dist-shared"),
-
-  // Отдельная папка на сервере
+  localRoot: __dirname + "/dist-shared",
   remoteRoot: process.env.FTP_SHARED_REMOTE_ROOT,
-
   include: ["*", "**/*"],
-
   deleteRemote: false,
 };
 

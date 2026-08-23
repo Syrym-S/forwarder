@@ -14,7 +14,7 @@ const ShareModal = ({ leadId, openShareModal, handleCloseShareModal }) => {
   const handleShareLead = async () => {
     const response = await shareLead(leadId);
 
-    window.location(`/shared/${leadId}/${response.token}`);
+    window.open(response.url, "_blank");
   };
 
   return (
