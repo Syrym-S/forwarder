@@ -4,6 +4,13 @@ export const VIEWS = {
   kanban: "kanban",
 };
 
+export const LEAD_TABS = {
+  lead_details: "lead_details",
+  customer_chat: "customer_chat",
+  driver_chat: "driver_chat",
+  factor_chat: "factor_chat",
+};
+
 export const steps = ["Маршрут", "Груз", "Водитель", "Заказщик", "Проверка"];
 
 export const initialForm = {

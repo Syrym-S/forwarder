@@ -1,63 +1,60 @@
 import { useEffect, useState } from "react";
 import RootLayout from "../../components/layout/root-layout";
-
-import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
-import { LeadDocumentsSection } from "../../components/leads/documents/LeadDocumentsSection";
 import { useParams } from "react-router-dom";
-import LocalShippingOutlinedIcon from "@mui/icons-material/LocalShippingOutlined";
-import { Box, Button } from "@mui/material";
+import {
+  Box,
+  Button,
+  Tab,
+  Tabs,
+  ToggleButton,
+  ToggleButtonGroup,
+} from "@mui/material";
 import AddLeadForm from "../../features/leads/add-lead-form";
 import { useFormDefaultValues } from "../../shared/hooks/leads/use-form-default-values";
-import LeadMap from "../../components/leads/lead-map";
-import { uploadLeadFileApi } from "../../app/store/leads/api";
-import { mapLeadFilesResponseFromApi } from "../../features/leads/model/lead-files.adapter";
 import LeadHeading from "../../components/leads/lead-item/lead-heading";
-import LeadCustomerInfo from "../../components/leads/lead-item/lead-customer-info";
-import LeadRouteInfo from "../../components/leads/lead-item/lead-route-info";
-import LeadCargoInfo from "../../components/leads/lead-item/lead-cargo-info";
-import LeadDriverInfo from "../../components/leads/lead-item/lead-driver-info";
-import Section from "../../shared/ui/section";
-import { STATUS } from "../../shared/const/tenders";
 import { useLeadsStore } from "../../app/store/leads/leads-store";
 import PageLoader from "../../shared/ui/loaders/page-loader";
-import LeadCargoFilesContainer from "../../components/leads/lead-cargo-files-container";
 import ShareModal from "../../components/leads/lead-item/share-modal";
+import LeadItemMainContainer from "../../components/leads/lead-item/lead-item-main-container";
+import { LEAD_TABS } from "../../shared/const/leads";
+import ChatFirstVertion from "../../components/chat/chat-first-vertion";
+
+const mockUserCustomer = {
+  fio: "Арман Рахатов",
+  avatar:
+    "https://avatars.mds.yandex.net/i?id=7940f02c803cd4419ad3927674dbd9ba_l-5850566-images-thumbs&n=13",
+  role: "customer",
+};
+
+const mockUserDriver = {
+  fio: "Рустам Илиясов",
+  avatar:
+    "https://avatars.mds.yandex.net/i?id=c79fb37a003821a0bbeeb4aac87a429d_l-10595999-images-thumbs&n=13",
+  role: "driver",
+};
+
+const mockUserFactor = {
+  fio: "Марал Жахан",
+  avatar:
+    "https://media.gettyimages.com/id/1197925988/photo/young-woman-working-in-factor.jpg?s=1024x1024&w=gi&k=20&c=inFzr37F6FO9UTXNBenFwV3tyEMJR9NoSPTXeLTSmHg=",
+  role: "factor",
+};
 
 const LeadItem = () => {
   const { id } = useParams();
 
+  const getLeadFiles = useLeadsStore((state) => state.getLeadFiles);
+  const getLeadItem = useLeadsStore((state) => state.getLeadItem);
+
+  const [currentTab, setCurrentTab] = useState(LEAD_TABS.lead_details);
   const [openShareModal, setOpenShareModal] = useState(false);
   const [openEdit, setOpenEdit] = useState(false);
+  const [documentError, setDocumentError] = useState("");
 
-  const getLeadItem = useLeadsStore((state) => state.getLeadItem);
   const leadData = useLeadsStore((state) => state.currentLead);
-  const isConfirmLoading = useLeadsStore((state) => state.isConfirmLoading);
   const files = useLeadsStore((state) => state.files);
-  const getLeadFiles = useLeadsStore((state) => state.getLeadFiles);
-  const deleteLeadFile = useLeadsStore((state) => state.deleteLeadFile);
-
-  const leadPoints = [
-    leadData?.from_location,
-    ...(leadData?.waypoints || []),
-    leadData?.to_location,
-  ];
-
-  const isEditableStatus =
-    leadData?.status !== STATUS.finished && leadData?.status !== STATUS.deleted;
-  const isAllPassed = leadPoints.every((item) => item?.is_passed);
-
-  const confirmLeadDelivery = useLeadsStore(
-    (state) => state.confirmLeadDelivery,
-  );
 
   const defaultValues = useFormDefaultValues(leadData, files);
-
-  // eslint-disable-next-line no-unused-vars
-  const [documents, setDocuments] = useState([]);
-  const [isDocumentUploading, setIsDocumentUploading] = useState(false);
-  const [documentError, setDocumentError] = useState("");
-  // eslint-disable-next-line no-unused-vars
-  const [deletingDocumentIds, setDeletingDocumentIds] = useState([]);
 
   const openEditForm = () => {
     setOpenEdit(true);
@@ -71,67 +68,6 @@ const LeadItem = () => {
     setOpenShareModal(false);
   };
 
-  const from = {
-    lat: leadData?.from_location.lat,
-    lon: leadData?.from_location.lon,
-  };
-  const to = {
-    lat: leadData?.to_location.lat,
-    lon: leadData?.to_location.lon,
-  };
-
-  const waypoints = leadData?.waypoints?.map((waypoint) => {
-    return {
-      lat: waypoint.lat,
-      lon: waypoint.lon,
-    };
-  });
-
-  const cargosCount = leadData?.cargos?.length;
-
-  async function reloadLeadDocuments(leadId) {
-    const response = await getLeadFiles(leadId);
-    const mappedDocuments = mapLeadFilesResponseFromApi(response);
-
-    setDocuments(mappedDocuments);
-  }
-
-  async function handleAddDocument({ name, context, file }) {
-    if (!id || !file) return;
-
-    try {
-      setIsDocumentUploading(true);
-      setDocumentError("");
-
-      await uploadLeadFileApi(id, {
-        file,
-        name,
-        context,
-      });
-
-      await reloadLeadDocuments(id);
-      // await getLeadFiles(id);
-    } catch (error) {
-      setDocumentError(
-        error.response?.data?.message ||
-          error.message ||
-          "Не удалось загрузить документ",
-      );
-    } finally {
-      setIsDocumentUploading(false);
-    }
-  }
-
-  const handleDeleteFileFromDB = async (lead_id, file_path) => {
-    await deleteLeadFile(lead_id, file_path);
-    await getLeadFiles(lead_id);
-  };
-
-  const handleConfirmDelivery = async () => {
-    await confirmLeadDelivery(id);
-    await getLeadItem(id);
-  };
-
   useEffect(() => {
     let isCancelled = false;
 
@@ -143,15 +79,9 @@ const LeadItem = () => {
       try {
         setDocumentError("");
 
-        const response = await getLeadFiles(id);
-        const mappedDocuments = mapLeadFilesResponseFromApi(response);
-
-        if (!isCancelled) {
-          setDocuments(mappedDocuments);
-        }
+        await getLeadFiles(id);
       } catch (error) {
         if (!isCancelled) {
-          setDocuments([]);
           setDocumentError(
             error.response?.data?.message ||
               error.message ||
@@ -200,11 +130,40 @@ const LeadItem = () => {
 
         <Box
           sx={{
+            pt: 2,
             width: "100%",
             display: "flex",
-            justifyContent: "end",
+            justifyContent: "space-between",
           }}
         >
+          <Tabs
+            value={currentTab}
+            onChange={(_, newValue) => {
+              setCurrentTab(newValue);
+            }}
+            variant="scrollable"
+            scrollButtons="auto"
+            aria-label="Переключение разделов"
+            sx={{
+              alignSelf: {
+                xs: "stretch",
+                sm: "auto",
+              },
+              "& .MuiTab-root": {
+                px: 1.5,
+                minWidth: 40,
+                textTransform: "none",
+              },
+            }}
+          >
+            <Tab value={LEAD_TABS.lead_details} label="Детали лида" />
+
+            <Tab value={LEAD_TABS.customer_chat} label="Чат с заказчиком" />
+
+            <Tab value={LEAD_TABS.driver_chat} label="Чат с водителем" />
+
+            <Tab value={LEAD_TABS.factor_chat} label="Чат с фактором" />
+          </Tabs>
           <Button
             color="primary"
             variant="outlined"
@@ -222,80 +181,24 @@ const LeadItem = () => {
           />
         )}
 
-        <Box
-          sx={{
-            boxShadow: 1,
-            borderRadius: 2,
-            overflow: "hidden",
-            my: 3,
-          }}
-        >
-          <LeadMap waypoints={waypoints} from={from} to={to} id={id} />
-        </Box>
-
-        <LeadCustomerInfo leadData={leadData} />
-
-        {/* {newNotification &&
-          notification_type === NOTIFICATION_TYPE.shipping && (
-            <NotificationPopup selectedNotification={newNotification} />
-          )} */}
-
-        <LeadRouteInfo leadData={leadData} />
-
-        <Section
-          title={`Груз`}
-          icon={<LocalShippingOutlinedIcon color="primary" />}
-        >
-          <Box
-            sx={{
-              display: "grid",
-              gridTemplateColumns: "1fr",
-              gap: 2,
-            }}
-          >
-            {leadData?.cargos?.map((cargo, index) => (
-              <LeadCargoInfo
-                cargosCount={cargosCount}
-                cargo={cargo}
-                lead={leadData}
-                index={index}
-                isLeadsPage
-              />
-            ))}
-          </Box>
-        </Section>
-
-        <LeadCargoFilesContainer
-          leatData={leadData}
-          cargoActions={leadData?.cargo_actions}
-        />
-
-        <LeadDriverInfo leadData={leadData} />
-
-        <Section
-          title="Документы"
-          icon={<DescriptionOutlinedIcon color="primary" />}
-        >
-          <LeadDocumentsSection
-            leadStatus={leadData?.status}
-            documents={files.reverse()}
-            onAddDocument={handleAddDocument}
-            onDeleteDocument={handleDeleteFileFromDB}
-            isUploading={isDocumentUploading}
-            uploadError={documentError}
-            deletingDocumentIds={deletingDocumentIds}
+        {currentTab === LEAD_TABS.lead_details && (
+          <LeadItemMainContainer
+            leadData={leadData}
+            documentError={documentError}
+            setDocumentError={setDocumentError}
           />
-        </Section>
+        )}
 
-        {isEditableStatus && isAllPassed && (
-          <Button
-            color="error"
-            variant="outlined"
-            disabled={isConfirmLoading}
-            onClick={handleConfirmDelivery}
-          >
-            {isConfirmLoading ? "...Завершение рейса" : "Завершить рейс"}
-          </Button>
+        {currentTab === LEAD_TABS.customer_chat && (
+          <ChatFirstVertion mockUser={mockUserCustomer} />
+        )}
+
+        {currentTab === LEAD_TABS.driver_chat && (
+          <ChatFirstVertion mockUser={mockUserDriver} />
+        )}
+
+        {currentTab === LEAD_TABS.factor_chat && (
+          <ChatFirstVertion mockUser={mockUserFactor} />
         )}
       </Box>
     </RootLayout>
