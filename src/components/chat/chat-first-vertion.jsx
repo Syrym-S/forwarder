@@ -5,41 +5,31 @@ import {
   Typography,
   IconButton,
   TextField,
+  CircularProgress,
 } from "@mui/material";
-import { useState, useRef } from "react";
-import dayjs from "dayjs";
-import { ROLES } from "../../shared/const/roles";
+import { useState, useRef, useEffect } from "react";
 import PanoramaOutlinedIcon from "@mui/icons-material/PanoramaOutlined";
 import SendIcon from "@mui/icons-material/Send";
+import { useLeadsStore } from "../../app/store/leads/leads-store";
+import { useParams } from "react-router-dom";
+import MessageList from "./message-list";
+import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 
-const messagesMock = [
-  {
-    id: 1,
-    senderId: 101,
-    text: "Здравствуйте! Хотел уточнить информацию по грузу.",
-    createdAt: "2026-08-24T08:10:00",
-    role: "customer",
-  },
-  {
-    id: 2,
-    senderId: 101,
-    text: "Подскажите, пожалуйста, когда планируется погрузка?",
-    createdAt: "2026-08-24T08:12:00",
-    role: "customer",
-  },
-  {
-    id: 3,
-    senderId: 101,
-    text: "Также хотел узнать точный адрес загрузки.",
-    createdAt: "2026-08-24T08:15:00",
-    role: "customer",
-  },
-];
+const ChatFirstVertion = ({ messageType }) => {
+  const { id } = useParams();
 
-const ChatFirstVertion = ({ mockUser }) => {
-  const [sentMeassages, setSentMessages] = useState([]);
+  const participantData = useLeadsStore((state) => state.participantData);
+  const getLeadMessages = useLeadsStore((state) => state.getLeadMessages);
+  const getMessageParticipantInfo = useLeadsStore(
+    (state) => state.getMessageParticipantInfo,
+  );
 
-  const allMessages = [...messagesMock, ...sentMeassages];
+  useEffect(() => {
+    getLeadMessages(id, messageType);
+    getMessageParticipantInfo(id, messageType);
+  }, []);
+
+  if (!participantData) return <CircularProgress />;
 
   return (
     <Paper
@@ -72,27 +62,50 @@ const ChatFirstVertion = ({ mockUser }) => {
             gap: 1,
           }}
         >
-          <Box
-            component="img"
-            src={mockUser.avatar}
-            alt={mockUser.fio}
-            sx={{
-              display: "block",
-              borderRadius: "100%",
-              width: "80px",
-              height: "80px",
-              objectFit: "cover",
-              boxShadow: 2,
-            }}
-          />
-
+          {participantData[0]?.avatar ? (
+            <Box
+              component="img"
+              src={participantData[0]?.avatar}
+              sx={{
+                display: "block",
+                borderRadius: "100%",
+                width: "80px",
+                height: "80px",
+                objectFit: "cover",
+                boxShadow: 2,
+              }}
+            />
+          ) : (
+            <Box
+              sx={{
+                width: "80px",
+                height: "80px",
+                borderRadius: "50%",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                bgcolor: "primary.main",
+                color: "white",
+                fontSize: "14px",
+                fontWeight: 600,
+                boxShadow: 2,
+                flexShrink: 0,
+              }}
+            >
+              <PersonOutlinedIcon
+                sx={{
+                  fontSize: "3rem",
+                }}
+              />
+            </Box>
+          )}
           <Box>
             <Typography
               sx={{
                 fontSize: "1.5rem",
               }}
             >
-              {mockUser.fio}
+              {participantData[0]?.person_fio}
             </Typography>
 
             <Typography
@@ -102,116 +115,45 @@ const ChatFirstVertion = ({ mockUser }) => {
                 color: "#5c5b5b",
               }}
             >
-              Заказщик
+              {participantData[0]?.role}
             </Typography>
           </Box>
         </Box>
       </Stack>
 
-      <Stack
-        spacing={2}
-        sx={{
-          flex: 1,
-          p: 3,
-          overflowY: "auto",
-        }}
-      >
-        {allMessages.map((message) => {
-          const isForwarderSend = message.role === ROLES.forwarder;
+      <MessageList mockUser={participantData[0]} />
 
-          return (
-            <Box
-              key={message.id}
-              sx={{
-                display: "flex",
-                gap: 1,
-                justifyContent: isForwarderSend ? "flex-end" : "flex-start",
-              }}
-            >
-              {!isForwarderSend && (
-                <Box
-                  component="img"
-                  src={mockUser.avatar}
-                  sx={{
-                    display: "block",
-                    borderRadius: "100%",
-                    width: "35px",
-                    height: "35px",
-                    objectFit: "cover",
-                    boxShadow: 2,
-                  }}
-                />
-              )}
-
-              <Box
-                sx={{
-                  maxWidth: "70%",
-                  px: 2,
-                  py: 1.5,
-                  borderRadius: isForwarderSend
-                    ? "16px 0px 16px 16px"
-                    : "0 16px 16px 16px",
-                  backgroundColor: isForwarderSend ? "white" : "#9faaffab",
-                  boxShadow: 1,
-                }}
-              >
-                <Typography
-                  sx={{
-                    fontSize: "1rem",
-                    wordBreak: "break-word",
-                    color: isForwarderSend ? "black" : "white",
-                  }}
-                >
-                  {message.text}
-                </Typography>
-
-                <Typography
-                  sx={{
-                    mt: 0.5,
-                    fontSize: "0.75rem",
-                    color: "text.secondary",
-                    textAlign: "right",
-                  }}
-                >
-                  {new Date(message.createdAt).toLocaleTimeString("ru-RU", {
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  })}
-                </Typography>
-              </Box>
-            </Box>
-          );
-        })}
-      </Stack>
-      <ChatMessageInput setSentMessages={setSentMessages} />
+      <ChatMessageInput messageType={messageType} />
     </Paper>
   );
 };
 
 export default ChatFirstVertion;
 
-const ChatMessageInput = ({ setSentMessages }) => {
+const ChatMessageInput = ({ messageType }) => {
+  const { id } = useParams();
+
+  const sendMessage = useLeadsStore((state) => state.sendMessage);
+  const getLeadMessages = useLeadsStore((state) => state.getLeadMessages);
+
   const [inputValue, setInputValue] = useState("");
   const [selectedFiles, setSelectedFiles] = useState([]);
 
   const fileInputRef = useRef(null);
 
-  const handleSendMessage = () => {
+  const handleSendMessage = async () => {
     if (!inputValue.trim() && selectedFiles.length === 0) return;
 
-    const currentDateTime = dayjs().format("YYYY-MM-DD HH:mm:ss");
-
     const newSentMessage = {
-      id: crypto.randomUUID(),
-      text: inputValue,
-      createdAt: currentDateTime,
-      role: "forwarder",
-      files: selectedFiles,
+      chat_type: messageType,
+      message: inputValue,
     };
 
-    setSentMessages((prev) => [...prev, newSentMessage]);
-
     setInputValue("");
+
+    await sendMessage(id, newSentMessage);
+    await getLeadMessages(id, messageType);
+
     setSelectedFiles([]);
   };
 

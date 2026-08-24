@@ -259,3 +259,32 @@ export const shareLeadApi = async (id) => {
 
   return data;
 };
+
+export const getLeadMessagesApi = async (id, messageType) => {
+  const data = await api.get(`/forwarder/v1/leads/${id}/chat/messages`, {
+    params: {
+      chat_type: messageType,
+    },
+  });
+
+  return data;
+};
+
+export const sendMessageApi = async (id, payload) => {
+  const data = await api.post(
+    `/forwarder/v1/leads/${id}/chat/messages`,
+    payload,
+  );
+
+  return data;
+};
+
+export const getMessageParticipantInfoApi = async (id, messageType) => {
+  const data = await api.get(`/forwarder/v1/leads/${id}/chat/participants`, {
+    params: {
+      chat_type: messageType,
+    },
+  });
+
+  return data;
+};

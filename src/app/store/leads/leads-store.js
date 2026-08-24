@@ -20,6 +20,9 @@ import {
   getAcceptedLeadsApi,
   deleteCargoApi,
   shareLeadApi,
+  sendMessageApi,
+  getLeadMessagesApi,
+  getMessageParticipantInfoApi,
 } from "./api";
 
 export const useLeadsStore = create((set) => ({
@@ -29,8 +32,10 @@ export const useLeadsStore = create((set) => ({
   files: [],
   uploadedFiles: [],
   acceptedLeads: [],
+  leadMessages: [],
 
   currentLead: null,
+  participantData: null,
   notificationPopUpCurrentLead: null,
 
   isLoading: false,
@@ -42,6 +47,9 @@ export const useLeadsStore = create((set) => ({
   isConfirmLoading: false,
   isAcceptedLeadsLoading: false,
   isCargoDeleteLoading: false,
+  isSendingLoading: false,
+  isMessagesLoading: false,
+  isParticipantLoading: false,
 
   error: null,
   count: 0,
@@ -502,6 +510,76 @@ export const useLeadsStore = create((set) => ({
       set({
         error: e.message,
         isCargoDeleteLoading: false,
+      });
+
+      console.error("Response:", e.response?.data);
+      throw e;
+    }
+  },
+
+  getLeadMessages: async (lead_id, messageType) => {
+    try {
+      set({ isMessagesLoading: true, error: null });
+
+      const response = await getLeadMessagesApi(lead_id, messageType);
+
+      console.log(response);
+
+      set({
+        leadMessages: response.data.data,
+        isMessagesLoading: false,
+      });
+
+      return response.data;
+    } catch (e) {
+      set({
+        error: e.message,
+        isMessagesLoading: false,
+      });
+
+      console.error("Response:", e.response?.data);
+      throw e;
+    }
+  },
+
+  sendMessage: async (lead_id, payload) => {
+    try {
+      set({ isSendingLoading: true, error: null });
+
+      const response = await sendMessageApi(lead_id, payload);
+
+      set({
+        isSendingLoading: false,
+      });
+
+      return response.data;
+    } catch (e) {
+      set({
+        error: e.message,
+        isSendingLoading: false,
+      });
+
+      console.error("Response:", e.response?.data);
+      throw e;
+    }
+  },
+
+  getMessageParticipantInfo: async (lead_id, messageType) => {
+    try {
+      set({ isParticipantLoading: true, error: null });
+
+      const response = await getMessageParticipantInfoApi(lead_id, messageType);
+
+      set({
+        participantData: response.data.data,
+        isParticipantLoading: false,
+      });
+
+      return response.data;
+    } catch (e) {
+      set({
+        error: e.message,
+        isParticipantLoading: false,
       });
 
       console.error("Response:", e.response?.data);

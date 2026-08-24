@@ -19,27 +19,6 @@ import LeadItemMainContainer from "../../components/leads/lead-item/lead-item-ma
 import { LEAD_TABS } from "../../shared/const/leads";
 import ChatFirstVertion from "../../components/chat/chat-first-vertion";
 
-const mockUserCustomer = {
-  fio: "Арман Рахатов",
-  avatar:
-    "https://avatars.mds.yandex.net/i?id=7940f02c803cd4419ad3927674dbd9ba_l-5850566-images-thumbs&n=13",
-  role: "customer",
-};
-
-const mockUserDriver = {
-  fio: "Рустам Илиясов",
-  avatar:
-    "https://avatars.mds.yandex.net/i?id=c79fb37a003821a0bbeeb4aac87a429d_l-10595999-images-thumbs&n=13",
-  role: "driver",
-};
-
-const mockUserFactor = {
-  fio: "Марал Жахан",
-  avatar:
-    "https://media.gettyimages.com/id/1197925988/photo/young-woman-working-in-factor.jpg?s=1024x1024&w=gi&k=20&c=inFzr37F6FO9UTXNBenFwV3tyEMJR9NoSPTXeLTSmHg=",
-  role: "factor",
-};
-
 const LeadItem = () => {
   const { id } = useParams();
 
@@ -190,15 +169,15 @@ const LeadItem = () => {
         )}
 
         {currentTab === LEAD_TABS.customer_chat && (
-          <ChatFirstVertion mockUser={mockUserCustomer} />
+          <ChatFirstVertion messageType={"lead"} />
         )}
 
         {currentTab === LEAD_TABS.driver_chat && (
-          <ChatFirstVertion mockUser={mockUserDriver} />
+          <ChatFirstVertion messageType={"cargo"} />
         )}
 
         {currentTab === LEAD_TABS.factor_chat && (
-          <ChatFirstVertion mockUser={mockUserFactor} />
+          <ChatFirstVertion messageType={"factoring"} />
         )}
       </Box>
     </RootLayout>
