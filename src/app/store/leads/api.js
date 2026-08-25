@@ -268,9 +268,29 @@ export const getLeadMessagesApi = async (id, params) => {
   return data;
 };
 
+export const deleteMessageApi = async (id, message_id, params) => {
+  const data = await api.delete(
+    `/forwarder/v1/leads/${id}/chat/messages/${message_id}`,
+    {
+      params,
+    },
+  );
+
+  return data;
+};
+
 export const sendMessageApi = async (id, payload) => {
   const data = await api.post(
     `/forwarder/v1/leads/${id}/chat/messages`,
+    payload,
+  );
+
+  return data;
+};
+
+export const editMessageApi = async (id, message_id, payload) => {
+  const data = await api.put(
+    `forwarder/v1/leads/${id}/chat/messages/${message_id}`,
     payload,
   );
 

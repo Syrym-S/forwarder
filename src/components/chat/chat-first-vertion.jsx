@@ -11,7 +11,7 @@ import { useState, useRef, useEffect } from "react";
 import PanoramaOutlinedIcon from "@mui/icons-material/PanoramaOutlined";
 import SendIcon from "@mui/icons-material/Send";
 import { useLeadsStore } from "../../app/store/leads/leads-store";
-import { useFetcher, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import MessageList from "./message-list";
 import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 
@@ -210,7 +210,9 @@ const ChatMessageInput = ({ messageType }) => {
       setInputValue("");
       setSelectedFiles([]);
 
-      await getLeadMessages(id, messageType);
+      await getLeadMessages(id, {
+        chat_type: messageType,
+      });
     } catch (error) {
       console.error("Ошибка отправки:", error);
     }

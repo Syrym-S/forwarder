@@ -24,6 +24,8 @@ import {
   getLeadMessagesApi,
   getMessageParticipantInfoApi,
   downloadMessageFileApi,
+  deleteMessageApi,
+  editMessageApi,
 } from "./api";
 
 export const useLeadsStore = create((set) => ({
@@ -558,6 +560,48 @@ export const useLeadsStore = create((set) => ({
       set({
         error: e.message,
         isSendingLoading: false,
+      });
+
+      console.error("Response:", e.response?.data);
+      throw e;
+    }
+  },
+
+  editMessage: async (lead_id, message_id, payload) => {
+    try {
+      set({ isSendingLoading: true, error: null });
+
+      const response = await editMessageApi(lead_id, message_id, payload);
+
+      set({
+        isSendingLoading: false,
+      });
+
+      return response.data;
+    } catch (e) {
+      set({
+        error: e.message,
+        isSendingLoading: false,
+      });
+
+      console.error("Response:", e.response?.data);
+      throw e;
+    }
+  },
+
+  deleteMessage: async (lead_id, message_id, params) => {
+    try {
+      set({ isMessagesLoading: true, error: null });
+
+      await deleteMessageApi(lead_id, message_id, params);
+
+      set({
+        isMessagesLoading: false,
+      });
+    } catch (e) {
+      set({
+        error: e.message,
+        isMessagesLoading: false,
       });
 
       console.error("Response:", e.response?.data);
