@@ -3,8 +3,9 @@ import { ROLES_ID } from "../../shared/const/roles";
 import { useLeadsStore } from "../../app/store/leads/leads-store";
 import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 import dayjs from "dayjs";
+import MessageFileCard from "./message-file-card";
 
-const MessageList = ({ participant }) => {
+const MessageList = ({ participant, messageType }) => {
   const leadMessages = useLeadsStore((state) => state.leadMessages);
   const isMessagesLoading = useLeadsStore((state) => state.isMessagesLoading);
 
@@ -91,6 +92,9 @@ const MessageList = ({ participant }) => {
                 boxShadow: 1,
               }}
             >
+              {message.attachments.map((file) => (
+                <MessageFileCard file={file} messageType={messageType} />
+              ))}
               <Typography
                 sx={{
                   fontSize: "1rem",

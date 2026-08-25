@@ -1,14 +1,7 @@
 import { useEffect, useState } from "react";
 import RootLayout from "../../components/layout/root-layout";
 import { useParams } from "react-router-dom";
-import {
-  Box,
-  Button,
-  Tab,
-  Tabs,
-  ToggleButton,
-  ToggleButtonGroup,
-} from "@mui/material";
+import { Box, Button, Tab, Tabs } from "@mui/material";
 import AddLeadForm from "../../features/leads/add-lead-form";
 import { useFormDefaultValues } from "../../shared/hooks/leads/use-form-default-values";
 import LeadHeading from "../../components/leads/lead-item/lead-heading";
@@ -18,6 +11,7 @@ import ShareModal from "../../components/leads/lead-item/share-modal";
 import LeadItemMainContainer from "../../components/leads/lead-item/lead-item-main-container";
 import { LEAD_TABS } from "../../shared/const/leads";
 import ChatFirstVertion from "../../components/chat/chat-first-vertion";
+import { STATUS } from "../../shared/const/tenders";
 
 const LeadItem = () => {
   const { id } = useParams();
@@ -34,6 +28,9 @@ const LeadItem = () => {
   const files = useLeadsStore((state) => state.files);
 
   const defaultValues = useFormDefaultValues(leadData, files);
+
+  const isActive =
+    leadData?.status !== STATUS.finished && leadData?.status !== STATUS.deleted;
 
   const openEditForm = () => {
     setOpenEdit(true);
@@ -137,11 +134,23 @@ const LeadItem = () => {
           >
             <Tab value={LEAD_TABS.lead_details} label="Детали лида" />
 
-            <Tab value={LEAD_TABS.customer_chat} label="Чат с заказчиком" />
+            <Tab
+              value={LEAD_TABS.customer_chat}
+              disabled={!leadData.customer.name}
+              label="Чат с заказчиком"
+            />
 
-            <Tab value={LEAD_TABS.driver_chat} label="Чат с водителем" />
+            <Tab
+              value={LEAD_TABS.driver_chat}
+              disabled={!leadData.driver.fio}
+              label="Чат с водителем"
+            />
 
-            <Tab value={LEAD_TABS.factor_chat} label="Чат с фактором" />
+            <Tab
+              value={LEAD_TABS.factor_chat}
+              label="Чат с фактором"
+              disabled={isActive}
+            />
           </Tabs>
           <Button
             color="primary"

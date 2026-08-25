@@ -12,6 +12,8 @@ export function LeadDocumentCard({
   onDelete,
   isDeleting = false,
 }) {
+  console.log(document);
+
   const { id } = useParams();
   const fileType = getFileType(document);
   const isForwarderFile = document?.source === ROLES.forwarder;
@@ -80,7 +82,7 @@ export function LeadDocumentCard({
               lineHeight: 1.35,
             }}
           >
-            {document.name?.slice(0, 20) + "..." || "Документ"}
+            {document?.name?.slice(0, 20) + "..." || "Документ"}
           </Typography>
 
           <Typography
@@ -92,7 +94,7 @@ export function LeadDocumentCard({
               lineHeight: 1.35,
             }}
           >
-            {document.context
+            {document?.context
               ? document.context?.slice(0, 20) + "..."
               : "Описание не указано"}
           </Typography>
@@ -107,7 +109,7 @@ export function LeadDocumentCard({
               wordBreak: "break-word",
             }}
           >
-            {document.fileName || "Файл"}
+            {document?.fileName || "Файл"}
           </Typography>
         </Box>
 

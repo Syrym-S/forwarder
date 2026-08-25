@@ -11,12 +11,14 @@ import { useState, useRef, useEffect } from "react";
 import PanoramaOutlinedIcon from "@mui/icons-material/PanoramaOutlined";
 import SendIcon from "@mui/icons-material/Send";
 import { useLeadsStore } from "../../app/store/leads/leads-store";
-import { useParams } from "react-router-dom";
+import { useFetcher, useParams } from "react-router-dom";
 import MessageList from "./message-list";
 import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 
 const ChatFirstVertion = ({ messageType }) => {
   const { id } = useParams();
+
+  const [page, setPage] = useState(1);
 
   const participantData = useLeadsStore((state) => state.participantData);
   const getLeadMessages = useLeadsStore((state) => state.getLeadMessages);
@@ -25,15 +27,25 @@ const ChatFirstVertion = ({ messageType }) => {
   );
 
   useEffect(() => {
-    getLeadMessages(id, messageType);
+    getLeadMessages(id, {
+      chat_type: messageType,
+    });
     getMessageParticipantInfo(id, messageType);
   }, []);
+
+  useEffect(() => {
+    getLeadMessages(id, {
+      page: page,
+      chat_type: messageType,
+    });
+  }, [page]);
 
   if (!participantData) return <CircularProgress />;
 
   return (
     <Paper
       sx={{
+        position: "relative",
         display: "flex",
         flexDirection: "column",
         my: 1,
@@ -44,6 +56,38 @@ const ChatFirstVertion = ({ messageType }) => {
         overflow: "hidden",
       }}
     >
+      <Box
+        sx={{
+          position: "fixed",
+          display: "flex",
+          gap: 10,
+          bottom: 1,
+          right: 2,
+        }}
+      >
+        <Box
+          onClick={() => setPage((prev) => prev - 1)}
+          sx={{
+            width: "20px",
+            height: "20px",
+            borderRadius: "50%",
+            background: "blue",
+          }}
+        >
+          -
+        </Box>
+        <Box
+          onClick={() => setPage((prev) => prev + 1)}
+          sx={{
+            width: "20px",
+            height: "20px",
+            borderRadius: "50%",
+            background: "blue",
+          }}
+        >
+          +
+        </Box>
+      </Box>
       <Stack
         spacing={1}
         sx={{
@@ -121,7 +165,7 @@ const ChatFirstVertion = ({ messageType }) => {
         </Box>
       </Stack>
 
-      <MessageList mockUser={participantData[0]} />
+      <MessageList mockUser={participantData[0]} messageType={messageType} />
 
       <ChatMessageInput messageType={messageType} />
     </Paper>
@@ -142,19 +186,34 @@ const ChatMessageInput = ({ messageType }) => {
   const fileInputRef = useRef(null);
 
   const handleSendMessage = async () => {
-    if (!inputValue.trim() && selectedFiles.length === 0) return;
+    if (!inputValue?.trim() && selectedFiles.length === 0) return;
 
-    const newSentMessage = {
-      chat_type: messageType,
-      message: inputValue,
-    };
+    const formData = new FormData();
 
-    setInputValue("");
+    formData.append("chat_type", messageType);
 
-    await sendMessage(id, newSentMessage);
-    await getLeadMessages(id, messageType);
+    if (inputValue?.trim()) {
+      formData.append("message", inputValue.trim());
+    }
 
-    setSelectedFiles([]);
+    selectedFiles.forEach((file) => {
+      formData.append("file", file);
+    });
+
+    for (const [key, value] of formData.entries()) {
+      console.log(key, value);
+    }
+
+    try {
+      await sendMessage(id, formData);
+
+      setInputValue("");
+      setSelectedFiles([]);
+
+      await getLeadMessages(id, messageType);
+    } catch (error) {
+      console.error("Ошибка отправки:", error);
+    }
   };
 
   const handleFileChange = (event) => {

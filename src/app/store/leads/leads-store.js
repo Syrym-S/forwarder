@@ -23,6 +23,7 @@ import {
   sendMessageApi,
   getLeadMessagesApi,
   getMessageParticipantInfoApi,
+  downloadMessageFileApi,
 } from "./api";
 
 export const useLeadsStore = create((set) => ({
@@ -517,11 +518,11 @@ export const useLeadsStore = create((set) => ({
     }
   },
 
-  getLeadMessages: async (lead_id, messageType) => {
+  getLeadMessages: async (lead_id, params) => {
     try {
       set({ isMessagesLoading: true, error: null });
 
-      const response = await getLeadMessagesApi(lead_id, messageType);
+      const response = await getLeadMessagesApi(lead_id, params);
 
       console.log(response);
 
@@ -547,6 +548,32 @@ export const useLeadsStore = create((set) => ({
       set({ isSendingLoading: true, error: null });
 
       const response = await sendMessageApi(lead_id, payload);
+
+      set({
+        isSendingLoading: false,
+      });
+
+      return response.data;
+    } catch (e) {
+      set({
+        error: e.message,
+        isSendingLoading: false,
+      });
+
+      console.error("Response:", e.response?.data);
+      throw e;
+    }
+  },
+
+  downloadMessageFile: async (lead_id, attachment_id, messageType) => {
+    try {
+      set({ isSendingLoading: true, error: null });
+
+      const response = await downloadMessageFileApi(
+        lead_id,
+        attachment_id,
+        messageType,
+      );
 
       set({
         isSendingLoading: false,

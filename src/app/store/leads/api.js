@@ -260,11 +260,9 @@ export const shareLeadApi = async (id) => {
   return data;
 };
 
-export const getLeadMessagesApi = async (id, messageType) => {
+export const getLeadMessagesApi = async (id, params) => {
   const data = await api.get(`/forwarder/v1/leads/${id}/chat/messages`, {
-    params: {
-      chat_type: messageType,
-    },
+    params,
   });
 
   return data;
@@ -274,6 +272,24 @@ export const sendMessageApi = async (id, payload) => {
   const data = await api.post(
     `/forwarder/v1/leads/${id}/chat/messages`,
     payload,
+  );
+
+  return data;
+};
+
+export const downloadMessageFileApi = async (
+  id,
+  attachment_id,
+  messageType,
+) => {
+  const data = await api.get(
+    `/forwarder/v1/leads/${id}/chat/attachments/${attachment_id}`,
+    {
+      params: {
+        chat_type: messageType,
+      },
+      responseType: "blob",
+    },
   );
 
   return data;
