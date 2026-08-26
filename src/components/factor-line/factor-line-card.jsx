@@ -1,17 +1,8 @@
-import React from "react";
-import {
-  Box,
-  Card,
-  CardContent,
-  Chip,
-  Divider,
-  LinearProgress,
-  Stack,
-  Typography,
-} from "@mui/material";
+import { Box, Divider, LinearProgress, Stack, Typography } from "@mui/material";
 import RenderStatus from "../../shared/ui/render-status";
 import { useNavigate } from "react-router-dom";
 import { renderLineColor } from "../../shared/helpers/factoring/render-progress-line-color";
+import dayjs from "dayjs";
 
 const formatAmount = (amount, currency) => {
   return `${new Intl.NumberFormat("ru-RU").format(amount)} ${currency}`;
@@ -36,6 +27,10 @@ const FactoringLineCard = ({ line }) => {
     period_start,
     period_end,
   } = line;
+
+  console.log(period_end);
+
+  console.log(formatDate(period_end.date));
 
   const handleNavigateToDetailPage = () => {
     navigate(
@@ -139,7 +134,7 @@ const FactoringLineCard = ({ line }) => {
                   fontSize: "1.3rem",
                 }}
               >
-                {summ_free}
+                {Math.round(summ_free)}
                 {currency}
               </Typography>
             </Stack>
@@ -163,7 +158,6 @@ const FactoringLineCard = ({ line }) => {
 
       <Divider sx={{ my: 3 }} />
 
-      {/* Dates */}
       <Box
         sx={{
           display: "flex",
@@ -176,9 +170,30 @@ const FactoringLineCard = ({ line }) => {
             Дата начала
           </Typography>
 
-          <Typography variant="body2" fontWeight={500}>
-            {formatDate(period_start.date)}
-          </Typography>
+          <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+            <Typography
+              variant="body2"
+              sx={{
+                color: "text.primary",
+              }}
+            >
+              {dayjs(period_start.date).format("DD:MM:YYYY")}
+            </Typography>
+
+            <Typography
+              variant="caption"
+              sx={{
+                px: 1,
+                py: 0.25,
+                borderRadius: 1,
+                bgcolor: "grey.100",
+                color: "text.secondary",
+                fontWeight: 500,
+              }}
+            >
+              {dayjs(period_start.date).format("HH:mm")}
+            </Typography>
+          </Box>
         </Box>
 
         <Box textAlign="right">
@@ -186,9 +201,30 @@ const FactoringLineCard = ({ line }) => {
             Дата окончания
           </Typography>
 
-          <Typography variant="body2" fontWeight={500}>
-            {formatDate(period_end.date)}
-          </Typography>
+          <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+            <Typography
+              variant="body2"
+              sx={{
+                color: "text.primary",
+              }}
+            >
+              {dayjs(period_end.date).format("DD:MM:YYYY")}
+            </Typography>
+
+            <Typography
+              variant="caption"
+              sx={{
+                px: 1,
+                py: 0.25,
+                borderRadius: 1,
+                bgcolor: "grey.100",
+                color: "text.secondary",
+                fontWeight: 500,
+              }}
+            >
+              {dayjs(period_end.date).format("HH:mm")}
+            </Typography>
+          </Box>
         </Box>
       </Box>
     </Box>
