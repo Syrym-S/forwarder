@@ -7,7 +7,7 @@ import { useLeadsStore } from "../../../app/store/leads/leads-store";
 
 window.Pusher = Pusher;
 
-const useChatEcho = (leadId) => {
+const useChatEcho = (leadId, messageType) => {
   const getNewMessage = useLeadsStore((state) => state.getNewMessage);
   const updateMessage = useLeadsStore((state) => state.updateMessage);
   const deleteMessageFromSocket = useLeadsStore(
@@ -22,9 +22,7 @@ const useChatEcho = (leadId) => {
 
     const connect = async () => {
       try {
-        const response = await getChatTokenApi(leadId);
-
-        console.log("CHAT TOKEN RESPONSE:", response);
+        const response = await getChatTokenApi(leadId, messageType);
 
         const { token, chat_id } = response.data;
 

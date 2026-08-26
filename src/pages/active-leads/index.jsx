@@ -1,33 +1,15 @@
-import React, { useEffect, useState } from "react";
-import Pagination from "@mui/material/Pagination";
+import { useEffect, useState } from "react";
 import RootLayout from "../../components/layout/root-layout";
-import LeadCard from "../../components/leads/lead-card";
-import { Tabs, Tab, Button, Autocomplete, TextField } from "@mui/material";
-import {
-  Box,
-  CircularProgress,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
-  Skeleton,
-} from "@mui/material";
-import ViewListRoundedIcon from "@mui/icons-material/ViewListRounded";
-import GridViewRoundedIcon from "@mui/icons-material/GridViewRounded";
-import { LeadCardSkeleton } from "../../shared/ui/lead-card-skeleton";
-import LeadsTable from "../../components/leads/leads-table";
+import { Box, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 import { VIEWS } from "../../shared/const/leads";
 import AddLeadForm from "../../features/leads/add-lead-form";
 import { useFormDefaultValues } from "../../shared/hooks/leads/use-form-default-values";
-import Loader from "../../components/layout/loader";
 import { useLeadsStore } from "../../app/store/leads/leads-store";
 import ViewTabs from "../../shared/ui/view-tabs";
-import PageLoader from "../../shared/ui/loaders/page-loader";
 import { useNotificationsStore } from "../../app/store/notifications/noti-store";
 import { NOTIFICATION_TYPE } from "../../shared/const/notification-types";
 import LeadListContainer from "../../components/leads/lead-list-container";
 import { parserNotificationType } from "../../shared/helpers/notifications/parse-notification-type";
-import { Controller } from "react-hook-form";
 import { ACTIVE_LEAD_STATUS_OPTIONS } from "../../shared/const/tenders";
 
 const ActiveLeads = () => {
