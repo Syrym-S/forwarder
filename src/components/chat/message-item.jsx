@@ -24,7 +24,6 @@ const MessageItem = ({ message, participant, messageType }) => {
 
   const deleteMessage = useLeadsStore((state) => state.deleteMessage);
   const editMessage = useLeadsStore((state) => state.editMessage);
-  const getLeadMessages = useLeadsStore((state) => state.getLeadMessages);
 
   const handleContextMenu = (event) => {
     if (
@@ -61,18 +60,12 @@ const MessageItem = ({ message, participant, messageType }) => {
     };
 
     await editMessage(id, message.id, payload);
-    await getLeadMessages(id, {
-      chat_type: messageType,
-    });
 
     setIsEditing(false);
   };
 
   const handleDelete = async () => {
     await deleteMessage(id, message.id, {
-      chat_type: messageType,
-    });
-    await getLeadMessages(id, {
       chat_type: messageType,
     });
     handleCloseContextMenu();

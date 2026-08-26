@@ -324,3 +324,13 @@ export const getMessageParticipantInfoApi = async (id, messageType) => {
 
   return data;
 };
+
+export const getChatTokenApi = async (leadId, messageType = "lead") => {
+  const data = await api.get(`/forwarder/v1/leads/${leadId}/chat/token`, {
+    params: {
+      chat_type: messageType,
+    },
+  });
+
+  return data;
+};

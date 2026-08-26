@@ -547,13 +547,7 @@ export const useLeadsStore = create((set) => ({
 
   sendMessage: async (lead_id, payload) => {
     try {
-      set({ isSendingLoading: true, error: null });
-
       const response = await sendMessageApi(lead_id, payload);
-
-      set({
-        isSendingLoading: false,
-      });
 
       return response.data;
     } catch (e) {
@@ -569,13 +563,7 @@ export const useLeadsStore = create((set) => ({
 
   editMessage: async (lead_id, message_id, payload) => {
     try {
-      set({ isSendingLoading: true, error: null });
-
       const response = await editMessageApi(lead_id, message_id, payload);
-
-      set({
-        isSendingLoading: false,
-      });
 
       return response.data;
     } catch (e) {
@@ -591,13 +579,9 @@ export const useLeadsStore = create((set) => ({
 
   deleteMessage: async (lead_id, message_id, params) => {
     try {
-      set({ isMessagesLoading: true, error: null });
+      const response = await deleteMessageApi(lead_id, message_id, params);
 
-      await deleteMessageApi(lead_id, message_id, params);
-
-      set({
-        isMessagesLoading: false,
-      });
+      return response;
     } catch (e) {
       set({
         error: e.message,
@@ -656,5 +640,50 @@ export const useLeadsStore = create((set) => ({
       console.error("Response:", e.response?.data);
       throw e;
     }
+  },
+
+  getNewMessage: (message) => {
+    set((state) => ({
+      leadMessages: [...state.leadMessages, message],
+    }));
+  },
+
+  updateMessage: (message) => {
+    set((state) => ({
+      leadMessages: state.leadMessages.map((item) =>
+        item.id === message.id
+          ? {
+              ...item,
+              ...message,
+            }
+          : item,
+      ),
+    }));
+  },
+
+  deleteMessageFromSocket: (message) => {
+    set((state) => ({
+      leadMessages: state.leadMessages.map((item) =>
+        item.id === message.id
+          ? {
+              ...item,
+              ...message,
+            }
+          : item,
+      ),
+    }));
+  },
+
+  readMessages: (participant_id) => {
+    set((state) => ({
+      leadMessages: state.leadMessages.map((item) =>
+        item.participant_id === participant_id
+          ? {
+              ...item,
+              is_read: true,
+            }
+          : item,
+      ),
+    }));
   },
 }));

@@ -14,11 +14,10 @@ import { useLeadsStore } from "../../app/store/leads/leads-store";
 import { useParams } from "react-router-dom";
 import MessageList from "./message-list";
 import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
+import useChatEcho from "../../shared/hooks/chat/use-chat-echo";
 
 const ChatFirstVertion = ({ messageType }) => {
   const { id } = useParams();
-
-  const [page, setPage] = useState(1);
 
   const participantData = useLeadsStore((state) => state.participantData);
   const getLeadMessages = useLeadsStore((state) => state.getLeadMessages);
@@ -33,12 +32,7 @@ const ChatFirstVertion = ({ messageType }) => {
     getMessageParticipantInfo(id, messageType);
   }, []);
 
-  useEffect(() => {
-    getLeadMessages(id, {
-      page: page,
-      chat_type: messageType,
-    });
-  }, [page]);
+  useChatEcho(id);
 
   if (!participantData) return <CircularProgress />;
 
@@ -56,38 +50,6 @@ const ChatFirstVertion = ({ messageType }) => {
         overflow: "hidden",
       }}
     >
-      <Box
-        sx={{
-          position: "fixed",
-          display: "flex",
-          gap: 10,
-          bottom: 1,
-          right: 2,
-        }}
-      >
-        <Box
-          onClick={() => setPage((prev) => prev - 1)}
-          sx={{
-            width: "20px",
-            height: "20px",
-            borderRadius: "50%",
-            background: "blue",
-          }}
-        >
-          -
-        </Box>
-        <Box
-          onClick={() => setPage((prev) => prev + 1)}
-          sx={{
-            width: "20px",
-            height: "20px",
-            borderRadius: "50%",
-            background: "blue",
-          }}
-        >
-          +
-        </Box>
-      </Box>
       <Stack
         spacing={1}
         sx={{
@@ -178,7 +140,6 @@ const ChatMessageInput = ({ messageType }) => {
   const { id } = useParams();
 
   const sendMessage = useLeadsStore((state) => state.sendMessage);
-  const getLeadMessages = useLeadsStore((state) => state.getLeadMessages);
 
   const [inputValue, setInputValue] = useState("");
   const [selectedFiles, setSelectedFiles] = useState([]);
@@ -209,10 +170,9 @@ const ChatMessageInput = ({ messageType }) => {
 
       setInputValue("");
       setSelectedFiles([]);
-
-      await getLeadMessages(id, {
-        chat_type: messageType,
-      });
+      // await getLeadMessages(id, {
+      //   chat_type: messageType,
+      // });
     } catch (error) {
       console.error("Ошибка отправки:", error);
     }
@@ -253,7 +213,6 @@ const ChatMessageInput = ({ messageType }) => {
           py: 1,
         }}
       >
-        {/* Выбранные файлы */}
         {selectedFiles.length > 0 && (
           <Box
             sx={{
