@@ -1,5 +1,5 @@
 import { Box, Typography, TextField, IconButton } from "@mui/material";
-import { ROLES_ID } from "../../shared/const/roles";
+import { ROLES, ROLES_ID } from "../../shared/const/roles";
 import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 import MessageFileCard from "./message-file-card";
 import dayjs from "dayjs";
@@ -12,7 +12,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import CheckIcon from "@mui/icons-material/Check";
 import MessageStatus from "./message-status";
 
-const MessageItem = ({ message, participant, messageType }) => {
+const MessageItem = ({ message, participants, messageType }) => {
   const { id } = useParams();
   const [contextMenu, setContextMenu] = useState(null);
   const [editedMessage, setEditedMessage] = useState(null);
@@ -21,9 +21,24 @@ const MessageItem = ({ message, participant, messageType }) => {
   const isDeleted = message.is_deleted;
   const isEdited = message.is_changed;
   const isForwarderSend = message.participant.role_id === ROLES_ID.forwarder;
+  const isFactorSend = message.participant.role_id === ROLES_ID.factor;
+  const isCustomerSend = message.participant.role_id === ROLES_ID.customer;
 
   const deleteMessage = useLeadsStore((state) => state.deleteMessage);
   const editMessage = useLeadsStore((state) => state.editMessage);
+
+  const foctorData = participants?.find((user) => user.role === ROLES.factor);
+  const customerData = participants?.find(
+    (user) => user.role === ROLES.customer,
+  );
+
+  const senderData = isFactorSend
+    ? foctorData
+    : isCustomerSend
+      ? customerData
+      : null;
+
+  const senderAvatar = senderData?.avatar;
 
   const handleContextMenu = (event) => {
     if (
@@ -77,44 +92,61 @@ const MessageItem = ({ message, participant, messageType }) => {
         key={message.id}
         sx={{
           display: "flex",
+          flexDirection: "column",
           gap: 1,
-          justifyContent: isForwarderSend ? "flex-end" : "flex-start",
+          alignItems: isForwarderSend ? "flex-end" : "flex-start",
         }}
       >
-        {!isForwarderSend &&
-          (participant?.avatar ? (
-            <Box
-              component="img"
-              src={participant.avatar}
-              sx={{
-                display: "block",
-                borderRadius: "100%",
-                width: "35px",
-                height: "35px",
-                objectFit: "cover",
-                boxShadow: 2,
-              }}
-            />
-          ) : (
-            <Box
-              sx={{
-                width: "35px",
-                height: "35px",
-                borderRadius: "50%",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                bgcolor: "primary.main",
-                color: "white",
-                fontSize: "14px",
-                fontWeight: 600,
-                boxShadow: 2,
-                flexShrink: 0,
-              }}
-            >
-              <PersonOutlinedIcon />
-            </Box>
-          ))}
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "end",
+            gap: 1,
+          }}
+        >
+          {!isForwarderSend &&
+            (senderAvatar ? (
+              <Box
+                component="img"
+                src={senderAvatar}
+                alt={senderData?.person_fio || "User"}
+                sx={{
+                  display: "block",
+                  borderRadius: "50%",
+                  width: 25,
+                  height: 25,
+                  objectFit: "cover",
+                  boxShadow: 2,
+                  flexShrink: 0,
+                }}
+              />
+            ) : (
+              <Box
+                sx={{
+                  width: 25,
+                  height: 25,
+                  borderRadius: "50%",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  bgcolor: "primary.main",
+                  color: "white",
+                  boxShadow: 2,
+                  flexShrink: 0,
+                }}
+              >
+                <PersonOutlinedIcon fontSize="small" />
+              </Box>
+            ))}
+          <Typography
+            sx={{
+              fontSize: "0.7rem",
+              color: "#4a94d9",
+            }}
+          >
+            {senderData?.person_fio}
+          </Typography>
+        </Box>
 
         <Box
           onContextMenu={handleContextMenu}
@@ -127,7 +159,7 @@ const MessageItem = ({ message, participant, messageType }) => {
             borderRadius: isForwarderSend
               ? "16px 0px 16px 16px"
               : "0 16px 16px 16px",
-            backgroundColor: isForwarderSend ? "white" : "#9faaffab",
+            backgroundColor: isForwarderSend ? "primary.main" : "#f6f6f6",
             boxShadow: 1,
           }}
         >
@@ -158,13 +190,22 @@ const MessageItem = ({ message, participant, messageType }) => {
             </Box>
           )}
 
-          {message.attachments.map((file) => (
-            <MessageFileCard
-              key={file.id}
-              file={file}
-              messageType={messageType}
-            />
-          ))}
+          <Box
+            sx={{
+              display: "grid",
+              gap: 1,
+              gridTemplateColumns: "1fr",
+            }}
+          >
+            {message.attachments.map((file) => (
+              <MessageFileCard
+                isForwarderSend={isForwarderSend}
+                key={file.id}
+                file={file}
+                messageType={messageType}
+              />
+            ))}
+          </Box>
 
           {isEditing ? (
             <Box
@@ -215,7 +256,7 @@ const MessageItem = ({ message, participant, messageType }) => {
                 sx={{
                   fontSize: "1rem",
                   wordBreak: "break-word",
-                  color: isForwarderSend ? "black" : "white",
+                  color: isForwarderSend ? "white" : "black",
                 }}
               >
                 {message.message}

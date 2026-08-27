@@ -25,6 +25,8 @@ const ChatFirstVertion = ({ messageType }) => {
     (state) => state.getMessageParticipantInfo,
   );
 
+  const isFactoringChat = messageType === "factoring";
+
   useEffect(() => {
     getLeadMessages(id, {
       chat_type: messageType,
@@ -32,7 +34,7 @@ const ChatFirstVertion = ({ messageType }) => {
     getMessageParticipantInfo(id, messageType);
   }, []);
 
-  useChatEcho(id);
+  useChatEcho(id, messageType);
 
   if (!participantData) return <CircularProgress />;
 
@@ -68,66 +70,82 @@ const ChatFirstVertion = ({ messageType }) => {
             gap: 1,
           }}
         >
-          {participantData[0]?.avatar ? (
-            <Box
-              component="img"
-              src={participantData[0]?.avatar}
-              sx={{
-                display: "block",
-                borderRadius: "100%",
-                width: "80px",
-                height: "80px",
-                objectFit: "cover",
-                boxShadow: 2,
-              }}
-            />
-          ) : (
-            <Box
-              sx={{
-                width: "80px",
-                height: "80px",
-                borderRadius: "50%",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                bgcolor: "primary.main",
-                color: "white",
-                fontSize: "14px",
-                fontWeight: 600,
-                boxShadow: 2,
-                flexShrink: 0,
-              }}
-            >
-              <PersonOutlinedIcon
+          {participantData?.map((participant, index) =>
+            participant.avatar ? (
+              <Box
+                component="img"
+                src={participant?.avatar}
                 sx={{
-                  fontSize: "3rem",
+                  display: "block",
+                  borderRadius: "100%",
+                  width: "80px",
+                  height: "80px",
+                  objectFit: "cover",
+                  boxShadow: 2,
+                  transform: `translateX(-${index * 40}px)`,
                 }}
               />
-            </Box>
+            ) : (
+              <Box
+                sx={{
+                  width: "80px",
+                  height: "80px",
+                  borderRadius: "50%",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  bgcolor: "primary.main",
+                  color: "white",
+                  fontSize: "14px",
+                  fontWeight: 600,
+                  boxShadow: 2,
+                  flexShrink: 0,
+                  transform: `translateX(-${index * 40}px)`,
+                }}
+              >
+                <PersonOutlinedIcon
+                  sx={{
+                    fontSize: "3rem",
+                  }}
+                />
+              </Box>
+            ),
           )}
           <Box>
-            <Typography
-              sx={{
-                fontSize: "1.5rem",
-              }}
-            >
-              {participantData[0]?.person_fio}
-            </Typography>
+            {!isFactoringChat ? (
+              <>
+                <Typography
+                  sx={{
+                    fontSize: "1.5rem",
+                  }}
+                >
+                  {participantData[0]?.person_fio}
+                </Typography>
 
-            <Typography
-              sx={{
-                fontSize: "1rem",
-                textTransform: "capitalize",
-                color: "#5c5b5b",
-              }}
-            >
-              {participantData[0]?.role}
-            </Typography>
+                <Typography
+                  sx={{
+                    fontSize: "1rem",
+                    textTransform: "capitalize",
+                    color: "#5c5b5b",
+                  }}
+                >
+                  {participantData[0]?.role}
+                </Typography>
+              </>
+            ) : (
+              <Typography
+                sx={{
+                  fontSize: "1.5rem",
+                }}
+              >
+                Чат о факторинговой покупке
+              </Typography>
+            )}
           </Box>
         </Box>
       </Stack>
 
-      <MessageList mockUser={participantData[0]} messageType={messageType} />
+      <MessageList participants={participantData} messageType={messageType} />
 
       <ChatMessageInput messageType={messageType} />
     </Paper>
@@ -140,6 +158,7 @@ const ChatMessageInput = ({ messageType }) => {
   const { id } = useParams();
 
   const sendMessage = useLeadsStore((state) => state.sendMessage);
+  const isSendingLoading = useLeadsStore((state) => state.isSendingLoading);
 
   const [inputValue, setInputValue] = useState("");
   const [selectedFiles, setSelectedFiles] = useState([]);
@@ -158,21 +177,14 @@ const ChatMessageInput = ({ messageType }) => {
     }
 
     selectedFiles.forEach((file) => {
-      formData.append("file", file);
+      formData.append("file[]", file);
     });
-
-    for (const [key, value] of formData.entries()) {
-      console.log(key, value);
-    }
 
     try {
       await sendMessage(id, formData);
 
       setInputValue("");
       setSelectedFiles([]);
-      // await getLeadMessages(id, {
-      //   chat_type: messageType,
-      // });
     } catch (error) {
       console.error("Ошибка отправки:", error);
     }
@@ -297,7 +309,6 @@ const ChatMessageInput = ({ messageType }) => {
           </Box>
         )}
 
-        {/* Текстовый инпут */}
         <TextField
           value={inputValue}
           fullWidth
@@ -335,7 +346,7 @@ const ChatMessageInput = ({ messageType }) => {
             mb: 0.2,
           }}
         >
-          <SendIcon />
+          {isSendingLoading ? <CircularProgress size="small" /> : <SendIcon />}
         </IconButton>
 
         <IconButton

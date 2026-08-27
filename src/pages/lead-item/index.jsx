@@ -19,7 +19,7 @@ const LeadItem = () => {
   const getLeadFiles = useLeadsStore((state) => state.getLeadFiles);
   const getLeadItem = useLeadsStore((state) => state.getLeadItem);
 
-  const [currentTab, setCurrentTab] = useState(LEAD_TABS.lead_details);
+  const [currentTab, setCurrentTab] = useState(LEAD_TABS.factor_chat);
   const [openShareModal, setOpenShareModal] = useState(false);
   const [openEdit, setOpenEdit] = useState(false);
   const [documentError, setDocumentError] = useState("");

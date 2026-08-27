@@ -1,7 +1,8 @@
 export const ROLES = {
-  driver: "driver",
   forwarder: "forwarder",
   customer: "customer",
+  factor: "factor",
+  driver: "driver",
 };
 
 export const ROLES_ID = {

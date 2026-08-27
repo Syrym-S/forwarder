@@ -1,4 +1,4 @@
-import { Box, IconButton, Typography } from "@mui/material";
+import { Box, CircularProgress, IconButton, Typography } from "@mui/material";
 import PictureAsPdfOutlinedIcon from "@mui/icons-material/PictureAsPdfOutlined";
 import InsertDriveFileOutlinedIcon from "@mui/icons-material/InsertDriveFileOutlined";
 import DownloadOutlinedIcon from "@mui/icons-material/DownloadOutlined";
@@ -20,10 +20,12 @@ const checkFileFormat = (file) => {
   return "file";
 };
 
-const MessageFileCard = ({ file, messageType }) => {
+const MessageFileCard = ({ file, messageType, isForwarderSend }) => {
   const { id } = useParams();
 
   const downloadFile = useLeadsStore((state) => state.downloadMessageFile);
+  const isDownloadLoading = useLeadsStore((state) => state.isDownloadLoading);
+  const downloadingFileId = useLeadsStore((state) => state.downloadingFileId);
 
   const fileFormat = checkFileFormat(file?.file_name);
 
@@ -45,6 +47,8 @@ const MessageFileCard = ({ file, messageType }) => {
       link.remove();
 
       window.URL.revokeObjectURL(url);
+
+      console.log(file.id);
     } catch (error) {
       console.error("Ошибка скачивания файла:", error);
     }
@@ -82,18 +86,35 @@ const MessageFileCard = ({ file, messageType }) => {
       {currentFile.icon}
 
       <Box sx={{ flex: 1, minWidth: 0 }}>
-        <Typography variant="body2" noWrap sx={{ fontWeight: 500 }}>
+        <Typography
+          variant="body2"
+          noWrap
+          sx={{ fontWeight: 500, color: isForwarderSend ? "white" : "black" }}
+        >
           {file?.file_name}
         </Typography>
 
-        <Typography variant="caption" color="text.secondary">
+        <Typography
+          variant="caption"
+          sx={{
+            color: isForwarderSend ? "white" : "black",
+          }}
+        >
           {currentFile.label}
         </Typography>
       </Box>
 
-      <IconButton onClick={handleDownload} size="small">
-        <DownloadOutlinedIcon />
-      </IconButton>
+      {isDownloadLoading && downloadingFileId === file.id ? (
+        <CircularProgress
+          sx={{
+            color: "white",
+          }}
+        />
+      ) : (
+        <IconButton onClick={handleDownload} size="small">
+          <DownloadOutlinedIcon />
+        </IconButton>
+      )}
     </Box>
   );
 };

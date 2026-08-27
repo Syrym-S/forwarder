@@ -40,6 +40,7 @@ export const useLeadsStore = create((set) => ({
   currentLead: null,
   participantData: null,
   notificationPopUpCurrentLead: null,
+  downloadFileId: null,
 
   isLoading: false,
   isSearchLoading: false,
@@ -53,6 +54,7 @@ export const useLeadsStore = create((set) => ({
   isSendingLoading: false,
   isMessagesLoading: false,
   isParticipantLoading: false,
+  isDownloadLoading: false,
 
   error: null,
   count: 0,
@@ -547,8 +549,14 @@ export const useLeadsStore = create((set) => ({
 
   sendMessage: async (lead_id, payload) => {
     try {
+      set({
+        isSendingLoading: true,
+      });
       const response = await sendMessageApi(lead_id, payload);
 
+      set({
+        isSendingLoading: false,
+      });
       return response.data;
     } catch (e) {
       set({
@@ -595,7 +603,11 @@ export const useLeadsStore = create((set) => ({
 
   downloadMessageFile: async (lead_id, attachment_id, messageType) => {
     try {
-      set({ isSendingLoading: true, error: null });
+      set({
+        isDownloadLoading: true,
+        downloadingFileId: attachment_id,
+        error: null,
+      });
 
       const response = await downloadMessageFileApi(
         lead_id,
@@ -604,14 +616,15 @@ export const useLeadsStore = create((set) => ({
       );
 
       set({
-        isSendingLoading: false,
+        isDownloadLoading: false,
+        downloadingFileId: null,
       });
 
       return response.data;
     } catch (e) {
       set({
         error: e.message,
-        isSendingLoading: false,
+        isDownloadLoading: false,
       });
 
       console.error("Response:", e.response?.data);

@@ -3,7 +3,7 @@ import { useLeadsStore } from "../../app/store/leads/leads-store";
 import MessageItem from "./message-item";
 import { useEffect, useRef } from "react";
 
-const MessageList = ({ participant, messageType }) => {
+const MessageList = ({ participants, messageType }) => {
   const leadMessages = useLeadsStore((state) => state.leadMessages);
   const isMessagesLoading = useLeadsStore((state) => state.isMessagesLoading);
 
@@ -48,7 +48,7 @@ const MessageList = ({ participant, messageType }) => {
           key={message.id}
           message={message}
           messageType={messageType}
-          participant={participant}
+          participants={participants}
         />
       ))}
     </Stack>
