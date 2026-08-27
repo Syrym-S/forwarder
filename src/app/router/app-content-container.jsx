@@ -1,37 +1,47 @@
 import React, { useEffect, useRef, useState } from "react";
 import Header from "../../components/layout/header";
 import { Outlet } from "react-router-dom";
-import { Box, IconButton, Snackbar, Tooltip, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Snackbar,
+  Typography,
+} from "@mui/material";
 import SideBar from "../../components/layout/menu";
 import NotificationPopup from "../../components/layout/notifications/notification-popup";
 import { useNotificationsStore } from "../store/notifications/noti-store";
 import RenderNotificationIcon from "../../shared/ui/render-notification-icon";
-import PhoneOutlinedIcon from "@mui/icons-material/PhoneOutlined";
-import MarkunreadOutlinedIcon from "@mui/icons-material/MarkunreadOutlined";
-import ContentCopyOutlinedIcon from "@mui/icons-material/ContentCopyOutlined";
 
 const AppContentContainer = () => {
   const [openMenu, setOpenMenu] = useState(false);
+
   const connectNotifications = useNotificationsStore(
     (state) => state.connectNotifications,
   );
+
   const newNotification = useNotificationsStore(
     (state) => state.newNotification,
   );
+
   const getNotifications = useNotificationsStore(
     (state) => state.getNotifications,
   );
+
   const clearNewNotificationValue = useNotificationsStore(
     (state) => state.clearNewNotificationValue,
   );
 
   const [notificationPopUpItem, setNotificationPopUpItem] = useState(null);
 
+  const socketRef = useRef(null);
+
   const handleOpenPopUp = () => {
     setNotificationPopUpItem(newNotification);
   };
-
-  const socketRef = useRef(null);
 
   useEffect(() => {
     const init = async () => {
@@ -104,6 +114,7 @@ const AppContentContainer = () => {
               <RenderNotificationIcon type={newNotification?.type} />
               {newNotification?.theme}
             </Typography>
+
             <Typography
               sx={{
                 fontSize: "0.8rem",
