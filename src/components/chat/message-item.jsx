@@ -1,4 +1,10 @@
-import { Box, Typography, TextField, IconButton } from "@mui/material";
+import {
+  Box,
+  Typography,
+  TextField,
+  IconButton,
+  CircularProgress,
+} from "@mui/material";
 import { ROLES, ROLES_ID } from "../../shared/const/roles";
 import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 import MessageFileCard from "./message-file-card";
@@ -25,6 +31,7 @@ const MessageItem = ({ message, participants, messageType }) => {
   const isCustomerSend = message.participant.role_id === ROLES_ID.customer;
 
   const deleteMessage = useLeadsStore((state) => state.deleteMessage);
+  const deletingMessage = useLeadsStore((state) => state.deletingMessage);
   const editMessage = useLeadsStore((state) => state.editMessage);
 
   const foctorData = participants?.find((user) => user.role === ROLES.factor);
@@ -242,12 +249,13 @@ const MessageItem = ({ message, participants, messageType }) => {
                 <CloseIcon fontSize="small" />
               </IconButton>
 
-              <IconButton
-                size="small"
-                color="primary"
-                onClick={handleConfirmEdit}
-              >
-                <CheckIcon fontSize="small" />
+              <IconButton size="small" onClick={handleConfirmEdit}>
+                <CheckIcon
+                  fontSize="small"
+                  sx={{
+                    color: "white",
+                  }}
+                />
               </IconButton>
             </Box>
           ) : (
@@ -259,7 +267,15 @@ const MessageItem = ({ message, participants, messageType }) => {
                   color: isForwarderSend ? "white" : "black",
                 }}
               >
-                {message.message}
+                {deletingMessage && deletingMessage === message.id ? (
+                  <CircularProgress
+                    sx={{
+                      color: "white",
+                    }}
+                  />
+                ) : (
+                  message.message
+                )}
               </Typography>
 
               <Box

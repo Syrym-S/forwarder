@@ -41,6 +41,8 @@ export const useLeadsStore = create((set) => ({
   participantData: null,
   notificationPopUpCurrentLead: null,
   downloadFileId: null,
+  newMessage: null,
+  deletingMessage: null,
 
   isLoading: false,
   isSearchLoading: false,
@@ -65,6 +67,7 @@ export const useLeadsStore = create((set) => ({
   clearCurrentLead: () => {
     set({ currentLead: null, error: null });
   },
+
   clearNotificationPopUpCurrentLead: () => {
     set({ notificationPopUpCurrentLead: null, error: null });
   },
@@ -528,8 +531,6 @@ export const useLeadsStore = create((set) => ({
 
       const response = await getLeadMessagesApi(lead_id, params);
 
-      console.log(response);
-
       set({
         leadMessages: response.data.data,
         isMessagesLoading: false,
@@ -550,11 +551,13 @@ export const useLeadsStore = create((set) => ({
   sendMessage: async (lead_id, payload) => {
     try {
       set({
+        newMessage: payload,
         isSendingLoading: true,
       });
       const response = await sendMessageApi(lead_id, payload);
 
       set({
+        newMessage: null,
         isSendingLoading: false,
       });
       return response.data;
@@ -587,8 +590,14 @@ export const useLeadsStore = create((set) => ({
 
   deleteMessage: async (lead_id, message_id, params) => {
     try {
+      set({
+        deletingMessage: message_id,
+      });
       const response = await deleteMessageApi(lead_id, message_id, params);
 
+      set({
+        deletingMessage: null,
+      });
       return response;
     } catch (e) {
       set({

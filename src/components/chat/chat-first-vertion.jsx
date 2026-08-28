@@ -1,7 +1,6 @@
 import {
   Box,
   Paper,
-  Stack,
   Typography,
   IconButton,
   TextField,
@@ -13,18 +12,23 @@ import SendIcon from "@mui/icons-material/Send";
 import { useLeadsStore } from "../../app/store/leads/leads-store";
 import { useParams } from "react-router-dom";
 import MessageList from "./message-list";
-import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 import useChatEcho from "../../shared/hooks/chat/use-chat-echo";
+import ForumOutlinedIcon from "@mui/icons-material/ForumOutlined";
+import ParticipantData from "./participants/participant-data";
 
 const ChatFirstVertion = ({ messageType }) => {
   const { id } = useParams();
 
   const participantData = useLeadsStore((state) => state.participantData);
+
+  const isMessagesLoading = useLeadsStore((state) => state.isMessagesLoading);
+  const leadMessages = useLeadsStore((state) => state.leadMessages);
   const getLeadMessages = useLeadsStore((state) => state.getLeadMessages);
   const getMessageParticipantInfo = useLeadsStore(
     (state) => state.getMessageParticipantInfo,
   );
 
+  const isEmpty = leadMessages?.length === 0;
   const isFactoringChat = messageType === "factoring";
 
   useEffect(() => {
@@ -45,6 +49,7 @@ const ChatFirstVertion = ({ messageType }) => {
         display: "flex",
         flexDirection: "column",
         my: 1,
+        mx: 1,
         minHeight: 500,
         maxHeight: 700,
         overflowY: "auto",
@@ -52,98 +57,64 @@ const ChatFirstVertion = ({ messageType }) => {
         overflow: "hidden",
       }}
     >
-      <Stack
-        spacing={1}
-        sx={{
-          py: 2,
-          px: 5,
-          backgroundColor: "white",
-          borderBottom: "1px solid",
-          borderColor: "divider",
-          boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.15)",
-          zIndex: 1,
-        }}
-      >
+      <ParticipantData
+        participantData={participantData}
+        isFactoringChat={isFactoringChat}
+      />
+
+      {isEmpty && !isMessagesLoading && (
         <Box
           sx={{
+            height: "100%",
             display: "flex",
-            gap: 1,
+            flex: 1,
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            textAlign: "center",
+            px: 3,
           }}
         >
-          {participantData?.map((participant, index) =>
-            participant.avatar ? (
-              <Box
-                component="img"
-                src={participant?.avatar}
-                sx={{
-                  display: "block",
-                  borderRadius: "100%",
-                  width: "80px",
-                  height: "80px",
-                  objectFit: "cover",
-                  boxShadow: 2,
-                  transform: `translateX(-${index * 40}px)`,
-                }}
-              />
-            ) : (
-              <Box
-                sx={{
-                  width: "80px",
-                  height: "80px",
-                  borderRadius: "50%",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  bgcolor: "primary.main",
-                  color: "white",
-                  fontSize: "14px",
-                  fontWeight: 600,
-                  boxShadow: 2,
-                  flexShrink: 0,
-                  transform: `translateX(-${index * 40}px)`,
-                }}
-              >
-                <PersonOutlinedIcon
-                  sx={{
-                    fontSize: "3rem",
-                  }}
-                />
-              </Box>
-            ),
-          )}
-          <Box>
-            {!isFactoringChat ? (
-              <>
-                <Typography
-                  sx={{
-                    fontSize: "1.5rem",
-                  }}
-                >
-                  {participantData[0]?.person_fio}
-                </Typography>
-
-                <Typography
-                  sx={{
-                    fontSize: "1rem",
-                    textTransform: "capitalize",
-                    color: "#5c5b5b",
-                  }}
-                >
-                  {participantData[0]?.role}
-                </Typography>
-              </>
-            ) : (
-              <Typography
-                sx={{
-                  fontSize: "1.5rem",
-                }}
-              >
-                Чат о факторинговой покупке
-              </Typography>
-            )}
+          <Box
+            sx={{
+              borderRadius: "50%",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              bgcolor: "primary.50",
+              mb: 2,
+            }}
+          >
+            <ForumOutlinedIcon
+              sx={{
+                fontSize: 36,
+                color: "primary.main",
+              }}
+            />
           </Box>
+
+          <Typography
+            variant="subtitle1"
+            sx={{
+              fontWeight: 600,
+              mb: 0.5,
+            }}
+          >
+            Пока нет чатов
+          </Typography>
+
+          <Typography
+            variant="body2"
+            color="text.secondary"
+            sx={{
+              maxWidth: 240,
+              lineHeight: 1.5,
+            }}
+          >
+            Здесь будут отображаться ваши диалоги и новые сообщения.
+          </Typography>
         </Box>
-      </Stack>
+      )}
 
       <MessageList participants={participantData} messageType={messageType} />
 
@@ -181,10 +152,10 @@ const ChatMessageInput = ({ messageType }) => {
     });
 
     try {
-      await sendMessage(id, formData);
-
       setInputValue("");
       setSelectedFiles([]);
+
+      await sendMessage(id, formData);
     } catch (error) {
       console.error("Ошибка отправки:", error);
     }

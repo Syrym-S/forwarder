@@ -2,8 +2,10 @@ import { CircularProgress, Stack } from "@mui/material";
 import { useLeadsStore } from "../../app/store/leads/leads-store";
 import MessageItem from "./message-item";
 import { useEffect, useRef } from "react";
+import MessageItemSkeleton from "../../shared/ui/loaders/message-item-skeleton";
 
 const MessageList = ({ participants, messageType }) => {
+  const newMessage = useLeadsStore((state) => state.newMessage);
   const leadMessages = useLeadsStore((state) => state.leadMessages);
   const isMessagesLoading = useLeadsStore((state) => state.isMessagesLoading);
 
@@ -51,6 +53,8 @@ const MessageList = ({ participants, messageType }) => {
           participants={participants}
         />
       ))}
+
+      {newMessage && <MessageItemSkeleton />}
     </Stack>
   );
 };
