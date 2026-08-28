@@ -25,7 +25,7 @@ function App() {
     getContractStatus();
   }, []);
 
-  // if (!isContractSigned) return <AgreementInfo openModal={!isContractSigned} />;
+  if (!isContractSigned) return <AgreementInfo openModal={!isContractSigned} />;
 
   return (
     <>

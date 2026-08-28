@@ -22,6 +22,7 @@
     "@mui/x-data-grid": "^9.3.0",
     "axios": "^1.16.1",
     "dayjs": "^1.11.21",
+    "docx-preview": "^0.4.0",
     "dotenv": "^17.4.2",
     "json-server": "^1.0.0-beta.15",
     "laravel-echo": "^2.4.0",

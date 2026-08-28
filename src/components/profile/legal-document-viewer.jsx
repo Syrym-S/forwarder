@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Box, CircularProgress, Typography } from "@mui/material";
+import { renderAsync } from "docx-preview";
 import { useProfileStore } from "../../app/store/profile/profile-store";
 
 const LegalDocumentViewer = ({ file }) => {
@@ -8,10 +9,15 @@ const LegalDocumentViewer = ({ file }) => {
   );
 
   const [fileUrl, setFileUrl] = useState(null);
+  const [fileBlob, setFileBlob] = useState(null);
+
+  const docxContainerRef = useRef(null);
 
   useEffect(() => {
     if (!file?.content || !file?.mime) {
       setFileUrl(null);
+      setFileBlob(null);
+
       return undefined;
     }
 
@@ -32,6 +38,7 @@ const LegalDocumentViewer = ({ file }) => {
 
       const url = URL.createObjectURL(blob);
 
+      setFileBlob(blob);
       setFileUrl(url);
 
       return () => {
@@ -41,10 +48,40 @@ const LegalDocumentViewer = ({ file }) => {
       console.error("Ошибка создания preview:", error);
 
       setFileUrl(null);
+      setFileBlob(null);
 
       return undefined;
     }
   }, [file?.content, file?.mime]);
+
+  useEffect(() => {
+    if (
+      file?.mime !==
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document" ||
+      !fileBlob ||
+      !docxContainerRef.current
+    ) {
+      return;
+    }
+
+    const renderDocument = async () => {
+      try {
+        docxContainerRef.current.innerHTML = "";
+
+        await renderAsync(fileBlob, docxContainerRef.current);
+      } catch (error) {
+        console.error("Ошибка отображения DOCX:", error);
+      }
+    };
+
+    renderDocument();
+
+    return () => {
+      if (docxContainerRef.current) {
+        docxContainerRef.current.innerHTML = "";
+      }
+    };
+  }, [file?.mime, fileBlob]);
 
   if (isLegalDocumentsLoading) {
     return (
@@ -84,6 +121,34 @@ const LegalDocumentViewer = ({ file }) => {
           border: 0,
           borderRadius: 1,
           boxShadow: 2,
+        }}
+      />
+    );
+  }
+
+  if (
+    file.mime ===
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+  ) {
+    return (
+      <Box
+        ref={docxContainerRef}
+        sx={{
+          my: 1,
+          width: "100%",
+          height: "30vh",
+          overflow: "auto",
+          borderRadius: 1,
+          boxShadow: 2,
+
+          "& .docx-wrapper": {
+            background: "#f5f5f5",
+            padding: 2,
+          },
+
+          "& .docx": {
+            margin: "0 auto",
+          },
         }}
       />
     );
