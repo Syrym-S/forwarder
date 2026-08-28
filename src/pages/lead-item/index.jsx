@@ -109,7 +109,15 @@ const LeadItem = () => {
             pt: 2,
             width: "100%",
             display: "flex",
+            flexDirection: {
+              xs: "column",
+              md: "row",
+            },
             justifyContent: "space-between",
+            alignItems: {
+              xs: "start",
+              md: "center",
+            },
           }}
         >
           <Tabs
@@ -152,10 +160,14 @@ const LeadItem = () => {
               disabled={isActive}
             />
           </Tabs>
+
           <Button
             color="primary"
             variant="outlined"
             onClick={handleOpenShareModal}
+            sx={{
+              height: 30,
+            }}
           >
             Поделиться
           </Button>

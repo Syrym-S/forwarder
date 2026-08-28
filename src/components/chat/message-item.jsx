@@ -76,6 +76,8 @@ const MessageItem = ({ message, participants, messageType }) => {
   };
 
   const handleConfirmEdit = async () => {
+    if (!editedMessage) return false;
+
     const payload = {
       message: editedMessage,
       chat_type: messageType,
@@ -83,6 +85,7 @@ const MessageItem = ({ message, participants, messageType }) => {
 
     await editMessage(id, message.id, payload);
 
+    setEditedMessage(null);
     setIsEditing(false);
   };
 
