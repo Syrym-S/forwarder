@@ -20,12 +20,15 @@ function App() {
     }
   };
 
+  const features = window.APP_DATA.features;
+
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     getContractStatus();
   }, []);
 
-  if (!isContractSigned) return <AgreementInfo openModal={!isContractSigned} />;
+  if (!isContractSigned && features.aitu_contract_signing)
+    return <AgreementInfo openModal={!isContractSigned} />;
 
   return (
     <>
