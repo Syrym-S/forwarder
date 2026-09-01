@@ -17,6 +17,7 @@ import BlockOutlinedIcon from "@mui/icons-material/BlockOutlined";
 import CloseIcon from "@mui/icons-material/Close";
 import CheckIcon from "@mui/icons-material/Check";
 import MessageStatus from "./message-status";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
 
 const MessageItem = ({ message, participants, messageType }) => {
   const { id } = useParams();
@@ -159,167 +160,179 @@ const MessageItem = ({ message, participants, messageType }) => {
         </Box>
 
         <Box
-          onContextMenu={handleContextMenu}
           sx={{
-            position: "relative",
-            maxWidth: "70%",
-            width: isEditing ? "50%" : "fit-content",
-            px: 2,
-            py: 1.5,
-            borderRadius: isForwarderSend
-              ? "16px 0px 16px 16px"
-              : "0 16px 16px 16px",
-            backgroundColor: isForwarderSend ? "primary.main" : "#f6f6f6",
-            boxShadow: 1,
+            display: "flex",
+            justifyContent: "flex-end",
           }}
         >
-          {isDeleted && (
-            <Box
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                gap: 0.5,
-              }}
-            >
-              <BlockOutlinedIcon
-                sx={{
-                  fontSize: "1rem",
-                  color: "rgba(0, 0, 0, 0.45)",
-                }}
-              />
-
-              <Typography
-                sx={{
-                  fontSize: "0.9rem",
-                  fontStyle: "italic",
-                  color: "rgba(0, 0, 0, 0.45)",
-                }}
-              >
-                Сообщение удалено
-              </Typography>
-            </Box>
-          )}
-
           <Box
+            onContextMenu={handleContextMenu}
             sx={{
-              display: "grid",
-              gap: 1,
-              gridTemplateColumns: "1fr",
+              position: "relative",
+              maxWidth: {
+                xs: "90%",
+                md: "70%",
+              },
+              width: isEditing ? "50%" : "fit-content",
+              px: 2,
+              py: 1.5,
+              borderRadius: isForwarderSend
+                ? "16px 0px 16px 16px"
+                : "0 16px 16px 16px",
+              backgroundColor: isForwarderSend ? "primary.main" : "#f6f6f6",
+              boxShadow: 1,
             }}
           >
-            {message.attachments.map((file) => (
-              <MessageFileCard
-                isForwarderSend={isForwarderSend}
-                key={file.id}
-                file={file}
-                messageType={messageType}
-              />
-            ))}
-          </Box>
-
-          {isEditing ? (
-            <Box
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                gap: 0.5,
-                minWidth: 250,
-              }}
-            >
-              <TextField
-                fullWidth
-                size="small"
-                onInput={(e) => {
-                  setEditedMessage(e.target.value);
-                }}
-                defaultValue={message.message}
-                autoFocus
-                sx={{
-                  "& .MuiOutlinedInput-root": {
-                    bgcolor: "background.paper",
-                    borderRadius: 2,
-                  },
-                }}
-              />
-
-              <IconButton
-                size="small"
-                onClick={handleCloseEdit}
-                sx={{
-                  color: "error.main",
-                }}
-              >
-                <CloseIcon fontSize="small" />
-              </IconButton>
-
-              <IconButton size="small" onClick={handleConfirmEdit}>
-                <CheckIcon
-                  fontSize="small"
-                  sx={{
-                    color: "white",
-                  }}
-                />
-              </IconButton>
-            </Box>
-          ) : (
-            <>
-              <Typography
-                sx={{
-                  fontSize: "1rem",
-                  wordBreak: "break-word",
-                  color: isForwarderSend ? "white" : "black",
-                }}
-              >
-                {deletingMessage && deletingMessage === message.id ? (
-                  <CircularProgress
-                    sx={{
-                      color: "white",
-                    }}
-                  />
-                ) : (
-                  message.message
-                )}
-              </Typography>
-
+            {isDeleted && (
               <Box
                 sx={{
                   display: "flex",
                   alignItems: "center",
-                  gap: 2,
+                  gap: 0.5,
                 }}
               >
+                <BlockOutlinedIcon
+                  sx={{
+                    fontSize: "1rem",
+                    color: "rgba(0, 0, 0, 0.45)",
+                  }}
+                />
+
                 <Typography
                   sx={{
-                    mt: 0.5,
-                    fontSize: "0.75rem",
-                    color: "text.secondary",
-                    textAlign: "right",
+                    fontSize: "0.9rem",
+                    fontStyle: "italic",
+                    color: "rgba(0, 0, 0, 0.45)",
                   }}
                 >
-                  {dayjs(message.created_at).format("DD.MM.YYYY HH:mm")}
+                  Сообщение удалено
+                </Typography>
+              </Box>
+            )}
+
+            <Box
+              sx={{
+                display: "grid",
+                gap: 1,
+                gridTemplateColumns: "1fr",
+              }}
+            >
+              {message.attachments.map((file) => (
+                <MessageFileCard
+                  isForwarderSend={isForwarderSend}
+                  key={file.id}
+                  file={file}
+                  messageType={messageType}
+                />
+              ))}
+            </Box>
+
+            {isEditing ? (
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 0.5,
+                  minWidth: 250,
+                }}
+              >
+                <TextField
+                  fullWidth
+                  size="small"
+                  onInput={(e) => {
+                    setEditedMessage(e.target.value);
+                  }}
+                  defaultValue={message.message}
+                  autoFocus
+                  sx={{
+                    "& .MuiOutlinedInput-root": {
+                      bgcolor: "background.paper",
+                      borderRadius: 2,
+                    },
+                  }}
+                />
+
+                <IconButton
+                  size="small"
+                  onClick={handleCloseEdit}
+                  sx={{
+                    color: "error.main",
+                  }}
+                >
+                  <CloseIcon fontSize="small" />
+                </IconButton>
+
+                <IconButton size="small" onClick={handleConfirmEdit}>
+                  <CheckIcon
+                    fontSize="small"
+                    sx={{
+                      color: "white",
+                    }}
+                  />
+                </IconButton>
+              </Box>
+            ) : (
+              <>
+                <Typography
+                  sx={{
+                    fontSize: "1rem",
+                    wordBreak: "break-word",
+                    color: isForwarderSend ? "white" : "black",
+                  }}
+                >
+                  {deletingMessage && deletingMessage === message.id ? (
+                    <CircularProgress
+                      sx={{
+                        color: "white",
+                      }}
+                    />
+                  ) : (
+                    message.message
+                  )}
                 </Typography>
 
-                {isEdited && (
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 2,
+                  }}
+                >
                   <Typography
                     sx={{
-                      fontSize: "0.7rem",
-                      fontStyle: "italic",
+                      mt: 0.5,
+                      fontSize: "0.75rem",
                       color: "text.secondary",
+                      textAlign: "right",
                     }}
                   >
-                    изменено
+                    {dayjs(message.created_at).format("DD.MM.YYYY HH:mm")}
                   </Typography>
-                )}
 
-                {isForwarderSend && (
-                  <MessageStatus
-                    is_arrived={message.is_arrived}
-                    is_viewed={message.is_viewed}
-                  />
-                )}
-              </Box>
-            </>
-          )}
+                  {isEdited && (
+                    <Typography
+                      sx={{
+                        fontSize: "0.7rem",
+                        fontStyle: "italic",
+                        color: "text.secondary",
+                      }}
+                    >
+                      изменено
+                    </Typography>
+                  )}
+
+                  {isForwarderSend && (
+                    <MessageStatus
+                      is_arrived={message.is_arrived}
+                      is_viewed={message.is_viewed}
+                    />
+                  )}
+                </Box>
+              </>
+            )}
+          </Box>
+
+          {isForwarderSend && <MoreVertIcon />}
         </Box>
       </Box>
 

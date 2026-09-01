@@ -19,7 +19,10 @@ const ParticipantData = ({ participantData, isFactoringChat }) => {
       spacing={1}
       sx={{
         py: 2,
-        px: 5,
+        px: {
+          xs: 2,
+          md: 5,
+        },
         backgroundColor: "white",
         borderBottom: "1px solid",
         borderColor: "divider",
@@ -112,7 +115,10 @@ const ParticipantData = ({ participantData, isFactoringChat }) => {
             <>
               <Typography
                 sx={{
-                  fontSize: "1.5rem",
+                  fontSize: {
+                    xs: "1rem",
+                    md: "1.5rem",
+                  },
                 }}
               >
                 {participantData[0]?.person_fio}

@@ -41,7 +41,10 @@ const MessageList = ({ participants, messageType }) => {
       ref={chatRef}
       sx={{
         flex: 1,
-        p: 3,
+        p: {
+          xs: 1,
+          md: 3,
+        },
         overflowY: "auto",
       }}
     >

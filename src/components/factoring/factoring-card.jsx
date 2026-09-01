@@ -4,6 +4,7 @@ import RenderStatus from "../../shared/ui/render-status";
 import InfoField from "../../shared/ui/info-field";
 import dayjs from "dayjs";
 import { useNavigate } from "react-router-dom";
+import { moneySpacingFormat } from "../../shared/helpers/money-spacing";
 
 const FactoringCard = ({ factoring }) => {
   const navigate = useNavigate();
@@ -120,11 +121,11 @@ const FactoringCard = ({ factoring }) => {
         >
           <InfoField
             label={"Задолжность"}
-            value={`${factoring?.deb_summ} ${factoring?.deb_currency}`}
+            value={`${moneySpacingFormat(factoring?.deb_summ)} ${factoring?.deb_currency}`}
           />
           <InfoField
             label={"Оплата за задолжность"}
-            value={`${factoring?.cred_summ} ${factoring?.currency}`}
+            value={`${moneySpacingFormat(factoring?.cred_summ)} ${factoring?.currency}`}
           />
         </Box>
         <Box

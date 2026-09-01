@@ -91,7 +91,16 @@ const LeadCard = ({ lead }) => {
             }}
             color="primary"
             variant="outlined"
-            label={`Заказщий: ${lead?.customer?.name || lead?.customer || "Не указан"}`}
+            label={`Заказщий: ${lead?.customer?.name || "Не указан"}`}
+          />
+
+          <Chip
+            sx={{
+              borderRadius: 1,
+            }}
+            color="primary"
+            variant="outlined"
+            label={`Количество груза ${lead?.cargos?.length}`}
           />
         </Box>
         <Box
@@ -209,35 +218,6 @@ const LeadCard = ({ lead }) => {
               </Typography>
             </Box>
           </Box>
-        </Box>
-        <Box
-          sx={{
-            display: "grid",
-            gridTemplateColumns: {
-              xs: "1fr 1fr",
-              md: "repeat(3, 1fr)",
-            },
-            gap: 1,
-          }}
-        >
-          <InfoField
-            label="Вес"
-            value={
-              lead?.cargo?.weight_kg ? `${lead?.cargo.weight_kg} кг` : null
-            }
-          />
-          <InfoField label="Тип" value={lead?.cargo?.type} />
-          <InfoField
-            label="Цена"
-            value={lead?.price ? `${lead?.price} ${lead?.currency}` : null}
-            accent
-            sx={{
-              gridColumn: {
-                xs: "1 / -1",
-                md: "auto",
-              },
-            }}
-          />
         </Box>
       </Stack>
     </Box>

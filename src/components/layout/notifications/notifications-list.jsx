@@ -4,11 +4,9 @@ import {
   Chip,
   CircularProgress,
   ListItemText,
-  MenuItem,
   Paper,
   Typography,
 } from "@mui/material";
-import NotificationsOffOutlinedIcon from "@mui/icons-material/NotificationsOffOutlined";
 import NotificationItem from "./notification-item";
 
 const NotificationsList = ({
@@ -21,12 +19,13 @@ const NotificationsList = ({
   const isLoading = useNotificationsStore((state) => state.isLoading);
 
   const isEmpty = notifications.length === 0;
+  const isLessThan10 = notifications.length <= 10;
 
   return (
     <Paper
       sx={{
         width: 300,
-        height: "fit-content",
+        height: isLessThan10 ? "fit-content" : "70vh",
         display: isLoading ? "" : "grid",
         gridTemplateColumns: "1fr",
         gridTemplateRows: isEmpty ? "1fr 1fr 1fr" : "1fr 4fr 1fr",

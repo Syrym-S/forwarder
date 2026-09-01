@@ -166,6 +166,7 @@ const LeadItem = () => {
             variant="outlined"
             onClick={handleOpenShareModal}
             sx={{
+              my: 1,
               height: 30,
             }}
           >

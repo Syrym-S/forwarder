@@ -3,7 +3,6 @@ import { AppBar, Button, Tooltip } from "@mui/material";
 import MarkunreadOutlinedIcon from "@mui/icons-material/MarkunreadOutlined";
 import PhoneOutlinedIcon from "@mui/icons-material/PhoneOutlined";
 import { useState } from "react";
-import logo from "@assets/logo.png";
 
 export function SupportContacts() {
   const supportEmail = window?.APP_DATA?.support?.email;
@@ -114,7 +113,7 @@ const Header = () => {
       >
         <Box
           component="img"
-          src={logo}
+          src="/wp-content/plugins/360Logistics/assets/js/shared/logo.png"
           alt="logo"
           sx={{
             height: 32,

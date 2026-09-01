@@ -3,6 +3,7 @@ import { NavLink } from "react-router-dom";
 import RenderStatus from "../../ui/render-status";
 import dayjs from "dayjs";
 import CustomNavLink from "../../ui/custom-nav-link";
+import { moneySpacingFormat } from "../../helpers/money-spacing";
 
 const useFactoringColumns = () => {
   const columns = [
@@ -89,7 +90,7 @@ const useFactoringColumns = () => {
       width: 200,
       renderCell: ({ row }) => (
         <Box>
-          {row?.deb_summ} {row?.deb_currency}
+          {moneySpacingFormat(row?.deb_summ)} {row?.deb_currency}
         </Box>
       ),
     },

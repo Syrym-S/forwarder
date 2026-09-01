@@ -224,7 +224,7 @@ const SideBar = ({ openMenu, setOpenMenu }) => {
         left: 0,
         flexDirection: "column",
         justifyContent: "space-between",
-        zIndex: 1,
+        zIndex: 2,
         borderRight: "1px solid",
         borderColor: "divider",
       }}

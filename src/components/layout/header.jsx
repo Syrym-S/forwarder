@@ -77,7 +77,7 @@ const Header = ({ openMenu, setOpenMenu }) => {
         justifyContent: "space-between",
         padding: "0 16px",
         backgroundColor: "background.default",
-        zIndex: 2,
+        zIndex: 3,
         boxShadow: 0,
         borderBottom: "1px solid",
         borderColor: "divider",

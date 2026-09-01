@@ -3,6 +3,7 @@ import RenderStatus from "../../shared/ui/render-status";
 import { useNavigate } from "react-router-dom";
 import { renderLineColor } from "../../shared/helpers/factoring/render-progress-line-color";
 import dayjs from "dayjs";
+import { moneySpacingFormat } from "../../shared/helpers/money-spacing";
 
 const formatAmount = (amount, currency) => {
   return `${new Intl.NumberFormat("ru-RU").format(amount)} ${currency}`;
@@ -80,7 +81,7 @@ const FactoringLineCard = ({ line }) => {
           </Typography>
 
           <Typography variant="h5" fontWeight={700}>
-            {formatAmount(summ_max, currency)}
+            {formatAmount(moneySpacingFormat(summ_max), currency)}
           </Typography>
         </Box>
 
