@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 import LeadMap from "../lead-map";
-import { Box, Button } from "@mui/material";
+import { Box, Button, CircularProgress } from "@mui/material";
 import LeadCustomerInfo from "./lead-customer-info";
 import LeadRouteInfo from "./lead-route-info";
 import Section from "../../../shared/ui/section";
@@ -9,11 +9,13 @@ import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
 import LeadCargoInfo from "./lead-cargo-info";
 import LeadCargoFilesContainer from "../lead-cargo-files-container";
 import LeadDriverInfo from "./lead-driver-info";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { uploadLeadFileApi } from "../../../app/store/leads/api";
 import { useLeadsStore } from "../../../app/store/leads/leads-store";
 import { LeadDocumentsSection } from "../documents/LeadDocumentsSection";
 import { STATUS } from "../../../shared/const/tenders";
+import RenderErrorContext from "../../../shared/ui/errors/render-error-context";
+import { LeadDocumentCard } from "../documents/LeadDocumentCard";
 
 const LeadItemMainContainer = ({
   leadData,
@@ -23,6 +25,7 @@ const LeadItemMainContainer = ({
   const { id } = useParams();
 
   const files = useLeadsStore((state) => state.files);
+  const avrDocument = useLeadsStore((state) => state.avrDocument);
   const getLeadFiles = useLeadsStore((state) => state.getLeadFiles);
   const getLeadItem = useLeadsStore((state) => state.getLeadItem);
   const deleteLeadFile = useLeadsStore((state) => state.deleteLeadFile);
@@ -30,6 +33,16 @@ const LeadItemMainContainer = ({
   const confirmLeadDelivery = useLeadsStore(
     (state) => state.confirmLeadDelivery,
   );
+  const generateAvrDocument = useLeadsStore(
+    (state) => state.generateAvrDocument,
+  );
+  const isGenerateAvrLoading = useLeadsStore(
+    (state) => state.isGenerateAvrLoading,
+  );
+  const isSignAvrLoading = useLeadsStore((state) => state.isSignAvrLoading);
+  const signAvrDocument = useLeadsStore((state) => state.signAvrDocument);
+  const getAvrDocument = useLeadsStore((state) => state.getAvrDocument);
+  const error = useLeadsStore((state) => state.error);
 
   const [isDocumentUploading, setIsDocumentUploading] = useState(false);
   // eslint-disable-next-line no-unused-vars
@@ -101,6 +114,23 @@ const LeadItemMainContainer = ({
     await getLeadItem(id);
   };
 
+  const handleGenerateAvrDocument = async () => {
+    await generateAvrDocument(id);
+  };
+
+  const handleSignAvrDocument = async () => {
+    const response = await signAvrDocument(id);
+    const link = response.data.sign_url;
+
+    window.open(link, "_blank");
+  };
+
+  useEffect(() => {
+    if (leadData.status === STATUS.finished) {
+      getAvrDocument(id);
+    }
+  }, []);
+
   return (
     <>
       <Box
@@ -113,11 +143,52 @@ const LeadItemMainContainer = ({
       >
         <LeadMap waypoints={waypoints} from={from} to={to} id={id} />
       </Box>
+      {leadData.status === STATUS.finished && (
+        <Box
+          sx={{
+            mb: 3,
+          }}
+        >
+          <Box
+            sx={{
+              display: "flex",
+              gap: 1,
+              my: 1,
+            }}
+          >
+            <Button
+              variant="outlined"
+              color="primary"
+              onClick={handleGenerateAvrDocument}
+              sx={{
+                display: "flex",
+                gap: 1,
+              }}
+            >
+              {isGenerateAvrLoading && <CircularProgress size={12} />}
+              Сгенерировать AVR документ для подписи
+            </Button>
 
-      <Button sx={{ mb: 3 }} variant="outlined" color="primary">
-        Подтвердить документ
-      </Button>
+            <Button
+              variant="outlined"
+              color="primary"
+              onClick={handleSignAvrDocument}
+            >
+              {isSignAvrLoading && <CircularProgress size={12} />}
+              Подписать документ
+            </Button>
+          </Box>
+          {error && <RenderErrorContext error={error} />}
 
+          <Box
+            sx={{
+              width: "30%",
+            }}
+          >
+            <LeadDocumentCard document={avrDocument?.document} />
+          </Box>
+        </Box>
+      )}
       <LeadRouteInfo leadData={leadData} />
 
       <LeadCustomerInfo leadData={leadData} />

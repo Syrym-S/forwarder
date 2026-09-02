@@ -334,3 +334,21 @@ export const getChatTokenApi = async (leadId, messageType) => {
 
   return data;
 };
+
+export const generaetAvrDocumentApi = async (leadId) => {
+  const data = await api.post(`/forwarder/avr/v1/${leadId}/generate`);
+
+  return data;
+};
+
+export const signAvrDocumentApi = async (leadId) => {
+  const data = await api.post(`/forwarder/avr/v1/${leadId}/sign`);
+
+  return data;
+};
+
+export const getAvrDocumentApi = async (leadId) => {
+  const data = await api.get(`/forwarder/avr/v1/${leadId}`);
+
+  return data;
+};

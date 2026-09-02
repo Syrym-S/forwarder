@@ -26,6 +26,9 @@ import {
   downloadMessageFileApi,
   deleteMessageApi,
   editMessageApi,
+  generaetAvrDocumentApi,
+  signAvrDocumentApi,
+  getAvrDocumentApi,
 } from "./api";
 
 export const useLeadsStore = create((set) => ({
@@ -43,6 +46,7 @@ export const useLeadsStore = create((set) => ({
   downloadFileId: null,
   newMessage: null,
   deletingMessage: null,
+  avrDocument: null,
 
   isLoading: false,
   isSearchLoading: false,
@@ -57,6 +61,8 @@ export const useLeadsStore = create((set) => ({
   isMessagesLoading: false,
   isParticipantLoading: false,
   isDownloadLoading: false,
+  isGenerateAvrLoading: false,
+  isSignAvrLoading: false,
 
   error: null,
   count: 0,
@@ -707,5 +713,50 @@ export const useLeadsStore = create((set) => ({
           : item,
       ),
     }));
+  },
+
+  generateAvrDocument: async (leadId) => {
+    try {
+      set({ isGenerateAvrLoading: true });
+
+      const response = await generaetAvrDocumentApi(leadId);
+
+      set({ isGenerateAvrLoading: false });
+
+      return response;
+    } catch (e) {
+      set({ error: e.response?.data?.message, isGenerateAvrLoading: false });
+    }
+  },
+
+  signAvrDocument: async (leadId) => {
+    try {
+      set({ isSignAvrLoading: true });
+
+      const response = await signAvrDocumentApi(leadId);
+
+      set({ isSignAvrLoading: false });
+
+      return response;
+    } catch (e) {
+      set({ error: e.response?.data?.message, isSignAvrLoading: false });
+    }
+  },
+
+  getAvrDocument: async (leadId) => {
+    try {
+      set({ isAvrLoading: true });
+
+      const response = await getAvrDocumentApi(leadId);
+
+      set({
+        avrDocument: response.data,
+        isAvrLoading: false,
+      });
+
+      return response;
+    } catch (e) {
+      console.log(e);
+    }
   },
 }));

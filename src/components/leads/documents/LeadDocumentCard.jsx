@@ -12,8 +12,6 @@ export function LeadDocumentCard({
   onDelete,
   isDeleting = false,
 }) {
-  console.log(document);
-
   const { id } = useParams();
   const fileType = getFileType(document);
   const isForwarderFile = document?.source === ROLES.forwarder;

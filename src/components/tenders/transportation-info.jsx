@@ -1,10 +1,8 @@
-import React from "react";
 import Section from "../../shared/ui/section";
 import { Box } from "@mui/material";
 import InfoField from "../../shared/ui/info-field";
 import LocalShippingOutlinedIcon from "@mui/icons-material/LocalShippingOutlined";
 import ArrowRightAltRoundedIcon from "@mui/icons-material/ArrowRightAltRounded";
-import RenderStatus from "../../shared/ui/render-status";
 
 const TransportationInfo = ({ tender }) => {
   return (
@@ -51,13 +49,6 @@ const TransportationInfo = ({ tender }) => {
             tender?.lead?.to_location?.city ||
             "Битые данные"
           }
-        />
-      </Box>
-
-      <Box sx={{ py: 4 }}>
-        <InfoField
-          label="Статус"
-          value={<RenderStatus status={tender?.lead?.status} />}
         />
       </Box>
     </Section>
