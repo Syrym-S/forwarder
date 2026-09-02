@@ -7,7 +7,7 @@ import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 const TenderInfo = ({ tender }) => {
   return (
     <Section
-      title="Информация о тендере"
+      title="Информация о аукционе"
       icon={<InfoOutlinedIcon color="primary" />}
     >
       <Box

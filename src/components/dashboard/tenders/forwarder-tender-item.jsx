@@ -53,7 +53,7 @@ const ForwarderTenderItem = ({ tender }) => {
           />
 
           <Chip
-            label={`Дата окончания тендера: ${dayjs(tender?.end_date_time).format("DD-MM-YYYY") || "—"}`}
+            label={`Дата окончания аукциона: ${dayjs(tender?.end_date_time).format("DD-MM-YYYY") || "—"}`}
             color={"primary"}
             variant={"outlined"}
             sx={{

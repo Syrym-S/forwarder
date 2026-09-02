@@ -14,7 +14,7 @@ const ForwardersTenderTable = (tenders) => {
         checkboxSelection
         sx={{ border: 0, minHeight: "80vh" }}
         localeText={{
-          noRowsLabel: "Список пуст. Добавьте тендер",
+          noRowsLabel: "Список пуст. Добавьте аукцион",
         }}
       />
     </Paper>

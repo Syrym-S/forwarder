@@ -36,7 +36,7 @@ const ConfirmBetModal = ({
       ) : (
         <DialogContent>
           <Typography>
-            Вы уверены что хотите сделать ставку на этот тендер?
+            Вы уверены что хотите сделать ставку на этот аукцион?
           </Typography>
           <Typography>
             Сумма: {formValues.amount} {formValues.currency}

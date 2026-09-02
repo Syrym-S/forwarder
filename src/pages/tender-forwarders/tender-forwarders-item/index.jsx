@@ -216,7 +216,7 @@ const TenderForwardersItem = () => {
             color="success"
             onClick={handleStartTender}
           >
-            Запустить тендер
+            Запустить аукцион
           </Button>
         )}
         {!isCanceled && !isClosed && (
@@ -225,12 +225,12 @@ const TenderForwardersItem = () => {
             variant="outlined"
             color="warning"
           >
-            Отменить тендер
+            Отменить аукцион
           </Button>
         )}
         {!hasWinner && (
           <Button onClick={handleDeleteTender} variant="outlined" color="error">
-            Удалить тендер
+            Удалить аукцион
           </Button>
         )}
       </Box>

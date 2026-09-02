@@ -114,6 +114,10 @@ const LeadItemMainContainer = ({
         <LeadMap waypoints={waypoints} from={from} to={to} id={id} />
       </Box>
 
+      <Button sx={{ mb: 3 }} variant="outlined" color="primary">
+        Подтвердить документ
+      </Button>
+
       <LeadRouteInfo leadData={leadData} />
 
       <LeadCustomerInfo leadData={leadData} />

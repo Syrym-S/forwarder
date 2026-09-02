@@ -160,7 +160,7 @@ const TenderParticipants = ({ tender }) => {
           </Box>
 
           <Dialog open={openConfirm} onClose={handleCloseConfirmModal}>
-            <DialogTitle>Добавление участника запустит тендер</DialogTitle>
+            <DialogTitle>Добавление участника запустит аукцион</DialogTitle>
             <DialogContent
               sx={{
                 display: "flex",

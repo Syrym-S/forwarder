@@ -182,21 +182,21 @@ const menuItems = [
   },
   {
     id: 5,
-    label: "Тендера",
+    label: "Аукционы",
     sub_items: [
       {
         id: 1,
         path: "/tender-applications",
         lable: "Аукционные заявки",
         icon: <AssignmentOutlined />,
-        tooltip_text: "Список тендеров от заказчиков",
+        tooltip_text: "Список аукционов от заказчиков",
       },
       {
         id: 2,
         path: "/tender-forwarders",
-        lable: "Аукционные перевозчиков",
+        lable: "Аукционы перевозчиков",
         icon: <RequestQuoteOutlined />,
-        tooltip_text: "Список тендеров, созданных вами",
+        tooltip_text: "Список аукционов, созданных вами",
       },
     ],
   },

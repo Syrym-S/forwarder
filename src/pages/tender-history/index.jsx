@@ -95,7 +95,7 @@ const TenderHistory = () => {
         <ViewTabs view={view} setView={setView} withoutDataAdd withoutKanban />
 
         <Tooltip
-          title="Cписок активных тендеров"
+          title="Cписок активных аукционов"
           onClick={handleNavigateToTenders}
         >
           <IconButton>
@@ -103,7 +103,7 @@ const TenderHistory = () => {
           </IconButton>
         </Tooltip>
       </Box>
-      {isTenderEmplty && <Alert severity="info">Доступных тендеров нет</Alert>}
+      {isTenderEmplty && <Alert severity="info">Доступных аукционов нет</Alert>}
 
       {isCardsView && view === VIEWS.cards && (
         <>

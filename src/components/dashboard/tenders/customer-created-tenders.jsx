@@ -73,7 +73,7 @@ const CustomerCreatedTenders = () => {
             textTransform: "uppercase",
           }}
         >
-          Список тендеров от Заказщиков
+          Список аукцонов от Заказщиков
         </Typography>
 
         <Tooltip
@@ -103,7 +103,7 @@ const CustomerCreatedTenders = () => {
               alignItems: "center",
             }}
           >
-            <Alert severity="info">Список тендеров от заказщиков пуст!</Alert>
+            <Alert severity="info">Список аукционов от заказщиков пуст!</Alert>
           </Box>
         </Box>
       )}

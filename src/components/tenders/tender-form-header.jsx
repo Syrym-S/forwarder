@@ -5,7 +5,7 @@ const TenderFormHeader = ({ isEdit }) => {
   return (
     <Box>
       <DialogTitle>
-        {isEdit ? "Редактирование тендера" : "Создание тендера"}
+        {isEdit ? "Редактирование аукциона" : "Создание аукциона"}
       </DialogTitle>
     </Box>
   );

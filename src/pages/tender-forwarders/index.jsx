@@ -101,7 +101,7 @@ const TenderForwarders = () => {
             }}
           >
             {isTendersEmpty ? (
-              <EmptyListUi text="Список пуст. Добавьте тендер!" />
+              <EmptyListUi text="Список пуст. Добавьте аукцион!" />
             ) : (
               tenders.map((tender) => (
                 <ForwardersTenderCard key={tender.id} tender={tender} />

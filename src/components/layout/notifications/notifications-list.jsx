@@ -52,7 +52,7 @@ const NotificationsList = ({
             color: "backgound.main",
           }}
         >
-          Последние события по вашим заявкам и тендерам
+          Последние события по вашим заявкам и аукционам
         </Typography>
       </Box>
 

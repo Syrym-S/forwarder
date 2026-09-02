@@ -76,7 +76,7 @@ const ForwarderCreatedTenders = () => {
             textTransform: "uppercase",
           }}
         >
-          Список тендеров для водителей
+          Список аукционов для водителей
         </Typography>
 
         <Tooltip
@@ -106,7 +106,7 @@ const ForwarderCreatedTenders = () => {
               alignItems: "center",
             }}
           >
-            <Alert severity="info">Список тендеров для водителей пуст!</Alert>
+            <Alert severity="info">Список аукционов для водителей пуст!</Alert>
           </Box>
         </Box>
       )}
@@ -127,7 +127,7 @@ const ForwarderCreatedTenders = () => {
               alignItems: "center",
             }}
           >
-            <Alert severity="info">Нет публичных тендеров!</Alert>
+            <Alert severity="info">Нет публичных аукционов!</Alert>
           </Box>
         </Box>
       )}

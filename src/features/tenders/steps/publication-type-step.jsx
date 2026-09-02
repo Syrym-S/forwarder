@@ -57,7 +57,7 @@ const PublicationTypeStep = ({
         control={control}
         render={({ field }) => (
           <FormControlLabel
-            label="Публичный тендер"
+            label="Публичный аукцион"
             control={
               <Checkbox
                 checked={field.value}

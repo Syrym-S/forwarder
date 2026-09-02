@@ -1,20 +1,17 @@
-import React, { useEffect } from "react";
+import { useEffect, useState } from "react";
 import RootLayout from "../../../components/layout/root-layout";
 import { useParams } from "react-router-dom";
 import { useFactoringStore } from "../../../app/store/factoring/factoring-store";
-import Loader from "../../../components/layout/loader";
 import { useLeadsStore } from "../../../app/store/leads/leads-store";
 import FactoringDetailsHeading from "../../../components/factoring/factoring-details-heading";
 import LeadMap from "../../../components/leads/lead-map";
-import { Box, Button, Container, Stack } from "@mui/material";
+import { Box, Button, Chip } from "@mui/material";
 import FactoringFinancialInfo from "../../../components/factoring/factoring-financial-info";
 import FactoringCustomerInfo from "../../../components/factoring/factoring-customer-info";
-import TransportationInfo from "../../../components/tenders/transportation-info";
 import FactoringTransportationInfo from "../../../components/factoring/factoring-transportation-info";
 import FactoringCargoInfo from "../../../components/factoring/factoring-cargo-info";
 import Section from "../../../shared/ui/section";
 import { useProfileStore } from "../../../app/store/profile/profile-store";
-import InfoField from "../../../shared/ui/info-field";
 import ProfileDataTable from "../../../components/factoring/profile-data-table";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 import FactorDataTable from "../../../components/factoring/factor-data-table";
@@ -22,9 +19,14 @@ import RememberMeOutlinedIcon from "@mui/icons-material/RememberMeOutlined";
 import PageLoader from "../../../shared/ui/loaders/page-loader";
 import FactoringVerifications from "../../../components/factoring/factoring-verifications";
 import LocalShippingOutlinedIcon from "@mui/icons-material/LocalShippingOutlined";
+import ConfirmModal from "../../../components/factoring/confirm-modal";
+import { STATUS } from "../../../shared/const/tenders";
+import InfoField from "../../../shared/ui/info-field";
 
 const FactoringItem = () => {
   const { id } = useParams();
+
+  const [openConfirmModal, setOpenConfirmModal] = useState(null);
 
   const currentLead = useLeadsStore((state) => state.currentLead);
   const getLeadItem = useLeadsStore((state) => state.getLeadItem);
@@ -35,9 +37,9 @@ const FactoringItem = () => {
   );
   const isConfirmLoading = useFactoringStore((state) => state.isConfirmLoading);
   const isLoading = useFactoringStore((state) => state.isLoading);
-
   const profileData = useProfileStore((state) => state.profileData);
   const getProfileData = useProfileStore((state) => state.getProfileData);
+  const approvePaiment = useFactoringStore((state) => state.approvePaiment);
 
   const from = {
     lat: currentLead?.from_location.lat,
@@ -59,6 +61,24 @@ const FactoringItem = () => {
     await acceptFactoring(id);
     await getFactoringDetails(id);
   };
+
+  const handleOpenModal = () => {
+    setOpenConfirmModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setOpenConfirmModal(false);
+  };
+
+  const handleApprovePaiment = async () => {
+    await approvePaiment(id);
+    await getFactoringDetails(id);
+    handleCloseModal();
+  };
+
+  const canBeApproved =
+    !factoringDetails?.await_paid_ff &&
+    factoringDetails?.status === STATUS.await_paid;
 
   useEffect(() => {
     const getDetails = async () => {
@@ -85,7 +105,6 @@ const FactoringItem = () => {
   return (
     <RootLayout withoutDataCheck>
       <FactoringDetailsHeading factoring={factoringDetails} />
-
       <Box
         sx={{
           boxShadow: 1,
@@ -102,6 +121,66 @@ const FactoringItem = () => {
         />
       </Box>
       <FactoringTransportationInfo lead={currentLead} />
+      <Section
+        title={`Подтверждении оплаты`}
+        icon={<LocalShippingOutlinedIcon color="primary" />}
+      >
+        {canBeApproved && (
+          <Button
+            variant="outlined"
+            color="primary"
+            onClick={handleOpenModal}
+            sx={{
+              my: 1,
+            }}
+          >
+            Подтвердить оплату cо стороны экспедитора
+          </Button>
+        )}
+
+        <Box
+          sx={{
+            display: "flex",
+            gap: 1,
+          }}
+        >
+          <InfoField
+            label={"Со стороны экспедитора"}
+            value={
+              <Chip
+                color={factoringDetails.await_paid_ff ? "success" : ""}
+                label={
+                  factoringDetails.await_paid_ff
+                    ? "Подтверждено"
+                    : "Не подтверждено"
+                }
+              />
+            }
+          />
+          <InfoField
+            label={"Со стороны фатора"}
+            value={
+              <Chip
+                color={factoringDetails.await_paid_cf ? "success" : ""}
+                label={
+                  factoringDetails.await_paid_cf
+                    ? "Подтверждено"
+                    : "Не подтверждено"
+                }
+              />
+            }
+          />
+        </Box>
+
+        {openConfirmModal && (
+          <ConfirmModal
+            open={openConfirmModal}
+            onClose={handleCloseModal}
+            text={`Вы дейтсвительно хотите подтвердить факторинг на сумму ${currentLead?.price} ${currentLead?.currency}`}
+            onConfirm={handleApprovePaiment}
+          />
+        )}
+      </Section>
 
       <Section
         title={`Груз`}
@@ -119,16 +198,12 @@ const FactoringItem = () => {
           ))}
         </Box>
       </Section>
-
       <FactoringFinancialInfo factoring={factoringDetails} />
-
       <FactoringCustomerInfo
         customer={factoringDetails?.customer}
         verified_customer={factoringDetails?.verified_customer}
       />
-
       <FactoringVerifications factoring={factoringDetails} />
-
       <Box
         sx={{
           display: "grid",
@@ -156,7 +231,6 @@ const FactoringItem = () => {
           <FactorDataTable factor={factoringDetails?.factor} />
         </Section>
       </Box>
-
       {!factoringDetails?.verified_forwarder && (
         <Button
           disabled={isConfirmLoading || isLoading}

@@ -332,7 +332,16 @@ const MessageItem = ({ message, participants, messageType }) => {
             )}
           </Box>
 
-          {isForwarderSend && <MoreVertIcon />}
+          {isForwarderSend && (
+            <MoreVertIcon
+              sx={{
+                display: {
+                  xs: "block",
+                  md: "none",
+                },
+              }}
+            />
+          )}
         </Box>
       </Box>
 

@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import {
   acceptFactoringApi,
+  approvePaimentApi,
   createFactoringApi,
   createFactoringLineApi,
   getFactorDetailsApi,
@@ -19,6 +20,7 @@ export const useFactoringStore = create((set) => ({
 
   isLoading: false,
   isFactorsLoading: false,
+  isApproveLoading: false,
   isFactorDetailsLoading: false,
   isSearchLoading: false,
   isConfirmLoading: false,
@@ -202,6 +204,27 @@ export const useFactoringStore = create((set) => ({
       set({
         error: e.message,
         isLoading: false,
+      });
+
+      throw e;
+    }
+  },
+
+  approvePaiment: async (factoring_id) => {
+    try {
+      set({ isApproveLoading: true, error: null });
+
+      const response = await approvePaimentApi(factoring_id);
+
+      set({
+        isApproveLoading: false,
+      });
+
+      return response.data;
+    } catch (e) {
+      set({
+        error: e.message,
+        isApproveLoading: false,
       });
 
       throw e;

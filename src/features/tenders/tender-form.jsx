@@ -155,7 +155,7 @@ const TenderForm = ({
   return (
     <Dialog open={openForm} onClose={handleCloseForm} maxWidth="sm" fullWidth>
       <DialogTitle>
-        {isEdit ? "Редактирование тендера" : "Создание тендера"}
+        {isEdit ? "Редактирование аукциона" : "Создание аукциона"}
       </DialogTitle>
 
       <DialogContent

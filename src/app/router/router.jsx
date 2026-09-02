@@ -103,35 +103,35 @@ export const router = createBrowserRouter(
           path: "/tender-applications",
           element: <TenderApplications />,
           handle: {
-            breadcrumb: "Тендерные заявки",
+            breadcrumb: "Аукционные заявки",
           },
         },
         {
           path: "/tenders/:id", /// Линк с нотификации приходит так
           element: <TenderApplicationsItem />,
           handle: {
-            breadcrumb: ({ params }) => `Тендерная заявка / ${params.id}`,
+            breadcrumb: ({ params }) => `Аукционная заявка / ${params.id}`,
           },
         },
         {
           path: "/tender-forwarders",
           element: <TenderForwarders />,
           handle: {
-            breadcrumb: "Тендера перевозчиков",
+            breadcrumb: "Аукционы перевозчиков",
           },
         },
         {
           path: "/tenders-driver/:id", /// Линк с нотификации приходит так
           element: <TenderForwardersItem />,
           handle: {
-            breadcrumb: ({ params }) => `Тендер / ${params.id}`,
+            breadcrumb: ({ params }) => `Аукцион / ${params.id}`,
           },
         },
         {
           path: "/tenders-history/",
           element: <TenderHistory />,
           handle: {
-            breadcrumb: "История тендеров",
+            breadcrumb: "История аукционов",
           },
         },
         {

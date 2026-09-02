@@ -19,7 +19,7 @@ const CancelBetModal = ({
       <DialogTitle>Отменить ставку</DialogTitle>
       <DialogContent>
         <Typography>
-          Вы уверены что хотите отменить ставку на этот тендер?
+          Вы уверены что хотите отменить ставку на этот аукцион?
         </Typography>
         <Typography>
           Сумма ставки: {bet.amount} {bet.currency}

@@ -78,3 +78,12 @@ export const createFactoringLineApi = async (payload) => {
 
   return data;
 };
+
+export const approvePaimentApi = async (factoring_id) => {
+  const data = await api.post(
+    `/forwarder/v1/factoring/${factoring_id}/approve-paid`,
+    null,
+  );
+
+  return data;
+};
