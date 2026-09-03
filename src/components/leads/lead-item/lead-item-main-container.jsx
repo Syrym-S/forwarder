@@ -39,6 +39,7 @@ const LeadItemMainContainer = ({
   const isGenerateAvrLoading = useLeadsStore(
     (state) => state.isGenerateAvrLoading,
   );
+  const isAvrLoading = useLeadsStore((state) => state.isAvrLoading);
   const isSignAvrLoading = useLeadsStore((state) => state.isSignAvrLoading);
   const signAvrDocument = useLeadsStore((state) => state.signAvrDocument);
   const getAvrDocument = useLeadsStore((state) => state.getAvrDocument);
@@ -79,7 +80,7 @@ const LeadItemMainContainer = ({
     await getLeadFiles(leadId);
   }
 
-  async function handleAddDocument({ name, context, file }) {
+  async function handleAddDocument({ file }) {
     if (!id || !file) return;
 
     try {
@@ -88,8 +89,8 @@ const LeadItemMainContainer = ({
 
       await uploadLeadFileApi(id, {
         file,
-        name,
-        context,
+        name: file.name,
+        context: file.context,
       });
 
       await reloadLeadDocuments(id);
@@ -143,52 +144,63 @@ const LeadItemMainContainer = ({
       >
         <LeadMap waypoints={waypoints} from={from} to={to} id={id} />
       </Box>
+
       {leadData.status === STATUS.finished && (
-        <Box
-          sx={{
-            mb: 3,
-          }}
+        <Section
+          title="Подпись AVR документа"
+          icon={<DescriptionOutlinedIcon color="primary" />}
         >
           <Box
             sx={{
-              display: "flex",
-              gap: 1,
-              my: 1,
+              mb: 3,
             }}
           >
-            <Button
-              variant="outlined"
-              color="primary"
-              onClick={handleGenerateAvrDocument}
+            <Box
               sx={{
                 display: "flex",
                 gap: 1,
+                my: 1,
               }}
             >
-              {isGenerateAvrLoading && <CircularProgress size={12} />}
-              Сгенерировать AVR документ для подписи
-            </Button>
+              <Button
+                variant="outlined"
+                color="primary"
+                onClick={handleGenerateAvrDocument}
+                sx={{
+                  display: "flex",
+                  gap: 1,
+                }}
+              >
+                {isGenerateAvrLoading && <CircularProgress size={12} />}
+                Сгенерировать AVR документ для подписи
+              </Button>
 
-            <Button
-              variant="outlined"
-              color="primary"
-              onClick={handleSignAvrDocument}
+              <Button
+                variant="outlined"
+                color="primary"
+                onClick={handleSignAvrDocument}
+              >
+                {isSignAvrLoading && <CircularProgress size={12} />}
+                Подписать документ
+              </Button>
+            </Box>
+            {error && <RenderErrorContext error={error} />}
+
+            <Box
+              sx={{
+                width: "30%",
+              }}
             >
-              {isSignAvrLoading && <CircularProgress size={12} />}
-              Подписать документ
-            </Button>
+              {isAvrLoading ? (
+                <CircularProgress />
+              ) : (
+                <LeadDocumentCard document={avrDocument?.document} />
+              )}
+            </Box>
           </Box>
-          {error && <RenderErrorContext error={error} />}
-
-          <Box
-            sx={{
-              width: "30%",
-            }}
-          >
-            <LeadDocumentCard document={avrDocument?.document} />
-          </Box>
-        </Box>
+        </Section>
       )}
+
       <LeadRouteInfo leadData={leadData} />
 
       <LeadCustomerInfo leadData={leadData} />

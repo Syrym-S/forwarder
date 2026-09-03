@@ -1,5 +1,4 @@
 import { useState } from "react";
-
 import {
   Alert,
   Box,
@@ -8,10 +7,8 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
 import UploadFileOutlinedIcon from "@mui/icons-material/UploadFileOutlined";
 import { LeadDocumentCard } from "./LeadDocumentCard";
-import Loader from "../../layout/loader";
 import { useLeadsStore } from "../../../app/store/leads/leads-store";
 import FileModal from "../../tenders/file-modal";
 import { STATUS } from "../../../shared/const/tenders";

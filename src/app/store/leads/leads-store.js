@@ -61,6 +61,7 @@ export const useLeadsStore = create((set) => ({
   isMessagesLoading: false,
   isParticipantLoading: false,
   isDownloadLoading: false,
+  isAvrLoading: false,
   isGenerateAvrLoading: false,
   isSignAvrLoading: false,
 
