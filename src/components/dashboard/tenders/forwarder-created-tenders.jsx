@@ -7,16 +7,15 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useTendersStore } from "../../../app/store/tenders/tender-store";
-import CustomerTenderItem from "./customer-tender-item";
-import PageLoader from "../../../shared/ui/loaders/page-loader";
 import ForwarderTenderItem from "./forwarder-tender-item";
 
 const ForwarderCreatedTenders = () => {
   const tenders = useTendersStore((state) => state.tenders);
   const getTenders = useTendersStore((state) => state.getTenders);
   const isLoading = useTendersStore((state) => state.isLoading);
+
   const [checked, setChecked] = useState(false);
 
   const handleChange = (event) => {
@@ -90,7 +89,7 @@ const ForwarderCreatedTenders = () => {
         </Tooltip>
       </Box>
 
-      {isTendersEmpty && (
+      {isTendersEmpty && checked && (
         <Box
           sx={{
             display: "grid",
@@ -111,7 +110,7 @@ const ForwarderCreatedTenders = () => {
         </Box>
       )}
 
-      {isPulicTendersEmpty && checked && (
+      {isPulicTendersEmpty && !checked && (
         <Box
           sx={{
             display: "grid",

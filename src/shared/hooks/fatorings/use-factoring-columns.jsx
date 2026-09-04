@@ -100,7 +100,7 @@ const useFactoringColumns = () => {
       width: 200,
       renderCell: ({ row }) => (
         <Box>
-          {row?.cred_summ} {row?.currency}
+          {moneySpacingFormat(row?.cred_summ)} {row?.currency}
         </Box>
       ),
     },

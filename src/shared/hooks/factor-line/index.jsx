@@ -2,6 +2,7 @@ import { NavLink } from "react-router-dom";
 import RenderStatus from "../../ui/render-status";
 import { Box, LinearProgress, Stack, Typography } from "@mui/material";
 import { renderLineColor } from "../../helpers/factoring/render-progress-line-color";
+import { moneySpacingFormat } from "../../helpers/money-spacing";
 
 const useFactoringLineColumns = () => {
   return [
@@ -85,6 +86,13 @@ const useFactoringLineColumns = () => {
       headerName: "Текущая сумма",
       flex: 1,
       minWidth: 160,
+      renderCell: ({ row }) => {
+        return (
+          <>
+            {moneySpacingFormat(row.summ_current)} {row.currency}
+          </>
+        );
+      },
     },
     {
       field: "progress",
@@ -140,12 +148,15 @@ const useFactoringLineColumns = () => {
       headerName: "Максимальная сумма",
       flex: 1,
       minWidth: 180,
+      renderCell: ({ row }) => {
+        return (
+          <>
+            {moneySpacingFormat(row.summ_max)} {row.currency}
+          </>
+        );
+      },
     },
-    {
-      field: "currency",
-      headerName: "Валюта",
-      width: 100,
-    },
+
     {
       field: "period_start",
       headerName: "Дата начала",

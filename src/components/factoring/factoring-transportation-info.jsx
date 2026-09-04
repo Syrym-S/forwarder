@@ -5,6 +5,7 @@ import InfoField from "../../shared/ui/info-field";
 import LocalShippingOutlinedIcon from "@mui/icons-material/LocalShippingOutlined";
 import ArrowRightAltRoundedIcon from "@mui/icons-material/ArrowRightAltRounded";
 import RenderStatus from "../../shared/ui/render-status";
+import { moneySpacingFormat } from "../../shared/helpers/money-spacing";
 
 const FactoringTransportationInfo = ({ lead }) => {
   return (
@@ -68,7 +69,7 @@ const FactoringTransportationInfo = ({ lead }) => {
         >
           <InfoField
             label="Цена груза"
-            value={`${lead?.price} ${lead?.currency}`}
+            value={`${moneySpacingFormat(lead?.price)} ${lead?.currency}`}
           />
 
           <InfoField

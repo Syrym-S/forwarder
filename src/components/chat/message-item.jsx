@@ -171,9 +171,9 @@ const MessageItem = ({ message, participants, messageType }) => {
               position: "relative",
               maxWidth: {
                 xs: "90%",
-                md: "70%",
+                md: "100%",
               },
-              width: isEditing ? "50%" : "fit-content",
+              width: isEditing ? "100%" : "fit-content",
               px: 2,
               py: 1.5,
               borderRadius: isForwarderSend

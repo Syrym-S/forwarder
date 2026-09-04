@@ -22,6 +22,7 @@ import LocalShippingOutlinedIcon from "@mui/icons-material/LocalShippingOutlined
 import ConfirmModal from "../../../components/factoring/confirm-modal";
 import { STATUS } from "../../../shared/const/tenders";
 import InfoField from "../../../shared/ui/info-field";
+import RequestQuoteOutlinedIcon from "@mui/icons-material/RequestQuoteOutlined";
 
 const FactoringItem = () => {
   const { id } = useParams();
@@ -123,7 +124,7 @@ const FactoringItem = () => {
       <FactoringTransportationInfo lead={currentLead} />
       <Section
         title={`Подтверждении оплаты`}
-        icon={<LocalShippingOutlinedIcon color="primary" />}
+        icon={<RequestQuoteOutlinedIcon color="primary" />}
       >
         {canBeApproved && (
           <Button
@@ -198,7 +199,9 @@ const FactoringItem = () => {
           ))}
         </Box>
       </Section>
+
       <FactoringFinancialInfo factoring={factoringDetails} />
+
       <FactoringCustomerInfo
         customer={factoringDetails?.customer}
         verified_customer={factoringDetails?.verified_customer}
