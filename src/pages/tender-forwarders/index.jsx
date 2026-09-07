@@ -1,15 +1,15 @@
 import { useEffect, useState } from "react";
 import RootLayout from "../../components/layout/root-layout";
-import { Alert, Box, Button, Pagination } from "@mui/material";
+import { Box, Pagination, TextField } from "@mui/material";
 import TenderForm from "../../features/tenders/tender-form";
 import { useTendersStore } from "../../app/store/tenders/tender-store";
 import { VIEWS } from "../../shared/const/leads";
-import Loader from "../../components/layout/loader";
 import ForwardersTenderCard from "../../components/tenders/forwarders-tender-card";
 import PageLoader from "../../shared/ui/loaders/page-loader";
 import ViewTabs from "../../shared/ui/view-tabs";
 import ForwardersTenderTable from "../../components/tenders/forwarders-tender-table";
 import EmptyListUi from "../../shared/ui/common/empty-list-ui";
+import DataContainer from "../../shared/ui/data-container";
 
 const defaultValues = {
   lead: null,
@@ -24,6 +24,7 @@ const TenderForwarders = () => {
   const [view, setView] = useState(VIEWS.table);
   const [openForm, setOpenForm] = useState(false);
   const [page, setPage] = useState(1);
+  const [inputValue, setInputValue] = useState("");
 
   const tenders = useTendersStore((state) => state.tenders);
   const getTenders = useTendersStore((state) => state.getTenders);
@@ -35,7 +36,7 @@ const TenderForwarders = () => {
   );
 
   const PAGE_COUNT = Math.ceil(count / perPage);
-  const isTendersEmpty = true;
+  const isTendersEmpty = tenders?.length === 0;
   const isCardsView = view === VIEWS.cards;
 
   const handlePageChange = (_, value) => {
@@ -60,22 +61,64 @@ const TenderForwarders = () => {
     clearCurrentTender();
   }, []);
 
-  if (isLoading)
-    return (
-      <RootLayout withoutDataCheck>
-        <PageLoader />
-      </RootLayout>
-    );
+  useEffect(() => {
+    const value = inputValue?.trim();
+
+    const timer = setTimeout(() => {
+      if (!value) {
+        getTenders();
+
+        return;
+      }
+
+      if (value.length >= 2) {
+        getTenders({ q: value });
+      }
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  }, [inputValue]);
 
   return (
     <RootLayout withoutDataCheck>
       <Box>
-        <ViewTabs
-          view={view}
-          setView={setView}
-          withoutKanban
-          handleOpenForm={handleOpenForm}
-        />
+        <Box
+          sx={{
+            mx: "auto",
+            display: "flex",
+            gap: 1,
+            width: {
+              xs: "100%",
+              sm: isCardsView ? "60%" : "100%",
+            },
+          }}
+        >
+          <ViewTabs
+            view={view}
+            setView={setView}
+            withoutKanban
+            handleOpenForm={handleOpenForm}
+          />
+
+          <TextField
+            onChange={(e) => {
+              setInputValue(e.target.value);
+            }}
+            label="Поиск тендера"
+            fullWidth
+            size="small"
+            sx={{
+              display: "block",
+              my: 1,
+              width: {
+                xs: "100%",
+                sm: "300px",
+              },
+              borderRadius: "50px",
+              zIndex: 0,
+            }}
+          />
+        </Box>
 
         {openForm && (
           <TenderForm
@@ -85,47 +128,49 @@ const TenderForwarders = () => {
           />
         )}
 
-        {isCardsView && (
-          <Box
-            sx={{
-              mx: "auto",
-              width: {
-                xs: "100%",
-                sm: "60%",
-              },
-              alignItems: "center",
-              display: "grid",
-              gap: 5,
-              my: "10px",
-              gridTemplateColumns: "1fr",
-            }}
-          >
-            {isTendersEmpty ? (
-              <EmptyListUi text="Список пуст. Добавьте аукцион!" />
-            ) : (
-              tenders.map((tender) => (
-                <ForwardersTenderCard key={tender.id} tender={tender} />
-              ))
-            )}
-          </Box>
-        )}
+        <DataContainer isLoading={isLoading}>
+          {isCardsView && (
+            <Box
+              sx={{
+                mx: "auto",
+                width: {
+                  xs: "100%",
+                  sm: "60%",
+                },
+                alignItems: "center",
+                display: "grid",
+                gap: 5,
+                my: "10px",
+                gridTemplateColumns: "1fr",
+              }}
+            >
+              {isTendersEmpty ? (
+                <EmptyListUi text="Список пуст. Добавьте аукцион!" />
+              ) : (
+                tenders.map((tender) => (
+                  <ForwardersTenderCard key={tender.id} tender={tender} />
+                ))
+              )}
+            </Box>
+          )}
 
-        {!isCardsView && <ForwardersTenderTable tenders={tenders} />}
+          {!isCardsView && <ForwardersTenderTable tenders={tenders} />}
 
-        {!isTendersEmpty && (
-          <Pagination
-            sx={{
-              my: 4,
-              mx: "auto",
-              width: "fit-content",
-            }}
-            page={page}
-            color="primary"
-            shape="rounded"
-            count={PAGE_COUNT}
-            onChange={handlePageChange}
-          />
-        )}
+          {!isTendersEmpty && (
+            <Pagination
+              sx={{
+                my: 4,
+                mx: "auto",
+                width: "fit-content",
+              }}
+              page={page}
+              color="primary"
+              shape="rounded"
+              count={PAGE_COUNT}
+              onChange={handlePageChange}
+            />
+          )}
+        </DataContainer>
       </Box>
     </RootLayout>
   );

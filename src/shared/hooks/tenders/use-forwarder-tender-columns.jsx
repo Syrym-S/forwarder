@@ -1,4 +1,4 @@
-import { Box } from "@mui/material";
+import { Box, Chip } from "@mui/material";
 import { NavLink } from "react-router-dom";
 import RenderStatus from "../../ui/render-status";
 
@@ -80,6 +80,15 @@ const useForwarderTenderColumns = () => {
       field: "publication_type",
       headerName: "Тип публикации",
       width: 200,
+      renderCell: ({ row }) => (
+        <Box>
+          {row?.publication_type === "public" ? (
+            <Chip label="Публичный" color="primary" />
+          ) : (
+            <Chip label="Приватный" color="primary" variant="outlined" />
+          )}
+        </Box>
+      ),
     },
   ];
 

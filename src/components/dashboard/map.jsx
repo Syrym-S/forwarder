@@ -105,12 +105,11 @@ const formatDuration = (duration) => {
 const MapTooltip = ({ route }) => {
   return (
     <Tooltip sticky>
-      <Box sx={{ minWidth: 250 }}>
+      <Box sx={{ maxWidth: 350 }}>
         <Box
           sx={{ mb: 0.75, display: "flex", flexDirection: "column", gap: 1 }}
         >
           <Typography
-            component="span"
             sx={{
               fontSize: "0.75rem",
               fontWeight: 600,
@@ -119,7 +118,6 @@ const MapTooltip = ({ route }) => {
             Откуда:
           </Typography>{" "}
           <Typography
-            component="span"
             sx={{
               fontSize: "0.75rem",
             }}
@@ -132,7 +130,6 @@ const MapTooltip = ({ route }) => {
           sx={{ mb: 0.75, display: "flex", flexDirection: "column", gap: 1 }}
         >
           <Typography
-            component="span"
             sx={{
               fontSize: "0.75rem",
               fontWeight: 600,
@@ -141,7 +138,6 @@ const MapTooltip = ({ route }) => {
             Куда:
           </Typography>{" "}
           <Typography
-            component="span"
             sx={{
               fontSize: "0.75rem",
             }}
@@ -155,7 +151,7 @@ const MapTooltip = ({ route }) => {
         </Typography>
 
         <Typography sx={{ fontSize: "0.75rem" }}>
-          Длительность: {formatDuration(route.duration)}
+          ДлительASDASность: {formatDuration(route.duration)}
         </Typography>
       </Box>
     </Tooltip>

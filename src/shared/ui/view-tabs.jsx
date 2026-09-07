@@ -1,13 +1,5 @@
-import React from "react";
 import { VIEWS } from "../const/leads";
-import {
-  Box,
-  Button,
-  Tab,
-  Tabs,
-  ToggleButton,
-  ToggleButtonGroup,
-} from "@mui/material";
+import { Box, Button, ToggleButton, ToggleButtonGroup } from "@mui/material";
 import ViewListRoundedIcon from "@mui/icons-material/ViewListRounded";
 import GridViewRoundedIcon from "@mui/icons-material/GridViewRounded";
 import ViewKanbanOutlinedIcon from "@mui/icons-material/ViewKanbanOutlined";
@@ -21,7 +13,7 @@ const ViewTabs = ({
   isLeadsEmpty,
   buttonText = "Добавить",
 }) => {
-  const isCradsView = view === VIEWS.cards;
+  const isCardsView = view === VIEWS.cards;
 
   return (
     <Box
@@ -32,7 +24,7 @@ const ViewTabs = ({
         mx: "auto",
         width: {
           xs: "100%",
-          sm: isCradsView ? "60%" : "100%",
+          sm: isCardsView ? "60%" : "100%",
         },
       }}
     >
