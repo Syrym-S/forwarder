@@ -1,12 +1,6 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import RootLayout from "../../components/layout/root-layout";
 import { Box, Container, Paper, Stack, Typography } from "@mui/material";
-import UploadAvatar from "../../components/profile/upload-avatar";
-import EditCompanyFileds from "../../components/profile/edit-company-fileds";
-import EditBankDetails from "../../components/profile/edit-bank-details";
-import EditContactPerson from "../../components/profile/edit-contact-person";
-import EditPassword from "../../components/profile/edit-password";
-import EditDocumentDetails from "../../components/profile/edit-document-details";
 import { useProfileStore } from "../../app/store/profile/profile-store";
 import EditProfileForm from "../../features/profile/edit-profile-data";
 import PageLoader from "../../shared/ui/loaders/page-loader";

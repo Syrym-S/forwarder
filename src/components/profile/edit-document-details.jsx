@@ -30,7 +30,7 @@ const EditDocumentDetails = ({
     legalDocuments?.find((document) => document.context === "employer") || {};
 
   const signContract =
-    legalDocuments?.find((document) => document.context === "contract") || {};
+    legalDocuments?.find((document) => document.context === "contract") || null;
 
   return (
     <Stack spacing={2}>
@@ -360,43 +360,45 @@ const EditDocumentDetails = ({
         </Box>
       </Box>
 
-      <Box
-        sx={{
-          border: "1px solid",
-          my: 1,
-          borderColor: "divider",
-          borderRadius: 2,
-          p: 2,
-          transition: "0.2s",
-          "&:hover": {
-            borderColor: "primary.main",
-            backgroundColor: "action.hover",
-          },
-        }}
-      >
+      {signContract && (
         <Box
           sx={{
-            display: "flex",
-            flexDirection: "column",
+            border: "1px solid",
+            my: 1,
+            borderColor: "divider",
+            borderRadius: 2,
+            p: 2,
+            transition: "0.2s",
+            "&:hover": {
+              borderColor: "primary.main",
+              backgroundColor: "action.hover",
+            },
           }}
         >
-          <Stack>
-            <Typography
-              sx={{
-                color: "rgba(0, 0, 0, 0.6)",
-                fontSize: "1rem",
-                lineHeight: 1.4375,
-                letterSpacing: "0.00938em",
-                fontWeight: 400,
-              }}
-            >
-              Документ подписи контракта
-            </Typography>
-          </Stack>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+            }}
+          >
+            <Stack>
+              <Typography
+                sx={{
+                  color: "rgba(0, 0, 0, 0.6)",
+                  fontSize: "1rem",
+                  lineHeight: 1.4375,
+                  letterSpacing: "0.00938em",
+                  fontWeight: 400,
+                }}
+              >
+                Документ подписи контракта
+              </Typography>
+            </Stack>
 
-          {signContract && <LegalDocumentViewer file={signContract} />}
+            <LegalDocumentViewer file={signContract} />
+          </Box>
         </Box>
-      </Box>
+      )}
     </Stack>
   );
 };
