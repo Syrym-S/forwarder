@@ -1,23 +1,17 @@
 import {
-  Autocomplete,
   Box,
   Button,
-  Checkbox,
+  CircularProgress,
   Dialog,
   DialogContent,
   DialogTitle,
-  FormControlLabel,
-  Stack,
-  TextField,
-  Typography,
 } from "@mui/material";
-import { Controller, useForm, useWatch } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { useTendersStore } from "../../app/store/tenders/tender-store";
 import { useEffect, useState } from "react";
 import dayjs from "dayjs";
 import Loader from "../../components/layout/loader";
 import { useParams } from "react-router-dom";
-import RenderLeadOptions from "../../components/tenders/render-lead-options";
 import ChooseLeadStep from "./steps/choose-lead-step";
 import PublicationTypeStep from "./steps/publication-type-step";
 import { useLeadsStore } from "../../app/store/leads/leads-store";
@@ -29,7 +23,7 @@ const steps = [
 ];
 
 const stepFields = {
-  1: ["lead", "public_date_time", "end_date_time"],
+  1: ["lead", "public_date_time", "end_date_time", "participants"],
 };
 
 const prepareTenderData = (form) => {
@@ -52,6 +46,8 @@ const TenderForm = ({
   defaultValues = {},
 }) => {
   const [step, setStep] = useState(1);
+  const [error, setError] = useState(null);
+  const [isSubmitLoading, setIsSubmitLoading] = useState(false);
 
   const { id } = useParams();
   const { control, setValue, trigger, getValues } = useForm({
@@ -72,6 +68,8 @@ const TenderForm = ({
 
   const [selectedDrivers, setSelectedDrivers] = useState([]);
 
+  const isSelectedDriversExists = selectedDrivers?.length !== 0;
+
   const renderContent = (step) => {
     switch (step) {
       case 1:
@@ -86,6 +84,8 @@ const TenderForm = ({
       case 2:
         return (
           <PublicationTypeStep
+            error={error}
+            setError={setError}
             control={control}
             formValues={formValues}
             selectedDrivers={selectedDrivers}
@@ -112,7 +112,14 @@ const TenderForm = ({
   };
 
   const onSubmit = async () => {
+    setIsSubmitLoading(true);
     const payload = prepareTenderData(formValues);
+
+    if (!isSelectedDriversExists && !formValues?.publication_type) {
+      setError("Добавьте хотя бы одного водителя!");
+
+      return;
+    }
 
     try {
       if (isEdit) {
@@ -144,6 +151,8 @@ const TenderForm = ({
     } catch (e) {
       console.log(e);
     }
+
+    setIsSubmitLoading(false);
   };
 
   useEffect(() => {
@@ -184,7 +193,22 @@ const TenderForm = ({
           )}
 
           {isLastStep ? (
-            <Button variant="contained" onClick={onSubmit}>
+            <Button
+              variant="contained"
+              onClick={onSubmit}
+              sx={{
+                display: "flex",
+                gap: 1,
+              }}
+            >
+              {isSubmitLoading && (
+                <CircularProgress
+                  size={13}
+                  sx={{
+                    color: "white",
+                  }}
+                />
+              )}
               {isEdit ? "Cохранить" : "Создать"}
             </Button>
           ) : (

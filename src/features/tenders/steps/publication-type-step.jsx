@@ -14,8 +14,11 @@ import { Controller } from "react-hook-form";
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 import { useTendersStore } from "../../../app/store/tenders/tender-store";
 import { useDriverStore } from "../../../app/store/drivers/driver-store";
+import RenderErrorContext from "../../../shared/ui/errors/render-error-context";
 
 const PublicationTypeStep = ({
+  error,
+  setError,
   control,
   formValues,
   selectedDrivers,
@@ -42,6 +45,7 @@ const PublicationTypeStep = ({
   const handleAddDriver = () => {
     setSelectedDrivers((prev) => [...prev, selectedDriver]);
     setSelectedDriver(null);
+    setError(null);
   };
 
   const handleRemoveDriver = (id) => {
@@ -52,6 +56,8 @@ const PublicationTypeStep = ({
 
   return (
     <>
+      {error && <RenderErrorContext error={error} />}
+
       <Controller
         name="publication_type"
         control={control}
@@ -67,6 +73,7 @@ const PublicationTypeStep = ({
           />
         )}
       />
+
       <Controller
         name="max_participants"
         disabled={!isPublic}
