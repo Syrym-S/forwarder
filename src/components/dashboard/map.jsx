@@ -102,10 +102,17 @@ const formatDuration = (duration) => {
   return `${Math.round(Number(duration) / 60)} мин`;
 };
 
-const MapTooltip = ({ route }) => {
+const MapTooltip = ({ route, open, setOpen }) => {
   return (
-    <Tooltip sticky>
-      <Box sx={{ maxWidth: 350 }}>
+    <Tooltip
+      sticky
+      open={open}
+      onClose={() => setOpen(false)}
+      disableHoverListener
+      disableFocusListener
+      disableTouchListener
+    >
+      <Box sx={{ maxWidth: 350, width: 200 }}>
         <Box
           sx={{ mb: 0.75, display: "flex", flexDirection: "column", gap: 1 }}
         >
@@ -151,7 +158,7 @@ const MapTooltip = ({ route }) => {
         </Typography>
 
         <Typography sx={{ fontSize: "0.75rem" }}>
-          ДлительASDASность: {formatDuration(route.duration)}
+          Длительность: {formatDuration(route.duration)}
         </Typography>
       </Box>
     </Tooltip>
@@ -187,7 +194,7 @@ const Map = ({
   const leads = leadsProp || storeLeads;
 
   const [routes, setRoutes] = useState([]);
-
+  const [open, setOpen] = useState(false);
   const [points, setPoints] = useState(null);
 
   const [passedRoute, setPassedRoute] = useState([]);
@@ -431,7 +438,7 @@ const Map = ({
                   click: () => onSelectLead?.(route.id),
                 }}
               >
-                <MapTooltip route={route} />
+                <MapTooltip route={route} open={open} setOpen={setOpen} />
               </Polyline>
 
               {passedRoute && (

@@ -3,26 +3,19 @@ import RootLayout from "../../components/layout/root-layout";
 import {
   Alert,
   Box,
-  Button,
   IconButton,
   Pagination,
   TextField,
   Tooltip,
-  Typography,
 } from "@mui/material";
-import TenderForm from "../../features/tenders/tender-form";
 import { useTendersStore } from "../../app/store/tenders/tender-store";
 import { VIEWS } from "../../shared/const/leads";
-import Loader from "../../components/layout/loader";
-import ForwardersTenderCard from "../../components/tenders/forwarders-tender-card";
 import ApplicationsTenderCard from "../../components/tenders/applications-tender-card";
-import PageLoader from "../../shared/ui/loaders/page-loader";
 import { useNotificationsStore } from "../../app/store/notifications/noti-store";
 import { NOTIFICATION_TYPE } from "../../shared/const/notification-types";
 import { parserNotificationType } from "../../shared/helpers/notifications/parse-notification-type";
 import ViewTabs from "../../shared/ui/view-tabs";
 import ApplicationsTenderTable from "../../components/tenders/applications-tender-table";
-import HistoryOutlined from "@mui/icons-material/HistoryOutlined";
 import { useNavigate } from "react-router-dom";
 import ContentPasteOutlinedIcon from "@mui/icons-material/ContentPasteOutlined";
 import DataContainer from "../../shared/ui/data-container";

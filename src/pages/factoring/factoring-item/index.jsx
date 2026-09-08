@@ -1,17 +1,11 @@
-import { useEffect, useState } from "react";
 import RootLayout from "../../../components/layout/root-layout";
-import { useParams } from "react-router-dom";
-import { useFactoringStore } from "../../../app/store/factoring/factoring-store";
-import { useLeadsStore } from "../../../app/store/leads/leads-store";
 import FactoringDetailsHeading from "../../../components/factoring/factoring-details-heading";
 import LeadMap from "../../../components/leads/lead-map";
-import { Box, Button, Chip } from "@mui/material";
 import FactoringFinancialInfo from "../../../components/factoring/factoring-financial-info";
 import FactoringCustomerInfo from "../../../components/factoring/factoring-customer-info";
 import FactoringTransportationInfo from "../../../components/factoring/factoring-transportation-info";
 import FactoringCargoInfo from "../../../components/factoring/factoring-cargo-info";
 import Section from "../../../shared/ui/section";
-import { useProfileStore } from "../../../app/store/profile/profile-store";
 import ProfileDataTable from "../../../components/factoring/profile-data-table";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 import FactorDataTable from "../../../components/factoring/factor-data-table";
@@ -20,9 +14,16 @@ import PageLoader from "../../../shared/ui/loaders/page-loader";
 import FactoringVerifications from "../../../components/factoring/factoring-verifications";
 import LocalShippingOutlinedIcon from "@mui/icons-material/LocalShippingOutlined";
 import ConfirmModal from "../../../components/factoring/confirm-modal";
-import { STATUS } from "../../../shared/const/tenders";
 import InfoField from "../../../shared/ui/info-field";
 import RequestQuoteOutlinedIcon from "@mui/icons-material/RequestQuoteOutlined";
+import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
+import { useEffect, useState } from "react";
+import { useLeadsStore } from "../../../app/store/leads/leads-store";
+import { Box, Button, Chip } from "@mui/material";
+import { useProfileStore } from "../../../app/store/profile/profile-store";
+import { STATUS } from "../../../shared/const/tenders";
+import { useParams } from "react-router-dom";
+import { useFactoringStore } from "../../../app/store/factoring/factoring-store";
 
 const FactoringItem = () => {
   const { id } = useParams();
@@ -59,8 +60,13 @@ const FactoringItem = () => {
   });
 
   const handleAcceptFactoring = async () => {
-    await acceptFactoring(id);
+    const response = await acceptFactoring(id);
+
+    const link = response.sign_url;
+
     await getFactoringDetails(id);
+
+    window.open(link, "_blank");
   };
 
   const handleOpenModal = () => {
@@ -121,7 +127,26 @@ const FactoringItem = () => {
           id={currentLead?.id}
         />
       </Box>
+
+      <Section
+        title="Подпись документа"
+        icon={<DescriptionOutlinedIcon color="primary" />}
+      >
+        {!factoringDetails?.verified_forwarder && (
+          <Button
+            variant="outlined"
+            disabled={isConfirmLoading || isLoading}
+            onClick={handleAcceptFactoring}
+          >
+            {isConfirmLoading || isLoading
+              ? "...Идет подтверждение"
+              : "Подтвердить"}
+          </Button>
+        )}
+      </Section>
+
       <FactoringTransportationInfo lead={currentLead} />
+
       <Section
         title={`Подтверждении оплаты`}
         icon={<RequestQuoteOutlinedIcon color="primary" />}
@@ -234,16 +259,6 @@ const FactoringItem = () => {
           <FactorDataTable factor={factoringDetails?.factor} />
         </Section>
       </Box>
-      {!factoringDetails?.verified_forwarder && (
-        <Button
-          disabled={isConfirmLoading || isLoading}
-          onClick={handleAcceptFactoring}
-        >
-          {isConfirmLoading || isLoading
-            ? "...Идет подтверждение"
-            : "Подтвердить"}
-        </Button>
-      )}
     </RootLayout>
   );
 };
