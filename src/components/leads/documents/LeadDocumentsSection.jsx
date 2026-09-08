@@ -23,6 +23,8 @@ export function LeadDocumentsSection({
   deletingDocumentIds = [],
 }) {
   const isFilesEmpty = documents.length === 0;
+  const isFinishedOrDelted =
+    leadStatus === STATUS.finished || leadStatus === STATUS.deleted;
 
   const isLoading = useLeadsStore((state) => state.isLoading);
 
@@ -168,6 +170,7 @@ export function LeadDocumentsSection({
               <LeadDocumentCard
                 key={document.id}
                 document={document}
+                isFileReadOnly={isFinishedOrDelted}
                 onOpen={setSelectedDocument}
                 onDelete={onDeleteDocument}
                 isDeleting={deletingDocumentIds.includes(document.id)}
