@@ -1,7 +1,6 @@
 import {
   Box,
   Button,
-  CircularProgress,
   Dialog,
   DialogContent,
   DialogTitle,
@@ -9,21 +8,16 @@ import {
 } from "@mui/material";
 import { useEffect } from "react";
 import { useNotificationsStore } from "../../../app/store/notifications/noti-store";
-import { NavLink } from "react-router-dom";
-import Loader from "../loader";
 import Section from "../../../shared/ui/section";
 import RenderNotificationType from "../../../shared/ui/render-notification-type";
 import NotificationsNoneOutlinedIcon from "@mui/icons-material/NotificationsNoneOutlined";
 import LocalPostOfficeOutlinedIcon from "@mui/icons-material/LocalPostOfficeOutlined";
 import InfoField from "../../../shared/ui/info-field";
-import CustomNavLink from "../../../shared/ui/custom-nav-link";
 import { Link as RouterLink } from "react-router-dom";
 import { parserNotificationType } from "../../../shared/helpers/notifications/parse-notification-type";
 import { useLeadsStore } from "../../../app/store/leads/leads-store";
 import { NOTIFICATION_TYPE } from "../../../shared/const/notification-types";
 import { LeadDocumentCard } from "../../leads/documents/LeadDocumentCard";
-import { STATUS } from "../../../shared/const/tenders";
-import PageLoader from "../../../shared/ui/loaders/page-loader";
 import NotificationLoader from "../../../shared/ui/loaders/notification-loader";
 
 const NotificationPopup = ({
@@ -44,6 +38,9 @@ const NotificationPopup = ({
   );
   const getNotificationDetails = useNotificationsStore(
     (state) => state.getNotificationDetails,
+  );
+  const getNotifications = useNotificationsStore(
+    (state) => state.getNotifications,
   );
   const isNotificationDetailsLoading = useNotificationsStore(
     (state) => state.isNotificationDetailsLoading,

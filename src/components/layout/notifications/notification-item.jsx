@@ -1,6 +1,4 @@
 import { Box, Typography } from "@mui/material";
-import React from "react";
-import { NOTIFICATION_TYPE } from "../../../shared/const/notification-types";
 import RenderNotificationIcon from "../../../shared/ui/render-notification-icon";
 
 const NotificationItem = ({
