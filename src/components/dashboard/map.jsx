@@ -396,7 +396,7 @@ const Map = ({
       >
         <TileLayer
           attribution="&copy; OpenStreetMap contributors"
-          url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
+          url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png?key=cb1_33bl_1_e67a46f1e67e6cbad8143c4e"
         />
 
         <FitSelectedRouteBounds route={selectedRoute} />

@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { MapContainer, TileLayer, Marker, Polyline } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import { isStaging } from "../../app/client";
-import { CircularProgress } from "@mui/material";
 import "./hide.css";
 
 const driverIcon = L.divIcon({
@@ -133,7 +132,7 @@ export default function LeadMap({ from, waypoints, to, id }) {
       zoom={13}
       style={{ height: "300px", width: "100%", zIndex: 0 }}
     >
-      <TileLayer url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png" />
+      <TileLayer url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png?key=cb1_33bl_1_e67a46f1e67e6cbad8143c4e" />
 
       <Marker position={start} />
 
