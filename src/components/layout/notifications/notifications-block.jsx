@@ -1,16 +1,8 @@
-import {
-  Badge,
-  Box,
-  CircularProgress,
-  Drawer,
-  IconButton,
-  Popover,
-} from "@mui/material";
+import { Badge, IconButton, Popover } from "@mui/material";
 import NotificationsNoneOutlinedIcon from "@mui/icons-material/NotificationsNoneOutlined";
 import { useState } from "react";
 import { useNotificationsStore } from "../../../app/store/notifications/noti-store";
 import NotificationsList from "./notifications-list";
-import Loader from "../loader";
 import NotificationPopup from "./notification-popup";
 import NotificationsDrawer from "./notifications-drawer";
 

@@ -25,14 +25,9 @@ const NotificationPopup = ({
   setSelectedNotification,
 }) => {
   const currentLead = useLeadsStore((state) => state.currentLead);
-  const getLeadItem = useLeadsStore((state) => state.getLeadItem);
   const getNotificationPopUpLeadItem = useLeadsStore(
     (state) => state.getNotificationPopUpLeadItem,
   );
-  const verifyCargo = useLeadsStore((state) => state.verifyCargo);
-  const rejectCargo = useLeadsStore((state) => state.rejectCargo);
-  const verifyCargoUnload = useLeadsStore((state) => state.verifyCargoUnload);
-  const rejectCargoUnload = useLeadsStore((state) => state.rejectCargoUnload);
   const notificationDetails = useNotificationsStore(
     (state) => state.notificationDetails,
   );
@@ -58,38 +53,15 @@ const NotificationPopup = ({
     clearNotificationPopUpCurrentLead();
   };
 
-  const handleVerifyCargoLoad = async () => {
-    await verifyCargo(id);
-    await getNotificationPopUpLeadItem(id);
-  };
-
-  const handleRejectCargoLoad = async () => {
-    await rejectCargo(id);
-    await getNotificationPopUpLeadItem(id);
-    await getLeadItem(id);
-  };
-
-  const handleVerifyCargoUnload = async () => {
-    await verifyCargoUnload(id);
-    await getNotificationPopUpLeadItem(id);
-  };
-
-  const handleRejectCargoUnload = async () => {
-    await rejectCargoUnload(id);
-    await getNotificationPopUpLeadItem(id);
-  };
-
-  const loadCargoActions = currentLead?.cargo_actions[0];
-  const unloadCargoActions = currentLead?.cargo_actions[1];
-
   const newCargoActionFiles =
     currentLead?.cargo_actions[currentLead?.cargo_actions.length - 1]?.files;
 
-  const isLoadVerified = loadCargoActions?.is_verified;
-  const isUnloadVerified = unloadCargoActions?.is_verified;
-
   useEffect(() => {
     getNotificationDetails(selectedNotification.id);
+
+    return () => {
+      getNotifications();
+    };
   }, []);
 
   useEffect(() => {
