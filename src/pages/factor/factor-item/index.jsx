@@ -25,6 +25,7 @@ import HandshakeIcon from "@mui/icons-material/Handshake";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import ShowChartOutlinedIcon from "@mui/icons-material/ShowChartOutlined";
 import ConfirmModal from "../../../shared/ui/confirm-modal";
+import { STATUS } from "../../../shared/const/tenders";
 
 const FactorItem = () => {
   const { id } = useParams();
@@ -38,6 +39,14 @@ const FactorItem = () => {
     (state) => state.getFactoringLineDetails,
   );
   const isLoading = useFactorStore((state) => state.isLoading);
+  // const isApproveLoading = useFactorStore((state) => state.isApproveLoading);
+  const approveFactoreLine = useFactorStore(
+    (state) => state.approveFactoreLine,
+  );
+
+  const canBeApproved =
+    !factoringLineDetails?.forwarder_signed &&
+    factoringLineDetails?.status === STATUS.new;
 
   const usedPercent =
     factoringLineDetails?.summ_max > 0
@@ -58,6 +67,13 @@ const FactorItem = () => {
 
   const handleCloseModal = () => {
     setOpenModal(false);
+  };
+
+  const handleApproveFactoringLine = async () => {
+    const response = await approveFactoreLine(id);
+    const link = response.sign_url;
+
+    window.open(link, "_blank");
   };
 
   useEffect(() => {
@@ -138,21 +154,26 @@ const FactorItem = () => {
         <FactorDataTable factor={factoringLineDetails?.factor} />
       </Section>
 
-      <Section
-        icon={<RememberMeOutlinedIcon color="primary" />}
-        title={"Подтверждение"}
-      >
-        <Button onClick={handleOpenModal} variant="outlined">
-          Подтвердить
-        </Button>
-      </Section>
+      {canBeApproved && (
+        <Section
+          icon={<RememberMeOutlinedIcon color="primary" />}
+          title={"Подтверждение"}
+        >
+          <Button onClick={handleOpenModal} variant="outlined">
+            Подтвердить
+          </Button>
+        </Section>
+      )}
 
-      <ConfirmModal
-        open={openModal}
-        title="Подтверждении факторинг линии"
-        description="Вы уверены что хотите подтвердить линию?"
-        onCancel={handleCloseModal}
-      />
+      {openModal && (
+        <ConfirmModal
+          open={openModal}
+          title="Подтверждении факторинг линии"
+          description="Вы уверены что хотите подтвердить линию?"
+          onCancel={handleCloseModal}
+          onConfirm={handleApproveFactoringLine}
+        />
+      )}
 
       <Section
         icon={<ShowChartOutlinedIcon color="primary" />}

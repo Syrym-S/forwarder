@@ -11,3 +11,9 @@ export const getFactorLineDetailsApi = async (id) => {
 
   return data;
 };
+
+export const approveFactoreLineApi = async (id) => {
+  const data = await api.post(`/forwarder/v1/factoring/line/${id}/sign`);
+
+  return data;
+};

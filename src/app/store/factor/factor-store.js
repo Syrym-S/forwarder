@@ -1,11 +1,16 @@
 import { create } from "zustand";
-import { getFactorLineDetailsApi, getFactorsLineApi } from "./api";
+import {
+  approveFactoreLineApi,
+  getFactorLineDetailsApi,
+  getFactorsLineApi,
+} from "./api";
 
 export const useFactorStore = create((set) => ({
   factoringsLine: [],
   factoringLineDetails: null,
 
   isLoading: false,
+  isApproveLoading: false,
 
   getFactoringsLine: async () => {
     try {
@@ -30,6 +35,20 @@ export const useFactorStore = create((set) => ({
     } catch (e) {
       console.log(e);
       set({ isLoading: false });
+    }
+  },
+
+  approveFactoreLine: async (id) => {
+    try {
+      set({ isApproveLoading: true });
+
+      const response = await approveFactoreLineApi(id);
+
+      set({ isApproveLoading: false });
+      return response;
+    } catch (e) {
+      console.log(e);
+      set({ isApproveLoading: false });
     }
   },
 }));
