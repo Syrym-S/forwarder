@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import RootLayout from "../../../components/layout/root-layout";
 import { useParams } from "react-router-dom";
 import { useFactorStore } from "../../../app/store/factor/factor-store";
@@ -8,7 +8,9 @@ import RememberMeOutlinedIcon from "@mui/icons-material/RememberMeOutlined";
 import {
   Alert,
   Box,
+  Button,
   Chip,
+  Dialog,
   LinearProgress,
   Stack,
   Typography,
@@ -22,9 +24,12 @@ import FactoringPurchaseCard from "../../../components/factor-line/factoring-pur
 import HandshakeIcon from "@mui/icons-material/Handshake";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import ShowChartOutlinedIcon from "@mui/icons-material/ShowChartOutlined";
+import ConfirmModal from "../../../shared/ui/confirm-modal";
 
 const FactorItem = () => {
   const { id } = useParams();
+
+  const [openModal, setOpenModal] = useState(false);
 
   const factoringLineDetails = useFactorStore(
     (state) => state.factoringLineDetails,
@@ -46,6 +51,14 @@ const FactorItem = () => {
   const purchases = factoringLineDetails?.purchases;
 
   const isPurchasesEmpty = purchases?.length === 0;
+
+  const handleOpenModal = () => {
+    setOpenModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setOpenModal(false);
+  };
 
   useEffect(() => {
     getFactoringLineDetails(id);
@@ -124,6 +137,22 @@ const FactorItem = () => {
       >
         <FactorDataTable factor={factoringLineDetails?.factor} />
       </Section>
+
+      <Section
+        icon={<RememberMeOutlinedIcon color="primary" />}
+        title={"Подтверждение"}
+      >
+        <Button onClick={handleOpenModal} variant="outlined">
+          Подтвердить
+        </Button>
+      </Section>
+
+      <ConfirmModal
+        open={openModal}
+        title="Подтверждении факторинг линии"
+        description="Вы уверены что хотите подтвердить линию?"
+        onCancel={handleCloseModal}
+      />
 
       <Section
         icon={<ShowChartOutlinedIcon color="primary" />}
