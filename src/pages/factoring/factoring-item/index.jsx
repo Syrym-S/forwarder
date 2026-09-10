@@ -129,7 +129,7 @@ const FactoringItem = () => {
       </Box>
 
       <Section
-        title="Подпись документа"
+        title="Подтвердить факторинг"
         icon={<DescriptionOutlinedIcon color="primary" />}
       >
         {!factoringDetails?.verified_forwarder && (
@@ -144,6 +144,8 @@ const FactoringItem = () => {
           </Button>
         )}
       </Section>
+
+      <ConfirmModal />
 
       <FactoringTransportationInfo lead={currentLead} />
 

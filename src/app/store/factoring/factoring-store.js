@@ -19,6 +19,7 @@ export const useFactoringStore = create((set) => ({
   factorDetails: null,
 
   isLoading: false,
+  isCreateLoading: false,
   isFactorsLoading: false,
   isApproveLoading: false,
   isFactorDetailsLoading: false,
@@ -147,19 +148,19 @@ export const useFactoringStore = create((set) => ({
 
   createFactoring: async (payload) => {
     try {
-      set({ isLoading: true, error: null });
+      set({ isCreateLoading: true, error: null });
 
       const response = await createFactoringApi(payload);
 
       set({
-        isLoading: false,
+        isCreateLoading: false,
       });
 
       return response.data;
     } catch (e) {
       set({
         error: e.response.data.message,
-        isLoading: false,
+        isCreateLoading: false,
       });
 
       return e;
@@ -168,19 +169,19 @@ export const useFactoringStore = create((set) => ({
 
   createFactoringLine: async (payload) => {
     try {
-      set({ isLoading: true, error: null });
+      set({ isCreateLoading: true, error: null });
 
       const response = await createFactoringLineApi(payload);
 
       set({
-        isLoading: false,
+        isCreateLoading: false,
       });
 
       return response.data;
     } catch (e) {
       set({
         error: e.response.data.message,
-        isLoading: false,
+        isCreateLoading: false,
       });
 
       console.error("Payload:", payload);

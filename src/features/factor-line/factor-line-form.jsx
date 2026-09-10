@@ -2,6 +2,7 @@ import {
   Autocomplete,
   Box,
   Button,
+  CircularProgress,
   Dialog,
   DialogContent,
   DialogTitle,
@@ -44,6 +45,7 @@ const FactorLineForm = ({ open, setOpenForm, setSuccessModal }) => {
   const createFactoringLine = useFactoringStore(
     (state) => state.createFactoringLine,
   );
+  const isCreateLoading = useFactoringStore((state) => state.isCreateLoading);
 
   const { control, reset, setValue, handleSubmit } = useForm({
     mode: "onChange",
@@ -59,7 +61,10 @@ const FactorLineForm = ({ open, setOpenForm, setSuccessModal }) => {
   const onSubmit = async (data) => {
     const preparedData = prepareData(data, factorDetails);
 
-    createFactoringLine(preparedData);
+    const response = await createFactoringLine(preparedData);
+
+    window.open(response.sign_url, "_blank");
+
     reset({
       factor_id: selectedFactor?.id ?? "",
       summ_max: factorDetails.sum_default ?? "",
@@ -221,8 +226,13 @@ const FactorLineForm = ({ open, setOpenForm, setSuccessModal }) => {
           variant="outlined"
           color="primary"
           onClick={handleSubmit(onSubmit)}
+          sx={{
+            display: "flex",
+            gap: 1,
+          }}
         >
-          Создать заявку
+          {isCreateLoading && <CircularProgress size={13} />}
+          {isCreateLoading ? "...Cоздание" : "Создать заявку"}
         </Button>
       </DialogContent>
     </Dialog>
