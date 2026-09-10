@@ -1,21 +1,10 @@
-import {
-  Box,
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  MenuItem,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Box, Button, MenuItem, TextField, Typography } from "@mui/material";
 import { Controller, useForm, useWatch } from "react-hook-form";
 import { useTendersStore } from "../../app/store/tenders/tender-store";
 import Section from "../../shared/ui/section";
 import PaidOutlinedIcon from "@mui/icons-material/PaidOutlined";
 import { useState } from "react";
-import ConfirmBetModal from "./confirm-actions/confirm-bet-modal";
-import CancelBetModal from "./confirm-actions/cancel-bet-modal";
+import ConfirmModal from "../../shared/ui/confirm-modal";
 
 const defaultValues = {
   amount: "",
@@ -27,6 +16,7 @@ const MakeBetForm = ({ tender, handleHideBetField }) => {
   const [openConfirmModal, setOpenConfirmModal] = useState(false);
 
   const makeBet = useTendersStore((state) => state.makeBet);
+  const isBetsLoading = useTendersStore((state) => state.isBetsLoading);
   const getCustomerTenderDetails = useTendersStore(
     (state) => state.getCustomerTenderDetails,
   );
@@ -52,8 +42,10 @@ const MakeBetForm = ({ tender, handleHideBetField }) => {
 
   const submitBetForm = async () => {
     await makeBet(tender.id, formValues);
-    await getCustomerTenderDetails(tender.id);
+
     handleHideBetField();
+
+    await getCustomerTenderDetails(tender.id);
   };
 
   return (
@@ -145,11 +137,22 @@ const MakeBetForm = ({ tender, handleHideBetField }) => {
         </Button>
       </Box>
 
-      <ConfirmBetModal
-        handleCloseConfirmModal={handleCloseConfirmModal}
-        openConfirmModal={openConfirmModal}
-        formValues={formValues}
-        submitBetForm={submitBetForm}
+      <ConfirmModal
+        title="Поставить ставку"
+        description={
+          <>
+            <Typography>
+              Вы уверены что хотите сделать ставку на этот аукцион?
+            </Typography>
+            <Typography>
+              Сумма: {formValues.amount} {formValues.currency}
+            </Typography>
+          </>
+        }
+        open={openConfirmModal}
+        onCancel={handleCloseConfirmModal}
+        onConfirm={submitBetForm}
+        isLoading={isBetsLoading}
       />
     </Section>
   );

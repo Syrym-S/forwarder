@@ -17,6 +17,7 @@ import { useTendersStore } from "../../app/store/tenders/tender-store";
 import ParticipantCard from "./participant-card";
 import { useDriverStore } from "../../app/store/drivers/driver-store";
 import { STATUS } from "../../shared/const/tenders";
+import ConfirmModal from "../../shared/ui/confirm-modal";
 
 const TenderParticipants = ({ tender }) => {
   const [openConfirm, setOpenConfirm] = useState(false);
@@ -26,7 +27,9 @@ const TenderParticipants = ({ tender }) => {
   const drivers = useDriverStore((state) => state.drivers);
   const isLoading = useDriverStore((state) => state.isLoading);
   const isAddingLoading = useTendersStore((state) => state.isAddingLoading);
-  const isParticipantsLoading = useTendersStore((state) => state.isLoading);
+  const isLoadingCurrentTenderLoading = useTendersStore(
+    (state) => state.isLoadingCurrentTenderLoading,
+  );
   const getDrivers = useDriverStore((state) => state.getDrivers);
   const getTenderDetails = useTendersStore((state) => state.getTenderDetails);
   const addParticipant = useTendersStore((state) => state.addParticipant);
@@ -37,17 +40,20 @@ const TenderParticipants = ({ tender }) => {
   const canAddParticipant =
     tender?.status !== STATUS.cancelled && tender?.status !== STATUS.closed;
 
-  const handleAddParticipant = async () => {
-    await addParticipant(tender.id, { participant_id: selectedDriver.id });
-    await getTenderDetails(tender.id);
-  };
-
   const handleOpenConfirmModal = async () => {
     setOpenConfirm(true);
   };
 
   const handleCloseConfirmModal = async () => {
     setOpenConfirm(false);
+  };
+
+  const handleAddParticipant = async () => {
+    await addParticipant(tender.id, { participant_id: selectedDriver.id });
+
+    handleCloseConfirmModal();
+
+    await getTenderDetails(tender.id);
   };
 
   const onDriverChange = (_, value) => {
@@ -159,32 +165,14 @@ const TenderParticipants = ({ tender }) => {
             </Button>
           </Box>
 
-          <Dialog open={openConfirm} onClose={handleCloseConfirmModal}>
-            <DialogTitle>Добавление участника запустит аукцион</DialogTitle>
-            <DialogContent
-              sx={{
-                display: "flex",
-                justifyContent: "space-between",
-              }}
-            >
-              <Button
-                disabled={isAddingLoading}
-                variant="contained"
-                color="primary"
-                onClick={handleAddParticipant}
-              >
-                {isAddingLoading ? "...Добавление" : "Добавить"}
-              </Button>
-              <Button
-                disabled={isAddingLoading}
-                variant="outlined"
-                color="error"
-                onClick={handleCloseConfirmModal}
-              >
-                Отмена
-              </Button>
-            </DialogContent>
-          </Dialog>
+          <ConfirmModal
+            open={openConfirm}
+            title="Добавить участника"
+            description="Добавление участника запустит аукцион!"
+            onConfirm={handleAddParticipant}
+            onCancel={handleCloseConfirmModal}
+            isLoading={isAddingLoading}
+          />
         </Stack>
       )}
 
@@ -198,7 +186,7 @@ const TenderParticipants = ({ tender }) => {
             gap: "10px",
           }}
         >
-          {isParticipantsLoading || isAddingLoading ? (
+          {isLoadingCurrentTenderLoading || isAddingLoading ? (
             <>...Загрузка</>
           ) : (
             tender?.participants?.map((participant) => (

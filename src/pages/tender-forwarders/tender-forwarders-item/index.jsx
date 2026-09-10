@@ -119,7 +119,7 @@ const TenderForwardersItem = () => {
     getTenderDetails(id);
   }, []);
 
-  if (!currentTender || isLoadingCurrentTenderLoading)
+  if (!currentTender)
     return (
       <RootLayout withoutDataCheck>
         <PageLoader />

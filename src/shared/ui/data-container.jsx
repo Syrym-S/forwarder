@@ -1,4 +1,3 @@
-import RootLayout from "../../components/layout/root-layout";
 import PageLoader from "./loaders/page-loader";
 
 const DataContainer = ({ isLoading, children }) => {

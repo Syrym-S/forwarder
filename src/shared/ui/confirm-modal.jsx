@@ -1,5 +1,6 @@
 import {
   Button,
+  CircularProgress,
   Dialog,
   DialogActions,
   DialogContent,
@@ -13,6 +14,7 @@ const ConfirmModal = ({
   description,
   onConfirm,
   onCancel,
+  isLoading,
 }) => {
   return (
     <Dialog open={open} onClose={onCancel} maxWidth="xs" fullWidth>
@@ -23,11 +25,32 @@ const ConfirmModal = ({
         </Typography>
       </DialogContent>
       <DialogActions sx={{ px: 3, pb: 2 }}>
-        <Button onClick={onCancel} color="inherit">
+        <Button
+          disabled={isLoading}
+          onClick={onCancel}
+          variant="outlined"
+          color="error"
+        >
           Отмена
         </Button>
-        <Button onClick={onConfirm} variant="contained">
-          Подтвердить
+        <Button
+          disabled={isLoading}
+          onClick={onConfirm}
+          variant="contained"
+          sx={{
+            display: "flex",
+            gap: 1,
+          }}
+        >
+          {isLoading && (
+            <CircularProgress
+              size={13}
+              sx={{
+                color: "white",
+              }}
+            />
+          )}
+          {isLoading ? "Подтверждение" : "Подтвердить"}
         </Button>
       </DialogActions>
     </Dialog>

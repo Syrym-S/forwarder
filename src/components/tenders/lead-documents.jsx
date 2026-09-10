@@ -5,14 +5,12 @@ import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
 import { Box, CircularProgress, Dialog, DialogTitle } from "@mui/material";
 import FileModal from "./file-modal";
 import { useLeadsStore } from "../../app/store/leads/leads-store";
-import { useTendersStore } from "../../app/store/tenders/tender-store";
 
 const LeadDocuments = ({ tender }) => {
   const [currentFile, setCurrentFile] = useState(null);
   const files = useLeadsStore((state) => state.files);
 
   const getLeadFiles = useLeadsStore((state) => state.getLeadFiles);
-  const isLoading = useTendersStore((state) => state.isLoading);
 
   const isEmpty = files.length === 0;
 
@@ -22,7 +20,7 @@ const LeadDocuments = ({ tender }) => {
     }
   }, [tender?.lead?.id]);
 
-  if (isLoading)
+  if (!files)
     return (
       <Section
         title="Документы лида"

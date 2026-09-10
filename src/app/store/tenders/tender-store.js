@@ -234,13 +234,12 @@ export const useTendersStore = create((set) => ({
   makeBet: async (tender_id, payload) => {
     try {
       set({
-        isLoading: true,
+        isBetsLoading: true,
       });
       const response = await makeBetApi(tender_id, payload);
 
       set({
-        currentTender: response.data,
-        isLoading: false,
+        isBetsLoading: false,
       });
       return response;
     } catch (e) {

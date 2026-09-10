@@ -15,6 +15,7 @@ import PaidOutlinedIcon from "@mui/icons-material/PaidOutlined";
 import CancelBetModal from "../../features/tenders/confirm-actions/cancel-bet-modal";
 import { STATUS } from "../../shared/const/tenders";
 import RenderStatus from "../../shared/ui/render-status";
+import ConfirmModal from "../../shared/ui/confirm-modal";
 
 const MakeBetBlock = ({ tender, setShowBetField }) => {
   const [openCancelModal, setOpenCancelModal] = useState(false);
@@ -98,110 +99,151 @@ const MakeBetBlock = ({ tender, setShowBetField }) => {
         {tender?.bets.reverse().map((bet, index) => {
           const canBeDeleted =
             bet.status !== STATUS.winning && tender.status !== STATUS.closed;
+          const confirmCancel = () => {
+            handleCancelBet(index);
+          };
 
           return (
             bet.is_own && (
               <>
                 {bet.status !== STATUS.closed && (
-                  <Box
-                    sx={{
-                      display: "flex",
-                      flexDirection: "column",
-                      width: "100%",
-                    }}
-                  >
+                  <Box sx={{ width: "100%" }}>
                     <Box
                       sx={{
-                        display: "flex",
-                        gap: 2,
+                        mb: 1.5,
+                        px: 1.5,
+                        py: 1,
+                        borderRadius: 1.5,
+                        bgcolor: "action.hover",
                       }}
                     >
-                      <Typography>
-                        Комментарий: {bet.comment === "" ? "-" : bet.comment}
+                      <Typography
+                        sx={{
+                          fontSize: "0.7rem",
+                          color: "text.secondary",
+                          mb: 0.25,
+                        }}
+                      >
+                        Комментарий
+                      </Typography>
+
+                      <Typography
+                        sx={{
+                          fontSize: "0.9rem",
+                          fontWeight: 500,
+                          wordBreak: "break-word",
+                        }}
+                      >
+                        {bet.comment || "-"}
                       </Typography>
                     </Box>
 
                     <Box
                       sx={{
-                        width: "100%",
                         display: "grid",
-                        gridTemplateColumns: "1fr 1fr",
+                        gridTemplateColumns: {
+                          xs: "1fr",
+                          sm: "1fr 1fr",
+                        },
                         gap: 1,
                       }}
                     >
                       <Box
                         sx={{
+                          p: 1.5,
                           border: "1px solid",
                           borderColor: "divider",
-                          p: 1,
-                          borderRadius: 1,
+                          borderRadius: 1.5,
                         }}
                       >
                         <Typography
                           sx={{
                             fontSize: "0.7rem",
+                            color: "text.secondary",
+                            mb: 0.5,
                           }}
                         >
-                          Cумма
+                          Сумма
                         </Typography>
 
                         <Typography
                           sx={{
                             fontSize: "1.1rem",
-                            color: "#42a5f5",
+                            fontWeight: 600,
+                            color: "primary.main",
                           }}
                         >
                           {bet.amount} {bet.currency}
                         </Typography>
                       </Box>
+
                       <Box
                         sx={{
+                          p: 1.5,
                           border: "1px solid",
                           borderColor: "divider",
-                          p: 1,
-                          borderRadius: 1,
+                          borderRadius: 1.5,
                         }}
                       >
                         <Typography
                           sx={{
                             fontSize: "0.7rem",
+                            color: "text.secondary",
+                            mb: 0.5,
                           }}
                         >
-                          Cтатус
+                          Статус
                         </Typography>
 
-                        <Typography
+                        <Box
                           sx={{
-                            fontSize: "1.1rem",
+                            display: "flex",
+                            alignItems: "center",
+                            minHeight: 26,
                           }}
                         >
                           <RenderStatus status={bet.status} />
-                        </Typography>
+                        </Box>
                       </Box>
-                      {canBeDeleted && (
-                        <Button
-                          sx={{
-                            fontSize: {
-                              xs: "0.7rem",
-                              sm: "0.9rem",
-                            },
-                            gridColumn: 2,
-                            borderRadius: 1,
-                          }}
-                          variant={"outlined"}
-                          color={"error"}
-                          onClick={handleOpenCancelModal}
-                        >
-                          {"Отменить ставку"}
-                        </Button>
-                      )}
                     </Box>
 
-                    <CancelBetModal
-                      bet={bet}
-                      confirmCancel={() => handleCancelBet(index)}
-                      openCancelModal={openCancelModal}
-                      handleCloseCancelModal={handleCloseCancelModal}
+                    {canBeDeleted && (
+                      <Button
+                        fullWidth
+                        variant="outlined"
+                        color="error"
+                        onClick={handleOpenCancelModal}
+                        sx={{
+                          mt: 1.5,
+                          borderRadius: 1.5,
+                          fontSize: {
+                            xs: "0.75rem",
+                            sm: "0.85rem",
+                          },
+                          fontWeight: 500,
+                          py: 0.8,
+                        }}
+                      >
+                        Отменить ставку
+                      </Button>
+                    )}
+
+                    <ConfirmModal
+                      open={openCancelModal}
+                      title="Отмена ставки"
+                      description={
+                        <>
+                          <Typography>
+                            Вы уверены что хотите отменить ставку на этот
+                            аукцион?
+                          </Typography>
+                          <Typography>
+                            Сумма ставки: {bet.amount} {bet.currency}
+                          </Typography>
+                        </>
+                      }
+                      onCancel={handleCloseCancelModal}
+                      onConfirm={confirmCancel}
                     />
                   </Box>
                 )}
