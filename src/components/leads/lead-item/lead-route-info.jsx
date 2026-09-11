@@ -26,19 +26,24 @@ const LeadRouteInfo = ({ leadData }) => {
             position: "relative",
           }}
         >
-          {leadData.from_location?.is_passed && (
-            <Chip
-              variant="contained"
-              color="primary"
-              size="small"
-              label="Точка пройдена"
-              sx={{
-                position: "absolute",
-                top: "-10px",
-                right: 5,
-              }}
-            />
-          )}
+          <Chip
+            variant={
+              leadData.from_location?.is_passed ? "contained" : "outlined"
+            }
+            color={leadData.from_location?.is_passed ? "primary" : "default"}
+            size="small"
+            label={
+              leadData.from_location?.is_passed
+                ? "Точка пройдена"
+                : "Точка не пройдена"
+            }
+            sx={{
+              position: "absolute",
+              top: "-10px",
+              right: 5,
+            }}
+          />
+
           <InfoField
             label={"Откуда"}
             value={leadData.from_location?.address || "Битые данные"}
@@ -52,19 +57,18 @@ const LeadRouteInfo = ({ leadData }) => {
               position: "relative",
             }}
           >
-            {point.is_passed && (
-              <Chip
-                variant="contained"
-                color="primary"
-                size="small"
-                label="Точка пройдена"
-                sx={{
-                  position: "absolute",
-                  top: "-10px",
-                  right: 5,
-                }}
-              />
-            )}
+            <Chip
+              variant={point.is_passed ? "contained" : "outlined"}
+              color={point.is_passed ? "primary" : "default"}
+              size="small"
+              label={point.is_passed ? "Точка пройдена" : "Точка не пройдена"}
+              sx={{
+                position: "absolute",
+                top: "-10px",
+                right: 5,
+              }}
+            />
+
             <InfoField
               label={`Промежуточная точка ${index + 1}`}
               accent={point.is_passed}
@@ -95,6 +99,23 @@ const LeadRouteInfo = ({ leadData }) => {
               }}
             />
           )}
+
+          <Chip
+            variant={leadData.to_location?.is_passed ? "contained" : "outlined"}
+            color={leadData.to_location?.is_passed ? "primary" : "default"}
+            size="small"
+            label={
+              leadData.to_location?.is_passed
+                ? "Точка пройдена"
+                : "Точка не пройдена"
+            }
+            sx={{
+              position: "absolute",
+              top: "-10px",
+              right: 5,
+            }}
+          />
+
           <InfoField
             label="Куда"
             accent={leadData.to_location?.is_passed}

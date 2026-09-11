@@ -71,9 +71,10 @@ const FactorItem = () => {
 
   const handleApproveFactoringLine = async () => {
     const response = await approveFactoreLine(id);
-    const link = response.sign_url;
+    const link = response.data.sign_url;
 
     window.open(link, "_blank");
+    handleCloseModal();
   };
 
   useEffect(() => {

@@ -100,7 +100,7 @@ const ChatFirstVertion = ({ messageType }) => {
               mb: 0.5,
             }}
           >
-            Пока нет чатов
+            Пока нет сообщения
           </Typography>
 
           <Typography
