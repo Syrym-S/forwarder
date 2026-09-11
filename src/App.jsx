@@ -20,7 +20,7 @@ function App() {
     }
   };
 
-  const features = window.APP_DATA.features;
+  const features = window.APP_DATA?.features || {};
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect

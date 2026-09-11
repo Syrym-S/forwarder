@@ -25,6 +25,7 @@ const FactoringLineRingProgress = ({ line }) => {
           xs: "100%",
           md: "70%",
         },
+
         mx: "auto",
         cursor: "pointer",
         border: "1px solid",
@@ -33,7 +34,7 @@ const FactoringLineRingProgress = ({ line }) => {
         transition: "0.2s ease",
         p: 1,
         "&:hover": {
-          borderColor: "primary.light",
+          borderColor: "rgb(24, 87, 196)",
           boxShadow: "0 6px 18px rgba(33, 150, 243, 0.12)",
         },
       }}
@@ -80,6 +81,7 @@ const FactoringLineRingProgress = ({ line }) => {
             sx={{
               position: "absolute",
               opacity: 0.12,
+              color: "rgba(0,0,0,0.5)",
             }}
           />
 
@@ -129,22 +131,37 @@ const FactoringLineRingProgress = ({ line }) => {
               xs: "end",
               md: "start",
             },
-            gap: 1,
+            gap: {
+              xs: 2,
+              md: 1.5,
+            },
           }}
         >
           <Box>
-            <Typography variant="body2" color="text.secondary">
+            <Typography
+              sx={{
+                color: "#5F6368",
+                fontSize: {
+                  xs: "0.7rem",
+                  md: "0.8rem",
+                },
+                fontWeight: 500,
+                lineHeight: 1.3,
+                mb: 0.25,
+              }}
+            >
               Максимальная сумма
             </Typography>
 
             <Typography
-              variant="h6"
-              fontWeight={600}
               sx={{
+                color: "#343A40",
                 fontSize: {
-                  xs: " 0.7rem",
+                  xs: "0.75rem",
                   md: "1rem",
                 },
+                fontWeight: 600,
+                lineHeight: 1.3,
               }}
             >
               {line.summ_max.toLocaleString("ru-RU")} {line.currency}
@@ -152,18 +169,30 @@ const FactoringLineRingProgress = ({ line }) => {
           </Box>
 
           <Box>
-            <Typography variant="body2" color="text.secondary">
+            <Typography
+              sx={{
+                color: "#5F6368",
+                fontSize: {
+                  xs: "0.7rem",
+                  md: "0.8rem",
+                },
+                fontWeight: 500,
+                lineHeight: 1.3,
+                mb: 0.25,
+              }}
+            >
               Потрачено
             </Typography>
 
             <Typography
-              variant="h6"
-              fontWeight={600}
               sx={{
+                color: "#343A40",
                 fontSize: {
-                  xs: " 0.7rem",
+                  xs: "0.75rem",
                   md: "1rem",
                 },
+                fontWeight: 600,
+                lineHeight: 1.3,
               }}
             >
               {line.summ_current.toLocaleString("ru-RU")} {line.currency}
@@ -171,21 +200,64 @@ const FactoringLineRingProgress = ({ line }) => {
           </Box>
 
           <Box>
-            <Typography variant="body2" color="text.secondary">
+            <Typography
+              sx={{
+                color: "#5F6368",
+                fontSize: {
+                  xs: "0.7rem",
+                  md: "0.8rem",
+                },
+                fontWeight: 500,
+                lineHeight: 1.3,
+                mb: 0.25,
+              }}
+            >
               Свободно
             </Typography>
 
             <Typography
-              variant="h6"
-              fontWeight={600}
               sx={{
+                color: "#343A40",
                 fontSize: {
-                  xs: " 0.7rem",
+                  xs: "0.75rem",
                   md: "1rem",
                 },
+                fontWeight: 600,
+                lineHeight: 1.3,
               }}
             >
               {line.summ_free.toLocaleString("ru-RU")} {line.currency}
+            </Typography>
+          </Box>
+
+          <Box>
+            <Typography
+              sx={{
+                color: "#5F6368",
+                fontSize: {
+                  xs: "0.7rem",
+                  md: "0.8rem",
+                },
+                fontWeight: 500,
+                lineHeight: 1.3,
+                mb: 0.25,
+              }}
+            >
+              Срок
+            </Typography>
+
+            <Typography
+              sx={{
+                color: "#343A40",
+                fontSize: {
+                  xs: "0.75rem",
+                  md: "1rem",
+                },
+                fontWeight: 600,
+                lineHeight: 1.3,
+              }}
+            >
+              {line.summ_free} {line.currency}
             </Typography>
           </Box>
         </Box>

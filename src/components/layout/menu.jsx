@@ -44,8 +44,6 @@ export function SupportContacts() {
     >
       <Tooltip title={supportEmail} placement="top" arrow>
         <Button
-          color="primary"
-          variant="contained"
           component="a"
           href={`mailto:${supportEmail}?subject=${encodeURIComponent(
             "Обращение в поддержку",
@@ -53,9 +51,18 @@ export function SupportContacts() {
           sx={{
             boxShadow: 0,
             fontSize: 12,
+            color: "rgb(82, 96, 121)",
+            borderRadius: "8px",
+            border: "solid 1px rgb(181, 186, 194)",
+            fontWeight: 600,
+            textTransform: "lowercase",
 
             "& .MuiButton-startIcon": {
               flexShrink: 0,
+            },
+
+            "&:hover": {
+              border: "solid 1px rgb(49, 51, 54)",
             },
           }}
           startIcon={<MarkunreadOutlinedIcon />}
@@ -80,12 +87,24 @@ export function SupportContacts() {
         open={copied ? true : undefined}
       >
         <Button
-          color="primary"
-          variant="contained"
           onClick={handleCopyPhone}
           sx={{
             boxShadow: 0,
             fontSize: 12,
+
+            color: "rgb(82, 96, 121)",
+            borderRadius: "8px",
+            border: "solid 1px rgb(181, 186, 194)",
+            fontWeight: 600,
+            textTransform: "lowercase",
+
+            "& .MuiButton-startIcon": {
+              flexShrink: 0,
+            },
+
+            "&:hover": {
+              border: "solid 1px rgb(49, 51, 54)",
+            },
           }}
           startIcon={<PhoneOutlinedIcon />}
         >
@@ -105,7 +124,13 @@ const menuItems = [
         id: 1,
         path: "/",
         lable: "Главная",
-        icon: <RouteOutlined />,
+        icon: (
+          <RouteOutlined
+            sx={{
+              fontSize: "1.1rem",
+            }}
+          />
+        ),
         tooltip_text: "Отображение всех маршрутов на карте",
       },
     ],
@@ -118,7 +143,13 @@ const menuItems = [
         id: 1,
         path: "/active-leads",
         lable: "Активные перевозки",
-        icon: <LocalShippingOutlinedIcon />,
+        icon: (
+          <LocalShippingOutlinedIcon
+            sx={{
+              fontSize: "1.1rem",
+            }}
+          />
+        ),
         tooltip_text:
           "Созданные вами и заказчиками активные перевозки. Возможность создать лид",
       },
@@ -126,7 +157,13 @@ const menuItems = [
         id: 2,
         path: "/history-leads",
         lable: "История перевозок",
-        icon: <HistoryOutlined />,
+        icon: (
+          <HistoryOutlined
+            sx={{
+              fontSize: "1.1rem",
+            }}
+          />
+        ),
         tooltip_text: "Список завершённых и удалённых перевозок",
       },
     ],
@@ -139,14 +176,26 @@ const menuItems = [
         id: 1,
         path: "/account",
         lable: "Счёт",
-        icon: <ReceiptLongOutlined />,
+        icon: (
+          <ReceiptLongOutlined
+            sx={{
+              fontSize: "1.1rem",
+            }}
+          />
+        ),
         tooltip_text: "Скоро",
       },
       {
         id: 2,
         path: "/factorings",
         lable: "Факторинги",
-        icon: <AccountBalanceOutlined />,
+        icon: (
+          <AccountBalanceOutlined
+            sx={{
+              fontSize: "1.1rem",
+            }}
+          />
+        ),
         tooltip_text:
           "Список факторингов, созданных вами, заказчиками и факторами. Возможность создать факторинг",
       },
@@ -154,7 +203,13 @@ const menuItems = [
         id: 3,
         path: "/factoring-lines",
         lable: "Факторинговые компании",
-        icon: <HandshakeOutlined />,
+        icon: (
+          <HandshakeOutlined
+            sx={{
+              fontSize: "1.1rem",
+            }}
+          />
+        ),
         tooltip_text:
           "Список факторинговых линий. Возможность создать факторинг линию",
       },
@@ -168,14 +223,26 @@ const menuItems = [
         id: 1,
         path: "/customers",
         lable: "Заказчики",
-        icon: <GroupsOutlined />,
+        icon: (
+          <GroupsOutlined
+            sx={{
+              fontSize: "1.1rem",
+            }}
+          />
+        ),
         tooltip_text: "Список всех заказчиков",
       },
       {
         id: 2,
         path: "/drivers",
         lable: "Водители",
-        icon: <DriveEtaOutlined />,
+        icon: (
+          <DriveEtaOutlined
+            sx={{
+              fontSize: "1.1rem",
+            }}
+          />
+        ),
         tooltip_text: "Список всех водителей",
       },
     ],
@@ -188,14 +255,26 @@ const menuItems = [
         id: 1,
         path: "/tender-applications",
         lable: "Аукционные заявки",
-        icon: <AssignmentOutlined />,
+        icon: (
+          <AssignmentOutlined
+            sx={{
+              fontSize: "1.1rem",
+            }}
+          />
+        ),
         tooltip_text: "Список аукционов от заказчиков",
       },
       {
         id: 2,
         path: "/tender-forwarders",
         lable: "Аукционы перевозчиков",
-        icon: <RequestQuoteOutlined />,
+        icon: (
+          <RequestQuoteOutlined
+            sx={{
+              fontSize: "1.1rem",
+            }}
+          />
+        ),
         tooltip_text: "Список аукционов, созданных вами",
       },
     ],
@@ -236,6 +315,7 @@ const SideBar = ({ openMenu, setOpenMenu }) => {
               <Typography
                 component="p"
                 sx={{
+                  fontSize: "1rem",
                   color: "#2b2a2a",
                   padding: "3px 15px",
                   fontWeight: "light",
@@ -252,13 +332,15 @@ const SideBar = ({ openMenu, setOpenMenu }) => {
                   className={"link"}
                   to={sub_item.path}
                   style={({ isActive }) => ({
-                    backgroundColor: isActive && "#e3e4e6",
+                    color: isActive && "rgb(24, 87, 196)",
+                    backgroundColor: isActive && "rgba(24, 87, 196, 0.08)",
                     borderRadius: isActive && "5px",
                     display: "flex",
                     alignItems: "center",
                     gap: "10px",
                     fontWeight: 200,
                     letterSpacing: "0.075em",
+                    fontSize: "0.9em",
                   })}
                 >
                   {sub_item.icon} {sub_item.lable}
@@ -272,15 +354,17 @@ const SideBar = ({ openMenu, setOpenMenu }) => {
       <Box
         sx={{
           m: 2,
-          p: 1,
-          background: "rgba(174, 174, 174, 0.2)",
-          borderRadius: 2,
+          padding: "20px",
+          background: "rgba(226, 230, 238, 0.4)",
+          border: "1px solid rgb(226, 230, 238)",
+          borderRadius: 3,
         }}
       >
         <Typography
           sx={{
-            fontWeight: "600",
-            fontSize: 16,
+            fontSize: "15px",
+            fontWeight: 600,
+            color: "rgb(22, 36, 62)",
           }}
         >
           Нужна помощь?
@@ -288,7 +372,7 @@ const SideBar = ({ openMenu, setOpenMenu }) => {
         <Typography
           sx={{
             fontWeight: "400",
-            fontSize: 14,
+            fontSize: 12,
           }}
         >
           Наша служба поддержки на связи 24/7

@@ -1,8 +1,7 @@
 import { Alert, Box, CircularProgress, Paper, Typography } from "@mui/material";
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { useFactorStore } from "../../../app/store/factor/factor-store";
 import FactoringLineRingProgress from "./factoring-line-ring-progress";
-import ShowChartSharpIcon from "@mui/icons-material/ShowChartSharp";
 import { STATUS } from "../../../shared/const/tenders";
 
 const FactoringProgressBarContainer = () => {
@@ -33,7 +32,6 @@ const FactoringProgressBarContainer = () => {
       <Box
         sx={{
           backgroundColor: "white",
-          // position: "sticky",
           top: 0,
           left: 0,
           display: "flex",
@@ -47,7 +45,8 @@ const FactoringProgressBarContainer = () => {
       >
         <Typography
           sx={{
-            textTransform: "uppercase",
+            fontSize: "1.2rem",
+            fontWeight: 600,
           }}
         >
           Подтвержденные факторинг линии

@@ -53,7 +53,7 @@ const DashboardLeadsList = ({
           xs: "auto",
           lg: 500,
         },
-        borderRadius: 2,
+        borderRadius: 3,
         p: 2,
         display: "flex",
         flexDirection: "column",
@@ -61,8 +61,22 @@ const DashboardLeadsList = ({
       }}
     >
       <Box sx={{ mb: 1.5 }}>
-        <Typography variant="h6" fontWeight={600}>
+        <Typography
+          sx={{
+            fontWeight: 600,
+            fontSize: "1.3rem",
+          }}
+        >
           Активные лиды
+        </Typography>
+
+        <Typography
+          sx={{
+            fontWeight: 400,
+            fontSize: "0.9rem",
+          }}
+        >
+          Выберите лид, чтобы подсветить маршрут на карте
         </Typography>
       </Box>
 

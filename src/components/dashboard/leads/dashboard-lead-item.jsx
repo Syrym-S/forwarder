@@ -1,20 +1,20 @@
-import { Box, Chip, Divider, Stack, Typography, Paper } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
+import { Box, Chip, Divider, Stack, Typography, Paper } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
-import RenderStatus from '../../../shared/ui/render-status';
+import RenderStatus from "../../../shared/ui/render-status";
 
 function formatLocation(location) {
-  return location?.address || 'Адрес не указан';
+  return location?.address || "Адрес не указан";
 }
 
 function formatLeadPrice(lead) {
   const price = lead?.summ === 0 ? lead?.cargo_price : lead?.summ;
 
-  if (price === null || price === undefined || price === '') {
-    return 'Цена не указана';
+  if (price === null || price === undefined || price === "") {
+    return "Цена не указана";
   }
 
-  return `${Number(price).toLocaleString('ru-RU')} ${lead?.currency || ''}`;
+  return `${Number(price).toLocaleString("ru-RU")} ${lead?.currency || ""}`;
 }
 
 function hasRouteCoordinates(lead) {
@@ -26,7 +26,7 @@ function hasRouteCoordinates(lead) {
   );
 }
 
-const DashboardLeadItem = ({ 
+const DashboardLeadItem = ({
   lead,
   isSelected,
   isHovered,
@@ -54,53 +54,45 @@ const DashboardLeadItem = ({
     navigate(`/leads/${leadId}`);
   };
 
-
   return (
     <Paper
-      variant='outlined'
+      variant="outlined"
       onClick={handleClick}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       onDoubleClick={handleDoubleClick}
       sx={{
-        p: 1.5,
-        borderRadius: 2,
+        p: 1,
+        borderRadius: 3,
         cursor: "pointer",
         transition: "0.2s ease",
-        borderColor: isSelected || isHovered ? "primary.main" : "divider",
+        borderColor: isSelected || isHovered ? "rgb(24, 87, 196)" : "divider",
         backgroundColor: isSelected
           ? "primary.50"
           : isHovered
             ? "rgba(33, 150, 243, 0.04)"
             : "background.paper",
-        boxShadow:
-          isSelected || isHovered
-            ? "0 6px 18px rgba(33, 150, 243, 0.16)"
-            : "none",
-        "&:hover": {
-          borderColor: "primary.light",
-          boxShadow: "0 6px 18px rgba(33, 150, 243, 0.12)",
-        },
       }}
     >
       <Stack spacing={1.25}>
         <Box
           sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'flex-start',
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "flex-start",
             gap: 0.75,
             minWidth: 0,
           }}
         >
           <Chip
-            label={`Лид # ${lead?.id || '—'}`}
-            size='small'
-            color={isSelected ? 'primary' : 'default'}
-            variant={isSelected ? 'filled' : 'outlined'}
+            label={`Лид # ${lead?.num || "—"}`}
+            size="small"
+            variant={isSelected ? "filled" : "outlined"}
             sx={{
               fontWeight: 600,
               borderRadius: 999,
+              color: isSelected ? "white" : "black",
+              background: isSelected ? "rgb(24, 87, 196)" : "default",
             }}
           />
 
@@ -108,7 +100,7 @@ const DashboardLeadItem = ({
         </Box>
 
         <Box>
-          <Typography variant='caption' color='text.secondary'>
+          <Typography variant="caption" color="text.secondary">
             Откуда
           </Typography>
 
@@ -126,7 +118,7 @@ const DashboardLeadItem = ({
         <Divider />
 
         <Box>
-          <Typography variant='caption' color='text.secondary'>
+          <Typography variant="caption" color="text.secondary">
             Куда
           </Typography>
 
@@ -143,9 +135,9 @@ const DashboardLeadItem = ({
 
         <Box
           sx={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
             gap: 1,
           }}
         >
@@ -153,7 +145,7 @@ const DashboardLeadItem = ({
             sx={{
               fontSize: 13,
               fontWeight: 600,
-              color: 'primary.main',
+              color: "rgb(24, 87, 196)",
             }}
           >
             {formatLeadPrice(lead)}
@@ -161,10 +153,10 @@ const DashboardLeadItem = ({
 
           {!hasRoute && (
             <Chip
-              label='Нет координат'
-              size='small'
-              color='warning'
-              variant='outlined'
+              label="Нет координат"
+              size="small"
+              color="warning"
+              variant="outlined"
             />
           )}
         </Box>

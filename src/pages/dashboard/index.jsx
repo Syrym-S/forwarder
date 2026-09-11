@@ -51,14 +51,7 @@ const Dashboard = () => {
       <Container
         maxWidth={false}
         sx={{
-          px: {
-            xs: "10px",
-            sm: "30px",
-          },
-          py: {
-            xs: "10px",
-            sm: "30px",
-          },
+          p: "10px",
         }}
       >
         <Box
@@ -75,7 +68,7 @@ const Dashboard = () => {
           <Box
             sx={{
               boxShadow: 2,
-              borderRadius: 2,
+              borderRadius: 4,
               overflow: "hidden",
               minWidth: 0,
             }}

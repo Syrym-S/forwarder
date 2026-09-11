@@ -134,6 +134,7 @@ const Header = ({ openMenu, setOpenMenu }) => {
             overflow: "hidden",
             textOverflow: "ellipsis",
             whiteSpace: "nowrap",
+            borderRadius: 2,
             px: {
               xs: 0,
               sm: 1,

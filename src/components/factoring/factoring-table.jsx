@@ -20,7 +20,15 @@ const FactoringTable = ({ factorings }) => {
         localeText={{
           noRowsLabel: isLoading ? <CircularProgress /> : "Список пуст",
         }}
-        sx={{ border: 0 }}
+        sx={{
+          "& .MuiDataGrid-row:nth-of-type(even)": {
+            backgroundColor: "#f5f7fa",
+          },
+
+          "& .MuiDataGrid-row:nth-of-type(odd)": {
+            backgroundColor: "#ffffff",
+          },
+        }}
       />
     </Paper>
   );

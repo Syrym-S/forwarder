@@ -16,6 +16,10 @@ const CustomerTenderItem = ({ tender }) => {
     navigate(`/tenders/${tender?.id}`);
   };
 
+  const daysLeft = dayjs(tender?.end_date_time).diff(dayjs(), "day", true);
+
+  const remainingDays = Math.max(0, Math.ceil(daysLeft));
+
   return (
     <Box
       onClick={handleClick}
@@ -28,7 +32,7 @@ const CustomerTenderItem = ({ tender }) => {
         transition: "0.2s ease",
         backgroundColor: "primary.50",
         "&:hover": {
-          borderColor: "primary.light",
+          borderColor: "rgb(24, 87, 196)",
           boxShadow: "0 6px 18px rgba(33, 150, 243, 0.12)",
         },
       }}
@@ -39,43 +43,46 @@ const CustomerTenderItem = ({ tender }) => {
             display: "flex",
             gap: 0.75,
             minWidth: 0,
-            flexWrap: "wrap",
           }}
         >
           <Chip
-            label={`Лид # ${leadData?.id || "—"}`}
-            color={"primary"}
+            label={`Аукцион # ${tender.id || "—"}`}
             variant={"outlined"}
+            size="small"
             sx={{
               fontWeight: 600,
               borderRadius: 999,
-            }}
-          />
-
-          <Chip
-            label={`Дата окончания аукциона: ${dayjs(tender?.end_date_time).format("DD-MM-YYYY") || "—"}`}
-            color={"primary"}
-            variant={"outlined"}
-            sx={{
-              fontWeight: 600,
-              borderRadius: 999,
-            }}
-          />
-
-          <Chip
-            label={
-              tender?.publication_type === "public" ? "Публичный" : "Приватный"
-            }
-            color={"primary"}
-            variant={"outlined"}
-            sx={{
-              fontWeight: 600,
-              borderRadius: 999,
+              color: "rgb(24, 87, 196)",
+              borderColor: "rgb(24, 87, 196)",
             }}
           />
 
           {leadData?.status && <RenderStatus status={tender?.status} />}
+
+          <Chip
+            label={`Осталось: ${remainingDays} дн.`}
+            variant={"outlined"}
+            size="small"
+            sx={{
+              fontWeight: 600,
+              borderRadius: 999,
+            }}
+          />
         </Box>
+
+        <Chip
+          label={
+            tender?.publication_type === "public" ? "Публичный" : "Приватный"
+          }
+          color={"primary"}
+          variant={"outlined"}
+          size="small"
+          sx={{
+            width: "fit-content",
+            fontWeight: 600,
+            borderRadius: 999,
+          }}
+        />
 
         <Box>
           <Typography variant="caption" color="text.secondary">

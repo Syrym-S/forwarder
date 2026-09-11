@@ -40,6 +40,7 @@ const ForwarderCreatedTenders = () => {
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
+          borderRadius: 2,
         }}
       >
         <CircularProgress />
@@ -53,6 +54,7 @@ const ForwarderCreatedTenders = () => {
         pb: 2,
         overflowY: "auto",
         position: "relative",
+        borderRadius: 2,
       }}
     >
       <Box
@@ -72,7 +74,8 @@ const ForwarderCreatedTenders = () => {
       >
         <Typography
           sx={{
-            textTransform: "uppercase",
+            fontSize: "1.2rem",
+            fontWeight: 600,
           }}
         >
           Список аукционов для водителей
@@ -85,7 +88,18 @@ const ForwarderCreatedTenders = () => {
               : "Показать только публичные: ВКЛ"
           }
         >
-          <Switch onChange={handleChange} />
+          <Switch
+            onChange={handleChange}
+            sx={{
+              "& .MuiSwitch-switchBase.Mui-checked": {
+                color: "rgb(24, 87, 196)",
+              },
+
+              "& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track": {
+                color: "rgb(24, 87, 196)",
+              },
+            }}
+          />
         </Tooltip>
       </Box>
 
@@ -136,7 +150,9 @@ const ForwarderCreatedTenders = () => {
           ? pulicTenders.map((tender) => (
               <ForwarderTenderItem tender={tender} />
             ))
-          : tenders.map((tender) => <ForwarderTenderItem tender={tender} />)}
+          : pulicTenders.map((tender) => (
+              <ForwarderTenderItem tender={tender} />
+            ))}
       </Box>
     </Paper>
   );

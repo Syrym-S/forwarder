@@ -1,143 +1,159 @@
 import { STATUS } from "../const/tenders";
-import { Chip } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 
-const RenderChip = ({ label, color, variant }) => {
+export const RenderStatusContent = ({ label, color = "#518ded" }) => {
   return (
-    <Chip
-      label={label}
-      variant={variant}
-      color={color}
+    <Box
       sx={{
+        display: "flex",
+        alignItems: "center",
+        gap: 1,
         width: "100%",
-        fontSize: {
-          xs: "0.6rem",
-          sm: "0.8rem",
-        },
       }}
-    />
+    >
+      <Box
+        sx={{
+          width: 6,
+          height: 6,
+          flexShrink: 0,
+          borderRadius: "50%",
+          backgroundColor: color,
+        }}
+      ></Box>
+
+      <Typography
+        sx={{
+          color: "#172B4D",
+          fontSize: {
+            xs: "0.7rem",
+            sm: "0.8rem",
+          },
+        }}
+      >
+        {label}
+      </Typography>
+    </Box>
   );
 };
 
 const RenderStatus = ({ status }) => {
   switch (status) {
     case STATUS.new:
-      return <RenderChip label={"Новый"} variant="contained" color="info" />;
+      return (
+        <RenderStatusContent
+          label={"Новый"}
+          variant="contained"
+          color="#51d861"
+        />
+      );
 
     case STATUS.active:
       return (
-        <RenderChip label={"Активный"} variant="outlined" color="success" />
+        <RenderStatusContent
+          label={"Активный"}
+          variant="outlined"
+          color="#49b439"
+        />
       );
 
     case STATUS.cancelled:
       return (
-        <RenderChip label={"Отменненый"} variant="outlined" color="error" />
+        <RenderStatusContent
+          label={"Отменненый"}
+          variant="outlined"
+          color="#c60606"
+        />
       );
 
     case STATUS.add_driver:
       return (
-        <RenderChip
-          label={"Водитель добавлен"}
-          variant="outlined"
-          color="info"
-        />
+        <RenderStatusContent label={"Водитель добавлен"} variant="outlined" />
       );
 
     case STATUS.start_driver:
       return (
-        <RenderChip
-          label={"Поездка начата"}
-          variant="contained"
-          color="primary"
-        />
+        <RenderStatusContent label={"Поездка начата"} variant="contained" />
       );
 
     case STATUS.loading:
-      return (
-        <RenderChip label={"Погрузка"} variant="contaned" color="primary" />
-      );
+      return <RenderStatusContent label={"Погрузка"} variant="contaned" />;
 
     case STATUS.start_loading:
-      return (
-        <RenderChip label={"Погрузка"} variant="outlined" color="warning" />
-      );
+      return <RenderStatusContent label={"Погрузка"} variant="outlined" />;
 
     case STATUS.verification_loading:
       return (
-        <RenderChip
+        <RenderStatusContent
           label={"Погрузка подтверждена"}
           variant="contained"
-          color="success"
         />
       );
 
     case STATUS.start_unloading:
-      return (
-        <RenderChip label={"Разгрузка"} variant="outlined" color="success" />
-      );
+      return <RenderStatusContent label={"Разгрузка"} variant="outlined" />;
 
     case STATUS.unloading:
-      return (
-        <RenderChip label={"Разгрузка"} variant="contaned" color="primary" />
-      );
+      return <RenderStatusContent label={"Разгрузка"} variant="contaned" />;
 
     case STATUS.verification_unloading:
       return (
-        <RenderChip
+        <RenderStatusContent
           label={"Разгрузка подтверждена"}
           variant="outlined"
-          color="warning"
         />
       );
 
     case STATUS.finished:
       return (
-        <RenderChip
+        <RenderStatusContent
           label={"Рейс завершен"}
           variant="outlined"
-          color="success"
+          color="#c60606"
         />
       );
 
     case STATUS.deleted:
       return (
-        <RenderChip label={"Рейс удален"} variant="outlined" color="error" />
+        <RenderStatusContent
+          label={"Рейс удален"}
+          variant="outlined"
+          color="#c60606"
+        />
       );
 
     case STATUS.loss:
       return (
-        <RenderChip label={"Проиграна"} variant="outlined" color="error" />
+        <RenderStatusContent
+          label={"Проиграна"}
+          variant="outlined"
+          color="#c60606"
+        />
       );
 
     case STATUS.closed:
-      return <RenderChip label={"Закрыто"} variant="container" color="error" />;
+      return (
+        <RenderStatusContent
+          label={"Закрыто"}
+          variant="container"
+          color="#c60606"
+        />
+      );
 
     case STATUS.winning:
-      return (
-        <RenderChip label={"Выиграна"} variant="outlined" color="success" />
-      );
+      return <RenderStatusContent label={"Выиграна"} variant="outlined" />;
 
     case STATUS.await_paid:
       return (
-        <RenderChip
-          label={"В ожидании оплаты"}
-          variant="outlined"
-          color="secondary"
-        />
+        <RenderStatusContent label={"В ожидании оплаты"} variant="outlined" />
       );
 
     case STATUS.verified_participant:
       return (
-        <RenderChip
-          label={"На подтверждении"}
-          variant="outlined"
-          color="warning"
-        />
+        <RenderStatusContent label={"На подтверждении"} variant="outlined" />
       );
 
     case STATUS.approved:
-      return (
-        <RenderChip label={"Подтверждено"} variant="outlined" color="success" />
-      );
+      return <RenderStatusContent label={"Подтверждено"} variant="outlined" />;
 
     default:
       return <>Нет статуа</>;

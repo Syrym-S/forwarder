@@ -37,6 +37,7 @@ const CustomerCreatedTenders = () => {
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
+          borderRadius: 2,
         }}
       >
         <CircularProgress />
@@ -51,6 +52,7 @@ const CustomerCreatedTenders = () => {
         pb: 2,
         overflowY: "auto",
         position: "relative",
+        borderRadius: 2,
       }}
     >
       <Box
@@ -70,7 +72,8 @@ const CustomerCreatedTenders = () => {
       >
         <Typography
           sx={{
-            textTransform: "uppercase",
+            fontSize: "1.2rem",
+            fontWeight: 600,
           }}
         >
           Список аукцонов от Заказщиков
@@ -83,7 +86,18 @@ const CustomerCreatedTenders = () => {
               : "Показать только публичные: ВКЛ"
           }
         >
-          <Switch onChange={handleChange} />
+          <Switch
+            onChange={handleChange}
+            sx={{
+              "& .MuiSwitch-switchBase.Mui-checked": {
+                color: "rgb(24, 87, 196)",
+              },
+
+              "& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track": {
+                color: "rgb(24, 87, 196)",
+              },
+            }}
+          />
         </Tooltip>
       </Box>
 

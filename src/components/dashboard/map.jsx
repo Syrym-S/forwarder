@@ -389,7 +389,6 @@ const Map = ({
         zoom={13}
         style={{
           zIndex: 0,
-          borderRadius: "10px",
           height: "500px",
           width: "100%",
         }}

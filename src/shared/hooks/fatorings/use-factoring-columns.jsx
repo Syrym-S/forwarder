@@ -1,6 +1,6 @@
 import { Box, Chip, Typography } from "@mui/material";
 import { NavLink } from "react-router-dom";
-import RenderStatus from "../../ui/render-status";
+import RenderStatus, { RenderStatusContent } from "../../ui/render-status";
 import dayjs from "dayjs";
 import CustomNavLink from "../../ui/custom-nav-link";
 import { moneySpacingFormat } from "../../helpers/money-spacing";
@@ -19,7 +19,17 @@ const useFactoringColumns = () => {
       field: "status",
       headerName: "Статус",
       width: 200,
-      renderCell: ({ row }) => <RenderStatus status={row.status} />,
+      renderCell: ({ row }) => (
+        <Box
+          sx={{
+            height: "100%",
+            display: "flex",
+            alignItems: "center",
+          }}
+        >
+          <RenderStatus status={row.status} />
+        </Box>
+      ),
     },
     {
       field: "lead_id",
@@ -125,11 +135,18 @@ const useFactoringColumns = () => {
       headerName: "Подтверждение от заказщика",
       width: 200,
       renderCell: ({ row }) => (
-        <Chip
-          label={row?.verified_customer ? "Подтвержден" : "В ожидании"}
-          variant="contained"
-          color={row?.verified_customer ? "success" : "warning"}
-        />
+        <Box
+          sx={{
+            height: "100%",
+            display: "flex",
+            alignItems: "center",
+          }}
+        >
+          <RenderStatusContent
+            label={row?.verified_customer ? "Подтвержден" : "В ожидании"}
+            color={row?.verified_customer ? "#51d861" : "#e9821b"}
+          />
+        </Box>
       ),
     },
     {
@@ -137,11 +154,18 @@ const useFactoringColumns = () => {
       headerName: "Подтверждение от фактора",
       width: 200,
       renderCell: ({ row }) => (
-        <Chip
-          label={row?.verified_factor ? "Подтвержден" : "В ожидании"}
-          variant="contained"
-          color={row?.verified_factor ? "success" : "warning"}
-        />
+        <Box
+          sx={{
+            height: "100%",
+            display: "flex",
+            alignItems: "center",
+          }}
+        >
+          <RenderStatusContent
+            label={row?.verified_factor ? "Подтвержден" : "В ожидании"}
+            color={row?.verified_factor ? "#51d861" : "#e9821b"}
+          />
+        </Box>
       ),
     },
     {
@@ -149,11 +173,18 @@ const useFactoringColumns = () => {
       headerName: "Подтверждение от вас",
       width: 200,
       renderCell: ({ row }) => (
-        <Chip
-          label={row?.verified_forwarder ? "Подтвержден" : "В ожидании"}
-          variant="contained"
-          color={row?.verified_forwarder ? "success" : "warning"}
-        />
+        <Box
+          sx={{
+            height: "100%",
+            display: "flex",
+            alignItems: "center",
+          }}
+        >
+          <RenderStatusContent
+            label={row?.verified_forwarder ? "Подтвержден" : "В ожидании"}
+            color={row?.verified_forwarder ? "#51d861" : "#e9821b"}
+          />
+        </Box>
       ),
     },
   ];
