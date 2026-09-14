@@ -3,10 +3,11 @@ import { Box, Typography } from "@mui/material";
 const InfoField = ({ label, value, accent = false }) => (
   <Box
     sx={{
-      p: 1.5,
+      py: 0.5,
+      px: 1.5,
       border: "1px solid",
-      borderColor: accent ? "primary.main" : "divider",
-      borderRadius: 2,
+      borderColor: accent ? "rgb(24, 87, 196)" : "divider",
+      borderRadius: 4,
       bgcolor: accent ? "rgba(33,150,243,.04)" : "background.default",
     }}
   >
@@ -22,8 +23,8 @@ const InfoField = ({ label, value, accent = false }) => (
 
     <Typography
       sx={{
-        fontWeight: accent ? 600 : 400,
-        color: "color.slate_2",
+        fontWeight: 600,
+        color: "rgb(24, 87, 196)",
       }}
     >
       {value || "Не указано"}

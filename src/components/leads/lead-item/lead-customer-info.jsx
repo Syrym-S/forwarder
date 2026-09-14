@@ -1,10 +1,10 @@
-import React from "react";
 import BusinessOutlinedIcon from "@mui/icons-material/BusinessOutlined";
 import Section from "../../../shared/ui/section";
-import InfoField from "../../../shared/ui/info-field";
 import { Box, Button, CircularProgress } from "@mui/material";
 import { useLeadsStore } from "../../../app/store/leads/leads-store";
 import { STATUS } from "../../../shared/const/tenders";
+import { InfoBadge } from "../../lead-form/info-badge";
+import InfoItem from "../../../shared/ui/info-item";
 
 const LeadCustomerInfo = ({ leadData }) => {
   const customer = leadData?.customer;
@@ -49,7 +49,7 @@ const LeadCustomerInfo = ({ leadData }) => {
         title="Данные о заказщике"
         icon={<BusinessOutlinedIcon color="primary" />}
       >
-        <InfoField label={""} value={"Заказщик не указан"} />
+        <InfoBadge label={""} value={"Заказщик не указан"} />
       </Section>
     );
 
@@ -79,10 +79,10 @@ const LeadCustomerInfo = ({ leadData }) => {
           },
         }}
       >
-        <InfoField label={"Имя"} value={customer.name} />
-        <InfoField label={"Номер телефона"} value={customer.tel} />
-        <InfoField label={"БИН"} value={customer.bin} />
-        <InfoField label={"Контактное лицо"} value={customer.contact_person} />
+        <InfoItem label={"Имя"} value={customer.name} />
+        <InfoItem label={"Номер телефона"} value={customer.tel} />
+        <InfoItem label={"БИН"} value={customer.bin} />
+        <InfoItem label={"Контактное лицо"} value={customer.contact_person} />
       </Box>
     </Section>
   );

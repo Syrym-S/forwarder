@@ -1,12 +1,44 @@
-import React from "react";
-import Section from "../../../shared/ui/section";
-import { Box, Button, CircularProgress, Typography } from "@mui/material";
-import InfoField from "../../../shared/ui/info-field";
-import RenderStatus from "../../../shared/ui/render-status";
-import { useLeadsStore } from "../../../app/store/leads/leads-store";
+import { Box, Button, Typography } from "@mui/material";
 import { STATUS } from "../../../shared/const/tenders";
+import { useLeadsStore } from "../../../app/store/leads/leads-store";
 
-const LeadCargoInfo = ({
+const InfoItem = ({ label, value }) => {
+  return (
+    <Box
+      sx={{
+        p: 1,
+        border: "1px solid",
+        borderColor: "divider",
+        borderRadius: 2.5,
+        minWidth: 0,
+      }}
+    >
+      <Typography
+        sx={{
+          fontSize: 12,
+          fontWeight: 500,
+          color: "text.secondary",
+          mb: 0.3,
+        }}
+      >
+        {label}
+      </Typography>
+
+      <Typography
+        sx={{
+          fontSize: 15,
+          fontWeight: 500,
+          color: "text.primary",
+          lineHeight: 1.3,
+        }}
+      >
+        {value ?? "Не указано"}
+      </Typography>
+    </Box>
+  );
+};
+
+const CargoCard = ({
   cargo,
   lead,
   index,
@@ -23,43 +55,58 @@ const LeadCargoInfo = ({
     await getLeadItem(lead.id);
   };
 
+  console.log(cargo);
+
   return (
     <Box
       sx={{
+        p: 2,
         border: "1px solid",
         borderColor: "divider",
-        borderRadius: 2,
-        p: 2,
+        borderRadius: 5,
+        backgroundColor: "rgb(250, 250, 250)",
       }}
     >
       <Typography
-        fontWeight={600}
         sx={{
-          py: 1,
+          fontSize: 15,
+          fontWeight: 600,
+          mb: 1.5,
         }}
       >
-        Груз {cargo.name}
+        Груз #{index + 1}
       </Typography>
+
       <Box
         sx={{
           display: "grid",
           gridTemplateColumns: {
             xs: "1fr",
-            md: "repeat(2,1fr)",
+            sm: "repeat(2, 1fr)",
+            md: "repeat(4, 1fr)",
           },
-          gap: 2,
-          mb: 2,
+          gap: 1.2,
+          mb: 1.2,
         }}
       >
-        <InfoField label="Тип" value={cargo?.сargo_type} />
+        <InfoItem label="Наименование" value={cargo?.name} />
 
-        <InfoField
+        <InfoItem label="Тип" value={cargo?.type} />
+
+        <InfoItem
           label="Вес"
           value={cargo?.weight_kg ? `${cargo?.weight_kg} кг` : "Вес не указан"}
         />
+
+        <InfoItem label="Цена груза" value={cargo?.cargo_price} />
+
+        <InfoItem
+          label="Размеры"
+          value={`${cargo?.height_cm || "-"} x ${cargo?.width_cm || "-"} x ${cargo?.length_cm || "-"}`}
+        />
       </Box>
 
-      <InfoField label="Описание" value={`${cargo?.description || "--"}`} />
+      <InfoItem label="Описание" value={`${cargo?.description || "--"}`} />
       {cargosCount !== 1 && isLeadsPage && canEditStatus && (
         <Button
           onClick={handleDeleteCargo}
@@ -67,6 +114,7 @@ const LeadCargoInfo = ({
           variant="outlined"
           sx={{
             my: 1,
+            borderRadius: 3,
           }}
         >
           Удалить груз
@@ -76,4 +124,4 @@ const LeadCargoInfo = ({
   );
 };
 
-export default LeadCargoInfo;
+export default CargoCard;

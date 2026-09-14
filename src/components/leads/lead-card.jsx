@@ -1,13 +1,4 @@
-import React from "react";
-import {
-  Card,
-  CardContent,
-  Typography,
-  Box,
-  Chip,
-  Divider,
-  Stack,
-} from "@mui/material";
+import { Typography, Box, Stack } from "@mui/material";
 import TripOriginIcon from "@mui/icons-material/TripOrigin";
 import ArrowDownwardRoundedIcon from "@mui/icons-material/ArrowDownwardRounded";
 import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
@@ -22,6 +13,8 @@ const LeadCard = ({ lead }) => {
     navigate(`/leads/${lead.id}`);
   };
 
+  console.log(lead);
+
   return (
     <Box
       onClick={navigateToLeadItem}
@@ -34,191 +27,125 @@ const LeadCard = ({ lead }) => {
         maxWidth: "100%",
         border: "2px solid",
         borderColor: "divider",
-        borderRadius: 4,
+        borderRadius: 7,
         backgroundColor: "background.paper",
         boxShadow: "0 2px 8px rgba(0, 0, 0, 0.06)",
         transition: "0.2s ease",
         cursor: "pointer",
         "&:hover": {
-          borderColor: "primary.light",
+          borderColor: "rgb(24, 87, 196)",
           boxShadow: "0 8px 24px rgba(33, 150, 243, 0.12)",
         },
       }}
     >
-      <Stack spacing={2.5}>
+      <Stack spacing={1}>
+        <Typography
+          sx={{
+            fontSize: 20,
+          }}
+        >
+          Заказщик: {lead?.customer?.name || "Не указан"}
+        </Typography>
+
+        <Stack
+          direction="row"
+          flexWrap="wrap"
+          useFlexGap
+          sx={{
+            flexDirection: {
+              xs: "column",
+              sm: "row",
+            },
+            justifyContent: {
+              xs: "flex-start",
+              sm: "flex-end",
+            },
+            gap: 2,
+          }}
+        >
+          <Typography
+            sx={{
+              fontSize: 20,
+            }}
+          >
+            #{lead.num || "—"}
+          </Typography>
+
+          <RenderStatus status={lead.status} />
+        </Stack>
+
         <Box
           sx={{
             display: "flex",
-            justifyContent: "space-between",
-            alignItems: "flex-start",
+            alignItems: "center",
             gap: 2,
-            flexWrap: "wrap",
           }}
         >
-          <Stack
-            direction="row"
-            spacing={1}
-            flexWrap="wrap"
-            useFlexGap
-            sx={{
-              flexDirection: {
-                xs: "column",
-                sm: "row",
-              },
-              justifyContent: {
-                xs: "flex-start",
-                sm: "flex-end",
-              },
-            }}
-          >
-            <Chip
-              label={`Лид # ${lead.id || "—"}`}
-              color="primary"
-              variant="outlined"
-              sx={{
-                borderRadius: 999,
-                fontWeight: 600,
-                backgroundColor: "rgba(33, 150, 243, 0.04)",
-              }}
-            />
-
-            <RenderStatus status={lead.status} />
-          </Stack>
-
-          <Chip
-            sx={{
-              borderRadius: 1,
-            }}
-            color="primary"
-            variant="outlined"
-            label={`Заказщий: ${lead?.customer?.name || "Не указан"}`}
-          />
-
-          <Chip
-            sx={{
-              borderRadius: 1,
-            }}
-            color="primary"
-            variant="outlined"
-            label={`Количество груза ${lead?.cargos?.length}`}
-          />
-        </Box>
-        <Box
-          sx={{
-            display: {
-              xs: "grid",
-              sm: "flex",
-            },
-            gridTemplateColumns: {
-              xs: "1fr",
-            },
-            alignItems: "stretch",
-            gap: 1.5,
-            flexWrap: {
-              xs: "wrap",
-            },
-          }}
-        >
-          <Box
-            sx={{
-              flex: 1,
-              minHeight: 86,
-              p: 1.5,
-              border: "1px solid",
-              borderColor: "divider",
-              borderRadius: 2,
-              backgroundColor: "grey.50",
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "flex-start",
-            }}
-          >
-            <Typography
-              variant="caption"
-              sx={{
-                display: "block",
-                color: "text.secondary",
-                mb: 0.5,
-              }}
-            >
-              Откуда
-            </Typography>
-
+          <Box>
             <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-              <TripOriginIcon sx={{ fontSize: 18, color: "primary.main" }} />
-
-              <Typography
-                fontWeight={500}
-                sx={{
-                  fontSize: 14,
-                  lineHeight: 1.35,
-                }}
-              >
-                {lead?.from_location?.address || lead?.from || "Битые данные"}
-              </Typography>
-            </Box>
-          </Box>
-          <Box
-            sx={{
-              display: {
-                xs: "none",
-                sm: "flex",
-              },
-              alignItems: "center",
-              justifyContent: "center",
-              px: 0.5,
-            }}
-          >
-            <ArrowDownwardRoundedIcon
-              sx={{
-                color: "text.secondary",
-                fontSize: 28,
-                transform: {
-                  xs: "none",
-                  sm: "rotate(-90deg)",
-                },
-              }}
-            />
-          </Box>
-          <Box
-            sx={{
-              flex: 1,
-              p: 1.5,
-              border: "1px solid",
-              borderColor: "divider",
-              borderRadius: 2,
-              backgroundColor: "grey.50",
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "flex-start",
-            }}
-          >
-            <Typography
-              variant="caption"
-              sx={{
-                display: "block",
-                color: "text.secondary",
-                mb: 0.5,
-              }}
-            >
-              Куда
-            </Typography>
-            <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-              <LocationOnOutlinedIcon
-                sx={{ fontSize: 18, color: "primary.main" }}
+              <TripOriginIcon
+                sx={{ fontSize: 12, color: "rgb(24, 87, 196)" }}
               />
               <Typography
-                fontWeight={500}
                 sx={{
-                  fontSize: 14,
-                  lineHeight: 1.35,
+                  fontSize: 12,
                 }}
               >
-                {lead?.to_location?.address || lead?.to || "Битые данные"}
+                Откуда
               </Typography>
             </Box>
+
+            <Typography
+              fontWeight={500}
+              sx={{
+                fontSize: 12,
+                lineHeight: 1.35,
+              }}
+            >
+              {lead?.from_location?.address || lead?.from || "Битые данные"}
+            </Typography>
+          </Box>
+
+          <ArrowDownwardRoundedIcon
+            sx={{
+              color: "text.secondary",
+              fontSize: 15,
+              transform: {
+                xs: "none",
+                sm: "rotate(-90deg)",
+              },
+            }}
+          />
+
+          <Box>
+            <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+              <LocationOnOutlinedIcon
+                sx={{ fontSize: 12, color: "rgb(24, 87, 196)" }}
+              />
+              <Typography
+                sx={{
+                  fontSize: 12,
+                }}
+              >
+                Куда
+              </Typography>
+            </Box>
+
+            <Typography
+              sx={{
+                fontSize: 12,
+                lineHeight: 1.35,
+              }}
+            >
+              {lead?.to_location?.address || lead?.from || "Битые данные"}
+            </Typography>
           </Box>
         </Box>
+
+        <InfoField
+          label="Цена"
+          value={lead?.price ? `${lead?.price} ${lead?.currency}` : "Не указан"}
+        />
       </Stack>
     </Box>
   );

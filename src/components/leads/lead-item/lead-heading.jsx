@@ -52,13 +52,20 @@ const LeadHeading = ({ leadData, openEditForm }) => {
         }}
       >
         <Stack>
-          <Typography variant="h5" fontWeight={700}>
+          <Typography
+            sx={{
+              fontWeight: 600,
+              fontSize: 22,
+            }}
+          >
             Информация о лиде
           </Typography>
 
           <Typography
             sx={{
               color: "color.slate",
+              fontWeight: 500,
+              fontSize: 15,
             }}
           >
             Подробные данные по заявке
@@ -83,6 +90,7 @@ const LeadHeading = ({ leadData, openEditForm }) => {
         sx={{
           display: "flex",
           py: "10px",
+          alignItems: "center",
           justifyContent: { xs: "space-between", sm: "end" },
           gap: {
             xs: "3px",
@@ -90,15 +98,18 @@ const LeadHeading = ({ leadData, openEditForm }) => {
           },
           width: {
             xs: "100%",
-            sm: "fit-content",
+            sm: "40%",
           },
         }}
-        spacing={1}
       >
         <Chip
-          label={`Лид #${leadData.id}`}
-          color="primary"
+          label={`Лид #${leadData.num}`}
           variant="outlined"
+          sx={{
+            color: "rgb(24, 87, 196)",
+            borderColor: "rgb(24, 87, 196)",
+            fontWeight: 600,
+          }}
         />
 
         <RenderStatus status={leadData.status} />
@@ -116,7 +127,7 @@ const LeadHeading = ({ leadData, openEditForm }) => {
                 onClick={openEditForm}
                 sx={{
                   fontSize: "2.5rem",
-                  color: "primary.main",
+                  color: "rgb(24, 87, 196)",
                   cursor: "pointer",
                 }}
               />

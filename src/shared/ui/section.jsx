@@ -24,7 +24,8 @@ const Section = ({ icon, title, children }) => (
         sx={{
           width: 32,
           height: 32,
-          borderRadius: 1,
+          p: 1,
+          borderRadius: "100%",
           bgcolor: "background.main",
           display: "flex",
           alignItems: "center",
@@ -34,7 +35,14 @@ const Section = ({ icon, title, children }) => (
         {icon}
       </Box>
 
-      <Typography fontWeight={600}>{title}</Typography>
+      <Typography
+        sx={{
+          fontWeight: 600,
+          color: "rgb(22, 36, 62)",
+        }}
+      >
+        {title}
+      </Typography>
     </Box>
 
     {children}

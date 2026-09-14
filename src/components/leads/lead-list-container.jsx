@@ -77,7 +77,6 @@ const LeadListContainer = ({
       {isKanbanView && <LeadKanbanTable leads={leads} />}
       {!isLeadsEmpty && (
         <Pagination
-          color="primary"
           shape="rounded"
           page={page}
           count={PAGE_COUNT}
@@ -85,6 +84,20 @@ const LeadListContainer = ({
           sx={{
             width: "fit-content",
             mx: "auto",
+
+            "& .MuiPaginationItem-root": {
+              color: "#1F2937",
+              fontWeight: 500,
+            },
+
+            "& .MuiPaginationItem-root.Mui-selected": {
+              backgroundColor: "rgb(24, 87, 196)",
+              color: "#fff",
+
+              "&:hover": {
+                backgroundColor: "rgb(24, 87, 196)",
+              },
+            },
           }}
         />
       )}

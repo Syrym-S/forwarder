@@ -16,6 +16,7 @@ import { LeadDocumentsSection } from "../documents/LeadDocumentsSection";
 import { STATUS } from "../../../shared/const/tenders";
 import RenderErrorContext from "../../../shared/ui/errors/render-error-context";
 import { LeadDocumentCard } from "../documents/LeadDocumentCard";
+import CargoCard from "./lead-cargo-info";
 
 const LeadItemMainContainer = ({
   leadData,
@@ -137,7 +138,7 @@ const LeadItemMainContainer = ({
       <Box
         sx={{
           boxShadow: 1,
-          borderRadius: 2,
+          borderRadius: 4,
           overflow: "hidden",
           my: 3,
         }}
@@ -217,7 +218,7 @@ const LeadItemMainContainer = ({
           }}
         >
           {leadData?.cargos?.map((cargo, index) => (
-            <LeadCargoInfo
+            <CargoCard
               cargosCount={cargosCount}
               cargo={cargo}
               lead={leadData}

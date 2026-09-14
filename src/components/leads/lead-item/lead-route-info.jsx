@@ -1,11 +1,7 @@
-import React from "react";
 import Section from "../../../shared/ui/section";
-import { Box, Chip, Stack, Typography } from "@mui/material";
-import InfoField from "../../../shared/ui/info-field";
+import { Box } from "@mui/material";
 import RouteOutlinedIcon from "@mui/icons-material/RouteOutlined";
-import ArrowRightAltRoundedIcon from "@mui/icons-material/ArrowRightAltRounded";
-import RenderStatus from "../../../shared/ui/render-status";
-import RenderType from "../../../shared/ui/render-type";
+import RoutePoint from "./route-point";
 
 const LeadRouteInfo = ({ leadData }) => {
   return (
@@ -21,107 +17,33 @@ const LeadRouteInfo = ({ leadData }) => {
           alignItems: "stretch",
         }}
       >
-        <Box
-          sx={{
-            position: "relative",
-          }}
-        >
-          <Chip
-            variant={
-              leadData.from_location?.is_passed ? "contained" : "outlined"
-            }
-            color={leadData.from_location?.is_passed ? "primary" : "default"}
-            size="small"
-            label={
-              leadData.from_location?.is_passed
-                ? "Точка пройдена"
-                : "Точка не пройдена"
-            }
-            sx={{
-              position: "absolute",
-              top: "-10px",
-              right: 5,
-            }}
-          />
-
-          <InfoField
-            label={"Откуда"}
-            value={leadData.from_location?.address || "Битые данные"}
-            accent={leadData.from_location?.is_passed}
-          />
-        </Box>
+        <RoutePoint
+          label="Откуда"
+          address={leadData.from_location?.address || "Битые данные"}
+          status={
+            leadData.from_location?.is_passed
+              ? "Точка пройдена"
+              : "Точка не пройдена"
+          }
+        />
 
         {leadData?.waypoints?.map((point, index) => (
-          <Box
-            sx={{
-              position: "relative",
-            }}
-          >
-            <Chip
-              variant={point.is_passed ? "contained" : "outlined"}
-              color={point.is_passed ? "primary" : "default"}
-              size="small"
-              label={point.is_passed ? "Точка пройдена" : "Точка не пройдена"}
-              sx={{
-                position: "absolute",
-                top: "-10px",
-                right: 5,
-              }}
-            />
-
-            <InfoField
-              label={`Промежуточная точка ${index + 1}`}
-              accent={point.is_passed}
-              value={
-                <Stack spacing={1}>
-                  <Typography>{point.address || "Битые данные"}</Typography>
-                  <RenderType type={point.type} />
-                </Stack>
-              }
-            />
-          </Box>
+          <RoutePoint
+            label={`Промежуточная точка #${index}`}
+            address={point?.address || "Битые данные"}
+            status={point?.is_passed ? "Точка пройдена" : "Точка не пройдена"}
+          />
         ))}
-        <Box
-          sx={{
-            position: "relative",
-          }}
-        >
-          {leadData.to_location?.is_passed && (
-            <Chip
-              variant="contained"
-              color="primary"
-              size="small"
-              label="Точка пройдена"
-              sx={{
-                position: "absolute",
-                top: "-10px",
-                right: 5,
-              }}
-            />
-          )}
 
-          <Chip
-            variant={leadData.to_location?.is_passed ? "contained" : "outlined"}
-            color={leadData.to_location?.is_passed ? "primary" : "default"}
-            size="small"
-            label={
-              leadData.to_location?.is_passed
-                ? "Точка пройдена"
-                : "Точка не пройдена"
-            }
-            sx={{
-              position: "absolute",
-              top: "-10px",
-              right: 5,
-            }}
-          />
-
-          <InfoField
-            label="Куда"
-            accent={leadData.to_location?.is_passed}
-            value={leadData.to_location?.address || "Битые данные"}
-          />
-        </Box>
+        <RoutePoint
+          label="Откуда"
+          address={leadData.to_location?.address || "Битые данные"}
+          status={
+            leadData.to_location?.is_passed
+              ? "Точка пройдена"
+              : "Точка не пройдена"
+          }
+        />
       </Box>
     </Section>
   );

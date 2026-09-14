@@ -41,7 +41,7 @@ export const useFormDefaultValues = (lead = null, files = []) => {
       cargo_price: cargo?.cargo_price || null,
       cargo_type: cargo?.type || null,
       name: cargo?.name || "",
-      comment: cargo.description || "",
+      description: cargo.description || "",
       weight_kg: cargo?.weight_kg || null,
       length_cm: cargo?.length_cm || null,
       width_cm: cargo?.width_cm || null,

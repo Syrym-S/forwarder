@@ -38,29 +38,34 @@ const ViewTabs = ({
             }
           }}
           size="small"
-          color="primary"
           aria-label="Переключение отображения экспедиторов"
           sx={{
             alignSelf: {
               xs: "stretch",
               sm: "auto",
             },
+
             "& .MuiToggleButton-root": {
               px: 1.5,
               minWidth: 40,
+
+              "&.Mui-selected": {
+                color: "rgb(24, 87, 196)",
+                backgroundColor: "rgba(112, 160, 243, 0.17)",
+              },
             },
           }}
         >
-          <ToggleButton key={VIEWS.table} value={VIEWS.table}>
+          <ToggleButton value={VIEWS.table}>
             <ViewListRoundedIcon fontSize="small" />
           </ToggleButton>
 
-          <ToggleButton key={VIEWS.cards} value={VIEWS.cards}>
+          <ToggleButton value={VIEWS.cards}>
             <GridViewRoundedIcon fontSize="small" />
           </ToggleButton>
 
           {!withoutKanban && (
-            <ToggleButton key={VIEWS.kanban} value={VIEWS.kanban}>
+            <ToggleButton value={VIEWS.kanban}>
               <ViewKanbanOutlinedIcon fontSize="small" />
             </ToggleButton>
           )}
@@ -68,7 +73,15 @@ const ViewTabs = ({
       )}
 
       {!withoutDataAdd && (
-        <Button variant="outlined" onClick={handleOpenForm}>
+        <Button
+          variant="contained"
+          onClick={handleOpenForm}
+          sx={{
+            backgroundColor: "rgb(24, 87, 196)",
+            color: "white",
+            borderRadius: 2,
+          }}
+        >
           {buttonText}
         </Button>
       )}

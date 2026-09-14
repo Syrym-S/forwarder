@@ -90,22 +90,17 @@ const ActiveLeads = () => {
         <FormControl
           size="small"
           sx={{
-            width: {
-              xs: "100%",
-              sm: 300,
-            },
-            zIndex: 0,
+            minWidth: 250,
           }}
         >
-          <InputLabel>Статус</InputLabel>
+          <InputLabel id="status-select-label">Статус</InputLabel>
 
           <Select
+            labelId="status-select-label"
             label="Статус"
-            value={filterStatus?.label}
+            value={filterStatus?.value ?? ""}
             onChange={(event) => {
               const value = event.target.value;
-
-              setFilterStatus(value);
 
               const selected =
                 ACTIVE_LEAD_STATUS_OPTIONS.find(
@@ -118,11 +113,55 @@ const ActiveLeads = () => {
                 fetchLeads();
               }
             }}
+            MenuProps={{
+              PaperProps: {
+                sx: {
+                  mt: 1,
+                  borderRadius: 2,
+                  maxHeight: 430,
+                },
+              },
+            }}
+            sx={{
+              borderRadius: "10px",
+
+              "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                borderColor: "#1D5BE3",
+                borderWidth: 2,
+              },
+
+              "& .MuiSelect-select": {
+                py: 1.2,
+                px: 2,
+                fontSize: "1rem",
+                color: "#172B4D",
+              },
+
+              "& .MuiSvgIcon-root": {
+                color: "#6B7280",
+              },
+            }}
           >
-            <MenuItem value="">Все</MenuItem>
+            <MenuItem value="">Все статусы</MenuItem>
 
             {ACTIVE_LEAD_STATUS_OPTIONS.map((option) => (
-              <MenuItem key={option.value} value={option.value}>
+              <MenuItem
+                key={option.value}
+                value={option.value}
+                sx={{
+                  py: 1.2,
+                  fontSize: "1rem",
+                  color: "#172B4D",
+
+                  "&.Mui-selected": {
+                    backgroundColor: "#EAF1FB",
+                  },
+
+                  "&.Mui-selected:hover": {
+                    backgroundColor: "#EAF1FB",
+                  },
+                }}
+              >
                 {option.label}
               </MenuItem>
             ))}

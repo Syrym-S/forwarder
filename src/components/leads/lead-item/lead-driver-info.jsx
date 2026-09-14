@@ -5,6 +5,8 @@ import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 import { Box, Button, CircularProgress } from "@mui/material";
 import { useLeadsStore } from "../../../app/store/leads/leads-store";
 import { STATUS } from "../../../shared/const/tenders";
+import { InfoBadge } from "../../lead-form/info-badge";
+import InfoItem from "../../../shared/ui/info-item";
 
 const LeadDriverInfo = ({ leadData }) => {
   const driver = leadData?.driver;
@@ -39,7 +41,7 @@ const LeadDriverInfo = ({ leadData }) => {
   if (!driver.fio && !driver.id)
     return (
       <Section title="Водитель" icon={<PersonOutlinedIcon color="primary" />}>
-        <InfoField label={""} value={"Водитель не указан"} />
+        <InfoBadge label={""} value={"Водитель не указан"} />
       </Section>
     );
 
@@ -61,9 +63,9 @@ const LeadDriverInfo = ({ leadData }) => {
           gap: 3,
         }}
       >
-        <InfoField label={"ID водителя"} value={driver.id} />
-        <InfoField label={"ФИО"} value={driver.fio} />
-        <InfoField label={"Номер телефона"} value={driver.phone} />
+        <InfoItem label={"ID водителя"} value={driver.id} />
+        <InfoItem label={"ФИО"} value={driver.fio} />
+        <InfoItem label={"Номер телефона"} value={driver.phone} />
       </Box>
     </Section>
   );

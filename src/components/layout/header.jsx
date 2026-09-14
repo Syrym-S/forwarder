@@ -127,6 +127,7 @@ const Header = ({ openMenu, setOpenMenu }) => {
           variant="outlined"
           onClick={handleOpenProfileMenu}
           sx={{
+            borderColor: "rgb(24, 87, 196)",
             display: "flex",
             gap: 1,
             width: "fit-content",
@@ -164,6 +165,7 @@ const Header = ({ openMenu, setOpenMenu }) => {
                 xs: "none",
                 sm: "inline",
               },
+              color: "rgb(24, 87, 196)",
             }}
           >
             {userEmail}
