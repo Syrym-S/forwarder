@@ -21,7 +21,7 @@ const Drivers = () => {
   //Позже венру если нужно будет , показывает по какому слово пошел запрос поиска
   const [__, setSearchRequest] = useState("");
   const [inputValue, setInputValue] = useState("");
-  const [savedData, setSavedData] = useState(null);
+  const [savedData, setSavedData] = useState(true);
 
   const getDrivers = useDriverStore((state) => state.getDrivers);
   const searchDriver = useDriverStore((state) => state.searchDriver);
