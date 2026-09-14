@@ -1,15 +1,14 @@
-import { useEffect, useState } from "react";
 import RootLayout from "../../components/layout/root-layout";
-import { Box, Pagination, TextField } from "@mui/material";
 import TenderForm from "../../features/tenders/tender-form";
-import { useTendersStore } from "../../app/store/tenders/tender-store";
-import { VIEWS } from "../../shared/const/leads";
 import ForwardersTenderCard from "../../components/tenders/forwarders-tender-card";
-import PageLoader from "../../shared/ui/loaders/page-loader";
 import ViewTabs from "../../shared/ui/view-tabs";
 import ForwardersTenderTable from "../../components/tenders/forwarders-tender-table";
 import EmptyListUi from "../../shared/ui/common/empty-list-ui";
 import DataContainer from "../../shared/ui/data-container";
+import { useEffect, useState } from "react";
+import { Box, Pagination, TextField } from "@mui/material";
+import { useTendersStore } from "../../app/store/tenders/tender-store";
+import { VIEWS } from "../../shared/const/leads";
 
 const defaultValues = {
   lead: null,
@@ -159,7 +158,7 @@ const TenderForwarders = () => {
           {!isTendersEmpty && (
             <Pagination
               sx={{
-                my: 4,
+                my: 5,
                 mx: "auto",
                 width: "fit-content",
               }}

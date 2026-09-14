@@ -1,14 +1,12 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useCustomerStore } from "../../app/store/customers/customers-store";
 import { VIEWS } from "../../shared/const/leads";
 import { useSearchParams } from "react-router-dom";
 import { Alert, Box, Pagination } from "@mui/material";
-import RootLayout from "../layout/root-layout";
 import PageLoader from "../../shared/ui/loaders/page-loader";
 import CustomersTable from "./customer-table";
 import CustomerCard from "./customer-card";
 import CustomerDetailsModal from "./customer-details-modal";
-import EmptyListUI from "../../shared/ui/empty-list-ui";
 
 const CustomerListContainer = ({ view }) => {
   const [selectedCustomer, setSelectedCustomer] = useState(null);

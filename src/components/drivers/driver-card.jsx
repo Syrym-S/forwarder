@@ -1,7 +1,5 @@
 import { Box, Chip, Stack, Typography } from "@mui/material";
-import RenderStatus from "../../shared/ui/render-status";
-import Section from "../../shared/ui/section";
-import InfoField from "../../shared/ui/info-field";
+import InfoItem from "../../shared/ui/info-item";
 
 const DriverCard = ({ driver, setSelectedDriver }) => {
   const handleSetDriverDetails = () => {
@@ -92,9 +90,9 @@ const DriverCard = ({ driver, setSelectedDriver }) => {
           gap: 3,
         }}
       >
-        <InfoField label="Адресс" value={driver?.legal_address} />
-        <InfoField label="Email" value={driver?.email} />
-        <InfoField label="ИИН" value={driver?.iin} />
+        <InfoItem label="Адресс" value={driver?.legal_address} />
+        <InfoItem label="Email" value={driver?.email} />
+        <InfoItem label="ИИН" value={driver?.iin} />
       </Stack>
     </Box>
   );

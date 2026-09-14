@@ -12,7 +12,18 @@ const ApplicationsTenderTable = (tenders) => {
         getRowId={(row) => row.id}
         columns={columns}
         checkboxSelection
-        sx={{ border: 0 }}
+        sx={{
+          border: 0,
+          boxShadow: 0,
+          minHeight: "80vh",
+          "& .MuiDataGrid-row:nth-of-type(even)": {
+            backgroundColor: "#f5f7fa",
+          },
+
+          "& .MuiDataGrid-row:nth-of-type(odd)": {
+            backgroundColor: "#ffffff",
+          },
+        }}
       />
     </Paper>
   );

@@ -182,6 +182,7 @@ const TenderApplications = () => {
             shape="rounded"
             sx={{
               mx: "auto",
+              my: 5,
               width: "fit-content",
             }}
             onChange={handlePageChange}

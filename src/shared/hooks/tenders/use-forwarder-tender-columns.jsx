@@ -23,7 +23,17 @@ const useForwarderTenderColumns = () => {
       field: "status",
       headerName: "Статус",
       width: 200,
-      renderCell: ({ row }) => <RenderStatus status={row.status} />,
+      renderCell: ({ row }) => (
+        <Box
+          sx={{
+            height: "100%",
+            display: "flex",
+            alignItems: "center",
+          }}
+        >
+          <RenderStatus status={row.status} />
+        </Box>
+      ),
     },
     {
       field: "lead_id",

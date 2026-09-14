@@ -2,6 +2,7 @@ import { Box, Chip, Stack, Typography } from "@mui/material";
 import React from "react";
 import InfoField from "../../shared/ui/info-field";
 import PersonPinOutlinedIcon from "@mui/icons-material/PersonPinOutlined";
+import InfoItem from "../../shared/ui/info-item";
 
 const CustomerCard = ({ customer, setSelectedCustomer }) => {
   const handleSetCustomerDetails = () => {
@@ -71,9 +72,9 @@ const CustomerCard = ({ customer, setSelectedCustomer }) => {
           my: 2,
         }}
       >
-        <InfoField label="Банк" value={customer?.bank_name} />
-        <InfoField label="BIN" value={customer?.bin} />
-        <InfoField label="Адресс заказщиков" value={customer?.legal_address} />
+        <InfoItem label="Банк" value={customer?.bank_name} />
+        <InfoItem label="BIN" value={customer?.bin} />
+        <InfoItem label="Адресс заказщиков" value={customer?.legal_address} />
       </Box>
     </Box>
   );

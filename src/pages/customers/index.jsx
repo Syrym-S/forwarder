@@ -1,23 +1,7 @@
-import {
-  Autocomplete,
-  Box,
-  Button,
-  Dialog,
-  DialogTitle,
-  Pagination,
-  Stack,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Box, TextField } from "@mui/material";
 import RootLayout from "../../components/layout/root-layout";
-import Loader from "../../components/layout/loader";
 import { useEffect, useState } from "react";
-import CustomerCard from "../../components/customers/customer-card";
-import CustomerDetailsModal from "../../components/customers/customer-details-modal";
 import { useCustomerStore } from "../../app/store/customers/customers-store";
-import EmptyListUI from "../../shared/ui/empty-list-ui";
-import PageLoader from "../../shared/ui/loaders/page-loader";
-import CustomersTable from "../../components/customers/customer-table";
 import { VIEWS } from "../../shared/const/leads";
 import ViewTabs from "../../shared/ui/view-tabs";
 import AddCustomerForm from "../../features/customer/add-customer-form";
