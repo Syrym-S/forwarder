@@ -1,5 +1,4 @@
-import { Box, Chip, Typography } from "@mui/material";
-import { NavLink } from "react-router-dom";
+import { Box, Typography } from "@mui/material";
 import RenderStatus, { RenderStatusContent } from "../../ui/render-status";
 import dayjs from "dayjs";
 import CustomNavLink from "../../ui/custom-nav-link";

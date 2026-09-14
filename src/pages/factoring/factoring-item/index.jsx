@@ -3,7 +3,6 @@ import FactoringDetailsHeading from "../../../components/factoring/factoring-det
 import LeadMap from "../../../components/leads/lead-map";
 import FactoringFinancialInfo from "../../../components/factoring/factoring-financial-info";
 import FactoringCustomerInfo from "../../../components/factoring/factoring-customer-info";
-import FactoringTransportationInfo from "../../../components/factoring/factoring-transportation-info";
 import FactoringCargoInfo from "../../../components/factoring/factoring-cargo-info";
 import Section from "../../../shared/ui/section";
 import ProfileDataTable from "../../../components/factoring/profile-data-table";
@@ -24,6 +23,9 @@ import { useProfileStore } from "../../../app/store/profile/profile-store";
 import { STATUS } from "../../../shared/const/tenders";
 import { useParams } from "react-router-dom";
 import { useFactoringStore } from "../../../app/store/factoring/factoring-store";
+import LeadRouteInfo from "../../../components/leads/lead-item/lead-route-info";
+import InfoItem from "../../../shared/ui/info-item";
+import CargoCard from "../../../components/leads/lead-item/lead-cargo-info";
 
 const FactoringItem = () => {
   const { id } = useParams();
@@ -111,155 +113,162 @@ const FactoringItem = () => {
 
   return (
     <RootLayout withoutDataCheck>
-      <FactoringDetailsHeading factoring={factoringDetails} />
       <Box
         sx={{
-          boxShadow: 1,
-          borderRadius: 2,
-          overflow: "hidden",
-          my: 3,
+          px: 10,
         }}
       >
-        <LeadMap
-          from={from}
-          waypoints={waypoints}
-          to={to}
-          id={currentLead?.id}
-        />
-      </Box>
-
-      <Section
-        title="Подтвердить факторинг"
-        icon={<DescriptionOutlinedIcon color="primary" />}
-      >
-        {!factoringDetails?.verified_forwarder && (
-          <Button
-            variant="outlined"
-            disabled={isConfirmLoading || isLoading}
-            onClick={handleAcceptFactoring}
-          >
-            {isConfirmLoading || isLoading
-              ? "...Идет подтверждение"
-              : "Подтвердить"}
-          </Button>
-        )}
-      </Section>
-
-      <ConfirmModal />
-
-      <FactoringTransportationInfo lead={currentLead} />
-
-      <Section
-        title={`Подтверждении оплаты`}
-        icon={<RequestQuoteOutlinedIcon color="primary" />}
-      >
-        {canBeApproved && (
-          <Button
-            variant="outlined"
-            color="primary"
-            onClick={handleOpenModal}
-            sx={{
-              my: 1,
-            }}
-          >
-            Подтвердить оплату cо стороны экспедитора
-          </Button>
-        )}
+        <FactoringDetailsHeading factoring={factoringDetails} />
 
         <Box
           sx={{
-            display: "flex",
-            gap: 1,
+            boxShadow: 1,
+            borderRadius: 2,
+            overflow: "hidden",
+            my: 3,
           }}
         >
-          <InfoField
-            label={"Со стороны экспедитора"}
-            value={
-              <Chip
-                color={factoringDetails.await_paid_ff ? "success" : ""}
-                label={
-                  factoringDetails.await_paid_ff
-                    ? "Подтверждено"
-                    : "Не подтверждено"
-                }
-              />
-            }
-          />
-          <InfoField
-            label={"Со стороны фатора"}
-            value={
-              <Chip
-                color={factoringDetails.await_paid_cf ? "success" : ""}
-                label={
-                  factoringDetails.await_paid_cf
-                    ? "Подтверждено"
-                    : "Не подтверждено"
-                }
-              />
-            }
+          <LeadMap
+            from={from}
+            waypoints={waypoints}
+            to={to}
+            id={currentLead?.id}
           />
         </Box>
 
-        {openConfirmModal && (
-          <ConfirmModal
-            open={openConfirmModal}
-            onClose={handleCloseModal}
-            text={`Вы дейтсвительно хотите подтвердить факторинг на сумму ${currentLead?.price} ${currentLead?.currency}`}
-            onConfirm={handleApprovePaiment}
-          />
-        )}
-      </Section>
+        <Section
+          title="Подтвердить факторинг"
+          icon={<DescriptionOutlinedIcon color="primary" />}
+        >
+          {!factoringDetails?.verified_forwarder && (
+            <Button
+              variant="outlined"
+              disabled={isConfirmLoading || isLoading}
+              onClick={handleAcceptFactoring}
+            >
+              {isConfirmLoading || isLoading
+                ? "...Идет подтверждение"
+                : "Подтвердить"}
+            </Button>
+          )}
+        </Section>
 
-      <Section
-        title={`Груз`}
-        icon={<LocalShippingOutlinedIcon color="primary" />}
-      >
+        <ConfirmModal />
+
+        <LeadRouteInfo leadData={currentLead} />
+
+        <Section
+          title={`Подтверждении оплаты`}
+          icon={<RequestQuoteOutlinedIcon color="primary" />}
+        >
+          {canBeApproved && (
+            <Button
+              variant="outlined"
+              color="primary"
+              onClick={handleOpenModal}
+              sx={{
+                my: 1,
+              }}
+            >
+              Подтвердить оплату cо стороны экспедитора
+            </Button>
+          )}
+
+          <Box
+            sx={{
+              display: "flex",
+              gap: 1,
+            }}
+          >
+            <InfoItem
+              label={"Со стороны экспедитора"}
+              value={
+                <Chip
+                  color={factoringDetails.await_paid_ff ? "success" : ""}
+                  label={
+                    factoringDetails.await_paid_ff
+                      ? "Подтверждено"
+                      : "Не подтверждено"
+                  }
+                />
+              }
+            />
+            <InfoItem
+              label={"Со стороны фатора"}
+              value={
+                <Chip
+                  color={factoringDetails.await_paid_cf ? "success" : ""}
+                  label={
+                    factoringDetails.await_paid_cf
+                      ? "Подтверждено"
+                      : "Не подтверждено"
+                  }
+                />
+              }
+            />
+          </Box>
+
+          {openConfirmModal && (
+            <ConfirmModal
+              open={openConfirmModal}
+              onClose={handleCloseModal}
+              text={`Вы дейтсвительно хотите подтвердить факторинг на сумму ${currentLead?.price} ${currentLead?.currency}`}
+              onConfirm={handleApprovePaiment}
+            />
+          )}
+        </Section>
+
+        <Section
+          title={`Груз`}
+          icon={<LocalShippingOutlinedIcon color="primary" />}
+        >
+          <Box
+            sx={{
+              display: "grid",
+              gridTemplateColumns: "1fr",
+              gap: 2,
+            }}
+          >
+            {currentLead?.cargos?.map((cargo, index) => (
+              <CargoCard cargo={cargo} index={index} />
+            ))}
+          </Box>
+        </Section>
+
+        <FactoringFinancialInfo factoring={factoringDetails} />
+
+        <FactoringCustomerInfo
+          customer={factoringDetails?.customer}
+          verified_customer={factoringDetails?.verified_customer}
+        />
+        <FactoringVerifications factoring={factoringDetails} />
         <Box
           sx={{
             display: "grid",
-            gridTemplateColumns: "1fr",
-            gap: 2,
+            gridTemplateColumns: {
+              xs: "1fr",
+              sm: "1fr 1fr",
+            },
+            gap: {
+              xs: 1,
+              sm: 3,
+            },
           }}
         >
-          {currentLead?.cargos?.map((cargo) => (
-            <FactoringCargoInfo cargo={cargo} />
-          ))}
+          <Section
+            icon={<AccountCircleOutlinedIcon color="primary" />}
+            title={"Мои данные"}
+          >
+            <ProfileDataTable />
+          </Section>
+
+          <Section
+            icon={<RememberMeOutlinedIcon color="primary" />}
+            title={"Данные Фактора"}
+          >
+            <FactorDataTable factor={factoringDetails?.factor} />
+          </Section>
         </Box>
-      </Section>
-
-      <FactoringFinancialInfo factoring={factoringDetails} />
-
-      <FactoringCustomerInfo
-        customer={factoringDetails?.customer}
-        verified_customer={factoringDetails?.verified_customer}
-      />
-      <FactoringVerifications factoring={factoringDetails} />
-      <Box
-        sx={{
-          display: "grid",
-          gridTemplateColumns: {
-            xs: "1fr",
-            sm: "1fr 1fr",
-          },
-          gap: {
-            xs: 1,
-            sm: 3,
-          },
-        }}
-      >
-        <Section
-          icon={<AccountCircleOutlinedIcon color="primary" />}
-          title={"Мои данные"}
-        >
-          <ProfileDataTable />
-        </Section>
-
-        <Section
-          icon={<RememberMeOutlinedIcon color="primary" />}
-          title={"Данные Фактора"}
-        >
-          <FactorDataTable factor={factoringDetails?.factor} />
-        </Section>
       </Box>
     </RootLayout>
   );

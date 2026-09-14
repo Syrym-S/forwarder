@@ -3,6 +3,7 @@ import InfoField from "../../shared/ui/info-field";
 import Section from "../../shared/ui/section";
 import CurrencyExchangeOutlinedIcon from "@mui/icons-material/CurrencyExchangeOutlined";
 import { moneySpacingFormat } from "../../shared/helpers/money-spacing";
+import InfoItem from "../../shared/ui/info-item";
 
 const FactoringFinancialInfo = ({ factoring }) => {
   return (
@@ -23,19 +24,19 @@ const FactoringFinancialInfo = ({ factoring }) => {
           },
         }}
       >
-        <InfoField
+        <InfoItem
           label={"Задолжность"}
           value={`${moneySpacingFormat(factoring?.deb_summ)} ${factoring?.deb_currency}`}
         />
-        <InfoField
+        <InfoItem
           label={"Оплата за задолжность"}
           value={`${moneySpacingFormat(factoring?.cred_summ)} ${factoring?.currency}`}
         />
-        <InfoField
+        <InfoItem
           label={"Процент фактора"}
           value={`${(factoring?.proc_factor * 100).toFixed(1)}%`}
         />
-        <InfoField
+        <InfoItem
           label={"Процент сервиса"}
           value={`${(factoring?.proc_service * 100).toFixed(1)}%`}
         />

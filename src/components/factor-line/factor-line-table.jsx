@@ -14,7 +14,16 @@ const FactorLineTable = (factorLine) => {
         columns={columns}
         rowHeight={70}
         checkboxSelection
-        sx={{ border: 0, minHeight: "80vh" }}
+        // sx={{ border: 0, minHeight: "80vh" }}
+        sx={{
+          "& .MuiDataGrid-row:nth-of-type(even)": {
+            backgroundColor: "#f5f7fa",
+          },
+
+          "& .MuiDataGrid-row:nth-of-type(odd)": {
+            backgroundColor: "#ffffff",
+          },
+        }}
         localeText={{
           noRowsLabel: "Список пуст",
         }}

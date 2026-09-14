@@ -1,22 +1,19 @@
-import React, { useEffect, useState } from "react";
 import RootLayout from "../../components/layout/root-layout";
 import CreateFactoringForm from "../../features/factoring/create-factoring-form";
-import { Alert, Box, Button, Pagination, Tab, Tabs } from "@mui/material";
-import { useFactoringStore } from "../../app/store/factoring/factoring-store";
 import FactoringCard from "../../components/factoring/factoring-card";
-import Loader from "../../components/layout/loader";
 import FactoringTable from "../../components/factoring/factoring-table";
-import { VIEWS } from "../../shared/const/leads";
-import ViewListRoundedIcon from "@mui/icons-material/ViewListRounded";
-import GridViewRoundedIcon from "@mui/icons-material/GridViewRounded";
 import ViewTabs from "../../shared/ui/view-tabs";
 import PageLoader from "../../shared/ui/loaders/page-loader";
-import { useLeadsStore } from "../../app/store/leads/leads-store";
 import FactorLineForm from "../../features/factor-line/factor-line-form";
 import SuccessModal from "../../components/factoring/factoring-form/success-modal";
+import { Alert, Box, Pagination } from "@mui/material";
 import { useNotificationsStore } from "../../app/store/notifications/noti-store";
 import { parserNotificationType } from "../../shared/helpers/notifications/parse-notification-type";
 import { NOTIFICATION_TYPE } from "../../shared/const/notification-types";
+import { useEffect, useState } from "react";
+import { useFactoringStore } from "../../app/store/factoring/factoring-store";
+import { VIEWS } from "../../shared/const/leads";
+import { useLeadsStore } from "../../app/store/leads/leads-store";
 
 const Factoring = () => {
   const factorings = useFactoringStore((state) => state.factorings);

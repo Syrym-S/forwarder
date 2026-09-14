@@ -3,6 +3,7 @@ import Section from "../../shared/ui/section";
 import BusinessOutlinedIcon from "@mui/icons-material/BusinessOutlined";
 import InfoField from "../../shared/ui/info-field";
 import { Box, Chip } from "@mui/material";
+import InfoItem from "../../shared/ui/info-item";
 
 const FactoringCustomerInfo = ({ customer, verified_customer }) => {
   if (!customer)
@@ -33,10 +34,10 @@ const FactoringCustomerInfo = ({ customer, verified_customer }) => {
           },
         }}
       >
-        <InfoField label={"Имя"} value={customer.fullname} />
-        <InfoField label={"ID"} value={customer.id} />
-        <InfoField label={"БИН"} value={customer.bin} />
-        <InfoField
+        <InfoItem label={"Имя"} value={customer.fullname} />
+        <InfoItem label={"ID"} value={customer.id} />
+        <InfoItem label={"БИН"} value={customer.bin} />
+        <InfoItem
           label={"Подтверждение"}
           value={
             <Chip

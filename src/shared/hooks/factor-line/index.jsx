@@ -29,7 +29,17 @@ const useFactoringLineColumns = () => {
       headerName: "Статус",
       flex: 1,
       minWidth: 150,
-      renderCell: ({ row }) => <RenderStatus status={row.status} />,
+      renderCell: ({ row }) => (
+        <Box
+          sx={{
+            height: "100%",
+            display: "flex",
+            alignItems: "center",
+          }}
+        >
+          <RenderStatus status={row.status} />
+        </Box>
+      ),
     },
     {
       field: "factor",

@@ -4,6 +4,8 @@ import RouteOutlinedIcon from "@mui/icons-material/RouteOutlined";
 import RoutePoint from "./route-point";
 
 const LeadRouteInfo = ({ leadData }) => {
+  console.log(leadData);
+
   return (
     <Section title="Маршрут" icon={<RouteOutlinedIcon color="primary" />}>
       <Box
@@ -19,9 +21,9 @@ const LeadRouteInfo = ({ leadData }) => {
       >
         <RoutePoint
           label="Откуда"
-          address={leadData.from_location?.address || "Битые данные"}
+          address={leadData?.from_location?.address || "Битые данные"}
           status={
-            leadData.from_location?.is_passed
+            leadData?.from_location?.is_passed
               ? "Точка пройдена"
               : "Точка не пройдена"
           }
@@ -37,9 +39,9 @@ const LeadRouteInfo = ({ leadData }) => {
 
         <RoutePoint
           label="Откуда"
-          address={leadData.to_location?.address || "Битые данные"}
+          address={leadData?.to_location?.address || "Битые данные"}
           status={
-            leadData.to_location?.is_passed
+            leadData?.to_location?.is_passed
               ? "Точка пройдена"
               : "Точка не пройдена"
           }

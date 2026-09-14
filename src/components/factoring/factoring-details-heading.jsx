@@ -11,7 +11,6 @@ import {
   Typography,
 } from "@mui/material";
 import RenderStatus from "../../shared/ui/render-status";
-import EditNoteRoundedIcon from "@mui/icons-material/EditNoteRounded";
 
 const FactoringDetailsHeading = ({
   factoring,
@@ -42,13 +41,20 @@ const FactoringDetailsHeading = ({
         }}
       >
         <Stack>
-          <Typography variant="h5" fontWeight={700}>
+          <Typography
+            sx={{
+              fontWeight: 600,
+              fontSize: 22,
+            }}
+          >
             Информация о факторинге
           </Typography>
 
           <Typography
             sx={{
               color: "color.slate",
+              fontWeight: 500,
+              fontSize: 15,
             }}
           >
             Подробные данные

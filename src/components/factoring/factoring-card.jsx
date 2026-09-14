@@ -5,6 +5,7 @@ import InfoField from "../../shared/ui/info-field";
 import dayjs from "dayjs";
 import { useNavigate } from "react-router-dom";
 import { moneySpacingFormat } from "../../shared/helpers/money-spacing";
+import InfoItem from "../../shared/ui/info-item";
 
 const FactoringCard = ({ factoring }) => {
   const navigate = useNavigate();
@@ -96,15 +97,12 @@ const FactoringCard = ({ factoring }) => {
               xs: "1fr",
               sm: "repeat(3, 1fr)",
             },
-            gap: {
-              xs: 1,
-              sm: 3,
-            },
+            gap: 1,
           }}
         >
-          <InfoField label={"ID факторинга"} value={factoring?.id || "0"} />
-          <InfoField label={"ID лида"} value={factoring?.lead_id} />
-          <InfoField
+          <InfoItem label={"ID факторинга"} value={factoring?.id || "0"} />
+          <InfoItem label={"ID лида"} value={factoring?.lead_id} />
+          <InfoItem
             label={"Дата создания"}
             value={dayjs(factoring?.created_at.date).format("DD-MM-YYYY")}
           />
@@ -119,11 +117,11 @@ const FactoringCard = ({ factoring }) => {
             },
           }}
         >
-          <InfoField
+          <InfoItem
             label={"Задолжность"}
             value={`${moneySpacingFormat(factoring?.deb_summ)} ${factoring?.deb_currency}`}
           />
-          <InfoField
+          <InfoItem
             label={"Оплата за задолжность"}
             value={`${moneySpacingFormat(factoring?.cred_summ)} ${factoring?.currency}`}
           />
@@ -134,15 +132,15 @@ const FactoringCard = ({ factoring }) => {
             gridTemplateColumns: "repeat(2, 1fr)",
             gap: {
               xs: 1,
-              sm: 3,
+              sm: 2,
             },
           }}
         >
-          <InfoField
+          <InfoItem
             label={"Процент фактора"}
             value={`${(factoring?.proc_factor * 100).toFixed(1)}%`}
           />
-          <InfoField
+          <InfoItem
             label={"Процент сервиса"}
             value={`${(factoring?.proc_service * 100).toFixed(1)}%`}
           />
