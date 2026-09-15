@@ -8,13 +8,23 @@ import {
 } from "@mui/material";
 import { useLeadsStore } from "../../../app/store/leads/leads-store";
 
-const ShareModal = ({ leadId, openShareModal, handleCloseShareModal }) => {
+const ShareModal = ({
+  leadId,
+  openShareModal,
+  handleCloseShareModal,
+  setShareUrl,
+}) => {
   const shareLead = useLeadsStore((state) => state.shareLead);
 
   const handleShareLead = async () => {
     const response = await shareLead(leadId);
+    const link = response.url;
+    const expires_at = response.expires_at;
 
-    window.open(response.url, "_blank");
+    setShareUrl({
+      url: link,
+      expires_at: expires_at,
+    });
   };
 
   return (

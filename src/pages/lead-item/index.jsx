@@ -12,6 +12,7 @@ import LeadItemMainContainer from "../../components/leads/lead-item/lead-item-ma
 import { LEAD_TABS } from "../../shared/const/leads";
 import ChatFirstVertion from "../../components/chat/chat-first-vertion";
 import { STATUS } from "../../shared/const/tenders";
+import ShareLeadLinkBlock from "../../components/leads/lead-item/share-lead-link-block";
 
 const LeadItem = () => {
   const { id } = useParams();
@@ -23,6 +24,7 @@ const LeadItem = () => {
   const [openShareModal, setOpenShareModal] = useState(false);
   const [openEdit, setOpenEdit] = useState(false);
   const [documentError, setDocumentError] = useState("");
+  const [shareUrl, setShareUrl] = useState(null);
 
   const leadData = useLeadsStore((state) => state.currentLead);
   const files = useLeadsStore((state) => state.files);
@@ -179,6 +181,16 @@ const LeadItem = () => {
             leadId={id}
             openShareModal={openShareModal}
             handleCloseShareModal={handleCloseShareModal}
+            setShareUrl={setShareUrl}
+          />
+        )}
+
+        {shareUrl && (
+          <ShareLeadLinkBlock
+            open={shareUrl}
+            link={shareUrl.url}
+            expiresAt={shareUrl.expires_at}
+            onClose={() => setShareUrl(null)}
           />
         )}
 

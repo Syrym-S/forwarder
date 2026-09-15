@@ -8,7 +8,6 @@ const RoutePoint = ({ label, address, status, type }) => {
   return (
     <Box
       sx={{
-        width: "100%",
         p: 1.5,
         border: "1px solid",
         borderColor: "divider",

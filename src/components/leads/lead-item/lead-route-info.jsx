@@ -4,8 +4,6 @@ import RouteOutlinedIcon from "@mui/icons-material/RouteOutlined";
 import RoutePoint from "./route-point";
 
 const LeadRouteInfo = ({ leadData }) => {
-  console.log(leadData);
-
   return (
     <Section title="Маршрут" icon={<RouteOutlinedIcon color="primary" />}>
       <Box
