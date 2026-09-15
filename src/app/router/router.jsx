@@ -1,4 +1,3 @@
-import React from "react";
 import Dashboard from "../../pages/dashboard";
 import LeadItem from "../../pages/lead-item";
 import Profile from "../../pages/profile";
@@ -13,13 +12,13 @@ import TenderForwardersItem from "../../pages/tender-forwarders/tender-forwarder
 import TenderApplications from "../../pages/tender-applications";
 import TenderApplicationsItem from "../../pages/tender-applications/tender-applications-item";
 import FactoringItem from "../../pages/factoring/factoring-item";
-import { createBrowserRouter } from "react-router-dom";
-import { isStaging } from "../client";
 import AppContentContainer from "./app-content-container";
 import Factor from "../../pages/factor";
 import TenderHistory from "../../pages/tender-history";
 import FactorItem from "../../pages/factor/factor-item";
 import ErrorPage from "../../pages/error";
+import { createBrowserRouter } from "react-router-dom";
+import { isStaging } from "../client";
 
 export const router = createBrowserRouter(
   [

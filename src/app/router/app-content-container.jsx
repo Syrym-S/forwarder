@@ -1,20 +1,11 @@
-import React, { useEffect, useRef, useState } from "react";
 import Header from "../../components/layout/header";
-import { Outlet } from "react-router-dom";
-import {
-  Box,
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  Snackbar,
-  Typography,
-} from "@mui/material";
 import SideBar from "../../components/layout/menu";
 import NotificationPopup from "../../components/layout/notifications/notification-popup";
-import { useNotificationsStore } from "../store/notifications/noti-store";
 import RenderNotificationIcon from "../../shared/ui/render-notification-icon";
+import { useEffect, useRef, useState } from "react";
+import { Outlet } from "react-router-dom";
+import { Box, Snackbar, Typography } from "@mui/material";
+import { useNotificationsStore } from "../store/notifications/noti-store";
 
 const AppContentContainer = () => {
   const [openMenu, setOpenMenu] = useState(false);
@@ -90,35 +81,47 @@ const AppContentContainer = () => {
         {newNotification && (
           <Box
             sx={{
-              px: 2,
-              py: 3,
-              height: 100,
-              width: 300,
-              backgroundColor: "#1976d2",
+              px: 1.5,
+              py: 1.25,
+              width: 280,
+              minHeight: 80,
+              backgroundColor: "primary.main",
               borderBottom: "1px solid rgba(0,0,0,0.1)",
               cursor: "pointer",
               borderRadius: 2,
               boxShadow: 2,
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
             }}
           >
             <Typography
               sx={{
-                fontSize: "1.2rem",
+                fontSize: "0.95rem",
+                fontWeight: 500,
                 display: "flex",
                 alignItems: "center",
-                gap: 1,
-                height: "fit-content",
+                gap: 0.75,
                 color: "white",
+                lineHeight: 1.2,
+                mb: 0.5,
               }}
             >
               <RenderNotificationIcon type={newNotification?.type} />
+
               {newNotification?.theme}
             </Typography>
 
             <Typography
               sx={{
-                fontSize: "0.8rem",
+                fontSize: "0.75rem",
                 color: "white",
+                lineHeight: 1.3,
+
+                display: "-webkit-box",
+                WebkitLineClamp: 2,
+                WebkitBoxOrient: "vertical",
+                overflow: "hidden",
               }}
             >
               {newNotification?.message}
