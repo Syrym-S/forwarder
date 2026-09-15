@@ -1,7 +1,11 @@
-import { Dialog, DialogContent } from "@mui/material";
-import { useState } from "react";
 import FormHeader from "../../components/lead-form/form-header";
 import FirstStep from "../../components/lead-form/steps/first-step";
+import DocumentUpload from "../../components/lead-form/steps/document-upload";
+import PriceStep from "../../components/lead-form/steps/price-step";
+import LeadFormTabs from "../../components/lead-form/lead-form-tabs";
+import CargoStep from "../../components/lead-form/steps/cargo-step";
+import { Dialog, DialogContent } from "@mui/material";
+import { useState } from "react";
 import { FormNavButtons } from "../../components/lead-form/form-nav-buttons";
 import { useForm, useWatch } from "react-hook-form";
 import { LastStep } from "../../components/lead-form/steps/last-step";
@@ -10,11 +14,7 @@ import { mapCreateLeadFormToApi } from "../../components/lead-form/model/createL
 import { ThirdStep } from "../../components/lead-form/steps/third-step";
 import { ForthStep } from "../../components/lead-form/steps/forth-step";
 import { uploadLeadFileApi } from "../../app/store/leads/api";
-import DocumentUpload from "../../components/lead-form/steps/document-upload";
-import PriceStep from "../../components/lead-form/steps/price-step";
-import LeadFormTabs from "../../components/lead-form/lead-form-tabs";
 import { useLeadsStore } from "../../app/store/leads/leads-store";
-import SecondStep from "../../components/lead-form/steps/second-step";
 
 const steps = [
   { id: 1, label: "Маршрут" },
@@ -58,7 +58,7 @@ const AddLeadForm = ({
   const [uploadedFiles, setUploadedFiles] = useState([]);
   const [activeStep, setActiveStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [hasStepError, setHasStepError] = useState(false);
+  const [hasStepError] = useState(false);
   const [resultModal, setResultModal] = useState({
     open: false,
     type: null,
@@ -199,7 +199,7 @@ const AddLeadForm = ({
         );
       case 2:
         return (
-          <SecondStep
+          <CargoStep
             control={control}
             errors={errors}
             leadStatus={currentLead?.status}

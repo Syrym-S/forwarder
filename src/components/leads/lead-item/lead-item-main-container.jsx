@@ -1,12 +1,11 @@
-import { useParams } from "react-router-dom";
+import RenderErrorContext from "../../../shared/ui/errors/render-error-context";
+import CargoCard from "./lead-cargo-info";
 import LeadMap from "../lead-map";
-import { Box, Button, CircularProgress } from "@mui/material";
 import LeadCustomerInfo from "./lead-customer-info";
 import LeadRouteInfo from "./lead-route-info";
 import Section from "../../../shared/ui/section";
 import LocalShippingOutlinedIcon from "@mui/icons-material/LocalShippingOutlined";
 import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
-import LeadCargoInfo from "./lead-cargo-info";
 import LeadCargoFilesContainer from "../lead-cargo-files-container";
 import LeadDriverInfo from "./lead-driver-info";
 import { useEffect, useState } from "react";
@@ -14,9 +13,9 @@ import { uploadLeadFileApi } from "../../../app/store/leads/api";
 import { useLeadsStore } from "../../../app/store/leads/leads-store";
 import { LeadDocumentsSection } from "../documents/LeadDocumentsSection";
 import { STATUS } from "../../../shared/const/tenders";
-import RenderErrorContext from "../../../shared/ui/errors/render-error-context";
 import { LeadDocumentCard } from "../documents/LeadDocumentCard";
-import CargoCard from "./lead-cargo-info";
+import { useParams } from "react-router-dom";
+import { Box, Button, CircularProgress } from "@mui/material";
 
 const LeadItemMainContainer = ({
   leadData,

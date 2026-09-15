@@ -65,7 +65,7 @@ export function mapCreateLeadFormToApi(form) {
 
   addIfHasValue(payload, "waypoints", form.waypoints);
   addIfHasValue(payload, "loading_date", form.loadingDate);
-  addIfHasValue(payload, "comment", normalizeText(form.comment));
+  addIfHasValue(payload, "description", normalizeText(form.description));
   addIfHasValue(payload, "driver", form.driver?.id);
   addIfHasValue(payload, "customer", form.customer?.id);
   addIfHasValue(payload, "documents", form.documents);
@@ -109,7 +109,7 @@ export function mapCreatedLeadToUi(form, response = {}) {
 
     driver: form.driver[0].id,
 
-    description: form.comment || `Груз заявки #${id}`,
+    description: form.description || `Груз заявки #${id}`,
 
     from_city: form.fromLocation,
 

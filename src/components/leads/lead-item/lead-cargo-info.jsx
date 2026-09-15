@@ -1,42 +1,7 @@
-import { Box, Button, Typography } from "@mui/material";
+import InfoItem from "../../../shared/ui/info-item";
+import { Box, Button, CircularProgress, Typography } from "@mui/material";
 import { STATUS } from "../../../shared/const/tenders";
 import { useLeadsStore } from "../../../app/store/leads/leads-store";
-
-const InfoItem = ({ label, value }) => {
-  return (
-    <Box
-      sx={{
-        p: 1,
-        border: "1px solid",
-        borderColor: "divider",
-        borderRadius: 2.5,
-        minWidth: 0,
-      }}
-    >
-      <Typography
-        sx={{
-          fontSize: 12,
-          fontWeight: 500,
-          color: "text.secondary",
-          mb: 0.3,
-        }}
-      >
-        {label}
-      </Typography>
-
-      <Typography
-        sx={{
-          fontSize: 15,
-          fontWeight: 500,
-          color: "text.primary",
-          lineHeight: 1.3,
-        }}
-      >
-        {value ?? "Не указано"}
-      </Typography>
-    </Box>
-  );
-};
 
 const CargoCard = ({
   cargo,
@@ -49,13 +14,15 @@ const CargoCard = ({
     lead?.status === STATUS.new || lead?.status === STATUS.add_driver;
   const getLeadItem = useLeadsStore((state) => state.getLeadItem);
   const deleteCargo = useLeadsStore((state) => state.deleteCargo);
+  const isLoading = useLeadsStore((state) => state.isLoading);
+  const isCargoDeleteLoading = useLeadsStore(
+    (state) => state.isCargoDeleteLoading,
+  );
 
   const handleDeleteCargo = async () => {
     await deleteCargo(lead.id, index);
     await getLeadItem(lead.id);
   };
-
-  console.log(cargo);
 
   return (
     <Box
@@ -115,8 +82,13 @@ const CargoCard = ({
           sx={{
             my: 1,
             borderRadius: 3,
+            display: "flex",
+            gap: 1,
           }}
         >
+          {(isCargoDeleteLoading || isLoading) && (
+            <CircularProgress size={13} />
+          )}
           Удалить груз
         </Button>
       )}

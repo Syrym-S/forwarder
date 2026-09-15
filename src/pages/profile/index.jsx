@@ -1,9 +1,9 @@
-import { useEffect } from "react";
 import RootLayout from "../../components/layout/root-layout";
-import { Box, Container, Paper, Stack, Typography } from "@mui/material";
-import { useProfileStore } from "../../app/store/profile/profile-store";
 import EditProfileForm from "../../features/profile/edit-profile-data";
 import PageLoader from "../../shared/ui/loaders/page-loader";
+import { useEffect } from "react";
+import { Box, Container, Paper, Stack, Typography } from "@mui/material";
+import { useProfileStore } from "../../app/store/profile/profile-store";
 
 const Profile = () => {
   const profileData = useProfileStore((state) => state.profileData);

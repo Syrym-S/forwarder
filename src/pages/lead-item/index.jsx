@@ -1,18 +1,18 @@
-import { useEffect, useState } from "react";
 import RootLayout from "../../components/layout/root-layout";
-import { useParams } from "react-router-dom";
-import { Box, Button, Tab, Tabs } from "@mui/material";
 import AddLeadForm from "../../features/leads/add-lead-form";
-import { useFormDefaultValues } from "../../shared/hooks/leads/use-form-default-values";
 import LeadHeading from "../../components/leads/lead-item/lead-heading";
-import { useLeadsStore } from "../../app/store/leads/leads-store";
 import PageLoader from "../../shared/ui/loaders/page-loader";
 import ShareModal from "../../components/leads/lead-item/share-modal";
 import LeadItemMainContainer from "../../components/leads/lead-item/lead-item-main-container";
-import { LEAD_TABS } from "../../shared/const/leads";
 import ChatFirstVertion from "../../components/chat/chat-first-vertion";
-import { STATUS } from "../../shared/const/tenders";
 import ShareLeadLinkBlock from "../../components/leads/lead-item/share-lead-link-block";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { Box, Button, Tab, Tabs } from "@mui/material";
+import { useFormDefaultValues } from "../../shared/hooks/leads/use-form-default-values";
+import { useLeadsStore } from "../../app/store/leads/leads-store";
+import { LEAD_TABS } from "../../shared/const/leads";
+import { STATUS } from "../../shared/const/tenders";
 
 const LeadItem = () => {
   const { id } = useParams();

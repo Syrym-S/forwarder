@@ -1,14 +1,12 @@
-import { Alert, Box, Pagination } from "@mui/material";
-import React, { useEffect, useState } from "react";
 import DriversTable from "./driver-table";
 import DriverCard from "./driver-card";
+import PageLoader from "../../shared/ui/loaders/page-loader";
+import DriverDetailsModal from "./driver-details-modal";
+import { Alert, Box, Pagination } from "@mui/material";
+import { useEffect, useState } from "react";
 import { useDriverStore } from "../../app/store/drivers/driver-store";
 import { VIEWS } from "../../shared/const/leads";
 import { useSearchParams } from "react-router-dom";
-import EmptyListUI from "../../shared/ui/empty-list-ui";
-import PageLoader from "../../shared/ui/loaders/page-loader";
-import DriverDetailsModal from "./driver-details-modal";
-import RootLayout from "../layout/root-layout";
 
 const DriverListContainer = ({ view }) => {
   const [_, setSearchParams] = useSearchParams();
@@ -23,6 +21,7 @@ const DriverListContainer = ({ view }) => {
   const clearDriverDetails = useDriverStore(
     (state) => state.clearDriverDetails,
   );
+  const getDrivers = useDriverStore((state) => state.getDrivers);
 
   const isCardsView = view === VIEWS.cards;
   const isEmpty = drivers?.length === 0;
@@ -47,6 +46,12 @@ const DriverListContainer = ({ view }) => {
       getDriverDetails(selectedDriver?.id);
     }
   }, [selectedDriver]);
+
+  useEffect(() => {
+    getDrivers({
+      page: page,
+    });
+  }, [page]);
 
   if (isLoading) return <PageLoader />;
 

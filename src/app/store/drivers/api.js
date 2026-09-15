@@ -2,11 +2,7 @@ import { api } from "../../client";
 
 export const getDriversApi = async (params) => {
   const data = await api.get(`/forwarder/v1/drivers`, {
-    headers: {
-      params,
-      // eslint-disable-next-line no-undef
-      "X-WP-Nonce": APP_DATA.nonce,
-    },
+    params,
   });
 
   return data;

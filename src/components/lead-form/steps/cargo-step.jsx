@@ -13,7 +13,7 @@ import { useOptionsStore } from "../../../app/store/options";
 import { StepSection } from "../step-section";
 import { STATUS } from "../../../shared/const/tenders";
 
-const SecondStep = ({ control, errors, leadStatus }) => {
+const CargoStep = ({ control, errors, leadStatus }) => {
   const { fields, append, remove } = useFieldArray({
     control,
     name: "cargos",
@@ -27,7 +27,6 @@ const SecondStep = ({ control, errors, leadStatus }) => {
   const lastCargo = cargos?.[cargos.length - 1];
   const canEditStatus =
     leadStatus === STATUS.new || leadStatus === STATUS.add_driver;
-
   const canAddCargo = lastCargo?.name?.trim();
 
   return (
@@ -96,7 +95,7 @@ const SecondStep = ({ control, errors, leadStatus }) => {
   );
 };
 
-export default SecondStep;
+export default CargoStep;
 
 const CargoStepFieldsContent = ({ index, control }) => {
   const searchCargoType = useOptionsStore((state) => state.searchCargoType);
@@ -337,7 +336,7 @@ const CargoStepFieldsContent = ({ index, control }) => {
       />
 
       <Controller
-        name={`cargos.${index}.comment`}
+        name={`cargos.${index}.description`}
         control={control}
         render={({ field }) => (
           <TextField
