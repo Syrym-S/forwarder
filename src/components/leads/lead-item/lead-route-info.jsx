@@ -36,7 +36,7 @@ const LeadRouteInfo = ({ leadData }) => {
         ))}
 
         <RoutePoint
-          label="Откуда"
+          label="Куда"
           address={leadData?.to_location?.address || "Битые данные"}
           status={
             leadData?.to_location?.is_passed

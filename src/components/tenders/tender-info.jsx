@@ -1,8 +1,7 @@
-import React from "react";
 import Section from "../../shared/ui/section";
-import { Box } from "@mui/material";
-import InfoField from "../../shared/ui/info-field";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
+import InfoItem from "../../shared/ui/info-item";
+import { Box } from "@mui/material";
 
 const TenderInfo = ({ tender }) => {
   return (
@@ -21,20 +20,20 @@ const TenderInfo = ({ tender }) => {
           mb: 2,
         }}
       >
-        <InfoField label="Для кого" value={"-"} />
+        <InfoItem label="Для кого" value={"-"} />
 
-        <InfoField
+        <InfoItem
           label="Тип публикации"
           value={
             tender?.publication_type === "public" ? "Публичный" : "Приватный"
           }
         />
 
-        <InfoField
+        <InfoItem
           label="Макс. участников"
           value={tender?.max_participants_count}
         />
-        <InfoField label="Участников" value={tender?.participants_count} />
+        <InfoItem label="Участников" value={tender?.participants_count} />
       </Box>
     </Section>
   );

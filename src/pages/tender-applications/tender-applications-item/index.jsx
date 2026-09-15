@@ -19,6 +19,7 @@ import { STATUS } from "../../../shared/const/tenders";
 import { useNotificationsStore } from "../../../app/store/notifications/noti-store";
 import { parserNotificationType } from "../../../shared/helpers/notifications/parse-notification-type";
 import { NOTIFICATION_TYPE } from "../../../shared/const/notification-types";
+import LeadRouteInfo from "../../../components/leads/lead-item/lead-route-info";
 
 const TenderApplicationsItem = () => {
   const { id } = useParams();
@@ -70,6 +71,8 @@ const TenderApplicationsItem = () => {
     }
   }, [newNotification]);
 
+  console.log("customerCurrentTender", customerCurrentTender);
+
   if (!customerCurrentTender)
     return (
       <RootLayout withoutDataCheck>
@@ -97,7 +100,7 @@ const TenderApplicationsItem = () => {
         />
       </Box>
 
-      <TransportationInfo tender={customerCurrentTender} />
+      <LeadRouteInfo leadData={customerCurrentTender.lead} />
 
       <TenderInfo tender={customerCurrentTender} />
 
@@ -112,8 +115,8 @@ const TenderApplicationsItem = () => {
             gap: 2,
           }}
         >
-          {cargosInfo?.map((cargo) => (
-            <LeadCargoInfo cargo={cargo} />
+          {cargosInfo?.map((cargo, index) => (
+            <LeadCargoInfo cargo={cargo} index={index} />
           ))}
         </Box>
       </Section>
