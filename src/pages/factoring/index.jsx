@@ -3,10 +3,10 @@ import CreateFactoringForm from "../../features/factoring/create-factoring-form"
 import FactoringCard from "../../components/factoring/factoring-card";
 import FactoringTable from "../../components/factoring/factoring-table";
 import ViewTabs from "../../shared/ui/view-tabs";
-import PageLoader from "../../shared/ui/loaders/page-loader";
 import FactorLineForm from "../../features/factor-line/factor-line-form";
 import SuccessModal from "../../components/factoring/factoring-form/success-modal";
-import { Alert, Box, Pagination } from "@mui/material";
+import DataContainer from "../../shared/ui/data-container";
+import { Box, Pagination, Typography } from "@mui/material";
 import { useNotificationsStore } from "../../app/store/notifications/noti-store";
 import { parserNotificationType } from "../../shared/helpers/notifications/parse-notification-type";
 import { NOTIFICATION_TYPE } from "../../shared/const/notification-types";
@@ -14,54 +14,9 @@ import { useEffect, useState } from "react";
 import { useFactoringStore } from "../../app/store/factoring/factoring-store";
 import { VIEWS } from "../../shared/const/leads";
 import { useLeadsStore } from "../../app/store/leads/leads-store";
-import DataContainer from "../../shared/ui/data-container";
-
-const mackFactoring = [
-  {
-    id: "6aa7d7159c62bc86ed04bb64",
-    status: "new",
-    deb_summ: 0,
-    deb_currency: "KZT",
-    currency: "KZT",
-    cred_summ: 0,
-    proc_service: 0.035,
-    proc_factor: 0.035,
-    verified_forwarder: false,
-    verified_customer: false,
-    verified_factor: false,
-    date_verified_forwarder: null,
-    date_verified_customer: null,
-    date_verified_factor: null,
-    await_paid_ff: false,
-    await_paid_cf: false,
-    created_at: {
-      date: "2026-09-14 11:14:29.605000",
-      timezone_type: 3,
-      timezone: "UTC",
-    },
-    lead_id: "6a96a83ce42ee5b064002a12",
-    customer: {
-      id: "6a21448d0df91d66fc0d06a2",
-      bin: "240640031200",
-      fullname: "Customer Tes",
-    },
-    factor: {
-      id: "6a6892e8f5bdcd112a06c5d3",
-      bin: "240640031278",
-      company_name: "TEST AITU FACTOR",
-      company_account: "KZ1292600000123456",
-      company_bik: "CASPKZKA",
-      company_address: "qwert",
-      fio: "TEST AITU FACTOR",
-      iin: "030927550619",
-      phone: "77074463578",
-      email: "testaitu@gmail.com",
-    },
-  },
-];
 
 const Factoring = () => {
-  const factorings = mackFactoring;
+  const factorings = useFactoringStore((state) => state.factorings);
   const isLoading = useFactoringStore((state) => state.isLoading);
   const getFactorings = useFactoringStore((state) => state.getFactorings);
   const clearFactoringDetails = useFactoringStore(
@@ -120,13 +75,27 @@ const Factoring = () => {
 
   return (
     <RootLayout withoutDataCheck>
+      <Box>
+        <Typography
+          sx={{
+            fontWeight: 600,
+            fontSize: "1.5rem",
+            сolor: "font_color.heading",
+          }}
+        >
+          Факторинги
+        </Typography>
+
+        <Typography color="text.secondary" fontSize={14}>
+          Факторинги по завершенным лидам
+        </Typography>
+      </Box>
       <ViewTabs
         view={view}
         setView={setView}
         withoutKanban
         handleOpenForm={handleModalOpen}
       />
-
       <DataContainer
         isLoading={isLoading}
         isEmpty={isFactoringsEmpty}
@@ -157,7 +126,6 @@ const Factoring = () => {
 
         {!isCradsView && <FactoringTable factorings={factorings} />}
       </DataContainer>
-
       <Pagination
         sx={{
           mx: "auto",
@@ -169,7 +137,6 @@ const Factoring = () => {
         count={PAGE_COUNT}
         onChange={handlePageChange}
       />
-
       {openFormModal && (
         <CreateFactoringForm
           openFormModal={openFormModal}
@@ -177,7 +144,6 @@ const Factoring = () => {
           setOpenFactoringLineForm={setOpenFactoringLineForm}
         />
       )}
-
       {openFactoringLineForm && (
         <FactorLineForm
           open={openFactoringLineForm}
@@ -185,7 +151,6 @@ const Factoring = () => {
           setSuccessModal={setSuccessModal}
         />
       )}
-
       {successModal && (
         <SuccessModal open={successModal} setOpen={setSuccessModal} />
       )}

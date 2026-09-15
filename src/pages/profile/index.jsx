@@ -32,12 +32,17 @@ const Profile = () => {
               xs: 2,
               sm: 3,
             },
-            borderRadius: 3,
+            borderRadius: 5,
           }}
         >
           <Stack spacing={3}>
             <Box>
-              <Typography variant="h6" fontWeight={600}>
+              <Typography
+                sx={{
+                  fontWeight: 600,
+                  fontSize: "1.5rem",
+                }}
+              >
                 Профиль
               </Typography>
 

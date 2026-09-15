@@ -1,11 +1,9 @@
-import { useEffect, useState } from "react";
 import RootLayout from "../../components/layout/root-layout";
-import { Alert, AlertTitle, Box, Typography } from "@mui/material";
 import FactorLineForm from "../../features/factor-line/factor-line-form";
 import ViewTabs from "../../shared/ui/view-tabs";
-import FactorLineTable from "../../components/factor-line/factor-line-table";
 import FactorLineContainer from "../../components/factor-line/factor-line-container";
-import { STATUS } from "../../shared/const/tenders";
+import { useEffect, useState } from "react";
+import { Box, Typography } from "@mui/material";
 import { VIEWS } from "../../shared/const/leads";
 import { useFactorStore } from "../../app/store/factor/factor-store";
 import { useNotificationsStore } from "../../app/store/notifications/noti-store";
@@ -41,6 +39,21 @@ const Factor = () => {
 
   return (
     <RootLayout withoutDataCheck>
+      <Box>
+        <Typography
+          sx={{
+            fontWeight: 600,
+            fontSize: "1.5rem",
+            сolor: "font_color.heading",
+          }}
+        >
+          Факторинг линии
+        </Typography>
+
+        <Typography color="text.secondary" fontSize={14}>
+          Заявки на факторинг линии
+        </Typography>
+      </Box>
       <Box
         sx={{
           p: 1,

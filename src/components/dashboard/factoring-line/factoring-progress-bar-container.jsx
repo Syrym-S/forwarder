@@ -47,6 +47,7 @@ const FactoringProgressBarContainer = () => {
           sx={{
             fontSize: "1.2rem",
             fontWeight: 600,
+            color: "font_color.heading",
           }}
         >
           Подтвержденные факторинг линии

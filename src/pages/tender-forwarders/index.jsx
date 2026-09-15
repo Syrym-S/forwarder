@@ -6,7 +6,7 @@ import ForwardersTenderTable from "../../components/tenders/forwarders-tender-ta
 import EmptyListUi from "../../shared/ui/common/empty-list-ui";
 import DataContainer from "../../shared/ui/data-container";
 import { useEffect, useState } from "react";
-import { Box, Pagination, TextField } from "@mui/material";
+import { Box, Pagination, TextField, Typography } from "@mui/material";
 import { useTendersStore } from "../../app/store/tenders/tender-store";
 import { VIEWS } from "../../shared/const/leads";
 
@@ -80,6 +80,21 @@ const TenderForwarders = () => {
 
   return (
     <RootLayout withoutDataCheck>
+      <Box>
+        <Typography
+          sx={{
+            fontWeight: 600,
+            fontSize: "1.5rem",
+            сolor: "font_color.heading",
+          }}
+        >
+          Аукционны перевозчиков
+        </Typography>
+
+        <Typography color="text.secondary" fontSize={14}>
+          Список аукционов созданные вами для водителей
+        </Typography>
+      </Box>
       <Box>
         <Box
           sx={{

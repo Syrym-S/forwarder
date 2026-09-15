@@ -65,6 +65,7 @@ const DashboardLeadsList = ({
           sx={{
             fontWeight: 600,
             fontSize: "1.3rem",
+            color: "font_color.heading",
           }}
         >
           Активные лиды

@@ -1,19 +1,12 @@
-import { useEffect, useState } from "react";
 import RootLayout from "../../components/layout/root-layout";
-import { useDriverStore } from "../../app/store/drivers/driver-store";
-import DriverCard from "../../components/drivers/driver-card";
-import { Box, Pagination, Stack, TextField, Typography } from "@mui/material";
-import DriverDetailsModal from "../../components/drivers/driver-details-modal";
-import Loader from "../../components/layout/loader";
-import PageLoader from "../../shared/ui/loaders/page-loader";
-import EmptyListUI from "../../shared/ui/empty-list-ui";
-import { VIEWS } from "../../shared/const/leads";
 import ViewTabs from "../../shared/ui/view-tabs";
-import DriversTable from "../../components/drivers/driver-table";
 import AddDriverForm from "../../features/drivers/add-drivers-form";
-import InviteLinkModal from "../../components/customers/invite-link-modal";
 import DriverListContainer from "../../components/drivers/driver-list-container";
 import SavedDataModal from "../../components/drivers/saved-data-modal";
+import { useEffect, useState } from "react";
+import { useDriverStore } from "../../app/store/drivers/driver-store";
+import { Box, TextField, Typography } from "@mui/material";
+import { VIEWS } from "../../shared/const/leads";
 
 const Drivers = () => {
   const [open, setOpen] = useState(false);
@@ -62,6 +55,22 @@ const Drivers = () => {
 
   return (
     <RootLayout withoutDataCheck>
+      <Box>
+        <Typography
+          sx={{
+            fontWeight: 600,
+            fontSize: "1.5rem",
+            сolor: "font_color.heading",
+          }}
+        >
+          Водители
+        </Typography>
+
+        <Typography color="text.secondary" fontSize={14}>
+          Список водителей
+        </Typography>
+      </Box>
+
       <Box
         sx={{
           mx: "auto",

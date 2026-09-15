@@ -49,6 +49,11 @@ const EditDocumentDetails = ({
             // error={Boolean(errors.companyName)}
             // helperText={errors.companyName}
             fullWidth
+            sx={{
+              "& .MuiOutlinedInput-root": {
+                borderRadius: 2,
+              },
+            }}
           />
         )}
       />
@@ -64,10 +69,13 @@ const EditDocumentDetails = ({
             // onChange={handleChange}
             // error={Boolean(errors.personIssueCountry)}
             // helperText={errors.personIssueCountry}
-            sx={{
-              textTransform: "uppercase",
-            }}
+
             fullWidth
+            sx={{
+              "& .MuiOutlinedInput-root": {
+                borderRadius: 2,
+              },
+            }}
           />
         )}
       />

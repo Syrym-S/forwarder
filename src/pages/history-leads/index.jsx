@@ -1,27 +1,13 @@
-import React, { useEffect, useState } from "react";
-import Pagination from "@mui/material/Pagination";
 import RootLayout from "../../components/layout/root-layout";
-import LeadCard from "../../components/leads/lead-card";
-import { Tabs, Tab, Button, Autocomplete, TextField } from "@mui/material";
-import {
-  Box,
-  CircularProgress,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
-  Skeleton,
-} from "@mui/material";
-import { LeadCardSkeleton } from "../../shared/ui/lead-card-skeleton";
-import LeadsTable from "../../components/leads/leads-table";
-import { VIEWS } from "../../shared/const/leads";
-import AddLeadForm from "../../features/leads/add-lead-form";
-import { useLeadsStore } from "../../app/store/leads/leads-store";
 import ViewTabs from "../../shared/ui/view-tabs";
-import PageLoader from "../../shared/ui/loaders/page-loader";
+import LeadListContainer from "../../components/leads/lead-list-container";
+import { useEffect, useState } from "react";
+import { Typography } from "@mui/material";
+import { Box, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
+import { VIEWS } from "../../shared/const/leads";
+import { useLeadsStore } from "../../app/store/leads/leads-store";
 import { HISTORY_LEAD_STATUS_OPTIONS } from "../../shared/const/tenders";
 import { Controller, useForm } from "react-hook-form";
-import LeadListContainer from "../../components/leads/lead-list-container";
 
 const HistoryLeads = () => {
   const [filterStatus, setFilterStatus] = useState(null);
@@ -59,6 +45,22 @@ const HistoryLeads = () => {
 
   return (
     <RootLayout withoutDataCheck>
+      <Box>
+        <Typography
+          sx={{
+            fontWeight: 600,
+            fontSize: "1.5rem",
+            сolor: "font_color.heading",
+          }}
+        >
+          История лидов
+        </Typography>
+
+        <Typography color="text.secondary" fontSize={14}>
+          Список завершенных или удаленных лидов
+        </Typography>
+      </Box>
+
       <Box
         sx={{
           display: "flex",

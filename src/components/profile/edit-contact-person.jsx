@@ -19,6 +19,11 @@ const EditContactPerson = ({ control }) => {
             // error={Boolean(errors.companyName)}
             // helperText={errors.companyName}
             fullWidth
+            sx={{
+              "& .MuiOutlinedInput-root": {
+                borderRadius: 2,
+              },
+            }}
           />
         )}
       />
@@ -35,6 +40,11 @@ const EditContactPerson = ({ control }) => {
             // error={Boolean(errors.companyName)}
             // helperText={errors.companyName}
             fullWidth
+            sx={{
+              "& .MuiOutlinedInput-root": {
+                borderRadius: 2,
+              },
+            }}
           />
         )}
       />
@@ -51,6 +61,11 @@ const EditContactPerson = ({ control }) => {
             // error={Boolean(errors.companyName)}
             // helperText={errors.companyName}
             fullWidth
+            sx={{
+              "& .MuiOutlinedInput-root": {
+                borderRadius: 2,
+              },
+            }}
           />
         )}
       />
@@ -67,6 +82,11 @@ const EditContactPerson = ({ control }) => {
             // error={Boolean(errors.companyName)}
             // helperText={errors.companyName}
             fullWidth
+            sx={{
+              "& .MuiOutlinedInput-root": {
+                borderRadius: 2,
+              },
+            }}
           />
         )}
       />

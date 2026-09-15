@@ -19,6 +19,11 @@ const EditPassword = ({ control }) => {
             // error={Boolean(errors.companyName)}
             // helperText={errors.companyName}
             fullWidth
+            sx={{
+              "& .MuiOutlinedInput-root": {
+                borderRadius: 2,
+              },
+            }}
           />
         )}
       />
@@ -36,6 +41,11 @@ const EditPassword = ({ control }) => {
             // error={Boolean(errors.companyName)}
             // helperText={errors.companyName}
             fullWidth
+            sx={{
+              "& .MuiOutlinedInput-root": {
+                borderRadius: 2,
+              },
+            }}
           />
         )}
       />
@@ -53,6 +63,11 @@ const EditPassword = ({ control }) => {
             // error={Boolean(errors.companyName)}
             // helperText={errors.companyName}
             fullWidth
+            sx={{
+              "& .MuiOutlinedInput-root": {
+                borderRadius: 2,
+              },
+            }}
           />
         )}
       />

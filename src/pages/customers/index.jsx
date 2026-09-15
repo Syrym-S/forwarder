@@ -1,12 +1,12 @@
-import { Box, TextField } from "@mui/material";
 import RootLayout from "../../components/layout/root-layout";
-import { useEffect, useState } from "react";
-import { useCustomerStore } from "../../app/store/customers/customers-store";
-import { VIEWS } from "../../shared/const/leads";
 import ViewTabs from "../../shared/ui/view-tabs";
 import AddCustomerForm from "../../features/customer/add-customer-form";
 import InviteLinkModal from "../../components/customers/invite-link-modal";
 import CustomerListContainer from "../../components/customers/customer-list-container";
+import { Box, TextField, Typography } from "@mui/material";
+import { useEffect, useState } from "react";
+import { useCustomerStore } from "../../app/store/customers/customers-store";
+import { VIEWS } from "../../shared/const/leads";
 
 const Customers = () => {
   const [open, setOpen] = useState(false);
@@ -53,6 +53,22 @@ const Customers = () => {
 
   return (
     <RootLayout withoutDataCheck>
+      <Box>
+        <Typography
+          sx={{
+            fontWeight: 600,
+            fontSize: "1.5rem",
+            сolor: "font_color.heading",
+          }}
+        >
+          Заказчики
+        </Typography>
+
+        <Typography color="text.secondary" fontSize={14}>
+          Список заказчиков
+        </Typography>
+      </Box>
+
       <Box
         sx={{
           mx: "auto",

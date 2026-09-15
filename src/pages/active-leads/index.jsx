@@ -1,14 +1,21 @@
-import { useEffect, useState } from "react";
 import RootLayout from "../../components/layout/root-layout";
-import { Box, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
-import { VIEWS } from "../../shared/const/leads";
 import AddLeadForm from "../../features/leads/add-lead-form";
+import ViewTabs from "../../shared/ui/view-tabs";
+import LeadListContainer from "../../components/leads/lead-list-container";
+import { useEffect, useState } from "react";
+import {
+  Box,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  Typography,
+} from "@mui/material";
+import { VIEWS } from "../../shared/const/leads";
 import { useFormDefaultValues } from "../../shared/hooks/leads/use-form-default-values";
 import { useLeadsStore } from "../../app/store/leads/leads-store";
-import ViewTabs from "../../shared/ui/view-tabs";
 import { useNotificationsStore } from "../../app/store/notifications/noti-store";
 import { NOTIFICATION_TYPE } from "../../shared/const/notification-types";
-import LeadListContainer from "../../components/leads/lead-list-container";
 import { parserNotificationType } from "../../shared/helpers/notifications/parse-notification-type";
 import { ACTIVE_LEAD_STATUS_OPTIONS } from "../../shared/const/tenders";
 
@@ -64,6 +71,21 @@ const ActiveLeads = () => {
 
   return (
     <RootLayout withoutDataCheck>
+      <Box>
+        <Typography
+          sx={{
+            fontWeight: 600,
+            fontSize: "1.5rem",
+            сolor: "font_color.heading",
+          }}
+        >
+          Активные лиды
+        </Typography>
+
+        <Typography color="text.secondary" fontSize={14}>
+          Список заявок на перевозку
+        </Typography>
+      </Box>
       <Box
         sx={{
           display: "flex",

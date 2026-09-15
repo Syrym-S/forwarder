@@ -74,6 +74,7 @@ const CustomerCreatedTenders = () => {
           sx={{
             fontSize: "1.2rem",
             fontWeight: 600,
+            color: "font_color.heading",
           }}
         >
           Список аукцонов от Заказщиков
