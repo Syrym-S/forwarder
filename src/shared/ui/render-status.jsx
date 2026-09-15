@@ -8,7 +8,6 @@ export const RenderStatusContent = ({ label, color = "#518ded" }) => {
         display: "flex",
         alignItems: "center",
         gap: 1,
-        width: "100%",
       }}
     >
       <Box

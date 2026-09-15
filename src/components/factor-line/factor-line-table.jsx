@@ -1,6 +1,5 @@
 import { Paper } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
-import React from "react";
 import useFactoringLineColumns from "../../shared/hooks/factor-line";
 
 const FactorLineTable = (factorLine) => {
@@ -14,7 +13,6 @@ const FactorLineTable = (factorLine) => {
         columns={columns}
         rowHeight={70}
         checkboxSelection
-        // sx={{ border: 0, minHeight: "80vh" }}
         sx={{
           "& .MuiDataGrid-row:nth-of-type(even)": {
             backgroundColor: "#f5f7fa",

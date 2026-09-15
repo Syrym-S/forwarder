@@ -1,8 +1,7 @@
 import { Box, Chip, Stack, Typography } from "@mui/material";
-import React from "react";
-import RenderStatus from "../../shared/ui/render-status";
-import InfoField from "../../shared/ui/info-field";
-import dayjs from "dayjs";
+import RenderStatus, {
+  RenderStatusContent,
+} from "../../shared/ui/render-status";
 import { useNavigate } from "react-router-dom";
 import { moneySpacingFormat } from "../../shared/helpers/money-spacing";
 import InfoItem from "../../shared/ui/info-item";
@@ -22,7 +21,7 @@ const FactoringCard = ({ factoring }) => {
         p: 3,
         border: "2px solid",
         borderColor: "divider",
-        borderRadius: 4,
+        borderRadius: 7,
         backgroundColor: "background.paper",
         boxShadow: "0 2px 8px rgba(0, 0, 0, 0.06)",
         transition: "0.2s ease",
@@ -100,12 +99,12 @@ const FactoringCard = ({ factoring }) => {
             gap: 1,
           }}
         >
-          <InfoItem label={"ID факторинга"} value={factoring?.id || "0"} />
-          <InfoItem label={"ID лида"} value={factoring?.lead_id} />
           <InfoItem
-            label={"Дата создания"}
-            value={dayjs(factoring?.created_at.date).format("DD-MM-YYYY")}
+            label={"Фактора"}
+            value={factoring?.factor?.company_name || "-"}
           />
+          <InfoItem label={"ФИО Фактора"} value={factoring?.factor?.fio} />
+          <InfoItem label={"БИН Фактора"} value={factoring?.factor?.bin} />
         </Box>
         <Box
           sx={{
@@ -146,6 +145,21 @@ const FactoringCard = ({ factoring }) => {
           />
         </Box>
       </Stack>
+
+      <Box sx={{ py: 1, display: "flex", gap: 4 }}>
+        <RenderStatusContent
+          label={`Вы: ${factoring?.verified_forwarder ? "Подтвержден" : "Не подтверждено"}`}
+          color={factoring?.verified_customer ? "#51d861" : "#e9821b"}
+        />
+        <RenderStatusContent
+          label={`Фактор: ${factoring?.verified_factor ? "Подтвержден" : "Не подтверждено"}`}
+          color={factoring?.verified_customer ? "#51d861" : "#e9821b"}
+        />
+        <RenderStatusContent
+          label={`Заказчик: ${factoring?.verified_customer ? "Подтвержден" : "Не подтверждено"}`}
+          color={factoring?.verified_customer ? "#51d861" : "#e9821b"}
+        />
+      </Box>
     </Box>
   );
 };

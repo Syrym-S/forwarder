@@ -14,9 +14,54 @@ import { useEffect, useState } from "react";
 import { useFactoringStore } from "../../app/store/factoring/factoring-store";
 import { VIEWS } from "../../shared/const/leads";
 import { useLeadsStore } from "../../app/store/leads/leads-store";
+import DataContainer from "../../shared/ui/data-container";
+
+const mackFactoring = [
+  {
+    id: "6aa7d7159c62bc86ed04bb64",
+    status: "new",
+    deb_summ: 0,
+    deb_currency: "KZT",
+    currency: "KZT",
+    cred_summ: 0,
+    proc_service: 0.035,
+    proc_factor: 0.035,
+    verified_forwarder: false,
+    verified_customer: false,
+    verified_factor: false,
+    date_verified_forwarder: null,
+    date_verified_customer: null,
+    date_verified_factor: null,
+    await_paid_ff: false,
+    await_paid_cf: false,
+    created_at: {
+      date: "2026-09-14 11:14:29.605000",
+      timezone_type: 3,
+      timezone: "UTC",
+    },
+    lead_id: "6a96a83ce42ee5b064002a12",
+    customer: {
+      id: "6a21448d0df91d66fc0d06a2",
+      bin: "240640031200",
+      fullname: "Customer Tes",
+    },
+    factor: {
+      id: "6a6892e8f5bdcd112a06c5d3",
+      bin: "240640031278",
+      company_name: "TEST AITU FACTOR",
+      company_account: "KZ1292600000123456",
+      company_bik: "CASPKZKA",
+      company_address: "qwert",
+      fio: "TEST AITU FACTOR",
+      iin: "030927550619",
+      phone: "77074463578",
+      email: "testaitu@gmail.com",
+    },
+  },
+];
 
 const Factoring = () => {
-  const factorings = useFactoringStore((state) => state.factorings);
+  const factorings = mackFactoring;
   const isLoading = useFactoringStore((state) => state.isLoading);
   const getFactorings = useFactoringStore((state) => state.getFactorings);
   const clearFactoringDetails = useFactoringStore(
@@ -73,20 +118,6 @@ const Factoring = () => {
     }
   }, [newNotification, notification_type, getFactorings]);
 
-  if (isLoading)
-    return (
-      <RootLayout withoutDataCheck>
-        <PageLoader />
-      </RootLayout>
-    );
-
-  if (isFactoringsEmpty)
-    return (
-      <RootLayout withoutDataCheck>
-        <Alert severity="info">Доступных факторингов нет</Alert>
-      </RootLayout>
-    );
-
   return (
     <RootLayout withoutDataCheck>
       <ViewTabs
@@ -96,30 +127,36 @@ const Factoring = () => {
         handleOpenForm={handleModalOpen}
       />
 
-      {isCradsView && (
-        <Box
-          sx={{
-            width: {
-              xs: "100%",
-              sm: "60%",
-            },
-            mx: "auto",
-            display: "grid",
-            gap: 5,
-            my: "10px",
+      <DataContainer
+        isLoading={isLoading}
+        isEmpty={isFactoringsEmpty}
+        emptyText="Доступных факторингов нет"
+      >
+        {isCradsView && (
+          <Box
+            sx={{
+              width: {
+                xs: "100%",
+                sm: "60%",
+              },
+              mx: "auto",
+              display: "grid",
+              gap: 5,
+              my: "10px",
 
-            gridTemplateColumns: {
-              xs: "1fr",
-            },
-          }}
-        >
-          {factorings.map((factoring) => (
-            <FactoringCard factoring={factoring} key={factoring.id} />
-          ))}
-        </Box>
-      )}
+              gridTemplateColumns: {
+                xs: "1fr",
+              },
+            }}
+          >
+            {factorings.map((factoring) => (
+              <FactoringCard factoring={factoring} key={factoring.id} />
+            ))}
+          </Box>
+        )}
 
-      {!isCradsView && <FactoringTable factorings={factorings} />}
+        {!isCradsView && <FactoringTable factorings={factorings} />}
+      </DataContainer>
 
       <Pagination
         sx={{
