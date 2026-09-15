@@ -34,7 +34,7 @@ const FactoringLineRingProgress = ({ line }) => {
         transition: "0.2s ease",
         p: 1,
         "&:hover": {
-          borderColor: "rgb(24, 87, 196)",
+          borderColor: "primary.main",
           boxShadow: "0 6px 18px rgba(33, 150, 243, 0.12)",
         },
       }}

@@ -106,8 +106,8 @@ const LeadHeading = ({ leadData, openEditForm }) => {
           label={`Лид #${leadData.num}`}
           variant="outlined"
           sx={{
-            color: "rgb(24, 87, 196)",
-            borderColor: "rgb(24, 87, 196)",
+            color: "primary.main",
+            borderColor: "primary.main",
             fontWeight: 600,
           }}
         />
@@ -127,7 +127,7 @@ const LeadHeading = ({ leadData, openEditForm }) => {
                 onClick={openEditForm}
                 sx={{
                   fontSize: "2.5rem",
-                  color: "rgb(24, 87, 196)",
+                  color: "primary.main",
                   cursor: "pointer",
                 }}
               />

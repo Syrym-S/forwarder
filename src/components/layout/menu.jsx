@@ -332,7 +332,7 @@ const SideBar = ({ openMenu, setOpenMenu }) => {
                   className={"link"}
                   to={sub_item.path}
                   style={({ isActive }) => ({
-                    color: isActive && "rgb(24, 87, 196)",
+                    color: isActive && "primary.main",
                     backgroundColor: isActive && "rgba(24, 87, 196, 0.08)",
                     borderRadius: isActive && "5px",
                     display: "flex",

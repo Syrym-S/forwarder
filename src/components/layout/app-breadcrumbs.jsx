@@ -71,7 +71,7 @@ export default function AppBreadcrumbs() {
                 xs: 13,
                 sm: 16,
               },
-              color: "rgb(24, 87, 196)",
+              color: "primary.main",
             }}
             underline="none"
           >

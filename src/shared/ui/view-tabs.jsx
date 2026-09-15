@@ -50,7 +50,7 @@ const ViewTabs = ({
               minWidth: 40,
 
               "&.Mui-selected": {
-                color: "rgb(24, 87, 196)",
+                color: "primary.main",
                 backgroundColor: "rgba(112, 160, 243, 0.17)",
               },
             },
@@ -77,7 +77,7 @@ const ViewTabs = ({
           variant="contained"
           onClick={handleOpenForm}
           sx={{
-            backgroundColor: "rgb(24, 87, 196)",
+            backgroundColor: "primary.main",
             color: "white",
             borderRadius: 2,
           }}

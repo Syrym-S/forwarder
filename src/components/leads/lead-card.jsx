@@ -33,7 +33,7 @@ const LeadCard = ({ lead }) => {
         transition: "0.2s ease",
         cursor: "pointer",
         "&:hover": {
-          borderColor: "rgb(24, 87, 196)",
+          borderColor: "primary.main",
           boxShadow: "0 8px 24px rgba(33, 150, 243, 0.12)",
         },
       }}
@@ -83,9 +83,7 @@ const LeadCard = ({ lead }) => {
         >
           <Box>
             <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-              <TripOriginIcon
-                sx={{ fontSize: 12, color: "rgb(24, 87, 196)" }}
-              />
+              <TripOriginIcon sx={{ fontSize: 12, color: "primary.main" }} />
               <Typography
                 sx={{
                   fontSize: 12,
@@ -120,7 +118,7 @@ const LeadCard = ({ lead }) => {
           <Box>
             <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
               <LocationOnOutlinedIcon
-                sx={{ fontSize: 12, color: "rgb(24, 87, 196)" }}
+                sx={{ fontSize: 12, color: "primary.main" }}
               />
               <Typography
                 sx={{

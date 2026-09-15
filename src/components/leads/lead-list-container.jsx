@@ -91,11 +91,11 @@ const LeadListContainer = ({
             },
 
             "& .MuiPaginationItem-root.Mui-selected": {
-              backgroundColor: "rgb(24, 87, 196)",
+              backgroundColor: "primary.main",
               color: "#fff",
 
               "&:hover": {
-                backgroundColor: "rgb(24, 87, 196)",
+                backgroundColor: "primary.main",
               },
             },
           }}

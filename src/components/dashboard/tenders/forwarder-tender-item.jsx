@@ -32,7 +32,7 @@ const ForwarderTenderItem = ({ tender }) => {
         transition: "0.2s ease",
         backgroundColor: "primary.50",
         "&:hover": {
-          borderColor: "rgb(24, 87, 196)",
+          borderColor: "primary.main",
           boxShadow: "0 6px 18px rgba(33, 150, 243, 0.12)",
         },
       }}
@@ -53,8 +53,8 @@ const ForwarderTenderItem = ({ tender }) => {
             sx={{
               fontWeight: 600,
               borderRadius: 999,
-              color: "rgb(24, 87, 196)",
-              borderColor: "rgb(24, 87, 196)",
+              color: "primary.main",
+              borderColor: "primary.main",
             }}
           />
 

@@ -66,7 +66,7 @@ const DashboardLeadItem = ({
         borderRadius: 3,
         cursor: "pointer",
         transition: "0.2s ease",
-        borderColor: isSelected || isHovered ? "rgb(24, 87, 196)" : "divider",
+        borderColor: isSelected || isHovered ? "primary.main" : "divider",
         backgroundColor: isSelected
           ? "primary.50"
           : isHovered
@@ -92,7 +92,7 @@ const DashboardLeadItem = ({
               fontWeight: 600,
               borderRadius: 999,
               color: isSelected ? "white" : "black",
-              background: isSelected ? "rgb(24, 87, 196)" : "default",
+              background: isSelected ? "primary.main" : "default",
             }}
           />
 
@@ -145,7 +145,7 @@ const DashboardLeadItem = ({
             sx={{
               fontSize: 13,
               fontWeight: 600,
-              color: "rgb(24, 87, 196)",
+              color: "primary.main",
             }}
           >
             {formatLeadPrice(lead)}

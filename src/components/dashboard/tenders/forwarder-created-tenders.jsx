@@ -92,11 +92,11 @@ const ForwarderCreatedTenders = () => {
             onChange={handleChange}
             sx={{
               "& .MuiSwitch-switchBase.Mui-checked": {
-                color: "rgb(24, 87, 196)",
+                color: "primary.main",
               },
 
               "& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track": {
-                color: "rgb(24, 87, 196)",
+                color: "primary.main",
               },
             }}
           />
