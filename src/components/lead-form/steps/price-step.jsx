@@ -1,6 +1,6 @@
-import { Controller } from "react-hook-form";
+import FormControllerInput from "../../../shared/ui/input/form-controller-input";
 import { StepSection } from "../step-section";
-import { Box, TextField } from "@mui/material";
+import { Box } from "@mui/material";
 
 const PriceStep = ({ control }) => {
   return (
@@ -15,29 +15,20 @@ const PriceStep = ({ control }) => {
           gap: 2,
         }}
       >
-        <Controller
+        <FormControllerInput
           name="price"
           control={control}
-          render={({ field }) => (
-            <TextField
-              {...field}
-              label="Цена заказщика"
-              size="small"
-              fullWidth
-            />
-          )}
+          label="Цена заказчика"
+          size="small"
+          fullWidth
         />
-        <Controller
+
+        <FormControllerInput
           name="transportation_price"
           control={control}
-          render={({ field }) => (
-            <TextField
-              {...field}
-              label="Ваша цена за перевозку (trancportation_price)"
-              size="small"
-              fullWidth
-            />
-          )}
+          label="Ваша цена за перевозку"
+          size="small"
+          fullWidth
         />
       </Box>
     </StepSection>

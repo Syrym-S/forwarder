@@ -1,5 +1,4 @@
 import { Controller, useWatch } from "react-hook-form";
-import PropTypes from "prop-types";
 import {
   Autocomplete,
   Box,
@@ -10,50 +9,52 @@ import {
 } from "@mui/material";
 import { StepSection } from "../step-section";
 import { InfoBadge } from "../info-badge";
-import { useDriverStore } from "../../../app/store/drivers/driver-store";
+import { useCustomerStore } from "../../../app/store/customers/customers-store";
 import { useEffect, useState } from "react";
 
-export function ThirdStep({ control, errors, setValue }) {
-  const selectedDriver = useWatch({
+const CustomerStep = ({ control, errors, setValue }) => {
+  const selectedCustomer = useWatch({
     control,
-    name: "driver",
+    name: "customer",
   });
 
   const [inputValue, setInputValue] = useState("");
 
-  const drivers = useDriverStore((state) => state.drivers);
-  const getDrivers = useDriverStore((state) => state.getDrivers);
-  const searchDriver = useDriverStore((state) => state.searchDriver);
-  const isLoading = useDriverStore((state) => state.isLoading);
+  const customers = useCustomerStore((state) => state.customers);
+  const getCustomers = useCustomerStore((state) => state.getCustomers);
+  const searchCustomers = useCustomerStore((state) => state.searchCustomers);
+  const isLoading = useCustomerStore((state) => state.isLoading);
 
   useEffect(() => {
     const value = inputValue.trim();
 
     const timer = setTimeout(() => {
       if (!value) {
-        getDrivers();
+        getCustomers();
         return;
       }
 
-      searchDriver({ q: value });
+      if (value.length >= 1) {
+        searchCustomers({ q: value });
+      }
     }, 1000);
 
     return () => clearTimeout(timer);
-  }, [inputValue, getDrivers, searchDriver]);
+  }, [inputValue, getCustomers, searchCustomers]);
 
   return (
     <StepSection
-      title="Выбор водителя"
-      description="Найдите и выберите водителя, который будет закреплен за маршрутом"
+      title="Выбор заказщика"
+      description="Найдите и выберите заказщика, который заказал услугу"
     >
       <Controller
-        name="driver"
+        name="customer"
         control={control}
         render={({ field }) => (
           <Stack spacing={2}>
             <Autocomplete
               inputValue={inputValue}
-              options={drivers}
+              options={customers}
               filterOptions={(options) => options}
               value={field.value ?? null}
               loading={isLoading}
@@ -62,13 +63,11 @@ export function ThirdStep({ control, errors, setValue }) {
                 if (!value) return null;
 
                 return (
-                  selectedDriver?.fio && (
-                    <Chip
-                      variant="contained"
-                      color="primary"
-                      label={value.fio}
-                    />
-                  )
+                  <Chip
+                    variant="contained"
+                    color="primary"
+                    label={value.name}
+                  />
                 );
               }}
               onInputChange={(_, newInputValue, reason) => {
@@ -85,7 +84,7 @@ export function ThirdStep({ control, errors, setValue }) {
 
                 setInputValue("");
 
-                setValue("driver", value, {
+                setValue("customer", value, {
                   shouldDirty: true,
                   shouldTouch: true,
                   shouldValidate: true,
@@ -112,7 +111,7 @@ export function ThirdStep({ control, errors, setValue }) {
                     }}
                     fontWeight={700}
                   >
-                    {option.fio}
+                    {option.name}
                   </Typography>
                   <Typography
                     sx={{
@@ -121,30 +120,26 @@ export function ThirdStep({ control, errors, setValue }) {
                     }}
                     fontWeight={200}
                   >
-                    ИИН: {option.iin}
-                  </Typography>
-                  <Typography
-                    sx={{
-                      fontSize: "0.7rem",
-                      width: "fit-content",
-                    }}
-                    fontWeight={200}
-                  >
-                    {option.email}
+                    БИН: {option.bin}
                   </Typography>
                 </Box>
               )}
               renderInput={(params) => (
                 <TextField
                   {...params}
-                  placeholder="Выберите водителя"
-                  error={Boolean(errors.driver)}
-                  helperText={errors.driver?.message}
+                  placeholder="Выберите заказщика"
+                  error={Boolean(errors.customer)}
+                  helperText={errors.customer?.message}
+                  sx={{
+                    "& .MuiOutlinedInput-root": {
+                      borderRadius: 2,
+                    },
+                  }}
                 />
               )}
             />
 
-            {selectedDriver && (
+            {selectedCustomer && (
               <Box
                 sx={{
                   display: "grid",
@@ -155,21 +150,9 @@ export function ThirdStep({ control, errors, setValue }) {
                   gap: 1.5,
                 }}
               >
-                <InfoBadge label="ФИО водителя" value={selectedDriver.fio} />
+                <InfoBadge label="Заказщик" value={selectedCustomer.name} />
 
-                <InfoBadge
-                  label="Телефон"
-                  value={selectedDriver.phone || "Не указан"}
-                />
-
-                <InfoBadge
-                  label="Email"
-                  value={selectedDriver.email || "Не указан"}
-                />
-                <InfoBadge
-                  label="ИИН"
-                  value={selectedDriver.iin || "Не указан"}
-                />
+                <InfoBadge label="Тип компании" value={selectedCustomer.type} />
               </Box>
             )}
           </Stack>
@@ -177,4 +160,6 @@ export function ThirdStep({ control, errors, setValue }) {
       />
     </StepSection>
   );
-}
+};
+
+export default CustomerStep;

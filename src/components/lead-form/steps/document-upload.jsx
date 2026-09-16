@@ -13,6 +13,7 @@ import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useLeadsStore } from "../../../app/store/leads/leads-store";
+import FormInput from "../../../shared/ui/input/form-input";
 
 const DocumentUpload = ({ setValue, uploadedFiles, setUploadedFiles }) => {
   const { id } = useParams();
@@ -83,14 +84,14 @@ const DocumentUpload = ({ setValue, uploadedFiles, setUploadedFiles }) => {
             alignItems: "flex-start",
           }}
         >
-          <TextField
+          <FormInput
             label="Название документа"
             size="small"
             onInput={handleFileName}
             fullWidth
           />
 
-          <TextField
+          <FormInput
             name="context"
             label="Описание"
             size="small"
@@ -109,6 +110,7 @@ const DocumentUpload = ({ setValue, uploadedFiles, setUploadedFiles }) => {
                   xs: "100%",
                   md: "auto",
                 },
+                borderRadius: 2,
               }}
             >
               <input

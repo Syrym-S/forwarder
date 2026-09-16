@@ -1,9 +1,10 @@
 import FormHeader from "../../components/lead-form/form-header";
-import FirstStep from "../../components/lead-form/steps/route-step";
 import DocumentUpload from "../../components/lead-form/steps/document-upload";
 import PriceStep from "../../components/lead-form/steps/price-step";
 import LeadFormTabs from "../../components/lead-form/lead-form-tabs";
 import CargoStep from "../../components/lead-form/steps/cargo-step";
+import DriverStep from "../../components/lead-form/steps/driver-step";
+import RouteStep from "../../components/lead-form/steps/route-step";
 import { Dialog, DialogContent } from "@mui/material";
 import { useState } from "react";
 import { FormNavButtons } from "../../components/lead-form/form-nav-buttons";
@@ -11,11 +12,9 @@ import { useForm, useWatch } from "react-hook-form";
 import { LastStep } from "../../components/lead-form/steps/last-step";
 import { CreateLeadResultModal } from "../../components/lead-form/create-lead-result-modal";
 import { mapCreateLeadFormToApi } from "../../components/lead-form/model/createLead.adapter";
-import { ThirdStep } from "../../components/lead-form/steps/third-step";
-import { ForthStep } from "../../components/lead-form/steps/forth-step";
 import { uploadLeadFileApi } from "../../app/store/leads/api";
 import { useLeadsStore } from "../../app/store/leads/leads-store";
-import RouteStep from "../../components/lead-form/steps/route-step";
+import CustomerStep from "../../components/lead-form/steps/customer-step";
 
 const steps = [
   { id: 1, label: "Маршрут" },
@@ -87,7 +86,7 @@ const AddLeadForm = ({
 
   const formValues = useWatch({ control });
 
-  console.log("formValues", formValues);
+  console.log(formValues);
 
   const isLastStep = activeStep === steps.length;
 
@@ -205,11 +204,11 @@ const AddLeadForm = ({
         );
       case 3:
         return (
-          <ThirdStep control={control} errors={errors} setValue={setValue} />
+          <DriverStep control={control} errors={errors} setValue={setValue} />
         );
       case 4:
         return (
-          <ForthStep control={control} errors={errors} setValue={setValue} />
+          <CustomerStep control={control} errors={errors} setValue={setValue} />
         );
       case 5:
         return <PriceStep control={control} />;

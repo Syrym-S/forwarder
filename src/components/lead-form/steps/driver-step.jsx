@@ -1,63 +1,58 @@
 import { Controller, useWatch } from "react-hook-form";
-import PropTypes from "prop-types";
 import {
   Autocomplete,
   Box,
   Chip,
-  CircularProgress,
-  InputAdornment,
   Stack,
   TextField,
   Typography,
 } from "@mui/material";
 import { StepSection } from "../step-section";
 import { InfoBadge } from "../info-badge";
-import { useCustomerStore } from "../../../app/store/customers/customers-store";
+import { useDriverStore } from "../../../app/store/drivers/driver-store";
 import { useEffect, useState } from "react";
 
-export function ForthStep({ control, errors, setValue }) {
-  const selectedCustomer = useWatch({
+const DriverStep = ({ control, errors, setValue }) => {
+  const selectedDriver = useWatch({
     control,
-    name: "customer",
+    name: "driver",
   });
 
   const [inputValue, setInputValue] = useState("");
 
-  const customers = useCustomerStore((state) => state.customers);
-  const getCustomers = useCustomerStore((state) => state.getCustomers);
-  const searchCustomers = useCustomerStore((state) => state.searchCustomers);
-  const isLoading = useCustomerStore((state) => state.isLoading);
+  const drivers = useDriverStore((state) => state.drivers);
+  const getDrivers = useDriverStore((state) => state.getDrivers);
+  const searchDriver = useDriverStore((state) => state.searchDriver);
+  const isLoading = useDriverStore((state) => state.isLoading);
 
   useEffect(() => {
     const value = inputValue.trim();
 
     const timer = setTimeout(() => {
       if (!value) {
-        getCustomers();
+        getDrivers();
         return;
       }
 
-      if (value.length >= 1) {
-        searchCustomers({ q: value });
-      }
+      searchDriver({ q: value });
     }, 1000);
 
     return () => clearTimeout(timer);
-  }, [inputValue, getCustomers, searchCustomers]);
+  }, [inputValue, getDrivers, searchDriver]);
 
   return (
     <StepSection
-      title="Выбор заказщика"
-      description="Найдите и выберите заказщика, который заказал услугу"
+      title="Выбор водителя"
+      description="Найдите и выберите водителя, который будет закреплен за маршрутом"
     >
       <Controller
-        name="customer"
+        name="driver"
         control={control}
         render={({ field }) => (
           <Stack spacing={2}>
             <Autocomplete
               inputValue={inputValue}
-              options={customers}
+              options={drivers}
               filterOptions={(options) => options}
               value={field.value ?? null}
               loading={isLoading}
@@ -66,11 +61,13 @@ export function ForthStep({ control, errors, setValue }) {
                 if (!value) return null;
 
                 return (
-                  <Chip
-                    variant="contained"
-                    color="primary"
-                    label={value.name}
-                  />
+                  selectedDriver?.fio && (
+                    <Chip
+                      variant="contained"
+                      color="primary"
+                      label={value.fio}
+                    />
+                  )
                 );
               }}
               onInputChange={(_, newInputValue, reason) => {
@@ -87,7 +84,7 @@ export function ForthStep({ control, errors, setValue }) {
 
                 setInputValue("");
 
-                setValue("customer", value, {
+                setValue("driver", value, {
                   shouldDirty: true,
                   shouldTouch: true,
                   shouldValidate: true,
@@ -114,7 +111,7 @@ export function ForthStep({ control, errors, setValue }) {
                     }}
                     fontWeight={700}
                   >
-                    {option.name}
+                    {option.fio}
                   </Typography>
                   <Typography
                     sx={{
@@ -123,21 +120,35 @@ export function ForthStep({ control, errors, setValue }) {
                     }}
                     fontWeight={200}
                   >
-                    БИН: {option.bin}
+                    ИИН: {option.iin}
+                  </Typography>
+                  <Typography
+                    sx={{
+                      fontSize: "0.7rem",
+                      width: "fit-content",
+                    }}
+                    fontWeight={200}
+                  >
+                    {option.email}
                   </Typography>
                 </Box>
               )}
               renderInput={(params) => (
                 <TextField
                   {...params}
-                  placeholder="Выберите заказщика"
-                  error={Boolean(errors.customer)}
-                  helperText={errors.customer?.message}
+                  placeholder="Выберите водителя"
+                  error={Boolean(errors.driver)}
+                  helperText={errors.driver?.message}
+                  sx={{
+                    "& .MuiOutlinedInput-root": {
+                      borderRadius: 2,
+                    },
+                  }}
                 />
               )}
             />
 
-            {selectedCustomer && (
+            {selectedDriver && (
               <Box
                 sx={{
                   display: "grid",
@@ -148,9 +159,21 @@ export function ForthStep({ control, errors, setValue }) {
                   gap: 1.5,
                 }}
               >
-                <InfoBadge label="Заказщик" value={selectedCustomer.name} />
+                <InfoBadge label="ФИО водителя" value={selectedDriver.fio} />
 
-                <InfoBadge label="Тип компании" value={selectedCustomer.type} />
+                <InfoBadge
+                  label="Телефон"
+                  value={selectedDriver.phone || "Не указан"}
+                />
+
+                <InfoBadge
+                  label="Email"
+                  value={selectedDriver.email || "Не указан"}
+                />
+                <InfoBadge
+                  label="ИИН"
+                  value={selectedDriver.iin || "Не указан"}
+                />
               </Box>
             )}
           </Stack>
@@ -158,4 +181,6 @@ export function ForthStep({ control, errors, setValue }) {
       />
     </StepSection>
   );
-}
+};
+
+export default DriverStep;

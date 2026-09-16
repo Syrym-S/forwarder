@@ -21,13 +21,27 @@ export function FormNavButtons({
         justifyContent: "space-between",
       }}
     >
-      <Button type="button" onClick={onClose} disabled={isSubmitting}>
+      <Button
+        type="button"
+        onClick={onClose}
+        disabled={isSubmitting}
+        sx={{
+          borderRadius: 2,
+        }}
+      >
         Отмена
       </Button>
 
       <Box sx={{ display: "flex", gap: 1 }}>
         {!isFirstStep && (
-          <Button type="button" onClick={onBack} disabled={isSubmitting}>
+          <Button
+            type="button"
+            onClick={onBack}
+            disabled={isSubmitting}
+            sx={{
+              borderRadius: 2,
+            }}
+          >
             Назад
           </Button>
         )}
@@ -38,6 +52,9 @@ export function FormNavButtons({
             variant="contained"
             disabled={isSubmitting || hasCurrentStepErrors}
             onClick={onSubmit}
+            sx={{
+              borderRadius: 2,
+            }}
           >
             {isEdit ? "Сохранить" : "Создать маршрут"}
           </Button>
@@ -47,6 +64,9 @@ export function FormNavButtons({
             variant="contained"
             disabled={hasCurrentStepErrors || isSubmitting}
             onClick={onNext}
+            sx={{
+              borderRadius: 2,
+            }}
           >
             Дальше
           </Button>

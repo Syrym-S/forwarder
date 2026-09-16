@@ -12,6 +12,7 @@ import { useEffect } from "react";
 import { useOptionsStore } from "../../../app/store/options";
 import { StepSection } from "../step-section";
 import { STATUS } from "../../../shared/const/tenders";
+import FormControllerInput from "../../../shared/ui/input/form-controller-input";
 
 const CargoStep = ({ control, errors, leadStatus }) => {
   const { fields, append, remove } = useFieldArray({
@@ -87,6 +88,9 @@ const CargoStep = ({ control, errors, leadStatus }) => {
               height_cm: null,
             })
           }
+          sx={{
+            borderRadius: 2,
+          }}
         >
           Добавить груз
         </Button>
@@ -139,15 +143,15 @@ const CargoStepFieldsContent = ({ index, control }) => {
         gap: 2,
       }}
     >
-      <Controller
+      <FormControllerInput
         name={`cargos.${index}.name`}
         control={control}
         rules={{
-          required: "Обятельно нужно указать название товара",
+          required: "Обязательно нужно указать название товара",
         }}
-        render={({ field }) => (
-          <TextField {...field} label="Название груза" size="small" fullWidth />
-        )}
+        label="Название груза"
+        size="small"
+        fullWidth
       />
 
       <Controller
@@ -177,6 +181,11 @@ const CargoStepFieldsContent = ({ index, control }) => {
                 onChange={(e) => {
                   setInputValue(e.target.value);
                 }}
+                sx={{
+                  "& .MuiOutlinedInput-root": {
+                    borderRadius: 2,
+                  },
+                }}
               />
             )}
           />
@@ -202,6 +211,11 @@ const CargoStepFieldsContent = ({ index, control }) => {
             }}
             fullWidth
             size="small"
+            sx={{
+              "& .MuiOutlinedInput-root": {
+                borderRadius: 2,
+              },
+            }}
           />
         )}
       />
@@ -220,7 +234,7 @@ const CargoStepFieldsContent = ({ index, control }) => {
           gap: 2,
         }}
       >
-        <Controller
+        <FormControllerInput
           name={`cargos.${index}.length_cm`}
           control={control}
           rules={{
@@ -228,18 +242,13 @@ const CargoStepFieldsContent = ({ index, control }) => {
             validate: (value) =>
               Number(value) > 0 || "Длина должна быть больше 0",
           }}
-          render={({ field }) => (
-            <TextField
-              {...field}
-              type="number"
-              label="Длина, см"
-              fullWidth
-              size="small"
-            />
-          )}
+          type="number"
+          label="Длина, см"
+          fullWidth
+          size="small"
         />
 
-        <Controller
+        <FormControllerInput
           name={`cargos.${index}.width_cm`}
           control={control}
           rules={{
@@ -247,18 +256,13 @@ const CargoStepFieldsContent = ({ index, control }) => {
             validate: (value) =>
               Number(value) > 0 || "Ширина должна быть больше 0",
           }}
-          render={({ field }) => (
-            <TextField
-              {...field}
-              type="number"
-              label="Ширина, см"
-              fullWidth
-              size="small"
-            />
-          )}
+          type="number"
+          label="Ширина, см"
+          fullWidth
+          size="small"
         />
 
-        <Controller
+        <FormControllerInput
           name={`cargos.${index}.height_cm`}
           control={control}
           rules={{
@@ -266,19 +270,14 @@ const CargoStepFieldsContent = ({ index, control }) => {
             validate: (value) =>
               Number(value) > 0 || "Высота должна быть больше 0",
           }}
-          render={({ field }) => (
-            <TextField
-              {...field}
-              type="number"
-              label="Высота, см"
-              fullWidth
-              size="small"
-            />
-          )}
+          type="number"
+          label="Высота, см"
+          fullWidth
+          size="small"
         />
       </Box>
 
-      <Controller
+      <FormControllerInput
         name={`cargos.${index}.cargo_price`}
         control={control}
         rules={{
@@ -286,15 +285,10 @@ const CargoStepFieldsContent = ({ index, control }) => {
           validate: (value) =>
             Number(value) >= 0 || "Цена не может быть отрицательной",
         }}
-        render={({ field }) => (
-          <TextField
-            {...field}
-            type="number"
-            label="Цена"
-            fullWidth
-            size="small"
-          />
-        )}
+        type="number"
+        label="Цена"
+        fullWidth
+        size="small"
       />
 
       <Controller
@@ -313,7 +307,16 @@ const CargoStepFieldsContent = ({ index, control }) => {
             getOptionLabel={(option) => `${option.code} - ${option.fullname}`}
             isOptionEqualToValue={(option, value) => option.code === value.code}
             renderInput={(params) => (
-              <TextField {...params} label="Валюта" size="small" />
+              <TextField
+                {...params}
+                label="Валюта"
+                size="small"
+                sx={{
+                  "& .MuiOutlinedInput-root": {
+                    borderRadius: 2,
+                  },
+                }}
+              />
             )}
           />
         )}
@@ -350,6 +353,9 @@ const CargoStepFieldsContent = ({ index, control }) => {
               gridColumn: {
                 xs: "auto",
                 sm: "1 / -1",
+              },
+              "& .MuiOutlinedInput-root": {
+                borderRadius: 2,
               },
             }}
           />
