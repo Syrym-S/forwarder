@@ -235,7 +235,7 @@ const RouteStep = ({ control, form, setValue }) => {
             display: "grid",
             gridTemplateColumns: {
               xs: "1fr",
-              sm: "2fr 1fr",
+              sm: "2fr 1fr 1fr",
             },
             gap: 1,
           }}
@@ -267,13 +267,27 @@ const RouteStep = ({ control, form, setValue }) => {
           <FormControllerInput
             name={`point_schedules[0].start_at`}
             control={control}
-            label={`Дата погрузки`}
+            label={`Начало (Откуда)`}
             type="date"
             fullWidth
             size="small"
-            defaultValue={dayjs(form.point_schedules[0].start_at).format(
-              "YYYY-MM-DD",
-            )}
+            onChange={() => {
+              setValue(`point_schedules[0].point_index`, 0);
+            }}
+            slotProps={{
+              htmlInput: {
+                min: dayjs().format("YYYY-MM-DD"),
+              },
+            }}
+          />
+
+          <FormControllerInput
+            name={`point_schedules[0].end_at`}
+            control={control}
+            label={`Окончание (Откуда)`}
+            type="date"
+            fullWidth
+            size="small"
             onChange={() => {
               setValue(`point_schedules[0].point_index`, 0);
             }}
@@ -350,7 +364,27 @@ const RouteStep = ({ control, form, setValue }) => {
                 <FormControllerInput
                   name={`point_schedules[${index + 1}].start_at`}
                   control={control}
-                  label={`Дата промежуточной точки #${index + 1}`}
+                  label={`Начало (Точка ${index + 1})`}
+                  type="date"
+                  fullWidth
+                  size="small"
+                  onChange={() => {
+                    setValue(
+                      `point_schedules[${index + 1}].point_index`,
+                      index + 1,
+                    );
+                  }}
+                  slotProps={{
+                    htmlInput: {
+                      min: dayjs().format("YYYY-MM-DD"),
+                    },
+                  }}
+                />
+
+                <FormControllerInput
+                  name={`point_schedules[${index + 1}].end_at`}
+                  control={control}
+                  label={`Окончание (Точка ${index + 1})`}
                   type="date"
                   fullWidth
                   size="small"
@@ -390,7 +424,7 @@ const RouteStep = ({ control, form, setValue }) => {
             display: "grid",
             gridTemplateColumns: {
               xs: "1fr",
-              sm: "2fr 1fr",
+              sm: "2fr 1fr 1fr",
             },
             gap: 1,
           }}
@@ -419,7 +453,27 @@ const RouteStep = ({ control, form, setValue }) => {
           <FormControllerInput
             name={`point_schedules[${fields.length + 1}].start_at`}
             control={control}
-            label={`Дата погрузки`}
+            label={`Начало (Куда)`}
+            type="date"
+            fullWidth
+            size="small"
+            onChange={() => {
+              setValue(
+                `point_schedules[${fields.length + 1}].point_index`,
+                fields.length + 1,
+              );
+            }}
+            slotProps={{
+              htmlInput: {
+                min: dayjs().format("YYYY-MM-DD"),
+              },
+            }}
+          />
+
+          <FormControllerInput
+            name={`point_schedules[${fields.length + 1}].end_at`}
+            control={control}
+            label={`Окончание (Куда)`}
             type="date"
             fullWidth
             size="small"
