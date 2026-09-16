@@ -1,5 +1,5 @@
 import FormHeader from "../../components/lead-form/form-header";
-import FirstStep from "../../components/lead-form/steps/first-step";
+import FirstStep from "../../components/lead-form/steps/route-step";
 import DocumentUpload from "../../components/lead-form/steps/document-upload";
 import PriceStep from "../../components/lead-form/steps/price-step";
 import LeadFormTabs from "../../components/lead-form/lead-form-tabs";
@@ -15,6 +15,7 @@ import { ThirdStep } from "../../components/lead-form/steps/third-step";
 import { ForthStep } from "../../components/lead-form/steps/forth-step";
 import { uploadLeadFileApi } from "../../app/store/leads/api";
 import { useLeadsStore } from "../../app/store/leads/leads-store";
+import RouteStep from "../../components/lead-form/steps/route-step";
 
 const steps = [
   { id: 1, label: "Маршрут" },
@@ -190,12 +191,7 @@ const AddLeadForm = ({
     switch (step) {
       case 1:
         return (
-          <FirstStep
-            control={control}
-            errors={errors}
-            form={formValues}
-            setValue={setValue}
-          />
+          <RouteStep control={control} form={formValues} setValue={setValue} />
         );
       case 2:
         return (

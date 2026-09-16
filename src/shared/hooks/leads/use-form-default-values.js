@@ -1,4 +1,4 @@
-import React from "react";
+import dayjs from "dayjs";
 
 export const useFormDefaultValues = (lead = null, files = []) => {
   return {
@@ -37,6 +37,14 @@ export const useFormDefaultValues = (lead = null, files = []) => {
     price: lead?.price,
     transportation_price: lead?.transportation_price || null,
     documents: files || [],
+    point_schedules:
+      lead?.point_schedules.map((point) => ({
+        point_index: point.point_index,
+        start_at: point.start_at
+          ? dayjs(point.start_at).format("YYYY-MM-DD")
+          : "",
+        end_at: point.end_at ? dayjs(point.end_at).format("YYYY-MM-DD") : "",
+      })) || [],
     cargos: lead?.cargos?.map((cargo) => ({
       cargo_price: cargo?.cargo_price || null,
       cargo_type: cargo?.type || null,

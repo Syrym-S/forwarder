@@ -1,7 +1,7 @@
 import Section from "../../../shared/ui/section";
-import { Box } from "@mui/material";
 import RouteOutlinedIcon from "@mui/icons-material/RouteOutlined";
 import RoutePoint from "./route-point";
+import { Box } from "@mui/material";
 
 const LeadRouteInfo = ({ leadData }) => {
   return (
@@ -25,13 +25,15 @@ const LeadRouteInfo = ({ leadData }) => {
               ? "Точка пройдена"
               : "Точка не пройдена"
           }
+          date={leadData?.point_schedules[0]}
         />
 
         {leadData?.waypoints?.map((point, index) => (
           <RoutePoint
-            label={`Промежуточная точка #${index}`}
+            label={`Промежуточная точка #${index + 1}`}
             address={point?.address || "Битые данные"}
             status={point?.is_passed ? "Точка пройдена" : "Точка не пройдена"}
+            date={leadData?.point_schedules[index + 1]}
           />
         ))}
 
@@ -43,6 +45,7 @@ const LeadRouteInfo = ({ leadData }) => {
               ? "Точка пройдена"
               : "Точка не пройдена"
           }
+          date={leadData?.point_schedules[leadData?.waypoints?.length + 1]}
         />
       </Box>
     </Section>
