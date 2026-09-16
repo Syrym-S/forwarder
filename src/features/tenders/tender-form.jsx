@@ -26,7 +26,7 @@ const stepFields = {
   1: ["lead", "public_date_time", "end_date_time", "participants"],
 };
 
-const prepareTenderData = (form) => {
+const prepareTenderData = (form, selectedDrivers) => {
   return {
     lead_id: form?.lead.id || "",
     public_date_time:
@@ -36,6 +36,7 @@ const prepareTenderData = (form) => {
     type: "shipper",
     publication_type: form?.publication_type ? "public" : "private",
     max_participants: form?.max_participants || 0,
+    participants: selectedDrivers.map((user) => user.id),
   };
 };
 
@@ -57,6 +58,8 @@ const TenderForm = ({
   });
 
   const formValues = useWatch({ control });
+
+  console.log("formValues", formValues);
 
   const isLoading = useLeadsStore((state) => state.isLoading);
   const getTenders = useTendersStore((state) => state.getTenders);
@@ -113,7 +116,7 @@ const TenderForm = ({
 
   const onSubmit = async () => {
     setIsSubmitLoading(true);
-    const payload = prepareTenderData(formValues);
+    const payload = prepareTenderData(formValues, selectedDrivers);
 
     if (!isSelectedDriversExists && !formValues?.publication_type) {
       setError("Добавьте хотя бы одного водителя!");
