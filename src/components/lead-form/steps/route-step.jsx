@@ -267,6 +267,9 @@ const RouteStep = ({ control, form, setValue }) => {
           <FormControllerInput
             name={`point_schedules[0].start_at`}
             control={control}
+            rules={{
+              required: "Дата начала обязательна",
+            }}
             label={`Начало (Откуда)`}
             type="date"
             fullWidth
@@ -283,6 +286,9 @@ const RouteStep = ({ control, form, setValue }) => {
 
           <FormControllerInput
             name={`point_schedules[0].end_at`}
+            rules={{
+              required: "Дата оконяания обязательна",
+            }}
             control={control}
             label={`Окончание (Откуда)`}
             type="date"
@@ -363,6 +369,9 @@ const RouteStep = ({ control, form, setValue }) => {
 
                 <FormControllerInput
                   name={`point_schedules[${index + 1}].start_at`}
+                  rules={{
+                    required: "Дата начала обязательна",
+                  }}
                   control={control}
                   label={`Начало (Точка ${index + 1})`}
                   type="date"
@@ -383,6 +392,9 @@ const RouteStep = ({ control, form, setValue }) => {
 
                 <FormControllerInput
                   name={`point_schedules[${index + 1}].end_at`}
+                  rules={{
+                    required: "Дата оконяания обязательна",
+                  }}
                   control={control}
                   label={`Окончание (Точка ${index + 1})`}
                   type="date"
@@ -409,7 +421,7 @@ const RouteStep = ({ control, form, setValue }) => {
                   sx={{
                     whiteSpace: "nowrap",
                     borderRadius: 2,
-                    height: "100%",
+                    py: 1,
                   }}
                 >
                   Убрать
@@ -452,6 +464,9 @@ const RouteStep = ({ control, form, setValue }) => {
 
           <FormControllerInput
             name={`point_schedules[${fields.length + 1}].start_at`}
+            rules={{
+              required: "Дата начала обязательна",
+            }}
             control={control}
             label={`Начало (Куда)`}
             type="date"
@@ -473,6 +488,9 @@ const RouteStep = ({ control, form, setValue }) => {
           <FormControllerInput
             name={`point_schedules[${fields.length + 1}].end_at`}
             control={control}
+            rules={{
+              required: "Дата оконяания обязательна",
+            }}
             label={`Окончание (Куда)`}
             type="date"
             fullWidth

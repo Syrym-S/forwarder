@@ -5,6 +5,7 @@ import LeadFormTabs from "../../components/lead-form/lead-form-tabs";
 import CargoStep from "../../components/lead-form/steps/cargo-step";
 import DriverStep from "../../components/lead-form/steps/driver-step";
 import RouteStep from "../../components/lead-form/steps/route-step";
+import CustomerStep from "../../components/lead-form/steps/customer-step";
 import { Dialog, DialogContent } from "@mui/material";
 import { useState } from "react";
 import { FormNavButtons } from "../../components/lead-form/form-nav-buttons";
@@ -14,7 +15,6 @@ import { CreateLeadResultModal } from "../../components/lead-form/create-lead-re
 import { mapCreateLeadFormToApi } from "../../components/lead-form/model/createLead.adapter";
 import { uploadLeadFileApi } from "../../app/store/leads/api";
 import { useLeadsStore } from "../../app/store/leads/leads-store";
-import CustomerStep from "../../components/lead-form/steps/customer-step";
 
 const steps = [
   { id: 1, label: "Маршрут" },
@@ -27,7 +27,7 @@ const steps = [
 ];
 
 const stepFields = [
-  ["from_location.address", "to_location.address", "loadingDate"],
+  ["from_location.address", "to_location.address", "point_schedules"],
   [
     "cargoType",
     "weightKg",
@@ -54,6 +54,8 @@ const AddLeadForm = ({
   const updateLead = useLeadsStore((state) => state.updateLead);
   const getLeadItem = useLeadsStore((state) => state.getLeadItem);
   const clearCurrentLead = useLeadsStore((state) => state.clearCurrentLead);
+
+  console.log(initialValues);
 
   const [uploadedFiles, setUploadedFiles] = useState([]);
   const [activeStep, setActiveStep] = useState(1);
@@ -85,8 +87,6 @@ const AddLeadForm = ({
   });
 
   const formValues = useWatch({ control });
-
-  console.log(formValues);
 
   const isLastStep = activeStep === steps.length;
 
@@ -242,12 +242,20 @@ const AddLeadForm = ({
   }
 
   async function handleNext() {
-    const fields = stepFields[activeStep - 1] || [];
+    let fields = stepFields[activeStep - 1] || [];
 
     const isStepValid = await trigger(fields);
 
     if (!isStepValid) {
       return;
+    }
+
+    if (activeStep === 1) {
+      fields = [
+        "from_location.address",
+        "to_location.address",
+        "point_schedules",
+      ];
     }
 
     if (

@@ -56,6 +56,7 @@ const CargoStep = ({ control, errors, leadStatus }) => {
               control={control}
               errors={errors}
               remove={remove}
+              cargo={field}
             />
 
             {fields.length !== 1 && (
@@ -101,7 +102,7 @@ const CargoStep = ({ control, errors, leadStatus }) => {
 
 export default CargoStep;
 
-const CargoStepFieldsContent = ({ index, control }) => {
+const CargoStepFieldsContent = ({ index, control, cargo }) => {
   const searchCargoType = useOptionsStore((state) => state.searchCargoType);
   const cargoTypes = useOptionsStore((state) => state.cargoTypes);
   const getCargoTypes = useOptionsStore((state) => state.getCargoTypes);
@@ -157,7 +158,7 @@ const CargoStepFieldsContent = ({ index, control }) => {
       <Controller
         name={`cargos.${index}.type`}
         control={control}
-        defaultValue={null}
+        defaultValue={cargo?.type || ""}
         render={({ field, fieldState }) => (
           <Autocomplete
             inputValue={inputValue}
@@ -165,9 +166,16 @@ const CargoStepFieldsContent = ({ index, control }) => {
             loading={isCargoTypesLoading}
             loadingText="Загрузка..."
             value={cargoTypes.find((item) => item.name === field.value) || null}
-            onChange={(_, value) => {
+            onChange={(_, value, reason) => {
               field.onChange(value?.name || "");
               setInputValue(value?.name || "");
+
+              if (reason === "clear") {
+                getCargoTypes();
+              }
+            }}
+            onInputChange={(_, value) => {
+              setInputValue(value);
             }}
             getOptionLabel={(option) => option.name}
             isOptionEqualToValue={(option, value) => option.id === value.id}
@@ -178,9 +186,6 @@ const CargoStepFieldsContent = ({ index, control }) => {
                 size="small"
                 error={!!fieldState.error}
                 helperText={fieldState.error?.message}
-                onChange={(e) => {
-                  setInputValue(e.target.value);
-                }}
                 sx={{
                   "& .MuiOutlinedInput-root": {
                     borderRadius: 2,

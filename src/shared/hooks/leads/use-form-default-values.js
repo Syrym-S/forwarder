@@ -47,7 +47,7 @@ export const useFormDefaultValues = (lead = null, files = []) => {
       })) || [],
     cargos: lead?.cargos?.map((cargo) => ({
       cargo_price: cargo?.cargo_price || null,
-      cargo_type: cargo?.type || null,
+      type: cargo?.type || null,
       name: cargo?.name || "",
       description: cargo.description || "",
       weight_kg: cargo?.weight_kg || null,
