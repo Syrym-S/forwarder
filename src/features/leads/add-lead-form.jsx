@@ -55,8 +55,6 @@ const AddLeadForm = ({
   const getLeadItem = useLeadsStore((state) => state.getLeadItem);
   const clearCurrentLead = useLeadsStore((state) => state.clearCurrentLead);
 
-  console.log(initialValues);
-
   const [uploadedFiles, setUploadedFiles] = useState([]);
   const [activeStep, setActiveStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);

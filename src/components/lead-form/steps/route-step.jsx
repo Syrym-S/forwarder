@@ -12,7 +12,7 @@ import {
 import { StepSection } from "../step-section";
 import { useCustomerMap } from "../use-customer-map";
 import { CustomerMapView } from "../map-view";
-import { useFieldArray } from "react-hook-form";
+import { useFieldArray, useWatch } from "react-hook-form";
 import { useRouteMapPicker } from "../use-route-map-picker";
 import { STATUS } from "../../../shared/const/tenders";
 import { useLeadsStore } from "../../../app/store/leads/leads-store";
@@ -53,6 +53,22 @@ const RouteStep = ({ control, form, setValue }) => {
     appendSchedule({
       date: "",
     });
+  };
+
+  const pointSchedules =
+    useWatch({
+      control,
+      name: "point_schedules",
+    }) || [];
+
+  const today = dayjs().format("YYYY-MM-DD");
+
+  const getMinDate = (date) => {
+    if (!date) return today;
+
+    return dayjs(date).isAfter(dayjs(today))
+      ? dayjs(date).format("YYYY-MM-DD")
+      : today;
   };
 
   const map = useCustomerMap();
@@ -265,41 +281,41 @@ const RouteStep = ({ control, form, setValue }) => {
           />
 
           <FormControllerInput
-            name={`point_schedules[0].start_at`}
+            name="point_schedules[0].start_at"
             control={control}
             rules={{
               required: "Дата начала обязательна",
             }}
-            label={`Начало (Откуда)`}
+            label="Начало (Откуда)"
             type="date"
             fullWidth
             size="small"
             onChange={() => {
-              setValue(`point_schedules[0].point_index`, 0);
+              setValue("point_schedules[0].point_index", 0);
             }}
             slotProps={{
               htmlInput: {
-                min: dayjs().format("YYYY-MM-DD"),
+                min: today,
               },
             }}
           />
 
           <FormControllerInput
-            name={`point_schedules[0].end_at`}
-            rules={{
-              required: "Дата оконяания обязательна",
-            }}
+            name="point_schedules[0].end_at"
             control={control}
-            label={`Окончание (Откуда)`}
+            rules={{
+              required: "Дата окончания обязательна",
+            }}
+            label="Окончание (Откуда)"
             type="date"
             fullWidth
             size="small"
             onChange={() => {
-              setValue(`point_schedules[0].point_index`, 0);
+              setValue("point_schedules[0].point_index", 0);
             }}
             slotProps={{
               htmlInput: {
-                min: dayjs().format("YYYY-MM-DD"),
+                min: getMinDate(pointSchedules?.[0]?.start_at),
               },
             }}
           />
@@ -385,7 +401,7 @@ const RouteStep = ({ control, form, setValue }) => {
                   }}
                   slotProps={{
                     htmlInput: {
-                      min: dayjs().format("YYYY-MM-DD"),
+                      min: getMinDate(pointSchedules?.[index]?.end_at),
                     },
                   }}
                 />
@@ -393,7 +409,7 @@ const RouteStep = ({ control, form, setValue }) => {
                 <FormControllerInput
                   name={`point_schedules[${index + 1}].end_at`}
                   rules={{
-                    required: "Дата оконяания обязательна",
+                    required: "Дата окончания обязательна",
                   }}
                   control={control}
                   label={`Окончание (Точка ${index + 1})`}
@@ -408,7 +424,7 @@ const RouteStep = ({ control, form, setValue }) => {
                   }}
                   slotProps={{
                     htmlInput: {
-                      min: dayjs().format("YYYY-MM-DD"),
+                      min: getMinDate(pointSchedules?.[index + 1]?.start_at),
                     },
                   }}
                 />
@@ -468,7 +484,7 @@ const RouteStep = ({ control, form, setValue }) => {
               required: "Дата начала обязательна",
             }}
             control={control}
-            label={`Начало (Куда)`}
+            label="Начало (Куда)"
             type="date"
             fullWidth
             size="small"
@@ -480,7 +496,7 @@ const RouteStep = ({ control, form, setValue }) => {
             }}
             slotProps={{
               htmlInput: {
-                min: dayjs().format("YYYY-MM-DD"),
+                min: getMinDate(pointSchedules?.[fields.length]?.end_at),
               },
             }}
           />
@@ -489,9 +505,9 @@ const RouteStep = ({ control, form, setValue }) => {
             name={`point_schedules[${fields.length + 1}].end_at`}
             control={control}
             rules={{
-              required: "Дата оконяания обязательна",
+              required: "Дата окончания обязательна",
             }}
-            label={`Окончание (Куда)`}
+            label="Окончание (Куда)"
             type="date"
             fullWidth
             size="small"
@@ -503,7 +519,7 @@ const RouteStep = ({ control, form, setValue }) => {
             }}
             slotProps={{
               htmlInput: {
-                min: dayjs().format("YYYY-MM-DD"),
+                min: getMinDate(pointSchedules?.[fields.length + 1]?.start_at),
               },
             }}
           />
