@@ -38,6 +38,7 @@ const CreateFactoringForm = ({ openFormModal, handleModalClose }) => {
 
   const getFactors = useFactoringStore((state) => state.getFactors);
   const createFactoring = useFactoringStore((state) => state.createFactoring);
+  const isCreateLoading = useFactoringStore((state) => state.isCreateLoading);
   const getFactorings = useFactoringStore((state) => state.getFactorings);
   const getLeadItem = useLeadsStore((state) => state.getLeadItem);
   const currentLead = useLeadsStore((state) => state.currentLead);
@@ -198,10 +199,22 @@ const CreateFactoringForm = ({ openFormModal, handleModalClose }) => {
           </Button>
           <Button
             variant="contained"
-            disabled={canBeSubmitted}
+            disabled={canBeSubmitted || isCreateLoading}
             color="primary"
             onClick={isLast || !isSettingsExist ? handleSubmit : handleNextStep}
+            sx={{
+              display: "flex",
+              gap: 1,
+            }}
           >
+            {isCreateLoading && (
+              <CircularProgress
+                size={15}
+                sx={{
+                  color: "white",
+                }}
+              />
+            )}
             {isLast || !isSettingsExist ? "Cоздать" : "Дальше"}
           </Button>
         </Box>
