@@ -4,32 +4,23 @@ import {
   Dialog,
   DialogContent,
   DialogTitle,
-  Typography,
+  TextField,
 } from "@mui/material";
-import { useLeadsStore } from "../../../app/store/leads/leads-store";
 
-const ShareModal = ({
-  leadId,
-  openShareModal,
+const WarningModal = ({
+  openWarningModal,
   handleCloseShareModal,
-  setShareUrl,
+  setConfirm,
+  comment,
+  setComment,
 }) => {
-  const shareLead = useLeadsStore((state) => state.shareLead);
-
   const handleShareLead = async () => {
-    const response = await shareLead(leadId);
-    const link = response.url;
-    const expires_at = response.expires_at;
-
-    setShareUrl({
-      url: link,
-      expires_at: expires_at,
-    });
+    setConfirm(true);
   };
 
   return (
     <Dialog
-      open={openShareModal}
+      open={openWarningModal}
       onClose={handleCloseShareModal}
       maxWidth="sm"
       fullWidth
@@ -52,7 +43,7 @@ const ShareModal = ({
           color: "#263244",
         }}
       >
-        Поделиться лидом
+        Перенос лида в статус "Авариная ситуация"
       </DialogTitle>
 
       <DialogContent
@@ -61,17 +52,23 @@ const ShareModal = ({
           pb: 3,
         }}
       >
-        <Typography
+        <TextField
+          fullWidth
+          multiline
+          minRows={3}
+          maxRows={6}
+          label="Причина"
+          placeholder="Введите комментарий..."
+          value={comment}
+          onChange={(event) => setComment(event.target.value)}
           sx={{
-            fontSize: "0.9rem",
-            fontWeight: 400,
-            color: "#667892",
-            lineHeight: 1.5,
+            mt: 1,
+            "& .MuiOutlinedInput-root": {
+              borderRadius: "10px",
+              fontSize: "0.9rem",
+            },
           }}
-        >
-          Вы уверены, что хотите поделиться информацией о лиде с третьими
-          лицами? Информация будет доступна по ссылке любому, у кого она есть.
-        </Typography>
+        />
 
         <Box
           sx={{
@@ -101,6 +98,7 @@ const ShareModal = ({
           <Button
             color="primary"
             variant="contained"
+            disabled={!comment}
             onClick={handleShareLead}
             sx={{
               px: 2.5,
@@ -115,7 +113,7 @@ const ShareModal = ({
               },
             }}
           >
-            Поделиться
+            Сообщить об аварии
           </Button>
         </Box>
       </DialogContent>
@@ -123,4 +121,4 @@ const ShareModal = ({
   );
 };
 
-export default ShareModal;
+export default WarningModal;

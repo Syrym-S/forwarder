@@ -154,6 +154,24 @@ const RenderStatus = ({ status }) => {
     case STATUS.approved:
       return <RenderStatusContent label={"Подтверждено"} variant="outlined" />;
 
+    case STATUS.emergency_situation:
+      return (
+        <RenderStatusContent
+          label={"Авариная ситуация"}
+          variant="outlined"
+          color="#c60606"
+        />
+      );
+
+    case STATUS.finished_emergency_situation:
+      return (
+        <RenderStatusContent
+          label={"Авариная ситуация закрыта"}
+          variant="outlined"
+          color="#c60606"
+        />
+      );
+
     default:
       return <>Нет статуа</>;
   }

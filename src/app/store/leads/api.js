@@ -354,3 +354,20 @@ export const getAvrDocumentApi = async (leadId) => {
 
   return data;
 };
+
+export const sendEmergencySituationApi = async (leadId, payload) => {
+  const data = await api.post(
+    `/forwarder/v1/lead/${leadId}/emergency-situation`,
+    payload,
+  );
+
+  return data;
+};
+
+export const finishEmergencySituationApi = async (leadId) => {
+  const data = await api.post(
+    `/forwarder/v1/lead/${leadId}/emergency-situation/finished`,
+  );
+
+  return data;
+};

@@ -1,7 +1,14 @@
-import { Box, Chip, Stack, Tooltip, Typography } from "@mui/material";
 import EditNoteRoundedIcon from "@mui/icons-material/EditNoteRounded";
 import RenderStatus from "../../../shared/ui/render-status";
-import { STATUS } from "../../../shared/const/tenders";
+import {
+  Box,
+  Chip,
+  CircularProgress,
+  Stack,
+  Tooltip,
+  Typography,
+} from "@mui/material";
+import { FINISHED_LEAD_STATUSES } from "../../../shared/const/tenders";
 import { useNotificationsStore } from "../../../app/store/notifications/noti-store";
 import { useEffect } from "react";
 import { useLeadsStore } from "../../../app/store/leads/leads-store";
@@ -9,10 +16,7 @@ import { parserNotificationType } from "../../../shared/helpers/notifications/pa
 import { NOTIFICATION_TYPE } from "../../../shared/const/notification-types";
 
 const LeadHeading = ({ leadData, openEditForm }) => {
-  const canBeEdited =
-    leadData.status !== STATUS.finished &&
-    leadData.status !== STATUS.cancelled &&
-    leadData.status !== STATUS.deleted;
+  const canBeEdited = !FINISHED_LEAD_STATUSES.includes(leadData.status);
 
   const newNotification = useNotificationsStore(
     (state) => state.newNotification,
@@ -20,6 +24,7 @@ const LeadHeading = ({ leadData, openEditForm }) => {
 
   const { notification_type } = parserNotificationType;
   const getLeadItem = useLeadsStore((state) => state.getLeadItem);
+  const isLoading = useLeadsStore((state) => state.isLoading);
 
   useEffect(() => {
     if (notification_type === NOTIFICATION_TYPE.shipping) {
@@ -112,7 +117,18 @@ const LeadHeading = ({ leadData, openEditForm }) => {
           }}
         />
 
-        <RenderStatus status={leadData.status} />
+        <Box
+          sx={{
+            display: "flex",
+            gap: 1,
+            width: "fit-content",
+            alignItems: "center",
+          }}
+        >
+          {isLoading && <CircularProgress size={13} />}
+          <RenderStatus status={leadData.status} />
+        </Box>
+
         <Stack
           sx={{
             display: {

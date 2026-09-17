@@ -6,33 +6,56 @@ import ShareModal from "../../components/leads/lead-item/share-modal";
 import LeadItemMainContainer from "../../components/leads/lead-item/lead-item-main-container";
 import ChatFirstVertion from "../../components/chat/chat-first-vertion";
 import ShareLeadLinkBlock from "../../components/leads/lead-item/share-lead-link-block";
+import WarningAmberRoundedIcon from "@mui/icons-material/WarningAmberRounded";
+import IosShareOutlinedIcon from "@mui/icons-material/IosShareOutlined";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { Box, Button, Tab, Tabs } from "@mui/material";
+import { Box, IconButton, Tab, Tabs, Tooltip } from "@mui/material";
 import { useFormDefaultValues } from "../../shared/hooks/leads/use-form-default-values";
 import { useLeadsStore } from "../../app/store/leads/leads-store";
 import { LEAD_TABS } from "../../shared/const/leads";
-import { STATUS } from "../../shared/const/tenders";
+import {
+  FINISHED_LEAD_STATUSES,
+  IN_PROGRESS_STATUSES,
+  STATUS,
+} from "../../shared/const/tenders";
+import ConfirmModal from "../../shared/ui/confirm-modal";
+import WarningModal from "../../components/leads/lead-item/warning-modal";
+import DoNotDisturbOnOutlinedIcon from "@mui/icons-material/DoNotDisturbOnOutlined";
 
 const LeadItem = () => {
   const { id } = useParams();
 
   const getLeadFiles = useLeadsStore((state) => state.getLeadFiles);
   const getLeadItem = useLeadsStore((state) => state.getLeadItem);
+  const sendEmergencySituation = useLeadsStore(
+    (state) => state.sendEmergencySituation,
+  );
+  const finishEmergencySituation = useLeadsStore(
+    (state) => state.finishEmergencySituation,
+  );
+  const isSentEmergencyLoading = useLeadsStore(
+    (state) => state.isSentEmergencyLoading,
+  );
+  const isFinishEmergencyLoading = useLeadsStore(
+    (state) => state.isFinishEmergencyLoading,
+  );
 
   const [currentTab, setCurrentTab] = useState(LEAD_TABS.lead_details);
   const [openShareModal, setOpenShareModal] = useState(false);
+  const [openWarningModal, setOpenWarningModal] = useState(false);
   const [openEdit, setOpenEdit] = useState(false);
+  const [openFinishEmergency, setOpenFinishEmergency] = useState(false);
   const [documentError, setDocumentError] = useState("");
   const [shareUrl, setShareUrl] = useState(null);
+  const [confirm, setConfirm] = useState(null);
+  const [emergencyComment, setEmergencyComment] = useState("");
 
   const leadData = useLeadsStore((state) => state.currentLead);
   const files = useLeadsStore((state) => state.files);
-
+  const showEmergencyButton = IN_PROGRESS_STATUSES.includes(leadData?.status);
   const defaultValues = useFormDefaultValues(leadData, files);
-
-  const isActive =
-    leadData?.status !== STATUS.finished && leadData?.status !== STATUS.deleted;
+  const isActive = !FINISHED_LEAD_STATUSES.includes(leadData?.status);
 
   const openEditForm = () => {
     setOpenEdit(true);
@@ -44,6 +67,39 @@ const LeadItem = () => {
 
   const handleCloseShareModal = () => {
     setOpenShareModal(false);
+  };
+
+  const handleOpenWarningModal = () => {
+    setOpenWarningModal(true);
+  };
+
+  const handleCloseWarningModal = () => {
+    setOpenWarningModal(false);
+  };
+
+  const handleOpenFinishEmergencyModal = () => {
+    setOpenFinishEmergency(true);
+  };
+
+  const handleCloseFinishEmergencyModal = () => {
+    setOpenFinishEmergency(false);
+  };
+
+  const handleSendEmergencySituation = async () => {
+    await sendEmergencySituation(id, {
+      emergency_situation_comment: emergencyComment,
+    });
+    handleCloseWarningModal();
+    setConfirm(false);
+
+    await getLeadItem(id);
+  };
+
+  const handleFinishEmergencySituation = async () => {
+    await finishEmergencySituation(id);
+    handleCloseFinishEmergencyModal();
+
+    await getLeadItem(id);
   };
 
   useEffect(() => {
@@ -163,17 +219,70 @@ const LeadItem = () => {
             />
           </Tabs>
 
-          <Button
-            color="primary"
-            variant="outlined"
-            onClick={handleOpenShareModal}
+          <Box
             sx={{
-              my: 1,
-              height: 30,
+              display: "flex",
+              gap: 1,
             }}
           >
-            Поделиться
-          </Button>
+            {showEmergencyButton && (
+              <Tooltip title="Сообщить об аварии" arrow>
+                <IconButton
+                  color="error"
+                  onClick={handleOpenWarningModal}
+                  sx={{
+                    height: 30,
+                    width: 30,
+                    p: 3,
+                  }}
+                >
+                  <WarningAmberRoundedIcon
+                    sx={{
+                      fontSize: 28,
+                    }}
+                  />
+                </IconButton>
+              </Tooltip>
+            )}
+
+            {leadData.status === STATUS.emergency_situation && (
+              <Tooltip title="Закрыть авариную ситуацию" arrow>
+                <IconButton
+                  color="error"
+                  onClick={handleOpenFinishEmergencyModal}
+                  sx={{
+                    height: 30,
+                    width: 30,
+                    p: 3,
+                  }}
+                >
+                  <DoNotDisturbOnOutlinedIcon
+                    sx={{
+                      fontSize: 28,
+                    }}
+                  />
+                </IconButton>
+              </Tooltip>
+            )}
+
+            <Tooltip title="Поделиться лидом" arrow>
+              <IconButton
+                color="primary"
+                onClick={handleOpenShareModal}
+                sx={{
+                  height: 30,
+                  width: 30,
+                  p: 3,
+                }}
+              >
+                <IosShareOutlinedIcon
+                  sx={{
+                    fontSize: 25,
+                  }}
+                />
+              </IconButton>
+            </Tooltip>
+          </Box>
         </Box>
 
         {openShareModal && (
@@ -191,6 +300,43 @@ const LeadItem = () => {
             link={shareUrl.url}
             expiresAt={shareUrl.expires_at}
             onClose={() => setShareUrl(null)}
+          />
+        )}
+
+        {openWarningModal && (
+          <WarningModal
+            openWarningModal={openWarningModal}
+            handleCloseShareModal={handleCloseWarningModal}
+            setConfirm={setConfirm}
+            comment={emergencyComment}
+            setComment={setEmergencyComment}
+          />
+        )}
+
+        {confirm && (
+          <ConfirmModal
+            warning
+            open={confirm}
+            title={"Внимание!"}
+            description={
+              "Вы уверены, что хотите сообщить об аварийном случае? Данное действие может привести к отмене факторинга и завершению лида. Отменить это действие будет невозможно."
+            }
+            onCancel={() => setConfirm(false)}
+            onConfirm={handleSendEmergencySituation}
+            isLoading={isSentEmergencyLoading}
+          />
+        )}
+
+        {openFinishEmergency && (
+          <ConfirmModal
+            open={openFinishEmergency}
+            title={"Внимание!"}
+            description={
+              "Вы уверены, что хотите закрыть авариную ситуацию? Данное действие завершит отслеживание лида, и закроет лид"
+            }
+            onCancel={handleCloseFinishEmergencyModal}
+            onConfirm={handleFinishEmergencySituation}
+            isLoading={isFinishEmergencyLoading}
           />
         )}
 

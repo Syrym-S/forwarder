@@ -16,7 +16,25 @@ export const STATUS = {
   winning: "winning",
   loss: "loss",
   approved: "approved",
+  emergency_situation: "emergency_situation",
+  finished_emergency_situation: "finished_emergency_situation",
 };
+
+export const FINISHED_LEAD_STATUSES = [
+  STATUS.finished,
+  STATUS.deleted,
+  STATUS.finished_emergency_situation,
+];
+
+export const NEW_LEAD_STATUS = [STATUS.new, STATUS.add_driver];
+
+export const IN_PROGRESS_STATUSES = [
+  STATUS.start_driver,
+  STATUS.start_loading,
+  STATUS.start_unloading,
+  STATUS.verification_loading,
+  STATUS.verification_unloading,
+];
 
 export const WAYPOINT_TYPES = {
   loading: "loading",

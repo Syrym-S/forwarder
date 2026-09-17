@@ -29,6 +29,8 @@ import {
   generaetAvrDocumentApi,
   signAvrDocumentApi,
   getAvrDocumentApi,
+  sendEmergencySituationApi,
+  finishEmergencySituationApi,
 } from "./api";
 
 export const useLeadsStore = create((set) => ({
@@ -64,6 +66,8 @@ export const useLeadsStore = create((set) => ({
   isAvrLoading: false,
   isGenerateAvrLoading: false,
   isSignAvrLoading: false,
+  isSentEmergencyLoading: false,
+  isFinishEmergencyLoading: false,
 
   error: null,
   count: 0,
@@ -756,6 +760,30 @@ export const useLeadsStore = create((set) => ({
       });
 
       return response;
+    } catch (e) {
+      console.log(e);
+    }
+  },
+
+  sendEmergencySituation: async (leadId, payload) => {
+    try {
+      set({ isSentEmergencyLoading: true });
+
+      await sendEmergencySituationApi(leadId, payload);
+
+      set({ isSentEmergencyLoading: false });
+    } catch (e) {
+      console.log(e);
+    }
+  },
+
+  finishEmergencySituation: async (leadId) => {
+    try {
+      set({ isFinishEmergencyLoading: true });
+
+      await finishEmergencySituationApi(leadId);
+
+      set({ isFinishEmergencyLoading: false });
     } catch (e) {
       console.log(e);
     }
