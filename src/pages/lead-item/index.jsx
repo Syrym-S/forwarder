@@ -22,6 +22,7 @@ import {
 import ConfirmModal from "../../shared/ui/confirm-modal";
 import WarningModal from "../../components/leads/lead-item/warning-modal";
 import DoNotDisturbOnOutlinedIcon from "@mui/icons-material/DoNotDisturbOnOutlined";
+import InfoItem from "../../shared/ui/info-item";
 
 const LeadItem = () => {
   const { id } = useParams();
@@ -164,7 +165,7 @@ const LeadItem = () => {
 
         <Box
           sx={{
-            pt: 2,
+            py: 2,
             width: "100%",
             display: "flex",
             flexDirection: {
@@ -283,6 +284,21 @@ const LeadItem = () => {
               </IconButton>
             </Tooltip>
           </Box>
+        </Box>
+
+        <Box
+          sx={{
+            py: 1,
+            width: "50%",
+          }}
+        >
+          {leadData.emergency_situation_comment && (
+            <InfoItem
+              color="error"
+              label={"Коментарий по авариному случаю"}
+              value={leadData.emergency_situation_comment}
+            />
+          )}
         </Box>
 
         {openShareModal && (

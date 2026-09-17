@@ -1,12 +1,15 @@
 import { Box, Typography } from "@mui/material";
 
-const InfoItem = ({ label, value }) => {
+const InfoItem = ({ label, value, color }) => {
+  const isError = color === "error";
+
   return (
     <Box
       sx={{
         p: 1,
         border: "1px solid",
-        borderColor: "divider",
+        borderColor: isError ? "error.main" : "divider",
+        backgroundColor: isError ? "rgba(211, 47, 47, 0.05)" : "transparent",
         borderRadius: 2.5,
         minWidth: 0,
       }}
@@ -15,7 +18,7 @@ const InfoItem = ({ label, value }) => {
         sx={{
           fontSize: 12,
           fontWeight: 500,
-          color: "text.secondary",
+          color: isError ? "error.main" : "text.secondary",
           mb: 0.3,
         }}
       >
@@ -26,7 +29,7 @@ const InfoItem = ({ label, value }) => {
         sx={{
           fontSize: 15,
           fontWeight: 500,
-          color: "text.primary",
+          color: isError ? "error.main" : "text.primary",
           lineHeight: 1.3,
         }}
       >
