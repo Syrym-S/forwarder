@@ -59,8 +59,6 @@ const TenderForm = ({
 
   const formValues = useWatch({ control });
 
-  console.log("formValues", formValues);
-
   const isLoading = useLeadsStore((state) => state.isLoading);
   const getTenders = useTendersStore((state) => state.getTenders);
   const getTenderDetails = useTendersStore((state) => state.getTenderDetails);

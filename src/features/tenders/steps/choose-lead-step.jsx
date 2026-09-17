@@ -5,6 +5,8 @@ import { Autocomplete, CircularProgress, TextField } from "@mui/material";
 import RenderLeadOptions from "../../../components/tenders/render-lead-options";
 import { useLeadsStore } from "../../../app/store/leads/leads-store";
 import { STATUS } from "../../../shared/const/tenders";
+import FormInput from "../../../shared/ui/input/form-input";
+import FormControllerInput from "../../../shared/ui/input/form-controller-input";
 
 const ChooseLeadStep = ({ control, setValue, isEdit, getValues }) => {
   const searchedLeads = useLeadsStore((state) => state.searchedLeads);
@@ -71,7 +73,7 @@ const ChooseLeadStep = ({ control, setValue, isEdit, getValues }) => {
             }}
             getOptionLabel={(option) => `${option?.from} - ${option?.to}`}
             renderInput={(params) => (
-              <TextField
+              <FormInput
                 {...params}
                 label="Лид"
                 placeholder="Выбирите лида"
@@ -88,7 +90,7 @@ const ChooseLeadStep = ({ control, setValue, isEdit, getValues }) => {
         )}
       />
 
-      <Controller
+      <FormControllerInput
         name="public_date_time"
         control={control}
         rules={{
@@ -103,35 +105,27 @@ const ChooseLeadStep = ({ control, setValue, isEdit, getValues }) => {
             );
           },
         }}
-        render={({ field, fieldState }) => (
-          <TextField
-            {...field}
-            defaultValue={dayjs(field.value).format("YYYY-MM-DD")}
-            value={field.value}
-            label="Дата публикации"
-            type="date"
-            error={!!fieldState.error}
-            helperText={fieldState.error?.message}
-            fullWidth
-            slotProps={{
-              htmlInput: {
-                min: dayjs().format("YYYY-MM-DD"),
-              },
-              inputLabel: {
-                shrink: true,
-              },
-            }}
-            sx={{
-              gridColumn: {
-                xs: "auto",
-                sm: "1 / -1",
-              },
-              marginTop: "10px",
-            }}
-          />
-        )}
+        label="Дата публикации"
+        type="date"
+        fullWidth
+        slotProps={{
+          htmlInput: {
+            min: dayjs().format("YYYY-MM-DD"),
+          },
+          inputLabel: {
+            shrink: true,
+          },
+        }}
+        sx={{
+          gridColumn: {
+            xs: "auto",
+            sm: "1 / -1",
+          },
+          marginTop: "10px",
+        }}
       />
-      <Controller
+
+      <FormControllerInput
         name="end_date_time"
         control={control}
         rules={{
@@ -145,32 +139,26 @@ const ChooseLeadStep = ({ control, setValue, isEdit, getValues }) => {
             );
           },
         }}
-        render={({ field, fieldState }) => (
-          <TextField
-            {...field}
-            value={field.value}
-            label="Дата окончания"
-            type="date"
-            error={fieldState?.error}
-            helperText={fieldState?.error?.message}
-            fullWidth
-            slotProps={{
-              inputLabel: {
-                shrink: true,
-              },
-              htmlInput: {
-                min: dayjs(startDate).add(1, "day").format("YYYY-MM-DD"),
-              },
-            }}
-            sx={{
-              gridColumn: {
-                xs: "auto",
-                sm: "1 / -1",
-              },
-              marginTop: "10px",
-            }}
-          />
-        )}
+        label="Дата окончания"
+        type="date"
+        fullWidth
+        slotProps={{
+          inputLabel: {
+            shrink: true,
+          },
+          htmlInput: {
+            min: startDate
+              ? dayjs(startDate).add(1, "day").format("YYYY-MM-DD")
+              : dayjs().format("YYYY-MM-DD"),
+          },
+        }}
+        sx={{
+          gridColumn: {
+            xs: "auto",
+            sm: "1 / -1",
+          },
+          marginTop: "10px",
+        }}
       />
     </>
   );

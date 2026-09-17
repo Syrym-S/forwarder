@@ -15,6 +15,8 @@ import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 import { useTendersStore } from "../../../app/store/tenders/tender-store";
 import { useDriverStore } from "../../../app/store/drivers/driver-store";
 import RenderErrorContext from "../../../shared/ui/errors/render-error-context";
+import FormInput from "../../../shared/ui/input/form-input";
+import FormControllerInput from "../../../shared/ui/input/form-controller-input";
 
 const PublicationTypeStep = ({
   error,
@@ -74,19 +76,13 @@ const PublicationTypeStep = ({
         )}
       />
 
-      <Controller
+      <FormControllerInput
         name="max_participants"
-        disabled={!isPublic}
         control={control}
-        render={({ field }) => (
-          <TextField
-            {...field}
-            value={field.value}
-            type="number"
-            label="Количество учатсников"
-            helperText="0 - без лимит"
-          />
-        )}
+        disabled={!isPublic}
+        type="number"
+        label="Количество участников"
+        helperText="0 - без лимита"
       />
 
       <Stack>
@@ -114,7 +110,7 @@ const PublicationTypeStep = ({
             );
           }}
           renderInput={(params) => (
-            <TextField
+            <FormInput
               {...params}
               label={isLoading ? "...Загрузка данных" : "Водитель"}
               placeholder="Выберите водителя"
