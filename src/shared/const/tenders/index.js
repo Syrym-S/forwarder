@@ -62,6 +62,7 @@ export const ACTIVE_LEAD_STATUS_OPTIONS = [
   { label: "Погрузка подтверждена", value: "verification_loading" },
   { label: "Разгрузка", value: "start_unloading" },
   { label: "Разгрузка подтверждена", value: "verification_unloading" },
+  { label: "Aварийная ситуация", value: "emergency_situation" },
 ];
 
 export const HISTORY_LEAD_STATUS_OPTIONS = [

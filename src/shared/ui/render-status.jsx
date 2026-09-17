@@ -157,7 +157,7 @@ const RenderStatus = ({ status }) => {
     case STATUS.emergency_situation:
       return (
         <RenderStatusContent
-          label={"Авариная ситуация"}
+          label={"Aварийная ситуация"}
           variant="outlined"
           color="#c60606"
         />
@@ -166,7 +166,7 @@ const RenderStatus = ({ status }) => {
     case STATUS.finished_emergency_situation:
       return (
         <RenderStatusContent
-          label={"Авариная ситуация закрыта"}
+          label={"Aварийная ситуация закрыта"}
           variant="outlined"
           color="#c60606"
         />
