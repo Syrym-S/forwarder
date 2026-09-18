@@ -7,6 +7,7 @@ import { useLeadsStore } from "../../../app/store/leads/leads-store";
 import { STATUS } from "../../../shared/const/tenders";
 import { InfoBadge } from "../../lead-form/info-badge";
 import InfoItem from "../../../shared/ui/info-item";
+import PrimaryButton from "../../../shared/ui/button/primary-button";
 
 const LeadDriverInfo = ({ leadData }) => {
   const driver = leadData?.driver;
@@ -48,9 +49,12 @@ const LeadDriverInfo = ({ leadData }) => {
   return (
     <Section title="Водитель" icon={<PersonOutlinedIcon color="primary" />}>
       {isAddDriverStatus && (
-        <Button color="error" variant="outlined" onClick={handleDetachDriver}>
-          Отвязать водителя
-        </Button>
+        <PrimaryButton
+          color="error"
+          variant="outlined"
+          onClick={handleDetachDriver}
+          text="Отвязать водителя"
+        />
       )}
       <Box
         sx={{

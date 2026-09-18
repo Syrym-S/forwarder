@@ -9,6 +9,7 @@ import {
   Typography,
 } from "@mui/material";
 import WarningAmberRoundedIcon from "@mui/icons-material/WarningAmberRounded";
+import PrimaryButton from "./button/primary-button";
 
 const ConfirmModal = ({
   open,
@@ -113,23 +114,20 @@ const ConfirmModal = ({
           gap: 1,
         }}
       >
-        <Button
-          disabled={isLoading}
+        <PrimaryButton
+          variant="outlined"
+          isLoading={isLoading}
           onClick={onCancel}
-          color="primary"
-          sx={{
-            px: 2.5,
-            py: 0.8,
-            borderRadius: "10px",
-            fontSize: "0.8rem",
-            fontWeight: 600,
-            textTransform: "none",
-          }}
-        >
-          Отмена
-        </Button>
+          text="Отмена"
+        />
 
-        <Button
+        <PrimaryButton
+          isLoading={isLoading}
+          onClick={onConfirm}
+          text={isLoading ? "Подтверждение" : "Подтвердить"}
+        />
+
+        {/* <Button
           disabled={isLoading}
           onClick={onConfirm}
           variant="contained"
@@ -158,7 +156,7 @@ const ConfirmModal = ({
           )}
 
           {isLoading ? "Подтверждение" : "Подтвердить"}
-        </Button>
+        </Button> */}
       </DialogActions>
     </Dialog>
   );

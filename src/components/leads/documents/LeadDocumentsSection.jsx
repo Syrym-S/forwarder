@@ -12,6 +12,8 @@ import { LeadDocumentCard } from "./LeadDocumentCard";
 import { useLeadsStore } from "../../../app/store/leads/leads-store";
 import FileModal from "../../tenders/file-modal";
 import { STATUS } from "../../../shared/const/tenders";
+import PrimaryButton from "../../../shared/ui/button/primary-button";
+import FormInput from "../../../shared/ui/input/form-input";
 
 export function LeadDocumentsSection({
   leadStatus,
@@ -75,14 +77,14 @@ export function LeadDocumentsSection({
               alignItems: "flex-start",
             }}
           >
-            <TextField
+            <FormInput
               name="name"
               label="Название документа"
               size="small"
               fullWidth
             />
 
-            <TextField name="context" label="Описание" size="small" fullWidth />
+            <FormInput name="context" label="Описание" size="small" fullWidth />
 
             <Box>
               <Button
@@ -130,10 +132,10 @@ export function LeadDocumentsSection({
               )}
             </Box>
 
-            <Button
+            <PrimaryButton
               type="submit"
               variant="contained"
-              disabled={isUploading}
+              isLoading={isUploading}
               sx={{
                 gridColumn: {
                   xs: "1",
@@ -141,9 +143,8 @@ export function LeadDocumentsSection({
                 },
                 justifySelf: "flex-start",
               }}
-            >
-              {isUploading ? "Добавление..." : "Добавить документ"}
-            </Button>
+              text={isUploading ? "Добавление..." : "Добавить документ"}
+            />
           </Box>
         )}
 

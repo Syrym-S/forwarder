@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
 import dayjs from "dayjs";
-import { Controller } from "react-hook-form";
-import { Autocomplete, CircularProgress, TextField } from "@mui/material";
+import { Controller, useWatch } from "react-hook-form";
+import { Autocomplete, Box } from "@mui/material";
 import RenderLeadOptions from "../../../components/tenders/render-lead-options";
 import { useLeadsStore } from "../../../app/store/leads/leads-store";
 import { STATUS } from "../../../shared/const/tenders";
 import FormInput from "../../../shared/ui/input/form-input";
 import FormControllerInput from "../../../shared/ui/input/form-controller-input";
 
-const ChooseLeadStep = ({ control, setValue, isEdit, getValues }) => {
+const ChooseLeadStep = ({ control, setValue, isEdit }) => {
   const searchedLeads = useLeadsStore((state) => state.searchedLeads);
   const isSearchLoading = useLeadsStore((state) => state.isSearchLoading);
   const searchLeads = useLeadsStore((state) => state.searchLeads);
@@ -16,8 +16,31 @@ const ChooseLeadStep = ({ control, setValue, isEdit, getValues }) => {
   const [inputValue, setInputValue] = useState("");
   const [selectedLead, setSelectedLead] = useState();
 
-  const startDate = getValues("public_date_time");
+  // Дата и время публикации
+  const publicDate = useWatch({
+    control,
+    name: "public_date",
+  });
 
+  const publicTime = useWatch({
+    control,
+    name: "public_time",
+  });
+
+  // Дата и время окончания
+  const endDate = useWatch({
+    control,
+    name: "end_date",
+  });
+
+  const endTime = useWatch({
+    control,
+    name: "end_time",
+  });
+
+  /**
+   * Поиск лидов
+   */
   useEffect(() => {
     if (!inputValue) return;
 
@@ -28,10 +51,56 @@ const ChooseLeadStep = ({ control, setValue, isEdit, getValues }) => {
     }, 1000);
 
     return () => clearTimeout(timer);
-  }, [inputValue]);
+  }, [inputValue, searchLeads]);
+
+  /**
+   * Собираем дату + время публикации
+   *
+   * 2026-09-18
+   * 16:30
+   *
+   * ->
+   *
+   * 2026-09-18 16:30:00
+   */
+  useEffect(() => {
+    if (!publicDate || !publicTime) {
+      setValue("public_date_time", "");
+      return;
+    }
+
+    setValue("public_date_time", `${publicDate} ${publicTime}:00`, {
+      shouldDirty: true,
+      shouldValidate: true,
+    });
+  }, [publicDate, publicTime, setValue]);
+
+  /**
+   * Собираем дату + время окончания
+   *
+   * 2026-09-20
+   * 18:45
+   *
+   * ->
+   *
+   * 2026-09-20 18:45:00
+   */
+  useEffect(() => {
+    if (!endDate || !endTime) {
+      setValue("end_date_time", "");
+      return;
+    }
+
+    setValue("end_date_time", `${endDate} ${endTime}:00`, {
+      shouldDirty: true,
+      shouldValidate: true,
+    });
+  }, [endDate, endTime, setValue]);
 
   return (
     <>
+      {/* ================= LEAD ================= */}
+
       <Controller
         name="lead"
         control={control}
@@ -48,7 +117,7 @@ const ChooseLeadStep = ({ control, setValue, isEdit, getValues }) => {
             loading={isSearchLoading}
             disabled={isEdit}
             options={isSearchLoading ? [] : [...searchedLeads]}
-            noOptionsText={<>Ввидте два символа</>}
+            noOptionsText="Введите два символа"
             onInputChange={(_, newInputValue, reason) => {
               if (reason === "input") {
                 setInputValue(newInputValue);
@@ -62,7 +131,8 @@ const ChooseLeadStep = ({ control, setValue, isEdit, getValues }) => {
             onChange={(_, value) => {
               field.onChange(value);
 
-              setInputValue(value?.from ? `${value?.from} - ${value?.to}` : "");
+              setInputValue(value?.from ? `${value.from} - ${value.to}` : "");
+
               setValue("lead", value, {
                 shouldDirty: true,
                 shouldTouch: true,
@@ -81,85 +151,174 @@ const ChooseLeadStep = ({ control, setValue, isEdit, getValues }) => {
                 helperText={fieldState.error?.message}
               />
             )}
-            renderOption={(props, option) => {
-              return (
-                <RenderLeadOptions option={option} key={option.id} {...props} />
-              );
-            }}
+            renderOption={(props, option) => (
+              <RenderLeadOptions {...props} key={option.id} option={option} />
+            )}
           />
         )}
       />
 
-      <FormControllerInput
-        name="public_date_time"
-        control={control}
-        rules={{
-          required: "Выберите дату начала",
-          validate: (value) => {
-            if (!value) return true;
+      {/* ================= PUBLICATION ================= */}
 
-            return (
-              dayjs(value).isSame(dayjs(), "day") ||
-              dayjs(value).isAfter(dayjs(), "day") ||
-              "Дата не может быть раньше сегодняшнего дня"
-            );
-          },
-        }}
-        label="Дата публикации"
-        type="date"
-        fullWidth
-        slotProps={{
-          htmlInput: {
-            min: dayjs().format("YYYY-MM-DD"),
-          },
-          inputLabel: {
-            shrink: true,
-          },
-        }}
+      <Box
         sx={{
-          gridColumn: {
-            xs: "auto",
-            sm: "1 / -1",
+          display: "grid",
+          gridTemplateColumns: {
+            xs: "1fr",
+            sm: "2fr 1fr",
           },
-          marginTop: "10px",
+          gap: 1,
+          mt: 1.5,
         }}
-      />
+      >
+        {/* Дата публикации */}
 
-      <FormControllerInput
-        name="end_date_time"
-        control={control}
-        rules={{
-          required: "Укажите дату окончания",
-          validate: (value) => {
-            if (!startDate || !value) return true;
+        <FormControllerInput
+          name="public_date"
+          control={control}
+          rules={{
+            required: "Выберите дату публикации",
 
-            return (
-              dayjs(value).isAfter(dayjs(startDate)) ||
-              "Дата окончания должна быть позже даты начала"
-            );
-          },
-        }}
-        label="Дата окончания"
-        type="date"
-        fullWidth
-        slotProps={{
-          inputLabel: {
-            shrink: true,
-          },
-          htmlInput: {
-            min: startDate
-              ? dayjs(startDate).add(1, "day").format("YYYY-MM-DD")
-              : dayjs().format("YYYY-MM-DD"),
-          },
-        }}
+            validate: (value) => {
+              if (!value) return true;
+
+              return (
+                !dayjs(value).isBefore(dayjs(), "day") ||
+                "Дата не может быть раньше сегодняшнего дня"
+              );
+            },
+          }}
+          label="Дата публикации"
+          type="date"
+          fullWidth
+          slotProps={{
+            htmlInput: {
+              min: dayjs().format("YYYY-MM-DD"),
+            },
+            inputLabel: {
+              shrink: true,
+            },
+          }}
+        />
+
+        {/* Время публикации */}
+
+        <FormControllerInput
+          name="public_time"
+          control={control}
+          rules={{
+            required: "Укажите время публикации",
+
+            validate: (value) => {
+              if (!value || !publicDate) return true;
+
+              // Проверяем время только если выбран сегодняшний день
+              if (!dayjs(publicDate).isSame(dayjs(), "day")) {
+                return true;
+              }
+
+              const selectedDateTime = dayjs(`${publicDate} ${value}`);
+
+              return (
+                !selectedDateTime.isBefore(dayjs()) ||
+                "Время не может быть раньше текущего"
+              );
+            },
+          }}
+          label="Время"
+          type="time"
+          fullWidth
+          slotProps={{
+            htmlInput: {
+              step: 60,
+            },
+            inputLabel: {
+              shrink: true,
+            },
+          }}
+        />
+      </Box>
+
+      {/* ================= END ================= */}
+
+      <Box
         sx={{
-          gridColumn: {
-            xs: "auto",
-            sm: "1 / -1",
+          display: "grid",
+          gridTemplateColumns: {
+            xs: "1fr",
+            sm: "2fr 1fr",
           },
-          marginTop: "10px",
+          gap: 1,
+          mt: 1.5,
         }}
-      />
+      >
+        {/* Дата окончания */}
+
+        <FormControllerInput
+          name="end_date"
+          control={control}
+          rules={{
+            required: "Укажите дату окончания",
+
+            validate: (value) => {
+              if (!value || !publicDate) return true;
+
+              return (
+                !dayjs(value).isBefore(dayjs(publicDate), "day") ||
+                "Дата окончания не может быть раньше даты публикации"
+              );
+            },
+          }}
+          label="Дата окончания"
+          type="date"
+          fullWidth
+          slotProps={{
+            inputLabel: {
+              shrink: true,
+            },
+
+            htmlInput: {
+              min: publicDate || dayjs().format("YYYY-MM-DD"),
+            },
+          }}
+        />
+
+        {/* Время окончания */}
+
+        <FormControllerInput
+          name="end_time"
+          control={control}
+          rules={{
+            required: "Укажите время окончания",
+
+            validate: (value) => {
+              if (!value || !endDate || !publicDate || !publicTime) {
+                return true;
+              }
+
+              const publicationDateTime = dayjs(`${publicDate} ${publicTime}`);
+
+              const endDateTime = dayjs(`${endDate} ${value}`);
+
+              return (
+                endDateTime.isAfter(publicationDateTime) ||
+                "Дата и время окончания должны быть позже публикации"
+              );
+            },
+          }}
+          label="Время"
+          type="time"
+          fullWidth
+          slotProps={{
+            htmlInput: {
+              step: 60,
+            },
+            inputLabel: {
+              shrink: true,
+            },
+          }}
+        />
+      </Box>
     </>
   );
 };

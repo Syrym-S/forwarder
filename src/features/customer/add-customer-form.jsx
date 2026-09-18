@@ -15,6 +15,7 @@ import {
 import { Controller, useForm } from "react-hook-form";
 import { useCustomerStore } from "../../app/store/customers/customers-store";
 import { IMaskInput } from "react-imask";
+import PrimaryButton from "../../shared/ui/button/primary-button";
 
 const ORGANIZATION_TYPES = [
   { label: "ТОО", value: "ТОО" },
@@ -276,14 +277,21 @@ const AddCustomerForm = ({ open, handleClose }) => {
       </DialogContent>
 
       <DialogActions sx={{ px: 3, py: 2 }}>
-        <Button onClick={handleClose}>Отмена</Button>
+        {/* <Button onClick={handleClose}>Отмена</Button> */}
 
-        <Button
+        {/* <Button
           variant="contained"
           onClick={handleSubmit(submitCustomerHandle)}
         >
           Добавить
-        </Button>
+        </Button> */}
+
+        <PrimaryButton variant="outlined" onClick={handleClose} text="Отмена" />
+
+        <PrimaryButton
+          onClick={handleSubmit(submitCustomerHandle)}
+          text="Добавить"
+        />
       </DialogActions>
     </Dialog>
   );

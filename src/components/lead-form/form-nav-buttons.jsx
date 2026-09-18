@@ -1,5 +1,6 @@
 import { Box, Button, DialogActions } from "@mui/material";
 import PropTypes from "prop-types";
+import PrimaryButton from "../../shared/ui/button/primary-button";
 
 export function FormNavButtons({
   isEdit,
@@ -15,61 +16,42 @@ export function FormNavButtons({
   return (
     <DialogActions
       sx={{
-        px: 3,
         pb: 3,
         pt: 2,
         justifyContent: "space-between",
       }}
     >
-      <Button
-        type="button"
+      <PrimaryButton
+        variant="outlined"
         onClick={onClose}
         disabled={isSubmitting}
-        sx={{
-          borderRadius: 2,
-        }}
-      >
-        Отмена
-      </Button>
+        text={"Отмена"}
+      />
 
       <Box sx={{ display: "flex", gap: 1 }}>
         {!isFirstStep && (
-          <Button
-            type="button"
+          <PrimaryButton
+            variant="outlined"
             onClick={onBack}
             disabled={isSubmitting}
-            sx={{
-              borderRadius: 2,
-            }}
-          >
-            Назад
-          </Button>
+            text={"Назад"}
+          />
         )}
 
         {isLastStep ? (
-          <Button
-            type="button"
+          <PrimaryButton
             variant="contained"
             disabled={isSubmitting || hasCurrentStepErrors}
             onClick={onSubmit}
-            sx={{
-              borderRadius: 2,
-            }}
-          >
-            {isEdit ? "Сохранить" : "Создать маршрут"}
-          </Button>
+            text={isEdit ? "Сохранить" : "Создать маршрут"}
+          />
         ) : (
-          <Button
-            type="button"
+          <PrimaryButton
             variant="contained"
             disabled={hasCurrentStepErrors || isSubmitting}
             onClick={onNext}
-            sx={{
-              borderRadius: 2,
-            }}
-          >
-            Дальше
-          </Button>
+            text={"Дальше"}
+          />
         )}
       </Box>
     </DialogActions>

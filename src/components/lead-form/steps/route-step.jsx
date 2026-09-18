@@ -16,6 +16,7 @@ import { useFieldArray, useWatch } from "react-hook-form";
 import { useRouteMapPicker } from "../use-route-map-picker";
 import { STATUS } from "../../../shared/const/tenders";
 import { useLeadsStore } from "../../../app/store/leads/leads-store";
+import PrimaryButton from "../../../shared/ui/button/primary-button";
 
 const waypointTypes = [
   { id: 1, value: "check_passes", label: "Транзит" },
@@ -48,11 +49,6 @@ const RouteStep = ({ control, form, setValue }) => {
 
   const today = dayjs().format("YYYY-MM-DD");
 
-  /**
-   * Возвращает минимально разрешённую дату.
-   * Если переданная дата раньше сегодняшней —
-   * минимальной будет сегодняшняя.
-   */
   const getMinDate = (date) => {
     if (!date) {
       return today;
@@ -63,18 +59,11 @@ const RouteStep = ({ control, form, setValue }) => {
       : today;
   };
 
-  /**
-   * Проверка start_at.
-   *
-   * start_at текущей точки не может быть
-   * раньше end_at предыдущей точки.
-   */
   const validateStartDate = (value, scheduleIndex) => {
     if (!value) {
       return true;
     }
 
-    // Первая точка маршрута
     if (scheduleIndex === 0) {
       return (
         !dayjs(value).isBefore(dayjs(today), "day") ||
@@ -94,12 +83,6 @@ const RouteStep = ({ control, form, setValue }) => {
     );
   };
 
-  /**
-   * Проверка end_at.
-   *
-   * end_at не может быть раньше start_at
-   * этой же точки.
-   */
   const validateEndDate = (value, scheduleIndex) => {
     if (!value) {
       return true;
@@ -128,14 +111,6 @@ const RouteStep = ({ control, form, setValue }) => {
       type: "check_passes",
     });
 
-    /**
-     * Добавляем schedule перед конечной точкой.
-     *
-     * Если у тебя при добавлении waypoint конечная точка
-     * уже существует в point_schedules, лучше использовать insert.
-     *
-     * Но оставляю текущую структуру append, как у тебя.
-     */
     appendSchedule({
       start_at: "",
       end_at: "",
@@ -143,11 +118,6 @@ const RouteStep = ({ control, form, setValue }) => {
     });
   };
 
-  /**
-   * При удалении waypoint удаляем и соответствующий schedule.
-   *
-   * +1 потому что point_schedules[0] — точка "Откуда".
-   */
   const handleRemoveWaypoint = (index) => {
     remove(index);
     removeSchedule(index + 1);
@@ -180,8 +150,6 @@ const RouteStep = ({ control, form, setValue }) => {
 
   return (
     <StepSection title="Маршрут">
-      {/* ================= HEADER ================= */}
-
       <Box
         sx={{
           display: "flex",
@@ -199,22 +167,18 @@ const RouteStep = ({ control, form, setValue }) => {
             flexWrap: "wrap",
           }}
         >
-          <Button
+          <PrimaryButton
             size="small"
             variant={activeMapPoint === "from" ? "contained" : "outlined"}
             onClick={() => {
               setActiveMapPoint("from");
               setCount(0);
             }}
-            sx={{
-              borderRadius: 2,
-            }}
-          >
-            Откуда
-          </Button>
+            text="Откуда"
+          />
 
           {fields.map((field, index) => (
-            <Button
+            <PrimaryButton
               key={field.id}
               size="small"
               disabled={currentLead && !canEditStatus}
@@ -226,24 +190,22 @@ const RouteStep = ({ control, form, setValue }) => {
                 setCount(index);
               }}
               sx={{
-                borderRadius: 2,
+                py: 0,
               }}
-            >
-              Точка #{index + 1}
-            </Button>
+              text={`Точка # ${index + 1}`}
+            />
           ))}
 
-          <Button
+          <PrimaryButton
             size="small"
             variant={activeMapPoint === "to" ? "contained" : "outlined"}
             disabled={currentLead && !canEditStatus}
             onClick={() => setActiveMapPoint("to")}
             sx={{
-              borderRadius: 2,
+              py: 0,
             }}
-          >
-            Куда
-          </Button>
+            text="Куда"
+          />
         </Box>
 
         <Box
@@ -252,35 +214,29 @@ const RouteStep = ({ control, form, setValue }) => {
             gap: 1,
           }}
         >
-          <Button
+          <PrimaryButton
             size="small"
             color="primary"
             variant="outlined"
             onClick={handleShowFiled}
             disabled={currentLead && !canEditStatus}
-            sx={{
-              borderRadius: 2,
-            }}
-          >
-            Добавить точку пересечения
-          </Button>
+            text="Добавить точку пересечения"
+          />
 
-          <Button
+          <PrimaryButton
             size="small"
             color="error"
             variant="outlined"
             onClick={handleClearRoute}
             disabled={isClearDisabled || (currentLead && !canEditStatus)}
+            text="Очистить маршрут"
             sx={{
-              borderRadius: 2,
+              p: 0,
+              px: 1,
             }}
-          >
-            Очистить маршрут
-          </Button>
+          />
         </Box>
       </Box>
-
-      {/* ================= MAP ================= */}
 
       <Box
         sx={{
@@ -446,14 +402,6 @@ const RouteStep = ({ control, form, setValue }) => {
             </Typography>
 
             {fields.map((crossField, index) => {
-              /**
-               * point_schedules:
-               *
-               * 0 = Откуда
-               * 1 = waypoint 1
-               * 2 = waypoint 2
-               * ...
-               */
               const scheduleIndex = index + 1;
 
               const previousEndAt = pointSchedules?.[scheduleIndex - 1]?.end_at;
@@ -469,8 +417,6 @@ const RouteStep = ({ control, form, setValue }) => {
                     alignItems: "flex-start",
                   }}
                 >
-                  {/* ADDRESS */}
-
                   <FormControllerInput
                     name={`waypoints[${index}].address`}
                     control={control}
@@ -484,8 +430,6 @@ const RouteStep = ({ control, form, setValue }) => {
                       },
                     }}
                   />
-
-                  {/* TYPE */}
 
                   <FormControllerInput
                     name={`waypoints[${index}].type`}
@@ -503,8 +447,6 @@ const RouteStep = ({ control, form, setValue }) => {
                       </MenuItem>
                     ))}
                   </FormControllerInput>
-
-                  {/* START */}
 
                   <FormControllerInput
                     name={`point_schedules[${scheduleIndex}].start_at`}
@@ -532,8 +474,6 @@ const RouteStep = ({ control, form, setValue }) => {
                     }}
                   />
 
-                  {/* END */}
-
                   <FormControllerInput
                     name={`point_schedules[${scheduleIndex}].end_at`}
                     control={control}
@@ -560,21 +500,13 @@ const RouteStep = ({ control, form, setValue }) => {
                     }}
                   />
 
-                  {/* REMOVE */}
-
-                  <Button
+                  <PrimaryButton
                     disabled={currentLead && !canEditStatus}
                     onClick={() => handleRemoveWaypoint(index)}
                     color="error"
                     variant="outlined"
-                    sx={{
-                      whiteSpace: "nowrap",
-                      borderRadius: 2,
-                      py: 1,
-                    }}
-                  >
-                    Убрать
-                  </Button>
+                    text="Убрать"
+                  />
                 </Box>
               );
             })}

@@ -5,6 +5,7 @@ import { useLeadsStore } from "../../../app/store/leads/leads-store";
 import { STATUS } from "../../../shared/const/tenders";
 import { InfoBadge } from "../../lead-form/info-badge";
 import InfoItem from "../../../shared/ui/info-item";
+import PrimaryButton from "../../../shared/ui/button/primary-button";
 
 const LeadCustomerInfo = ({ leadData }) => {
   const customer = leadData?.customer;
@@ -59,14 +60,13 @@ const LeadCustomerInfo = ({ leadData }) => {
       icon={<BusinessOutlinedIcon color="primary" />}
     >
       {(isAddDriverStatus || isNewStatus) && (
-        <Button
+        <PrimaryButton
           color="error"
           disabled={createdByCustomer}
           variant="outlined"
           onClick={handleDetachCustomer}
-        >
-          Отвязать Заказчика
-        </Button>
+          text={"Отвязать Заказчика"}
+        />
       )}
       <Box
         sx={{

@@ -3,6 +3,7 @@ import { Box, Button, ToggleButton, ToggleButtonGroup } from "@mui/material";
 import ViewListRoundedIcon from "@mui/icons-material/ViewListRounded";
 import GridViewRoundedIcon from "@mui/icons-material/GridViewRounded";
 import ViewKanbanOutlinedIcon from "@mui/icons-material/ViewKanbanOutlined";
+import PrimaryButton from "./button/primary-button";
 
 const ViewTabs = ({
   view,
@@ -72,7 +73,7 @@ const ViewTabs = ({
         </ToggleButtonGroup>
       )}
 
-      {!withoutDataAdd && (
+      {/* {!withoutDataAdd && (
         <Button
           variant="contained"
           onClick={handleOpenForm}
@@ -84,6 +85,10 @@ const ViewTabs = ({
         >
           {buttonText}
         </Button>
+      )} */}
+
+      {!withoutDataAdd && (
+        <PrimaryButton text={buttonText} onClick={handleOpenForm} />
       )}
     </Box>
   );
