@@ -77,7 +77,7 @@ const CustomerCreatedTenders = () => {
             color: "font_color.heading",
           }}
         >
-          Список аукцонов от Заказщиков
+          Список аукционов от Заказчиков
         </Typography>
 
         <Tooltip
@@ -118,7 +118,7 @@ const CustomerCreatedTenders = () => {
               alignItems: "center",
             }}
           >
-            <Alert severity="info">Список аукционов от заказщиков пуст!</Alert>
+            <Alert severity="info">Список аукционов от заказчиков пуст!</Alert>
           </Box>
         </Box>
       )}

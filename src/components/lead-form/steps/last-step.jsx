@@ -125,7 +125,7 @@ export function LastStep({ form }) {
         </Box>
       </StepSection>
 
-      <StepSection title="Заказщик">
+      <StepSection title="Заказчик">
         <Box
           sx={{
             display: "grid",
@@ -137,7 +137,7 @@ export function LastStep({ form }) {
           }}
         >
           <InfoBadge
-            label="ФИО заказщика"
+            label="ФИО заказчика"
             value={form.customer?.name || "Не выбран"}
           />
           <InfoBadge label="Тип" value={form.customer?.type || "Не выбран"} />

@@ -40,7 +40,7 @@ const CustomerCard = ({ customer, setSelectedCustomer }) => {
             color="text.secondary"
             sx={{ mb: 0.75, display: "flex", alignItems: "center" }}
           >
-            Заказщик
+            Заказчик
           </Typography>
 
           <Typography
@@ -74,7 +74,7 @@ const CustomerCard = ({ customer, setSelectedCustomer }) => {
       >
         <InfoItem label="Банк" value={customer?.bank_name} />
         <InfoItem label="BIN" value={customer?.bin} />
-        <InfoItem label="Адресс заказщиков" value={customer?.legal_address} />
+        <InfoItem label="Адресс заказчиков" value={customer?.legal_address} />
       </Box>
     </Box>
   );

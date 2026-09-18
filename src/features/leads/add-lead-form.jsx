@@ -20,7 +20,7 @@ const steps = [
   { id: 1, label: "Маршрут" },
   { id: 2, label: "Груз" },
   { id: 3, label: "Водитель" },
-  { id: 4, label: "Заказщик" },
+  { id: 4, label: "Заказчик" },
   { id: 5, label: "Цены" },
   { id: 6, label: "Документы" },
   { id: 7, label: "Проверка" },

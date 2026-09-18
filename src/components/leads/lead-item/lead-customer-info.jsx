@@ -28,7 +28,7 @@ const LeadCustomerInfo = ({ leadData }) => {
   if (isCustomerDetachLoading)
     return (
       <Section
-        title="Данные о заказщике"
+        title="Данные о заказчике"
         icon={<BusinessOutlinedIcon color="primary" />}
       >
         <Box
@@ -46,16 +46,16 @@ const LeadCustomerInfo = ({ leadData }) => {
   if (!customer?.name)
     return (
       <Section
-        title="Данные о заказщике"
+        title="Данные о заказчике"
         icon={<BusinessOutlinedIcon color="primary" />}
       >
-        <InfoBadge label={""} value={"Заказщик не указан"} />
+        <InfoBadge label={""} value={"Заказчик не указан"} />
       </Section>
     );
 
   return (
     <Section
-      title="Данные о заказщике"
+      title="Данные о заказчике"
       icon={<BusinessOutlinedIcon color="primary" />}
     >
       {(isAddDriverStatus || isNewStatus) && (
@@ -65,7 +65,7 @@ const LeadCustomerInfo = ({ leadData }) => {
           variant="outlined"
           onClick={handleDetachCustomer}
         >
-          Отвязать Заказщика
+          Отвязать Заказчика
         </Button>
       )}
       <Box

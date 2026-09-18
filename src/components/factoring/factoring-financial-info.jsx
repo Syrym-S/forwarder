@@ -25,11 +25,11 @@ const FactoringFinancialInfo = ({ factoring }) => {
         }}
       >
         <InfoItem
-          label={"Задолжность"}
+          label={"Задолженность"}
           value={`${moneySpacingFormat(factoring?.deb_summ)} ${factoring?.deb_currency}`}
         />
         <InfoItem
-          label={"Оплата за задолжность"}
+          label={"Оплата за задолженность"}
           value={`${moneySpacingFormat(factoring?.cred_summ)} ${factoring?.currency}`}
         />
         <InfoItem

@@ -44,8 +44,8 @@ const CustomerStep = ({ control, errors, setValue }) => {
 
   return (
     <StepSection
-      title="Выбор заказщика"
-      description="Найдите и выберите заказщика, который заказал услугу"
+      title="Выбор заказчика"
+      description="Найдите и выберите заказчика, который заказал услугу"
     >
       <Controller
         name="customer"
@@ -127,7 +127,7 @@ const CustomerStep = ({ control, errors, setValue }) => {
               renderInput={(params) => (
                 <TextField
                   {...params}
-                  placeholder="Выберите заказщика"
+                  placeholder="Выберите заказчика"
                   error={Boolean(errors.customer)}
                   helperText={errors.customer?.message}
                   sx={{
@@ -150,7 +150,7 @@ const CustomerStep = ({ control, errors, setValue }) => {
                   gap: 1.5,
                 }}
               >
-                <InfoBadge label="Заказщик" value={selectedCustomer.name} />
+                <InfoBadge label="Заказчик" value={selectedCustomer.name} />
 
                 <InfoBadge label="Тип компании" value={selectedCustomer.type} />
               </Box>

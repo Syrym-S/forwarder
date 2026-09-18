@@ -9,16 +9,16 @@ const FactoringCustomerInfo = ({ customer, verified_customer }) => {
   if (!customer)
     return (
       <Section
-        title="Данные о заказщике"
+        title="Данные заказчика"
         icon={<BusinessOutlinedIcon color="primary" />}
       >
-        <InfoField label={""} value={"Заказщик не указан"} />
+        <InfoField label={""} value={"Заказчик не указан"} />
       </Section>
     );
 
   return (
     <Section
-      title="Данные о заказщике"
+      title="Данные заказчика"
       icon={<BusinessOutlinedIcon color="primary" />}
     >
       <Box
@@ -43,8 +43,8 @@ const FactoringCustomerInfo = ({ customer, verified_customer }) => {
             <Chip
               label={
                 verified_customer
-                  ? "Заказщик подтвердил"
-                  : "Заказщик не подтвердил"
+                  ? "Заказчик подтвердил"
+                  : "Заказчик не подтвердил"
               }
               variant="outlined"
               color={verified_customer ? "success" : "error"}

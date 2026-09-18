@@ -105,7 +105,7 @@ const TenderHistory = () => {
           onChange={(e) => {
             setInputValue(e.target.value);
           }}
-          label="Поиск тендера"
+          label="Поиск аукциона"
           fullWidth
           size="small"
           sx={{

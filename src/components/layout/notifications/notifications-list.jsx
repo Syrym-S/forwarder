@@ -129,7 +129,7 @@ const NotificationsList = ({
             textAlign: "center",
           }}
         >
-          Смотреть все увидомления
+          Смотреть все уведомления
         </Typography>
         <Typography
           sx={{
@@ -150,7 +150,7 @@ const NotificationsList = ({
               size="small"
             />
           )}
-          Новых увидомлений
+          Новых уведомлений
         </Typography>
       </Box>
     </Paper>

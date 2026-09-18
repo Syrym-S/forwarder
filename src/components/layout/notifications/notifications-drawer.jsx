@@ -76,7 +76,7 @@ const NotificationsDrawer = ({
               fontWeight: "400",
             }}
           >
-            Увидомления
+            Уведомления
           </Typography>
 
           <Box

@@ -95,7 +95,7 @@ const useFactoringColumns = () => {
     },
     {
       field: "deb_summ",
-      headerName: "Задолжность",
+      headerName: "Задолженность",
       width: 200,
       renderCell: ({ row }) => (
         <Box>
@@ -105,7 +105,7 @@ const useFactoringColumns = () => {
     },
     {
       field: "cred_summ",
-      headerName: "Оплата за задолжность",
+      headerName: "Оплата за задолженность",
       width: 200,
       renderCell: ({ row }) => (
         <Box>
@@ -131,7 +131,7 @@ const useFactoringColumns = () => {
     },
     {
       field: "verified_customer",
-      headerName: "Подтверждение от заказщика",
+      headerName: "Подтверждение от заказчика",
       width: 200,
       renderCell: ({ row }) => (
         <Box

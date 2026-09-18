@@ -100,7 +100,7 @@ const TenderParticipants = ({ tender }) => {
             </Button>
           ) : (
             <Button variant="outlined" disabled>
-              Максимально количество участников
+              Максимальное количество участников
             </Button>
           )}
         </Box>

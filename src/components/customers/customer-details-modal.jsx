@@ -53,7 +53,7 @@ const CustomerDetailsModal = ({ selectedCustomer, handleClear }) => {
               fontSize: "1rem",
             }}
           >
-            Заказщик
+            Заказчик
           </Typography>
           <Typography
             sx={{
@@ -72,7 +72,7 @@ const CustomerDetailsModal = ({ selectedCustomer, handleClear }) => {
       <DialogContent>
         <Section
           icon={<AirportShuttleOutlinedIcon color="primary" />}
-          title="Представитель заказщика"
+          title="Представитель заказчика"
         >
           {customerDetails.persons[0] ? (
             <Stack

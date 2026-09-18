@@ -295,7 +295,7 @@ const LeadItem = () => {
           {leadData.emergency_situation_comment && (
             <InfoItem
               color="error"
-              label={"Коментарий по авариному случаю"}
+              label={"Коментарий по аварийному случаю"}
               value={leadData.emergency_situation_comment}
             />
           )}
@@ -348,7 +348,7 @@ const LeadItem = () => {
             open={openFinishEmergency}
             title={"Внимание!"}
             description={
-              "Вы уверены, что хотите закрыть авариную ситуацию? Данное действие завершит отслеживание лида, и закроет лид"
+              "Вы уверены, что хотите закрыть аварийную ситуацию? Данное действие завершит отслеживание лида, и закроет лид"
             }
             onCancel={handleCloseFinishEmergencyModal}
             onConfirm={handleFinishEmergencySituation}

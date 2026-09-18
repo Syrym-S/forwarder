@@ -109,7 +109,7 @@ const ChooseLeadAndFactor = ({
                 <TextField
                   {...params}
                   label="Лид"
-                  placeholder="Выбирите лида"
+                  placeholder="Выберите лида"
                   error={!!fieldState.error}
                   helperText={
                     fieldState.error
@@ -205,7 +205,7 @@ const ChooseLeadAndFactor = ({
                 {...field}
                 type="number"
                 size="small"
-                label="Cумма дебеторской задолженности"
+                label="Cумма дебиторской задолженности"
                 slotProps={{
                   inputLabel: {
                     shrink: isLeadLoading || !!currentLead,

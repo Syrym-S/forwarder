@@ -44,7 +44,7 @@ const LeadCard = ({ lead }) => {
             fontSize: 20,
           }}
         >
-          Заказщик: {lead?.customer?.name || "Не указан"}
+          Заказчик: {lead?.customer?.name || "Не указан"}
         </Typography>
 
         <Stack

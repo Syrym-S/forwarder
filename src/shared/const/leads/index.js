@@ -11,7 +11,7 @@ export const LEAD_TABS = {
   factor_chat: "factor_chat",
 };
 
-export const steps = ["Маршрут", "Груз", "Водитель", "Заказщик", "Проверка"];
+export const steps = ["Маршрут", "Груз", "Водитель", "Заказчик", "Проверка"];
 
 export const initialForm = {
   // customer: 'AKE Plast (АКЕ Пласт) ТОО',

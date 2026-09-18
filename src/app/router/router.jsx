@@ -80,7 +80,7 @@ export const router = createBrowserRouter(
           path: "/customers",
           element: <Customers />,
           handle: {
-            breadcrumb: "Заказщики",
+            breadcrumb: "Заказчики",
           },
         },
         {

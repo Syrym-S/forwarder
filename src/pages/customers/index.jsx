@@ -90,7 +90,7 @@ const Customers = () => {
           withoutKanban
           setView={setView}
           handleOpenForm={handleOpenForm}
-          buttonText="Пригласить заказщика"
+          buttonText="Пригласить заказчика"
         />
 
         {open && <AddCustomerForm open={open} handleClose={handleCloseForm} />}
@@ -106,7 +106,7 @@ const Customers = () => {
           onChange={(e) => {
             setInputValue(e.target.value);
           }}
-          label="Поиск заказщика"
+          label="Поиск заказчика"
           fullWidth
           size="small"
           sx={{
