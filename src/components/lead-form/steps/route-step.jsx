@@ -22,6 +22,7 @@ const waypointTypes = [
   { id: 2, value: "loading", label: "Погрузка" },
   { id: 3, value: "unloading", label: "Разгрузка" },
 ];
+
 const RouteStep = ({ control, form, setValue }) => {
   const currentLead = useLeadsStore((state) => state.currentLead);
 
@@ -30,14 +31,91 @@ const RouteStep = ({ control, form, setValue }) => {
     name: "waypoints",
   });
 
-  const { append: appendSchedule } = useFieldArray({
+  const { append: appendSchedule, remove: removeSchedule } = useFieldArray({
     control,
     name: "point_schedules",
   });
 
+  const pointSchedules =
+    useWatch({
+      control,
+      name: "point_schedules",
+    }) || [];
+
   const canEditStatus =
     currentLead?.status === STATUS.new ||
     currentLead?.status === STATUS.add_driver;
+
+  const today = dayjs().format("YYYY-MM-DD");
+
+  /**
+   * Возвращает минимально разрешённую дату.
+   * Если переданная дата раньше сегодняшней —
+   * минимальной будет сегодняшняя.
+   */
+  const getMinDate = (date) => {
+    if (!date) {
+      return today;
+    }
+
+    return dayjs(date).isAfter(dayjs(today), "day")
+      ? dayjs(date).format("YYYY-MM-DD")
+      : today;
+  };
+
+  /**
+   * Проверка start_at.
+   *
+   * start_at текущей точки не может быть
+   * раньше end_at предыдущей точки.
+   */
+  const validateStartDate = (value, scheduleIndex) => {
+    if (!value) {
+      return true;
+    }
+
+    // Первая точка маршрута
+    if (scheduleIndex === 0) {
+      return (
+        !dayjs(value).isBefore(dayjs(today), "day") ||
+        "Дата не может быть раньше сегодняшнего дня"
+      );
+    }
+
+    const previousEndAt = pointSchedules?.[scheduleIndex - 1]?.end_at;
+
+    if (!previousEndAt) {
+      return true;
+    }
+
+    return (
+      !dayjs(value).isBefore(dayjs(previousEndAt), "day") ||
+      "Дата начала не может быть раньше окончания предыдущей точки"
+    );
+  };
+
+  /**
+   * Проверка end_at.
+   *
+   * end_at не может быть раньше start_at
+   * этой же точки.
+   */
+  const validateEndDate = (value, scheduleIndex) => {
+    if (!value) {
+      return true;
+    }
+
+    const currentStartAt = pointSchedules?.[scheduleIndex]?.start_at;
+
+    if (!currentStartAt) {
+      return true;
+    }
+
+    return (
+      !dayjs(value).isBefore(dayjs(currentStartAt), "day") ||
+      "Дата окончания не может быть раньше даты начала"
+    );
+  };
 
   const handleShowFiled = () => {
     append({
@@ -50,25 +128,29 @@ const RouteStep = ({ control, form, setValue }) => {
       type: "check_passes",
     });
 
+    /**
+     * Добавляем schedule перед конечной точкой.
+     *
+     * Если у тебя при добавлении waypoint конечная точка
+     * уже существует в point_schedules, лучше использовать insert.
+     *
+     * Но оставляю текущую структуру append, как у тебя.
+     */
     appendSchedule({
-      date: "",
+      start_at: "",
+      end_at: "",
+      point_index: fields.length + 1,
     });
   };
 
-  const pointSchedules =
-    useWatch({
-      control,
-      name: "point_schedules",
-    }) || [];
-
-  const today = dayjs().format("YYYY-MM-DD");
-
-  const getMinDate = (date) => {
-    if (!date) return today;
-
-    return dayjs(date).isAfter(dayjs(today))
-      ? dayjs(date).format("YYYY-MM-DD")
-      : today;
+  /**
+   * При удалении waypoint удаляем и соответствующий schedule.
+   *
+   * +1 потому что point_schedules[0] — точка "Откуда".
+   */
+  const handleRemoveWaypoint = (index) => {
+    remove(index);
+    removeSchedule(index + 1);
   };
 
   const map = useCustomerMap();
@@ -94,8 +176,12 @@ const RouteStep = ({ control, form, setValue }) => {
     setValue,
   });
 
+  const toScheduleIndex = fields.length + 1;
+
   return (
     <StepSection title="Маршрут">
+      {/* ================= HEADER ================= */}
+
       <Box
         sx={{
           display: "flex",
@@ -127,8 +213,9 @@ const RouteStep = ({ control, form, setValue }) => {
             Откуда
           </Button>
 
-          {fields.map((_, index) => (
+          {fields.map((field, index) => (
             <Button
+              key={field.id}
               size="small"
               disabled={currentLead && !canEditStatus}
               variant={
@@ -193,6 +280,8 @@ const RouteStep = ({ control, form, setValue }) => {
         </Box>
       </Box>
 
+      {/* ================= MAP ================= */}
+
       <Box
         sx={{
           height: {
@@ -216,6 +305,8 @@ const RouteStep = ({ control, form, setValue }) => {
           onMarkerDragEnd={handleRouteMarkerDragEnd}
         />
       </Box>
+
+      {/* ================= LOCK MESSAGE ================= */}
 
       {currentLead && !canEditStatus && (
         <Box
@@ -246,6 +337,8 @@ const RouteStep = ({ control, form, setValue }) => {
           gap: 2,
         }}
       >
+        {/* ================= FROM ================= */}
+
         <Box
           sx={{
             display: "grid",
@@ -262,7 +355,6 @@ const RouteStep = ({ control, form, setValue }) => {
             label="Откуда"
             fullWidth
             size="small"
-            read
             rules={{
               required: "Укажите место отправления",
               minLength: {
@@ -280,11 +372,15 @@ const RouteStep = ({ control, form, setValue }) => {
             }}
           />
 
+          {/* FROM START */}
+
           <FormControllerInput
             name="point_schedules[0].start_at"
             control={control}
             rules={{
               required: "Дата начала обязательна",
+
+              validate: (value) => validateStartDate(value, 0),
             }}
             label="Начало (Откуда)"
             type="date"
@@ -300,11 +396,15 @@ const RouteStep = ({ control, form, setValue }) => {
             }}
           />
 
+          {/* FROM END */}
+
           <FormControllerInput
             name="point_schedules[0].end_at"
             control={control}
             rules={{
               required: "Дата окончания обязательна",
+
+              validate: (value) => validateEndDate(value, 0),
             }}
             label="Окончание (Откуда)"
             type="date"
@@ -320,6 +420,8 @@ const RouteStep = ({ control, form, setValue }) => {
             }}
           />
         </Box>
+
+        {/* ================= WAYPOINTS ================= */}
 
         {fields.length > 0 && (
           <Box
@@ -337,115 +439,149 @@ const RouteStep = ({ control, form, setValue }) => {
               sx={{
                 fontSize: "0.9rem",
                 fontWeight: 600,
-                сolor: "font_color.heading",
+                color: "font_color.heading",
               }}
             >
               Промежуточные точки
             </Typography>
 
-            {fields.map((crossField, index) => (
-              <Box
-                key={crossField.id}
-                sx={{
-                  display: "flex",
-                  gap: 1,
-                  alignItems: "flex-start",
-                }}
-              >
-                <FormControllerInput
-                  name={`waypoints[${index}].address`}
-                  control={control}
-                  label={`Промежуточная точка #${index + 1}`}
-                  fullWidth
-                  size="small"
-                  disabled={!canEditStatus}
-                  onChange={clearFromPoint}
-                  slotProps={{
-                    input: {
-                      readOnly: true,
-                    },
-                  }}
-                />
+            {fields.map((crossField, index) => {
+              /**
+               * point_schedules:
+               *
+               * 0 = Откуда
+               * 1 = waypoint 1
+               * 2 = waypoint 2
+               * ...
+               */
+              const scheduleIndex = index + 1;
 
-                <FormControllerInput
-                  name={`waypoints[${index}].type`}
-                  control={control}
-                  defaultValue="check_passes"
-                  select
-                  label="Тип"
-                  fullWidth
-                  size="small"
-                >
-                  {waypointTypes.map((type) => (
-                    <MenuItem key={type.id} value={type.value}>
-                      {type.label}
-                    </MenuItem>
-                  ))}
-                </FormControllerInput>
+              const previousEndAt = pointSchedules?.[scheduleIndex - 1]?.end_at;
 
-                <FormControllerInput
-                  name={`point_schedules[${index + 1}].start_at`}
-                  rules={{
-                    required: "Дата начала обязательна",
-                  }}
-                  control={control}
-                  label={`Начало (Точка ${index + 1})`}
-                  type="date"
-                  fullWidth
-                  size="small"
-                  onChange={() => {
-                    setValue(
-                      `point_schedules[${index + 1}].point_index`,
-                      index + 1,
-                    );
-                  }}
-                  slotProps={{
-                    htmlInput: {
-                      min: getMinDate(pointSchedules?.[index]?.end_at),
-                    },
-                  }}
-                />
+              const currentStartAt = pointSchedules?.[scheduleIndex]?.start_at;
 
-                <FormControllerInput
-                  name={`point_schedules[${index + 1}].end_at`}
-                  rules={{
-                    required: "Дата окончания обязательна",
-                  }}
-                  control={control}
-                  label={`Окончание (Точка ${index + 1})`}
-                  type="date"
-                  fullWidth
-                  size="small"
-                  onChange={() => {
-                    setValue(
-                      `point_schedules[${index + 1}].point_index`,
-                      index + 1,
-                    );
-                  }}
-                  slotProps={{
-                    htmlInput: {
-                      min: getMinDate(pointSchedules?.[index + 1]?.start_at),
-                    },
-                  }}
-                />
-
-                <Button
-                  disabled={currentLead && !canEditStatus}
-                  onClick={() => remove(index)}
-                  color="error"
-                  variant="outlined"
+              return (
+                <Box
+                  key={crossField.id}
                   sx={{
-                    whiteSpace: "nowrap",
-                    borderRadius: 2,
-                    py: 1,
+                    display: "flex",
+                    gap: 1,
+                    alignItems: "flex-start",
                   }}
                 >
-                  Убрать
-                </Button>
-              </Box>
-            ))}
+                  {/* ADDRESS */}
+
+                  <FormControllerInput
+                    name={`waypoints[${index}].address`}
+                    control={control}
+                    label={`Промежуточная точка #${index + 1}`}
+                    fullWidth
+                    size="small"
+                    disabled={currentLead && !canEditStatus}
+                    slotProps={{
+                      input: {
+                        readOnly: true,
+                      },
+                    }}
+                  />
+
+                  {/* TYPE */}
+
+                  <FormControllerInput
+                    name={`waypoints[${index}].type`}
+                    control={control}
+                    defaultValue="check_passes"
+                    select
+                    label="Тип"
+                    fullWidth
+                    size="small"
+                    disabled={currentLead && !canEditStatus}
+                  >
+                    {waypointTypes.map((type) => (
+                      <MenuItem key={type.id} value={type.value}>
+                        {type.label}
+                      </MenuItem>
+                    ))}
+                  </FormControllerInput>
+
+                  {/* START */}
+
+                  <FormControllerInput
+                    name={`point_schedules[${scheduleIndex}].start_at`}
+                    control={control}
+                    rules={{
+                      required: "Дата начала обязательна",
+
+                      validate: (value) =>
+                        validateStartDate(value, scheduleIndex),
+                    }}
+                    label={`Начало (Точка ${index + 1})`}
+                    type="date"
+                    fullWidth
+                    size="small"
+                    onChange={() => {
+                      setValue(
+                        `point_schedules[${scheduleIndex}].point_index`,
+                        scheduleIndex,
+                      );
+                    }}
+                    slotProps={{
+                      htmlInput: {
+                        min: getMinDate(previousEndAt),
+                      },
+                    }}
+                  />
+
+                  {/* END */}
+
+                  <FormControllerInput
+                    name={`point_schedules[${scheduleIndex}].end_at`}
+                    control={control}
+                    rules={{
+                      required: "Дата окончания обязательна",
+
+                      validate: (value) =>
+                        validateEndDate(value, scheduleIndex),
+                    }}
+                    label={`Окончание (Точка ${index + 1})`}
+                    type="date"
+                    fullWidth
+                    size="small"
+                    onChange={() => {
+                      setValue(
+                        `point_schedules[${scheduleIndex}].point_index`,
+                        scheduleIndex,
+                      );
+                    }}
+                    slotProps={{
+                      htmlInput: {
+                        min: getMinDate(currentStartAt),
+                      },
+                    }}
+                  />
+
+                  {/* REMOVE */}
+
+                  <Button
+                    disabled={currentLead && !canEditStatus}
+                    onClick={() => handleRemoveWaypoint(index)}
+                    color="error"
+                    variant="outlined"
+                    sx={{
+                      whiteSpace: "nowrap",
+                      borderRadius: 2,
+                      py: 1,
+                    }}
+                  >
+                    Убрать
+                  </Button>
+                </Box>
+              );
+            })}
           </Box>
         )}
+
+        {/* ================= TO ================= */}
 
         <Box
           sx={{
@@ -478,34 +614,42 @@ const RouteStep = ({ control, form, setValue }) => {
             }}
           />
 
+          {/* TO START */}
+
           <FormControllerInput
-            name={`point_schedules[${fields.length + 1}].start_at`}
+            name={`point_schedules[${toScheduleIndex}].start_at`}
+            control={control}
             rules={{
               required: "Дата начала обязательна",
+
+              validate: (value) => validateStartDate(value, toScheduleIndex),
             }}
-            control={control}
             label="Начало (Куда)"
             type="date"
             fullWidth
             size="small"
             onChange={() => {
               setValue(
-                `point_schedules[${fields.length + 1}].point_index`,
-                fields.length + 1,
+                `point_schedules[${toScheduleIndex}].point_index`,
+                toScheduleIndex,
               );
             }}
             slotProps={{
               htmlInput: {
-                min: getMinDate(pointSchedules?.[fields.length]?.end_at),
+                min: getMinDate(pointSchedules?.[toScheduleIndex - 1]?.end_at),
               },
             }}
           />
 
+          {/* TO END */}
+
           <FormControllerInput
-            name={`point_schedules[${fields.length + 1}].end_at`}
+            name={`point_schedules[${toScheduleIndex}].end_at`}
             control={control}
             rules={{
               required: "Дата окончания обязательна",
+
+              validate: (value) => validateEndDate(value, toScheduleIndex),
             }}
             label="Окончание (Куда)"
             type="date"
@@ -513,18 +657,20 @@ const RouteStep = ({ control, form, setValue }) => {
             size="small"
             onChange={() => {
               setValue(
-                `point_schedules[${fields.length + 1}].point_index`,
-                fields.length + 1,
+                `point_schedules[${toScheduleIndex}].point_index`,
+                toScheduleIndex,
               );
             }}
             slotProps={{
               htmlInput: {
-                min: getMinDate(pointSchedules?.[fields.length + 1]?.start_at),
+                min: getMinDate(pointSchedules?.[toScheduleIndex]?.start_at),
               },
             }}
           />
         </Box>
       </Box>
+
+      {/* ================= ERROR SNACKBAR ================= */}
 
       <Snackbar
         open={hasFromCityError || hasToCityError || hasCrossPointCityError}
@@ -535,7 +681,7 @@ const RouteStep = ({ control, form, setValue }) => {
         }}
       >
         <Alert severity="error" variant="filled" sx={{ width: "100%" }}>
-          На правильные параметры города. Попытайтесь выбрать другую точку
+          Неправильные параметры города. Попытайтесь выбрать другую точку
         </Alert>
       </Snackbar>
     </StepSection>
