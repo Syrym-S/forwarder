@@ -5,6 +5,7 @@ import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
 import { useNavigate } from "react-router-dom";
 import RenderStatus from "../../shared/ui/render-status";
 import InfoField from "../../shared/ui/info-field";
+import InfoItem from "../../shared/ui/info-item";
 
 const LeadCard = ({ lead }) => {
   const navigate = useNavigate();
@@ -12,8 +13,6 @@ const LeadCard = ({ lead }) => {
   const navigateToLeadItem = () => {
     navigate(`/leads/${lead.id}`);
   };
-
-  console.log(lead);
 
   return (
     <Box
@@ -39,28 +38,10 @@ const LeadCard = ({ lead }) => {
       }}
     >
       <Stack spacing={1}>
-        <Typography
+        <Box
           sx={{
-            fontSize: 20,
-          }}
-        >
-          Заказчик: {lead?.customer?.name || "Не указан"}
-        </Typography>
-
-        <Stack
-          direction="row"
-          flexWrap="wrap"
-          useFlexGap
-          sx={{
-            flexDirection: {
-              xs: "column",
-              sm: "row",
-            },
-            justifyContent: {
-              xs: "flex-start",
-              sm: "flex-end",
-            },
-            gap: 2,
+            display: "flex",
+            justifyContent: "space-between",
           }}
         >
           <Typography
@@ -68,11 +49,36 @@ const LeadCard = ({ lead }) => {
               fontSize: 20,
             }}
           >
-            #{lead.num || "—"}
+            Заказчик: {lead?.customer?.name || "Не указан"}
           </Typography>
 
-          <RenderStatus status={lead.status} />
-        </Stack>
+          <Stack
+            direction="row"
+            flexWrap="wrap"
+            useFlexGap
+            sx={{
+              flexDirection: {
+                xs: "column",
+                sm: "row",
+              },
+              justifyContent: {
+                xs: "flex-start",
+                sm: "flex-end",
+              },
+              gap: 2,
+            }}
+          >
+            <Typography
+              sx={{
+                fontSize: 20,
+              }}
+            >
+              #{lead.num || "—"}
+            </Typography>
+
+            <RenderStatus status={lead.status} />
+          </Stack>
+        </Box>
 
         <Box
           sx={{
@@ -96,7 +102,7 @@ const LeadCard = ({ lead }) => {
             <Typography
               fontWeight={500}
               sx={{
-                fontSize: 12,
+                fontSize: 14,
                 lineHeight: 1.35,
               }}
             >
@@ -107,7 +113,7 @@ const LeadCard = ({ lead }) => {
           <ArrowDownwardRoundedIcon
             sx={{
               color: "text.secondary",
-              fontSize: 15,
+              fontSize: 17,
               transform: {
                 xs: "none",
                 sm: "rotate(-90deg)",
@@ -131,7 +137,7 @@ const LeadCard = ({ lead }) => {
 
             <Typography
               sx={{
-                fontSize: 12,
+                fontSize: 14,
                 lineHeight: 1.35,
               }}
             >
@@ -140,7 +146,7 @@ const LeadCard = ({ lead }) => {
           </Box>
         </Box>
 
-        <InfoField
+        <InfoItem
           label="Цена"
           value={lead?.price ? `${lead?.price} ${lead?.currency}` : "Не указан"}
         />

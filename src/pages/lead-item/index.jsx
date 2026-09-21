@@ -27,21 +27,6 @@ import InfoItem from "../../shared/ui/info-item";
 const LeadItem = () => {
   const { id } = useParams();
 
-  const getLeadFiles = useLeadsStore((state) => state.getLeadFiles);
-  const getLeadItem = useLeadsStore((state) => state.getLeadItem);
-  const sendEmergencySituation = useLeadsStore(
-    (state) => state.sendEmergencySituation,
-  );
-  const finishEmergencySituation = useLeadsStore(
-    (state) => state.finishEmergencySituation,
-  );
-  const isSentEmergencyLoading = useLeadsStore(
-    (state) => state.isSentEmergencyLoading,
-  );
-  const isFinishEmergencyLoading = useLeadsStore(
-    (state) => state.isFinishEmergencyLoading,
-  );
-
   const [currentTab, setCurrentTab] = useState(LEAD_TABS.lead_details);
   const [openShareModal, setOpenShareModal] = useState(false);
   const [openWarningModal, setOpenWarningModal] = useState(false);
@@ -57,6 +42,20 @@ const LeadItem = () => {
   const showEmergencyButton = IN_PROGRESS_STATUSES.includes(leadData?.status);
   const defaultValues = useFormDefaultValues(leadData, files);
   const isActive = !FINISHED_LEAD_STATUSES.includes(leadData?.status);
+  const getLeadFiles = useLeadsStore((state) => state.getLeadFiles);
+  const getLeadItem = useLeadsStore((state) => state.getLeadItem);
+  const sendEmergencySituation = useLeadsStore(
+    (state) => state.sendEmergencySituation,
+  );
+  const finishEmergencySituation = useLeadsStore(
+    (state) => state.finishEmergencySituation,
+  );
+  const isSentEmergencyLoading = useLeadsStore(
+    (state) => state.isSentEmergencyLoading,
+  );
+  const isFinishEmergencyLoading = useLeadsStore(
+    (state) => state.isFinishEmergencyLoading,
+  );
 
   const openEditForm = () => {
     setOpenEdit(true);

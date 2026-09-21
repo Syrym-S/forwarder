@@ -164,7 +164,18 @@ const ActiveLeads = () => {
               },
             }}
           >
-            <MenuItem value="">Все статусы</MenuItem>
+            <MenuItem
+              value=""
+              sx={{
+                py: 0.9,
+                fontSize: "0.9rem",
+                color: "#172B4D",
+                fontWeight: 500,
+                textTransform: "none",
+              }}
+            >
+              Все статусы
+            </MenuItem>
 
             {ACTIVE_LEAD_STATUS_OPTIONS.map((option) => (
               <MenuItem
@@ -172,8 +183,13 @@ const ActiveLeads = () => {
                 value={option.value}
                 sx={{
                   py: 1.2,
-                  fontSize: "1rem",
+                  fontSize: "0.9rem",
                   color: "#172B4D",
+                  fontWeight: 500,
+                  textTransform: "none",
+                  gap: 1,
+                  borderTop: "1px solid",
+                  borderColor: "divider",
 
                   "&.Mui-selected": {
                     backgroundColor: "#EAF1FB",

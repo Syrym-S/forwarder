@@ -68,4 +68,8 @@ export const ACTIVE_LEAD_STATUS_OPTIONS = [
 export const HISTORY_LEAD_STATUS_OPTIONS = [
   { label: "Рейс завершен", value: "finished" },
   { label: "Рейс удален", value: "deleted" },
+  {
+    label: "Aварийная ситуация закрыта",
+    value: "finished_emergency_situation",
+  },
 ];

@@ -26,7 +26,6 @@ const HistoryLeads = () => {
 
   const isLeadsEmpty = historyLeads?.length === 0;
   const isCardsView = view === VIEWS.cards;
-  const PAGE_COUNT = Math.ceil(count / perPage);
 
   const handlePageChange = (_, value) => {
     setPage(value);
@@ -116,12 +115,45 @@ const HistoryLeads = () => {
                     getHistoryLeads();
                   }
                 }}
+                sx={{
+                  borderRadius: "10px",
+                }}
               >
-                <MenuItem value="">
-                  <em>Все</em>
+                <MenuItem
+                  value=""
+                  sx={{
+                    py: 0.9,
+                    fontSize: "0.9rem",
+                    color: "#172B4D",
+                    fontWeight: 500,
+                    textTransform: "none",
+                  }}
+                >
+                  Все статусы
                 </MenuItem>
                 {HISTORY_LEAD_STATUS_OPTIONS.map((option) => (
-                  <MenuItem key={option.value} value={option.value}>
+                  <MenuItem
+                    key={option.value}
+                    value={option.value}
+                    sx={{
+                      py: 1.2,
+                      fontSize: "0.9rem",
+                      color: "#172B4D",
+                      fontWeight: 500,
+                      textTransform: "none",
+                      gap: 1,
+                      borderTop: "1px solid",
+                      borderColor: "divider",
+
+                      "&.Mui-selected": {
+                        backgroundColor: "#EAF1FB",
+                      },
+
+                      "&.Mui-selected:hover": {
+                        backgroundColor: "#EAF1FB",
+                      },
+                    }}
+                  >
                     {option.label}
                   </MenuItem>
                 ))}
