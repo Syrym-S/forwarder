@@ -1,4 +1,3 @@
-import React from "react";
 import { useState, useEffect } from "react";
 import { Box, Container, Switch } from "@mui/material";
 
@@ -11,8 +10,12 @@ import TendersMainContainer from "../../components/dashboard/tenders/tenders-mai
 import FactoringProgressBarContainer from "../../components/dashboard/factoring-line/factoring-progress-bar-container";
 import FactoringTable from "../../components/factoring/factoring-table";
 import { useFactoringStore } from "../../app/store/factoring/factoring-store";
+import DashboardStats from "../../components/dashboard/statistics-cards/stats-cards-container";
+import { useStatsStore } from "../../app/store/stats/use-stats-store";
 
 const Dashboard = () => {
+  const stats = useStatsStore((state) => state.stats);
+  const getStats = useStatsStore((state) => state.getStats);
   const leads = useLeadsStore((state) => state.acceptedLeads);
   const factorings = useFactoringStore((state) => state.factorings);
   const getFactorings = useFactoringStore((state) => state.getFactorings);
@@ -44,6 +47,7 @@ const Dashboard = () => {
   useEffect(() => {
     fetchAcceptedLeads();
     getFactorings();
+    getStats();
   }, [fetchAcceptedLeads]);
 
   return (
@@ -54,6 +58,7 @@ const Dashboard = () => {
           p: "10px",
         }}
       >
+        <DashboardStats data={stats} />
         <Box
           sx={{
             display: "grid",

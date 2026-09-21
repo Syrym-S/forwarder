@@ -19,19 +19,23 @@ const createMarkerIcon = (label, subLabel) => {
     className: "custom-marker-wrapper",
     html: `
       <div class="map-marker">
-        <div class="map-marker__content">
-          ${label}
-           <div class="map-marker__sub-content">
-          ${subLabel}
-        </div>
+        <div class="map-marker__circle">
+          <div class="map-marker__content">
+            ${label}
+
+            ${
+              subLabel
+                ? `<div class="map-marker__sub-content">${subLabel}</div>`
+                : ""
+            }
+          </div>
         </div>
       </div>
     `,
-    iconSize: [40, 48],
-    iconAnchor: [20, 48],
+    iconSize: [34, 48],
+    iconAnchor: [17, 48],
   });
 };
-
 const driverIcon = L.divIcon({
   className: "driver-marker",
   html: '<div class="driver-marker__icon">🚚</div>',
