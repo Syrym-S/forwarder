@@ -12,6 +12,25 @@ import "leaflet/dist/leaflet.css";
 import { useLeadsStore } from "../../app/store/leads/leads-store";
 import L from "leaflet";
 import { isStaging } from "../../app/client";
+import "./marker.style.css";
+
+const createMarkerIcon = (label, subLabel) => {
+  return L.divIcon({
+    className: "custom-marker-wrapper",
+    html: `
+      <div class="map-marker">
+        <div class="map-marker__content">
+          ${label}
+           <div class="map-marker__sub-content">
+          ${subLabel}
+        </div>
+        </div>
+      </div>
+    `,
+    iconSize: [40, 48],
+    iconAnchor: [20, 48],
+  });
+};
 
 const driverIcon = L.divIcon({
   className: "driver-marker",
@@ -407,25 +426,30 @@ const Map = ({
           return (
             <Fragment key={route.id}>
               <Marker
+                key={`from-${route.id}`}
                 position={route.start}
+                icon={createMarkerIcon("A", `#${route.lead.num}`)}
                 opacity={isDimmed ? 0.3 : 1}
                 eventHandlers={{
                   click: () => onSelectLead?.(route.id),
                 }}
               />
-
-              {route.lead.waypoints.map((waypoint) => {
-                return <Marker position={[waypoint.lat, waypoint.lon]} />;
+              {route.lead.waypoints.map((waypoint, index) => {
+                return (
+                  <Marker
+                    position={[waypoint.lat, waypoint.lon]}
+                    icon={createMarkerIcon(`P #${index}`, `#${route.lead.num}`)}
+                  />
+                );
               })}
-
               <Marker
                 position={route.end}
                 opacity={isDimmed ? 0.3 : 1}
                 eventHandlers={{
                   click: () => onSelectLead?.(route.id),
                 }}
+                icon={createMarkerIcon("B", `#${route.lead.num}`)}
               />
-
               <Polyline
                 positions={route.coordinates}
                 pathOptions={{
@@ -439,7 +463,6 @@ const Map = ({
               >
                 <MapTooltip route={route} open={open} setOpen={setOpen} />
               </Polyline>
-
               {passedRoute && (
                 <Polyline
                   positions={passedRoute}
@@ -450,7 +473,6 @@ const Map = ({
                   }}
                 />
               )}
-
               {routeHistory && (
                 <Polyline
                   positions={routeHistory}

@@ -5,6 +5,21 @@ import L from "leaflet";
 import { isStaging } from "../../app/client";
 import "./hide.css";
 
+const createMarkerIcon = (label) => {
+  return L.divIcon({
+    className: "custom-marker-wrapper",
+    html: `
+      <div class="map-marker">
+        <div class="map-marker__content">
+          ${label}
+        </div>
+      </div>
+    `,
+    iconSize: [40, 48],
+    iconAnchor: [20, 48],
+  });
+};
+
 const driverIcon = L.divIcon({
   className: "driver-marker",
   html: '<div class="driver-marker__icon">🚚</div>',
@@ -134,13 +149,16 @@ export default function LeadMap({ from, waypoints, to, id }) {
     >
       <TileLayer url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png?key=cb1_33bl_1_e67a46f1e67e6cbad8143c4e" />
 
-      <Marker position={start} />
+      <Marker position={start} icon={createMarkerIcon("A")} />
 
-      {waypoints.map((waypoint) => (
-        <Marker position={[waypoint.lat, waypoint.lon]} />
+      {waypoints.map((waypoint, index) => (
+        <Marker
+          position={[waypoint.lat, waypoint.lon]}
+          icon={createMarkerIcon(`P#${index + 1}`)}
+        />
       ))}
 
-      <Marker position={end} />
+      <Marker position={end} icon={createMarkerIcon("B")} />
 
       {(route.length > 0 || !from.lat || !from?.lon) && (
         <Polyline positions={route} color="blue" weight={4} />
