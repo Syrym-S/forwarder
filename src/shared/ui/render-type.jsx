@@ -40,7 +40,7 @@ const RenderType = ({ type, size }) => {
         />
       );
 
-    case WAYPOINT_TYPES.check_passes:
+    default:
       return (
         <RenderChip
           label={"Промежуточная"}
@@ -49,8 +49,6 @@ const RenderType = ({ type, size }) => {
           size={size}
         />
       );
-    default:
-      return <>Нет статуа</>;
   }
 };
 

@@ -4,17 +4,30 @@ import RoutePoint from "./route-point";
 import { Box } from "@mui/material";
 
 const LeadRouteInfo = ({ leadData }) => {
+  const waypoints = leadData?.waypoints || [];
+  const pointSchedules = leadData?.point_schedules || [];
+
   return (
     <Section title="Маршрут" icon={<RouteOutlinedIcon color="primary" />}>
       <Box
         sx={{
-          display: "grid",
-          gridTemplateColumns: {
-            xs: "1fr",
-            md: "1fr",
+          display: "flex",
+          flexDirection: "column",
+
+          gap: {
+            xs: 1,
+            sm: 1.5,
+            md: 2,
           },
-          gap: 2,
-          alignItems: "stretch",
+
+          width: "100%",
+          minWidth: 0,
+
+          px: {
+            xs: 0,
+            sm: 0.5,
+            md: 0,
+          },
         }}
       >
         <RoutePoint
@@ -25,15 +38,16 @@ const LeadRouteInfo = ({ leadData }) => {
               ? "Точка пройдена"
               : "Точка не пройдена"
           }
-          date={leadData?.point_schedules[0]}
+          date={pointSchedules[0]}
         />
 
-        {leadData?.waypoints?.map((point, index) => (
+        {waypoints.map((point, index) => (
           <RoutePoint
+            key={point?.id || `${point?.address}-${index}`}
             label={`Промежуточная точка #${index + 1}`}
             address={point?.address || "Битые данные"}
             status={point?.is_passed ? "Точка пройдена" : "Точка не пройдена"}
-            date={leadData?.point_schedules[index + 1]}
+            date={pointSchedules[index + 1]}
           />
         ))}
 
@@ -45,7 +59,7 @@ const LeadRouteInfo = ({ leadData }) => {
               ? "Точка пройдена"
               : "Точка не пройдена"
           }
-          date={leadData?.point_schedules[leadData?.waypoints?.length + 1]}
+          date={pointSchedules[waypoints.length + 1]}
         />
       </Box>
     </Section>

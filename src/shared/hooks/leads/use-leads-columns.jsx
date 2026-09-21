@@ -38,10 +38,18 @@ const useLeadsColumns = () => {
     { field: "num", headerName: "Номер", width: 200 },
     {
       field: "driver",
-      headerName: "Driver",
+      headerName: "Водитель",
       width: 200,
       renderCell: ({ row }) => {
         return <Box>{row?.driver?.fio || "-"}</Box>;
+      },
+    },
+    {
+      field: "customer",
+      headerName: "Заказчик",
+      width: 200,
+      renderCell: ({ row }) => {
+        return <Box>{row?.customer?.name || "-"}</Box>;
       },
     },
     {

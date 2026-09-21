@@ -68,7 +68,7 @@ const HistoryLeads = () => {
             xs: "column",
             sm: "row",
           },
-          gap: 3,
+          gap: 1,
           mx: "auto",
           width: {
             xs: "100%",

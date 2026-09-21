@@ -90,7 +90,7 @@ const ActiveLeads = () => {
         sx={{
           display: "flex",
           alignItems: "center",
-          gap: 3,
+          gap: 1,
           mx: "auto",
           flexDirection: {
             xs: "column",
@@ -112,7 +112,10 @@ const ActiveLeads = () => {
         <FormControl
           size="small"
           sx={{
-            minWidth: 250,
+            width: {
+              xs: "100%",
+              md: "35%",
+            },
           }}
         >
           <InputLabel id="status-select-label">Статус</InputLabel>

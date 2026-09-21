@@ -4,7 +4,6 @@ import ArrowDownwardRoundedIcon from "@mui/icons-material/ArrowDownwardRounded";
 import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
 import { useNavigate } from "react-router-dom";
 import RenderStatus from "../../shared/ui/render-status";
-import InfoField from "../../shared/ui/info-field";
 import InfoItem from "../../shared/ui/info-item";
 
 const LeadCard = ({ lead }) => {

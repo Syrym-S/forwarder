@@ -2,7 +2,6 @@ import { VIEWS } from "../../shared/const/leads";
 import { Alert, Box, Pagination } from "@mui/material";
 import LeadCard from "./lead-card";
 import LeadsTable from "./leads-table";
-import PageLoader from "../../shared/ui/loaders/page-loader";
 import LeadKanbanTable from "./lead-kanban-table";
 
 const LeadListContainer = ({
