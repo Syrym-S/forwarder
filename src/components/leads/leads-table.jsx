@@ -18,6 +18,7 @@ const LeadsTable = ({ leads }) => {
           minHeight: "80vh",
           "& .MuiDataGrid-row:nth-of-type(even)": {
             backgroundColor: "#f5f7fa",
+            borderRadius: 3,
           },
 
           "& .MuiDataGrid-row:nth-of-type(odd)": {
