@@ -3,7 +3,6 @@ import FactoringDetailsHeading from "../../../components/factoring/factoring-det
 import LeadMap from "../../../components/leads/lead-map";
 import FactoringFinancialInfo from "../../../components/factoring/factoring-financial-info";
 import FactoringCustomerInfo from "../../../components/factoring/factoring-customer-info";
-import FactoringCargoInfo from "../../../components/factoring/factoring-cargo-info";
 import Section from "../../../shared/ui/section";
 import ProfileDataTable from "../../../components/factoring/profile-data-table";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
@@ -13,7 +12,6 @@ import PageLoader from "../../../shared/ui/loaders/page-loader";
 import FactoringVerifications from "../../../components/factoring/factoring-verifications";
 import LocalShippingOutlinedIcon from "@mui/icons-material/LocalShippingOutlined";
 import ConfirmModal from "../../../components/factoring/confirm-modal";
-import InfoField from "../../../shared/ui/info-field";
 import RequestQuoteOutlinedIcon from "@mui/icons-material/RequestQuoteOutlined";
 import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
 import { useEffect, useState } from "react";
@@ -26,6 +24,7 @@ import { useFactoringStore } from "../../../app/store/factoring/factoring-store"
 import LeadRouteInfo from "../../../components/leads/lead-item/lead-route-info";
 import InfoItem from "../../../shared/ui/info-item";
 import CargoCard from "../../../components/leads/lead-item/lead-cargo-info";
+import CustomerDataTable from "../../../components/factoring/customer-data-table";
 
 const FactoringItem = () => {
   const { id } = useParams();
@@ -153,7 +152,7 @@ const FactoringItem = () => {
           )}
         </Section>
 
-        <ConfirmModal />
+        {/* <ConfirmModal /> */}
 
         <LeadRouteInfo leadData={currentLead} />
 
@@ -181,7 +180,7 @@ const FactoringItem = () => {
             }}
           >
             <InfoItem
-              label={"Со стороны экспедитора"}
+              label={"Подтверждение оплаты Экспедитором от Фактора"}
               value={
                 <Chip
                   color={factoringDetails.await_paid_ff ? "success" : ""}
@@ -194,7 +193,7 @@ const FactoringItem = () => {
               }
             />
             <InfoItem
-              label={"Со стороны фатора"}
+              label={"Подтверждение оплаты Фактором от Заказчика"}
               value={
                 <Chip
                   color={factoringDetails.await_paid_cf ? "success" : ""}
@@ -267,6 +266,13 @@ const FactoringItem = () => {
             title={"Данные Фактора"}
           >
             <FactorDataTable factor={factoringDetails?.factor} />
+          </Section>
+
+          <Section
+            icon={<RememberMeOutlinedIcon color="primary" />}
+            title={"Данные Заказчика"}
+          >
+            <CustomerDataTable customer={factoringDetails?.customer} />
           </Section>
         </Box>
       </Box>
