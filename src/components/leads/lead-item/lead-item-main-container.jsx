@@ -8,6 +8,7 @@ import LocalShippingOutlinedIcon from "@mui/icons-material/LocalShippingOutlined
 import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
 import LeadCargoFilesContainer from "../lead-cargo-files-container";
 import LeadDriverInfo from "./lead-driver-info";
+import ReplayIcon from "@mui/icons-material/Replay";
 import { useEffect, useState } from "react";
 import { uploadLeadFileApi } from "../../../app/store/leads/api";
 import { useLeadsStore } from "../../../app/store/leads/leads-store";
@@ -15,7 +16,16 @@ import { LeadDocumentsSection } from "../documents/LeadDocumentsSection";
 import { STATUS } from "../../../shared/const/tenders";
 import { LeadDocumentCard } from "../documents/LeadDocumentCard";
 import { useParams } from "react-router-dom";
-import { Box, Button, CircularProgress } from "@mui/material";
+import {
+  Box,
+  Button,
+  CircularProgress,
+  IconButton,
+  Typography,
+} from "@mui/material";
+import { useNotificationsStore } from "../../../app/store/notifications/noti-store";
+import { parserNotificationType } from "../../../shared/helpers/notifications/parse-notification-type";
+import { NOTIFICATION_TYPE } from "../../../shared/const/notification-types";
 
 const LeadItemMainContainer = ({
   leadData,
@@ -25,7 +35,14 @@ const LeadItemMainContainer = ({
   const { id } = useParams();
 
   const files = useLeadsStore((state) => state.files);
-  const avrDocument = useLeadsStore((state) => state.avrDocument);
+  const driverAvrDocument = useLeadsStore((state) => state.driverAvrDocument);
+  const customerAvrDocument = useLeadsStore(
+    (state) => state.customerAvrDocument,
+  );
+
+  const newNotification = useNotificationsStore(
+    (state) => state.newNotification,
+  );
   const getLeadFiles = useLeadsStore((state) => state.getLeadFiles);
   const getLeadItem = useLeadsStore((state) => state.getLeadItem);
   const deleteLeadFile = useLeadsStore((state) => state.deleteLeadFile);
@@ -41,8 +58,19 @@ const LeadItemMainContainer = ({
   );
   const isAvrLoading = useLeadsStore((state) => state.isAvrLoading);
   const isSignAvrLoading = useLeadsStore((state) => state.isSignAvrLoading);
-  const signAvrDocument = useLeadsStore((state) => state.signAvrDocument);
-  const getAvrDocument = useLeadsStore((state) => state.getAvrDocument);
+  const signDriverAvrDocument = useLeadsStore(
+    (state) => state.signDriverAvrDocument,
+  );
+  const getDriverAvrDocument = useLeadsStore(
+    (state) => state.getDriverAvrDocument,
+  );
+
+  const signCustomerAvrDocument = useLeadsStore(
+    (state) => state.signCustomerAvrDocument,
+  );
+  const getCustomerAvrDocument = useLeadsStore(
+    (state) => state.getCustomerAvrDocument,
+  );
   const error = useLeadsStore((state) => state.error);
 
   const [isDocumentUploading, setIsDocumentUploading] = useState(false);
@@ -57,7 +85,9 @@ const LeadItemMainContainer = ({
 
   const cargosCount = leadData?.cargos?.length;
   const isEditableStatus =
-    leadData?.status !== STATUS.finished && leadData?.status !== STATUS.deleted;
+    leadData?.status !== STATUS.finished &&
+    leadData?.status !== STATUS.deleted &&
+    leadData.status !== STATUS.sign_avr;
   const isAllPassed = leadPoints.every((item) => item?.is_passed);
 
   const from = {
@@ -75,6 +105,9 @@ const LeadItemMainContainer = ({
       lon: waypoint.lon,
     };
   });
+
+  const leadAvrDF = leadData?.avr_df;
+  const leadAvrFC = leadData?.avr_fc;
 
   async function reloadLeadDocuments(leadId) {
     await getLeadFiles(leadId);
@@ -110,6 +143,8 @@ const LeadItemMainContainer = ({
     await getLeadFiles(lead_id);
   };
 
+  const { notification_type } = parserNotificationType(newNotification?.type);
+
   const handleConfirmDelivery = async () => {
     await confirmLeadDelivery(id);
     await getLeadItem(id);
@@ -117,20 +152,46 @@ const LeadItemMainContainer = ({
 
   const handleGenerateAvrDocument = async () => {
     await generateAvrDocument(id);
+    if (!leadAvrDF) {
+      await getDriverAvrDocument(id);
+    } else {
+      await getCustomerAvrDocument(id);
+    }
   };
 
-  const handleSignAvrDocument = async () => {
-    const response = await signAvrDocument(id);
+  const handleSignDriverAvrDocument = async () => {
+    const response = await signDriverAvrDocument(id);
+    const link = response.data.sign_url;
+
+    window.open(link, "_blank");
+  };
+
+  const handleSignCustomerAvrDocument = async () => {
+    const response = await signCustomerAvrDocument(id);
     const link = response.data.sign_url;
 
     window.open(link, "_blank");
   };
 
   useEffect(() => {
-    if (leadData.status === STATUS.finished) {
-      getAvrDocument(id);
+    if (
+      leadData.status === STATUS.sign_avr ||
+      leadData.status === STATUS.finished
+    ) {
+      getDriverAvrDocument(id);
+      getCustomerAvrDocument(id);
     }
   }, []);
+
+  useEffect(() => {
+    if (notification_type === NOTIFICATION_TYPE.shipping) {
+      getLeadItem(id);
+
+      if (!leadAvrDF || !leadAvrFC) {
+        handleGenerateAvrDocument();
+      }
+    }
+  }, [newNotification]);
 
   return (
     <>
@@ -145,7 +206,7 @@ const LeadItemMainContainer = ({
         <LeadMap waypoints={waypoints} from={from} to={to} id={id} />
       </Box>
 
-      {leadData.status === STATUS.finished && (
+      {leadData.status === STATUS.sign_avr && (
         <Section
           title="Подпись AVR документа"
           icon={<DescriptionOutlinedIcon color="primary" />}
@@ -172,32 +233,132 @@ const LeadItemMainContainer = ({
                 }}
               >
                 {isGenerateAvrLoading && <CircularProgress size={12} />}
-                Сгенерировать AVR документ для подписи
-              </Button>
+                {!leadAvrDF && "Сгенерировать AVR документ для Водителя"}
 
-              <Button
-                variant="outlined"
-                color="primary"
-                onClick={handleSignAvrDocument}
-              >
-                {isSignAvrLoading && <CircularProgress size={12} />}
-                Подписать документ
+                {leadAvrDF &&
+                  !leadAvrFC &&
+                  "Сгенерировать AVR документ для Заказчика"}
               </Button>
+              {driverAvrDocument && !leadAvrDF && (
+                <Button
+                  variant="outlined"
+                  color="primary"
+                  onClick={handleSignDriverAvrDocument}
+                >
+                  {isSignAvrLoading && <CircularProgress size={12} />}
+                  {!leadAvrDF && "Подписать для Водителя"}
+                </Button>
+              )}
+
+              {customerAvrDocument && !leadAvrFC && leadAvrDF && (
+                <Button
+                  variant="outlined"
+                  color="primary"
+                  onClick={handleSignCustomerAvrDocument}
+                >
+                  {isSignAvrLoading && <CircularProgress size={12} />}
+                  Подписать для Заказчика
+                </Button>
+              )}
+
+              <IconButton onClick={() => getLeadItem(id)}>
+                <ReplayIcon color="primary" />
+              </IconButton>
             </Box>
             {error && <RenderErrorContext error={error} />}
 
-            <Box
-              sx={{
-                width: "30%",
-              }}
-            >
-              {isAvrLoading ? (
-                <CircularProgress />
-              ) : (
-                <LeadDocumentCard document={avrDocument?.document} />
-              )}
-            </Box>
+            {driverAvrDocument && (
+              <Box
+                sx={{
+                  width: "30%",
+                }}
+              >
+                <Typography>
+                  AVR документ между Экпедитором и Водителем
+                </Typography>
+                {isAvrLoading ? (
+                  <CircularProgress />
+                ) : (
+                  <LeadDocumentCard document={driverAvrDocument?.document} />
+                )}
+              </Box>
+            )}
+
+            {customerAvrDocument && (
+              <Box
+                sx={{
+                  width: "30%",
+                }}
+              >
+                <Typography>
+                  AVR документ между Экпедитором и Заказчиком
+                </Typography>
+                {isAvrLoading ? (
+                  <CircularProgress />
+                ) : (
+                  <LeadDocumentCard document={customerAvrDocument?.document} />
+                )}
+              </Box>
+            )}
           </Box>
+        </Section>
+      )}
+
+      {leadData.status === STATUS.finished && (
+        <Section
+          title="Подписанные документы"
+          icon={<DescriptionOutlinedIcon color="primary" />}
+        >
+          <Box
+            sx={{
+              mb: 3,
+              display: "grid",
+              gridTemplateColumns: "1fr 1fr",
+              gap: 3,
+            }}
+          >
+            {driverAvrDocument && (
+              <Box>
+                <Typography>
+                  AVR документ между Экпедитором и Водителем
+                </Typography>
+                {isAvrLoading ? (
+                  <CircularProgress />
+                ) : (
+                  <LeadDocumentCard document={driverAvrDocument?.document} />
+                )}
+              </Box>
+            )}
+
+            {customerAvrDocument && (
+              <Box>
+                <Typography>
+                  AVR документ между Экпедитором и Заказчиком
+                </Typography>
+                {isAvrLoading ? (
+                  <CircularProgress />
+                ) : (
+                  <LeadDocumentCard document={customerAvrDocument?.document} />
+                )}
+              </Box>
+            )}
+          </Box>
+        </Section>
+      )}
+
+      {isEditableStatus && isAllPassed && (
+        <Section
+          title="Звершить рейс"
+          icon={<DescriptionOutlinedIcon color="primary" />}
+        >
+          <Button
+            color="error"
+            variant="outlined"
+            disabled={isConfirmLoading}
+            onClick={handleConfirmDelivery}
+          >
+            {isConfirmLoading ? "...Завершение рейса" : "Завершить рейс"}
+          </Button>
         </Section>
       )}
 
@@ -249,17 +410,6 @@ const LeadItemMainContainer = ({
           deletingDocumentIds={deletingDocumentIds}
         />
       </Section>
-
-      {isEditableStatus && isAllPassed && (
-        <Button
-          color="error"
-          variant="outlined"
-          disabled={isConfirmLoading}
-          onClick={handleConfirmDelivery}
-        >
-          {isConfirmLoading ? "...Завершение рейса" : "Завершить рейс"}
-        </Button>
-      )}
     </>
   );
 };

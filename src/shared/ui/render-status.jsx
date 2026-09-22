@@ -172,6 +172,15 @@ const RenderStatus = ({ status }) => {
         />
       );
 
+    case STATUS.sign_avr:
+      return (
+        <RenderStatusContent
+          label={"Ожидание подписей"}
+          variant="outlined"
+          color="#d16a16"
+        />
+      );
+
     default:
       return <>Нет статуа</>;
   }

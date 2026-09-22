@@ -27,10 +27,12 @@ import {
   deleteMessageApi,
   editMessageApi,
   generaetAvrDocumentApi,
-  signAvrDocumentApi,
-  getAvrDocumentApi,
   sendEmergencySituationApi,
   finishEmergencySituationApi,
+  getDriverAvrDocumentApi,
+  signDriverAvrDocumentApi,
+  getCustomerAvrDocumentApi,
+  signCustomerAvrDocumentApi,
 } from "./api";
 
 export const useLeadsStore = create((set) => ({
@@ -48,7 +50,8 @@ export const useLeadsStore = create((set) => ({
   downloadFileId: null,
   newMessage: null,
   deletingMessage: null,
-  avrDocument: null,
+  driverAvrDocument: null,
+  customerAvrDocument: null,
 
   isLoading: false,
   isSearchLoading: false,
@@ -734,11 +737,11 @@ export const useLeadsStore = create((set) => ({
     }
   },
 
-  signAvrDocument: async (leadId) => {
+  signDriverAvrDocument: async (leadId) => {
     try {
       set({ isSignAvrLoading: true });
 
-      const response = await signAvrDocumentApi(leadId);
+      const response = await signDriverAvrDocumentApi(leadId);
 
       set({ isSignAvrLoading: false });
 
@@ -748,14 +751,45 @@ export const useLeadsStore = create((set) => ({
     }
   },
 
-  getAvrDocument: async (leadId) => {
+  signCustomerAvrDocument: async (leadId) => {
+    try {
+      set({ isSignAvrLoading: true });
+
+      const response = await signCustomerAvrDocumentApi(leadId);
+
+      set({ isSignAvrLoading: false });
+
+      return response;
+    } catch (e) {
+      set({ error: e.response?.data?.message, isSignAvrLoading: false });
+    }
+  },
+
+  getDriverAvrDocument: async (leadId) => {
     try {
       set({ isAvrLoading: true });
 
-      const response = await getAvrDocumentApi(leadId);
+      const response = await getDriverAvrDocumentApi(leadId);
 
       set({
-        avrDocument: response.data,
+        driverAvrDocument: response.data,
+        isAvrLoading: false,
+      });
+
+      return response;
+    } catch (e) {
+      console.log(e);
+    }
+  },
+
+  getCustomerAvrDocument: async (leadId) => {
+    try {
+      set({ isAvrLoading: true });
+
+      const response = await getCustomerAvrDocumentApi(leadId);
+
+      set({
+        customerAvrDocument: response.data,
         isAvrLoading: false,
       });
 

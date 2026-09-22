@@ -343,14 +343,26 @@ export const generaetAvrDocumentApi = async (leadId) => {
   return data;
 };
 
-export const signAvrDocumentApi = async (leadId) => {
-  const data = await api.post(`/forwarder/avr/v1/${leadId}/sign`);
+export const signDriverAvrDocumentApi = async (leadId) => {
+  const data = await api.post(`/forwarder/avr/v1/${leadId}/driver/sign`);
 
   return data;
 };
 
-export const getAvrDocumentApi = async (leadId) => {
-  const data = await api.get(`/forwarder/avr/v1/${leadId}`);
+export const signCustomerAvrDocumentApi = async (leadId) => {
+  const data = await api.post(`/forwarder/avr/v1/${leadId}/customer/sign`);
+
+  return data;
+};
+
+export const getDriverAvrDocumentApi = async (leadId) => {
+  const data = await api.get(`/forwarder/avr/v1/${leadId}/driver`);
+
+  return data;
+};
+
+export const getCustomerAvrDocumentApi = async (leadId) => {
+  const data = await api.get(`/forwarder/avr/v1/${leadId}/customer`);
 
   return data;
 };

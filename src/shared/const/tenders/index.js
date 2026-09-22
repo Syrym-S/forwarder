@@ -18,6 +18,7 @@ export const STATUS = {
   approved: "approved",
   emergency_situation: "emergency_situation",
   finished_emergency_situation: "finished_emergency_situation",
+  sign_avr: "sign_avr",
 };
 
 export const FINISHED_LEAD_STATUSES = [

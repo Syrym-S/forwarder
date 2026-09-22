@@ -3,7 +3,7 @@ import TripOriginIcon from "@mui/icons-material/TripOrigin";
 import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
 import dayjs from "dayjs";
 
-const RoutePoint = ({ label, address, status, type, date }) => {
+const RoutePoint = ({ label, address, status, type, date, isPassed }) => {
   const Icon = type === "from" ? TripOriginIcon : LocationOnOutlinedIcon;
 
   return (
@@ -37,12 +37,12 @@ const RoutePoint = ({ label, address, status, type, date }) => {
 
         <Chip
           label={status}
+          color={isPassed ? "primary" : ""}
           size="small"
           variant="outlined"
           sx={{
             height: 28,
             fontWeight: 600,
-            color: "text.secondary",
             fontSize: 12,
           }}
         />
