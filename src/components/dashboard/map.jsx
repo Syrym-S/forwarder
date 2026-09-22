@@ -36,6 +36,7 @@ const createMarkerIcon = (label, subLabel) => {
     iconAnchor: [17, 48],
   });
 };
+
 const driverIcon = L.divIcon({
   className: "driver-marker",
   html: '<div class="driver-marker__icon">🚚</div>',
