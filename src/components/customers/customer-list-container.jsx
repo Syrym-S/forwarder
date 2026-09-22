@@ -27,8 +27,6 @@ const CustomerListContainer = ({ view }) => {
 
   const isCardsView = view === VIEWS.cards;
 
-  console.log(view);
-
   const isEmpty = customers?.length === 0;
   const PAGE_COUNT = Math.ceil(count / perPage);
 

@@ -18,6 +18,7 @@ import AirportShuttleOutlinedIcon from "@mui/icons-material/AirportShuttleOutlin
 import HighlightOffOutlinedIcon from "@mui/icons-material/HighlightOffOutlined";
 import { useDriverStore } from "../../app/store/drivers/driver-store";
 import ModalLoader from "../../shared/ui/loaders/modal-loader";
+import InfoItem from "../../shared/ui/info-item";
 
 const DriverDetailsModal = ({ selectedDriver, handleClear }) => {
   const driverDetails = useDriverStore((state) => state.driverDetails);
@@ -88,7 +89,7 @@ const DriverDetailsModal = ({ selectedDriver, handleClear }) => {
               },
             }}
           >
-            <InfoField
+            <InfoItem
               label={"Верификаци документов"}
               value={
                 <Chip
@@ -105,19 +106,19 @@ const DriverDetailsModal = ({ selectedDriver, handleClear }) => {
               }
             />
 
-            <InfoField
+            <InfoItem
               label={"Статус резидентства"}
               value={
                 driverDetails?.is_foreigner ? "Иностранец" : "Гражданин страны"
               }
             />
 
-            <InfoField
+            <InfoItem
               label={"Занятость"}
               value={driverDetails?.is_ip ? "ИП" : "Не ИП"}
             />
 
-            <InfoField
+            <InfoItem
               label={"Доверенность"}
               value={
                 driverDetails?.trusted
@@ -126,9 +127,9 @@ const DriverDetailsModal = ({ selectedDriver, handleClear }) => {
               }
             />
 
-            <InfoField label={"ИИН"} value={driverDetails?.iin} />
+            <InfoItem label={"ИИН"} value={driverDetails?.iin} />
 
-            <InfoField label={"Номер телефона"} value={driverDetails?.phone} />
+            <InfoItem label={"Номер телефона"} value={driverDetails?.phone} />
           </Box>
         </Section>
       </DialogContent>

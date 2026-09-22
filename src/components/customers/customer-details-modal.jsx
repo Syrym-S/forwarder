@@ -17,6 +17,7 @@ import AirportShuttleOutlinedIcon from "@mui/icons-material/AirportShuttleOutlin
 import HighlightOffOutlinedIcon from "@mui/icons-material/HighlightOffOutlined";
 import { useCustomerStore } from "../../app/store/customers/customers-store";
 import ModalLoader from "../../shared/ui/loaders/modal-loader";
+import InfoItem from "../../shared/ui/info-item";
 
 const CustomerDetailsModal = ({ selectedCustomer, handleClear }) => {
   const customerDetails = useCustomerStore((state) => state.customerDetails);
@@ -80,9 +81,9 @@ const CustomerDetailsModal = ({ selectedCustomer, handleClear }) => {
                 gap: "10px",
               }}
             >
-              <InfoField label="ФИО" value={customerDetails.persons[0]?.fio} />
-              <InfoField label="ИИН" value={customerDetails.persons[0]?.iin} />
-              <InfoField
+              <InfoItem label="ФИО" value={customerDetails.persons[0]?.fio} />
+              <InfoItem label="ИИН" value={customerDetails.persons[0]?.iin} />
+              <InfoItem
                 label="Номер телефона"
                 value={customerDetails.persons[0]?.phone}
               />
