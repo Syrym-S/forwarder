@@ -29,7 +29,6 @@ const FactorLineContainer = ({ view }) => {
         {isCardView && (
           <Box
             sx={{
-              width: "60%",
               display: "grid",
               gridTemplateColumns: "1fr",
               gap: 1,

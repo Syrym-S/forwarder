@@ -135,11 +135,11 @@ const FactoringItem = () => {
           />
         </Box>
 
-        <Section
-          title="Подтвердить факторинг"
-          icon={<DescriptionOutlinedIcon color="primary" />}
-        >
-          {!factoringDetails?.verified_forwarder && (
+        {!factoringDetails?.verified_forwarder && (
+          <Section
+            title="Подтвердить факторинг"
+            icon={<DescriptionOutlinedIcon color="primary" />}
+          >
             <Button
               variant="outlined"
               disabled={isConfirmLoading || isLoading}
@@ -149,8 +149,8 @@ const FactoringItem = () => {
                 ? "...Идет подтверждение"
                 : "Подтвердить"}
             </Button>
-          )}
-        </Section>
+          </Section>
+        )}
 
         {/* <ConfirmModal /> */}
 
@@ -236,11 +236,13 @@ const FactoringItem = () => {
 
         <FactoringFinancialInfo factoring={factoringDetails} />
 
-        <FactoringCustomerInfo
+        {/* <FactoringCustomerInfo
           customer={factoringDetails?.customer}
           verified_customer={factoringDetails?.verified_customer}
-        />
+        /> */}
+
         <FactoringVerifications factoring={factoringDetails} />
+
         <Box
           sx={{
             display: "grid",
@@ -272,7 +274,10 @@ const FactoringItem = () => {
             icon={<RememberMeOutlinedIcon color="primary" />}
             title={"Данные Заказчика"}
           >
-            <CustomerDataTable customer={factoringDetails?.customer} />
+            <CustomerDataTable
+              customer={factoringDetails?.customer}
+              verified_customer={factoringDetails?.verified_customer}
+            />
           </Section>
         </Box>
       </Box>

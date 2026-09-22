@@ -30,6 +30,14 @@ export const searchFactorApi = async (params) => {
   return data;
 };
 
+export const searchFinishedLeadsApi = async (params) => {
+  const data = await api.get(`/forwarder/v1/leads/factoring/search`, {
+    params,
+  });
+
+  return data;
+};
+
 export const getFactoringDetailsApi = async (index) => {
   const data = await api.get(`/forwarder/v1/factoring/${index}`, {
     headers: {

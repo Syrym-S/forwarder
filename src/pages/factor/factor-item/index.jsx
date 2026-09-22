@@ -26,6 +26,7 @@ import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import ShowChartOutlinedIcon from "@mui/icons-material/ShowChartOutlined";
 import ConfirmModal from "../../../shared/ui/confirm-modal";
 import { STATUS } from "../../../shared/const/tenders";
+import { moneySpacingFormat } from "../../../shared/helpers/money-spacing";
 
 const FactorItem = () => {
   const { id } = useParams();
@@ -109,7 +110,13 @@ const FactorItem = () => {
           }}
         >
           <Stack>
-            <Typography variant="h5" fontWeight={700}>
+            <Typography
+              sx={{
+                fontWeight: 600,
+                fontSize: "1.5rem",
+                сolor: "font_color.heading",
+              }}
+            >
               Информация о факторинговой линии
             </Typography>
 
@@ -127,6 +134,7 @@ const FactorItem = () => {
             display: "flex",
             py: "10px",
             justifyContent: { xs: "space-between", sm: "end" },
+            mb: 4,
             gap: {
               xs: "3px",
               sm: "10px",
@@ -211,7 +219,7 @@ const FactorItem = () => {
                   fontSize: "1.3rem",
                 }}
               >
-                {factoringLineDetails?.summ_current}
+                {moneySpacingFormat(factoringLineDetails?.summ_current || 0)}
                 {factoringLineDetails?.currency}
               </Typography>
             </Stack>
@@ -235,7 +243,7 @@ const FactorItem = () => {
                   fontSize: "1.3rem",
                 }}
               >
-                {factoringLineDetails?.summ_free}
+                {moneySpacingFormat(factoringLineDetails?.summ_free || 0)}
                 {factoringLineDetails?.currency}
               </Typography>
             </Stack>
@@ -275,7 +283,7 @@ const FactorItem = () => {
         >
           <InfoBadge
             label="Сумма линии"
-            value={`${factoringLineDetails?.summ_max} ${factoringLineDetails?.currency}`}
+            value={`${moneySpacingFormat(factoringLineDetails?.summ_max || 0)} ${factoringLineDetails?.currency}`}
           />
           <InfoBadge
             label="Период"

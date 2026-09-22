@@ -3,17 +3,6 @@ import RenderStatus from "../../shared/ui/render-status";
 import { useNavigate } from "react-router-dom";
 import { renderLineColor } from "../../shared/helpers/factoring/render-progress-line-color";
 import dayjs from "dayjs";
-import { moneySpacingFormat } from "../../shared/helpers/money-spacing";
-
-const formatAmount = (amount, currency) => {
-  return `${new Intl.NumberFormat("ru-RU").format(amount)} ${currency}`;
-};
-
-const formatDate = (date) => {
-  const [year, month, day] = date.split("-");
-
-  return `${day}.${month}.${year}`;
-};
 
 const FactoringLineCard = ({ line }) => {
   const navigate = useNavigate();
@@ -28,10 +17,6 @@ const FactoringLineCard = ({ line }) => {
     period_start,
     period_end,
   } = line;
-
-  console.log(period_end);
-
-  console.log(formatDate(period_end.date));
 
   const handleNavigateToDetailPage = () => {
     navigate(
@@ -48,9 +33,10 @@ const FactoringLineCard = ({ line }) => {
       onClick={handleNavigateToDetailPage}
       sx={{
         p: 3,
+        width: "100%",
         border: "2px solid",
         borderColor: "divider",
-        borderRadius: 4,
+        borderRadius: 7,
         backgroundColor: "background.paper",
         boxShadow: "0 2px 8px rgba(0, 0, 0, 0.06)",
         transition: "0.2s ease",
@@ -63,11 +49,17 @@ const FactoringLineCard = ({ line }) => {
     >
       <Box
         sx={{
-          display: "grid",
-          gridTemplateColumns: "3fr 1fr",
+          display: "flex",
+          alignItems: "center",
+          gap: 1,
         }}
       >
-        <Typography variant="h6" fontWeight={600}>
+        <Typography
+          sx={{
+            fontWeight: 600,
+            fontSize: "1.5rem",
+          }}
+        >
           Факторинговая линия
         </Typography>
 
@@ -78,10 +70,6 @@ const FactoringLineCard = ({ line }) => {
         <Box>
           <Typography variant="body2" color="text.secondary" mb={0.5}>
             Лимит
-          </Typography>
-
-          <Typography variant="h5" fontWeight={700}>
-            {formatAmount(moneySpacingFormat(summ_max), currency)}
           </Typography>
         </Box>
 

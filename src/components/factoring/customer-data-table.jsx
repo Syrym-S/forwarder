@@ -1,5 +1,6 @@
 import {
   Box,
+  Chip,
   Table,
   TableBody,
   TableCell,
@@ -7,35 +8,27 @@ import {
   TableRow,
 } from "@mui/material";
 
-const CustomerDataTable = ({ customer }) => {
+const CustomerDataTable = ({ customer, verified_customer }) => {
   const rows = [
     {
       label: "ФИО",
       value: customer?.fullname,
     },
     {
-      label: "Email",
-      value: customer?.email,
-    },
-    {
-      label: "ИИН",
-      value: customer?.iin,
-    },
-    {
-      label: "Номер",
-      value: customer?.phone,
-    },
-    {
-      label: "Компания",
-      value: customer?.company_name,
-    },
-    {
       label: "БИН",
       value: customer?.bin || customer?.company_bin,
     },
     {
-      label: "Адрес компании",
-      value: customer?.company_address,
+      label: "Подтверждение",
+      value: (
+        <Chip
+          label={
+            verified_customer ? "Заказчик подтвердил" : "Заказчик не подтвердил"
+          }
+          variant="outlined"
+          color={verified_customer ? "success" : "error"}
+        />
+      ),
     },
   ];
 

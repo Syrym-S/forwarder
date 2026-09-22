@@ -9,11 +9,13 @@ import {
   getFactoringsApi,
   getFactorsApi,
   searchFactorApi,
+  searchFinishedLeadsApi,
 } from "./api";
 
 export const useFactoringStore = create((set) => ({
   factorings: [],
   factors: [],
+  finishedLeads: [],
 
   factoringDetails: null,
   factorDetails: null,
@@ -84,6 +86,28 @@ export const useFactoringStore = create((set) => ({
 
       set({
         factors: response.data.results,
+        isSearchLoading: false,
+      });
+
+      return response.data;
+    } catch (e) {
+      set({
+        error: e.message,
+        isLoading: false,
+      });
+
+      throw e;
+    }
+  },
+
+  searchFinishedLeads: async (params) => {
+    try {
+      set({ isSearchLoading: true, error: null });
+
+      const response = await searchFinishedLeadsApi(params);
+
+      set({
+        finishedLeads: response.data.results,
         isSearchLoading: false,
       });
 

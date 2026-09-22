@@ -23,19 +23,21 @@ const ChooseLeadAndFactor = ({
   const [inputValueLead, setInputValueLead] = useState("");
   const [inputValueFactor, setInputValueFactor] = useState("");
 
-  const searchedLeads = useLeadsStore((state) => state.searchedLeads);
   const isLeadLoading = useLeadsStore((state) => state.isLoading);
   const isFactorsLoading = useFactoringStore((state) => state.isFactorsLoading);
   const factors = useFactoringStore((state) => state.factors);
   const isSearchLoading = useLeadsStore((state) => state.isSearchLoading);
   const currentLead = useLeadsStore((state) => state.currentLead);
-  const searchHistoryLeads = useLeadsStore((state) => state.searchHistoryLeads);
+  const finishedLeads = useFactoringStore((state) => state.finishedLeads);
+  const searchFinishedLeads = useFactoringStore(
+    (state) => state.searchFinishedLeads,
+  );
 
   useEffect(() => {
     if (!inputValueLead || inputValueLead.length < 2) return;
 
     const timer = setTimeout(async () => {
-      await searchHistoryLeads({
+      await searchFinishedLeads({
         q: inputValueLead.trim(),
       });
     }, 1000);
@@ -44,7 +46,7 @@ const ChooseLeadAndFactor = ({
   }, [inputValueLead]);
 
   useEffect(() => {
-    searchHistoryLeads({
+    searchFinishedLeads({
       q: "Алматы",
     });
   }, []);
@@ -69,7 +71,7 @@ const ChooseLeadAndFactor = ({
               value={selectedLead}
               inputValue={inputValueLead}
               loading={isSearchLoading}
-              options={searchedLeads}
+              options={finishedLeads}
               noOptionsText={<>Ввидте два символа</>}
               onInputChange={(_, value, reason) => {
                 if (reason === "input") {
