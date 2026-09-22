@@ -13,6 +13,7 @@ import {
   getTendersApi,
   getTendersHistoryApi,
   makeBetApi,
+  searchLeadsWithoutDriverApi,
   startTenderApi,
   updateTender,
 } from "./api";
@@ -21,6 +22,8 @@ export const useTendersStore = create((set) => ({
   tenders: [],
   customerTenders: [],
   tendersHistory: [],
+  leadsWithoutDriver: [],
+
   currentTender: null,
   customerCurrentTender: null,
 
@@ -124,6 +127,25 @@ export const useTendersStore = create((set) => ({
       });
     }
   },
+
+  searchLeadsWithoutDriver: async (params) => {
+    try {
+      set({ isSearchLoading: true, error: null });
+
+      const response = await searchLeadsWithoutDriverApi(params);
+
+      set({
+        leadsWithoutDriver: response.data.results,
+        isSearchLoading: false,
+      });
+    } catch (e) {
+      set({
+        error: e.message,
+        isLoading: false,
+      });
+    }
+  },
+
   startTender: async (tender_id) => {
     try {
       set({

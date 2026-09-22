@@ -97,6 +97,11 @@ const TenderHistory = () => {
           mb: 1,
           display: "flex",
           justifyContent: "space-between",
+          mx: "auto",
+          width: {
+            xs: "100%",
+            sm: isCardsView ? "60%" : "100%",
+          },
         }}
       >
         <ViewTabs view={view} setView={setView} withoutDataAdd withoutKanban />
@@ -133,7 +138,17 @@ const TenderHistory = () => {
 
       <DataContainer isLoading={isLoading}>
         {isTenderEmplty && (
-          <Alert severity="info">Доступных аукционов нет</Alert>
+          <Alert
+            severity="info"
+            sx={{
+              width: {
+                xs: "100%",
+                sm: isCardsView ? "60%" : "100%",
+              },
+            }}
+          >
+            Доступных аукционов нет
+          </Alert>
         )}
 
         {isCardsView && view === VIEWS.cards && (
@@ -163,19 +178,19 @@ const TenderHistory = () => {
         {!isCardsView && !isTenderEmplty && (
           <ApplicationsTenderTable tenders={tendersHistory} />
         )}
-
-        <Pagination
-          page={page}
-          count={PAGE_COUNT}
-          color="primary"
-          shape="rounded"
-          sx={{
-            mx: "auto",
-            width: "fit-content",
-          }}
-          onChange={handlePageChange}
-        />
       </DataContainer>
+      <Pagination
+        page={page}
+        count={PAGE_COUNT}
+        color="primary"
+        shape="rounded"
+        sx={{
+          mt: 6,
+          mx: "auto",
+          width: "fit-content",
+        }}
+        onChange={handlePageChange}
+      />
     </RootLayout>
   );
 };

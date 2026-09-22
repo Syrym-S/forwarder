@@ -37,6 +37,14 @@ export const deleteTenderApi = async (tender_id) => {
   return data;
 };
 
+export const searchLeadsWithoutDriverApi = async (params = {}) => {
+  const data = await api.get(`/forwarder/v1/tenders/leads/search`, {
+    params,
+  });
+
+  return data;
+};
+
 export const startTenderApi = async (tender_id) => {
   const data = await api.post(`forwarder/v1/tender/${tender_id}/start`, null);
 

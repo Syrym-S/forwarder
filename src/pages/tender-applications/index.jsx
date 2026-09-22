@@ -155,7 +155,18 @@ const TenderApplications = () => {
 
       <DataContainer isLoading={isLoading}>
         {isTenderEmpty && (
-          <Alert severity="info">Доступных аукционов нет</Alert>
+          <Alert
+            severity="info"
+            sx={{
+              mx: "auto",
+              width: {
+                xs: "100%",
+                sm: isCardsView ? "60%" : "100%",
+              },
+            }}
+          >
+            Доступных аукционов нет
+          </Alert>
         )}
 
         {isCardsView && !isTenderEmpty && (

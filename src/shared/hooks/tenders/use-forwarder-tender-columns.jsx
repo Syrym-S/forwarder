@@ -87,6 +87,11 @@ const useForwarderTenderColumns = () => {
       width: 200,
     },
     {
+      field: "bets_count",
+      headerName: "Кол-во ставок",
+      width: 200,
+    },
+    {
       field: "publication_type",
       headerName: "Тип публикации",
       width: 200,

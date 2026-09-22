@@ -1,12 +1,10 @@
-import { Box, Button, Chip, Stack, Typography } from "@mui/material";
+import { Box, Stack, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import RenderStatus from "../../shared/ui/render-status";
 import TripOriginIcon from "@mui/icons-material/TripOrigin";
 import ArrowDownwardRoundedIcon from "@mui/icons-material/ArrowDownwardRounded";
-import ArrowRightAltRoundedIcon from "@mui/icons-material/ArrowRightAltRounded";
 import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
-import { STATUS } from "../../shared/const/tenders";
-import InfoBadge from "../../shared/ui/info-badge";
+import InfoItem from "../../shared/ui/info-item";
 
 const ForwardersTenderCard = ({ tender }) => {
   const navigate = useNavigate();
@@ -87,113 +85,70 @@ const ForwardersTenderCard = ({ tender }) => {
         <Box
           sx={{
             display: "flex",
-            alignItems: "stretch",
-            gap: 1.5,
-            flexWrap: {
-              xs: "wrap",
-              sm: "nowrap",
-            },
+            alignItems: "center",
+            gap: 2,
           }}
         >
-          <Box
-            sx={{
-              flex: 1,
-              minWidth: 220,
-              minHeight: 86,
-              p: 1.5,
-              border: "1px solid",
-              borderColor: "divider",
-              borderRadius: 2,
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "flex-start",
-            }}
-          >
-            <Typography
-              variant="caption"
-              sx={{
-                display: "block",
-                color: "text.secondary",
-                mb: 0.5,
-              }}
-            >
-              Откуда
-            </Typography>
-
+          <Box>
             <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-              <TripOriginIcon sx={{ fontSize: 18, color: "primary.main" }} />
-
+              <TripOriginIcon sx={{ fontSize: 12, color: "primary.main" }} />
               <Typography
-                fontWeight={500}
                 sx={{
-                  fontSize: 14,
-                  lineHeight: 1.35,
+                  fontSize: 12,
                 }}
               >
-                {tender?.lead?.from_location?.address || "Не указано"}
+                Откуда
               </Typography>
             </Box>
-          </Box>
 
-          <Box
-            sx={{
-              display: {
-                xs: "none",
-                sm: "flex",
-              },
-              alignItems: "center",
-              justifyContent: "center",
-              px: 0.5,
-            }}
-          >
-            <ArrowRightAltRoundedIcon
-              sx={{
-                color: "text.secondary",
-                fontSize: 28,
-              }}
-            />
-          </Box>
-
-          <Box
-            sx={{
-              flex: 1,
-              minWidth: 220,
-              minHeight: 96,
-              p: 1.5,
-              border: "1px solid",
-              borderColor: "divider",
-              borderRadius: 2,
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "flex-start",
-            }}
-          >
             <Typography
-              variant="caption"
+              fontWeight={500}
               sx={{
-                display: "block",
-                color: "text.secondary",
-                mb: 0.5,
+                fontSize: 14,
+                lineHeight: 1.35,
               }}
             >
-              Куда
+              {tender?.lead?.from_location?.address ||
+                tender?.lead?.from ||
+                "Битые данные"}
             </Typography>
+          </Box>
 
+          <ArrowDownwardRoundedIcon
+            sx={{
+              color: "text.secondary",
+              fontSize: 17,
+              transform: {
+                xs: "none",
+                sm: "rotate(-90deg)",
+              },
+            }}
+          />
+
+          <Box>
             <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
               <LocationOnOutlinedIcon
-                sx={{ fontSize: 18, color: "primary.main" }}
+                sx={{ fontSize: 12, color: "primary.main" }}
               />
-
               <Typography
-                fontWeight={500}
                 sx={{
-                  fontSize: 14,
-                  lineHeight: 1.35,
+                  fontSize: 12,
                 }}
               >
-                {tender?.lead?.to_location?.address || "Не указано"}
+                Куда
               </Typography>
             </Box>
+
+            <Typography
+              sx={{
+                fontSize: 14,
+                lineHeight: 1.35,
+              }}
+            >
+              {tender?.lead?.to_location?.address ||
+                tender?.lead?.from ||
+                "Битые данные"}
+            </Typography>
           </Box>
         </Box>
 
@@ -207,19 +162,9 @@ const ForwardersTenderCard = ({ tender }) => {
             gap: 1,
           }}
         >
-          <InfoBadge
-            label="Вес"
-            value={
-              tender?.lead?.cargo?.weight_kg
-                ? `${tender?.lead?.cargo?.weight_kg} кг`
-                : "Не указано"
-            }
-          />
-
-          <InfoBadge
-            label="Тип"
-            value={tender?.lead?.cargo?.type || "Не указан"}
-          />
+          <InfoItem label="Дата пуликации" value={tender?.public_date_time} />
+          <InfoItem label="Дата закрытия" value={tender?.end_date_time} />
+          <InfoItem label="Кол-во участников" value={tender?.bets_count} />
         </Box>
       </Stack>
     </Box>

@@ -3,15 +3,19 @@ import dayjs from "dayjs";
 import { Controller, useWatch } from "react-hook-form";
 import { Autocomplete, Box } from "@mui/material";
 import RenderLeadOptions from "../../../components/tenders/render-lead-options";
-import { useLeadsStore } from "../../../app/store/leads/leads-store";
 import { STATUS } from "../../../shared/const/tenders";
 import FormInput from "../../../shared/ui/input/form-input";
 import FormControllerInput from "../../../shared/ui/input/form-controller-input";
+import { useTendersStore } from "../../../app/store/tenders/tender-store";
 
 const ChooseLeadStep = ({ control, setValue, isEdit }) => {
-  const searchedLeads = useLeadsStore((state) => state.searchedLeads);
-  const isSearchLoading = useLeadsStore((state) => state.isSearchLoading);
-  const searchLeads = useLeadsStore((state) => state.searchLeads);
+  const searchLeadsWithoutDriver = useTendersStore(
+    (state) => state.searchLeadsWithoutDriver,
+  );
+  const isSearchLoading = useTendersStore((state) => state.isSearchLoading);
+  const leadsWithoutDriver = useTendersStore(
+    (state) => state.leadsWithoutDriver,
+  );
 
   const [inputValue, setInputValue] = useState("");
   const [selectedLead, setSelectedLead] = useState();
@@ -45,24 +49,14 @@ const ChooseLeadStep = ({ control, setValue, isEdit }) => {
     if (!inputValue) return;
 
     const timer = setTimeout(async () => {
-      await searchLeads({
+      await searchLeadsWithoutDriver({
         q: inputValue.trim(),
       });
     }, 1000);
 
     return () => clearTimeout(timer);
-  }, [inputValue, searchLeads]);
+  }, [inputValue, searchLeadsWithoutDriver]);
 
-  /**
-   * Собираем дату + время публикации
-   *
-   * 2026-09-18
-   * 16:30
-   *
-   * ->
-   *
-   * 2026-09-18 16:30:00
-   */
   useEffect(() => {
     if (!publicDate || !publicTime) {
       setValue("public_date_time", "");
@@ -75,16 +69,6 @@ const ChooseLeadStep = ({ control, setValue, isEdit }) => {
     });
   }, [publicDate, publicTime, setValue]);
 
-  /**
-   * Собираем дату + время окончания
-   *
-   * 2026-09-20
-   * 18:45
-   *
-   * ->
-   *
-   * 2026-09-20 18:45:00
-   */
   useEffect(() => {
     if (!endDate || !endTime) {
       setValue("end_date_time", "");
@@ -99,8 +83,6 @@ const ChooseLeadStep = ({ control, setValue, isEdit }) => {
 
   return (
     <>
-      {/* ================= LEAD ================= */}
-
       <Controller
         name="lead"
         control={control}
@@ -116,7 +98,7 @@ const ChooseLeadStep = ({ control, setValue, isEdit }) => {
             inputValue={inputValue}
             loading={isSearchLoading}
             disabled={isEdit}
-            options={isSearchLoading ? [] : [...searchedLeads]}
+            options={isSearchLoading ? [] : [...leadsWithoutDriver]}
             noOptionsText="Введите два символа"
             onInputChange={(_, newInputValue, reason) => {
               if (reason === "input") {
