@@ -1,21 +1,23 @@
 import {
+  Alert,
   Box,
   Button,
   Dialog,
+  DialogActions,
   DialogContent,
   DialogTitle,
+  IconButton,
   Typography,
 } from "@mui/material";
 import { useEffect } from "react";
-import { useNotificationsStore } from "../../../app/store/notifications/noti-store";
-import Section from "../../../shared/ui/section";
-import RenderNotificationType from "../../../shared/ui/render-notification-type";
-import NotificationsNoneOutlinedIcon from "@mui/icons-material/NotificationsNoneOutlined";
-import LocalPostOfficeOutlinedIcon from "@mui/icons-material/LocalPostOfficeOutlined";
-import InfoField from "../../../shared/ui/info-field";
+import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
+import ArrowForwardRoundedIcon from "@mui/icons-material/ArrowForwardRounded";
 import { Link as RouterLink } from "react-router-dom";
-import { parserNotificationType } from "../../../shared/helpers/notifications/parse-notification-type";
+import { useNotificationsStore } from "../../../app/store/notifications/noti-store";
 import { useLeadsStore } from "../../../app/store/leads/leads-store";
+import RenderNotificationType from "../../../shared/ui/render-notification-type";
+import RenderNotificationIcon from "../../../shared/ui/render-notification-icon";
+import { parserNotificationType } from "../../../shared/helpers/notifications/parse-notification-type";
 import { NOTIFICATION_TYPE } from "../../../shared/const/notification-types";
 import { LeadDocumentCard } from "../../leads/documents/LeadDocumentCard";
 import NotificationLoader from "../../../shared/ui/loaders/notification-loader";
@@ -24,313 +26,206 @@ const NotificationPopup = ({
   selectedNotification,
   setSelectedNotification,
 }) => {
-  const currentLead = useLeadsStore((state) => state.currentLead);
-  const getNotificationPopUpLeadItem = useLeadsStore(
-    (state) => state.getNotificationPopUpLeadItem,
+  const currentLead = useLeadsStore(
+    (state) => state.notificationPopUpCurrentLead,
   );
-  const notificationDetails = useNotificationsStore(
-    (state) => state.notificationDetails,
-  );
-  const getNotificationDetails = useNotificationsStore(
-    (state) => state.getNotificationDetails,
-  );
-  const getNotifications = useNotificationsStore(
-    (state) => state.getNotifications,
-  );
-  const isNotificationDetailsLoading = useNotificationsStore(
-    (state) => state.isNotificationDetailsLoading,
-  );
-  const clearNotificationPopUpCurrentLead = useNotificationsStore(
+  const getLead = useLeadsStore((state) => state.getNotificationPopUpLeadItem);
+  const clearLead = useLeadsStore(
     (state) => state.clearNotificationPopUpCurrentLead,
   );
-
+  const {
+    notificationDetails,
+    getNotificationDetails,
+    getNotifications,
+    isNotificationDetailsLoading,
+    error,
+  } = useNotificationsStore();
   const { id, notification_type } = parserNotificationType(
-    notificationDetails?.type || "",
+    selectedNotification?.type || "",
   );
+  const files =
+    notification_type === NOTIFICATION_TYPE.shipping
+      ? currentLead?.cargo_actions?.at(-1)?.files || []
+      : [];
 
-  const handleNotificationPopupClose = () => {
+  const handleClose = () => {
     setSelectedNotification(null);
-    clearNotificationPopUpCurrentLead();
   };
-
-  const newCargoActionFiles =
-    currentLead?.cargo_actions[currentLead?.cargo_actions.length - 1]?.files;
 
   useEffect(() => {
     getNotificationDetails(selectedNotification.id);
-
     return () => {
       getNotifications();
     };
-  }, []);
+  }, [selectedNotification.id, getNotificationDetails, getNotifications]);
 
   useEffect(() => {
-    if (notification_type === NOTIFICATION_TYPE.shipping) {
-      getNotificationPopUpLeadItem(id);
-    }
-  }, [id]);
+    clearLead();
+    if (notification_type === NOTIFICATION_TYPE.shipping && id) getLead(id);
+    return () => clearLead();
+  }, [id, notification_type, getLead, clearLead]);
 
   return (
     <Dialog
       open={!!selectedNotification}
-      onClose={handleNotificationPopupClose}
+      onClose={handleClose}
       fullWidth
-      maxWidth="md"
-      sx={{
-        p: 5,
-      }}
+      maxWidth="sm"
+      aria-labelledby="notification-dialog-title"
       slotProps={{
         paper: {
           sx: {
-            width: {
-              xs: "calc(100% - 6px)",
-              sm: "100%",
-            },
-            m: {
-              xs: 0,
-              sm: 2,
-            },
+            borderRadius: 3,
+            m: 2,
+            width: "calc(100% - 32px)",
+            maxHeight: "calc(100dvh - 32px)",
           },
         },
       }}
     >
-      <DialogTitle>
-        {isNotificationDetailsLoading
-          ? "Загрузка..."
-          : selectedNotification?.theme}
+      <DialogTitle
+        id="notification-dialog-title"
+        sx={{
+          p: 3,
+          pr: 7,
+          borderBottom: "1px solid",
+          borderColor: "divider",
+          color: "font_color.heading",
+          fontSize: 20,
+          fontWeight: 600,
+          overflowWrap: "anywhere",
+        }}
+      >
+        {selectedNotification?.theme || "Уведомление"}
       </DialogTitle>
-
-      <DialogContent>
+      <IconButton
+        aria-label="Закрыть уведомление"
+        onClick={handleClose}
+        sx={{ position: "absolute", right: 12, top: 16 }}
+      >
+        <CloseRoundedIcon />
+      </IconButton>
+      <DialogContent sx={{ p: 3, "&.MuiDialogContent-root": { pt: 3 } }}>
         {isNotificationDetailsLoading ? (
-          <Section>
-            <NotificationLoader />
-          </Section>
+          <NotificationLoader />
+        ) : error ? (
+          <Alert severity="error">
+            Не удалось загрузить уведомление. Закройте окно и попробуйте ещё
+            раз.
+          </Alert>
         ) : (
-          <Section
-            icon={<NotificationsNoneOutlinedIcon color="primary" />}
-            title={<RenderNotificationType type={selectedNotification?.type} />}
-          >
-            <InfoField
-              accent
-              value={
-                <Box
+          <>
+            <Box
+              sx={{ display: "flex", alignItems: "center", gap: 1.5, mb: 2 }}
+            >
+              <Box
+                sx={{
+                  width: 42,
+                  height: 42,
+                  borderRadius: 2,
+                  bgcolor: "background.main",
+                  color: "primary.main",
+                  display: "grid",
+                  placeItems: "center",
+                  flexShrink: 0,
+                }}
+              >
+                <RenderNotificationIcon
+                  type={selectedNotification?.type || ""}
+                />
+              </Box>
+              <Box
+                sx={{
+                  color: "font_color.heading",
+                  fontSize: 14,
+                  fontWeight: 600,
+                }}
+              >
+                <RenderNotificationType
+                  type={selectedNotification?.type || ""}
+                />
+              </Box>
+            </Box>
+            <Typography
+              sx={{
+                p: 2,
+                borderRadius: 2,
+                bgcolor: "background.default",
+                fontSize: 14,
+                lineHeight: 1.8,
+                color: "text.secondary",
+                whiteSpace: "pre-wrap",
+                overflowWrap: "anywhere",
+              }}
+            >
+              {notificationDetails?.message || selectedNotification?.message}
+            </Typography>
+            {files.length > 0 && (
+              <Box sx={{ mt: 3 }}>
+                <Typography
                   sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    flexDirection: {
-                      xs: "column",
-                      sm: "row",
-                    },
-                    gap: 1,
+                    mb: 1.5,
+                    fontWeight: 600,
+                    fontSize: 14,
+                    color: "font_color.heading",
                   }}
                 >
-                  <Box
-                    sx={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: 2,
-                    }}
-                  >
-                    <LocalPostOfficeOutlinedIcon />
-                    <Typography
-                      sx={{
-                        fontSize: {
-                          xs: "0.8rem",
-                          sm: "0.9rem",
-                        },
-                      }}
-                    >
-                      {notificationDetails?.message}
-                    </Typography>
-                  </Box>
-                  <Button
-                    onClick={handleNotificationPopupClose}
-                    sx={{
-                      display: "block",
-                      ml: "auto",
-                      width: {
-                        xs: "100%",
-                        sm: "fit-content",
-                      },
-                      textAlign: "center",
-                    }}
-                    component={RouterLink}
-                    to={notificationDetails?.link}
-                    variant="contained"
-                  >
-                    Перейти
-                  </Button>
-                </Box>
-              }
-            />
-
-            {newCargoActionFiles && (
-              <>
+                  Документы
+                </Typography>
                 <Box
                   sx={{
-                    py: 1,
                     display: "grid",
                     gridTemplateColumns: {
-                      xs: "repeat(1,1fr)",
-                      sm: "repeat(2,1fr)",
-                      md: "repeat(3,1fr)",
+                      xs: "1fr",
+                      sm: "repeat(2, minmax(0, 1fr))",
                     },
-                    gap: 1,
+                    gap: 1.5,
                   }}
                 >
-                  {newCargoActionFiles.map((file) => (
-                    <LeadDocumentCard document={file} />
+                  {files.map((file, index) => (
+                    <LeadDocumentCard
+                      key={file.id || file.url || index}
+                      document={file}
+                    />
                   ))}
                 </Box>
-                {/* <Box
-                  sx={{
-                    my: 1,
-                    display: "flex",
-                    gap: 5,
-                  }}
-                >
-                  <Button
-                    disabled={isLoadLoading}
-                    color="success"
-                    variant="outlined"
-                    onClick={handleVerifyCargoLoad}
-                  >
-                    {isLoadLoading ? "Идет подтверждение" : "Подтвердить"}
-                  </Button>
-                  <Button
-                    disabled={isLoadLoading}
-                    color="error"
-                    variant="outlined"
-                    onClick={handleRejectCargoLoad}
-                  >
-                    Отклонить
-                  </Button>
-                </Box> */}
-              </>
+              </Box>
             )}
-            {/* {action === "loading_started" &&
-              (isLoading ? (
-                <Box
-                  sx={{
-                    height: "15vh",
-                    display: "flex",
-                    alignItems: "center",
-                  }}
-                >
-                  <CircularProgress />
-                </Box>
-              ) : (
-                <>
-                  <Box
-                    p={1}
-                    sx={{
-                      py: 1,
-                      display: "grid",
-                      gridTemplateColumns: {
-                        xs: "repeat(1,1fr)",
-                        sm: "repeat(2,1fr)",
-                        md: "repeat(3,1fr)",
-                      },
-                      gap: 1,
-                    }}
-                  >
-                    {loadCargoActions?.files?.map((file) => (
-                      <LeadDocumentCard document={file} />
-                    ))}
-                  </Box>
-                  {!isLoadVerified && loadCargoActions && (
-                    <Box
-                      sx={{
-                        my: 1,
-                        display: "flex",
-                        gap: 5,
-                      }}
-                    >
-                      <Button
-                        disabled={isLoadLoading}
-                        color="success"
-                        variant="outlined"
-                        onClick={handleVerifyCargoLoad}
-                      >
-                        {isLoadLoading ? "Идет подтверждение" : "Подтвердить"}
-                      </Button>
-                      <Button
-                        disabled={isLoadLoading}
-                        color="error"
-                        variant="outlined"
-                        onClick={handleRejectCargoLoad}
-                      >
-                        Отклонить
-                      </Button>
-                    </Box>
-                  )}
-                </>
-              ))} */}
-
-            {/* {action === "unloading_started" &&
-              (isLoading ? (
-                <Box
-                  sx={{
-                    height: "15vh",
-                    display: "flex",
-                    alignItems: "center",
-                  }}
-                >
-                  <CircularProgress />
-                </Box>
-              ) : (
-                <>
-                  <Box
-                    p={1}
-                    sx={{
-                      py: 1,
-                      display: "grid",
-                      gridTemplateColumns: {
-                        xs: "repeat(1,1fr)",
-                        sm: "repeat(2,1fr)",
-                        md: "repeat(3,1fr)",
-                      },
-                      gap: 1,
-                    }}
-                  >
-                    {unloadCargoActions?.files?.map((file) => (
-                      <LeadDocumentCard document={file} />
-                    ))}
-                  </Box>
-
-                  {!isUnloadVerified && unloadCargoActions && (
-                    <Box
-                      sx={{
-                        my: 1,
-                        display: "flex",
-                        gap: 5,
-                      }}
-                    >
-                      <Button
-                        disabled={isUnloadLoading}
-                        color="success"
-                        variant="outlined"
-                        onClick={handleVerifyCargoUnload}
-                      >
-                        {isUnloadLoading ? "Идет подтверждение" : "Подтвердить"}
-                      </Button>
-                      <Button
-                        disabled={isUnloadLoading}
-                        color="error"
-                        variant="outlined"
-                        onClick={handleRejectCargoUnload}
-                      >
-                        Отклонить
-                      </Button>
-                    </Box>
-                  )}
-                </>
-              ))} */}
-          </Section>
+          </>
         )}
       </DialogContent>
+      <DialogActions
+        sx={{
+          px: 3,
+          py: 2,
+          borderTop: "1px solid",
+          borderColor: "divider",
+          gap: 1,
+        }}
+      >
+        <Button
+          onClick={handleClose}
+          sx={{ textTransform: "none", borderRadius: 2 }}
+        >
+          Закрыть
+        </Button>
+        {!isNotificationDetailsLoading &&
+          !error &&
+          notificationDetails?.link && (
+            <Button
+              component={RouterLink}
+              to={notificationDetails.link}
+              onClick={handleClose}
+              variant="contained"
+              disableElevation
+              endIcon={<ArrowForwardRoundedIcon />}
+              sx={{ textTransform: "none", borderRadius: 2 }}
+            >
+              Перейти
+            </Button>
+          )}
+      </DialogActions>
     </Dialog>
   );
 };
-
 export default NotificationPopup;

@@ -29,7 +29,7 @@ export const useNotificationsStore = create((set) => ({
 
       set({
         notifications: response.data.results,
-        newNotification: newNotification.is_viewed ? null : newNotification,
+        newNotification: newNotification && !newNotification.is_viewed ? newNotification : null,
         isLoading: false,
         total: response.data.total,
         perPage: response.data.per_page,
@@ -48,7 +48,7 @@ export const useNotificationsStore = create((set) => ({
 
   getNotificationDetails: async (id) => {
     try {
-      set({ isNotificationDetailsLoading: true, error: null });
+      set({ isNotificationDetailsLoading: true, notificationDetails: null, error: null });
 
       const response = await getNotificationDetailsApi(id);
 

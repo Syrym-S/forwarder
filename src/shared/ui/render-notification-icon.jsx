@@ -1,4 +1,4 @@
-import { Chip } from "@mui/material";
+import NotificationsNoneOutlinedIcon from "@mui/icons-material/NotificationsNoneOutlined";
 import { NOTIFICATION_TYPE } from "../const/notification-types";
 import LocalShippingOutlinedIcon from "@mui/icons-material/LocalShippingOutlined";
 import ContentPasteOutlinedIcon from "@mui/icons-material/ContentPasteOutlined";
@@ -19,7 +19,7 @@ const RenderNotificationIcon = ({ type }) => {
     case NOTIFICATION_TYPE.factor:
       return <FactoryOutlinedIcon />;
     default:
-      return <>Нет Типа</>;
+      return <NotificationsNoneOutlinedIcon />;
   }
 };
 

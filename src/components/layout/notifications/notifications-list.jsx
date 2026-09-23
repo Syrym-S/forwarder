@@ -1,13 +1,8 @@
+import { Alert, Box, Button, Chip, Typography } from "@mui/material";
+import ArrowForwardRoundedIcon from "@mui/icons-material/ArrowForwardRounded";
 import { useNotificationsStore } from "../../../app/store/notifications/noti-store";
-import {
-  Box,
-  Chip,
-  CircularProgress,
-  ListItemText,
-  Paper,
-  Typography,
-} from "@mui/material";
 import NotificationItem from "./notification-item";
+import NotificationState from "./notification-state";
 
 const NotificationsList = ({
   notViewedCount,
@@ -17,93 +12,49 @@ const NotificationsList = ({
   handleOpenDrawer,
 }) => {
   const isLoading = useNotificationsStore((state) => state.isLoading);
-
-  const isEmpty = notifications.length === 0;
-  const isLessThan10 = notifications.length <= 10;
-
+  const error = useNotificationsStore((state) => state.error);
   return (
-    <Paper
+    <Box
       sx={{
-        width: 300,
-        height: isLessThan10 ? "fit-content" : "70vh",
-        display: isLoading ? "" : "grid",
-        gridTemplateColumns: "1fr",
-        gridTemplateRows: isEmpty ? "1fr 1fr 1fr" : "1fr 4fr 1fr",
+        width: { xs: "calc(100vw - 32px)", sm: 400 },
+        maxWidth: "100%",
+        display: "flex",
+        flexDirection: "column",
+        maxHeight: "min(680px, 80dvh)",
       }}
     >
-      <Box
-        sx={{
-          p: 2,
-          height: "fit-content",
-          borderBottom: "1px solid rgba(0,0,0,0.1)",
-        }}
-      >
-        <Typography
-          sx={{
-            fontWeight: "500",
-            fontSize: "0.8rem",
-          }}
-        >
-          Уведомления
-        </Typography>
-        <Typography
-          sx={{
-            fontWeight: "400",
-            color: "backgound.main",
-          }}
-        >
-          Последние события по вашим заявкам и аукционам
+      <Box sx={{ p: 2.5, borderBottom: "1px solid", borderColor: "divider" }}>
+        <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+          <Typography
+            sx={{ fontSize: 18, fontWeight: 600, color: "font_color.heading" }}
+          >
+            Уведомления
+          </Typography>
+          {notViewedCount > 0 && (
+            <Chip
+              size="small"
+              label={notViewedCount}
+              color="primary"
+              sx={{ height: 22, fontWeight: 600 }}
+            />
+          )}
+        </Box>
+        <Typography sx={{ mt: 0.75, fontSize: 13, color: "text.secondary" }}>
+          Последние события по перевозкам и аукционам
         </Typography>
       </Box>
-
-      <Box
-        sx={{
-          height: "100%",
-          overflow: "hidden",
-          overflowY: "auto",
-        }}
-      >
-        {isLoading ? (
-          <Box
-            sx={{
-              height: "100%",
-              border: "1px solid rgba(0,0,0,0.1)",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <CircularProgress />
-          </Box>
-        ) : isEmpty ? (
-          <Box
-            style={{
-              height: "100%",
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <ListItemText
-              sx={{
-                display: "block",
-              }}
-              primary="Уведомлений пока нет"
-              secondary="Здесь будут отображаться новые события"
-            />
-          </Box>
+      <Box sx={{ overflowY: "auto", minHeight: 0 }}>
+        {error ? (
+          <Alert severity="error" sx={{ m: 2 }}>
+            Не удалось загрузить уведомления. Попробуйте открыть список ещё раз.
+          </Alert>
+        ) : isLoading || !notifications.length ? (
+          <NotificationState loading={isLoading} />
         ) : (
-          <Box
-            sx={{
-              height: "100%",
-              display: "grid",
-              alignItems: "start",
-              gridTemplateColumns: "1fr",
-            }}
-          >
-            {notifications?.slice(0, 10).map((notification) => (
+          <Box sx={{ p: 1.5, display: "grid", gap: 1 }}>
+            {notifications.slice(0, 10).map((notification) => (
               <NotificationItem
+                key={notification.id}
                 notification={notification}
                 setSelectedNotification={setSelectedNotification}
                 handleNotificationsClose={handleNotificationsClose}
@@ -112,49 +63,17 @@ const NotificationsList = ({
           </Box>
         )}
       </Box>
-
-      <Box
-        onClick={handleOpenDrawer}
-        sx={{
-          p: 2,
-          height: "fit-content",
-          cursor: "pointer",
-          borderTop: "1px solid rgba(0,0,0,0.1)",
-        }}
-      >
-        <Typography
-          sx={{
-            fontWeight: "500",
-            fontSize: "1rem",
-            textAlign: "center",
-          }}
+      <Box sx={{ p: 1.5, borderTop: "1px solid", borderColor: "divider" }}>
+        <Button
+          fullWidth
+          onClick={handleOpenDrawer}
+          endIcon={<ArrowForwardRoundedIcon />}
+          sx={{ textTransform: "none", borderRadius: 2, py: 1 }}
         >
-          Смотреть все уведомления
-        </Typography>
-        <Typography
-          sx={{
-            fontWeight: "500",
-            fontSize: "0.8rem",
-            textAlign: "center",
-          }}
-        >
-          {notViewedCount !== 0 && (
-            <Chip
-              label={`+${notViewedCount}`}
-              color="error"
-              sx={{
-                fontWeight: "500",
-                fontSize: "0.6rem",
-                textAlign: "center",
-              }}
-              size="small"
-            />
-          )}
-          Новых уведомлений
-        </Typography>
+          Все уведомления
+        </Button>
       </Box>
-    </Paper>
+    </Box>
   );
 };
-
 export default NotificationsList;

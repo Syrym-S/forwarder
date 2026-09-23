@@ -1,18 +1,18 @@
 import {
+  Alert,
   Box,
   Button,
-  CircularProgress,
   Drawer,
   IconButton,
   Pagination,
-  Tooltip,
   Typography,
 } from "@mui/material";
-import React, { useEffect, useState } from "react";
-import HighlightOffRoundedIcon from "@mui/icons-material/HighlightOffRounded";
+import { useEffect, useState } from "react";
+import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
+import DoneAllRoundedIcon from "@mui/icons-material/DoneAllRounded";
 import { useNotificationsStore } from "../../../app/store/notifications/noti-store";
 import NotificationItem from "./notification-item";
-import MarkEmailReadOutlinedIcon from "@mui/icons-material/MarkEmailReadOutlined";
+import NotificationState from "./notification-state";
 
 const NotificationsDrawer = ({
   openNotificationsDrawer,
@@ -21,134 +21,126 @@ const NotificationsDrawer = ({
   handleNotificationsClose,
 }) => {
   const [page, setPage] = useState(1);
-
-  const total = useNotificationsStore((state) => state.total);
-  const perPage = useNotificationsStore((state) => state.perPage);
-  const notifications = useNotificationsStore((state) => state.notifications);
-  const getNotifications = useNotificationsStore(
-    (state) => state.getNotifications,
-  );
-  const isLoading = useNotificationsStore((state) => state.isLoading);
-  const markAllAsRead = useNotificationsStore((state) => state.markAllAsRead);
-
-  const PAGE_COUNT = Math.ceil(total / perPage);
-
-  const handlePageChange = (_, value) => {
-    setPage(value);
-  };
-
-  const handleReadAllNotifications = async () => {
-    await markAllAsRead();
-    await getNotifications();
-  };
+  const {
+    total,
+    perPage,
+    notifications,
+    getNotifications,
+    isLoading,
+    markAllAsRead,
+    error,
+  } = useNotificationsStore();
+  const pageCount = Math.ceil(total / Math.max(perPage, 1));
 
   useEffect(() => {
-    getNotifications({
-      page: page,
-    });
-  }, [page]);
+    if (openNotificationsDrawer) getNotifications({ page });
+  }, [page, openNotificationsDrawer, getNotifications]);
+
+  const handleReadAll = async () => {
+    await markAllAsRead();
+    if (!useNotificationsStore.getState().error)
+      await getNotifications({ page });
+  };
 
   return (
     <Drawer
       anchor="right"
       open={openNotificationsDrawer}
       onClose={handleCloseDrawer}
+      slotProps={{
+        paper: {
+          sx: {
+            width: { xs: "100%", sm: 460 },
+            maxWidth: "100%",
+            bgcolor: "background.default",
+          },
+        },
+      }}
     >
       <Box
         sx={{
-          width: {
-            xs: "80vw",
-            sm: "30vw",
-          },
-          py: 2,
+          p: 3,
+          bgcolor: "background.paper",
+          borderBottom: "1px solid",
+          borderColor: "divider",
         }}
       >
         <Box
           sx={{
-            px: 2,
             display: "flex",
+            alignItems: "center",
             justifyContent: "space-between",
+            gap: 1,
           }}
         >
           <Typography
-            sx={{
-              fontSize: "1.5rem",
-              fontWeight: "400",
-            }}
+            sx={{ fontSize: 22, fontWeight: 600, color: "font_color.heading" }}
           >
             Уведомления
           </Typography>
-
-          <Box
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              gap: 1,
-              cursor: "pointer",
-            }}
+          <IconButton
+            aria-label="Закрыть уведомления"
+            onClick={handleCloseDrawer}
           >
-            <IconButton
-              onClick={handleReadAllNotifications}
-              disabled={isLoading}
-            >
-              <Tooltip title="Отметить все прочитанными">
-                <MarkEmailReadOutlinedIcon color="primary" />
-              </Tooltip>
-            </IconButton>
-
-            <IconButton onClick={handleCloseDrawer}>
-              <HighlightOffRoundedIcon color="error" />
-            </IconButton>
-          </Box>
+            <CloseRoundedIcon />
+          </IconButton>
         </Box>
-
-        <Box
-          sx={{
-            minHeight: "90vh",
-            display: "flex",
-            flexDirection: "column",
-          }}
+        <Typography sx={{ mt: 0.5, fontSize: 13, color: "text.secondary" }}>
+          Все события по вашим перевозкам и аукционам
+        </Typography>
+        <Button
+          onClick={handleReadAll}
+          disabled={isLoading || !total}
+          startIcon={<DoneAllRoundedIcon />}
+          sx={{ mt: 2, textTransform: "none", borderRadius: 2 }}
         >
-          {isLoading ? (
-            <Box
-              sx={{
-                height: "100vh",
-                border: "1px solid rgba(0,0,0,0.1)",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              <CircularProgress />
-            </Box>
-          ) : (
-            notifications?.map((notification) => (
+          Отметить все прочитанными
+        </Button>
+      </Box>
+      <Box sx={{ flex: 1, minHeight: 0, overflowY: "auto" }}>
+        {error ? (
+          <Alert severity="error" sx={{ m: 2 }}>
+            Не удалось выполнить действие. Попробуйте ещё раз.
+          </Alert>
+        ) : isLoading || !notifications.length ? (
+          <NotificationState loading={isLoading} />
+        ) : (
+          <Box sx={{ p: 2, display: "grid", gap: 1.5 }}>
+            {notifications.map((notification) => (
               <NotificationItem
+                key={notification.id}
                 notification={notification}
                 setSelectedNotification={setSelectedNotification}
                 handleNotificationsClose={handleNotificationsClose}
                 handleCloseDrawer={handleCloseDrawer}
               />
-            ))
-          )}
-        </Box>
-
-        <Pagination
-          page={page}
-          count={PAGE_COUNT}
-          onChange={handlePageChange}
-          color="primary"
-          shape="rounded"
-          sx={{
-            width: "fit-content",
-            mx: "auto",
-            my: 1,
-            bottom: "0",
-          }}
-        />
+            ))}
+          </Box>
+        )}
       </Box>
+      {pageCount > 1 && (
+        <Box
+          sx={{
+            p: 2,
+            bgcolor: "background.paper",
+            borderTop: "1px solid",
+            borderColor: "divider",
+            display: "flex",
+            justifyContent: "center",
+          }}
+        >
+          <Pagination
+            page={page}
+            count={pageCount}
+            disabled={isLoading}
+            onChange={(_, value) => setPage(value)}
+            color="primary"
+            shape="rounded"
+            siblingCount={0}
+          />
+        </Box>
+      )}
     </Drawer>
   );
 };
-
 export default NotificationsDrawer;

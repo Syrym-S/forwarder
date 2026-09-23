@@ -8,6 +8,9 @@ import NotificationsDrawer from "./notifications-drawer";
 
 const NotificationsBlock = () => {
   const notifications = useNotificationsStore((state) => state.notifications);
+  const getNotifications = useNotificationsStore(
+    (state) => state.getNotifications,
+  );
 
   const notViewedCount = notifications.filter(
     (notification) => notification.is_viewed === false,
@@ -23,6 +26,7 @@ const NotificationsBlock = () => {
 
   const handleNotificationsClick = (event) => {
     setNotificationsAnchorEl(event.currentTarget);
+    getNotifications({ page: 1 });
   };
 
   const handleNotificationsClose = () => {
@@ -41,10 +45,20 @@ const NotificationsBlock = () => {
   return (
     <>
       <IconButton
+        aria-label="Открыть уведомления"
+        aria-expanded={isNotificationsOpen}
         aria-describedby={id}
         onClick={handleNotificationsClick}
         sx={{
-          mx: 2,
+          mx: { xs: 0, sm: 1 },
+          width: 40,
+          height: 40,
+          borderRadius: 2,
+          border: "1px solid",
+          borderColor: isNotificationsOpen ? "primary.main" : "divider",
+          color: "primary.main",
+          bgcolor: isNotificationsOpen ? "background.main" : "background.paper",
+          "&:hover": { bgcolor: "background.main" },
         }}
       >
         <Badge badgeContent={notViewedCount} max={99} color="error">
@@ -54,8 +68,16 @@ const NotificationsBlock = () => {
 
       <Popover
         id={id}
-        sx={{
-          borderRadius: "10px",
+        slotProps={{
+          paper: {
+            sx: {
+              mt: 1,
+              borderRadius: 3,
+              border: "1px solid",
+              borderColor: "divider",
+              boxShadow: "0 12px 40px rgba(22, 36, 62, 0.14)",
+            },
+          },
         }}
         open={isNotificationsOpen}
         anchorEl={notificationsAnchorEl}
@@ -65,11 +87,11 @@ const NotificationsBlock = () => {
         }}
         anchorOrigin={{
           vertical: "bottom",
-          horizontal: "center",
+          horizontal: "right",
         }}
         transformOrigin={{
           vertical: "top",
-          horizontal: "center",
+          horizontal: "right",
         }}
       >
         <NotificationsList
@@ -89,6 +111,7 @@ const NotificationsBlock = () => {
       )}
 
       <NotificationsDrawer
+        key={openNotificationsDrawer ? "open" : "closed"}
         openNotificationsDrawer={openNotificationsDrawer}
         handleCloseDrawer={handleCloseDrawer}
         setSelectedNotification={setSelectedNotification}
