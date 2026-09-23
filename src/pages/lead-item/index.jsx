@@ -8,6 +8,10 @@ import ChatFirstVertion from "../../components/chat/chat-first-vertion";
 import ShareLeadLinkBlock from "../../components/leads/lead-item/share-lead-link-block";
 import WarningAmberRoundedIcon from "@mui/icons-material/WarningAmberRounded";
 import IosShareOutlinedIcon from "@mui/icons-material/IosShareOutlined";
+import ConfirmModal from "../../shared/ui/confirm-modal";
+import WarningModal from "../../components/leads/lead-item/warning-modal";
+import DoNotDisturbOnOutlinedIcon from "@mui/icons-material/DoNotDisturbOnOutlined";
+import InfoItem from "../../shared/ui/info-item";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Box, IconButton, Tab, Tabs, Tooltip } from "@mui/material";
@@ -19,10 +23,6 @@ import {
   IN_PROGRESS_STATUSES,
   STATUS,
 } from "../../shared/const/tenders";
-import ConfirmModal from "../../shared/ui/confirm-modal";
-import WarningModal from "../../components/leads/lead-item/warning-modal";
-import DoNotDisturbOnOutlinedIcon from "@mui/icons-material/DoNotDisturbOnOutlined";
-import InfoItem from "../../shared/ui/info-item";
 
 const LeadItem = () => {
   const { id } = useParams();

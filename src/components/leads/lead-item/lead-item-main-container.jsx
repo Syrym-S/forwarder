@@ -35,6 +35,10 @@ const LeadItemMainContainer = ({
 }) => {
   const { id } = useParams();
 
+  const features = window.APP_DATA?.features || {};
+  const isMustSignDocument =
+    features.sign_provider_aitu || features.sign_provider_ncanode;
+
   const files = useLeadsStore((state) => state.files);
   const driverAvrDocument = useLeadsStore((state) => state.driverAvrDocument);
   const customerAvrDocument = useLeadsStore(
@@ -203,7 +207,7 @@ const LeadItemMainContainer = ({
         <LeadMap waypoints={waypoints} from={from} to={to} id={id} />
       </Box>
 
-      {leadData.status === STATUS.sign_avr && (
+      {leadData.status === STATUS.sign_avr && isMustSignDocument && (
         <Section
           title="Подписание AVR-документа"
           icon={<DescriptionOutlinedIcon color="primary" />}

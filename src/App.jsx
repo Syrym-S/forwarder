@@ -27,7 +27,7 @@ function App() {
     getContractStatus();
   }, []);
 
-  if (!isContractSigned && features.aitu_contract_signing)
+  if (!isContractSigned && features.contract_signing)
     return <AgreementInfo openModal={!isContractSigned} />;
 
   return (

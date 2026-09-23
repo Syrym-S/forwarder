@@ -29,6 +29,10 @@ import CustomerDataTable from "../../../components/factoring/customer-data-table
 const FactoringItem = () => {
   const { id } = useParams();
 
+  const features = window.APP_DATA?.features || {};
+  const isMustSignDocument =
+    features.sign_provider_aitu || features.sign_provider_ncanode;
+
   const [openConfirmModal, setOpenConfirmModal] = useState(null);
 
   const currentLead = useLeadsStore((state) => state.currentLead);
@@ -114,7 +118,10 @@ const FactoringItem = () => {
     <RootLayout withoutDataCheck>
       <Box
         sx={{
-          px: 10,
+          px: {
+            xs: 0,
+            sm: 10,
+          },
         }}
       >
         <FactoringDetailsHeading factoring={factoringDetails} />
@@ -135,7 +142,7 @@ const FactoringItem = () => {
           />
         </Box>
 
-        {!factoringDetails?.verified_forwarder && (
+        {!factoringDetails?.verified_forwarder && isMustSignDocument && (
           <Section
             title="Подтвердить факторинг"
             icon={<DescriptionOutlinedIcon color="primary" />}
@@ -245,6 +252,10 @@ const FactoringItem = () => {
 
         <Box
           sx={{
+            px: {
+              xs: 1,
+              sm: 0,
+            },
             display: "grid",
             gridTemplateColumns: {
               xs: "1fr",
