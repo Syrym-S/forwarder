@@ -45,6 +45,7 @@ const LeadRouteInfo = ({ leadData }) => {
         {waypoints.map((point, index) => (
           <RoutePoint
             key={point?.id || `${point?.address}-${index}`}
+            isPassed={point?.is_passed}
             label={`Промежуточная точка #${index + 1}`}
             address={point?.address || "Битые данные"}
             status={point?.is_passed ? "Точка пройдена" : "Точка не пройдена"}
@@ -60,6 +61,7 @@ const LeadRouteInfo = ({ leadData }) => {
               ? "Точка пройдена"
               : "Точка не пройдена"
           }
+          isPassed={leadData?.to_location?.is_passed}
           date={pointSchedules[waypoints.length + 1]}
         />
       </Box>

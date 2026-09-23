@@ -35,11 +35,10 @@ const PrimaryButton = ({
       color={color}
       sx={{
         fontSize: "0.9rem",
-        fontWeight: 600,
+        fontWeight: 400,
         textTransform: "none",
         gap: 1,
         borderRadius: 2,
-        boxShadow: getBoxShadow(),
 
         ...sx,
       }}

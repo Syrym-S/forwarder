@@ -175,18 +175,63 @@ const Header = ({ openMenu, setOpenMenu }) => {
           anchorEl={profileAnchorEl}
           open={isProfileMenuOpen}
           onClose={handleCloseProfileMenu}
+          slotProps={{
+            paper: {
+              sx: {
+                width: profileAnchorEl?.offsetWidth,
+              },
+            },
+          }}
         >
-          <MenuItem onClick={handleNavigateProfile}>Профиль</MenuItem>
+          <MenuItem
+            onClick={handleNavigateProfile}
+            sx={{
+              py: 0.9,
+              fontSize: "1.rem",
+              color: "#172B4D",
+              fontWeight: 500,
+              textTransform: "none",
+              textAlign: "center",
+            }}
+          >
+            Профиль
+          </MenuItem>
 
-          <MenuItem>Настройки</MenuItem>
+          <MenuItem
+            sx={{
+              py: 0.9,
+              fontSize: "1.rem",
+              color: "#172B4D",
+              fontWeight: 500,
+              textTransform: "none",
+              textAlign: "center",
+            }}
+          >
+            Настройки
+          </MenuItem>
 
-          <MenuItem onClick={handleOpenLogoutModal}>Выход</MenuItem>
+          <MenuItem
+            onClick={handleOpenLogoutModal}
+            sx={{
+              py: 0.9,
+              fontSize: "1.rem",
+              color: "#172B4D",
+              fontWeight: 500,
+              textTransform: "none",
+              textAlign: "center",
+            }}
+          >
+            Выход
+          </MenuItem>
         </Menu>
-        <LogoutModal
-          open={isLogoutModalOpen}
-          handleOpenModal={handleCloseLogoutModal}
-          handleCloseProfile={handleCloseProfileMenu}
-        />
+
+        {isLogoutModalOpen && (
+          <LogoutModal
+            open={isLogoutModalOpen}
+            handleOpenModal={handleCloseLogoutModal}
+            handleCloseProfile={handleCloseProfileMenu}
+          />
+        )}
       </Box>
     </AppBar>
   );

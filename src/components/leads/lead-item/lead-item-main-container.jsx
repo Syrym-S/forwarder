@@ -26,6 +26,7 @@ import {
 import { useNotificationsStore } from "../../../app/store/notifications/noti-store";
 import { parserNotificationType } from "../../../shared/helpers/notifications/parse-notification-type";
 import { NOTIFICATION_TYPE } from "../../../shared/const/notification-types";
+import PrimaryButton from "../../../shared/ui/button/primary-button";
 
 const LeadItemMainContainer = ({
   leadData,
@@ -187,9 +188,9 @@ const LeadItemMainContainer = ({
     if (notification_type === NOTIFICATION_TYPE.shipping) {
       getLeadItem(id);
 
-      if (!leadAvrDF || !leadAvrFC) {
-        handleGenerateAvrDocument();
-      }
+      // if (!leadAvrDF || !leadAvrFC) {
+      //   handleGenerateAvrDocument();
+      // }
     }
   }, [newNotification]);
 
@@ -223,42 +224,55 @@ const LeadItemMainContainer = ({
                 my: 1,
               }}
             >
-              <Button
-                variant="outlined"
-                color="primary"
-                onClick={handleGenerateAvrDocument}
-                sx={{
-                  display: "flex",
-                  gap: 1,
-                }}
-              >
-                {isGenerateAvrLoading && <CircularProgress size={12} />}
-                {!leadAvrDF && "Сгенерировать AVR документ для Водителя"}
+              {!leadAvrDF && (
+                <PrimaryButton
+                  variant="outlined"
+                  color="primary"
+                  onClick={handleGenerateAvrDocument}
+                  sx={{
+                    display: "flex",
+                    gap: 1,
+                    fontWeight: 400,
+                    boxShadow: "none",
+                  }}
+                  text={"Сгенерировать AVR документ для Водителя"}
+                />
+              )}
 
-                {leadAvrDF &&
-                  !leadAvrFC &&
-                  "Сгенерировать AVR документ для Заказчика"}
-              </Button>
+              {leadAvrDF && !leadAvrFC && (
+                <PrimaryButton
+                  variant="outlined"
+                  color="primary"
+                  isLoading={isGenerateAvrLoading}
+                  onClick={handleGenerateAvrDocument}
+                  sx={{
+                    display: "flex",
+                    gap: 1,
+                    fontWeight: 400,
+                    boxShadow: "none",
+                  }}
+                  text={"Сгенерировать AVR документ для Заказчика"}
+                />
+              )}
+
               {driverAvrDocument && !leadAvrDF && (
-                <Button
+                <PrimaryButton
+                  isLoading={isSignAvrLoading}
                   variant="outlined"
                   color="primary"
                   onClick={handleSignDriverAvrDocument}
-                >
-                  {isSignAvrLoading && <CircularProgress size={12} />}
-                  {!leadAvrDF && "Подписать для Водителя"}
-                </Button>
+                  text="Подписать AVR Водителя"
+                />
               )}
 
               {customerAvrDocument && !leadAvrFC && leadAvrDF && (
-                <Button
+                <PrimaryButton
                   variant="outlined"
                   color="primary"
+                  isLoading={isAvrLoading}
                   onClick={handleSignCustomerAvrDocument}
-                >
-                  {isSignAvrLoading && <CircularProgress size={12} />}
-                  Подписать для Заказчика
-                </Button>
+                  text="Подписать AVR Заказчика"
+                />
               )}
 
               <IconButton onClick={() => getLeadItem(id)}>

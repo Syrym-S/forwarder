@@ -19,6 +19,7 @@ import { useTenderDefaultValues } from "../../../shared/hooks/tender/use-tender-
 import { STATUS } from "../../../shared/const/tenders";
 import { useNotificationsStore } from "../../../app/store/notifications/noti-store";
 import { parserNotificationType } from "../../../shared/helpers/notifications/parse-notification-type";
+import PrimaryButton from "../../../shared/ui/button/primary-button";
 
 const TenderForwardersItem = () => {
   const { id } = useParams();
@@ -193,6 +194,14 @@ const TenderForwardersItem = () => {
         }}
       >
         {isNew && (
+          <PrimaryButton
+            variant="contained"
+            color="success"
+            onClick={handleStartTender}
+            text="Запустить аукцион"
+          />
+        )}
+        {/* {isNew && (
           <Button
             variant="contained"
             color="success"
@@ -200,20 +209,23 @@ const TenderForwardersItem = () => {
           >
             Запустить аукцион
           </Button>
-        )}
+        )} */}
         {!isCanceled && !isClosed && (
-          <Button
+          <PrimaryButton
             onClick={handleCancelTender}
             variant="outlined"
+            text="Отменить аукцион"
             color="warning"
-          >
-            Отменить аукцион
-          </Button>
+          />
         )}
+
         {!hasWinner && (
-          <Button onClick={handleDeleteTender} variant="outlined" color="error">
-            Удалить аукцион
-          </Button>
+          <PrimaryButton
+            variant="outlined"
+            onClick={handleDeleteTender}
+            color="error"
+            text="Удалить аукцион"
+          />
         )}
       </Box>
     </RootLayout>
