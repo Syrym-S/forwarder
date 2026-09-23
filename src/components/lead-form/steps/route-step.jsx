@@ -1,3 +1,4 @@
+import FormControllerSelect from "../../../shared/ui/input/form-controller-select";
 import dayjs from "dayjs";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import FormControllerInput from "../../../shared/ui/input/form-controller-input";
@@ -5,7 +6,6 @@ import {
   Alert,
   Box,
   Button,
-  MenuItem,
   Snackbar,
   Typography,
 } from "@mui/material";
@@ -431,22 +431,16 @@ const RouteStep = ({ control, form, setValue }) => {
                     }}
                   />
 
-                  <FormControllerInput
+                  <FormControllerSelect
                     name={`waypoints[${index}].type`}
                     control={control}
                     defaultValue="check_passes"
-                    select
+                    options={waypointTypes}
                     label="Тип"
                     fullWidth
                     size="small"
                     disabled={currentLead && !canEditStatus}
-                  >
-                    {waypointTypes.map((type) => (
-                      <MenuItem key={type.id} value={type.value}>
-                        {type.label}
-                      </MenuItem>
-                    ))}
-                  </FormControllerInput>
+                  />
 
                   <FormControllerInput
                     name={`point_schedules[${scheduleIndex}].start_at`}

@@ -1,16 +1,10 @@
+import CustomSelect from "../../shared/ui/input/custom-select";
 import RootLayout from "../../components/layout/root-layout";
 import AddLeadForm from "../../features/leads/add-lead-form";
 import ViewTabs from "../../shared/ui/view-tabs";
 import LeadListContainer from "../../components/leads/lead-list-container";
 import { useEffect, useState } from "react";
-import {
-  Box,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
-  Typography,
-} from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { VIEWS } from "../../shared/const/leads";
 import { useFormDefaultValues } from "../../shared/hooks/leads/use-form-default-values";
 import { useLeadsStore } from "../../app/store/leads/leads-store";
@@ -79,7 +73,7 @@ const ActiveLeads = () => {
             сolor: "font_color.heading",
           }}
         >
-          Активные лиды
+          Активные перевозки
         </Typography>
 
         <Typography color="text.secondary" fontSize={14}>
@@ -109,105 +103,35 @@ const ActiveLeads = () => {
           handleOpenForm={handleOpenForm}
         />
 
-        <FormControl
-          size="small"
-          sx={{
-            width: {
-              xs: "100%",
-              md: "35%",
+        <CustomSelect
+          id="active-lead-status"
+          label="Статус"
+          options={[
+            { value: "", label: "Все статусы" },
+            ...ACTIVE_LEAD_STATUS_OPTIONS,
+          ]}
+          value={filterStatus?.value ?? ""}
+          onChange={(event) => {
+            const value = event.target.value;
+
+            const selected =
+              ACTIVE_LEAD_STATUS_OPTIONS.find(
+                (option) => option.value === value,
+              ) ?? null;
+
+            setFilterStatus(selected);
+
+            if (!value) {
+              fetchLeads();
+            }
+          }}
+          sx={{ width: { xs: "100%", md: "35%" } }}
+          slotProps={{
+            select: {
+              MenuProps: { slotProps: { paper: { sx: { maxHeight: 430 } } } },
             },
           }}
-        >
-          <InputLabel id="status-select-label">Статус</InputLabel>
-
-          <Select
-            labelId="status-select-label"
-            label="Статус"
-            value={filterStatus?.value ?? ""}
-            onChange={(event) => {
-              const value = event.target.value;
-
-              const selected =
-                ACTIVE_LEAD_STATUS_OPTIONS.find(
-                  (option) => option.value === value,
-                ) ?? null;
-
-              setFilterStatus(selected);
-
-              if (!value) {
-                fetchLeads();
-              }
-            }}
-            MenuProps={{
-              PaperProps: {
-                sx: {
-                  mt: 1,
-                  borderRadius: 2,
-                  maxHeight: 430,
-                },
-              },
-            }}
-            sx={{
-              borderRadius: "10px",
-
-              "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                borderColor: "#1D5BE3",
-                borderWidth: 2,
-              },
-
-              "& .MuiSelect-select": {
-                py: 1.2,
-                px: 2,
-                fontSize: "1rem",
-                color: "#172B4D",
-              },
-
-              "& .MuiSvgIcon-root": {
-                color: "#6B7280",
-              },
-            }}
-          >
-            <MenuItem
-              value=""
-              sx={{
-                py: 0.9,
-                fontSize: "0.9rem",
-                color: "#172B4D",
-                fontWeight: 500,
-                textTransform: "none",
-              }}
-            >
-              Все статусы
-            </MenuItem>
-
-            {ACTIVE_LEAD_STATUS_OPTIONS.map((option) => (
-              <MenuItem
-                key={option.value}
-                value={option.value}
-                sx={{
-                  py: 1.2,
-                  fontSize: "0.9rem",
-                  color: "#172B4D",
-                  fontWeight: 500,
-                  textTransform: "none",
-                  gap: 1,
-                  borderTop: "1px solid",
-                  borderColor: "divider",
-
-                  "&.Mui-selected": {
-                    backgroundColor: "#EAF1FB",
-                  },
-
-                  "&.Mui-selected:hover": {
-                    backgroundColor: "#EAF1FB",
-                  },
-                }}
-              >
-                {option.label}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
+        />
       </Box>
 
       <LeadListContainer

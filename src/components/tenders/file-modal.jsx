@@ -65,7 +65,7 @@ const FileModal = ({ currentFile, setCurrentFile }) => {
               {fileType === "image" && (
                 <Box
                   component="img"
-                  title={currentFile.name || "Документ лида"}
+                  title={currentFile.name || "Документ перевозки"}
                   sx={{
                     display: "block",
                     width: "100%",
@@ -85,7 +85,7 @@ const FileModal = ({ currentFile, setCurrentFile }) => {
               {fileType === "pdf" && (
                 <Box
                   component="iframe"
-                  title={currentFile.name || "Документ лида"}
+                  title={currentFile.name || "Документ перевозки"}
                   sx={{
                     display: "block",
                     width: "100%",

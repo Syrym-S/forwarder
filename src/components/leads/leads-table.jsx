@@ -26,7 +26,7 @@ const LeadsTable = ({ leads }) => {
           },
         }}
         localeText={{
-          noRowsLabel: "Список лидов пуст",
+          noRowsLabel: "Список перевозок пуст",
         }}
       />
     </Paper>

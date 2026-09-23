@@ -2,8 +2,8 @@ import { PAGE_ROUTES } from "../const/page-routes";
 
 export const ROUTE_NAMES = {
   [PAGE_ROUTES.routes]: "МАРШРУТЫ",
-  [PAGE_ROUTES.active_leads]: "АКТИВНЫЕ ЛИДЫ",
-  [PAGE_ROUTES.history_leads]: "ИСТОРИЯ ЛИДОВ",
+  [PAGE_ROUTES.active_leads]: "АКТИВНЫЕ ПЕРЕВОЗКИ",
+  [PAGE_ROUTES.history_leads]: "ИСТОРИЯ ПЕРЕВОЗОК",
   [PAGE_ROUTES.account]: "АККАУНТ",
   [PAGE_ROUTES.factorings]: "ФАКТОРИНГ",
   [PAGE_ROUTES.customers]: "ЗАКАЗЧИКИ",

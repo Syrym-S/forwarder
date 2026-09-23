@@ -85,7 +85,7 @@ const DashboardLeadItem = ({
           }}
         >
           <Chip
-            label={`Лид # ${lead?.num || "—"}`}
+            label={`Перевозка # ${lead?.num || "—"}`}
             size="small"
             variant={isSelected ? "filled" : "outlined"}
             sx={{

@@ -87,7 +87,7 @@ const Factoring = () => {
         </Typography>
 
         <Typography color="text.secondary" fontSize={14}>
-          Факторинги по завершенным лидам
+          Факторинги по завершенным перевозкам
         </Typography>
       </Box>
       <ViewTabs

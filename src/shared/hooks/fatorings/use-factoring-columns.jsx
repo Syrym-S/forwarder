@@ -32,7 +32,7 @@ const useFactoringColumns = () => {
     },
     {
       field: "lead_id",
-      headerName: "ID лида",
+      headerName: "ID перевозки",
       width: 200,
     },
     {

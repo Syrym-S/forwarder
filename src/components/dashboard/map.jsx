@@ -443,7 +443,10 @@ const Map = ({
                 return (
                   <Marker
                     position={[waypoint.lat, waypoint.lon]}
-                    icon={createMarkerIcon(`P #${index}`, `#${route.lead.num}`)}
+                    icon={createMarkerIcon(
+                      `P#${index + 1}`,
+                      `#${route.lead.num}`,
+                    )}
                   />
                 );
               })}

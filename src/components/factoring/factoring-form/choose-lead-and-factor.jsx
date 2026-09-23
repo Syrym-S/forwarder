@@ -1,3 +1,5 @@
+import CustomSelect from "../../../shared/ui/input/custom-select";
+import { CURRENCY_OPTIONS } from "../../../shared/const/currencies";
 import { useEffect, useState } from "react";
 import { useFactoringStore } from "../../../app/store/factoring/factoring-store";
 import { useLeadsStore } from "../../../app/store/leads/leads-store";
@@ -5,7 +7,6 @@ import {
   Autocomplete,
   Box,
   CircularProgress,
-  MenuItem,
   TextField,
 } from "@mui/material";
 import { Controller } from "react-hook-form";
@@ -64,7 +65,7 @@ const ChooseLeadAndFactor = ({
           name="lead_id"
           control={control}
           rules={{
-            required: "Выбор лида обязателен",
+            required: "Выбор перевозки обязателен",
           }}
           render={({ field, fieldState }) => (
             <Autocomplete
@@ -110,8 +111,8 @@ const ChooseLeadAndFactor = ({
               renderInput={(params) => (
                 <TextField
                   {...params}
-                  label="Лид"
-                  placeholder="Выберите лид"
+                  label="Перевозка"
+                  placeholder="Выберите перевозку"
                   error={!!fieldState.error}
                   helperText={
                     fieldState.error
@@ -227,9 +228,10 @@ const ChooseLeadAndFactor = ({
           <Controller
             name="debCurrency"
             control={control}
-            render={({ field }) => (
-              <TextField
+            render={({ field: { ref, ...field } }) => (
+              <CustomSelect
                 {...field}
+                inputRef={ref}
                 slotProps={{
                   inputLabel: {
                     shrink: isLeadLoading || !!currentLead,
@@ -241,15 +243,11 @@ const ChooseLeadAndFactor = ({
                   },
                 }}
                 disabled
-                select
                 label="Валюта"
                 fullWidth
                 size="small"
-              >
-                <MenuItem value="KZT">KZT</MenuItem>
-                <MenuItem value="USD">USD</MenuItem>
-                <MenuItem value="RUB">RUB</MenuItem>
-              </TextField>
+                options={CURRENCY_OPTIONS}
+              />
             )}
           />
         </Box>

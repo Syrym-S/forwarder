@@ -33,7 +33,7 @@ const RenderLeadOptions = ({ option, ...props }) => {
         <Typography fontWeight={700}>{option?.to || ""}</Typography>
       </Box>
       <Typography fontWeight={700}>
-        {option.title || option.label || `Лид #${option.id}`}
+        {option.title || option.label || `Перевозка #${option.id}`}
       </Typography>
 
       <Typography color="text.secondary" sx={{ fontSize: 13 }}>

@@ -198,7 +198,7 @@ const LeadItem = () => {
               },
             }}
           >
-            <Tab value={LEAD_TABS.lead_details} label="Детали лида" />
+            <Tab value={LEAD_TABS.lead_details} label="Детали перевозки" />
 
             <Tab
               value={LEAD_TABS.customer_chat}
@@ -265,7 +265,7 @@ const LeadItem = () => {
               </Tooltip>
             )}
 
-            <Tooltip title="Поделиться лидом" arrow>
+            <Tooltip title="Поделиться перевозкой" arrow>
               <IconButton
                 color="primary"
                 onClick={handleOpenShareModal}
@@ -334,7 +334,7 @@ const LeadItem = () => {
             open={confirm}
             title={"Внимание!"}
             description={
-              "Вы уверены, что хотите сообщить об аварийном случае? Данное действие может привести к отмене факторинга и завершению лида. Отменить это действие будет невозможно."
+              "Вы уверены, что хотите сообщить об аварийном случае? Данное действие может привести к отмене факторинга и завершению перевозки. Отменить это действие будет невозможно."
             }
             onCancel={() => setConfirm(false)}
             onConfirm={handleSendEmergencySituation}
@@ -347,7 +347,7 @@ const LeadItem = () => {
             open={openFinishEmergency}
             title={"Внимание!"}
             description={
-              "Вы уверены, что хотите закрыть аварийную ситуацию? Данное действие завершит отслеживание лида, и закроет лид"
+              "Вы уверены, что хотите закрыть аварийную ситуацию? Данное действие завершит отслеживание перевозки, и закроет перевозку"
             }
             onCancel={handleCloseFinishEmergencyModal}
             onConfirm={handleFinishEmergencySituation}

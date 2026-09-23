@@ -37,7 +37,7 @@ const useAppTenederColumns = () => {
     },
     {
       field: "lead",
-      headerName: "ID Лида",
+      headerName: "ID Перевозки",
       width: 200,
       renderCell: ({ row }) => (
         <NavLink

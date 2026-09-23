@@ -42,9 +42,6 @@ const ChooseLeadStep = ({ control, setValue, isEdit }) => {
     name: "end_time",
   });
 
-  /**
-   * Поиск лидов
-   */
   useEffect(() => {
     if (!inputValue) return;
 
@@ -87,10 +84,10 @@ const ChooseLeadStep = ({ control, setValue, isEdit }) => {
         name="lead"
         control={control}
         rules={{
-          required: "Выбор лида обязателен",
+          required: "Выбор перевозки обязателен",
           validate: (value) =>
             value?.status === STATUS.new ||
-            "Нужно выбрать лид без назначенного водителя",
+            "Нужно выбрать перевозку без назначенного водителя",
         }}
         render={({ field, fieldState }) => (
           <Autocomplete
@@ -127,8 +124,8 @@ const ChooseLeadStep = ({ control, setValue, isEdit }) => {
             renderInput={(params) => (
               <FormInput
                 {...params}
-                label="Лид"
-                placeholder="Выберите лид"
+                label="Перевозка"
+                placeholder="Выберите перевозку"
                 error={!!fieldState.error}
                 helperText={fieldState.error?.message}
               />

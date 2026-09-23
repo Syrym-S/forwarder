@@ -141,7 +141,7 @@ export function LeadDocumentCard({
       {fileType === "image" && (
         <Box
           component="img"
-          title={document.name || "Документ лида"}
+          title={document.name || "Документ перевозки"}
           sx={{
             display: "block",
             borderRadius: 2,
@@ -163,7 +163,7 @@ export function LeadDocumentCard({
       {fileType === "pdf" && (
         <Box
           component="iframe"
-          title={document.name || "Документ лида"}
+          title={document.name || "Документ перевозки"}
           sx={{
             display: "block",
             width: "100%",

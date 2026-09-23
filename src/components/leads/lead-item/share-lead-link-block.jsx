@@ -62,7 +62,7 @@ const ShareLeadLinkModal = ({ open, link, expiresAt, onClose, onNavigate }) => {
             mb: 2,
           }}
         >
-          Ссылка на лид
+          Ссылка на перевозку
         </Typography>
 
         <Typography
@@ -72,7 +72,7 @@ const ShareLeadLinkModal = ({ open, link, expiresAt, onClose, onNavigate }) => {
             mb: 2,
           }}
         >
-          Любой, у кого есть эта ссылка, сможет просмотреть информацию о лиде.
+          Любой, у кого есть эта ссылка, сможет просмотреть информацию о перевозке.
         </Typography>
 
         <TextField

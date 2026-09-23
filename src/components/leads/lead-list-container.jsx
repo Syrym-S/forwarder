@@ -36,7 +36,7 @@ const LeadListContainer = ({
             my: 1,
           }}
         >
-          По статусу "{filterStatus.label}" активных лидов нет!
+          По статусу "{filterStatus.label}" активных перевозок нет!
         </Alert>
       )}
       {isCardsView && (
@@ -66,7 +66,7 @@ const LeadListContainer = ({
                 my: 1,
               }}
             >
-              Список лидов пуст
+              Список перевозок пуст
             </Alert>
           ) : (
             leads.map((lead) => <LeadCard key={lead.id} lead={lead} />)

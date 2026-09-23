@@ -63,7 +63,7 @@ const LeadHeading = ({ leadData, openEditForm }) => {
               fontSize: 22,
             }}
           >
-            Информация о лиде
+            Информация о перевозке
           </Typography>
 
           <Typography
@@ -108,7 +108,7 @@ const LeadHeading = ({ leadData, openEditForm }) => {
         }}
       >
         <Chip
-          label={`Лид #${leadData.num}`}
+          label={`Перевозка #${leadData.num}`}
           variant="outlined"
           sx={{
             color: "primary.main",

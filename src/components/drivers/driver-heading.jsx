@@ -27,7 +27,7 @@ const DriverHeading = ({ driver }) => {
       >
         <Stack>
           <Typography variant="h5" fontWeight={700}>
-            Информация о лиде
+            Информация о перевозке
           </Typography>
 
           <Typography

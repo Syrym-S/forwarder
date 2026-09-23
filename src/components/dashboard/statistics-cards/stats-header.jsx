@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import dayjs from "dayjs";
-import { Box, MenuItem, TextField, Typography } from "@mui/material";
+import { Box, TextField, Typography } from "@mui/material";
 import { useStatsStore } from "../../../app/store/stats/use-stats-store";
+
+import CustomSelect from "../../../shared/ui/input/custom-select";
 
 const PERIOD_OPTIONS = [
   {
@@ -71,7 +73,7 @@ const StatsHeader = ({ dateRange, setDateRange }) => {
     <Box
       sx={{
         display: "flex",
-        justifyContent: "space-between",
+        justifyContent: "",
         alignItems: {
           xs: "flex-start",
           md: "center",
@@ -87,7 +89,7 @@ const StatsHeader = ({ dateRange, setDateRange }) => {
         sx={{
           fontSize: {
             xs: "1.8rem",
-            md: "2.5rem",
+            md: "2rem",
           },
           fontWeight: 600,
         }}
@@ -107,24 +109,12 @@ const StatsHeader = ({ dateRange, setDateRange }) => {
           },
         }}
       >
-        <TextField
-          select
-          size="small"
+        <CustomSelect
+          options={PERIOD_OPTIONS}
           value={period}
           onChange={handlePeriodChange}
-          sx={{
-            width: {
-              xs: "100%",
-              sm: 180,
-            },
-          }}
-        >
-          {PERIOD_OPTIONS.map((option) => (
-            <MenuItem key={option.value} value={option.value}>
-              {option.label}
-            </MenuItem>
-          ))}
-        </TextField>
+          sx={{ width: { xs: "100%", sm: 190 } }}
+        />
 
         {period === "custom" && (
           <>

@@ -68,7 +68,7 @@ const DashboardLeadsList = ({
             color: "font_color.heading",
           }}
         >
-          Активные лиды
+          Активные перевозки
         </Typography>
 
         <Typography
@@ -77,7 +77,7 @@ const DashboardLeadsList = ({
             fontSize: "0.9rem",
           }}
         >
-          Выберите лид, чтобы подсветить маршрут на карте
+          Выберите перевозку, чтобы подсветить маршрут на карте
         </Typography>
       </Box>
 
@@ -106,7 +106,7 @@ const DashboardLeadsList = ({
         )}
 
         {!isLoading && !leads.length && (
-          <Alert severity="info">Активных лидов пока нет</Alert>
+          <Alert severity="info">Активных перевозок пока нет</Alert>
         )}
 
         {!isLoading && Boolean(leads.length) && (

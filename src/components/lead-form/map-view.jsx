@@ -72,7 +72,7 @@ export function CustomerMapView({
             >
               <Tooltip sticky>
                 <div>
-                  <b>Лид #{mapRoute.lead?.num ?? mapRoute.lead?.id}</b>
+                  <b>Перевозка #{mapRoute.lead?.num ?? mapRoute.lead?.id}</b>
                   <br />
                   {mapRoute.lead?.from_location} → {mapRoute.lead?.to_location}
                   {mapRoute.route?.distanceMeters && (
@@ -89,7 +89,7 @@ export function CustomerMapView({
               <Popup>
                 <strong>Точка А</strong>
                 <br />
-                Лид #{mapRoute.lead?.num ?? mapRoute.lead?.id}
+                Перевозка #{mapRoute.lead?.num ?? mapRoute.lead?.id}
                 <br />
                 {mapRoute.lead?.from_location || "Откуда не указано"}
               </Popup>
@@ -99,7 +99,7 @@ export function CustomerMapView({
               <Popup>
                 <strong>Точка Б</strong>
                 <br />
-                Лид #{mapRoute.lead?.num ?? mapRoute.lead?.id}
+                Перевозка #{mapRoute.lead?.num ?? mapRoute.lead?.id}
                 <br />
                 {mapRoute.lead?.to_location || "Куда не указано"}
               </Popup>

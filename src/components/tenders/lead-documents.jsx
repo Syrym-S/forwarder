@@ -23,7 +23,7 @@ const LeadDocuments = ({ tender }) => {
   if (!files)
     return (
       <Section
-        title="Документы лида"
+        title="Документы перевозки"
         icon={<DescriptionOutlinedIcon color="primary" />}
       >
         <Box
@@ -40,7 +40,7 @@ const LeadDocuments = ({ tender }) => {
 
   return (
     <Section
-      title="Документы лида"
+      title="Документы перевозки"
       icon={<DescriptionOutlinedIcon color="primary" />}
     >
       <Box

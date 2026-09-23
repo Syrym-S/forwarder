@@ -1,9 +1,10 @@
+import CustomSelect from "../../shared/ui/input/custom-select";
 import RootLayout from "../../components/layout/root-layout";
 import ViewTabs from "../../shared/ui/view-tabs";
 import LeadListContainer from "../../components/leads/lead-list-container";
 import { useEffect, useState } from "react";
 import { Typography } from "@mui/material";
-import { Box, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
+import { Box } from "@mui/material";
 import { VIEWS } from "../../shared/const/leads";
 import { useLeadsStore } from "../../app/store/leads/leads-store";
 import { HISTORY_LEAD_STATUS_OPTIONS } from "../../shared/const/tenders";
@@ -52,11 +53,11 @@ const HistoryLeads = () => {
             сolor: "font_color.heading",
           }}
         >
-          История лидов
+          История перевозок
         </Typography>
 
         <Typography color="text.secondary" fontSize={14}>
-          Список завершенных или удаленных лидов
+          Список завершенных или удаленных перевозок
         </Typography>
       </Box>
 
@@ -82,83 +83,39 @@ const HistoryLeads = () => {
           name="status"
           control={control}
           defaultValue=""
-          render={({ field }) => (
-            <FormControl
-              size="small"
-              sx={{
-                width: {
-                  xs: "100%",
-                  sm: 300,
-                },
-                zIndex: 0,
+          render={({ field: { ref, ...field } }) => (
+            <CustomSelect
+              {...field}
+              inputRef={ref}
+              label="Статус"
+              options={[
+                { value: "", label: "Все статусы" },
+                ...HISTORY_LEAD_STATUS_OPTIONS,
+              ]}
+              value={field.value ?? ""}
+              onChange={(event) => {
+                const value = event.target.value;
+
+                field.onChange(value);
+
+                const selected =
+                  HISTORY_LEAD_STATUS_OPTIONS.find(
+                    (option) => option.value === value,
+                  ) ?? null;
+
+                setFilterStatus(selected);
+
+                if (!value) {
+                  getHistoryLeads();
+                }
               }}
-            >
-              <InputLabel>Статус</InputLabel>
-
-              <Select
-                {...field}
-                label="Статус"
-                value={field.value ?? ""}
-                onChange={(event) => {
-                  const value = event.target.value;
-
-                  field.onChange(value);
-
-                  const selected =
-                    HISTORY_LEAD_STATUS_OPTIONS.find(
-                      (option) => option.value === value,
-                    ) ?? null;
-
-                  setFilterStatus(selected);
-
-                  if (!value) {
-                    getHistoryLeads();
-                  }
-                }}
-                sx={{
-                  borderRadius: "10px",
-                }}
-              >
-                <MenuItem
-                  value=""
-                  sx={{
-                    py: 0.9,
-                    fontSize: "0.9rem",
-                    color: "#172B4D",
-                    fontWeight: 500,
-                    textTransform: "none",
-                  }}
-                >
-                  Все статусы
-                </MenuItem>
-                {HISTORY_LEAD_STATUS_OPTIONS.map((option) => (
-                  <MenuItem
-                    key={option.value}
-                    value={option.value}
-                    sx={{
-                      py: 1.2,
-                      fontSize: "0.9rem",
-                      color: "#172B4D",
-                      fontWeight: 500,
-                      textTransform: "none",
-                      gap: 1,
-                      borderTop: "1px solid",
-                      borderColor: "divider",
-
-                      "&.Mui-selected": {
-                        backgroundColor: "#EAF1FB",
-                      },
-
-                      "&.Mui-selected:hover": {
-                        backgroundColor: "#EAF1FB",
-                      },
-                    }}
-                  >
-                    {option.label}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
+              sx={{ width: { xs: "100%", sm: 300 } }}
+              slotProps={{
+                select: {
+                  MenuProps: { slotProps: { paper: { sx: { maxHeight: 430 } } } },
+                },
+              }}
+            />
           )}
         />
       </Box>

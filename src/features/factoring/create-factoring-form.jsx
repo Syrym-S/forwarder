@@ -170,7 +170,7 @@ const CreateFactoringForm = ({ openFormModal, handleModalClose }) => {
             fontWeight: "400",
           }}
         >
-          Выберите завершённый лид, фактор и укажите параметры факторинга
+          Выберите завершённую перевозку, фактор и укажите параметры факторинга
         </Typography>
       </DialogTitle>
 

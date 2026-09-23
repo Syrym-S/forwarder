@@ -1,4 +1,6 @@
-import { Box, Button, MenuItem, TextField, Typography } from "@mui/material";
+import CustomSelect from "../../shared/ui/input/custom-select";
+import { CURRENCY_OPTIONS } from "../../shared/const/currencies";
+import { Box, Button, TextField, Typography } from "@mui/material";
 import { Controller, useForm, useWatch } from "react-hook-form";
 import { useTendersStore } from "../../app/store/tenders/tender-store";
 import Section from "../../shared/ui/section";
@@ -86,12 +88,14 @@ const MakeBetForm = ({ tender, handleHideBetField }) => {
         <Controller
           name="currency"
           control={control}
-          render={({ field }) => (
-            <TextField {...field} select label="Валюта" fullWidth size="small">
-              <MenuItem value="KZT">KZT</MenuItem>
-              <MenuItem value="USD">USD</MenuItem>
-              <MenuItem value="RUB">RUB</MenuItem>
-            </TextField>
+          render={({ field: { ref, ...field } }) => (
+            <CustomSelect
+              {...field}
+              inputRef={ref}
+              label="Валюта"
+              fullWidth
+              options={CURRENCY_OPTIONS}
+            />
           )}
         />
 

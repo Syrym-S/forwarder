@@ -34,7 +34,7 @@ function KanbanCard({ item }) {
     >
       <CardContent>
         <Typography variant="subtitle1" fontWeight={700} mb={2}>
-          ЛИД #{item.id}
+          ПЕРЕВОЗКА #{item.id}
         </Typography>
 
         <Stack direction="row" spacing={1} alignItems="flex-start" mb={2}>
