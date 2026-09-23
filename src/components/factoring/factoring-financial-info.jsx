@@ -8,7 +8,7 @@ import InfoItem from "../../shared/ui/info-item";
 const FactoringFinancialInfo = ({ factoring }) => {
   return (
     <Section
-      title="Данные и денежных средств"
+      title="Данные о денежных средствах"
       icon={<CurrencyExchangeOutlinedIcon color="primary" />}
     >
       <Box

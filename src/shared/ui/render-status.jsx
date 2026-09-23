@@ -58,7 +58,7 @@ const RenderStatus = ({ status }) => {
     case STATUS.cancelled:
       return (
         <RenderStatusContent
-          label={"Отменненый"}
+          label={"Отменённый"}
           variant="outlined"
           color="#c60606"
         />
@@ -182,7 +182,7 @@ const RenderStatus = ({ status }) => {
       );
 
     default:
-      return <>Нет статуа</>;
+      return <>Нет статуса</>;
   }
 };
 

@@ -63,7 +63,7 @@ export async function uploadLegalDocumentsApi(
     formData.append("employer_document", employerDocumentToUpload[0]);
     formData.append(
       "employer_document_name",
-      "Документ о трудоустройстве сотрудника с правам подписи или приказ о назначение первого руководителя",
+      "Документ о трудоустройстве сотрудника с правом подписи или приказ о назначении первого руководителя",
     );
   }
 

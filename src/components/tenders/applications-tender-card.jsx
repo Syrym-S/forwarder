@@ -56,7 +56,7 @@ const ApplicationsTenderCard = ({ tender }) => {
               color="text.secondary"
               sx={{ mb: 0.75 }}
             >
-              Ауикцион
+              Аукцион
             </Typography>
 
             <Typography
@@ -69,7 +69,7 @@ const ApplicationsTenderCard = ({ tender }) => {
                 fontWeight: 500,
               }}
             >
-              Ауикцион #{tender.id || "—"}
+              Аукцион #{tender.id || "—"}
             </Typography>
           </Box>
 

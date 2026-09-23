@@ -74,7 +74,7 @@ const CustomerCard = ({ customer, setSelectedCustomer }) => {
       >
         <InfoItem label="Банк" value={customer?.bank_name} />
         <InfoItem label="BIN" value={customer?.bin} />
-        <InfoItem label="Адресс заказчиков" value={customer?.legal_address} />
+        <InfoItem label="Адрес заказчиков" value={customer?.legal_address} />
       </Box>
     </Box>
   );

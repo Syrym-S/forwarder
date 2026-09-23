@@ -91,7 +91,7 @@ const NotificationsDrawer = ({
               onClick={handleReadAllNotifications}
               disabled={isLoading}
             >
-              <Tooltip title="Отметить все прочитанным">
+              <Tooltip title="Отметить все прочитанными">
                 <MarkEmailReadOutlinedIcon color="primary" />
               </Tooltip>
             </IconButton>

@@ -113,7 +113,7 @@ const FactorLineForm = ({ open, setOpenForm, setSuccessModal }) => {
               inputValue={inputValueFactor}
               loading={isFactorsLoading}
               options={factors || []}
-              noOptionsText={<>Ввидте два символа</>}
+              noOptionsText={<>Введите два символа</>}
               onInputChange={(_, value) => {
                 setInputValueFactor(value);
               }}
@@ -136,7 +136,7 @@ const FactorLineForm = ({ open, setOpenForm, setSuccessModal }) => {
                   {...params}
                   label="Фактор"
                   placeholder="Выбор фактора"
-                  helperText="Поиск по БИН или ИИН , введите все 12 символов"
+                  helperText="Поиск по БИН или ИИН: введите все 12 символов"
                 />
               )}
               renderOption={(props, option) => {

@@ -6,7 +6,7 @@ import { Box } from "@mui/material";
 const TenderInfo = ({ tender }) => {
   return (
     <Section
-      title="Информация о аукционе"
+      title="Информация об аукционе"
       icon={<InfoOutlinedIcon color="primary" />}
     >
       <Box

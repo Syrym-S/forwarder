@@ -47,11 +47,11 @@ const Factor = () => {
             сolor: "font_color.heading",
           }}
         >
-          Факторинг линии
+          Факторинговые линии
         </Typography>
 
         <Typography color="text.secondary" fontSize={14}>
-          Заявки на факторинг линии
+          Заявки на факторинговые линии
         </Typography>
       </Box>
       <Box

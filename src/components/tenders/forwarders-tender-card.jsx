@@ -49,7 +49,7 @@ const ForwardersTenderCard = ({ tender }) => {
               color="text.secondary"
               sx={{ mb: 0.75 }}
             >
-              Ауикцион
+              Аукцион
             </Typography>
 
             <Typography
@@ -62,7 +62,7 @@ const ForwardersTenderCard = ({ tender }) => {
                 fontWeight: 500,
               }}
             >
-              Ауикцион #{tender.id || "—"}
+              Аукцион #{tender.id || "—"}
             </Typography>
           </Box>
 
@@ -162,7 +162,7 @@ const ForwardersTenderCard = ({ tender }) => {
             gap: 1,
           }}
         >
-          <InfoItem label="Дата пуликации" value={tender?.public_date_time} />
+          <InfoItem label="Дата публикации" value={tender?.public_date_time} />
           <InfoItem label="Дата закрытия" value={tender?.end_date_time} />
           <InfoItem label="Кол-во участников" value={tender?.bets_count} />
         </Box>

@@ -24,7 +24,7 @@ const FactorLineContainer = ({ view }) => {
       <DataContainer
         isLoading={isLoading}
         isEmpty={isFactoringsLineEmpty}
-        emptyText="Список факторинг линий пуст"
+        emptyText="Список факторинговых линий пуст"
       >
         {isCardView && (
           <Box

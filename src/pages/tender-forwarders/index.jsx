@@ -88,11 +88,12 @@ const TenderForwarders = () => {
             сolor: "font_color.heading",
           }}
         >
-          Аукционны перевозчиков
+          Аукционы перевозчиков
         </Typography>
 
         <Typography color="text.secondary" fontSize={14}>
-          Список аукционов созданные вами для водителей
+          созданные вами для водителейСписок аукционов, созданных вами для
+          водителей
         </Typography>
       </Box>
       <Box>

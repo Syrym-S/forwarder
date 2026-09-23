@@ -177,7 +177,7 @@ const FactorItem = () => {
       {openModal && (
         <ConfirmModal
           open={openModal}
-          title="Подтверждении факторинг линии"
+          title="Подтверждение факторинговой линии"
           description="Вы уверены что хотите подтвердить линию?"
           onCancel={handleCloseModal}
           onConfirm={handleApproveFactoringLine}

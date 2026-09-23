@@ -32,7 +32,7 @@ const useCustomersColumns = (setSelectedCustomer) => {
     },
     {
       field: "legal_address",
-      headerName: "Адресс",
+      headerName: "Адрес",
       width: 200,
     },
     {

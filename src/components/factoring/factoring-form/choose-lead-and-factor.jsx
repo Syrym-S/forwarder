@@ -72,7 +72,7 @@ const ChooseLeadAndFactor = ({
               inputValue={inputValueLead}
               loading={isSearchLoading}
               options={finishedLeads}
-              noOptionsText={<>Ввидте два символа</>}
+              noOptionsText={<>Введите два символа</>}
               onInputChange={(_, value, reason) => {
                 if (reason === "input") {
                   setInputValueLead(value);
@@ -111,7 +111,7 @@ const ChooseLeadAndFactor = ({
                 <TextField
                   {...params}
                   label="Лид"
-                  placeholder="Выберите лида"
+                  placeholder="Выберите лид"
                   error={!!fieldState.error}
                   helperText={
                     fieldState.error
@@ -145,7 +145,7 @@ const ChooseLeadAndFactor = ({
               inputValue={inputValueFactor}
               loading={isFactorsLoading}
               options={factors}
-              noOptionsText={<>Ввидте два символа</>}
+              noOptionsText={<>Введите два символа</>}
               onInputChange={(_, value) => {
                 setInputValueFactor(value);
               }}
@@ -172,7 +172,7 @@ const ChooseLeadAndFactor = ({
                   helperText={
                     fieldState.error
                       ? fieldState.error?.message
-                      : "Поиск по БИН или ИИН , введите все 12 символов"
+                      : "Поиск по БИН или ИИН: введите все 12 символов"
                   }
                 />
               )}

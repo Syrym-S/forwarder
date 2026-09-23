@@ -246,7 +246,7 @@ const LeadItem = () => {
             )}
 
             {leadData.status === STATUS.emergency_situation && (
-              <Tooltip title="Закрыть авариную ситуацию" arrow>
+              <Tooltip title="Закрыть аварийную ситуацию" arrow>
                 <IconButton
                   color="error"
                   onClick={handleOpenFinishEmergencyModal}
@@ -294,7 +294,7 @@ const LeadItem = () => {
           {leadData.emergency_situation_comment && (
             <InfoItem
               color="error"
-              label={"Коментарий по аварийному случаю"}
+              label={"Комментарий по аварийному случаю"}
               value={leadData.emergency_situation_comment}
             />
           )}

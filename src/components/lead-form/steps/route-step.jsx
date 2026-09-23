@@ -281,7 +281,7 @@ const RouteStep = ({ control, form, setValue }) => {
           <LockOutlinedIcon color="error" fontSize="small" />
 
           <Typography variant="body2" color="error">
-            По текущему статусу, нельзя редактировать маршрут
+            При текущем статусе нельзя редактировать маршрут
           </Typography>
         </Box>
       )}

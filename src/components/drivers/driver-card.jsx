@@ -90,7 +90,7 @@ const DriverCard = ({ driver, setSelectedDriver }) => {
           gap: 3,
         }}
       >
-        <InfoItem label="Адресс" value={driver?.legal_address} />
+        <InfoItem label="Адрес" value={driver?.legal_address} />
         <InfoItem label="Email" value={driver?.email} />
         <InfoItem label="ИИН" value={driver?.iin} />
       </Stack>

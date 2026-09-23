@@ -157,7 +157,7 @@ const FactoringItem = () => {
         <LeadRouteInfo leadData={currentLead} />
 
         <Section
-          title={`Подтверждении оплаты`}
+          title={`Подтверждение оплаты`}
           icon={<RequestQuoteOutlinedIcon color="primary" />}
         >
           {canBeApproved && (
@@ -211,7 +211,7 @@ const FactoringItem = () => {
             <ConfirmModal
               open={openConfirmModal}
               onClose={handleCloseModal}
-              text={`Вы дейтсвительно хотите подтвердить факторинг на сумму ${currentLead?.price} ${currentLead?.currency}`}
+              text={`Вы действительно хотите подтвердить факторинг на сумму ${currentLead?.price} ${currentLead?.currency}`}
               onConfirm={handleApprovePaiment}
             />
           )}

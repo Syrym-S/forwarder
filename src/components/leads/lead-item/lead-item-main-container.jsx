@@ -187,10 +187,6 @@ const LeadItemMainContainer = ({
   useEffect(() => {
     if (notification_type === NOTIFICATION_TYPE.shipping) {
       getLeadItem(id);
-
-      // if (!leadAvrDF || !leadAvrFC) {
-      //   handleGenerateAvrDocument();
-      // }
     }
   }, [newNotification]);
 
@@ -209,7 +205,7 @@ const LeadItemMainContainer = ({
 
       {leadData.status === STATUS.sign_avr && (
         <Section
-          title="Подпись AVR документа"
+          title="Подписание AVR-документа"
           icon={<DescriptionOutlinedIcon color="primary" />}
         >
           <Box
@@ -235,7 +231,7 @@ const LeadItemMainContainer = ({
                     fontWeight: 400,
                     boxShadow: "none",
                   }}
-                  text={"Сгенерировать AVR документ для Водителя"}
+                  text={"Сгенерировать AVR-документ для водителя"}
                 />
               )}
 
@@ -251,7 +247,7 @@ const LeadItemMainContainer = ({
                     fontWeight: 400,
                     boxShadow: "none",
                   }}
-                  text={"Сгенерировать AVR документ для Заказчика"}
+                  text={"Сгенерировать AVR-документ для заказчика"}
                 />
               )}
 
@@ -261,7 +257,7 @@ const LeadItemMainContainer = ({
                   variant="outlined"
                   color="primary"
                   onClick={handleSignDriverAvrDocument}
-                  text="Подписать AVR Водителя"
+                  text="Подписать AVR водителя"
                 />
               )}
 
@@ -271,7 +267,7 @@ const LeadItemMainContainer = ({
                   color="primary"
                   isLoading={isAvrLoading}
                   onClick={handleSignCustomerAvrDocument}
-                  text="Подписать AVR Заказчика"
+                  text="Подписать AVR заказчика"
                 />
               )}
 
@@ -288,7 +284,7 @@ const LeadItemMainContainer = ({
                 }}
               >
                 <Typography>
-                  AVR документ между Экпедитором и Водителем
+                  AVR-документ между экспедитором и водителем
                 </Typography>
                 {isAvrLoading ? (
                   <CircularProgress />
@@ -305,7 +301,7 @@ const LeadItemMainContainer = ({
                 }}
               >
                 <Typography>
-                  AVR документ между Экпедитором и Заказчиком
+                  AVR-документ между экспедитором и заказчиком
                 </Typography>
                 {isAvrLoading ? (
                   <CircularProgress />
@@ -334,7 +330,7 @@ const LeadItemMainContainer = ({
             {driverAvrDocument && (
               <Box>
                 <Typography>
-                  AVR документ между Экпедитором и Водителем
+                  AVR-документ между экспедитором и водителем
                 </Typography>
                 {isAvrLoading ? (
                   <CircularProgress />
@@ -347,7 +343,7 @@ const LeadItemMainContainer = ({
             {customerAvrDocument && (
               <Box>
                 <Typography>
-                  AVR документ между Экпедитором и Заказчиком
+                  AVR-документ между экспедитором и заказчиком
                 </Typography>
                 {isAvrLoading ? (
                   <CircularProgress />
@@ -362,7 +358,7 @@ const LeadItemMainContainer = ({
 
       {isEditableStatus && isAllPassed && (
         <Section
-          title="Звершить рейс"
+          title="Завершить рейс"
           icon={<DescriptionOutlinedIcon color="primary" />}
         >
           <Button

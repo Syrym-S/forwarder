@@ -13,7 +13,7 @@ const TenderBets = ({ tender }) => {
 
   return (
     <Section
-      title={`Ставки (кол.во ${bets?.length})`}
+      title={`Ставки (кол-во ${bets?.length})`}
       icon={<PaidOutlinedIcon color="primary" />}
     >
       <Box

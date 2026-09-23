@@ -5,7 +5,7 @@ const RenderErroMessage = ({ error }) => {
     case "Image dimensions must not exceed 600x600px":
       return (
         <Alert severity="error">
-          Размер фото для профиля должна быть между 400x400 - 600x600
+          Размер фото для профиля должен быть от 400 × 400 до 600 × 600 пикселей
         </Alert>
       );
     case "Only PNG and JPEG images are allowed":

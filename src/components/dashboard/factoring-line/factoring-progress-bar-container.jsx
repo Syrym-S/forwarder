@@ -50,7 +50,7 @@ const FactoringProgressBarContainer = () => {
             color: "font_color.heading",
           }}
         >
-          Подтвержденные факторинг линии
+          Подтверждённые факторинговые линии
         </Typography>
       </Box>
       {isLoading ? (

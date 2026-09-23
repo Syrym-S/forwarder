@@ -18,7 +18,7 @@ import { useLeadsStore } from "../../app/store/leads/leads-store";
 import { useDriverStore } from "../../app/store/drivers/driver-store";
 
 const steps = [
-  { id: 1, name: "Выброр лида" },
+  { id: 1, name: "Выбор лида" },
   { id: 2, name: "Тип публикации" },
 ];
 

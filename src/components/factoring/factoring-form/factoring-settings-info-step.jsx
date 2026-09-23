@@ -58,7 +58,7 @@ const FactoringSettingsInfoStep = ({ line, approvedLine }) => {
           py: 1,
         }}
       >
-        <RenderErrorContext error={"Факторинг линия отсутствует"} />
+        <RenderErrorContext error={"Факторинговая линия отсутствует"} />
       </Stack>
     );
 

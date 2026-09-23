@@ -42,7 +42,7 @@ const useDriversColumns = (setSelectedDriver) => {
     },
     {
       field: "legal_address",
-      headerName: "Адресс",
+      headerName: "Адрес",
       width: 200,
       renderCell: ({ row }) => <>{row?.legal_address || "Не указан"}</>,
     },

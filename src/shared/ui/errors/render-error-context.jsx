@@ -6,9 +6,9 @@ const returnText = (error) => {
     case "":
       return;
     case "Image dimensions must not exceed 600x600px":
-      return "Размер фото для профиля должна быть между 400x400 - 600x600";
+      return "Размер фото для профиля должен быть от 400 × 400 до 600 × 600 пикселей";
     case "Image dimensions must be at least 400x400px":
-      return "Размер фото для профиля должна быть между 400x400 - 600x600";
+      return "Размер фото для профиля должен быть от 400 × 400 до 600 × 600 пикселей";
     case "Only PNG and JPEG images are allowed":
       return "Фото должно быть формата PNG или JPEG";
     default:

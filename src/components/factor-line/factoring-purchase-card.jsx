@@ -114,7 +114,7 @@ const FactoringPurchaseCard = ({ data }) => {
                   color: "#454545",
                 }}
               >
-                Профинансированно
+                Профинансировано
               </Typography>
               <Typography
                 sx={{

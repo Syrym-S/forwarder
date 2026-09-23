@@ -128,7 +128,7 @@ const ChooseLeadStep = ({ control, setValue, isEdit }) => {
               <FormInput
                 {...params}
                 label="Лид"
-                placeholder="Выберите лида"
+                placeholder="Выберите лид"
                 error={!!fieldState.error}
                 helperText={fieldState.error?.message}
               />

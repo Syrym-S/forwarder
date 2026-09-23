@@ -49,7 +49,7 @@ const TenderDetailsHeading = ({
       >
         <Stack>
           <Typography variant="h5" fontWeight={700}>
-            Информация о аукционной заявке
+            Информация об аукционной заявке
           </Typography>
 
           <Typography
@@ -90,7 +90,7 @@ const TenderDetailsHeading = ({
         spacing={1}
       >
         <Chip
-          label={`Ауикцион #${tender?.id}`}
+          label={`Аукцион #${tender?.id}`}
           color="primary"
           variant="outlined"
         />
