@@ -15,7 +15,6 @@ import { useStatsStore } from "../../app/store/stats/use-stats-store";
 
 const Dashboard = () => {
   const stats = useStatsStore((state) => state.stats);
-  const getStats = useStatsStore((state) => state.getStats);
   const leads = useLeadsStore((state) => state.acceptedLeads);
   const factorings = useFactoringStore((state) => state.factorings);
   const getFactorings = useFactoringStore((state) => state.getFactorings);
@@ -47,7 +46,6 @@ const Dashboard = () => {
   useEffect(() => {
     fetchAcceptedLeads();
     getFactorings();
-    getStats();
   }, [fetchAcceptedLeads]);
 
   return (

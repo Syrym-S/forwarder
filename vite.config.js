@@ -9,7 +9,17 @@ export default defineConfig({
     "process.env.NODE_ENV": JSON.stringify("production"),
   },
   build: {
-    cssCodeSplit: false,
+    minify: "terser",
+
+    terserOptions: {
+      compress: {
+        drop_console: true,
+        drop_debugger: true,
+      },
+      format: {
+        comments: false,
+      },
+    },
     lib: {
       entry: "src/main.jsx",
       formats: ["iife"],
