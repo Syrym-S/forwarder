@@ -99,6 +99,7 @@ const ActiveLeads = () => {
         <ViewTabs
           isLeadsEmpty={isLeadsEmpty}
           view={view}
+          withoutKanban
           setView={setView}
           handleOpenForm={handleOpenForm}
         />

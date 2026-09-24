@@ -4,6 +4,7 @@ import LeadCard from "./lead-card";
 import LeadsTable from "./leads-table";
 import LeadKanbanTable from "./lead-kanban-table";
 import LeadsTableSkeleton from "./skeleton/leads-table-skeleton";
+import PageLoader from "../../shared/ui/loaders/page-loader";
 
 const LeadListContainer = ({
   leads,
@@ -21,7 +22,9 @@ const LeadListContainer = ({
   const isTableView = view === VIEWS.table;
   const isKanbanView = view === VIEWS.kanban;
 
-  if (isLoading) return <LeadsTableSkeleton />;
+  if (isLoading && isTableView) return <LeadsTableSkeleton />;
+
+  if (isLoading && isCardsView) return <PageLoader />;
 
   return (
     <>
