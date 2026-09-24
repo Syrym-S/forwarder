@@ -14,10 +14,7 @@ import { useLeadsStore } from "../../../app/store/leads/leads-store";
 import { LeadDocumentsSection } from "../documents/LeadDocumentsSection";
 import { STATUS } from "../../../shared/const/tenders";
 import { useParams } from "react-router-dom";
-import {
-  Box,
-  Button,
-} from "@mui/material";
+import { Box, Button } from "@mui/material";
 import { useNotificationsStore } from "../../../app/store/notifications/noti-store";
 import { parserNotificationType } from "../../../shared/helpers/notifications/parse-notification-type";
 import { NOTIFICATION_TYPE } from "../../../shared/const/notification-types";
@@ -153,7 +150,11 @@ const LeadItemMainContainer = ({
   const handleRefreshAvr = async () => {
     setIsRefreshingAvr(true);
     try {
-      await Promise.all([getLeadItem(id), getDriverAvrDocument(id), getCustomerAvrDocument(id)]);
+      await Promise.all([
+        getLeadItem(id),
+        getDriverAvrDocument(id),
+        getCustomerAvrDocument(id),
+      ]);
     } finally {
       setIsRefreshingAvr(false);
     }
@@ -211,7 +212,8 @@ const LeadItemMainContainer = ({
         <LeadMap waypoints={waypoints} from={from} to={to} id={id} />
       </Box>
 
-      {((leadData.status === STATUS.sign_avr && isMustSignDocument) || leadData.status === STATUS.finished) && (
+      {((leadData.status === STATUS.sign_avr && isMustSignDocument) ||
+        (leadData.status === STATUS.finished && isMustSignDocument)) && (
         <LeadAvrSection
           driverDocument={driverAvrDocument}
           customerDocument={customerAvrDocument}
@@ -229,7 +231,7 @@ const LeadItemMainContainer = ({
         />
       )}
 
-      {isEditableStatus && isAllPassed && (
+      {isAllPassed && leadData.status === STATUS.verification_unloading && (
         <Section
           title="Завершить рейс"
           icon={<DescriptionOutlinedIcon color="primary" />}

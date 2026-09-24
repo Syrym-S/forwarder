@@ -16,6 +16,7 @@ import {
   TextField,
   Typography,
   InputAdornment,
+  MenuItem,
 } from "@mui/material";
 import { useDriverStore } from "../../app/store/drivers/driver-store";
 import { prepareDriverData } from "../../shared/helpers/prepare-driver-data";
@@ -23,6 +24,10 @@ import { useState } from "react";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
 import InsertDriveFileOutlinedIcon from "@mui/icons-material/InsertDriveFileOutlined";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
+
+import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
+import PersonOutlineRoundedIcon from "@mui/icons-material/PersonOutlineRounded";
+import PrimaryButton from "../../shared/ui/button/primary-button";
 
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
@@ -42,12 +47,17 @@ const defaultValues = {
   issue_country: "",
   document_issue_date: "",
   password: "",
+  confirm_password: "",
 };
 
 const AddDriverForm = ({ open, onClose, setSavedData }) => {
   const getDrivers = useDriverStore((state) => state.getDrivers);
   const createDriver = useDriverStore((state) => state.createDriver);
   const error = useDriverStore((state) => state.error);
+
+  const [documentIssuer, setDocumentIssuer] = useState("");
+  const today = new Date();
+  const maxIssueDate = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, "0")}-${String(today.getDate()).padStart(2, "0")}`;
 
   const [showPassword, setShowPassword] = useState(false);
 
@@ -56,7 +66,12 @@ const AddDriverForm = ({ open, onClose, setSavedData }) => {
     useState(null);
   const [employerDocumentToUpload, setEmployerDocumentToUpload] =
     useState(null);
-  const { control, handleSubmit, setValue } = useForm({
+  const {
+    control,
+    handleSubmit,
+    setValue,
+    formState: { isSubmitting },
+  } = useForm({
     defaultValues,
   });
 
@@ -103,15 +118,85 @@ const AddDriverForm = ({ open, onClose, setSavedData }) => {
   };
 
   return (
-    <Dialog open={open} maxWidth="md" fullWidth>
-      <DialogTitle>Данные водителя</DialogTitle>
+    <Dialog
+      open={open}
+      maxWidth="md"
+      fullWidth
+      aria-labelledby="driver-form-title"
+      slotProps={{
+        paper: {
+          sx: {
+            borderRadius: 3,
+            m: { xs: 1.5, sm: 4 },
+            width: { xs: "calc(100% - 24px)", sm: "calc(100% - 64px)" },
+            maxHeight: "calc(100% - 32px)",
+            "& .MuiButton-root": { textTransform: "none", borderRadius: 2 },
+            "& .MuiOutlinedInput-root": {
+              borderRadius: 2,
+              bgcolor: "background.paper",
+            },
+          },
+        },
+      }}
+    >
+      <DialogTitle
+        component="div"
+        sx={{
+          p: { xs: 2, sm: 3 },
+          display: "flex",
+          alignItems: "center",
+          gap: 1.5,
+        }}
+      >
+        <Box
+          sx={{
+            p: 1.25,
+            display: "flex",
+            borderRadius: 2,
+            bgcolor: "background.main",
+            color: "primary.main",
+          }}
+        >
+          <PersonOutlineRoundedIcon />
+        </Box>
+        <Box sx={{ flex: 1 }}>
+          <Typography
+            id="driver-form-title"
+            component="h2"
+            sx={{ fontSize: 20, fontWeight: 600, color: "font_color.heading" }}
+          >
+            Добавление водителя
+          </Typography>
+          <Typography sx={{ mt: 0.5, fontSize: 13, color: "text.secondary" }}>
+            Заполните данные водителя, реквизиты и документы
+          </Typography>
+        </Box>
+        <IconButton
+          aria-label="Закрыть форму"
+          onClick={onClose}
+          disabled={isSubmitting}
+        >
+          <CloseRoundedIcon />
+        </IconButton>
+      </DialogTitle>
 
-      <DialogContent dividers>
+      <DialogContent
+        dividers
+        sx={{ p: { xs: 2, sm: 3 }, bgcolor: "background.default" }}
+      >
         <Box
           component="form"
           id="driver-form"
           onSubmit={handleSubmit(submitDriverCreate)}
-          sx={{ mt: 1 }}
+          sx={{
+            "& > .MuiGrid-container": {
+              p: { xs: 1.5, sm: 2.5 },
+              bgcolor: "background.paper",
+              border: "1px solid",
+              borderColor: "divider",
+              borderRadius: 2.5,
+            },
+          }}
         >
           {error && (
             <Alert
@@ -124,6 +209,32 @@ const AddDriverForm = ({ open, onClose, setSavedData }) => {
             </Alert>
           )}
           <Grid container spacing={2}>
+            <Grid
+              size={12}
+              sx={{
+                mt: 1,
+                pb: 1,
+                borderBottom: "1px solid",
+                borderColor: "divider",
+              }}
+            >
+              <Typography
+                component="h3"
+                sx={{
+                  fontSize: 15,
+                  fontWeight: 600,
+                  color: "font_color.heading",
+                }}
+              >
+                Личные данные
+              </Typography>
+              <Typography
+                sx={{ mt: 0.5, fontSize: 12, color: "text.secondary" }}
+              >
+                Контактная информация водителя
+              </Typography>
+            </Grid>
+
             <Grid size={{ xs: 12, sm: 6 }}>
               <Controller
                 name="fio"
@@ -134,6 +245,7 @@ const AddDriverForm = ({ open, onClose, setSavedData }) => {
               />
             </Grid>
 
+            {!isForeigner && (
             <Grid size={{ xs: 12, sm: 6 }}>
               <Controller
                 name="iin"
@@ -143,6 +255,7 @@ const AddDriverForm = ({ open, onClose, setSavedData }) => {
                 )}
               />
             </Grid>
+            )}
 
             <Grid size={{ xs: 12, sm: 6 }}>
               <Controller
@@ -178,6 +291,32 @@ const AddDriverForm = ({ open, onClose, setSavedData }) => {
               />
             </Grid>
 
+            <Grid
+              size={12}
+              sx={{
+                mt: 1,
+                pb: 1,
+                borderBottom: "1px solid",
+                borderColor: "divider",
+              }}
+            >
+              <Typography
+                component="h3"
+                sx={{
+                  fontSize: 15,
+                  fontWeight: 600,
+                  color: "font_color.heading",
+                }}
+              >
+                ИП и реквизиты
+              </Typography>
+              <Typography
+                sx={{ mt: 0.5, fontSize: 12, color: "text.secondary" }}
+              >
+                Регистрация ИП обязательна. Укажите данные ИП и банковского счёта
+              </Typography>
+            </Grid>
+
             <Grid size={{ xs: 12, sm: 6 }}>
               <Controller
                 name="company_name"
@@ -185,7 +324,8 @@ const AddDriverForm = ({ open, onClose, setSavedData }) => {
                 render={({ field }) => (
                   <TextField
                     {...field}
-                    label="Название компании"
+                    label="Название ИП"
+                    slotProps={{ inputLabel: { required: true } }}
                     fullWidth
                     size="small"
                   />
@@ -243,15 +383,61 @@ const AddDriverForm = ({ open, onClose, setSavedData }) => {
               />
             </Grid>
 
+            <Grid
+              size={12}
+              sx={{
+                mt: 1,
+                pb: 1,
+                borderBottom: "1px solid",
+                borderColor: "divider",
+              }}
+            >
+              <Typography
+                component="h3"
+                sx={{
+                  fontSize: 15,
+                  fontWeight: 600,
+                  color: "font_color.heading",
+                }}
+              >
+                Удостоверяющий документ
+              </Typography>
+              <Typography
+                sx={{ mt: 0.5, fontSize: 12, color: "text.secondary" }}
+              >
+                Номер, страна и дата выдачи документа
+              </Typography>
+            </Grid>
+
+            <Grid size={12}>
+              <Box display="flex" gap={3}>
+                <Controller
+                  name="is_foreigner"
+                  control={control}
+                  render={({ field }) => (
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          checked={field.value}
+                          onChange={(e) => field.onChange(e.target.checked)}
+                        />
+                      }
+                      label="Иностранец"
+                    />
+                  )}
+                />
+              </Box>
+            </Grid>
+
             <Grid size={{ xs: 12, sm: 6 }}>
               <Controller
                 name="document_number"
                 control={control}
                 render={({ field }) => (
                   <TextField
-                    disabled={isForeigner}
                     {...field}
-                    label="Номер документа"
+                    label="Номер документа удостоверения личности / паспорта"
+                    slotProps={{ inputLabel: { required: true, shrink: true } }}
                     fullWidth
                     size="small"
                   />
@@ -266,7 +452,8 @@ const AddDriverForm = ({ open, onClose, setSavedData }) => {
                 render={({ field }) => (
                   <TextField
                     {...field}
-                    label="Страна"
+                    label={isForeigner ? "Страна" : "Страна выдачи"}
+                    slotProps={{ inputLabel: { required: true } }}
                     fullWidth
                     size="small"
                     disabled={isForeigner}
@@ -275,35 +462,87 @@ const AddDriverForm = ({ open, onClose, setSavedData }) => {
               />
             </Grid>
 
-            <Grid size={{ xs: 12, sm: 3 }}>
+            {!isForeigner && (
+              <>
+            <Grid size={{ xs: 12, sm: 6 }}>
               <Controller
                 name="document_issue_date"
                 control={control}
                 render={({ field }) => (
                   <TextField
                     {...field}
-                    label="Дата выдачи"
+                    label="Когда выдан документ"
                     type="date"
                     disabled={isForeigner}
                     fullWidth
                     size="small"
+                    helperText="Дата выдачи не позднее сегодняшнего дня"
                     slotProps={{
+                      htmlInput: { max: maxIssueDate },
                       inputLabel: {
                         shrink: true,
+                        required: true,
                       },
                     }}
                   />
                 )}
               />
             </Grid>
+                <Grid size={{ xs: 12, sm: 6 }}>
+                  <TextField
+                    select
+                    label="Кем выдан документ"
+                    value={documentIssuer}
+                    onChange={(event) => setDocumentIssuer(event.target.value)}
+                    fullWidth
+                    size="small"
+                    slotProps={{ inputLabel: { required: true } }}
+                    helperText="Выберите орган выдачи"
+                  >
+                    <MenuItem value="МЮ РК">МЮ РК</MenuItem>
+                    <MenuItem value="МВД РК">МВД РК</MenuItem>
+                  </TextField>
+                </Grid>
+              </>
+            )}
+
+            <Grid
+              size={12}
+              sx={{
+                mt: 1,
+                pb: 1,
+                borderBottom: "1px solid",
+                borderColor: "divider",
+              }}
+            >
+              <Typography
+                component="h3"
+                sx={{
+                  fontSize: 15,
+                  fontWeight: 600,
+                  color: "font_color.heading",
+                }}
+              >
+                Доступ к аккаунту
+              </Typography>
+              <Typography
+                sx={{ mt: 0.5, fontSize: 12, color: "text.secondary" }}
+              >
+                Минимум 6 символов: заглавная и строчная буквы, цифра и
+                специальный символ
+              </Typography>
+            </Grid>
 
             <Grid
               sx={{
                 display: "grid",
-                gap: 1,
-                gridTemplateColumns: "1fr",
+                gap: 2,
+                gridTemplateColumns: {
+                  xs: "1fr",
+                  sm: "repeat(2, minmax(0, 1fr))",
+                },
               }}
-              size={6}
+              size={12}
             >
               <Grid>
                 <Controller
@@ -414,24 +653,30 @@ const AddDriverForm = ({ open, onClose, setSavedData }) => {
               </Grid>
             </Grid>
 
-            <Grid size={12}>
-              <Box display="flex" gap={3}>
-                <Controller
-                  name="is_foreigner"
-                  control={control}
-                  render={({ field }) => (
-                    <FormControlLabel
-                      control={
-                        <Checkbox
-                          checked={field.value}
-                          onChange={(e) => field.onChange(e.target.checked)}
-                        />
-                      }
-                      label="Иностранец"
-                    />
-                  )}
-                />
-              </Box>
+            <Grid
+              size={12}
+              sx={{
+                mt: 1,
+                pb: 1,
+                borderBottom: "1px solid",
+                borderColor: "divider",
+              }}
+            >
+              <Typography
+                component="h3"
+                sx={{
+                  fontSize: 15,
+                  fontWeight: 600,
+                  color: "font_color.heading",
+                }}
+              >
+                Документы
+              </Typography>
+              <Typography
+                sx={{ mt: 0.5, fontSize: 12, color: "text.secondary" }}
+              >
+                Загрузка документов обязательна. Форматы: PDF, JPG или PNG
+              </Typography>
             </Grid>
 
             <Box
@@ -448,7 +693,8 @@ const AddDriverForm = ({ open, onClose, setSavedData }) => {
               <Box
                 sx={{
                   border: "1px solid",
-                  my: 1,
+                  minWidth: 0,
+                  bgcolor: "background.default",
                   borderColor: "divider",
                   borderRadius: 2,
                   p: 2,
@@ -465,17 +711,17 @@ const AddDriverForm = ({ open, onClose, setSavedData }) => {
                     flexDirection: "column",
                   }}
                 >
-                  <Stack>
+                  <Stack spacing={1.5}>
                     <Typography
                       sx={{
-                        color: "rgba(0, 0, 0, 0.6)",
-                        fontSize: "1rem",
+                        color: "text.primary",
+                        fontSize: 14,
                         lineHeight: 1.4375,
                         letterSpacing: "0.00938em",
-                        fontWeight: 400,
+                        fontWeight: 500,
                       }}
                     >
-                      Документ о регистрации юридического лица
+                      Документ о регистрации ИП *
                     </Typography>
 
                     <Button
@@ -483,7 +729,9 @@ const AddDriverForm = ({ open, onClose, setSavedData }) => {
                       variant="outlined"
                       startIcon={<UploadFileIcon />}
                     >
-                      Заменить документ
+                      {registrationDocumentsToUpload?.length
+                        ? "Заменить документ"
+                        : "Выбрать файл"}
                       <input
                         hidden
                         type="file"
@@ -585,7 +833,8 @@ const AddDriverForm = ({ open, onClose, setSavedData }) => {
               <Box
                 sx={{
                   border: "1px solid",
-                  my: 1,
+                  minWidth: 0,
+                  bgcolor: "background.default",
                   borderColor: "divider",
                   borderRadius: 2,
                   p: 2,
@@ -602,17 +851,17 @@ const AddDriverForm = ({ open, onClose, setSavedData }) => {
                     flexDirection: "column",
                   }}
                 >
-                  <Stack>
+                  <Stack spacing={1.5}>
                     <Typography
                       sx={{
-                        color: "rgba(0, 0, 0, 0.6)",
-                        fontSize: "1rem",
+                        color: "text.primary",
+                        fontSize: 14,
                         lineHeight: 1.4375,
                         letterSpacing: "0.00938em",
-                        fontWeight: 400,
+                        fontWeight: 500,
                       }}
                     >
-                      Документ о трудоустройстве сотрудника
+                      Документ о трудоустройстве сотрудника *
                     </Typography>
 
                     <Button
@@ -620,7 +869,9 @@ const AddDriverForm = ({ open, onClose, setSavedData }) => {
                       variant="outlined"
                       startIcon={<UploadFileIcon />}
                     >
-                      Заменить документ
+                      {employerDocumentToUpload?.length
+                        ? "Заменить документ"
+                        : "Выбрать файл"}
                       <input
                         hidden
                         type="file"
@@ -724,11 +975,26 @@ const AddDriverForm = ({ open, onClose, setSavedData }) => {
         </Box>
       </DialogContent>
 
-      <DialogActions>
-        <Button onClick={onClose}>Отмена</Button>
-        <Button type="submit" form="driver-form" variant="contained">
-          Сохранить
-        </Button>
+      <DialogActions
+        sx={{
+          px: { xs: 2, sm: 3 },
+          py: 2,
+          gap: 1,
+          "& > .MuiButton-root": { flex: { xs: 1, sm: "initial" } },
+        }}
+      >
+        <PrimaryButton
+          variant="outlined"
+          onClick={onClose}
+          disabled={isSubmitting}
+          text="Отмена"
+        />
+        <PrimaryButton
+          type="submit"
+          form="driver-form"
+          isLoading={isSubmitting}
+          text={isSubmitting ? "Сохранение…" : "Добавить водителя"}
+        />
       </DialogActions>
     </Dialog>
   );
