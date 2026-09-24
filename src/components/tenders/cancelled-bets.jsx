@@ -1,6 +1,6 @@
 import { Box, Chip } from "@mui/material";
 import React from "react";
-import Section from "../../shared/ui/section";
+import Section from "./tender-section";
 import DoDisturbIcon from "@mui/icons-material/DoDisturb";
 import { STATUS } from "../../shared/const/tenders";
 

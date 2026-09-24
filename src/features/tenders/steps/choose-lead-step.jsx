@@ -91,6 +91,17 @@ const ChooseLeadStep = ({ control, setValue, isEdit }) => {
         }}
         render={({ field, fieldState }) => (
           <Autocomplete
+            slotProps={{
+              paper: {
+                sx: {
+                  borderRadius: 3,
+                  border: "1px solid",
+                  borderColor: "divider",
+                  boxShadow: "0 8px 24px rgba(22, 36, 62, 0.1)",
+                },
+              },
+              listbox: { sx: { p: 0, maxHeight: 400 } },
+            }}
             value={selectedLead}
             inputValue={inputValue}
             loading={isSearchLoading}
@@ -169,6 +180,12 @@ const ChooseLeadStep = ({ control, setValue, isEdit }) => {
           }}
           label="Дата публикации"
           type="date"
+          onChange={(event) => {
+            if (!event.target.value) return;
+            setValue("public_time", dayjs().format("HH:mm"), {
+              shouldDirty: true,
+            });
+          }}
           fullWidth
           slotProps={{
             htmlInput: {
@@ -199,7 +216,7 @@ const ChooseLeadStep = ({ control, setValue, isEdit }) => {
               const selectedDateTime = dayjs(`${publicDate} ${value}`);
 
               return (
-                !selectedDateTime.isBefore(dayjs()) ||
+                !selectedDateTime.isBefore(dayjs(), "minute") ||
                 "Время не может быть раньше текущего"
               );
             },
@@ -250,6 +267,12 @@ const ChooseLeadStep = ({ control, setValue, isEdit }) => {
           }}
           label="Дата окончания"
           type="date"
+          onChange={(event) => {
+            if (!event.target.value) return;
+            setValue("end_time", dayjs().format("HH:mm"), {
+              shouldDirty: true,
+            });
+          }}
           fullWidth
           slotProps={{
             inputLabel: {

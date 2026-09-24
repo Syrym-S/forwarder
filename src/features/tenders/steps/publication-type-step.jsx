@@ -105,7 +105,7 @@ const PublicationTypeStep = ({
                   gap: 2,
                 }}
               >
-                <Typography fontWeight={700}>{option.fio}</Typography>
+                <Typography fontSize={14} fontWeight={600}>{option.fio}</Typography>
               </Box>
             );
           }}
@@ -165,7 +165,8 @@ const PublicationTypeStep = ({
                   border: "1px solid",
                   borderColor: "divider",
                   borderRadius: 2,
-                  fontWeight: 400,
+                  fontSize: 14,
+                  fontWeight: 500,
                   color: "color.slate_2",
                 }}
               >
@@ -192,7 +193,8 @@ const PublicationTypeStep = ({
                   border: "1px solid",
                   borderColor: "divider",
                   borderRadius: 2,
-                  fontWeight: 400,
+                  fontSize: 14,
+                  fontWeight: 500,
                   color: "color.slate_2",
                 }}
               >

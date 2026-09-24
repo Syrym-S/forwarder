@@ -1,6 +1,5 @@
 import PaidOutlinedIcon from "@mui/icons-material/PaidOutlined";
-import Section from "../../shared/ui/section";
-import InfoField from "../../shared/ui/info-field";
+import Section from "./tender-section";
 import { Box } from "@mui/material";
 import { BetCard } from "./bet-card";
 import { STATUS } from "../../shared/const/tenders";
@@ -13,7 +12,7 @@ const TenderBets = ({ tender }) => {
 
   return (
     <Section
-      title={`Ставки (кол-во ${bets?.length})`}
+      title={`Ставки · ${bets?.length}`}
       icon={<PaidOutlinedIcon color="primary" />}
     >
       <Box
@@ -32,7 +31,7 @@ const TenderBets = ({ tender }) => {
                 <BetCard bet={winningBet} tender={tender} />
               </>
             ) : (
-              bets.map((bet) => <BetCard bet={bet} tender={tender} />)
+              bets.map((bet) => <BetCard key={bet.id || bet.index} bet={bet} tender={tender} />)
             )}
           </>
         )}

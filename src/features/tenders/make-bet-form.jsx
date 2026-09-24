@@ -3,7 +3,7 @@ import { CURRENCY_OPTIONS } from "../../shared/const/currencies";
 import { Box, Button, TextField, Typography } from "@mui/material";
 import { Controller, useForm, useWatch } from "react-hook-form";
 import { useTendersStore } from "../../app/store/tenders/tender-store";
-import Section from "../../shared/ui/section";
+import Section from "../../components/tenders/tender-section";
 import PaidOutlinedIcon from "@mui/icons-material/PaidOutlined";
 import { useState } from "react";
 import ConfirmModal from "../../shared/ui/confirm-modal";
@@ -52,14 +52,14 @@ const MakeBetForm = ({ tender, handleHideBetField }) => {
 
   return (
     <Section
-      title="Сделайте вашу ставку"
+      title="Новая ставка"
       icon={<PaidOutlinedIcon color="primary" />}
     >
       <Box
         sx={{
           display: "grid",
-          gridTemplateColumns: "2fr 1fr",
-          gap: "10px",
+          gridTemplateColumns: { xs: "minmax(0, 1fr)", sm: "minmax(0, 2fr) minmax(0, 1fr)" },
+          gap: 2,
         }}
       >
         <Controller
@@ -75,7 +75,7 @@ const MakeBetForm = ({ tender, handleHideBetField }) => {
           render={({ field, fieldState }) => (
             <TextField
               {...field}
-              label="$"
+              label="Сумма ставки"
               size="small"
               type="number"
               error={!!fieldState.error}
@@ -124,29 +124,32 @@ const MakeBetForm = ({ tender, handleHideBetField }) => {
         sx={{
           display: "flex",
           justifyContent: "space-between",
+          flexWrap: "wrap",
+          gap: 1,
           py: 2,
         }}
       >
         <Button
-          disabled={!isValid}
-          variant="outlined"
+          disabled={!isValid || isBetsLoading}
+          variant="contained"
+          disableElevation
           color="primary"
           onClick={handleOpenConfirmModal}
         >
           Сделать ставку
         </Button>
 
-        <Button variant="outlined" color="error" onClick={handleHideBetField}>
+        <Button variant="outlined" color="primary" onClick={handleHideBetField}>
           Отмена
         </Button>
       </Box>
 
       <ConfirmModal
-        title="Поставить ставку"
+        title="Подтверждение ставки"
         description={
           <>
             <Typography>
-              Вы уверены что хотите сделать ставку на этот аукцион?
+              Вы уверены, что хотите сделать ставку на этот аукцион?
             </Typography>
             <Typography>
               Сумма: {formValues.amount} {formValues.currency}

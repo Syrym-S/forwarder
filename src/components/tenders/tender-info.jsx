@@ -1,4 +1,4 @@
-import Section from "../../shared/ui/section";
+import Section from "./tender-section";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import InfoItem from "../../shared/ui/info-item";
 import { Box } from "@mui/material";
@@ -14,10 +14,11 @@ const TenderInfo = ({ tender }) => {
           display: "grid",
           gridTemplateColumns: {
             xs: "1fr",
-            md: "repeat(3,1fr)",
+            sm: "repeat(2, minmax(0, 1fr))",
+            lg: "repeat(4, minmax(0, 1fr))",
           },
           gap: 2,
-          mb: 2,
+          mb: 0,
         }}
       >
         <InfoItem label="Для кого" value={"-"} />

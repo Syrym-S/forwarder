@@ -1,7 +1,7 @@
 import RootLayout from "../../../components/layout/root-layout";
 import LocalShippingOutlinedIcon from "@mui/icons-material/LocalShippingOutlined";
 import LeadMap from "../../../components/leads/lead-map";
-import Section from "../../../shared/ui/section";
+import Section from "../../../components/tenders/tender-section";
 import TenderForm from "../../../features/tenders/tender-form";
 import TenderParticipants from "../../../components/tenders/tender-participants";
 import LeadDocuments from "../../../components/tenders/lead-documents";
@@ -14,7 +14,7 @@ import LeadRouteInfo from "../../../components/leads/lead-item/lead-route-info";
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useTendersStore } from "../../../app/store/tenders/tender-store";
-import { Box, Button } from "@mui/material";
+import { Box } from "@mui/material";
 import { useTenderDefaultValues } from "../../../shared/hooks/tender/use-tender-default-values";
 import { STATUS } from "../../../shared/const/tenders";
 import { useNotificationsStore } from "../../../app/store/notifications/noti-store";
@@ -111,6 +111,7 @@ const TenderForwardersItem = () => {
 
   return (
     <RootLayout withoutDataCheck>
+      <Box sx={{ width: "100%", maxWidth: 1440, mx: "auto", minWidth: 0 }}>
       <TenderDetailsHeading
         tender={currentTender}
         handleOpenForm={handleOpenForm}
@@ -118,8 +119,9 @@ const TenderForwardersItem = () => {
 
       <Box
         sx={{
-          boxShadow: 1,
-          borderRadius: 2,
+          border: "1px solid",
+          borderColor: "divider",
+          borderRadius: 3,
           overflow: "hidden",
           my: 2,
         }}
@@ -157,7 +159,7 @@ const TenderForwardersItem = () => {
           }}
         >
           {cargosInfo?.map((cargo, index) => (
-            <LeadCargoInfo cargo={cargo} index={index} />
+            <LeadCargoInfo key={cargo.id || index} cargo={cargo} index={index} />
           ))}
         </Box>
       </Section>
@@ -169,11 +171,11 @@ const TenderForwardersItem = () => {
           display: "grid",
           gridTemplateColumns: {
             xs: "1fr",
-            sm: "1fr 1fr",
+            lg: "repeat(2, minmax(0, 1fr))",
           },
           gap: {
             xs: 0,
-            sm: 3,
+            lg: 2,
           },
         }}
       >
@@ -186,10 +188,11 @@ const TenderForwardersItem = () => {
         sx={{
           display: "flex",
           justifyContent: "end",
+          flexWrap: "wrap",
           gap: "10px",
           p: {
             xs: 0,
-            sm: 4,
+            sm: 2,
           },
         }}
       >
@@ -227,6 +230,7 @@ const TenderForwardersItem = () => {
             text="Удалить аукцион"
           />
         )}
+      </Box>
       </Box>
     </RootLayout>
   );

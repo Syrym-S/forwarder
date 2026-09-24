@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import React, { useState } from "react";
 import { useTendersStore } from "../../app/store/tenders/tender-store";
-import Section from "../../shared/ui/section";
+import Section from "./tender-section";
 import CancelledBets from "./cancelled-bets";
 import PaidOutlinedIcon from "@mui/icons-material/PaidOutlined";
 import CancelBetModal from "../../features/tenders/confirm-actions/cancel-bet-modal";

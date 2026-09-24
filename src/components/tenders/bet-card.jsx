@@ -1,7 +1,5 @@
 import { Box, Chip, Typography } from "@mui/material";
-import RenderStatus from "../../shared/ui/render-status";
 import { useTendersStore } from "../../app/store/tenders/tender-store";
-import { STATUS } from "../../shared/const/tenders";
 
 export const BetCard = ({ tender, bet }) => {
   const acceptBet = useTendersStore((state) => state.acceptBet);
@@ -16,7 +14,7 @@ export const BetCard = ({ tender, bet }) => {
   return (
     <Box
       sx={{
-        p: 1.5,
+        p: 2,
         border: "1px solid",
         borderColor: "divider",
         borderRadius: 2,
@@ -27,16 +25,20 @@ export const BetCard = ({ tender, bet }) => {
         sx={{
           display: "flex",
           justifyContent: "space-between",
+          alignItems: "center",
+          flexWrap: "wrap",
+          gap: 1.5,
+          mb: 1,
         }}
       >
         <Typography
           sx={{
-            fontWeight: 400,
+            fontWeight: 600,
+            fontSize: 20,
             color: "color.slate_2",
           }}
         >
-          {bet.amount}
-          {bet.currency}
+          {bet.amount} {bet.currency}
         </Typography>
 
         {isWinning ? (
@@ -48,7 +50,8 @@ export const BetCard = ({ tender, bet }) => {
             label={"Выбрать победителем"}
             onClick={handleAcceptBet}
             sx={{
-              boxShadow: 1,
+              borderRadius: 2,
+              boxShadow: "none",
               cursor: "pointer",
               transition: "0.1s",
               "&:hover": {
@@ -61,7 +64,7 @@ export const BetCard = ({ tender, bet }) => {
       <Typography
         variant="caption"
         sx={{
-          color: "color.slate",
+          color: "text.secondary",
         }}
         display="block"
       >

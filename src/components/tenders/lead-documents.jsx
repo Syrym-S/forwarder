@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import Section from "../../shared/ui/section";
+import Section from "./tender-section";
 import { LeadDocumentCard } from "../leads/documents/LeadDocumentCard";
 import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
-import { Box, CircularProgress, Dialog, DialogTitle } from "@mui/material";
+import { Box, CircularProgress } from "@mui/material";
 import FileModal from "./file-modal";
 import { useLeadsStore } from "../../app/store/leads/leads-store";
 
@@ -48,11 +48,10 @@ const LeadDocuments = ({ tender }) => {
           display: "grid",
           gridTemplateColumns: {
             xs: "1fr",
-            sm: "repeat(2, 1fr)",
-            md: "repeat(3, 1fr)",
-            lg: "repeat(4, 1fr)",
+            sm: "repeat(2, minmax(0, 1fr))",
+            lg: "repeat(3, minmax(0, 1fr))",
           },
-          gap: 3,
+          gap: 2,
         }}
       >
         {isEmpty && "Cписок пуст"}

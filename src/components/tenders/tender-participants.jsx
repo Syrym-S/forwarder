@@ -9,7 +9,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import Section from "../../shared/ui/section";
+import Section from "./tender-section";
 import PeopleAltOutlinedIcon from "@mui/icons-material/PeopleAltOutlined";
 import ControlPointRoundedIcon from "@mui/icons-material/ControlPointRounded";
 import { useEffect, useState } from "react";
@@ -78,12 +78,13 @@ const TenderParticipants = ({ tender }) => {
         <Box
           sx={{
             display: "flex",
-            gap: "20px",
+            gap: 1.5,
+            flexWrap: "wrap",
             justifyContent: "space-between",
             alignItems: "center",
           }}
         >
-          <Typography>Участники</Typography>
+          <Typography sx={{ fontWeight: 600, fontSize: 16 }}>Участники</Typography>
 
           {isInLimit || !isPublic ? (
             <Button
@@ -108,7 +109,7 @@ const TenderParticipants = ({ tender }) => {
       icon={<PeopleAltOutlinedIcon color="primary" />}
     >
       {showParticipantField && (
-        <Stack>
+        <Stack spacing={1.5} sx={{ p: 1.5, mb: 2, bgcolor: "background.default", borderRadius: 2 }}>
           <Autocomplete
             disabled={isLoading}
             options={drivers}

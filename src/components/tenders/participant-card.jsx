@@ -1,4 +1,4 @@
-import { Box, Button, IconButton, Stack, Typography } from "@mui/material";
+import { Box, IconButton, Stack, Typography } from "@mui/material";
 import DeleteOutlineRoundedIcon from "@mui/icons-material/DeleteOutlineRounded";
 import dayjs from "dayjs";
 import { useTendersStore } from "../../app/store/tenders/tender-store";
@@ -26,11 +26,11 @@ const ParticipantCard = ({ tender, tender_id, participant }) => {
         bgcolor: "background.default",
       }}
     >
-      <Stack>
+      <Stack spacing={0.5} sx={{ minWidth: 0 }}>
         <Typography
           variant="caption"
           sx={{
-            color: "color.slate",
+            color: "text.secondary",
           }}
           display="block"
         >
@@ -41,11 +41,14 @@ const ParticipantCard = ({ tender, tender_id, participant }) => {
           sx={{
             display: "flex",
             gap: 1,
+            flexWrap: "wrap",
           }}
         >
           <Typography
             sx={{
-              fontWeight: 400,
+              fontWeight: 500,
+              fontSize: 13,
+              overflowWrap: "anywhere",
               color: "color.slate_2",
             }}
           >
@@ -53,7 +56,9 @@ const ParticipantCard = ({ tender, tender_id, participant }) => {
           </Typography>
           <Typography
             sx={{
-              fontWeight: 400,
+              fontWeight: 500,
+              fontSize: 13,
+              overflowWrap: "anywhere",
               color: "color.slate_2",
             }}
           >
@@ -65,7 +70,7 @@ const ParticipantCard = ({ tender, tender_id, participant }) => {
       {tender.status !== STATUS.closed &&
         tender.status !== STATUS.cancelled && (
           <IconButton
-            variant="outlined"
+            aria-label="Удалить участника"
             color="error"
             onClick={handleDeleteParticipant}
           >

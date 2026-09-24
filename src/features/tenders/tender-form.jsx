@@ -163,7 +163,20 @@ const TenderForm = ({
   if (isLoading) return <Loader />;
 
   return (
-    <Dialog open={openForm} onClose={handleCloseForm} maxWidth="sm" fullWidth>
+    <Dialog
+      open={openForm}
+      onClose={handleCloseForm}
+      maxWidth="sm"
+      fullWidth
+      sx={{
+        "& .MuiDialogTitle-root": { fontSize: 20, fontWeight: 600, color: "font_color.heading" },
+        "& .MuiOutlinedInput-root": { borderRadius: 2, fontSize: 14, bgcolor: "background.paper" },
+        "& .MuiInputLabel-root": { fontSize: 14 },
+        "& .MuiFormHelperText-root": { fontSize: 12 },
+        "& .MuiFormControlLabel-label": { fontSize: 14, color: "text.primary" },
+        "& .MuiButton-root": { fontSize: 14, fontWeight: 500, textTransform: "none" },
+      }}
+    >
       <DialogTitle>
         {isEdit ? "Редактирование аукциона" : "Создание аукциона"}
       </DialogTitle>

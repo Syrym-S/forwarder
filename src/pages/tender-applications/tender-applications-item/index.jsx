@@ -1,10 +1,9 @@
 import RootLayout from "../../../components/layout/root-layout";
 import LocalShippingOutlinedIcon from "@mui/icons-material/LocalShippingOutlined";
 import LeadMap from "../../../components/leads/lead-map";
-import Section from "../../../shared/ui/section";
+import Section from "../../../components/tenders/tender-section";
 import LeadDocuments from "../../../components/tenders/lead-documents";
 import TenderInfo from "../../../components/tenders/tender-info";
-import TransportationInfo from "../../../components/tenders/transportation-info";
 import TenderDetailsHeading from "../../../components/tenders/tender-details-heading";
 import MakeBetForm from "../../../features/tenders/make-bet-form";
 import MakeBetBlock from "../../../components/tenders/make-bet-block";
@@ -82,12 +81,14 @@ const TenderApplicationsItem = () => {
 
   return (
     <RootLayout withoutDataCheck>
+      <Box sx={{ width: "100%", maxWidth: 1440, mx: "auto", minWidth: 0 }}>
       <TenderDetailsHeading tender={customerCurrentTender} isCustomerTender />
 
       <Box
         sx={{
-          boxShadow: 1,
-          borderRadius: 2,
+          border: "1px solid",
+          borderColor: "divider",
+          borderRadius: 3,
           overflow: "hidden",
           my: 3,
         }}
@@ -116,7 +117,7 @@ const TenderApplicationsItem = () => {
           }}
         >
           {cargosInfo?.map((cargo, index) => (
-            <LeadCargoInfo cargo={cargo} index={index} />
+            <LeadCargoInfo key={cargo.id || index} cargo={cargo} index={index} />
           ))}
         </Box>
       </Section>
@@ -128,12 +129,12 @@ const TenderApplicationsItem = () => {
           display: "grid",
           gridTemplateColumns: {
             xs: "1fr",
-            sm: "1fr 1fr",
+            lg: "repeat(2, minmax(0, 1fr))",
           },
           gridTemplateRows: "1fr",
           gap: {
             xs: 0,
-            sm: 5,
+            lg: 2,
           },
         }}
       >
@@ -150,6 +151,7 @@ const TenderApplicationsItem = () => {
         )}
 
         {isTenderActive && <CancelledBets bets={customerCurrentTender?.bets} />}
+      </Box>
       </Box>
     </RootLayout>
   );
