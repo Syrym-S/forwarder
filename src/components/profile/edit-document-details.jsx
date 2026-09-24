@@ -6,6 +6,7 @@ import {
   Typography,
   Stack,
   TextField,
+  MenuItem,
 } from "@mui/material";
 import { Controller } from "react-hook-form";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
@@ -23,6 +24,8 @@ const EditDocumentDetails = ({
   setEmployerDocumentToUpload,
   isSubmitting,
 }) => {
+  const today = new Date();
+  const maxIssueDate = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, "0")}-${String(today.getDate()).padStart(2, "0")}`;
   const registrationDocument =
     legalDocuments?.find((document) => document.context === "registration") ||
     {};
@@ -79,6 +82,57 @@ const EditDocumentDetails = ({
           />
         )}
       />
+
+      <Box
+        sx={{
+          display: "grid",
+          gridTemplateColumns: { xs: "1fr", sm: "repeat(2, minmax(0, 1fr))" },
+          gap: 2,
+        }}
+      >
+        <Controller
+          name="personDocumentIssueDate"
+          control={control}
+          defaultValue=""
+          render={({ field, fieldState }) => (
+            <TextField
+              {...field}
+              value={field.value ?? ""}
+              label="Когда выдан документ"
+              type="date"
+              fullWidth
+              error={Boolean(fieldState.error)}
+              helperText={fieldState.error?.message || "Дата выдачи не позднее сегодняшнего дня"}
+              slotProps={{
+                htmlInput: { max: maxIssueDate },
+                inputLabel: { shrink: true, required: true },
+              }}
+              sx={{ "& .MuiOutlinedInput-root": { borderRadius: 2 } }}
+            />
+          )}
+        />
+        <Controller
+          name="personDocumentIssuedBy"
+          control={control}
+          defaultValue=""
+          render={({ field, fieldState }) => (
+            <TextField
+              {...field}
+              value={field.value ?? ""}
+              select
+              label="Кем выдан документ"
+              fullWidth
+              error={Boolean(fieldState.error)}
+              helperText={fieldState.error?.message || "Выберите орган выдачи"}
+              slotProps={{ inputLabel: { required: true } }}
+              sx={{ "& .MuiOutlinedInput-root": { borderRadius: 2 } }}
+            >
+              <MenuItem value="МЮ РК">МЮ РК</MenuItem>
+              <MenuItem value="МВД РК">МВД РК</MenuItem>
+            </TextField>
+          )}
+        />
+      </Box>
 
       <Box
         sx={{

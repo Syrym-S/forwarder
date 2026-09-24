@@ -9,7 +9,6 @@ import EditDocumentDetails from "../../components/profile/edit-document-details"
 import { Box, Button, CircularProgress } from "@mui/material";
 import { useProfileStore } from "../../app/store/profile/profile-store";
 import { mapProfileFormToChangedApi } from "../profile-edit/profile-form-helpers";
-import RenderErroMessage from "../../shared/ui/render-error-message";
 import RenderErrorContext from "../../shared/ui/errors/render-error-context";
 
 const EditProfileForm = ({ profileData, legalDocuments }) => {
@@ -21,6 +20,9 @@ const EditProfileForm = ({ profileData, legalDocuments }) => {
   const uploadLegalDocuments = useProfileStore(
     (state) => state.uploadLegalDocuments,
   );
+
+  const hasToAddRegistrationDocuments =
+    window.APP_DATA.features.registration_documents;
 
   const editProfileData = useProfileStore((state) => state.editProfileData);
   const getProfileData = useProfileStore((state) => state.getProfileData);
@@ -126,16 +128,18 @@ const EditProfileForm = ({ profileData, legalDocuments }) => {
 
       <EditPassword control={control} />
 
-      <EditDocumentDetails
-        setValue={setValue}
-        isSubmitting={isSubmitting}
-        legalDocuments={legalDocuments}
-        registrationDocumentsToUpload={registrationDocumentsToUpload}
-        employerDocumentToUpload={employerDocumentToUpload}
-        setRegistrationDocumentsToUpload={setRegistrationDocumentsToUpload}
-        setEmployerDocumentToUpload={setEmployerDocumentToUpload}
-        control={control}
-      />
+      {hasToAddRegistrationDocuments && (
+        <EditDocumentDetails
+          setValue={setValue}
+          isSubmitting={isSubmitting}
+          legalDocuments={legalDocuments}
+          registrationDocumentsToUpload={registrationDocumentsToUpload}
+          employerDocumentToUpload={employerDocumentToUpload}
+          setRegistrationDocumentsToUpload={setRegistrationDocumentsToUpload}
+          setEmployerDocumentToUpload={setEmployerDocumentToUpload}
+          control={control}
+        />
+      )}
 
       <Box>
         <Button

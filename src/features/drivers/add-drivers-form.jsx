@@ -46,6 +46,7 @@ const defaultValues = {
   document_number: "",
   issue_country: "",
   document_issue_date: "",
+  document_issued_by: "",
   password: "",
   confirm_password: "",
 };
@@ -55,7 +56,9 @@ const AddDriverForm = ({ open, onClose, setSavedData }) => {
   const createDriver = useDriverStore((state) => state.createDriver);
   const error = useDriverStore((state) => state.error);
 
-  const [documentIssuer, setDocumentIssuer] = useState("");
+  const hasToAddRegistrationDocuments =
+    window.APP_DATA.features.registration_documents;
+
   const today = new Date();
   const maxIssueDate = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, "0")}-${String(today.getDate()).padStart(2, "0")}`;
 
@@ -246,15 +249,15 @@ const AddDriverForm = ({ open, onClose, setSavedData }) => {
             </Grid>
 
             {!isForeigner && (
-            <Grid size={{ xs: 12, sm: 6 }}>
-              <Controller
-                name="iin"
-                control={control}
-                render={({ field }) => (
-                  <TextField {...field} label="ИИН" fullWidth size="small" />
-                )}
-              />
-            </Grid>
+              <Grid size={{ xs: 12, sm: 6 }}>
+                <Controller
+                  name="iin"
+                  control={control}
+                  render={({ field }) => (
+                    <TextField {...field} label="ИИН" fullWidth size="small" />
+                  )}
+                />
+              </Grid>
             )}
 
             <Grid size={{ xs: 12, sm: 6 }}>
@@ -313,7 +316,8 @@ const AddDriverForm = ({ open, onClose, setSavedData }) => {
               <Typography
                 sx={{ mt: 0.5, fontSize: 12, color: "text.secondary" }}
               >
-                Регистрация ИП обязательна. Укажите данные ИП и банковского счёта
+                Регистрация ИП обязательна. Укажите данные ИП и банковского
+                счёта
               </Typography>
             </Grid>
 
@@ -464,44 +468,52 @@ const AddDriverForm = ({ open, onClose, setSavedData }) => {
 
             {!isForeigner && (
               <>
-            <Grid size={{ xs: 12, sm: 6 }}>
-              <Controller
-                name="document_issue_date"
-                control={control}
-                render={({ field }) => (
-                  <TextField
-                    {...field}
-                    label="Когда выдан документ"
-                    type="date"
-                    disabled={isForeigner}
-                    fullWidth
-                    size="small"
-                    helperText="Дата выдачи не позднее сегодняшнего дня"
-                    slotProps={{
-                      htmlInput: { max: maxIssueDate },
-                      inputLabel: {
-                        shrink: true,
-                        required: true,
-                      },
-                    }}
-                  />
-                )}
-              />
-            </Grid>
                 <Grid size={{ xs: 12, sm: 6 }}>
-                  <TextField
-                    select
-                    label="Кем выдан документ"
-                    value={documentIssuer}
-                    onChange={(event) => setDocumentIssuer(event.target.value)}
-                    fullWidth
-                    size="small"
-                    slotProps={{ inputLabel: { required: true } }}
-                    helperText="Выберите орган выдачи"
-                  >
-                    <MenuItem value="МЮ РК">МЮ РК</MenuItem>
-                    <MenuItem value="МВД РК">МВД РК</MenuItem>
-                  </TextField>
+                  <Controller
+                    name="document_issue_date"
+                    control={control}
+                    render={({ field }) => (
+                      <TextField
+                        {...field}
+                        label="Когда выдан документ"
+                        type="date"
+                        disabled={isForeigner}
+                        fullWidth
+                        size="small"
+                        helperText="Дата выдачи не позднее сегодняшнего дня"
+                        slotProps={{
+                          htmlInput: { max: maxIssueDate },
+                          inputLabel: {
+                            shrink: true,
+                            required: true,
+                          },
+                        }}
+                      />
+                    )}
+                  />
+                </Grid>
+                <Grid size={{ xs: 12, sm: 6 }}>
+                  <Controller
+                    name="document_issued_by"
+                    control={control}
+                    render={({ field, fieldState }) => (
+                      <TextField
+                        {...field}
+                        select
+                        label="Кем выдан документ"
+                        fullWidth
+                        size="small"
+                        slotProps={{ inputLabel: { required: true } }}
+                        error={Boolean(fieldState.error)}
+                        helperText={
+                          fieldState.error?.message || "Выберите орган выдачи"
+                        }
+                      >
+                        <MenuItem value="МЮ РК">МЮ РК</MenuItem>
+                        <MenuItem value="МВД РК">МВД РК</MenuItem>
+                      </TextField>
+                    )}
+                  />
                 </Grid>
               </>
             )}
@@ -653,324 +665,333 @@ const AddDriverForm = ({ open, onClose, setSavedData }) => {
               </Grid>
             </Grid>
 
-            <Grid
-              size={12}
-              sx={{
-                mt: 1,
-                pb: 1,
-                borderBottom: "1px solid",
-                borderColor: "divider",
-              }}
-            >
-              <Typography
-                component="h3"
-                sx={{
-                  fontSize: 15,
-                  fontWeight: 600,
-                  color: "font_color.heading",
-                }}
-              >
-                Документы
-              </Typography>
-              <Typography
-                sx={{ mt: 0.5, fontSize: 12, color: "text.secondary" }}
-              >
-                Загрузка документов обязательна. Форматы: PDF, JPG или PNG
-              </Typography>
-            </Grid>
-
-            <Box
-              sx={{
-                width: "100%",
-                display: "grid",
-                gap: 2,
-                gridTemplateColumns: {
-                  xs: "1fr",
-                  md: "1fr 1fr",
-                },
-              }}
-            >
-              <Box
-                sx={{
-                  border: "1px solid",
-                  minWidth: 0,
-                  bgcolor: "background.default",
-                  borderColor: "divider",
-                  borderRadius: 2,
-                  p: 2,
-                  transition: "0.2s",
-                  "&:hover": {
-                    borderColor: "primary.main",
-                    backgroundColor: "action.hover",
-                  },
-                }}
-              >
-                <Box
+            {hasToAddRegistrationDocuments && (
+              <>
+                <Grid
+                  size={12}
                   sx={{
-                    display: "flex",
-                    flexDirection: "column",
+                    mt: 1,
+                    pb: 1,
+                    borderBottom: "1px solid",
+                    borderColor: "divider",
                   }}
                 >
-                  <Stack spacing={1.5}>
-                    <Typography
-                      sx={{
-                        color: "text.primary",
-                        fontSize: 14,
-                        lineHeight: 1.4375,
-                        letterSpacing: "0.00938em",
-                        fontWeight: 500,
-                      }}
-                    >
-                      Документ о регистрации ИП *
-                    </Typography>
-
-                    <Button
-                      component="label"
-                      variant="outlined"
-                      startIcon={<UploadFileIcon />}
-                    >
-                      {registrationDocumentsToUpload?.length
-                        ? "Заменить документ"
-                        : "Выбрать файл"}
-                      <input
-                        hidden
-                        type="file"
-                        accept=".pdf,.jpg,.jpeg,.png"
-                        onChange={(event) => {
-                          setRegistrationDocumentsToUpload(event.target.files);
-                        }}
-                      />
-                    </Button>
-                  </Stack>
-                </Box>
-
-                {registrationDocumentsToUpload && (
-                  <Box
+                  <Typography
+                    component="h3"
                     sx={{
-                      mt: 2,
-                      display: "flex",
-                      alignItems: "center",
-                      gap: 1.5,
-                      p: 1.5,
-                      border: "1px solid",
-                      borderColor: "divider",
-                      borderRadius: 2,
-                      backgroundColor: "background.paper",
+                      fontSize: 15,
+                      fontWeight: 600,
+                      color: "font_color.heading",
                     }}
                   >
-                    {registrationDocumentsToUpload[0]?.type?.startsWith(
-                      "image/",
-                    ) ? (
+                    Документы
+                  </Typography>
+                  <Typography
+                    sx={{ mt: 0.5, fontSize: 12, color: "text.secondary" }}
+                  >
+                    Загрузка документов обязательна
+                  </Typography>
+                </Grid>
+                <Box
+                  sx={{
+                    width: "100%",
+                    display: "grid",
+                    gap: 2,
+                    gridTemplateColumns: {
+                      xs: "1fr",
+                      md: "1fr 1fr",
+                    },
+                  }}
+                >
+                  <Box
+                    sx={{
+                      border: "1px solid",
+                      minWidth: 0,
+                      bgcolor: "background.default",
+                      borderColor: "divider",
+                      borderRadius: 2,
+                      p: 2,
+                      transition: "0.2s",
+                      "&:hover": {
+                        borderColor: "primary.main",
+                        backgroundColor: "action.hover",
+                      },
+                    }}
+                  >
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                      }}
+                    >
+                      <Stack spacing={1.5}>
+                        <Typography
+                          sx={{
+                            color: "text.primary",
+                            fontSize: 14,
+                            lineHeight: 1.4375,
+                            letterSpacing: "0.00938em",
+                            fontWeight: 500,
+                          }}
+                        >
+                          Документ о регистрации юридического лица *
+                        </Typography>
+
+                        <Button
+                          component="label"
+                          variant="outlined"
+                          startIcon={<UploadFileIcon />}
+                        >
+                          {registrationDocumentsToUpload?.length
+                            ? "Заменить документ"
+                            : "Выбрать файл"}
+                          <input
+                            hidden
+                            type="file"
+                            accept=".pdf,.jpg,.jpeg,.png"
+                            onChange={(event) => {
+                              setRegistrationDocumentsToUpload(
+                                event.target.files,
+                              );
+                            }}
+                          />
+                        </Button>
+                      </Stack>
+                    </Box>
+
+                    {registrationDocumentsToUpload && (
                       <Box
-                        component="img"
-                        src={URL.createObjectURL(
-                          registrationDocumentsToUpload[0],
+                        sx={{
+                          mt: 2,
+                          display: "flex",
+                          alignItems: "center",
+                          gap: 1.5,
+                          p: 1.5,
+                          border: "1px solid",
+                          borderColor: "divider",
+                          borderRadius: 2,
+                          backgroundColor: "background.paper",
+                        }}
+                      >
+                        {registrationDocumentsToUpload[0]?.type?.startsWith(
+                          "image/",
+                        ) ? (
+                          <Box
+                            component="img"
+                            src={URL.createObjectURL(
+                              registrationDocumentsToUpload[0],
+                            )}
+                            alt={registrationDocumentsToUpload[0].name}
+                            sx={{
+                              width: 56,
+                              height: 56,
+                              borderRadius: 1,
+                              objectFit: "cover",
+                            }}
+                          />
+                        ) : (
+                          <Box
+                            sx={{
+                              width: 56,
+                              height: 56,
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "center",
+                              borderRadius: 1,
+                              backgroundColor: "action.hover",
+                            }}
+                          >
+                            <InsertDriveFileOutlinedIcon
+                              color="primary"
+                              fontSize="large"
+                            />
+                          </Box>
                         )}
-                        alt={registrationDocumentsToUpload[0].name}
-                        sx={{
-                          width: 56,
-                          height: 56,
-                          borderRadius: 1,
-                          objectFit: "cover",
-                        }}
-                      />
-                    ) : (
-                      <Box
-                        sx={{
-                          width: 56,
-                          height: 56,
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          borderRadius: 1,
-                          backgroundColor: "action.hover",
-                        }}
-                      >
-                        <InsertDriveFileOutlinedIcon
-                          color="primary"
-                          fontSize="large"
-                        />
+                        <Box
+                          sx={{
+                            minWidth: 0,
+                            flex: 1,
+                          }}
+                        >
+                          <Typography
+                            variant="body2"
+                            fontWeight={500}
+                            noWrap
+                            title={registrationDocumentsToUpload[0].name}
+                          >
+                            {registrationDocumentsToUpload[0].name}
+                          </Typography>
+
+                          <Typography variant="caption" color="text.secondary">
+                            {(
+                              registrationDocumentsToUpload[0].size /
+                              1024 /
+                              1024
+                            ).toFixed(2)}{" "}
+                            MB
+                          </Typography>
+                        </Box>
+                        <IconButton
+                          color="error"
+                          onClick={() => {
+                            setRegistrationDocumentsToUpload(null);
+                          }}
+                        >
+                          <DeleteOutlineOutlinedIcon />
+                        </IconButton>
                       </Box>
                     )}
-                    <Box
-                      sx={{
-                        minWidth: 0,
-                        flex: 1,
-                      }}
-                    >
-                      <Typography
-                        variant="body2"
-                        fontWeight={500}
-                        noWrap
-                        title={registrationDocumentsToUpload[0].name}
-                      >
-                        {registrationDocumentsToUpload[0].name}
-                      </Typography>
 
-                      <Typography variant="caption" color="text.secondary">
-                        {(
-                          registrationDocumentsToUpload[0].size /
-                          1024 /
-                          1024
-                        ).toFixed(2)}{" "}
-                        MB
-                      </Typography>
-                    </Box>
-                    <IconButton
-                      color="error"
-                      onClick={() => {
-                        setRegistrationDocumentsToUpload(null);
-                      }}
-                    >
-                      <DeleteOutlineOutlinedIcon />
-                    </IconButton>
+                    {/* {error && <FormHelperText error>{error.message}</FormHelperText>} */}
                   </Box>
-                )}
 
-                {/* {error && <FormHelperText error>{error.message}</FormHelperText>} */}
-              </Box>
-
-              <Box
-                sx={{
-                  border: "1px solid",
-                  minWidth: 0,
-                  bgcolor: "background.default",
-                  borderColor: "divider",
-                  borderRadius: 2,
-                  p: 2,
-                  transition: "0.2s",
-                  "&:hover": {
-                    borderColor: "primary.main",
-                    backgroundColor: "action.hover",
-                  },
-                }}
-              >
-                <Box
-                  sx={{
-                    display: "flex",
-                    flexDirection: "column",
-                  }}
-                >
-                  <Stack spacing={1.5}>
-                    <Typography
-                      sx={{
-                        color: "text.primary",
-                        fontSize: 14,
-                        lineHeight: 1.4375,
-                        letterSpacing: "0.00938em",
-                        fontWeight: 500,
-                      }}
-                    >
-                      Документ о трудоустройстве сотрудника *
-                    </Typography>
-
-                    <Button
-                      component="label"
-                      variant="outlined"
-                      startIcon={<UploadFileIcon />}
-                    >
-                      {employerDocumentToUpload?.length
-                        ? "Заменить документ"
-                        : "Выбрать файл"}
-                      <input
-                        hidden
-                        type="file"
-                        accept=".pdf,.jpg,.jpeg,.png"
-                        onChange={(event) => {
-                          console.log("event", event.target.files);
-                          setEmployerDocumentToUpload(event.target.files);
-                        }}
-                      />
-                    </Button>
-                  </Stack>
-                </Box>
-
-                {employerDocumentToUpload && (
                   <Box
                     sx={{
-                      mt: 2,
-                      display: "flex",
-                      alignItems: "center",
-                      gap: 1.5,
-                      p: 1.5,
                       border: "1px solid",
+                      minWidth: 0,
+                      bgcolor: "background.default",
                       borderColor: "divider",
                       borderRadius: 2,
-                      backgroundColor: "background.paper",
+                      p: 2,
+                      transition: "0.2s",
+                      "&:hover": {
+                        borderColor: "primary.main",
+                        backgroundColor: "action.hover",
+                      },
                     }}
                   >
-                    {employerDocumentToUpload[0].type.startsWith("image/") ? (
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                      }}
+                    >
+                      <Stack spacing={1.5}>
+                        <Typography
+                          sx={{
+                            color: "text.primary",
+                            fontSize: 14,
+                            lineHeight: 1.4375,
+                            letterSpacing: "0.00938em",
+                            fontWeight: 500,
+                          }}
+                        >
+                          Документ о трудоустройстве сотрудника *
+                        </Typography>
+
+                        <Button
+                          component="label"
+                          variant="outlined"
+                          startIcon={<UploadFileIcon />}
+                        >
+                          {employerDocumentToUpload?.length
+                            ? "Заменить документ"
+                            : "Выбрать файл"}
+                          <input
+                            hidden
+                            type="file"
+                            accept=".pdf,.jpg,.jpeg,.png"
+                            onChange={(event) => {
+                              console.log("event", event.target.files);
+                              setEmployerDocumentToUpload(event.target.files);
+                            }}
+                          />
+                        </Button>
+                      </Stack>
+                    </Box>
+
+                    {employerDocumentToUpload && (
                       <Box
-                        component="img"
-                        src={URL.createObjectURL(employerDocumentToUpload[0])}
-                        alt={employerDocumentToUpload[0].name}
                         sx={{
-                          width: 56,
-                          height: 56,
-                          borderRadius: 1,
-                          objectFit: "cover",
-                        }}
-                      />
-                    ) : (
-                      <Box
-                        sx={{
-                          width: 56,
-                          height: 56,
+                          mt: 2,
                           display: "flex",
                           alignItems: "center",
-                          justifyContent: "center",
-                          borderRadius: 1,
-                          backgroundColor: "action.hover",
+                          gap: 1.5,
+                          p: 1.5,
+                          border: "1px solid",
+                          borderColor: "divider",
+                          borderRadius: 2,
+                          backgroundColor: "background.paper",
                         }}
                       >
-                        <InsertDriveFileOutlinedIcon
-                          color="primary"
-                          fontSize="large"
-                        />
+                        {employerDocumentToUpload[0].type.startsWith(
+                          "image/",
+                        ) ? (
+                          <Box
+                            component="img"
+                            src={URL.createObjectURL(
+                              employerDocumentToUpload[0],
+                            )}
+                            alt={employerDocumentToUpload[0].name}
+                            sx={{
+                              width: 56,
+                              height: 56,
+                              borderRadius: 1,
+                              objectFit: "cover",
+                            }}
+                          />
+                        ) : (
+                          <Box
+                            sx={{
+                              width: 56,
+                              height: 56,
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "center",
+                              borderRadius: 1,
+                              backgroundColor: "action.hover",
+                            }}
+                          >
+                            <InsertDriveFileOutlinedIcon
+                              color="primary"
+                              fontSize="large"
+                            />
+                          </Box>
+                        )}
+
+                        <Box
+                          sx={{
+                            minWidth: 0,
+                            flex: 1,
+                          }}
+                        >
+                          <Typography
+                            variant="body2"
+                            fontWeight={500}
+                            noWrap
+                            title={employerDocumentToUpload[0].name}
+                          >
+                            {employerDocumentToUpload[0].name}
+                          </Typography>
+
+                          <Typography variant="caption" color="text.secondary">
+                            {(
+                              employerDocumentToUpload[0].size /
+                              1024 /
+                              1024
+                            ).toFixed(2)}{" "}
+                            MB
+                          </Typography>
+                        </Box>
+
+                        <IconButton
+                          // disabled={isSubmitting}
+                          color="error"
+                          onClick={() => {
+                            setValue("employer_document", null);
+                            setEmployerDocumentToUpload(null);
+                          }}
+                        >
+                          <DeleteOutlineOutlinedIcon />
+                        </IconButton>
                       </Box>
                     )}
 
-                    <Box
-                      sx={{
-                        minWidth: 0,
-                        flex: 1,
-                      }}
-                    >
-                      <Typography
-                        variant="body2"
-                        fontWeight={500}
-                        noWrap
-                        title={employerDocumentToUpload[0].name}
-                      >
-                        {employerDocumentToUpload[0].name}
-                      </Typography>
-
-                      <Typography variant="caption" color="text.secondary">
-                        {(
-                          employerDocumentToUpload[0].size /
-                          1024 /
-                          1024
-                        ).toFixed(2)}{" "}
-                        MB
-                      </Typography>
-                    </Box>
-
-                    <IconButton
-                      // disabled={isSubmitting}
-                      color="error"
-                      onClick={() => {
-                        setValue("employer_document", null);
-                        setEmployerDocumentToUpload(null);
-                      }}
-                    >
-                      <DeleteOutlineOutlinedIcon />
-                    </IconButton>
+                    {/* {error && <FormHelperText error>{error.message}</FormHelperText>} */}
                   </Box>
-                )}
-
-                {/* {error && <FormHelperText error>{error.message}</FormHelperText>} */}
-              </Box>
-            </Box>
+                </Box>
+              </>
+            )}
           </Grid>
         </Box>
       </DialogContent>

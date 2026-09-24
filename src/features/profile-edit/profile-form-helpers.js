@@ -16,6 +16,8 @@ export const initialProfileForm = {
 
   personDocumentNumber: "",
   personIssueCountry: "",
+  personDocumentIssueDate: "",
+  personDocumentIssuedBy: "",
 };
 
 function normalizeText(value) {
@@ -55,6 +57,8 @@ export function mapProfileFromApi(profile) {
 
     personDocumentNumber: profile?.personDocumentNumber || "",
     personIssueCountry: profile?.personIssueCountry || "",
+    personDocumentIssueDate: profile?.personDocumentIssueDate || "",
+    personDocumentIssuedBy: profile?.personDocumentIssuedBy || "",
 
     avatar: profile?.avatar || "",
   };
@@ -73,6 +77,8 @@ export function mapProfileFormToChangedApi(form, initialForm) {
     "personEmail",
     "personDocumentNumber",
     "personIssueCountry",
+    "personDocumentIssueDate",
+    "personDocumentIssuedBy",
   ];
 
   comparableFields.forEach((field) => {
