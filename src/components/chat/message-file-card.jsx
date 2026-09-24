@@ -79,8 +79,12 @@ const MessageFileCard = ({ file, messageType, isForwarderSend }) => {
         gap: 1.5,
         p: 1.5,
         borderRadius: 2,
-        backgroundColor: "action.hover",
+        backgroundColor: isForwarderSend ? "rgba(255,255,255,0.1)" : "background.default",
         maxWidth: 300,
+        minWidth: 0,
+        border: "1px solid",
+        borderColor: isForwarderSend ? "rgba(255,255,255,0.25)" : "divider",
+        color: isForwarderSend ? "common.white" : "primary.main",
       }}
     >
       {currentFile.icon}
@@ -105,13 +109,13 @@ const MessageFileCard = ({ file, messageType, isForwarderSend }) => {
       </Box>
 
       {isDownloadLoading && downloadingFileId === file.id ? (
-        <CircularProgress
+        <CircularProgress size={20}
           sx={{
-            color: "white",
+            color: "inherit",
           }}
         />
       ) : (
-        <IconButton onClick={handleDownload} size="small">
+        <IconButton aria-label={`Скачать ${file?.file_name || "файл"}`} onClick={handleDownload} size="small" sx={{ color: "inherit" }}>
           <DownloadOutlinedIcon />
         </IconButton>
       )}

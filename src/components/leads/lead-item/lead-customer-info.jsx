@@ -1,6 +1,6 @@
 import BusinessOutlinedIcon from "@mui/icons-material/BusinessOutlined";
-import Section from "../../../shared/ui/section";
-import { Box, Button, CircularProgress } from "@mui/material";
+import Section from "./lead-detail-section";
+import { Box, CircularProgress } from "@mui/material";
 import { useLeadsStore } from "../../../app/store/leads/leads-store";
 import { STATUS } from "../../../shared/const/tenders";
 import { InfoBadge } from "../../lead-form/info-badge";
@@ -65,17 +65,17 @@ const LeadCustomerInfo = ({ leadData }) => {
           disabled={createdByCustomer}
           variant="outlined"
           onClick={handleDetachCustomer}
-          text={"Отвязать Заказчика"}
+          text={"Отвязать заказчика"}
         />
       )}
       <Box
         sx={{
           py: 1,
           display: "grid",
-          gap: 2,
+          gap: 1.5,
           gridTemplateColumns: {
             xs: "repeat(1, 1fr)",
-            sm: "repeat(3, 1fr)",
+            sm: "repeat(2, minmax(0, 1fr))",
           },
         }}
       >

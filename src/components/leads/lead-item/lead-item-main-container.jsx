@@ -3,7 +3,7 @@ import CargoCard from "./lead-cargo-info";
 import LeadMap from "../lead-map";
 import LeadCustomerInfo from "./lead-customer-info";
 import LeadRouteInfo from "./lead-route-info";
-import Section from "../../../shared/ui/section";
+import Section from "./lead-detail-section";
 import LocalShippingOutlinedIcon from "@mui/icons-material/LocalShippingOutlined";
 import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
 import LeadCargoFilesContainer from "../lead-cargo-files-container";
@@ -81,10 +81,6 @@ const LeadItemMainContainer = ({
   ];
 
   const cargosCount = leadData?.cargos?.length;
-  const isEditableStatus =
-    leadData?.status !== STATUS.finished &&
-    leadData?.status !== STATUS.deleted &&
-    leadData.status !== STATUS.sign_avr;
   const isAllPassed = leadPoints.every((item) => item?.is_passed);
 
   const from = {
@@ -203,10 +199,11 @@ const LeadItemMainContainer = ({
     <>
       <Box
         sx={{
-          boxShadow: 1,
-          borderRadius: 4,
+          border: "1px solid",
+          borderColor: "divider",
+          borderRadius: 3,
           overflow: "hidden",
-          my: 3,
+          my: 2,
         }}
       >
         <LeadMap waypoints={waypoints} from={from} to={to} id={id} />
@@ -249,7 +246,10 @@ const LeadItemMainContainer = ({
 
       <LeadRouteInfo leadData={leadData} />
 
-      <LeadCustomerInfo leadData={leadData} />
+      <Box sx={{ display: "grid", gridTemplateColumns: { xs: "minmax(0, 1fr)", xl: "repeat(2, minmax(0, 1fr))" }, gap: 2, alignItems: "start" }}>
+        <LeadCustomerInfo leadData={leadData} />
+        <LeadDriverInfo leadData={leadData} />
+      </Box>
 
       <Section
         title={`Груз`}
@@ -264,6 +264,7 @@ const LeadItemMainContainer = ({
         >
           {leadData?.cargos?.map((cargo, index) => (
             <CargoCard
+              key={cargo.id || index}
               cargosCount={cargosCount}
               cargo={cargo}
               lead={leadData}
@@ -279,7 +280,6 @@ const LeadItemMainContainer = ({
         cargoActions={leadData?.cargo_actions}
       />
 
-      <LeadDriverInfo leadData={leadData} />
 
       <Section
         title="Документы"

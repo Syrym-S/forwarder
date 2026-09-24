@@ -144,10 +144,10 @@ const LeadItem = () => {
     <RootLayout data={leadData}>
       <Box
         sx={{
-          px: {
-            xs: 0,
-            md: 10,
-          },
+          maxWidth: 1440,
+          width: "100%",
+          minWidth: 0,
+          mx: "auto",
         }}
       >
         <LeadHeading leadData={leadData} openEditForm={openEditForm} />
@@ -164,7 +164,12 @@ const LeadItem = () => {
 
         <Box
           sx={{
-            py: 2,
+            p: 1,
+            my: 2,
+            gap: 1.5,
+            borderBottom: "1px solid",
+            borderColor: "divider",
+            boxSizing: "border-box",
             width: "100%",
             display: "flex",
             flexDirection: {
@@ -191,7 +196,15 @@ const LeadItem = () => {
                 xs: "stretch",
                 sm: "auto",
               },
+              minWidth: 0,
+              maxWidth: "100%",
+              "& .MuiTabs-indicator": { display: "none" },
+              "& .MuiTab-root.Mui-selected": { bgcolor: "background.main" },
               "& .MuiTab-root": {
+                minHeight: 40,
+                borderRadius: 2,
+                fontSize: 13,
+                fontWeight: 600,
                 px: 1.5,
                 minWidth: 40,
                 textTransform: "none",
@@ -231,14 +244,16 @@ const LeadItem = () => {
                   color="error"
                   onClick={handleOpenWarningModal}
                   sx={{
-                    height: 30,
-                    width: 30,
-                    p: 3,
+                    height: 40,
+                    width: 40,
+                    p: 1,
+                    borderRadius: 2,
+                    bgcolor: "background.default",
                   }}
                 >
                   <WarningAmberRoundedIcon
                     sx={{
-                      fontSize: 28,
+                      fontSize: 22,
                     }}
                   />
                 </IconButton>
@@ -251,14 +266,16 @@ const LeadItem = () => {
                   color="error"
                   onClick={handleOpenFinishEmergencyModal}
                   sx={{
-                    height: 30,
-                    width: 30,
-                    p: 3,
+                    height: 40,
+                    width: 40,
+                    p: 1,
+                    borderRadius: 2,
+                    bgcolor: "background.default",
                   }}
                 >
                   <DoNotDisturbOnOutlinedIcon
                     sx={{
-                      fontSize: 28,
+                      fontSize: 22,
                     }}
                   />
                 </IconButton>
@@ -270,14 +287,16 @@ const LeadItem = () => {
                 color="primary"
                 onClick={handleOpenShareModal}
                 sx={{
-                  height: 30,
-                  width: 30,
-                  p: 3,
+                  height: 40,
+                  width: 40,
+                  p: 1,
+                  borderRadius: 2,
+                  bgcolor: "background.default",
                 }}
               >
                 <IosShareOutlinedIcon
                   sx={{
-                    fontSize: 25,
+                    fontSize: 22,
                   }}
                 />
               </IconButton>

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Section from "../../shared/ui/section";
+import Section from "./lead-item/lead-detail-section";
 import NewReleasesIcon from "@mui/icons-material/NewReleases";
 import TaskAltOutlinedIcon from "@mui/icons-material/TaskAltOutlined";
 import { STATUS, WAYPOINT_TYPES } from "../../shared/const/tenders";
@@ -94,7 +94,7 @@ const CargosVerificationContainer = ({ cargoAction }) => {
             xs: "1fr",
             sm: "repeat(3, 1fr)",
           },
-          gap: 5,
+          gap: 2,
         }}
       >
         {cargoAction?.files?.map((file) => (
@@ -108,7 +108,7 @@ const CargosVerificationContainer = ({ cargoAction }) => {
           sx={{
             my: 1,
             display: "flex",
-            gap: 5,
+            gap: 2,
           }}
         >
           <Button

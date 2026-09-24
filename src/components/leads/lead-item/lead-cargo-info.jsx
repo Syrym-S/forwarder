@@ -30,8 +30,8 @@ const CargoCard = ({
         p: 2,
         border: "1px solid",
         borderColor: "divider",
-        borderRadius: 5,
-        backgroundColor: "rgb(250, 250, 250)",
+        borderRadius: 2.5,
+        backgroundColor: "background.default",
       }}
     >
       <Typography
@@ -50,7 +50,7 @@ const CargoCard = ({
           gridTemplateColumns: {
             xs: "1fr",
             sm: "repeat(2, 1fr)",
-            md: "repeat(4, 1fr)",
+            md: "repeat(4, minmax(0, 1fr))",
           },
           gap: 1.2,
           mb: 1.2,

@@ -25,6 +25,7 @@ const MessageList = ({ participants, messageType }) => {
         spacing={2}
         sx={{
           flex: 1,
+        minHeight: 0,
           p: 3,
           overflowY: "auto",
           alignItems: "center",
@@ -41,8 +42,9 @@ const MessageList = ({ participants, messageType }) => {
       ref={chatRef}
       sx={{
         flex: 1,
+        minHeight: 0,
         p: {
-          xs: 1,
+          xs: 1.5,
           md: 3,
         },
         overflowY: "auto",

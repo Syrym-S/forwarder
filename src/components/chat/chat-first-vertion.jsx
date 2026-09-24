@@ -43,15 +43,17 @@ const ChatFirstVertion = ({ messageType }) => {
   if (!participantData) return <CircularProgress />;
 
   return (
-    <Paper
+    <Paper elevation={0}
       sx={{
         position: "relative",
         display: "flex",
         flexDirection: "column",
         my: 1,
-        mx: 1,
-        minHeight: 500,
-        maxHeight: 700,
+        border: "1px solid",
+        borderColor: "divider",
+        borderRadius: 3,
+        height: { xs: "70dvh", md: 640 },
+        minHeight: 400,
         overflowY: "auto",
         backgroundColor: "background.default",
         overflow: "hidden",
@@ -81,7 +83,9 @@ const ChatFirstVertion = ({ messageType }) => {
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              bgcolor: "primary.50",
+              bgcolor: "background.main",
+              width: 64,
+              height: 64,
               mb: 2,
             }}
           >
@@ -116,7 +120,7 @@ const ChatFirstVertion = ({ messageType }) => {
         </Box>
       )}
 
-      <MessageList participants={participantData} messageType={messageType} />
+      {(!isEmpty || isMessagesLoading) && <MessageList participants={participantData} messageType={messageType} />}
 
       <ChatMessageInput messageType={messageType} />
     </Paper>
@@ -179,8 +183,9 @@ const ChatMessageInput = ({ messageType }) => {
         display: "flex",
         alignItems: "flex-end",
         gap: 1,
-        p: 2,
-        backgroundColor: "white",
+        p: { xs: 1.25, sm: 2 },
+        flexShrink: 0,
+        backgroundColor: "background.paper",
         borderTop: "1px solid",
         borderColor: "divider",
       }}
@@ -191,8 +196,10 @@ const ChatMessageInput = ({ messageType }) => {
           minWidth: 0,
           border: "1px solid",
           borderColor: "divider",
-          borderRadius: 3,
-          px: 2,
+          borderRadius: 2.5,
+          bgcolor: "background.default",
+          "&:focus-within": { borderColor: "primary.main" },
+          px: 1.5,
           py: 1,
         }}
       >
@@ -264,6 +271,7 @@ const ChatMessageInput = ({ messageType }) => {
 
                 <IconButton
                   size="small"
+                  aria-label={`Удалить вложение ${file.name}`}
                   onClick={() => handleRemoveFile(index)}
                   sx={{
                     position: "absolute",
@@ -283,7 +291,8 @@ const ChatMessageInput = ({ messageType }) => {
         <TextField
           value={inputValue}
           fullWidth
-          placeholder="Введите сообщение..."
+          placeholder="Напишите сообщение…"
+          sx={{ "& .MuiInputBase-root": { fontSize: 14 } }}
           multiline
           maxRows={4}
           variant="standard"
@@ -291,6 +300,7 @@ const ChatMessageInput = ({ messageType }) => {
             setInputValue(e.target.value);
           }}
           slotProps={{
+            htmlInput: { "aria-label": "Текст сообщения" },
             input: {
               disableUnderline: true,
             },
@@ -307,26 +317,33 @@ const ChatMessageInput = ({ messageType }) => {
         onChange={handleFileChange}
       />
 
-      <Box sx={{ display: "flex" }}>
+      <Box sx={{ display: "flex", gap: 0.5, flexDirection: { xs: "column-reverse", sm: "row" } }}>
         <IconButton
+          aria-label="Отправить сообщение"
+          disabled={isSendingLoading || (!inputValue.trim() && selectedFiles.length === 0)}
           onClick={handleSendMessage}
           color="primary"
           sx={{
             width: 44,
             height: 44,
             mb: 0.2,
+            borderRadius: 2,
+            bgcolor: "background.main",
           }}
         >
-          {isSendingLoading ? <CircularProgress size="small" /> : <SendIcon />}
+          {isSendingLoading ? <CircularProgress size={20} /> : <SendIcon />}
         </IconButton>
 
         <IconButton
+          aria-label="Прикрепить изображение"
           onClick={() => fileInputRef.current?.click()}
           color="primary"
           sx={{
             width: 44,
             height: 44,
             mb: 0.2,
+            borderRadius: 2,
+            bgcolor: "background.main",
           }}
         >
           <PanoramaOutlinedIcon />

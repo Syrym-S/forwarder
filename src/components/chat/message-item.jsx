@@ -152,7 +152,7 @@ const MessageItem = ({ message, participants, messageType }) => {
           <Typography
             sx={{
               fontSize: "0.7rem",
-              color: "#4a94d9",
+              color: "primary.main",
             }}
           >
             {senderData?.person_fio}
@@ -162,7 +162,9 @@ const MessageItem = ({ message, participants, messageType }) => {
         <Box
           sx={{
             display: "flex",
-            justifyContent: "flex-end",
+            justifyContent: isForwarderSend ? "flex-end" : "flex-start",
+            maxWidth: { xs: "100%", sm: "80%" },
+            minWidth: 0,
           }}
         >
           <Box
@@ -170,7 +172,7 @@ const MessageItem = ({ message, participants, messageType }) => {
             sx={{
               position: "relative",
               maxWidth: {
-                xs: "90%",
+                xs: "100%",
                 md: "100%",
               },
               width: isEditing ? "100%" : "fit-content",
@@ -179,8 +181,11 @@ const MessageItem = ({ message, participants, messageType }) => {
               borderRadius: isForwarderSend
                 ? "16px 0px 16px 16px"
                 : "0 16px 16px 16px",
-              backgroundColor: isForwarderSend ? "primary.main" : "#f6f6f6",
-              boxShadow: 1,
+              backgroundColor: isForwarderSend ? "primary.main" : "background.paper",
+              boxShadow: "none",
+              border: "1px solid",
+              borderColor: isForwarderSend ? "primary.main" : "divider",
+              minWidth: 0,
             }}
           >
             {isDeleted && (
@@ -194,7 +199,7 @@ const MessageItem = ({ message, participants, messageType }) => {
                 <BlockOutlinedIcon
                   sx={{
                     fontSize: "1rem",
-                    color: "rgba(0, 0, 0, 0.45)",
+                    color: isForwarderSend ? "rgba(255,255,255,0.8)" : "text.secondary",
                   }}
                 />
 
@@ -202,7 +207,7 @@ const MessageItem = ({ message, participants, messageType }) => {
                   sx={{
                     fontSize: "0.9rem",
                     fontStyle: "italic",
-                    color: "rgba(0, 0, 0, 0.45)",
+                    color: isForwarderSend ? "rgba(255,255,255,0.8)" : "text.secondary",
                   }}
                 >
                   Сообщение удалено
@@ -233,7 +238,8 @@ const MessageItem = ({ message, participants, messageType }) => {
                   display: "flex",
                   alignItems: "center",
                   gap: 0.5,
-                  minWidth: 250,
+                  minWidth: 0,
+                  width: { xs: "100%", sm: 300 },
                 }}
               >
                 <TextField
@@ -275,7 +281,9 @@ const MessageItem = ({ message, participants, messageType }) => {
               <>
                 <Typography
                   sx={{
-                    fontSize: "1rem",
+                    fontSize: 14,
+                    lineHeight: 1.6,
+                    whiteSpace: "pre-wrap",
                     wordBreak: "break-word",
                     color: isForwarderSend ? "white" : "black",
                   }}
@@ -295,14 +303,15 @@ const MessageItem = ({ message, participants, messageType }) => {
                   sx={{
                     display: "flex",
                     alignItems: "center",
-                    gap: 2,
+                    gap: 1,
+                    flexWrap: "wrap",
                   }}
                 >
                   <Typography
                     sx={{
                       mt: 0.5,
                       fontSize: "0.75rem",
-                      color: "text.secondary",
+                      color: isForwarderSend ? "rgba(255,255,255,0.8)" : "text.secondary",
                       textAlign: "right",
                     }}
                   >
@@ -314,7 +323,7 @@ const MessageItem = ({ message, participants, messageType }) => {
                       sx={{
                         fontSize: "0.7rem",
                         fontStyle: "italic",
-                        color: "text.secondary",
+                        color: isForwarderSend ? "rgba(255,255,255,0.8)" : "text.secondary",
                       }}
                     >
                       изменено
@@ -333,14 +342,14 @@ const MessageItem = ({ message, participants, messageType }) => {
           </Box>
 
           {isForwarderSend && (
-            <MoreVertIcon
+            <IconButton aria-label="Действия с сообщением" size="small" onClick={handleContextMenu}
               sx={{
                 display: {
                   xs: "block",
                   md: "none",
                 },
               }}
-            />
+            ><MoreVertIcon fontSize="small" /></IconButton>
           )}
         </Box>
       </Box>

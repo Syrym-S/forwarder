@@ -1,4 +1,4 @@
-import Section from "../../../shared/ui/section";
+import Section from "./lead-detail-section";
 import RouteOutlinedIcon from "@mui/icons-material/RouteOutlined";
 import RoutePoint from "./route-point";
 import { Box } from "@mui/material";

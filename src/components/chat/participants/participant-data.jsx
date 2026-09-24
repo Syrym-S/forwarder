@@ -1,4 +1,3 @@
-import React from "react";
 import { useLeadsStore } from "../../../app/store/leads/leads-store";
 import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 import {
@@ -21,26 +20,28 @@ const ParticipantData = ({ participantData, isFactoringChat }) => {
         py: 2,
         px: {
           xs: 2,
-          md: 5,
+          md: 2.5,
         },
-        backgroundColor: "white",
+        backgroundColor: "background.paper",
         borderBottom: "1px solid",
         borderColor: "divider",
-        boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.15)",
+        flexShrink: 0,
         zIndex: 1,
       }}
     >
       <Box
         sx={{
           display: "flex",
-          gap: 1,
+          gap: 1.5,
+          alignItems: "center",
+          flexWrap: "wrap",
         }}
       >
         {isParticipantLoading ? (
           <Box
             sx={{
-              width: "80px",
-              height: "80px",
+              width: "40px",
+              height: "40px",
               borderRadius: "50%",
               display: "flex",
               alignItems: "center",
@@ -48,7 +49,7 @@ const ParticipantData = ({ participantData, isFactoringChat }) => {
               color: "white",
               fontSize: "14px",
               fontWeight: 600,
-              boxShadow: 2,
+              boxShadow: "none",
               flexShrink: 0,
             }}
           >
@@ -58,23 +59,25 @@ const ParticipantData = ({ participantData, isFactoringChat }) => {
           participantData?.map((participant, index) =>
             participant.avatar ? (
               <Box
+                key={participant.id || index}
                 component="img"
+                alt={participant.person_fio || "Участник чата"}
                 src={participant?.avatar}
                 sx={{
                   display: "block",
                   borderRadius: "100%",
-                  width: "80px",
-                  height: "80px",
+                  width: "40px",
+                  height: "40px",
                   objectFit: "cover",
-                  boxShadow: 2,
-                  transform: `translateX(-${index * 40}px)`,
+                  boxShadow: "none",
+
                 }}
               />
             ) : (
-              <Box
+              <Box key={participant.id || index}
                 sx={{
-                  width: "80px",
-                  height: "80px",
+                  width: "40px",
+                  height: "40px",
                   borderRadius: "50%",
                   display: "flex",
                   alignItems: "center",
@@ -83,14 +86,14 @@ const ParticipantData = ({ participantData, isFactoringChat }) => {
                   color: "white",
                   fontSize: "14px",
                   fontWeight: 600,
-                  boxShadow: 2,
+                  boxShadow: "none",
                   flexShrink: 0,
-                  transform: `translateX(-${index * 40}px)`,
+
                 }}
               >
                 <PersonOutlinedIcon
                   sx={{
-                    fontSize: "3rem",
+                    fontSize: 24,
                   }}
                 />
               </Box>
@@ -117,7 +120,7 @@ const ParticipantData = ({ participantData, isFactoringChat }) => {
                 sx={{
                   fontSize: {
                     xs: "1rem",
-                    md: "1.5rem",
+                    md: "1rem",
                   },
                 }}
               >
@@ -126,9 +129,9 @@ const ParticipantData = ({ participantData, isFactoringChat }) => {
 
               <Typography
                 sx={{
-                  fontSize: "1rem",
+                  fontSize: 12,
                   textTransform: "capitalize",
-                  color: "#5c5b5b",
+                  color: "text.secondary",
                 }}
               >
                 {participantData[0]?.role}
@@ -137,7 +140,7 @@ const ParticipantData = ({ participantData, isFactoringChat }) => {
           ) : (
             <Typography
               sx={{
-                fontSize: "1.5rem",
+                fontSize: 16,
               }}
             >
               Чат о факторинговой покупке

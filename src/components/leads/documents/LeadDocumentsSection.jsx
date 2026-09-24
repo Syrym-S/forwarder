@@ -161,10 +161,11 @@ export function LeadDocumentsSection({
               display: "grid",
               gridTemplateColumns: {
                 xs: "1fr",
-                sm: "repeat(3, 1fr)",
+                sm: "repeat(2, minmax(0, 1fr))",
+                lg: "repeat(3, minmax(0, 1fr))",
               },
               alignItems: "stretch",
-              gap: 3,
+              gap: 2,
             }}
           >
             {documents.map((document) => (

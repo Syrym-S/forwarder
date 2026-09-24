@@ -2,10 +2,9 @@ import EditNoteRoundedIcon from "@mui/icons-material/EditNoteRounded";
 import RenderStatus from "../../../shared/ui/render-status";
 import {
   Box,
-  Chip,
+  Button,
   CircularProgress,
   Stack,
-  Tooltip,
   Typography,
 } from "@mui/material";
 import { FINISHED_LEAD_STATUSES } from "../../../shared/const/tenders";
@@ -33,123 +32,17 @@ const LeadHeading = ({ leadData, openEditForm }) => {
   }, [newNotification]);
 
   return (
-    <Box
-      spacing={0.5}
-      sx={{
-        display: "flex",
-        alignItems: {
-          xs: "start",
-          sm: "center",
-        },
-        gap: "10px",
-        justifyContent: "space-between",
-        flexDirection: {
-          xs: "column",
-          sm: "row",
-        },
-      }}
-    >
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          width: "100%",
-        }}
-      >
-        <Stack>
-          <Typography
-            sx={{
-              fontWeight: 600,
-              fontSize: 22,
-            }}
-          >
-            Информация о перевозке
-          </Typography>
-
-          <Typography
-            sx={{
-              color: "color.slate",
-              fontWeight: 500,
-              fontSize: 15,
-            }}
-          >
-            Подробные данные по заявке
-          </Typography>
-        </Stack>
-        {canBeEdited && (
-          <EditNoteRoundedIcon
-            onClick={openEditForm}
-            sx={{
-              display: {
-                xs: "block",
-                sm: "none",
-              },
-              fontSize: "2.5rem",
-              color: "primary.main",
-              cursor: "pointer",
-            }}
-          />
-        )}
-      </Box>
-      <Box
-        sx={{
-          display: "flex",
-          py: "10px",
-          alignItems: "center",
-          justifyContent: { xs: "space-between", sm: "end" },
-          gap: {
-            xs: "3px",
-            sm: "10px",
-          },
-          width: {
-            xs: "100%",
-            sm: "40%",
-          },
-        }}
-      >
-        <Chip
-          label={`Перевозка #${leadData.num}`}
-          variant="outlined"
-          sx={{
-            color: "primary.main",
-            borderColor: "primary.main",
-            fontWeight: 600,
-          }}
-        />
-
-        <Box
-          sx={{
-            display: "flex",
-            gap: 1,
-            width: "fit-content",
-            alignItems: "center",
-          }}
-        >
-          {isLoading && <CircularProgress size={13} />}
+    <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 2, mb: 2 }}>
+      <Stack spacing={0.5}>
+        <Typography component="h1" sx={{ fontSize: { xs: 22, sm: 26 }, fontWeight: 600, color: "font_color.heading" }}>Перевозка #{leadData.num || "—"}</Typography>
+        <Typography sx={{ fontSize: 14, color: "text.secondary" }}>Маршрут, участники и документы заявки</Typography>
+      </Stack>
+      <Box sx={{ display: "flex", alignItems: "center", gap: 1.5, flexWrap: "wrap" }}>
+        <Box sx={{ display: "flex", alignItems: "center", gap: 1, px: 1.5, py: 1, bgcolor: "background.paper", border: "1px solid", borderColor: "divider", borderRadius: 2 }}>
+          {isLoading && <CircularProgress size={14} />}
           <RenderStatus status={leadData.status} />
         </Box>
-
-        <Stack
-          sx={{
-            display: {
-              xs: "none",
-              sm: "block",
-            },
-          }}
-        >
-          <Tooltip title="Редактировать">
-            {canBeEdited && (
-              <EditNoteRoundedIcon
-                onClick={openEditForm}
-                sx={{
-                  fontSize: "2.5rem",
-                  color: "primary.main",
-                  cursor: "pointer",
-                }}
-              />
-            )}
-          </Tooltip>
-        </Stack>
+        {canBeEdited && <Button variant="outlined" startIcon={<EditNoteRoundedIcon />} onClick={openEditForm} sx={{ textTransform: "none", borderRadius: 2, height: 40 }}>Редактировать</Button>}
       </Box>
     </Box>
   );

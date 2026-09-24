@@ -22,8 +22,8 @@ const RoutePoint = ({
         p: 1.5,
         border: "1px solid",
         borderColor: "divider",
-        borderRadius: 5,
-        backgroundColor: "rgb(250, 250, 250)",
+        borderRadius: 2.5,
+        backgroundColor: "background.default",
       }}
     >
       {/* Верхняя строка */}
@@ -33,13 +33,15 @@ const RoutePoint = ({
           alignItems: "center",
           justifyContent: "space-between",
           gap: 2,
-          mb: 0.7,
+          mb: 1.25,
+          flexWrap: "wrap",
         }}
       >
         <Box
           sx={{
             display: "flex",
             gap: 1,
+            flexWrap: "wrap",
             alignItems: "center",
           }}
         >
@@ -56,11 +58,13 @@ const RoutePoint = ({
 
         <Chip
           label={status}
-          color={isPassed ? "primary" : ""}
+          color={isPassed ? "primary" : "default"}
           size="small"
           variant="outlined"
           sx={{
-            height: 28,
+            height: 24,
+            borderRadius: 2,
+            bgcolor: "background.paper",
             fontWeight: 600,
             fontSize: 12,
           }}
@@ -90,9 +94,7 @@ const RoutePoint = ({
             color: "text.primary",
             lineHeight: 1.4,
 
-            overflow: "hidden",
-            textOverflow: "ellipsis",
-            whiteSpace: "nowrap",
+            overflowWrap: "anywhere",
           }}
         >
           {address || "Адрес не указан"}
@@ -115,7 +117,7 @@ const RoutePoint = ({
                 color: "text.secondary",
               }}
             >
-              Дата начала:
+              Дата начала:{" "}
               <Box
                 component="span"
                 sx={{
@@ -136,7 +138,7 @@ const RoutePoint = ({
                 color: "text.secondary",
               }}
             >
-              Дата окончания:
+              Дата окончания:{" "}
               <Box
                 component="span"
                 sx={{

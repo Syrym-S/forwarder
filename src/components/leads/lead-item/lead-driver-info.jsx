@@ -1,8 +1,6 @@
-import React from "react";
-import Section from "../../../shared/ui/section";
-import InfoField from "../../../shared/ui/info-field";
+import Section from "./lead-detail-section";
 import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
-import { Box, Button, CircularProgress } from "@mui/material";
+import { Box, CircularProgress } from "@mui/material";
 import { useLeadsStore } from "../../../app/store/leads/leads-store";
 import { STATUS } from "../../../shared/const/tenders";
 import { InfoBadge } from "../../lead-form/info-badge";
@@ -62,9 +60,9 @@ const LeadDriverInfo = ({ leadData }) => {
           display: "grid",
           gridTemplateColumns: {
             xs: "1fr",
-            sm: "repeat(3,1fr)",
+            sm: "repeat(2, minmax(0, 1fr))",
           },
-          gap: 3,
+          gap: 1.5,
         }}
       >
         <InfoItem label={"ID водителя"} value={driver.id} />
