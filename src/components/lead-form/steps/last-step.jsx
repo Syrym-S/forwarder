@@ -1,11 +1,12 @@
-import { Box, Chip, Stack, Typography } from "@mui/material";
+import { Box } from "@mui/material";
 import { StepSection } from "../step-section";
 import { InfoBadge } from "../info-badge";
-import RenderType from "../../../shared/ui/render-type";
+import RoutePoint from "../../leads/lead-item/route-point";
 
 export function LastStep({ form }) {
   const waypoints = form.waypoints;
   const cargos = form.cargos;
+  const pointSchedules = form?.point_schedules || [];
 
   return (
     <Box sx={{ display: "grid", gap: 2 }}>
@@ -13,48 +14,47 @@ export function LastStep({ form }) {
         <Box
           sx={{
             display: "grid",
-            gridTemplateColumns: {
-              xs: "1fr",
-              sm: "1fr 1fr",
-            },
+            gridTemplateColumns: "1fr",
             gap: 2,
           }}
         >
-          <InfoBadge label="Откуда" value={form.to_location.address} />
+          <RoutePoint
+            label="Откуда"
+            address={form.from_location.address || "Битые данные"}
+            isFrom
+            status={
+              form.from_location?.is_passed
+                ? "Точка пройдена"
+                : "Точка не пройдена"
+            }
+            date={pointSchedules[0]}
+          />
 
           {waypoints.map((waypoint, index) => (
-            <Box
-              sx={{
-                position: "relative",
-              }}
-            >
-              <Box
-                sx={{
-                  position: "absolute",
-                  top: "-15px",
-                  right: 5,
-                }}
-              >
-                <RenderType type={waypoint.type} size="small" />
-              </Box>
-
-              <InfoBadge
-                label={`Промежуточная точка ${index + 1}`}
-                accent={waypoint.is_passed}
-                value={
-                  <Stack spacing={1}>
-                    <Typography>
-                      {waypoint.address || "Битые данные"}
-                    </Typography>
-                  </Stack>
-                }
-              />
-            </Box>
+            <RoutePoint
+              key={waypoint?.id || `${waypoint?.address}-${index}`}
+              isPassed={waypoint?.is_passed}
+              label={`Промежуточная точка #${index + 1}`}
+              address={waypoint?.address || "Битые данные"}
+              status={
+                waypoint?.is_passed ? "Точка пройдена" : "Точка не пройдена"
+              }
+              type={waypoint.type}
+              date={pointSchedules[index + 1]}
+            />
           ))}
 
-          <InfoBadge label="Куда" value={form.from_location.address} />
-
-          <InfoBadge label="Дата загрузки" value={form.loadingDate} />
+          <RoutePoint
+            label="Откуда"
+            address={form.to_location.address || "Битые данные"}
+            status={
+              form.to_location?.is_passed
+                ? "Точка пройдена"
+                : "Точка не пройдена"
+            }
+            date={pointSchedules[waypoints.length + 1]}
+            isTo
+          />
         </Box>
       </StepSection>
 

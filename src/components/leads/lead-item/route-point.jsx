@@ -2,9 +2,19 @@ import { Box, Chip, Typography } from "@mui/material";
 import TripOriginIcon from "@mui/icons-material/TripOrigin";
 import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
 import dayjs from "dayjs";
+import RenderType from "../../../shared/ui/render-type";
 
-const RoutePoint = ({ label, address, status, type, date, isPassed }) => {
-  const Icon = type === "from" ? TripOriginIcon : LocationOnOutlinedIcon;
+const RoutePoint = ({
+  label,
+  address,
+  status,
+  isFrom,
+  isTo,
+  date,
+  isPassed,
+  type,
+}) => {
+  const Icon = isFrom ? TripOriginIcon : LocationOnOutlinedIcon;
 
   return (
     <Box
@@ -26,14 +36,23 @@ const RoutePoint = ({ label, address, status, type, date, isPassed }) => {
           mb: 0.7,
         }}
       >
-        <Typography
+        <Box
           sx={{
-            fontSize: 10,
-            color: "text.secondary",
+            display: "flex",
+            gap: 1,
+            alignItems: "center",
           }}
         >
-          {label}
-        </Typography>
+          <Typography
+            sx={{
+              fontSize: 12,
+              color: "text.secondary",
+            }}
+          >
+            {label}
+          </Typography>
+          {!isFrom && !isTo && <RenderType type={type} size="small" />}
+        </Box>
 
         <Chip
           label={status}

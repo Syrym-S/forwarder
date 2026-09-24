@@ -288,7 +288,10 @@ const LeadItem = () => {
         <Box
           sx={{
             py: 1,
-            width: "50%",
+            width: {
+              xs: "100%",
+              sm: "50%",
+            },
           }}
         >
           {leadData.emergency_situation_comment && (

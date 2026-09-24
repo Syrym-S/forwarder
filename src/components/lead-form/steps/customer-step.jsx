@@ -95,33 +95,108 @@ const CustomerStep = ({ control, errors, setValue }) => {
                   component="li"
                   {...props}
                   sx={{
+                    px: "16px !important",
+                    py: "10px !important",
                     borderBottom: "1px solid",
                     borderColor: "divider",
-                    display: "flex",
-                    flexDirection: "column",
-                    justifyContent: "space-between",
-                    alignItems: "start",
-                    gap: 1,
+                    display: "flex !important",
+                    flexDirection: "column !important",
+                    alignItems: "flex-start !important",
+                    gap: "5px !important",
+                    "&:last-child": {
+                      borderBottom: "none",
+                    },
                   }}
                 >
-                  <Typography
+                  <Box
                     sx={{
-                      fontSize: "1rem",
-                      width: "fit-content",
+                      width: "100%",
+                      display: "flex",
+                      alignItems: "center",
+                      flexWrap: "wrap",
+                      gap: 1,
                     }}
-                    fontWeight={700}
                   >
-                    {option.name}
-                  </Typography>
-                  <Typography
-                    sx={{
-                      fontSize: "0.7rem",
-                      width: "fit-content",
-                    }}
-                    fontWeight={200}
-                  >
-                    БИН: {option.bin}
-                  </Typography>
+                    <Typography
+                      sx={{
+                        fontSize: 15,
+                        fontWeight: 600,
+                        color: "text.primary",
+                        lineHeight: 1.3,
+                        overflowWrap: "anywhere",
+                      }}
+                    >
+                      {option.name || "Без названия"}
+                    </Typography>
+                    {option.type && (
+                      <Typography
+                        sx={{
+                          fontSize: 11,
+                          fontWeight: 500,
+                          color: "primary.main",
+                          bgcolor: "primary.50",
+                          borderRadius: 1,
+                          px: 0.75,
+                          py: 0.2,
+                        }}
+                      >
+                        {option.type}
+                      </Typography>
+                    )}
+                  </Box>
+                  {option.bin && (
+                    <Typography
+                      sx={{
+                        fontSize: 12,
+                        color: "text.secondary",
+                      }}
+                    >
+                      БИН:{" "}
+                      <Box
+                        component="span"
+                        sx={{ color: "text.primary", fontWeight: 500 }}
+                      >
+                        {option.bin}
+                      </Box>
+                    </Typography>
+                  )}
+                  {option.persons?.map((person, index) =>
+                    person && (person.fio || person.iin || person.phone) ? (
+                      <Box
+                        key={index}
+                        sx={{
+                          display: "flex",
+                          alignItems: "center",
+                          flexWrap: "wrap",
+                          gap: 2,
+                        }}
+                      >
+                        {person.fio && (
+                          <Typography
+                            sx={{ fontSize: 12, color: "text.secondary", overflowWrap: "anywhere" }}
+                          >
+                            {person.fio}
+                          </Typography>
+                        )}
+                        {person.iin && (
+                          <Typography sx={{ fontSize: 12, color: "text.secondary" }}>
+                            ИИН:{" "}
+                            <Box component="span" sx={{ color: "text.primary", fontWeight: 500 }}>
+                              {person.iin}
+                            </Box>
+                          </Typography>
+                        )}
+                        {person.phone && (
+                          <Typography sx={{ fontSize: 12, color: "text.secondary" }}>
+                            Тел:{" "}
+                            <Box component="span" sx={{ color: "text.primary", fontWeight: 500 }}>
+                              +{String(person.phone).replace(/^\+/, "")}
+                            </Box>
+                          </Typography>
+                        )}
+                      </Box>
+                    ) : null,
+                  )}
                 </Box>
               )}
               renderInput={(params) => (

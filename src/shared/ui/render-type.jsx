@@ -1,20 +1,36 @@
 import { WAYPOINT_TYPES } from "../const/tenders";
 import { Chip } from "@mui/material";
+import { alpha } from "@mui/material/styles";
 
-const RenderChip = ({ label, color, variant, size = "large" }) => {
+const RenderChip = ({ label, color = "primary", variant, size = "medium" }) => {
   return (
     <Chip
       label={label}
       variant={variant}
       size={size}
       color={color}
-      sx={{
+      sx={(theme) => ({
         width: "fit-content",
-        fontSize: {
-          xs: "0.6rem",
-          sm: "0.8rem",
+        maxWidth: "100%",
+        height: size === "small" ? 24 : 28,
+        borderRadius: 5,
+        fontSize: size === "small" ? 11 : 12,
+        fontWeight: 600,
+        color: theme.palette[color]?.main || theme.palette.text.secondary,
+        backgroundColor: alpha(
+          theme.palette[color]?.main || theme.palette.text.secondary,
+          0.08,
+        ),
+        border: "1px solid",
+        borderColor: alpha(
+          theme.palette[color]?.main || theme.palette.text.secondary,
+          0.16,
+        ),
+        "& .MuiChip-label": {
+          px: 1.25,
+          lineHeight: 1.4,
         },
-      }}
+      })}
     />
   );
 };
@@ -25,7 +41,7 @@ const RenderType = ({ type, size }) => {
       return (
         <RenderChip
           label={"Точка для погрузки"}
-          variant="contaned"
+          variant="outlined"
           color="primary"
           size={size}
         />
@@ -34,7 +50,7 @@ const RenderType = ({ type, size }) => {
       return (
         <RenderChip
           label={"Точка для разгрузки"}
-          variant="contaned"
+          variant="outlined"
           color="primary"
           size={size}
         />
@@ -44,7 +60,7 @@ const RenderType = ({ type, size }) => {
       return (
         <RenderChip
           label={"Промежуточная"}
-          variant="contaned"
+          variant="outlined"
           color="primary"
           size={size}
         />

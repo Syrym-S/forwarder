@@ -32,6 +32,7 @@ const LeadRouteInfo = ({ leadData }) => {
       >
         <RoutePoint
           label="Откуда"
+          isFrom
           address={leadData?.from_location?.address || "Битые данные"}
           isPassed={leadData?.from_location?.is_passed}
           status={
@@ -50,12 +51,14 @@ const LeadRouteInfo = ({ leadData }) => {
             address={point?.address || "Битые данные"}
             status={point?.is_passed ? "Точка пройдена" : "Точка не пройдена"}
             date={pointSchedules[index + 1]}
+            type={point.type}
           />
         ))}
 
         <RoutePoint
           label="Куда"
           address={leadData?.to_location?.address || "Битые данные"}
+          isTo
           status={
             leadData?.to_location?.is_passed
               ? "Точка пройдена"
