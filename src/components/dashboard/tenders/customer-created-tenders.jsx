@@ -13,6 +13,12 @@ import CustomerTenderItem from "./customer-tender-item";
 
 const CustomerCreatedTenders = () => {
   const tenders = useTendersStore((state) => state.customerTenders);
+  const publicTenders = tenders.filter(
+    (tender) => tender.publication_type === "private",
+  );
+  const privateTenders = tenders.filter(
+    (tender) => tender.publication_type === "public",
+  );
   const getCustomerTenders = useTendersStore(
     (state) => state.getCustomerTenders,
   );
@@ -25,6 +31,8 @@ const CustomerCreatedTenders = () => {
   };
 
   const isEmpty = tenders.length === 0;
+  const isPublicTendersEmpty = publicTenders.length === 0;
+  const isPrivateTendersEmpty = privateTenders.length === 0;
 
   useEffect(() => {
     getCustomerTenders();
@@ -33,11 +41,15 @@ const CustomerCreatedTenders = () => {
   if (isLoading)
     return (
       <Paper
+        elevation={0}
+        variant="outlined"
         sx={{
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-          borderRadius: 2,
+          borderRadius: 3,
+          minWidth: 0,
+          minHeight: 220,
         }}
       >
         <CircularProgress />
@@ -46,18 +58,27 @@ const CustomerCreatedTenders = () => {
 
   return (
     <Paper
+      elevation={0}
+      variant="outlined"
       sx={{
         height: "100%",
         px: 2,
         pb: 2,
         overflowY: "auto",
+        maxHeight: 480,
+        boxSizing: "border-box",
         position: "relative",
-        borderRadius: 2,
+        borderRadius: 3,
+        minWidth: 0,
+        minHeight: 220,
       }}
     >
       <Box
         sx={{
-          backgroundColor: "white",
+          backgroundColor: "background.paper",
+          zIndex: 1,
+          flexWrap: "wrap",
+          gap: 1,
           position: "sticky",
           top: 0,
           left: 0,
@@ -66,25 +87,23 @@ const CustomerCreatedTenders = () => {
           justifyContent: "space-between",
           borderBottom: "1px solid",
           borderColor: "divider",
-          py: 1,
+          py: 2,
           mb: 1,
         }}
       >
         <Typography
           sx={{
-            fontSize: "1.2rem",
+            fontSize: 16,
             fontWeight: 600,
             color: "font_color.heading",
           }}
         >
-          Список аукционов от Заказчиков
+          Аукционы заказчиков
         </Typography>
 
         <Tooltip
           title={
-            checked
-              ? "Показать только публичные: ВЫКЛ"
-              : "Показать только публичные: ВКЛ"
+            checked ? "Показать только публичные" : "Показать только приватные"
           }
         >
           <Switch
@@ -102,13 +121,13 @@ const CustomerCreatedTenders = () => {
         </Tooltip>
       </Box>
 
-      {isEmpty && (
+      {isPublicTendersEmpty && checked && (
         <Box
           sx={{
             display: "grid",
             gridTemplateColumns: "1fr",
             gap: 2,
-            height: "30vh",
+            minHeight: 160,
           }}
         >
           <Box
@@ -118,7 +137,32 @@ const CustomerCreatedTenders = () => {
               alignItems: "center",
             }}
           >
-            <Alert severity="info">Список аукционов от заказчиков пуст!</Alert>
+            <Alert severity="info">
+              Список приватных аукционов от заказчиков пуст!
+            </Alert>
+          </Box>
+        </Box>
+      )}
+
+      {isPrivateTendersEmpty && !checked && (
+        <Box
+          sx={{
+            display: "grid",
+            gridTemplateColumns: "1fr",
+            gap: 2,
+            minHeight: 160,
+          }}
+        >
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <Alert severity="info">
+              Список публичных аукционов от заказчиков пуст!
+            </Alert>
           </Box>
         </Box>
       )}
@@ -126,10 +170,12 @@ const CustomerCreatedTenders = () => {
       {!isEmpty && (
         <Box sx={{ display: "grid", gridTemplateColumns: "1fr", gap: 2 }}>
           {checked
-            ? tenders
-                .filter((tender) => tender.publication_type === "public")
-                .map((tender) => <CustomerTenderItem tender={tender} />)
-            : tenders.map((tender) => <CustomerTenderItem tender={tender} />)}
+            ? publicTenders.map((tender) => (
+                <CustomerTenderItem key={tender.id} tender={tender} />
+              ))
+            : privateTenders.map((tender) => (
+                <CustomerTenderItem key={tender.id} tender={tender} />
+              ))}
         </Box>
       )}
     </Paper>

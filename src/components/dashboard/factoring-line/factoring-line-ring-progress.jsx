@@ -1,4 +1,4 @@
-import { Box, CircularProgress, Stack, Typography } from "@mui/material";
+import { Box, CircularProgress, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { renderLineColor } from "../../../shared/helpers/factoring/render-progress-line-color";
 
@@ -20,10 +20,13 @@ const FactoringLineRingProgress = ({ line }) => {
   return (
     <Box
       onClick={handleNavigateToDetailPage}
+      role="link"
+      tabIndex={0}
+      onKeyDown={(event) => { if (event.key === "Enter") handleNavigateToDetailPage(); }}
       sx={{
         width: {
           xs: "100%",
-          md: "70%",
+          md: "100%",
         },
 
         mx: "auto",
@@ -32,8 +35,11 @@ const FactoringLineRingProgress = ({ line }) => {
         borderColor: "divider",
         borderRadius: 2,
         transition: "0.2s ease",
-        p: 1,
-        "&:hover": {
+        p: 2,
+        boxSizing: "border-box",
+        bgcolor: "background.default",
+        minWidth: 0,
+        "&:hover, &:focus-visible": {
           borderColor: "primary.main",
           boxShadow: "0 6px 18px rgba(33, 150, 243, 0.12)",
         },
@@ -44,13 +50,15 @@ const FactoringLineRingProgress = ({ line }) => {
           display: "flex",
           pb: 1,
           mb: 1,
-          justifyContent: "space-around",
+          justifyContent: "space-between",
+          flexWrap: "wrap",
+          gap: 1.5,
           borderBottom: "1px solid",
           borderColor: "divider",
         }}
       >
-        <Typography>Компания: {factor.company_name}</Typography>
-        <Typography>Бин: {factor.company_bin}</Typography>
+        <Typography sx={{ fontSize: 14, fontWeight: 600, overflowWrap: "anywhere" }}> {factor.company_name}</Typography>
+        <Typography sx={{ fontSize: 12, color: "text.secondary" }}>БИН: {factor.company_bin}</Typography>
       </Box>
       <Box
         sx={{
@@ -69,14 +77,14 @@ const FactoringLineRingProgress = ({ line }) => {
         <Box
           sx={{
             position: "relative",
-            width: 180,
-            height: 180,
+            width: 140,
+            height: 140,
           }}
         >
           <CircularProgress
             variant="determinate"
             value={100}
-            size={180}
+            size={140}
             thickness={4}
             sx={{
               position: "absolute",
@@ -88,7 +96,7 @@ const FactoringLineRingProgress = ({ line }) => {
           <CircularProgress
             variant="determinate"
             value={usedPercent}
-            size={180}
+            size={140}
             thickness={4}
             sx={{
               color: renderLineColor(usedPercent),
@@ -106,10 +114,12 @@ const FactoringLineRingProgress = ({ line }) => {
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
-              justifyContent: "center",
+              flexWrap: "wrap",
+            minWidth: 0,
+            justifyContent: "center",
             }}
           >
-            <Typography variant="h4" fontWeight={700}>
+            <Typography variant="h5" fontWeight={700}>
               {usedPercent}%
             </Typography>
 
@@ -140,7 +150,7 @@ const FactoringLineRingProgress = ({ line }) => {
           <Box>
             <Typography
               sx={{
-                color: "#5F6368",
+                color: "text.secondary",
                 fontSize: {
                   xs: "0.7rem",
                   md: "0.8rem",
@@ -155,7 +165,7 @@ const FactoringLineRingProgress = ({ line }) => {
 
             <Typography
               sx={{
-                color: "#343A40",
+                color: "text.primary",
                 fontSize: {
                   xs: "0.75rem",
                   md: "1rem",
@@ -171,7 +181,7 @@ const FactoringLineRingProgress = ({ line }) => {
           <Box>
             <Typography
               sx={{
-                color: "#5F6368",
+                color: "text.secondary",
                 fontSize: {
                   xs: "0.7rem",
                   md: "0.8rem",
@@ -186,7 +196,7 @@ const FactoringLineRingProgress = ({ line }) => {
 
             <Typography
               sx={{
-                color: "#343A40",
+                color: "text.primary",
                 fontSize: {
                   xs: "0.75rem",
                   md: "1rem",
@@ -202,7 +212,7 @@ const FactoringLineRingProgress = ({ line }) => {
           <Box>
             <Typography
               sx={{
-                color: "#5F6368",
+                color: "text.secondary",
                 fontSize: {
                   xs: "0.7rem",
                   md: "0.8rem",
@@ -217,7 +227,7 @@ const FactoringLineRingProgress = ({ line }) => {
 
             <Typography
               sx={{
-                color: "#343A40",
+                color: "text.primary",
                 fontSize: {
                   xs: "0.75rem",
                   md: "1rem",
@@ -233,7 +243,7 @@ const FactoringLineRingProgress = ({ line }) => {
           <Box>
             <Typography
               sx={{
-                color: "#5F6368",
+                color: "text.secondary",
                 fontSize: {
                   xs: "0.7rem",
                   md: "0.8rem",
@@ -248,7 +258,7 @@ const FactoringLineRingProgress = ({ line }) => {
 
             <Typography
               sx={{
-                color: "#343A40",
+                color: "text.primary",
                 fontSize: {
                   xs: "0.75rem",
                   md: "1rem",

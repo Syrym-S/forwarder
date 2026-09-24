@@ -51,10 +51,11 @@ const DashboardLeadsList = ({
       sx={{
         height: {
           xs: "auto",
-          lg: 500,
+          lg: 580,
         },
         borderRadius: 3,
         p: 2,
+        boxSizing: "border-box",
         display: "flex",
         flexDirection: "column",
         minWidth: 0,
@@ -64,7 +65,7 @@ const DashboardLeadsList = ({
         <Typography
           sx={{
             fontWeight: 600,
-            fontSize: "1.3rem",
+            fontSize: 16,
             color: "font_color.heading",
           }}
         >
@@ -74,7 +75,8 @@ const DashboardLeadsList = ({
         <Typography
           sx={{
             fontWeight: 400,
-            fontSize: "0.9rem",
+            fontSize: 13,
+            color: "text.secondary",
           }}
         >
           Выберите перевозку, чтобы подсветить маршрут на карте
@@ -86,6 +88,8 @@ const DashboardLeadsList = ({
       <Box
         sx={{
           flex: 1,
+          minHeight: 0,
+          maxHeight: { xs: 480, lg: "none" },
           overflowY: "auto",
           pr: 0.5,
         }}

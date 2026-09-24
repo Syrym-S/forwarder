@@ -78,13 +78,13 @@ const StatCard = ({
       aria-busy={isLoading}
       sx={{
         minWidth: 0,
-        minHeight: canBeFiltered ? 220 : 190,
+        minHeight: canBeFiltered ? 200 : 170,
         p: { xs: 2, md: 2.5 },
         bgcolor: "background.paper",
         border: "1px solid",
-        borderColor: "#E3E8EF",
+        borderColor: "divider",
         borderRadius: 3,
-        boxShadow: "0 2px 8px rgba(22, 36, 62, 0.03)",
+        boxShadow: "none",
         boxSizing: "border-box",
         display: "flex",
         flexDirection: "column",
@@ -266,7 +266,7 @@ const StatCard = ({
       >
         <Typography
           sx={{
-            fontSize: canBeFiltered ? 40 : 34,
+            fontSize: 32,
             lineHeight: 1.1,
             letterSpacing: "-0.035em",
             fontVariantNumeric: "tabular-nums",
@@ -432,7 +432,7 @@ const DashboardStats = ({ data }) => {
             display: "grid",
             gridTemplateColumns: {
               xs: "1fr",
-              sm: "repeat(2, 1fr)",
+              sm: "repeat(2, minmax(0, 1fr))",
             },
             gap: 2,
           }}
@@ -453,7 +453,7 @@ const DashboardStats = ({ data }) => {
         </Box>
       </Box>
 
-      <Box sx={{ mt: 3, mb: 3 }}>
+      <Box sx={{ mt: 2.5 }}>
         <Typography
           sx={{
             fontSize: 13,
@@ -470,8 +470,8 @@ const DashboardStats = ({ data }) => {
             display: "grid",
             gridTemplateColumns: {
               xs: "1fr",
-              sm: "repeat(2, 1fr)",
-              md: "repeat(3, 1fr)",
+              sm: "repeat(2, minmax(0, 1fr))",
+              md: "repeat(3, minmax(0, 1fr))",
             },
             gap: 2,
           }}

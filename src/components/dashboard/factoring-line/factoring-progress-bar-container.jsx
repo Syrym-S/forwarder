@@ -20,10 +20,11 @@ const FactoringProgressBarContainer = () => {
   }, []);
 
   return (
-    <Paper
+    <Paper elevation={0} variant="outlined"
       sx={{
         width: "100%",
-        my: 5,
+        boxSizing: "border-box",
+        borderRadius: 3,
         px: 2,
         pb: 2,
         height: "fit-content",
@@ -31,7 +32,7 @@ const FactoringProgressBarContainer = () => {
     >
       <Box
         sx={{
-          backgroundColor: "white",
+          backgroundColor: "background.paper",
           top: 0,
           left: 0,
           display: "flex",
@@ -45,7 +46,7 @@ const FactoringProgressBarContainer = () => {
       >
         <Typography
           sx={{
-            fontSize: "1.2rem",
+            fontSize: 16,
             fontWeight: 600,
             color: "font_color.heading",
           }}
@@ -69,16 +70,16 @@ const FactoringProgressBarContainer = () => {
         <Box
           sx={{
             display: "grid",
-            gridTemplateColumns: "1fr",
+            gridTemplateColumns: { xs: "1fr", xl: "repeat(2, minmax(0, 1fr))" },
             overflow: "hidden",
-            overflowY: "scroll",
+            overflowY: "auto",
             gap: 2,
           }}
         >
           {isEmpty && <Alert severity="info">Список пуст</Alert>}
 
           {approvedLines.map((line) => (
-            <FactoringLineRingProgress line={line} />
+            <FactoringLineRingProgress key={line.id} line={line} />
           ))}
         </Box>
       )}

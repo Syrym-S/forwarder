@@ -1,4 +1,4 @@
-import { Box, Chip, Divider, Stack, Typography, Paper } from "@mui/material";
+import { Box, Button, Chip, Divider, Stack, Typography, Paper } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
 import RenderStatus from "../../../shared/ui/render-status";
@@ -62,13 +62,13 @@ const DashboardLeadItem = ({
       onMouseLeave={handleMouseLeave}
       onDoubleClick={handleDoubleClick}
       sx={{
-        p: 1,
+        p: 1.5,
         borderRadius: 3,
         cursor: "pointer",
         transition: "0.2s ease",
         borderColor: isSelected || isHovered ? "primary.main" : "divider",
         backgroundColor: isSelected
-          ? "primary.50"
+          ? "background.main"
           : isHovered
             ? "rgba(33, 150, 243, 0.04)"
             : "background.paper",
@@ -90,9 +90,9 @@ const DashboardLeadItem = ({
             variant={isSelected ? "filled" : "outlined"}
             sx={{
               fontWeight: 600,
-              borderRadius: 999,
-              color: isSelected ? "white" : "black",
-              background: isSelected ? "primary.main" : "default",
+              borderRadius: 2,
+              color: isSelected ? "common.white" : "primary.main",
+              bgcolor: isSelected ? "primary.main" : "background.paper",
             }}
           />
 
@@ -108,7 +108,8 @@ const DashboardLeadItem = ({
             fontWeight={500}
             sx={{
               fontSize: 13,
-              lineHeight: 1.35,
+              lineHeight: 1.5,
+              overflowWrap: "anywhere",
             }}
           >
             {formatLocation(lead?.from_location)}
@@ -126,7 +127,8 @@ const DashboardLeadItem = ({
             fontWeight={500}
             sx={{
               fontSize: 13,
-              lineHeight: 1.35,
+              lineHeight: 1.5,
+              overflowWrap: "anywhere",
             }}
           >
             {formatLocation(lead?.to_location)}
@@ -160,6 +162,7 @@ const DashboardLeadItem = ({
             />
           )}
         </Box>
+        <Button size="small" onClick={(event) => { event.stopPropagation(); handleDoubleClick(); }} sx={{ alignSelf: "flex-start", textTransform: "none", borderRadius: 2 }}>Подробнее о перевозке</Button>
       </Stack>
     </Paper>
   );

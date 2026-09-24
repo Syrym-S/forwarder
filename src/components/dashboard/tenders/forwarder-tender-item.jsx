@@ -1,5 +1,4 @@
 import { Box, Chip, Divider, Stack, Typography } from "@mui/material";
-import React from "react";
 import RenderStatus from "../../../shared/ui/render-status";
 import dayjs from "dayjs";
 import { useNavigate } from "react-router-dom";
@@ -23,6 +22,9 @@ const ForwarderTenderItem = ({ tender }) => {
   return (
     <Box
       onClick={handleClick}
+      role="link"
+      tabIndex={0}
+      onKeyDown={(event) => { if (event.key === "Enter") handleClick(); }}
       sx={{
         p: 1.5,
         borderRadius: 2,
@@ -30,8 +32,8 @@ const ForwarderTenderItem = ({ tender }) => {
         border: "1px solid",
         borderColor: "divider",
         transition: "0.2s ease",
-        backgroundColor: "primary.50",
-        "&:hover": {
+        backgroundColor: "background.default",
+        "&:hover, &:focus-visible": {
           borderColor: "primary.main",
           boxShadow: "0 6px 18px rgba(33, 150, 243, 0.12)",
         },
@@ -52,7 +54,7 @@ const ForwarderTenderItem = ({ tender }) => {
             size="small"
             sx={{
               fontWeight: 600,
-              borderRadius: 999,
+              borderRadius: 2,
               color: "primary.main",
               borderColor: "primary.main",
             }}
@@ -64,7 +66,7 @@ const ForwarderTenderItem = ({ tender }) => {
             size="small"
             sx={{
               fontWeight: 600,
-              borderRadius: 999,
+              borderRadius: 2,
             }}
           />
 
@@ -80,7 +82,7 @@ const ForwarderTenderItem = ({ tender }) => {
           sx={{
             width: "fit-content",
             fontWeight: 600,
-            borderRadius: 999,
+            borderRadius: 2,
           }}
         />
 
@@ -93,7 +95,8 @@ const ForwarderTenderItem = ({ tender }) => {
             fontWeight={500}
             sx={{
               fontSize: 13,
-              lineHeight: 1.35,
+              lineHeight: 1.5,
+              overflowWrap: "anywhere",
             }}
           >
             {formatLocation(leadData?.from_location)}
@@ -111,7 +114,8 @@ const ForwarderTenderItem = ({ tender }) => {
             fontWeight={500}
             sx={{
               fontSize: 13,
-              lineHeight: 1.35,
+              lineHeight: 1.5,
+              overflowWrap: "anywhere",
             }}
           >
             {formatLocation(leadData?.to_location)}

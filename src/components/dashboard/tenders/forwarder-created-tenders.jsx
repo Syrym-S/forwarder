@@ -26,6 +26,10 @@ const ForwarderCreatedTenders = () => {
     (tender) => tender.publication_type === "public",
   );
 
+  const privateTenders = tenders.filter(
+    (tender) => tender.publication_type === "private",
+  );
+
   const isTendersEmpty = tenders.length === 0;
   const isPulicTendersEmpty = pulicTenders.length === 0;
 
@@ -36,11 +40,15 @@ const ForwarderCreatedTenders = () => {
   if (isLoading)
     return (
       <Paper
+        elevation={0}
+        variant="outlined"
         sx={{
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-          borderRadius: 2,
+          borderRadius: 3,
+          minWidth: 0,
+          minHeight: 220,
         }}
       >
         <CircularProgress />
@@ -49,17 +57,26 @@ const ForwarderCreatedTenders = () => {
 
   return (
     <Paper
+      elevation={0}
+      variant="outlined"
       sx={{
         px: 2,
         pb: 2,
         overflowY: "auto",
+        maxHeight: 480,
+        boxSizing: "border-box",
         position: "relative",
-        borderRadius: 2,
+        borderRadius: 3,
+        minWidth: 0,
+        minHeight: 220,
       }}
     >
       <Box
         sx={{
-          backgroundColor: "white",
+          backgroundColor: "background.paper",
+          zIndex: 1,
+          flexWrap: "wrap",
+          gap: 1,
           position: "sticky",
           top: 0,
           left: 0,
@@ -68,25 +85,23 @@ const ForwarderCreatedTenders = () => {
           justifyContent: "space-between",
           borderBottom: "1px solid",
           borderColor: "divider",
-          py: 1,
+          py: 2,
           mb: 1,
         }}
       >
         <Typography
           sx={{
-            fontSize: "1.2rem",
+            fontSize: 16,
             fontWeight: 600,
             color: "font_color.heading",
           }}
         >
-          Список аукционов для водителей
+          Аукционы для водителей
         </Typography>
 
         <Tooltip
           title={
-            checked
-              ? "Показать только публичные: ВЫКЛ"
-              : "Показать только публичные: ВКЛ"
+            checked ? "Показать только публичные" : "Показать только приватные"
           }
         >
           <Switch
@@ -110,7 +125,7 @@ const ForwarderCreatedTenders = () => {
             display: "grid",
             gridTemplateColumns: "1fr",
             gap: 2,
-            height: "30vh",
+            minHeight: 160,
           }}
         >
           <Box
@@ -131,7 +146,7 @@ const ForwarderCreatedTenders = () => {
             display: "grid",
             gridTemplateColumns: "1fr",
             gap: 2,
-            height: "30vh",
+            minHeight: 160,
           }}
         >
           <Box
@@ -149,10 +164,10 @@ const ForwarderCreatedTenders = () => {
       <Box sx={{ display: "grid", gridTemplateColumns: "1fr", gap: 2 }}>
         {checked
           ? pulicTenders.map((tender) => (
-              <ForwarderTenderItem tender={tender} />
+              <ForwarderTenderItem key={tender.id} tender={tender} />
             ))
-          : pulicTenders.map((tender) => (
-              <ForwarderTenderItem tender={tender} />
+          : privateTenders.map((tender) => (
+              <ForwarderTenderItem key={tender.id} tender={tender} />
             ))}
       </Box>
     </Paper>

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Box, Container, Switch } from "@mui/material";
+import { Box, Container, Typography } from "@mui/material";
 
 import RootLayout from "../../components/layout/root-layout";
 import Map from "../../components/dashboard/map";
@@ -46,14 +46,18 @@ const Dashboard = () => {
   useEffect(() => {
     fetchAcceptedLeads();
     getFactorings();
-  }, [fetchAcceptedLeads]);
+  }, [fetchAcceptedLeads, getFactorings]);
 
   return (
     <RootLayout withoutDataCheck>
       <Container
         maxWidth={false}
         sx={{
-          p: "10px",
+          px: { xs: 0, sm: 0 },
+          display: "flex",
+          flexDirection: "column",
+          gap: 3,
+          minWidth: 0,
         }}
       >
         <DashboardStats data={stats} />
@@ -70,12 +74,18 @@ const Dashboard = () => {
         >
           <Box
             sx={{
-              boxShadow: 2,
-              borderRadius: 4,
+              border: "1px solid",
+              borderColor: "divider",
+              bgcolor: "background.paper",
+              borderRadius: 3,
               overflow: "hidden",
               minWidth: 0,
             }}
           >
+            <Box sx={{ p: 2, borderBottom: "1px solid", borderColor: "divider" }}>
+              <Typography component="h2" sx={{ fontSize: 16, fontWeight: 600, color: "font_color.heading" }}>Карта перевозок</Typography>
+              <Typography sx={{ mt: 0.5, fontSize: 13, color: "text.secondary" }}>Маршруты активных перевозок</Typography>
+            </Box>
             <Map
               leads={leads}
               selectedLeadId={selectedLeadId}
@@ -99,7 +109,11 @@ const Dashboard = () => {
 
         <FactoringProgressBarContainer />
 
-        <FactoringTable factorings={awaitingApproveFactorings} />
+        <Box sx={{ minWidth: 0, p: 2, bgcolor: "background.paper", border: "1px solid", borderColor: "divider", borderRadius: 3, "& > .MuiPaper-root": { boxShadow: "none", my: 0, height: 420 }, "& .MuiDataGrid-root": { border: 0, fontSize: 13 }, "& .MuiDataGrid-columnHeader": { bgcolor: "background.default" } }}>
+          <Typography component="h2" sx={{ fontSize: 16, fontWeight: 600, color: "font_color.heading", mb: 0.5 }}>Факторинг в ожидании</Typography>
+          <Typography sx={{ fontSize: 13, color: "text.secondary", mb: 2 }}>Заявки на подтверждении и в ожидании оплаты</Typography>
+          <FactoringTable factorings={awaitingApproveFactorings} />
+        </Box>
       </Container>
     </RootLayout>
   );
