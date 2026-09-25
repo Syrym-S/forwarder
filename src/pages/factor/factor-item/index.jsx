@@ -165,6 +165,7 @@ const FactorItem = () => {
             display: "flex",
             py: "10px",
             justifyContent: { xs: "space-between", sm: "end" },
+            alignItems: "center",
             mb: 4,
             gap: {
               xs: "3px",
@@ -183,7 +184,21 @@ const FactorItem = () => {
             variant="outlined"
           />
 
-          <RenderStatus status={factoringLineDetails?.status} />
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              gap: 1,
+              px: 1.5,
+              py: 1,
+              bgcolor: "background.paper",
+              border: "1px solid",
+              borderColor: "divider",
+              borderRadius: 2,
+            }}
+          >
+            <RenderStatus status={factoringLineDetails?.status} />
+          </Box>
         </Box>
       </Box>
 

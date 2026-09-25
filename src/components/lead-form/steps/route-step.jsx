@@ -6,13 +6,15 @@ import {
   Alert,
   Box,
   Button,
+  Checkbox,
+  FormControlLabel,
   Snackbar,
   Typography,
 } from "@mui/material";
 import { StepSection } from "../step-section";
 import { useCustomerMap } from "../use-customer-map";
 import { CustomerMapView } from "../map-view";
-import { useFieldArray, useWatch } from "react-hook-form";
+import { Controller, useFieldArray, useWatch } from "react-hook-form";
 import { useRouteMapPicker } from "../use-route-map-picker";
 import { STATUS } from "../../../shared/const/tenders";
 import { useLeadsStore } from "../../../app/store/leads/leads-store";
@@ -24,7 +26,7 @@ const waypointTypes = [
   { id: 3, value: "unloading", label: "Разгрузка" },
 ];
 
-const RouteStep = ({ control, form, setValue }) => {
+const RouteStep = ({ control, form, setValue, isEdit = false }) => {
   const currentLead = useLeadsStore((state) => state.currentLead);
 
   const { fields, append, remove } = useFieldArray({
@@ -610,6 +612,32 @@ const RouteStep = ({ control, form, setValue }) => {
           Неправильные параметры города. Попытайтесь выбрать другую точку
         </Alert>
       </Snackbar>
+      <Box sx={{ mt: 2, p: 2, border: "1px solid", borderColor: "divider", borderRadius: 2 }}>
+        <Controller
+          name="passVerify"
+          control={control}
+          defaultValue={false}
+          render={({ field }) => (
+            <FormControlLabel
+              control={
+                <Checkbox
+                  name={field.name}
+                  checked={field.value === true}
+                  onChange={(_, checked) => field.onChange(checked)}
+                  onBlur={field.onBlur}
+                  inputRef={field.ref}
+                  disabled={isEdit}
+                />
+              }
+              label="Пропуск видеофиксации разгрузки/погрузки"
+            />
+          )}
+        />
+        <Typography variant="body2" color="text.secondary">
+          При включении подтверждение погрузки и разгрузки экспедитором не требуется.
+          После создания перевозки изменить настройку нельзя.
+        </Typography>
+      </Box>
     </StepSection>
   );
 };

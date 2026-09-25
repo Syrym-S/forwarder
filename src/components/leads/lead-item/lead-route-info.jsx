@@ -2,6 +2,7 @@ import Section from "./lead-detail-section";
 import RouteOutlinedIcon from "@mui/icons-material/RouteOutlined";
 import RoutePoint from "./route-point";
 import { Box } from "@mui/material";
+import InfoItem from "../../../shared/ui/info-item";
 
 const LeadRouteInfo = ({ leadData }) => {
   const waypoints = leadData?.waypoints || [];
@@ -66,6 +67,10 @@ const LeadRouteInfo = ({ leadData }) => {
           }
           isPassed={leadData?.to_location?.is_passed}
           date={pointSchedules[waypoints.length + 1]}
+        />
+        <InfoItem
+          label="Пропуск видеофиксации разгрузки/погрузки"
+          value={leadData?.passVerify === true ? "Включён" : "Выключен"}
         />
       </Box>
     </Section>

@@ -2,6 +2,7 @@ import dayjs from "dayjs";
 
 export const useFormDefaultValues = (lead = null, files = []) => {
   return {
+    passVerify: lead?.passVerify === true,
     loading_date: lead?.created_at.date || null,
     driver: lead?.driver,
     summ: lead?.summ || null,

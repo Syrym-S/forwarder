@@ -44,7 +44,7 @@ const defaultValues = {
   bik: "",
   iik: "",
   document_number: "",
-  issue_country: "",
+  issue_country: "KZ",
   document_issue_date: "",
   document_issued_by: "",
   password: "",
@@ -428,7 +428,16 @@ const AddDriverForm = ({ open, onClose, setSavedData }) => {
                       control={
                         <Checkbox
                           checked={field.value}
-                          onChange={(e) => field.onChange(e.target.checked)}
+                          onChange={(e) => {
+                            const checked = e.target.checked;
+                            field.onChange(checked);
+                            if (!checked) {
+                              setValue("issue_country", "KZ", {
+                                shouldDirty: true,
+                                shouldValidate: true,
+                              });
+                            }
+                          }}
                         />
                       }
                       label="Иностранец"
@@ -461,11 +470,10 @@ const AddDriverForm = ({ open, onClose, setSavedData }) => {
                 render={({ field }) => (
                   <TextField
                     {...field}
-                    label={isForeigner ? "Страна" : "Страна выдачи"}
+                    label={"Страна выдачи"}
                     slotProps={{ inputLabel: { required: true } }}
                     fullWidth
                     size="small"
-                    disabled={isForeigner}
                   />
                 )}
               />

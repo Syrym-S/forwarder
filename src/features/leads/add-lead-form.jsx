@@ -68,6 +68,7 @@ const AddLeadForm = ({
 
   const defaultValues = {
     documents: [],
+    passVerify: false,
     ...initialValues,
   };
 
@@ -85,6 +86,8 @@ const AddLeadForm = ({
   });
 
   const formValues = useWatch({ control });
+
+  console.log("formValues", formValues);
 
   const isLastStep = activeStep === steps.length;
 
@@ -119,6 +122,7 @@ const AddLeadForm = ({
       let documentsUploadFailed = false;
 
       if (isEdit) {
+        delete payload.passVerify;
         await updateLead(editingItemId, payload);
         clearCurrentLead();
         await getLeadItem(editingItemId);
@@ -190,7 +194,12 @@ const AddLeadForm = ({
     switch (step) {
       case 1:
         return (
-          <RouteStep control={control} form={formValues} setValue={setValue} />
+          <RouteStep
+            control={control}
+            form={formValues}
+            setValue={setValue}
+            isEdit={isEdit}
+          />
         );
       case 2:
         return (

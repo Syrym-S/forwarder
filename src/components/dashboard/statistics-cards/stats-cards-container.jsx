@@ -1,4 +1,13 @@
-import { Box, Button, IconButton, Popover, Skeleton, TextField, Tooltip, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  IconButton,
+  Popover,
+  Skeleton,
+  TextField,
+  Tooltip,
+  Typography,
+} from "@mui/material";
 import StatsHeader from "./stats-header";
 import { useEffect, useId, useState } from "react";
 import dayjs from "dayjs";
@@ -56,22 +65,27 @@ const StatCard = ({
   const isCalendarOpen = Boolean(calendarAnchor);
   const { period, from, to } = draftFilter;
   const dateRange = { from, to };
-  const setDateRange = (update) => setDraftFilter((prev) => ({ ...prev, ...update(prev) }));
-  const handlePeriodChange = (event) => setDraftFilter((prev) => ({ ...prev, period: event.target.value }));
+  const setDateRange = (update) =>
+    setDraftFilter((prev) => ({ ...prev, ...update(prev) }));
+  const handlePeriodChange = (event) =>
+    setDraftFilter((prev) => ({ ...prev, period: event.target.value }));
   const isRangeInvalid = period === "custom" && (!from || !to || from > to);
   const applyFilter = () => {
     if (isRangeInvalid) return;
-    const hasChanged = period !== filter.period || (
-      period === "custom" && (from !== filter.from || to !== filter.to)
-    );
+    const hasChanged =
+      period !== filter.period ||
+      (period === "custom" && (from !== filter.from || to !== filter.to));
     if (hasChanged) onFilterChange({ ...draftFilter });
     setCalendarAnchor(null);
   };
-  const periodLabel = filter?.period === "custom"
-    ? (filter.from && filter.to && filter.from <= filter.to
-      ? dayjs(filter.from).format("DD.MM.YYYY") + " — " + dayjs(filter.to).format("DD.MM.YYYY")
-      : "Укажите корректный период")
-    : PERIOD_OPTIONS.find((option) => option.value === filter?.period)?.label;
+  const periodLabel =
+    filter?.period === "custom"
+      ? filter.from && filter.to && filter.from <= filter.to
+        ? dayjs(filter.from).format("DD.MM.YYYY") +
+          " — " +
+          dayjs(filter.to).format("DD.MM.YYYY")
+        : "Укажите корректный период"
+      : PERIOD_OPTIONS.find((option) => option.value === filter?.period)?.label;
 
   return (
     <Box
@@ -99,21 +113,34 @@ const StatCard = ({
           mb: 2.5,
         }}
       >
-        <Box sx={{ display: "flex", alignItems: "center", gap: 1.5, minWidth: 0 }}>
-          <Box sx={{ display: "grid", placeItems: "center", width: 42, height: 42, flexShrink: 0, borderRadius: 2.5, bgcolor: "background.main", color: "primary.main" }}>
+        <Box
+          sx={{ display: "flex", alignItems: "center", gap: 1.5, minWidth: 0 }}
+        >
+          <Box
+            sx={{
+              display: "grid",
+              placeItems: "center",
+              width: 42,
+              height: 42,
+              flexShrink: 0,
+              borderRadius: 2.5,
+              bgcolor: "background.main",
+              color: "primary.main",
+            }}
+          >
             <Box component={Icon} sx={{ fontSize: 23 }} />
           </Box>
-        <Typography
-          title={title}
-          sx={{
-            fontSize: "0.95rem",
-            fontWeight: 600,
-            color: "font_color.heading",
-            lineHeight: 1.4,
-          }}
-        >
-          {title}
-        </Typography>
+          <Typography
+            title={title}
+            sx={{
+              fontSize: "0.95rem",
+              fontWeight: 600,
+              color: "font_color.heading",
+              lineHeight: 1.4,
+            }}
+          >
+            {title}
+          </Typography>
         </Box>
         {canBeFiltered && (
           <Tooltip title="Выбрать период">
@@ -134,8 +161,13 @@ const StatCard = ({
                 border: "1px solid",
                 borderColor: isCalendarOpen ? "primary.main" : "#E3E8EF",
                 color: isCalendarOpen ? "primary.main" : "color.slate_2",
-                bgcolor: isCalendarOpen ? "background.main" : "background.paper",
-                "&:hover": { bgcolor: "background.main", color: "primary.main" },
+                bgcolor: isCalendarOpen
+                  ? "background.main"
+                  : "background.paper",
+                "&:hover": {
+                  bgcolor: "background.main",
+                  color: "primary.main",
+                },
               }}
             >
               <CalendarMonthOutlined sx={{ fontSize: 21 }} />
@@ -144,29 +176,29 @@ const StatCard = ({
         )}
       </Box>
 
-        {canBeFiltered && (
-          <Popover
-            open={isCalendarOpen}
-            anchorEl={calendarAnchor}
-            onClose={() => setCalendarAnchor(null)}
-            anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-            transformOrigin={{ vertical: "top", horizontal: "right" }}
-            slotProps={{
-              paper: {
-                id: calendarId,
-                role: "dialog",
-                "aria-label": `Период: ${title}`,
-                sx: {
-                  mt: 1,
-                  width: 300,
-                  maxWidth: "calc(100vw - 32px)",
-                  borderRadius: 3,
-                  border: "1px solid #E3E8EF",
-                  boxShadow: "0 8px 32px rgba(22, 36, 62, 0.12)",
-                },
+      {canBeFiltered && (
+        <Popover
+          open={isCalendarOpen}
+          anchorEl={calendarAnchor}
+          onClose={() => setCalendarAnchor(null)}
+          anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+          transformOrigin={{ vertical: "top", horizontal: "right" }}
+          slotProps={{
+            paper: {
+              id: calendarId,
+              role: "dialog",
+              "aria-label": `Период: ${title}`,
+              sx: {
+                mt: 1,
+                width: 300,
+                maxWidth: "calc(100vw - 32px)",
+                borderRadius: 3,
+                border: "1px solid #E3E8EF",
+                boxShadow: "0 8px 32px rgba(22, 36, 62, 0.12)",
               },
-            }}
-          >
+            },
+          }}
+        >
           <Box
             sx={{
               display: "flex",
@@ -174,10 +206,20 @@ const StatCard = ({
               gap: 2,
               p: 2,
               "& .MuiTextField-root": { width: "100%", minWidth: 0 },
-              "& .MuiOutlinedInput-root": { borderRadius: 2, fontSize: "0.85rem", bgcolor: "#FAFBFD" },
+              "& .MuiOutlinedInput-root": {
+                borderRadius: 2,
+                fontSize: "0.85rem",
+                bgcolor: "#FAFBFD",
+              },
             }}
           >
-            <Typography sx={{ fontSize: 14, fontWeight: 600, color: "font_color.heading" }}>
+            <Typography
+              sx={{
+                fontSize: 14,
+                fontWeight: 600,
+                color: "font_color.heading",
+              }}
+            >
               Выбор периода
             </Typography>
             <CustomSelect
@@ -231,7 +273,10 @@ const StatCard = ({
               </>
             )}
             <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 1 }}>
-              <Button onClick={() => setCalendarAnchor(null)} sx={{ textTransform: "none" }}>
+              <Button
+                onClick={() => setCalendarAnchor(null)}
+                sx={{ textTransform: "none" }}
+              >
                 Отмена
               </Button>
               <Button
@@ -245,11 +290,21 @@ const StatCard = ({
               </Button>
             </Box>
           </Box>
-          </Popover>
-        )}
+        </Popover>
+      )}
 
       {canBeFiltered && (
-        <Typography sx={{ order: 3, display: "flex", alignItems: "center", gap: 0.75, fontSize: 12, color: "text.secondary", mt: 2 }}>
+        <Typography
+          sx={{
+            order: 3,
+            display: "flex",
+            alignItems: "center",
+            gap: 0.75,
+            fontSize: 12,
+            color: "text.secondary",
+            mt: 2,
+          }}
+        >
           <CalendarMonthOutlined sx={{ fontSize: 16, flexShrink: 0 }} />
           За период: {periodLabel}
         </Typography>
@@ -287,7 +342,9 @@ const StatCard = ({
         </Typography>
       </Box>
 
-      {isLoading ? <Skeleton width="45%" /> : currencies?.length > 0 ? (
+      {isLoading ? (
+        <Skeleton width="45%" />
+      ) : currencies?.length > 0 ? (
         <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.75, mb: "auto" }}>
           {currencies.map((item) => {
             const value = valueKey ? item[valueKey] : null;
@@ -365,7 +422,7 @@ const DashboardStats = ({ data }) => {
   // Меняются при изменении периода
   const periodCards = [
     {
-      title: "Перевозки",
+      title: "Завершенные перевозки",
       filterKey: "leads",
       count: data.leads_period?.count ?? 0,
       countLabel: "перевозка",
@@ -444,10 +501,12 @@ const DashboardStats = ({ data }) => {
               canBeFiltered
               isLoading={isLoading}
               filter={filters[card.filterKey]}
-              onFilterChange={(filter) => setFilters((prev) => ({
-                ...prev,
-                [card.filterKey]: filter,
-              }))}
+              onFilterChange={(filter) =>
+                setFilters((prev) => ({
+                  ...prev,
+                  [card.filterKey]: filter,
+                }))
+              }
             />
           ))}
         </Box>

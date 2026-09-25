@@ -17,14 +17,14 @@ const SavedDataModal = ({ savedData, setSavedData }) => {
 
   const handleCopy = async (url) => {
     const text = `Логин: ${savedData?.email}
-Пароль: ${savedData?.password}
-Ссылка: ${url}`;
+      Пароль: ${savedData?.password}
+      Ссылка: ${url}`;
 
     await navigator.clipboard.writeText(text);
   };
 
   return (
-    <Dialog open={Boolean(savedData)} maxWidth="sm" fullWidth>
+    <Dialog open={true} maxWidth="sm" fullWidth>
       <DialogTitle>Сохранённые данные</DialogTitle>
 
       <DialogContent>
@@ -101,7 +101,7 @@ const SavedDataModal = ({ savedData, setSavedData }) => {
                         flexShrink: 0,
                       }}
                     >
-                      Копировать Apple
+                      Копировать
                     </Button>
                   </Box>
                 }
@@ -110,7 +110,7 @@ const SavedDataModal = ({ savedData, setSavedData }) => {
           </Box>
 
           {/* Android */}
-          <Box
+          {/* <Box
             display="flex"
             alignItems="center"
             justifyContent="space-between"
@@ -154,7 +154,7 @@ const SavedDataModal = ({ savedData, setSavedData }) => {
                 }
               />
             </Box>
-          </Box>
+          </Box> */}
         </Stack>
       </DialogContent>
 
