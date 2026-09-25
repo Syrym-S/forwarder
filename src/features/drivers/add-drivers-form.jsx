@@ -106,12 +106,17 @@ const AddDriverForm = ({ open, onClose, setSavedData }) => {
     }
 
     try {
-      await createDriver(formData);
+      const response = await createDriver(formData);
+      const credentials = response.data.credentials;
+
+      console.log(response);
       await getDrivers();
 
       setSavedData({
-        email: data.email,
-        password: data.password,
+        email: credentials.login,
+        password: credentials.password,
+        android_invite_link: credentials.login_url_android,
+        ios_invite_link: credentials.login_url_ios,
       });
 
       onClose();

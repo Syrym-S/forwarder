@@ -35,7 +35,6 @@ const LeadItemMainContainer = ({
   const customerAvrDocument = useLeadsStore(
     (state) => state.customerAvrDocument,
   );
-
   const newNotification = useNotificationsStore(
     (state) => state.newNotification,
   );
@@ -246,7 +245,17 @@ const LeadItemMainContainer = ({
 
       <LeadRouteInfo leadData={leadData} />
 
-      <Box sx={{ display: "grid", gridTemplateColumns: { xs: "minmax(0, 1fr)", xl: "repeat(2, minmax(0, 1fr))" }, gap: 2, alignItems: "start" }}>
+      <Box
+        sx={{
+          display: "grid",
+          gridTemplateColumns: {
+            xs: "minmax(0, 1fr)",
+            xl: "repeat(2, minmax(0, 1fr))",
+          },
+          gap: 2,
+          alignItems: "start",
+        }}
+      >
         <LeadCustomerInfo leadData={leadData} />
         <LeadDriverInfo leadData={leadData} />
       </Box>
@@ -279,7 +288,6 @@ const LeadItemMainContainer = ({
         leatData={leadData}
         cargoActions={leadData?.cargo_actions}
       />
-
 
       <Section
         title="Документы"

@@ -88,6 +88,7 @@ export const useDriverStore = create((set) => ({
         inviteLink: response.data.invite_link,
         isLoading: false,
       });
+      return response;
     } catch (e) {
       set({
         error: e.response.data.message,

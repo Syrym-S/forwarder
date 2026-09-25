@@ -67,7 +67,9 @@ const LeadDriverInfo = ({ leadData }) => {
       >
         <InfoItem label={"ID водителя"} value={driver.id} />
         <InfoItem label={"ФИО"} value={driver.fio} />
-        <InfoItem label={"Номер телефона"} value={driver.phone} />
+        {driver.phone && (
+          <InfoItem label={"Номер телефона"} value={driver.phone} />
+        )}
       </Box>
     </Section>
   );

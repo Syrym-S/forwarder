@@ -77,30 +77,30 @@ export default function LeadMap({ from, waypoints, to, id }) {
         ? "/staging/wp-json/geows/v1/token"
         : "/wp-json/geows/v1/token";
 
-      const addRes = await fetch(BASE_URL, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          // eslint-disable-next-line no-undef
-          "X-WP-Nonce": GeoWS_Config.nonce,
-        },
-        body: JSON.stringify({
-          lead_id: id,
-          type: "add",
-        }),
-      }).then((r) => r.json());
+      // const addRes = await fetch(BASE_URL, {
+      //   method: "POST",
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //     // eslint-disable-next-line no-undef
+      //     "X-WP-Nonce": GeoWS_Config.nonce,
+      //   },
+      //   body: JSON.stringify({
+      //     lead_id: id,
+      //     type: "add",
+      //   }),
+      // }).then((r) => r.json());
 
-      const wsAdd = new WebSocket(
-        `wss://geo.360logistics.kz/socket?token=${addRes.token}`,
-      );
-      wsAdd.onopen = () => {
-        console.log("add connected");
-        wsAdd.send(
-          JSON.stringify({
-            point: { latitude: 43.238, longitude: 76.8829, altitude: 620 },
-          }),
-        );
-      };
+      // const wsAdd = new WebSocket(
+      //   `wss://geo.360logistics.kz/socket?token=${addRes.token}`,
+      // );
+      // wsAdd.onopen = () => {
+      //   console.log("add connected");
+      //   wsAdd.send(
+      //     JSON.stringify({
+      //       point: { latitude: 43.238, longitude: 76.8829, altitude: 620 },
+      //     }),
+      //   );
+      // };
 
       const res = await fetch(BASE_URL, {
         method: "POST",

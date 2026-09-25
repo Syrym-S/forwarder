@@ -11,9 +11,6 @@ import {
 import InfoItem from "../../shared/ui/info-item";
 
 const SavedDataModal = ({ savedData, setSavedData }) => {
-  const appleUrl = "https://example.com/apple/download";
-  const androidUrl = "https://example.com/android/download";
-
   const handleClose = () => {
     setSavedData(null);
   };
@@ -43,7 +40,7 @@ const SavedDataModal = ({ savedData, setSavedData }) => {
             borderRadius={1}
           >
             <Box>
-              <InfoItem label={"Логин"} value={savedData?.email} />
+              <InfoItem label={"Логин"} value={savedData?.login} />
             </Box>
           </Box>
 
@@ -79,15 +76,27 @@ const SavedDataModal = ({ savedData, setSavedData }) => {
                   <Box
                     sx={{
                       display: "flex",
+                      alignItems: "center",
+                      gap: 1,
+                      minWidth: 0,
                       justifyContent: "space-between",
                     }}
                   >
-                    <Typography>{appleUrl}</Typography>
+                    <Typography
+                      noWrap
+                      title={savedData.ios_invite_link}
+                      sx={{
+                        flex: 1,
+                        minWidth: 0,
+                      }}
+                    >
+                      {savedData.ios_invite_link}
+                    </Typography>
 
                     <Button
                       variant="outlined"
                       size="small"
-                      onClick={() => handleCopy(appleUrl)}
+                      onClick={() => handleCopy(savedData.ios_invite_link)}
                       sx={{
                         flexShrink: 0,
                       }}
@@ -117,15 +126,24 @@ const SavedDataModal = ({ savedData, setSavedData }) => {
                   <Box
                     sx={{
                       display: "flex",
+                      alignItems: "center",
+                      gap: 1,
+                      minWidth: 0,
                       justifyContent: "space-between",
                     }}
                   >
-                    <Typography>{androidUrl}</Typography>
+                    <Typography
+                      noWrap
+                      title={savedData.android_invite_link}
+                      sx={{ flex: 1, minWidth: 0 }}
+                    >
+                      {savedData.android_invite_link}
+                    </Typography>
 
                     <Button
                       variant="outlined"
                       size="small"
-                      onClick={() => handleCopy(androidUrl)}
+                      onClick={() => handleCopy(savedData.android_invite_link)}
                       sx={{
                         flexShrink: 0,
                       }}
