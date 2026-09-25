@@ -71,7 +71,7 @@ const SavedDataModal = ({ savedData, setSavedData }) => {
           >
             <Box sx={{ flex: 1, minWidth: 0 }}>
               <InfoItem
-                label="Apple URL"
+                label="Ссылка входа"
                 value={
                   <Box
                     sx={{
