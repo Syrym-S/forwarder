@@ -5,7 +5,7 @@ import {
   getVerificationColor,
   getVerificationLabel,
 } from "../../shared/helpers/factoring/factoring.helpers";
-import Section from "../../shared/ui/section";
+import Section from "../leads/lead-item/lead-detail-section";
 import InfoBadge from "../../shared/ui/info-badge";
 
 const FactoringVerifications = ({ factoring }) => {

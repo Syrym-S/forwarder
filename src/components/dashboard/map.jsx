@@ -12,6 +12,7 @@ import "leaflet/dist/leaflet.css";
 import { useLeadsStore } from "../../app/store/leads/leads-store";
 import L from "leaflet";
 import { isStaging } from "../../app/client";
+import { fetchCachedRouteDetails } from "../../shared/helpers/route-cache";
 import "./marker.style.css";
 
 const createMarkerIcon = (label, subLabel) => {
@@ -86,24 +87,7 @@ const getRoute = async (points) => {
   try {
     const coordinates = points.map(([lat, lon]) => `${lon},${lat}`).join(";");
 
-    const response = await fetch(
-      `https://router.project-osrm.org/route/v1/driving/${coordinates}?overview=full&geometries=geojson`,
-    );
-
-    const data = await response.json();
-
-    if (!data.routes?.length) {
-      return null;
-    }
-
-    return {
-      distance: data.routes[0].distance,
-      duration: data.routes[0].duration,
-      coordinates: data.routes[0].geometry.coordinates.map(([lng, lat]) => [
-        lat,
-        lng,
-      ]),
-    };
+    return await fetchCachedRouteDetails(coordinates);
   } catch (error) {
     console.error("Failed to load route", error);
     return null;

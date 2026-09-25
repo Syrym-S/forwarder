@@ -87,6 +87,15 @@ export const createFactoringLineApi = async (payload) => {
   return data;
 };
 
+export const regenerateFactoringApi = async (factoringId) => {
+  return api.post(`/forwarder/v1/factoring/${factoringId}/regenerate`, null, {
+    headers: {
+      // eslint-disable-next-line no-undef
+      "X-WP-Nonce": APP_DATA.nonce,
+    },
+  });
+};
+
 export const approvePaimentApi = async (factoring_id) => {
   const data = await api.post(
     `/forwarder/v1/factoring/${factoring_id}/approve-paid`,

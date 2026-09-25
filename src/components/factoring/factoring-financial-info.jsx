@@ -1,6 +1,5 @@
 import { Box } from "@mui/material";
-import InfoField from "../../shared/ui/info-field";
-import Section from "../../shared/ui/section";
+import Section from "../leads/lead-item/lead-detail-section";
 import CurrencyExchangeOutlinedIcon from "@mui/icons-material/CurrencyExchangeOutlined";
 import { moneySpacingFormat } from "../../shared/helpers/money-spacing";
 import InfoItem from "../../shared/ui/info-item";
@@ -15,13 +14,11 @@ const FactoringFinancialInfo = ({ factoring }) => {
         sx={{
           display: "grid",
           gridTemplateColumns: {
-            xs: "1fr",
-            sm: "repeat(4, 1fr)",
+            xs: "minmax(0, 1fr)",
+            sm: "repeat(2, minmax(0, 1fr))",
+            lg: "repeat(4, minmax(0, 1fr))",
           },
-          gap: {
-            xs: 1,
-            sm: 3,
-          },
+          gap: 1.5,
         }}
       >
         <InfoItem

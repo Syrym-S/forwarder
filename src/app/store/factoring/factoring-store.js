@@ -8,6 +8,7 @@ import {
   getFactoringDetailsApi,
   getFactoringsApi,
   getFactorsApi,
+  regenerateFactoringApi,
   searchFactorApi,
   searchFinishedLeadsApi,
 } from "./api";
@@ -27,6 +28,7 @@ export const useFactoringStore = create((set) => ({
   isFactorDetailsLoading: false,
   isSearchLoading: false,
   isConfirmLoading: false,
+  isRegenerateLoading: false,
 
   error: null,
   count: 0,
@@ -232,6 +234,25 @@ export const useFactoringStore = create((set) => ({
       });
 
       throw e;
+    }
+  },
+
+  regenerateFactoring: async (factoringId) => {
+    set({ isRegenerateLoading: true, error: null });
+
+    try {
+      const response = await regenerateFactoringApi(factoringId);
+      return response.data;
+    } catch (e) {
+      set({
+        error:
+          e.response?.data?.message ||
+          e.message ||
+          "Не удалось перегенерировать документ",
+      });
+      throw e;
+    } finally {
+      set({ isRegenerateLoading: false });
     }
   },
 

@@ -3,6 +3,7 @@ import { MapContainer, TileLayer, Marker, Polyline } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import { isStaging } from "../../app/client";
+import { fetchCachedRoute } from "../../shared/helpers/route-cache";
 import "./hide.css";
 
 const createMarkerIcon = (label, subLabel) => {
@@ -36,40 +37,37 @@ const driverIcon = L.divIcon({
   popupAnchor: [0, -18],
 });
 
-const fetchRoute = async (points) => {
-  const coordinates = points.map(([lat, lon]) => `${lon},${lat}`).join(";");
-
-  const url = `https://router.project-osrm.org/route/v1/driving/${coordinates}?overview=full&geometries=geojson`;
-
-  const res = await fetch(url);
-  const data = await res.json();
-
-  const coords = data.routes[0].geometry.coordinates;
-
-  return coords.map(([lng, lat]) => [lat, lng]);
-};
-
-export default function LeadMap({ from, waypoints, to, id }) {
+export default function LeadMap({ from, waypoints = [], to, id }) {
   const start = !from?.lat ? [43.241141, 76.871399] : [from?.lat, from?.lon];
-  const cross = waypoints?.map((waypoint) => [waypoint.lat, waypoint.lon]);
+  const cross = waypoints.map((waypoint) => [waypoint.lat, waypoint.lon]);
   const end = !to?.lat ? [43.241141, 76.871399] : [to?.lat, to?.lon];
 
   const routePoints = [start, ...cross, end];
+  const coordinates = routePoints.map(([lat, lon]) => `${lon},${lat}`).join(";");
 
   const [points, setPoints] = useState(null);
-  const [route, setRoute] = useState([]);
+  const [routeData, setRouteData] = useState(null);
+  const route = routeData?.coordinates === coordinates ? routeData.points : [];
 
   const [passedRoute, setPassedRoute] = useState([]);
   const [routeHistory, setRouteHistory] = useState([]);
 
   useEffect(() => {
+    let cancelled = false;
     const load = async () => {
-      const result = await fetchRoute(routePoints);
-      setRoute(result);
+      try {
+        const result = await fetchCachedRoute(coordinates);
+        if (!cancelled) setRouteData({ coordinates, points: result });
+      } catch (error) {
+        if (!cancelled) console.error("Ошибка загрузки маршрута:", error);
+      }
     };
 
     load();
-  }, []);
+    return () => {
+      cancelled = true;
+    };
+  }, [coordinates]);
 
   useEffect(() => {
     async function connect() {
@@ -168,7 +166,7 @@ export default function LeadMap({ from, waypoints, to, id }) {
 
       <Marker position={end} icon={createMarkerIcon("B")} />
 
-      {(route.length > 0 || !from.lat || !from?.lon) && (
+      {route.length > 0 && (
         <Polyline positions={route} color="blue" weight={4} />
       )}
 

@@ -2,8 +2,7 @@ import RootLayout from "../../../components/layout/root-layout";
 import FactoringDetailsHeading from "../../../components/factoring/factoring-details-heading";
 import LeadMap from "../../../components/leads/lead-map";
 import FactoringFinancialInfo from "../../../components/factoring/factoring-financial-info";
-import FactoringCustomerInfo from "../../../components/factoring/factoring-customer-info";
-import Section from "../../../shared/ui/section";
+import Section from "../../../components/leads/lead-item/lead-detail-section";
 import ProfileDataTable from "../../../components/factoring/profile-data-table";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 import FactorDataTable from "../../../components/factoring/factor-data-table";
@@ -16,7 +15,8 @@ import RequestQuoteOutlinedIcon from "@mui/icons-material/RequestQuoteOutlined";
 import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
 import { useEffect, useState } from "react";
 import { useLeadsStore } from "../../../app/store/leads/leads-store";
-import { Box, Button, Chip } from "@mui/material";
+import { Alert, Box, Chip, Typography } from "@mui/material";
+import PrimaryButton from "../../../shared/ui/button/primary-button";
 import { useProfileStore } from "../../../app/store/profile/profile-store";
 import { STATUS } from "../../../shared/const/tenders";
 import { useParams } from "react-router-dom";
@@ -34,11 +34,18 @@ const FactoringItem = () => {
     features.sign_provider_aitu || features.sign_provider_ncanode;
 
   const [openConfirmModal, setOpenConfirmModal] = useState(null);
+  const [regenerateFeedback, setRegenerateFeedback] = useState(null);
 
   const currentLead = useLeadsStore((state) => state.currentLead);
   const getLeadItem = useLeadsStore((state) => state.getLeadItem);
   const factoringDetails = useFactoringStore((state) => state.factoringDetails);
   const acceptFactoring = useFactoringStore((state) => state.acceptFactoring);
+  const regenerateFactoring = useFactoringStore(
+    (state) => state.regenerateFactoring,
+  );
+  const isRegenerateLoading = useFactoringStore(
+    (state) => state.isRegenerateLoading,
+  );
   const getFactoringDetails = useFactoringStore(
     (state) => state.getFactoringDetails,
   );
@@ -72,6 +79,36 @@ const FactoringItem = () => {
     await getFactoringDetails(id);
 
     window.open(link, "_blank");
+  };
+
+  const handleRegenerateFactoring = async () => {
+    setRegenerateFeedback(null);
+
+    try {
+      await regenerateFactoring(id);
+    } catch (error) {
+      setRegenerateFeedback({
+        severity: "error",
+        message:
+          error.response?.data?.message ||
+          "Не удалось перегенерировать документ. Попробуйте ещё раз.",
+      });
+      return;
+    }
+
+    try {
+      await getFactoringDetails(id);
+      setRegenerateFeedback({
+        severity: "success",
+        message: "Документ перегенерирован. Можно перейти к подписанию.",
+      });
+    } catch {
+      setRegenerateFeedback({
+        severity: "warning",
+        message:
+          "Документ перегенерирован, но не удалось обновить данные. Обновите страницу.",
+      });
+    }
   };
 
   const handleOpenModal = () => {
@@ -118,20 +155,23 @@ const FactoringItem = () => {
     <RootLayout withoutDataCheck>
       <Box
         sx={{
-          px: {
-            xs: 0,
-            sm: 10,
-          },
+          maxWidth: 1440,
+          width: "100%",
+          minWidth: 0,
+          mx: "auto",
+          "& .MuiTableCell-root": { overflowWrap: "anywhere" },
+          "& .MuiTable-root": { tableLayout: "fixed" },
         }}
       >
         <FactoringDetailsHeading factoring={factoringDetails} />
 
         <Box
           sx={{
-            boxShadow: 1,
-            borderRadius: 2,
+            border: "1px solid",
+            borderColor: "divider",
+            borderRadius: 3,
             overflow: "hidden",
-            my: 3,
+            my: 2,
           }}
         >
           <LeadMap
@@ -142,20 +182,51 @@ const FactoringItem = () => {
           />
         </Box>
 
-        {!factoringDetails?.verified_forwarder && isMustSignDocument && (
+        {(factoringDetails?.verified_forwarder || isMustSignDocument) && (
           <Section
             title="Подтвердить факторинг"
             icon={<DescriptionOutlinedIcon color="primary" />}
           >
-            <Button
-              variant="outlined"
-              disabled={isConfirmLoading || isLoading}
-              onClick={handleAcceptFactoring}
-            >
-              {isConfirmLoading || isLoading
-                ? "...Идет подтверждение"
-                : "Подтвердить"}
-            </Button>
+            {factoringDetails?.verified_forwarder ? (
+              <Alert severity="success" sx={{ borderRadius: 2 }}>
+                Вы подписали договор!
+              </Alert>
+            ) : (
+              <>
+                <Typography sx={{ mb: 2, color: "text.secondary", fontSize: 14 }}>
+                  Подпишите договор для подтверждения факторинга. При необходимости
+                  вы можете перегенерировать документ перед подписанием.
+                </Typography>
+                <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1.5,
+                  "& .MuiButton-root": { width: { xs: "100%", sm: "auto" } },
+                }}>
+                  <PrimaryButton
+                    size="medium"
+                    isLoading={isConfirmLoading}
+                    disabled={isConfirmLoading || isLoading || isRegenerateLoading}
+                    onClick={handleAcceptFactoring}
+                    text={isConfirmLoading ? "Идёт подтверждение..." : "Подтвердить"}
+                  />
+                  <PrimaryButton
+                    variant="outlined"
+                    size="medium"
+                    isLoading={isRegenerateLoading}
+                    disabled={isConfirmLoading || isLoading}
+                    onClick={handleRegenerateFactoring}
+                    text={
+                      isRegenerateLoading
+                        ? "Перегенерация..."
+                        : "Перегенерировать документ"
+                    }
+                  />
+                </Box>
+                {regenerateFeedback && (
+                  <Alert severity={regenerateFeedback.severity} sx={{ mt: 2 }}>
+                    {regenerateFeedback.message}
+                  </Alert>
+                )}
+              </>
+            )}
           </Section>
         )}
 
@@ -168,29 +239,30 @@ const FactoringItem = () => {
           icon={<RequestQuoteOutlinedIcon color="primary" />}
         >
           {canBeApproved && (
-            <Button
+            <PrimaryButton
               variant="outlined"
               color="primary"
               onClick={handleOpenModal}
               sx={{
                 my: 1,
               }}
-            >
-              Подтвердить оплату cо стороны экспедитора
-            </Button>
+              text="Подтвердить оплату со стороны экспедитора"
+            />
           )}
 
           <Box
             sx={{
-              display: "flex",
-              gap: 1,
+              display: "grid",
+              gridTemplateColumns: { xs: "minmax(0, 1fr)", md: "repeat(2, minmax(0, 1fr))" },
+              gap: 1.5,
             }}
           >
             <InfoItem
               label={"Подтверждение оплаты Экспедитором от Фактора"}
               value={
                 <Chip
-                  color={factoringDetails.await_paid_ff ? "success" : ""}
+                  size="small"
+                  color={factoringDetails.await_paid_ff ? "success" : "default"}
                   label={
                     factoringDetails.await_paid_ff
                       ? "Подтверждено"
@@ -203,7 +275,8 @@ const FactoringItem = () => {
               label={"Подтверждение оплаты Фактором от Заказчика"}
               value={
                 <Chip
-                  color={factoringDetails.await_paid_cf ? "success" : ""}
+                  size="small"
+                  color={factoringDetails.await_paid_cf ? "success" : "default"}
                   label={
                     factoringDetails.await_paid_cf
                       ? "Подтверждено"
@@ -236,7 +309,7 @@ const FactoringItem = () => {
             }}
           >
             {currentLead?.cargos?.map((cargo, index) => (
-              <CargoCard cargo={cargo} index={index} />
+              <CargoCard key={cargo.id ?? index} cargo={cargo} index={index} />
             ))}
           </Box>
         </Section>
@@ -252,19 +325,13 @@ const FactoringItem = () => {
 
         <Box
           sx={{
-            px: {
-              xs: 1,
-              sm: 0,
-            },
             display: "grid",
             gridTemplateColumns: {
-              xs: "1fr",
-              sm: "1fr 1fr",
+              xs: "minmax(0, 1fr)",
+              lg: "repeat(2, minmax(0, 1fr))",
             },
-            gap: {
-              xs: 1,
-              sm: 3,
-            },
+            columnGap: 2,
+            alignItems: "start",
           }}
         >
           <Section

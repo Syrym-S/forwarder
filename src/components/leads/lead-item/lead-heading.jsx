@@ -32,17 +32,65 @@ const LeadHeading = ({ leadData, openEditForm }) => {
   }, [newNotification]);
 
   return (
-    <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 2, mb: 2 }}>
+    <Box
+      sx={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "space-between",
+        flexWrap: "wrap",
+        gap: 2,
+        mb: 2,
+      }}
+    >
       <Stack spacing={0.5}>
-        <Typography component="h1" sx={{ fontSize: { xs: 22, sm: 26 }, fontWeight: 600, color: "font_color.heading" }}>Перевозка #{leadData.num || "—"}</Typography>
-        <Typography sx={{ fontSize: 14, color: "text.secondary" }}>Маршрут, участники и документы заявки</Typography>
+        <Typography
+          component="h1"
+          sx={{
+            fontSize: { xs: 22, sm: 26 },
+            fontWeight: 600,
+            color: "font_color.heading",
+          }}
+        >
+          Перевозка #{leadData.num || "—"}
+        </Typography>
+        <Typography sx={{ fontSize: 14, color: "text.secondary" }}>
+          Маршрут, участники и документы заявки
+        </Typography>
       </Stack>
-      <Box sx={{ display: "flex", alignItems: "center", gap: 1.5, flexWrap: "wrap" }}>
-        <Box sx={{ display: "flex", alignItems: "center", gap: 1, px: 1.5, py: 1, bgcolor: "background.paper", border: "1px solid", borderColor: "divider", borderRadius: 2 }}>
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          gap: 1.5,
+          flexWrap: "wrap",
+        }}
+      >
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            gap: 1,
+            px: 1.5,
+            py: 1,
+            bgcolor: "background.paper",
+            border: "1px solid",
+            borderColor: "divider",
+            borderRadius: 2,
+          }}
+        >
           {isLoading && <CircularProgress size={14} />}
           <RenderStatus status={leadData.status} />
         </Box>
-        {canBeEdited && <Button variant="outlined" startIcon={<EditNoteRoundedIcon />} onClick={openEditForm} sx={{ textTransform: "none", borderRadius: 2, height: 40 }}>Редактировать</Button>}
+        {canBeEdited && (
+          <Button
+            variant="outlined"
+            startIcon={<EditNoteRoundedIcon />}
+            onClick={openEditForm}
+            sx={{ textTransform: "none", borderRadius: 2, height: 40 }}
+          >
+            Редактировать
+          </Button>
+        )}
       </Box>
     </Box>
   );

@@ -256,8 +256,8 @@ const LeadItemMainContainer = ({
           alignItems: "start",
         }}
       >
-        <LeadCustomerInfo leadData={leadData} />
-        <LeadDriverInfo leadData={leadData} />
+        <LeadCustomerInfo leadData={leadData} canDetach />
+        <LeadDriverInfo leadData={leadData} canDetach />
       </Box>
 
       <Section

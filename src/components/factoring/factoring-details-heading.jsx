@@ -1,22 +1,7 @@
-import {
-  Box,
-  Button,
-  Chip,
-  Dialog,
-  DialogContent,
-  DialogTitle,
-  Stack,
-  TextField,
-  Tooltip,
-  Typography,
-} from "@mui/material";
+import { Box, Chip, Stack, Typography } from "@mui/material";
 import RenderStatus from "../../shared/ui/render-status";
 
-const FactoringDetailsHeading = ({
-  factoring,
-  //   handleOpenForm,
-  //   isCustomerTender = false,
-}) => {
+const FactoringDetailsHeading = ({ factoring }) => {
   return (
     <Box
       sx={{
@@ -25,7 +10,9 @@ const FactoringDetailsHeading = ({
           xs: "start",
           sm: "center",
         },
-        gap: "10px",
+        gap: 2,
+        p: { xs: 2, sm: 2.5 },
+        borderRadius: 3,
         justifyContent: "space-between",
         flexDirection: {
           xs: "column",
@@ -37,7 +24,7 @@ const FactoringDetailsHeading = ({
         sx={{
           display: "flex",
           justifyContent: "space-between",
-          width: "100%",
+          minWidth: 0,
         }}
       >
         <Stack>
@@ -45,6 +32,7 @@ const FactoringDetailsHeading = ({
             sx={{
               fontWeight: 600,
               fontSize: 22,
+              color: "font_color.heading",
             }}
           >
             Информация о факторинге
@@ -65,7 +53,8 @@ const FactoringDetailsHeading = ({
       <Box
         sx={{
           display: "flex",
-          padding: "10px",
+          flexWrap: "wrap",
+          flexShrink: 0,
           justifyContent: { xs: "start", sm: "end" },
           gap: "10px",
           width: {
@@ -73,7 +62,6 @@ const FactoringDetailsHeading = ({
             sm: "fit-content",
           },
         }}
-        spacing={1}
       >
         <Chip
           label={`Факторинг #${factoring?.id}`}
@@ -81,7 +69,21 @@ const FactoringDetailsHeading = ({
           variant="outlined"
         />
 
-        <RenderStatus status={factoring?.status} />
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            gap: 1,
+            px: 1.5,
+            py: 1,
+            bgcolor: "background.paper",
+            border: "1px solid",
+            borderColor: "divider",
+            borderRadius: 2,
+          }}
+        >
+          <RenderStatus status={factoring?.status} />
+        </Box>
       </Box>
     </Box>
   );

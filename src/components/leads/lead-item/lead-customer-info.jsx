@@ -7,7 +7,7 @@ import { InfoBadge } from "../../lead-form/info-badge";
 import InfoItem from "../../../shared/ui/info-item";
 import PrimaryButton from "../../../shared/ui/button/primary-button";
 
-const LeadCustomerInfo = ({ leadData }) => {
+const LeadCustomerInfo = ({ leadData, canDetach = false }) => {
   const customer = leadData?.customer;
 
   const createdByCustomer = leadData?.created_by === "customer";
@@ -59,7 +59,7 @@ const LeadCustomerInfo = ({ leadData }) => {
       title="Данные о заказчике"
       icon={<BusinessOutlinedIcon color="primary" />}
     >
-      {(isAddDriverStatus || isNewStatus) && (
+      {(isAddDriverStatus || isNewStatus) && canDetach && (
         <PrimaryButton
           color="error"
           disabled={createdByCustomer}

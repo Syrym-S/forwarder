@@ -7,7 +7,7 @@ import { InfoBadge } from "../../lead-form/info-badge";
 import InfoItem from "../../../shared/ui/info-item";
 import PrimaryButton from "../../../shared/ui/button/primary-button";
 
-const LeadDriverInfo = ({ leadData }) => {
+const LeadDriverInfo = ({ leadData, canDetach = false }) => {
   const driver = leadData?.driver;
   const isAddDriverStatus = leadData?.status === STATUS.add_driver;
 
@@ -46,7 +46,7 @@ const LeadDriverInfo = ({ leadData }) => {
 
   return (
     <Section title="Водитель" icon={<PersonOutlinedIcon color="primary" />}>
-      {isAddDriverStatus && (
+      {isAddDriverStatus && canDetach && (
         <PrimaryButton
           color="error"
           variant="outlined"
