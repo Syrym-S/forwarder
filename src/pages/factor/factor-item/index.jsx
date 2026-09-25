@@ -27,11 +27,13 @@ import ShowChartOutlinedIcon from "@mui/icons-material/ShowChartOutlined";
 import ConfirmModal from "../../../shared/ui/confirm-modal";
 import { STATUS } from "../../../shared/const/tenders";
 import { moneySpacingFormat } from "../../../shared/helpers/money-spacing";
+import PrimaryButton from "../../../shared/ui/button/primary-button";
 
 const FactorItem = () => {
   const { id } = useParams();
 
   const [openModal, setOpenModal] = useState(false);
+  const [regenerateFeedback, setRegenerateFeedback] = useState(null);
 
   const factoringLineDetails = useFactorStore(
     (state) => state.factoringLineDetails,
@@ -40,7 +42,13 @@ const FactorItem = () => {
     (state) => state.getFactoringLineDetails,
   );
   const isLoading = useFactorStore((state) => state.isLoading);
-  // const isApproveLoading = useFactorStore((state) => state.isApproveLoading);
+  const isApproveLoading = useFactorStore((state) => state.isApproveLoading);
+  const isRegenerateLoading = useFactorStore(
+    (state) => state.isRegenerateLoading,
+  );
+  const regenerateFactoringLine = useFactorStore(
+    (state) => state.regenerateFactoringLine,
+  );
   const approveFactoreLine = useFactorStore(
     (state) => state.approveFactoreLine,
   );
@@ -76,6 +84,29 @@ const FactorItem = () => {
 
     window.open(link, "_blank");
     handleCloseModal();
+  };
+
+  const handleRegenerateFactoringLine = async () => {
+    setRegenerateFeedback(null);
+    try {
+      await regenerateFactoringLine(id);
+    } catch (error) {
+      setRegenerateFeedback({
+        severity: "error",
+        message:
+          error.response?.data?.message ||
+          "Не удалось перегенерировать документ. Попробуйте ещё раз.",
+      });
+      return;
+    }
+
+    const refreshed = await getFactoringLineDetails(id);
+    setRegenerateFeedback({
+      severity: refreshed ? "success" : "warning",
+      message: refreshed
+        ? "Документ факторинговой линии перегенерирован. Можно перейти к подписанию."
+        : "Документ перегенерирован, но не удалось обновить данные. Обновите страницу.",
+    });
   };
 
   useEffect(() => {
@@ -168,10 +199,32 @@ const FactorItem = () => {
           icon={<RememberMeOutlinedIcon color="primary" />}
           title={"Подтверждение"}
         >
-          <Button onClick={handleOpenModal} variant="outlined">
-            Подтвердить
-          </Button>
+          <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1.5 }}>
+            <PrimaryButton
+              onClick={handleOpenModal}
+              variant="outlined"
+              disabled={isApproveLoading || isRegenerateLoading || isLoading}
+              text="Подтвердить"
+            />
+            <PrimaryButton
+              onClick={handleRegenerateFactoringLine}
+              variant="outlined"
+              isLoading={isRegenerateLoading}
+              disabled={isApproveLoading || isLoading}
+              text={
+                isRegenerateLoading
+                  ? "Перегенерация..."
+                  : "Перегенерировать документ"
+              }
+            />
+          </Box>
         </Section>
+      )}
+
+      {regenerateFeedback && (
+        <Alert severity={regenerateFeedback.severity} sx={{ mb: 3 }}>
+          {regenerateFeedback.message}
+        </Alert>
       )}
 
       {openModal && (
@@ -181,6 +234,7 @@ const FactorItem = () => {
           description="Вы уверены что хотите подтвердить линию?"
           onCancel={handleCloseModal}
           onConfirm={handleApproveFactoringLine}
+          isLoading={isApproveLoading}
         />
       )}
 

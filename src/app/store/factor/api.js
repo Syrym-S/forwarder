@@ -17,3 +17,7 @@ export const approveFactoreLineApi = async (id) => {
 
   return data;
 };
+
+export const regenerateFactoringLineApi = async (lineId) => {
+  return api.post(`/forwarder/v1/factoring/line/${lineId}/regenerate`, null);
+};

@@ -3,6 +3,7 @@ import {
   approveFactoreLineApi,
   getFactorLineDetailsApi,
   getFactorsLineApi,
+  regenerateFactoringLineApi,
 } from "./api";
 
 export const useFactorStore = create((set) => ({
@@ -11,6 +12,8 @@ export const useFactorStore = create((set) => ({
 
   isLoading: false,
   isApproveLoading: false,
+  isRegenerateLoading: false,
+  regenerateError: null,
 
   getFactoringsLine: async () => {
     try {
@@ -32,9 +35,29 @@ export const useFactorStore = create((set) => ({
       const response = await getFactorLineDetailsApi(id);
 
       set({ factoringLineDetails: response.data, isLoading: false });
+      return true;
     } catch (e) {
       console.log(e);
       set({ isLoading: false });
+      return false;
+    }
+  },
+
+  regenerateFactoringLine: async (lineId) => {
+    set({ isRegenerateLoading: true, regenerateError: null });
+    try {
+      const response = await regenerateFactoringLineApi(lineId);
+      return response.data;
+    } catch (error) {
+      set({
+        regenerateError:
+          error.response?.data?.message ||
+          error.message ||
+          "Не удалось перегенерировать документ факторинговой линии",
+      });
+      throw error;
+    } finally {
+      set({ isRegenerateLoading: false });
     }
   },
 
