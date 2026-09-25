@@ -612,9 +612,17 @@ const RouteStep = ({ control, form, setValue, isEdit = false }) => {
           Неправильные параметры города. Попытайтесь выбрать другую точку
         </Alert>
       </Snackbar>
-      <Box sx={{ mt: 2, p: 2, border: "1px solid", borderColor: "divider", borderRadius: 2 }}>
+      <Box
+        sx={{
+          mt: 2,
+          p: 2,
+          border: "1px solid",
+          borderColor: "divider",
+          borderRadius: 2,
+        }}
+      >
         <Controller
-          name="passVerify"
+          name="pass_verify"
           control={control}
           defaultValue={false}
           render={({ field }) => (
@@ -629,14 +637,20 @@ const RouteStep = ({ control, form, setValue, isEdit = false }) => {
                   disabled={isEdit}
                 />
               }
-              label="Пропуск видеофиксации разгрузки/погрузки"
+              label="Пропуск подтверждения файлов погрузки/разгрузки"
             />
           )}
         />
         <Typography variant="body2" color="text.secondary">
-          При включении подтверждение погрузки и разгрузки экспедитором не требуется.
-          После создания перевозки изменить настройку нельзя.
+          При включении подтверждение файлов погрузки и разгрузки экспедитором
+          не требуется. После создания перевозки изменить настройку нельзя.
         </Typography>
+        {form.pass_verify === true && !isEdit && (
+          <Alert severity="warning" sx={{ mt: 1.5, borderRadius: 2 }}>
+            После создания лида изменить эту настройку будет нельзя. Пропуск
+            подтверждения файлов погрузки/разгрузки останется включённым.
+          </Alert>
+        )}
       </Box>
     </StepSection>
   );

@@ -5,7 +5,10 @@ import CargosVerificationContainer from "./cargos-verification-container";
 import EmptyListUI from "../../shared/ui/empty-list-ui";
 import { Alert } from "@mui/material";
 
-const LeadCargoFilesContainer = ({ cargoActions = [], passVerify = false }) => {
+const LeadCargoFilesContainer = ({
+  cargoActions = [],
+  pass_verify = false,
+}) => {
   const isFilesEmpty = cargoActions.length === 0;
 
   return (
@@ -13,16 +16,21 @@ const LeadCargoFilesContainer = ({ cargoActions = [], passVerify = false }) => {
       title="Информация о погрузках и разгрузках"
       icon={<Inventory2SharpIcon color="primary" />}
     >
-      {passVerify && (
+      {pass_verify && (
         <Alert severity="info" sx={{ mb: 2 }}>
-          Видеофиксация и подтверждение погрузки/разгрузки экспедитором не требуются.
+          Подтверждение файлов погрузки/разгрузки экспедитором не требуется.
         </Alert>
       )}
-      {isFilesEmpty && !passVerify && (
+      {isFilesEmpty && !pass_verify && (
         <Alert severity="info">Список загруженных файлов пуст</Alert>
       )}
       {cargoActions.map((cargoAction) => {
-        return <CargosVerificationContainer cargoAction={cargoAction} passVerify={passVerify} />;
+        return (
+          <CargosVerificationContainer
+            cargoAction={cargoAction}
+            pass_verify={pass_verify}
+          />
+        );
       })}
     </Section>
   );

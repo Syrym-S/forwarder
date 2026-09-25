@@ -68,7 +68,7 @@ const AddLeadForm = ({
 
   const defaultValues = {
     documents: [],
-    passVerify: false,
+    pass_verify: false,
     ...initialValues,
   };
 
@@ -122,7 +122,7 @@ const AddLeadForm = ({
       let documentsUploadFailed = false;
 
       if (isEdit) {
-        delete payload.passVerify;
+        delete payload.pass_verify;
         await updateLead(editingItemId, payload);
         clearCurrentLead();
         await getLeadItem(editingItemId);

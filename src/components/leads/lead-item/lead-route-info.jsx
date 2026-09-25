@@ -69,8 +69,8 @@ const LeadRouteInfo = ({ leadData }) => {
           date={pointSchedules[waypoints.length + 1]}
         />
         <InfoItem
-          label="Пропуск видеофиксации разгрузки/погрузки"
-          value={leadData?.passVerify === true ? "Включён" : "Выключен"}
+          label="Пропуск подтверждения файлов погрузки/разгрузки"
+          value={leadData?.pass_verify === true ? "Включён" : "Выключен"}
         />
       </Box>
     </Section>

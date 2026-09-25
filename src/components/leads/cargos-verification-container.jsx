@@ -25,7 +25,7 @@ const renderTitleText = (stage, isVerified) => {
   return title;
 };
 
-const CargosVerificationContainer = ({ cargoAction, passVerify = false }) => {
+const CargosVerificationContainer = ({ cargoAction, pass_verify = false }) => {
   const { id } = useParams();
   const [currentFile, setCurrentFile] = useState(null);
 
@@ -38,8 +38,10 @@ const CargosVerificationContainer = ({ cargoAction, passVerify = false }) => {
   const isUnloadLoading = useLeadsStore((state) => state.isUnloadLoading);
 
   const isVerified = cargoAction.is_verified;
-  const title = passVerify
-    ? (cargoAction.stage === WAYPOINT_TYPES.loading ? "Погрузка — без подтверждения" : "Разгрузка — без подтверждения")
+  const title = pass_verify
+    ? cargoAction.stage === WAYPOINT_TYPES.loading
+      ? "Погрузка — без подтверждения"
+      : "Разгрузка — без подтверждения"
     : renderTitleText(cargoAction.stage, isVerified);
 
   const handleVerifyCargoLoad = async () => {
@@ -63,7 +65,7 @@ const CargosVerificationContainer = ({ cargoAction, passVerify = false }) => {
   };
 
   const handleVerify = () => {
-    if (passVerify) return;
+    if (pass_verify) return;
     if (cargoAction.stage === WAYPOINT_TYPES.loading) {
       handleVerifyCargoLoad();
     } else {
@@ -72,7 +74,7 @@ const CargosVerificationContainer = ({ cargoAction, passVerify = false }) => {
   };
 
   const handleReject = () => {
-    if (passVerify) return;
+    if (pass_verify) return;
     if (cargoAction.stage === WAYPOINT_TYPES.loading) {
       handleRejectCargoLoad();
     } else {
@@ -107,7 +109,7 @@ const CargosVerificationContainer = ({ cargoAction, passVerify = false }) => {
 
         <FileModal currentFile={currentFile} setCurrentFile={setCurrentFile} />
       </Box>
-      {!isVerified && !passVerify && (
+      {!isVerified && !pass_verify && (
         <Box
           sx={{
             my: 1,

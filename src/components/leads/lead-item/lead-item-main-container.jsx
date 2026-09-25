@@ -285,7 +285,7 @@ const LeadItemMainContainer = ({
       </Section>
 
       <LeadCargoFilesContainer
-        passVerify={leadData?.passVerify === true}
+        pass_verify={leadData?.pass_verify === true}
         cargoActions={leadData?.cargo_actions}
       />
 

@@ -57,8 +57,8 @@ export function LastStep({ form }) {
           />
         </Box>
         <InfoBadge
-          label="Пропуск видеофиксации разгрузки/погрузки"
-          value={form.passVerify === true ? "Включён" : "Выключен"}
+          label="Пропуск подтверждения файлов погрузки/разгрузки"
+          value={form.pass_verify === true ? "Включён" : "Выключен"}
         />
       </StepSection>
 

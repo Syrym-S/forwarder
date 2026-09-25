@@ -46,7 +46,7 @@ function normalizeText(value) {
 
 export function mapCreateLeadFormToApi(form) {
   const payload = {
-    passVerify: form.passVerify === true,
+    pass_verify: form.pass_verify === true,
     from_country: form.from_location.country,
     from_region: form.from_location.region,
     from_city: form.from_location.city,
