@@ -3,10 +3,11 @@ import DocumentUpload from "../../components/lead-form/steps/document-upload";
 import PriceStep from "../../components/lead-form/steps/price-step";
 import LeadFormTabs from "../../components/lead-form/lead-form-tabs";
 import CargoStep from "../../components/lead-form/steps/cargo-step";
+import TransportationParameters from "../../components/lead-form/steps/transportation-parameters";
 import DriverStep from "../../components/lead-form/steps/driver-step";
 import RouteStep from "../../components/lead-form/steps/route-step";
 import CustomerStep from "../../components/lead-form/steps/customer-step";
-import { Dialog, DialogContent } from "@mui/material";
+import { Box, Dialog, DialogContent } from "@mui/material";
 import { useState } from "react";
 import { FormNavButtons } from "../../components/lead-form/form-nav-buttons";
 import { useForm, useWatch } from "react-hook-form";
@@ -28,15 +29,7 @@ const steps = [
 
 const stepFields = [
   ["from_location.address", "to_location.address", "point_schedules"],
-  [
-    "cargoType",
-    "weightKg",
-    "cargoLengthCm",
-    "cargoWidthCm",
-    "cargoHeightCm",
-    "price",
-    "currency",
-  ],
+  ["cargos"],
   ["forwarderId"],
   [],
   [],
@@ -203,11 +196,14 @@ const AddLeadForm = ({
         );
       case 2:
         return (
+          <Box sx={{ display: "grid", gap: 2 }}>
+            <TransportationParameters control={control} />
           <CargoStep
             control={control}
             errors={errors}
             leadStatus={currentLead?.status}
           />
+          </Box>
         );
       case 3:
         return (

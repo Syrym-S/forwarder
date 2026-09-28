@@ -1,3 +1,4 @@
+import { moneySpacingFormat } from "../../shared/helpers/money-spacing";
 import { Typography, Box, Stack } from "@mui/material";
 import TripOriginIcon from "@mui/icons-material/TripOrigin";
 import ArrowDownwardRoundedIcon from "@mui/icons-material/ArrowDownwardRounded";
@@ -147,7 +148,7 @@ const LeadCard = ({ lead }) => {
 
         <InfoItem
           label="Цена"
-          value={lead?.price ? `${lead?.price} ${lead?.currency}` : "Не указан"}
+          value={lead?.price ? `${moneySpacingFormat(lead?.price)} ${lead?.currency}` : "Не указан"}
         />
       </Stack>
     </Box>

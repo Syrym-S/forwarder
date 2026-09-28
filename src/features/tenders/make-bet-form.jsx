@@ -1,3 +1,4 @@
+import { moneySpacingFormat } from "../../shared/helpers/money-spacing";
 import CustomSelect from "../../shared/ui/input/custom-select";
 import { CURRENCY_OPTIONS } from "../../shared/const/currencies";
 import { Box, Button, TextField, Typography } from "@mui/material";
@@ -152,7 +153,7 @@ const MakeBetForm = ({ tender, handleHideBetField }) => {
               Вы уверены, что хотите сделать ставку на этот аукцион?
             </Typography>
             <Typography>
-              Сумма: {formValues.amount} {formValues.currency}
+              Сумма: {moneySpacingFormat(formValues.amount)} {formValues.currency}
             </Typography>
           </>
         }

@@ -1,3 +1,4 @@
+import { moneySpacingFormat } from "../../../shared/helpers/money-spacing";
 import { Box, CircularProgress, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { renderLineColor } from "../../../shared/helpers/factoring/render-progress-line-color";
@@ -174,7 +175,7 @@ const FactoringLineRingProgress = ({ line }) => {
                 lineHeight: 1.3,
               }}
             >
-              {line.summ_max.toLocaleString("ru-RU")} {line.currency}
+              {moneySpacingFormat(line.summ_max)} {line.currency}
             </Typography>
           </Box>
 
@@ -205,7 +206,7 @@ const FactoringLineRingProgress = ({ line }) => {
                 lineHeight: 1.3,
               }}
             >
-              {line.summ_current.toLocaleString("ru-RU")} {line.currency}
+              {moneySpacingFormat(line.summ_current)} {line.currency}
             </Typography>
           </Box>
 
@@ -236,7 +237,7 @@ const FactoringLineRingProgress = ({ line }) => {
                 lineHeight: 1.3,
               }}
             >
-              {line.summ_free.toLocaleString("ru-RU")} {line.currency}
+              {moneySpacingFormat(line.summ_free)} {line.currency}
             </Typography>
           </Box>
 
@@ -267,7 +268,7 @@ const FactoringLineRingProgress = ({ line }) => {
                 lineHeight: 1.3,
               }}
             >
-              {line.summ_free} {line.currency}
+              {moneySpacingFormat(line.summ_free)} {line.currency}
             </Typography>
           </Box>
         </Box>

@@ -1,3 +1,4 @@
+import { moneySpacingFormat } from "../../shared/helpers/money-spacing";
 import { Box, Chip, Typography } from "@mui/material";
 import { useTendersStore } from "../../app/store/tenders/tender-store";
 
@@ -38,7 +39,7 @@ export const BetCard = ({ tender, bet }) => {
             color: "color.slate_2",
           }}
         >
-          {bet.amount} {bet.currency}
+          {moneySpacingFormat(bet.amount)} {bet.currency}
         </Typography>
 
         {isWinning ? (

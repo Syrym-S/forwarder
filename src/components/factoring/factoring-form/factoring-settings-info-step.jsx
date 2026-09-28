@@ -1,3 +1,4 @@
+import { moneySpacingFormat } from "../../../shared/helpers/money-spacing";
 import React, { useEffect } from "react";
 import FactoringLineCard from "../../factor-line/factor-line-card";
 import { useFactorStore } from "../../../app/store/factor/factor-store";
@@ -100,7 +101,7 @@ const FactoringSettingsInfoStep = ({ line, approvedLine }) => {
                 fontSize: "1.3rem",
               }}
             >
-              {factoringLineDetails?.summ_current}
+              {moneySpacingFormat(factoringLineDetails?.summ_current)}{" "}
               {factoringLineDetails?.currency}
             </Typography>
           </Stack>
@@ -124,7 +125,7 @@ const FactoringSettingsInfoStep = ({ line, approvedLine }) => {
                 fontSize: "1.3rem",
               }}
             >
-              {factoringLineDetails?.summ_free}
+              {moneySpacingFormat(factoringLineDetails?.summ_free)}{" "}
               {factoringLineDetails?.currency}
             </Typography>
           </Stack>

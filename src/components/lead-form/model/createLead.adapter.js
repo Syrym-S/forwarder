@@ -1,3 +1,5 @@
+import { mapCargoToApi } from "../../../shared/lib/cargo-volume";
+
 function hasValue(value) {
   return value !== null && value !== undefined && value !== "";
 }
@@ -60,7 +62,7 @@ export function mapCreateLeadFormToApi(form) {
     name: form.name || "Не указан",
     currency: form.currency || "KZT",
     price: form.price || 0,
-    cargos: form.cargos || [],
+    cargos: (form.cargos || []).map(mapCargoToApi),
     point_schedules: form.point_schedules || [],
   };
 

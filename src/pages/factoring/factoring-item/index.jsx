@@ -1,3 +1,4 @@
+import { moneySpacingFormat } from "../../../shared/helpers/money-spacing";
 import RootLayout from "../../../components/layout/root-layout";
 import FactoringDetailsHeading from "../../../components/factoring/factoring-details-heading";
 import LeadMap from "../../../components/leads/lead-map";
@@ -291,7 +292,7 @@ const FactoringItem = () => {
             <ConfirmModal
               open={openConfirmModal}
               onClose={handleCloseModal}
-              text={`Вы действительно хотите подтвердить факторинг на сумму ${currentLead?.price} ${currentLead?.currency}`}
+              text={`Вы действительно хотите подтвердить факторинг на сумму ${moneySpacingFormat(currentLead?.price)} ${currentLead?.currency}`}
               onConfirm={handleApprovePaiment}
             />
           )}

@@ -1,3 +1,4 @@
+import { moneySpacingFormat } from "../../shared/helpers/money-spacing";
 import {
   Alert,
   Box,
@@ -173,7 +174,7 @@ const MakeBetBlock = ({ tender, setShowBetField }) => {
                             color: "primary.main",
                           }}
                         >
-                          {bet.amount} {bet.currency}
+                          {moneySpacingFormat(bet.amount)} {bet.currency}
                         </Typography>
                       </Box>
 
@@ -238,7 +239,7 @@ const MakeBetBlock = ({ tender, setShowBetField }) => {
                             аукцион?
                           </Typography>
                           <Typography>
-                            Сумма ставки: {bet.amount} {bet.currency}
+                            Сумма ставки: {moneySpacingFormat(bet.amount)} {bet.currency}
                           </Typography>
                         </>
                       }

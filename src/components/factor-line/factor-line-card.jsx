@@ -1,3 +1,4 @@
+import { moneySpacingFormat } from "../../shared/helpers/money-spacing";
 import { Box, Divider, LinearProgress, Stack, Typography } from "@mui/material";
 import RenderStatus from "../../shared/ui/render-status";
 import { useNavigate } from "react-router-dom";
@@ -99,7 +100,7 @@ const FactoringLineCard = ({ line }) => {
                   fontSize: "1.3rem",
                 }}
               >
-                {summ_current}
+                {moneySpacingFormat(summ_current)}{" "}
                 {currency}
               </Typography>
             </Stack>
@@ -123,7 +124,7 @@ const FactoringLineCard = ({ line }) => {
                   fontSize: "1.3rem",
                 }}
               >
-                {Math.round(summ_free)}
+                {moneySpacingFormat(Math.round(summ_free))}{" "}
                 {currency}
               </Typography>
             </Stack>

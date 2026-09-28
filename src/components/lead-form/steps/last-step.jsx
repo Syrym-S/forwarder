@@ -1,3 +1,5 @@
+import { getCargoVolume } from "../../../shared/lib/cargo-volume";
+import { transportationParameters } from "../../../shared/const/leads/transportation-parameters";
 import { Box } from "@mui/material";
 import { StepSection } from "../step-section";
 import { InfoBadge } from "../info-badge";
@@ -62,6 +64,14 @@ export function LastStep({ form }) {
         />
       </StepSection>
 
+      <StepSection title="Параметры перевозки">
+        <Box sx={{ display: "grid", gridTemplateColumns: { xs: "1fr", sm: "repeat(2, 1fr)" }, gap: 1.5 }}>
+          {transportationParameters.map(({ name, label }) => (
+            <InfoBadge key={name} label={label} value={form[name]?.name || form[name] || "Не указан"} />
+          ))}
+        </Box>
+      </StepSection>
+
       <StepSection title="Данные о грузах">
         <Box
           sx={{
@@ -75,7 +85,7 @@ export function LastStep({ form }) {
               cargo.height_cm || cargo.width_cm || cargo.length_cm;
 
             return (
-              <StepSection title={`Груз ${index + 1}`}>
+              <StepSection key={cargo.id ?? index} title={`Груз ${index + 1}`}>
                 <Box
                   sx={{
                     display: "grid",
@@ -92,14 +102,16 @@ export function LastStep({ form }) {
                     }
                   />
 
-                  <InfoBadge
-                    label="Размеры"
-                    value={
-                      hasMeasures
-                        ? `Ширина: ${cargo.width_cm || "не указана"} см × Длина: ${cargo.length_cm || "не указана"} см × Высота: ${cargo.height_cm || "не указана"} см`
-                        : "Данные о размере не указаны"
-                    }
-                  />
+                  {getCargoVolume(cargo) != null && (
+                    <InfoBadge label="Объём" value={`${getCargoVolume(cargo)} м³`} />
+                  )}
+                  {hasMeasures && (
+                    <InfoBadge label="Размеры" value={[
+                      cargo.length_cm && `Длина: ${cargo.length_cm} см`,
+                      cargo.width_cm && `Ширина: ${cargo.width_cm} см`,
+                      cargo.height_cm && `Высота: ${cargo.height_cm} см`,
+                    ].filter(Boolean).join(" × ")} />
+                  )}
                 </Box>
               </StepSection>
             );

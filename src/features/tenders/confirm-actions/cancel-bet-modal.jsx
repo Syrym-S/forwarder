@@ -1,3 +1,4 @@
+import { moneySpacingFormat } from "../../../shared/helpers/money-spacing";
 import {
   Button,
   Dialog,
@@ -22,7 +23,7 @@ const CancelBetModal = ({
           Вы уверены что хотите отменить ставку на этот аукцион?
         </Typography>
         <Typography>
-          Сумма ставки: {bet.amount} {bet.currency}
+          Сумма ставки: {moneySpacingFormat(bet.amount)} {bet.currency}
         </Typography>
       </DialogContent>
       <DialogActions>

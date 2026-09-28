@@ -1,3 +1,4 @@
+import { moneySpacingFormat } from "../../shared/helpers/money-spacing";
 import { Box, Chip } from "@mui/material";
 import React from "react";
 import Section from "./tender-section";
@@ -27,7 +28,7 @@ const CancelledBets = ({ bets }) => {
                         textDecorationThickness: "1.5px",
                         fontWeight: 600,
                       }}
-                      label={`${bet.amount} ${bet.currency}`}
+                      label={`${moneySpacingFormat(bet.amount)} ${bet.currency}`}
                       color="error"
                     />
                   </>

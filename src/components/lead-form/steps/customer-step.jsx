@@ -12,6 +12,9 @@ import { InfoBadge } from "../info-badge";
 import { useCustomerStore } from "../../../app/store/customers/customers-store";
 import { useEffect, useState } from "react";
 
+const hasCustomer = (customer) =>
+  Boolean(customer?.id || customer?.name?.trim());
+
 const CustomerStep = ({ control, errors, setValue }) => {
   const selectedCustomer = useWatch({
     control,
@@ -56,17 +59,22 @@ const CustomerStep = ({ control, errors, setValue }) => {
               inputValue={inputValue}
               options={customers}
               filterOptions={(options) => options}
-              value={field.value ?? null}
+              value={hasCustomer(field.value) ? field.value : null}
+              getOptionLabel={(option) => option?.name || "Без названия"}
               loading={isLoading}
-              isOptionEqualToValue={(option, value) => option?.id === value?.id}
+              isOptionEqualToValue={(option, value) =>
+                option === value ||
+                (Boolean(option?.id) && Boolean(value?.id) &&
+                  String(option.id) === String(value.id))
+              }
               renderValue={(value) => {
-                if (!value) return null;
+                if (!hasCustomer(value)) return null;
 
                 return (
                   <Chip
-                    variant="contained"
+                    variant="filled"
                     color="primary"
-                    label={value.name}
+                    label={value.name || "Без названия"}
                   />
                 );
               }}
@@ -214,7 +222,7 @@ const CustomerStep = ({ control, errors, setValue }) => {
               )}
             />
 
-            {selectedCustomer && (
+            {hasCustomer(selectedCustomer) && (
               <Box
                 sx={{
                   display: "grid",

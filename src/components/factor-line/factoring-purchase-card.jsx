@@ -1,3 +1,4 @@
+import { moneySpacingFormat } from "../../shared/helpers/money-spacing";
 import {
   Box,
   Card,
@@ -96,7 +97,7 @@ const FactoringPurchaseCard = ({ data }) => {
                   color: "#454545",
                 }}
               >
-                {data.deb_summ}
+                {moneySpacingFormat(data.deb_summ)}{" "}
                 {data.deb_currency}
               </Typography>
             </Box>
@@ -123,7 +124,7 @@ const FactoringPurchaseCard = ({ data }) => {
                   color: "#454545",
                 }}
               >
-                {data.cred_summ}
+                {moneySpacingFormat(data.cred_summ)}{" "}
                 {data.cred_currency}
               </Typography>
             </Box>

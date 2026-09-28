@@ -1,3 +1,5 @@
+import { moneySpacingFormat } from "../../../shared/helpers/money-spacing";
+import { getCargoVolume } from "../../../shared/lib/cargo-volume";
 import InfoItem from "../../../shared/ui/info-item";
 import { Box, Button, CircularProgress, Typography } from "@mui/material";
 import { STATUS } from "../../../shared/const/tenders";
@@ -65,12 +67,18 @@ const CargoCard = ({
           value={cargo?.weight_kg ? `${cargo?.weight_kg} кг` : "Вес не указан"}
         />
 
-        <InfoItem label="Цена груза" value={cargo?.cargo_price} />
+        <InfoItem label="Цена груза" value={moneySpacingFormat(cargo?.cargo_price)} />
 
-        <InfoItem
-          label="Размеры"
-          value={`${cargo?.height_cm || "-"} x ${cargo?.width_cm || "-"} x ${cargo?.length_cm || "-"}`}
-        />
+        {getCargoVolume(cargo) != null && (
+          <InfoItem label="Объём" value={`${getCargoVolume(cargo)} м³`} />
+        )}
+        {(cargo?.height_cm || cargo?.width_cm || cargo?.length_cm) && (
+          <InfoItem label="Размеры" value={[
+            cargo.length_cm && `Длина: ${cargo.length_cm} см`,
+            cargo.width_cm && `Ширина: ${cargo.width_cm} см`,
+            cargo.height_cm && `Высота: ${cargo.height_cm} см`,
+          ].filter(Boolean).join(" × ")} />
+        )}
       </Box>
 
       <InfoItem label="Описание" value={`${cargo?.description || "--"}`} />

@@ -1,3 +1,4 @@
+import CargoVolumeFields from "./cargo-volume-fields";
 import { Controller, useFieldArray, useWatch } from "react-hook-form";
 import {
   Autocomplete,
@@ -87,6 +88,7 @@ const CargoStep = ({ control, errors, leadStatus }) => {
               length_cm: null,
               width_cm: null,
               height_cm: null,
+              cargo_demention: null,
             })
           }
           sx={{
@@ -225,62 +227,7 @@ const CargoStepFieldsContent = ({ index, control, cargo }) => {
         )}
       />
 
-      <Box
-        sx={{
-          gridColumn: {
-            xs: "auto",
-            sm: "1 / -1",
-          },
-          display: "grid",
-          gridTemplateColumns: {
-            xs: "1fr",
-            sm: "repeat(3, 1fr)",
-          },
-          gap: 2,
-        }}
-      >
-        <FormControllerInput
-          name={`cargos.${index}.length_cm`}
-          control={control}
-          rules={{
-            required: "Укажите длину",
-            validate: (value) =>
-              Number(value) > 0 || "Длина должна быть больше 0",
-          }}
-          type="number"
-          label="Длина, см"
-          fullWidth
-          size="small"
-        />
-
-        <FormControllerInput
-          name={`cargos.${index}.width_cm`}
-          control={control}
-          rules={{
-            required: "Укажите ширину",
-            validate: (value) =>
-              Number(value) > 0 || "Ширина должна быть больше 0",
-          }}
-          type="number"
-          label="Ширина, см"
-          fullWidth
-          size="small"
-        />
-
-        <FormControllerInput
-          name={`cargos.${index}.height_cm`}
-          control={control}
-          rules={{
-            required: "Укажите высоту",
-            validate: (value) =>
-              Number(value) > 0 || "Высота должна быть больше 0",
-          }}
-          type="number"
-          label="Высота, см"
-          fullWidth
-          size="small"
-        />
-      </Box>
+      <CargoVolumeFields control={control} index={index} />
 
       <FormControllerInput
         name={`cargos.${index}.cargo_price`}

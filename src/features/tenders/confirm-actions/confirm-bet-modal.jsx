@@ -1,3 +1,4 @@
+import { moneySpacingFormat } from "../../../shared/helpers/money-spacing";
 import {
   Box,
   Button,
@@ -39,7 +40,7 @@ const ConfirmBetModal = ({
             Вы уверены что хотите сделать ставку на этот аукцион?
           </Typography>
           <Typography>
-            Сумма: {formValues.amount} {formValues.currency}
+            Сумма: {moneySpacingFormat(formValues.amount)} {formValues.currency}
           </Typography>
         </DialogContent>
       )}
