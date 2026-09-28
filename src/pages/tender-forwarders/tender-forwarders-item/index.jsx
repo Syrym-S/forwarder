@@ -20,6 +20,7 @@ import { STATUS } from "../../../shared/const/tenders";
 import { useNotificationsStore } from "../../../app/store/notifications/noti-store";
 import { parserNotificationType } from "../../../shared/helpers/notifications/parse-notification-type";
 import PrimaryButton from "../../../shared/ui/button/primary-button";
+import LeadTransportationInfo from "../../../components/leads/lead-item/lead-transportation-info";
 
 const TenderForwardersItem = () => {
   const { id } = useParams();
@@ -112,99 +113,105 @@ const TenderForwardersItem = () => {
   return (
     <RootLayout withoutDataCheck>
       <Box sx={{ width: "100%", maxWidth: 1440, mx: "auto", minWidth: 0 }}>
-      <TenderDetailsHeading
-        tender={currentTender}
-        handleOpenForm={handleOpenForm}
-      />
-
-      <Box
-        sx={{
-          border: "1px solid",
-          borderColor: "divider",
-          borderRadius: 3,
-          overflow: "hidden",
-          my: 2,
-        }}
-      >
-        <LeadMap
-          from={from}
-          waypoints={waypoints}
-          to={to}
-          id={currentTender?.lead?.id}
+        <TenderDetailsHeading
+          tender={currentTender}
+          handleOpenForm={handleOpenForm}
         />
-      </Box>
 
-      {openForm && (
-        <TenderForm
-          isEdit
-          openForm={openForm}
-          handleCloseForm={handleCloseForm}
-          defaultValues={defaultValues}
-        />
-      )}
+        <Box
+          sx={{
+            border: "1px solid",
+            borderColor: "divider",
+            borderRadius: 3,
+            overflow: "hidden",
+            my: 2,
+          }}
+        >
+          <LeadMap
+            from={from}
+            waypoints={waypoints}
+            to={to}
+            id={currentTender?.lead?.id}
+          />
+        </Box>
 
-      <LeadRouteInfo leadData={currentTender?.lead} />
+        {openForm && (
+          <TenderForm
+            isEdit
+            openForm={openForm}
+            handleCloseForm={handleCloseForm}
+            defaultValues={defaultValues}
+          />
+        )}
 
-      <TenderInfo tender={currentTender} />
+        <LeadRouteInfo leadData={currentTender?.lead} />
 
-      <Section
-        title={`Груз`}
-        icon={<LocalShippingOutlinedIcon color="primary" />}
-      >
+        <LeadTransportationInfo leadData={currentTender?.lead} />
+
+        <TenderInfo tender={currentTender} />
+
+        <Section
+          title={`Груз`}
+          icon={<LocalShippingOutlinedIcon color="primary" />}
+        >
+          <Box
+            sx={{
+              display: "grid",
+              gridTemplateColumns: "1fr",
+              gap: 2,
+            }}
+          >
+            {cargosInfo?.map((cargo, index) => (
+              <LeadCargoInfo
+                key={cargo.id || index}
+                cargo={cargo}
+                index={index}
+              />
+            ))}
+          </Box>
+        </Section>
+
+        <LeadDocuments tender={currentTender} />
+
         <Box
           sx={{
             display: "grid",
-            gridTemplateColumns: "1fr",
-            gap: 2,
+            gridTemplateColumns: {
+              xs: "1fr",
+              lg: "repeat(2, minmax(0, 1fr))",
+            },
+            gap: {
+              xs: 0,
+              lg: 2,
+            },
           }}
         >
-          {cargosInfo?.map((cargo, index) => (
-            <LeadCargoInfo key={cargo.id || index} cargo={cargo} index={index} />
-          ))}
+          <TenderParticipants tender={currentTender} />
+
+          <TenderBets tender={currentTender} />
         </Box>
-      </Section>
 
-      <LeadDocuments tender={currentTender} />
-
-      <Box
-        sx={{
-          display: "grid",
-          gridTemplateColumns: {
-            xs: "1fr",
-            lg: "repeat(2, minmax(0, 1fr))",
-          },
-          gap: {
-            xs: 0,
-            lg: 2,
-          },
-        }}
-      >
-        <TenderParticipants tender={currentTender} />
-
-        <TenderBets tender={currentTender} />
-      </Box>
-
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "end",
-          flexWrap: "wrap",
-          gap: "10px",
-          p: {
-            xs: 0,
-            sm: 2,
-          },
-        }}
-      >
-        {isNew && (
-          <PrimaryButton
-            variant="contained"
-            color="success"
-            onClick={handleStartTender}
-            text="Запустить аукцион"
-          />
-        )}
-        {/* {isNew && (
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "end",
+            flexWrap: "wrap",
+            gap: "10px",
+            p: {
+              xs: 0,
+              sm: 2,
+            },
+          }}
+        >
+          {isNew && (
+            <PrimaryButton
+              variant="contained"
+              color="success"
+              onClick={handleStartTender}
+              text="Запустить аукцион"
+            />
+          )}
+          {/* {isNew && (
           <Button
             variant="contained"
             color="success"
@@ -213,24 +220,24 @@ const TenderForwardersItem = () => {
             Запустить аукцион
           </Button>
         )} */}
-        {!isCanceled && !isClosed && (
-          <PrimaryButton
-            onClick={handleCancelTender}
-            variant="outlined"
-            text="Отменить аукцион"
-            color="warning"
-          />
-        )}
+          {!isCanceled && !isClosed && (
+            <PrimaryButton
+              onClick={handleCancelTender}
+              variant="outlined"
+              text="Отменить аукцион"
+              color="warning"
+            />
+          )}
 
-        {!hasWinner && (
-          <PrimaryButton
-            variant="outlined"
-            onClick={handleDeleteTender}
-            color="error"
-            text="Удалить аукцион"
-          />
-        )}
-      </Box>
+          {!hasWinner && (
+            <PrimaryButton
+              variant="outlined"
+              onClick={handleDeleteTender}
+              color="error"
+              text="Удалить аукцион"
+            />
+          )}
+        </Box>
       </Box>
     </RootLayout>
   );

@@ -147,8 +147,13 @@ const LeadCard = ({ lead }) => {
         </Box>
 
         <InfoItem
-          label="Цена"
-          value={lead?.price ? `${moneySpacingFormat(lead?.price)} ${lead?.currency}` : "Не указан"}
+          label="Цена заказчика"
+          value={`${moneySpacingFormat(lead?.price)} ${lead?.currency}`}
+        />
+
+        <InfoItem
+          label="Ваша цена за перевозку"
+          value={`${moneySpacingFormat(lead?.transportation_price)} ${lead?.currency}`}
         />
       </Stack>
     </Box>

@@ -26,6 +26,7 @@ import LeadRouteInfo from "../../../components/leads/lead-item/lead-route-info";
 import InfoItem from "../../../shared/ui/info-item";
 import CargoCard from "../../../components/leads/lead-item/lead-cargo-info";
 import CustomerDataTable from "../../../components/factoring/customer-data-table";
+import LeadTransportationInfo from "../../../components/leads/lead-item/lead-transportation-info";
 
 const FactoringItem = () => {
   const { id } = useParams();
@@ -194,19 +195,31 @@ const FactoringItem = () => {
               </Alert>
             ) : (
               <>
-                <Typography sx={{ mb: 2, color: "text.secondary", fontSize: 14 }}>
-                  Подпишите договор для подтверждения факторинга. При необходимости
-                  вы можете перегенерировать документ перед подписанием.
+                <Typography
+                  sx={{ mb: 2, color: "text.secondary", fontSize: 14 }}
+                >
+                  Подпишите договор для подтверждения факторинга. При
+                  необходимости вы можете перегенерировать документ перед
+                  подписанием.
                 </Typography>
-                <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1.5,
-                  "& .MuiButton-root": { width: { xs: "100%", sm: "auto" } },
-                }}>
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexWrap: "wrap",
+                    gap: 1.5,
+                    "& .MuiButton-root": { width: { xs: "100%", sm: "auto" } },
+                  }}
+                >
                   <PrimaryButton
                     size="medium"
                     isLoading={isConfirmLoading}
-                    disabled={isConfirmLoading || isLoading || isRegenerateLoading}
+                    disabled={
+                      isConfirmLoading || isLoading || isRegenerateLoading
+                    }
                     onClick={handleAcceptFactoring}
-                    text={isConfirmLoading ? "Идёт подтверждение..." : "Подтвердить"}
+                    text={
+                      isConfirmLoading ? "Идёт подтверждение..." : "Подтвердить"
+                    }
                   />
                   <PrimaryButton
                     variant="outlined"
@@ -235,6 +248,8 @@ const FactoringItem = () => {
 
         <LeadRouteInfo leadData={currentLead} />
 
+        <LeadTransportationInfo leadData={currentLead} />
+
         <Section
           title={`Подтверждение оплаты`}
           icon={<RequestQuoteOutlinedIcon color="primary" />}
@@ -254,7 +269,10 @@ const FactoringItem = () => {
           <Box
             sx={{
               display: "grid",
-              gridTemplateColumns: { xs: "minmax(0, 1fr)", md: "repeat(2, minmax(0, 1fr))" },
+              gridTemplateColumns: {
+                xs: "minmax(0, 1fr)",
+                md: "repeat(2, minmax(0, 1fr))",
+              },
               gap: 1.5,
             }}
           >

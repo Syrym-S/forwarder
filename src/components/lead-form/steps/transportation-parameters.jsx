@@ -1,12 +1,32 @@
-import { Box } from "@mui/material";
+import { Alert, Box, Button } from "@mui/material";
+import { useEffect } from "react";
 import { Controller } from "react-hook-form";
+import { useOptionsStore } from "../../../app/store/options";
 import { transportationParameters } from "../../../shared/const/leads/transportation-parameters";
 import CustomSelect from "../../../shared/ui/input/custom-select";
 import { StepSection } from "../step-section";
 
-export default function TransportationParameters({ control, options = {} }) {
+export default function TransportationParameters({ control }) {
+  const getLeadParams = useOptionsStore((state) => state.getLeadParams);
+  const leadParams = useOptionsStore((state) => state.leadParams);
+  const isLoading = useOptionsStore((state) => state.isLeadParamsLoading);
+  const error = useOptionsStore((state) => state.leadParamsError);
+
+  useEffect(() => {
+    getLeadParams();
+  }, [getLeadParams]);
+
   return (
     <StepSection title="Параметры перевозки">
+      {error && (
+        <Alert severity="error" sx={{ mb: 2 }} action={
+          <Button color="inherit" size="small" onClick={getLeadParams} disabled={isLoading}>
+            Повторить
+          </Button>
+        }>
+          Не удалось загрузить параметры перевозки
+        </Alert>
+      )}
       <Box
         sx={{
           display: "grid",
@@ -20,18 +40,27 @@ export default function TransportationParameters({ control, options = {} }) {
             name={name}
             control={control}
             defaultValue=""
-            render={({ field, fieldState }) => (
+            render={({ field, fieldState }) => {
+              const options = (leadParams[name] || []).map(({ name }) => ({ value: name, label: name }));
+              const value = field.value ?? "";
+              // Preserve an existing selection while options load or if it was removed from the dictionary.
+              if (value !== "" && !options.some((option) => String(option.value) === String(value))) {
+                options.push({ value, label: String(value) });
+              }
+              return (
               <CustomSelect
                 {...field}
                 inputRef={field.ref}
-                value={field.value ?? ""}
+                value={value}
                 label={label}
                 fullWidth
-                options={[{ value: "", label: "Не указан" }, ...(options[name] || [])]}
+                disabled={isLoading || !!error}
+                options={[{ value: "", label: "Не указан" }, ...options]}
                 error={!!fieldState.error}
-                helperText={fieldState.error?.message}
+                helperText={fieldState.error?.message || (isLoading ? "Загрузка…" : undefined)}
               />
-            )}
+              );
+            }}
           />
         ))}
       </Box>

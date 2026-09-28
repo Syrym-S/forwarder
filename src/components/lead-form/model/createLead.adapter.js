@@ -1,4 +1,5 @@
 import { mapCargoToApi } from "../../../shared/lib/cargo-volume";
+import { transportationParameters } from "../../../shared/const/leads/transportation-parameters";
 
 function hasValue(value) {
   return value !== null && value !== undefined && value !== "";
@@ -67,6 +68,11 @@ export function mapCreateLeadFormToApi(form) {
   };
 
   addIfHasValue(payload, "waypoints", form.waypoints);
+  for (const { name } of transportationParameters) {
+    if (form[name] !== undefined) {
+      payload[name] = normalizeText(form[name]?.name ?? form[name]) || null;
+    }
+  }
   addIfHasValue(payload, "loading_date", form.loadingDate);
   addIfHasValue(payload, "description", normalizeText(form.description));
   addIfHasValue(payload, "driver", form.driver?.id);

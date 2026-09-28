@@ -3,6 +3,7 @@ import CargoCard from "./lead-cargo-info";
 import LeadMap from "../lead-map";
 import LeadCustomerInfo from "./lead-customer-info";
 import LeadRouteInfo from "./lead-route-info";
+import LeadTransportationInfo from "./lead-transportation-info";
 import Section from "./lead-detail-section";
 import LocalShippingOutlinedIcon from "@mui/icons-material/LocalShippingOutlined";
 import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
@@ -244,6 +245,8 @@ const LeadItemMainContainer = ({
       )}
 
       <LeadRouteInfo leadData={leadData} />
+
+      <LeadTransportationInfo leadData={leadData} />
 
       <Box
         sx={{

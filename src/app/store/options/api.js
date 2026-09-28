@@ -1,5 +1,7 @@
 import { api } from "../../client";
 
+export const getLeadParamsApi = () => api.get("/forwarder/v1/lead-params");
+
 export const getCargoTypesApi = async (params) => {
   const data = await api.get(`/forwarder/v1/cargo-types`, {
     params,

@@ -1,4 +1,12 @@
-import { Box, Button, Chip, Divider, Stack, Typography, Paper } from "@mui/material";
+import {
+  Box,
+  Button,
+  Chip,
+  Divider,
+  Stack,
+  Typography,
+  Paper,
+} from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
 import RenderStatus from "../../../shared/ui/render-status";
@@ -7,14 +15,12 @@ function formatLocation(location) {
   return location?.address || "Адрес не указан";
 }
 
-function formatLeadPrice(lead) {
-  const price = lead?.summ === 0 ? lead?.cargo_price : lead?.summ;
-
+function formatLeadPrice(price, currency) {
   if (price === null || price === undefined || price === "") {
     return "Цена не указана";
   }
 
-  return `${Number(price).toLocaleString("ru-RU")} ${lead?.currency || ""}`;
+  return `${Number(price).toLocaleString("ru-RU")} ${currency || ""}`;
 }
 
 function hasRouteCoordinates(lead) {
@@ -150,7 +156,17 @@ const DashboardLeadItem = ({
               color: "primary.main",
             }}
           >
-            {formatLeadPrice(lead)}
+            Цена заказчика: {formatLeadPrice(lead?.price, lead?.currency)}
+          </Typography>
+          <Typography
+            sx={{
+              fontSize: 13,
+              fontWeight: 600,
+              color: "primary.main",
+            }}
+          >
+            Ваша цена за перевозку:
+            {formatLeadPrice(lead?.transportation_price, lead?.currency)}
           </Typography>
 
           {!hasRoute && (
@@ -162,7 +178,20 @@ const DashboardLeadItem = ({
             />
           )}
         </Box>
-        <Button size="small" onClick={(event) => { event.stopPropagation(); handleDoubleClick(); }} sx={{ alignSelf: "flex-start", textTransform: "none", borderRadius: 2 }}>Подробнее о перевозке</Button>
+        <Button
+          size="small"
+          onClick={(event) => {
+            event.stopPropagation();
+            handleDoubleClick();
+          }}
+          sx={{
+            alignSelf: "flex-start",
+            textTransform: "none",
+            borderRadius: 2,
+          }}
+        >
+          Подробнее о перевозке
+        </Button>
       </Stack>
     </Paper>
   );

@@ -1,7 +1,9 @@
 import dayjs from "dayjs";
+import { transportationParameters } from "../../const/leads/transportation-parameters";
 
 export const useFormDefaultValues = (lead = null, files = []) => {
   return {
+    ...Object.fromEntries(transportationParameters.map(({ name }) => [name, lead?.[name]?.name ?? lead?.[name] ?? ""])),
     pass_verify: lead?.pass_verify === true,
     loading_date: lead?.created_at.date || null,
     driver: lead?.driver,

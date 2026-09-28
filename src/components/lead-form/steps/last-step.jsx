@@ -4,8 +4,17 @@ import { Box } from "@mui/material";
 import { StepSection } from "../step-section";
 import { InfoBadge } from "../info-badge";
 import RoutePoint from "../../leads/lead-item/route-point";
+import { useOptionsStore } from "../../../app/store/options";
+import { useEffect } from "react";
+import InfoItem from "../../../shared/ui/info-item";
 
 export function LastStep({ form }) {
+  const leadParams = useOptionsStore((state) => state.leadParams);
+  const getLeadParams = useOptionsStore((state) => state.getLeadParams);
+
+  useEffect(() => {
+    getLeadParams();
+  }, [getLeadParams]);
   const waypoints = form.waypoints;
   const cargos = form.cargos;
   const pointSchedules = form?.point_schedules || [];
@@ -18,6 +27,7 @@ export function LastStep({ form }) {
             display: "grid",
             gridTemplateColumns: "1fr",
             gap: 2,
+            mb: 2,
           }}
         >
           <RoutePoint
@@ -65,10 +75,45 @@ export function LastStep({ form }) {
       </StepSection>
 
       <StepSection title="Параметры перевозки">
-        <Box sx={{ display: "grid", gridTemplateColumns: { xs: "1fr", sm: "repeat(2, 1fr)" }, gap: 1.5 }}>
+        <Box
+          sx={{
+            display: "grid",
+            gridTemplateColumns: { xs: "1fr", sm: "repeat(2, 1fr)" },
+            gap: 1.5,
+          }}
+        >
           {transportationParameters.map(({ name, label }) => (
-            <InfoBadge key={name} label={label} value={form[name]?.name || form[name] || "Не указан"} />
+            <InfoBadge
+              key={name}
+              label={label}
+              value={
+                leadParams[name]?.find(
+                  (option) =>
+                    String(option.id) === String(form[name]?.id ?? form[name]),
+                )?.name ||
+                form[name]?.name ||
+                form[name] ||
+                "Не указан"
+              }
+            />
           ))}
+        </Box>
+      </StepSection>
+
+      <StepSection title="Цены">
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            gap: 2,
+          }}
+        >
+          <InfoBadge label="Цена заказчика" value={form.price} />
+
+          <InfoBadge
+            label="Ваша цена за перевозку"
+            value={form.transportation_price}
+          />
         </Box>
       </StepSection>
 
@@ -103,14 +148,22 @@ export function LastStep({ form }) {
                   />
 
                   {getCargoVolume(cargo) != null && (
-                    <InfoBadge label="Объём" value={`${getCargoVolume(cargo)} м³`} />
+                    <InfoBadge
+                      label="Объём"
+                      value={`${getCargoVolume(cargo)} м³`}
+                    />
                   )}
                   {hasMeasures && (
-                    <InfoBadge label="Размеры" value={[
-                      cargo.length_cm && `Длина: ${cargo.length_cm} см`,
-                      cargo.width_cm && `Ширина: ${cargo.width_cm} см`,
-                      cargo.height_cm && `Высота: ${cargo.height_cm} см`,
-                    ].filter(Boolean).join(" × ")} />
+                    <InfoBadge
+                      label="Размеры"
+                      value={[
+                        cargo.length_cm && `Длина: ${cargo.length_cm} см`,
+                        cargo.width_cm && `Ширина: ${cargo.width_cm} см`,
+                        cargo.height_cm && `Высота: ${cargo.height_cm} см`,
+                      ]
+                        .filter(Boolean)
+                        .join(" × ")}
+                    />
                   )}
                 </Box>
               </StepSection>

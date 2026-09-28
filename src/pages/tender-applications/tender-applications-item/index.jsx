@@ -19,6 +19,7 @@ import { useNotificationsStore } from "../../../app/store/notifications/noti-sto
 import { parserNotificationType } from "../../../shared/helpers/notifications/parse-notification-type";
 import { NOTIFICATION_TYPE } from "../../../shared/const/notification-types";
 import LeadRouteInfo from "../../../components/leads/lead-item/lead-route-info";
+import LeadTransportationInfo from "../../../components/leads/lead-item/lead-transportation-info";
 
 const TenderApplicationsItem = () => {
   const { id } = useParams();
@@ -82,76 +83,84 @@ const TenderApplicationsItem = () => {
   return (
     <RootLayout withoutDataCheck>
       <Box sx={{ width: "100%", maxWidth: 1440, mx: "auto", minWidth: 0 }}>
-      <TenderDetailsHeading tender={customerCurrentTender} isCustomerTender />
+        <TenderDetailsHeading tender={customerCurrentTender} isCustomerTender />
 
-      <Box
-        sx={{
-          border: "1px solid",
-          borderColor: "divider",
-          borderRadius: 3,
-          overflow: "hidden",
-          my: 3,
-        }}
-      >
-        <LeadMap
-          from={from}
-          waypoints={waypoints}
-          to={to}
-          id={customerCurrentTender?.lead?.id}
-        />
-      </Box>
+        <Box
+          sx={{
+            border: "1px solid",
+            borderColor: "divider",
+            borderRadius: 3,
+            overflow: "hidden",
+            my: 3,
+          }}
+        >
+          <LeadMap
+            from={from}
+            waypoints={waypoints}
+            to={to}
+            id={customerCurrentTender?.lead?.id}
+          />
+        </Box>
 
-      <LeadRouteInfo leadData={customerCurrentTender.lead} />
+        <LeadRouteInfo leadData={customerCurrentTender.lead} />
 
-      <TenderInfo tender={customerCurrentTender} />
+        <LeadTransportationInfo leadData={customerCurrentTender.lead} />
 
-      <Section
-        title={`Груз`}
-        icon={<LocalShippingOutlinedIcon color="primary" />}
-      >
+        <TenderInfo tender={customerCurrentTender} />
+
+        <Section
+          title={`Груз`}
+          icon={<LocalShippingOutlinedIcon color="primary" />}
+        >
+          <Box
+            sx={{
+              display: "grid",
+              gridTemplateColumns: "1fr",
+              gap: 2,
+            }}
+          >
+            {cargosInfo?.map((cargo, index) => (
+              <LeadCargoInfo
+                key={cargo.id || index}
+                cargo={cargo}
+                index={index}
+              />
+            ))}
+          </Box>
+        </Section>
+
+        <LeadDocuments tender={customerCurrentTender} />
+
         <Box
           sx={{
             display: "grid",
-            gridTemplateColumns: "1fr",
-            gap: 2,
+            gridTemplateColumns: {
+              xs: "1fr",
+              lg: "repeat(2, minmax(0, 1fr))",
+            },
+            gridTemplateRows: "1fr",
+            gap: {
+              xs: 0,
+              lg: 2,
+            },
           }}
         >
-          {cargosInfo?.map((cargo, index) => (
-            <LeadCargoInfo key={cargo.id || index} cargo={cargo} index={index} />
-          ))}
+          {showBetField ? (
+            <MakeBetForm
+              tender={customerCurrentTender}
+              handleHideBetField={handleHideBetField}
+            />
+          ) : (
+            <MakeBetBlock
+              tender={customerCurrentTender}
+              setShowBetField={setShowBetField}
+            />
+          )}
+
+          {isTenderActive && (
+            <CancelledBets bets={customerCurrentTender?.bets} />
+          )}
         </Box>
-      </Section>
-
-      <LeadDocuments tender={customerCurrentTender} />
-
-      <Box
-        sx={{
-          display: "grid",
-          gridTemplateColumns: {
-            xs: "1fr",
-            lg: "repeat(2, minmax(0, 1fr))",
-          },
-          gridTemplateRows: "1fr",
-          gap: {
-            xs: 0,
-            lg: 2,
-          },
-        }}
-      >
-        {showBetField ? (
-          <MakeBetForm
-            tender={customerCurrentTender}
-            handleHideBetField={handleHideBetField}
-          />
-        ) : (
-          <MakeBetBlock
-            tender={customerCurrentTender}
-            setShowBetField={setShowBetField}
-          />
-        )}
-
-        {isTenderActive && <CancelledBets bets={customerCurrentTender?.bets} />}
-      </Box>
       </Box>
     </RootLayout>
   );

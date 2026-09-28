@@ -1,7 +1,16 @@
 import { create } from "zustand";
-import { getCargoTypesApi, getCurrenciesApi, searchCargoTypeApi } from "./api";
+import {
+  getCargoTypesApi,
+  getCurrenciesApi,
+  getLeadParamsApi,
+  searchCargoTypeApi,
+} from "./api";
 
-export const useOptionsStore = create((set) => ({
+export const useOptionsStore = create((set, get) => ({
+  leadParams: {},
+  isLeadParamsLoading: false,
+  leadParamsError: null,
+
   cargoTypes: [],
   currencies: [],
 
@@ -67,6 +76,22 @@ export const useOptionsStore = create((set) => ({
       set({
         error: e.message,
         isCurrenciesLoading: false,
+      });
+    }
+  },
+
+  getLeadParams: async () => {
+    if (get().isLeadParamsLoading) return;
+
+    set({ isLeadParamsLoading: true, leadParamsError: null });
+    try {
+      const response = await getLeadParamsApi();
+      set({ leadParams: response.data, isLeadParamsLoading: false });
+    } catch (error) {
+      set({
+        leadParamsError:
+          error.message || "Не удалось загрузить параметры перевозки",
+        isLeadParamsLoading: false,
       });
     }
   },

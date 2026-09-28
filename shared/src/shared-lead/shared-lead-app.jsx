@@ -9,6 +9,7 @@ import LeadCargoInfo from "../../../src/components/leads/lead-item/lead-cargo-in
 import LocalShippingOutlinedIcon from "@mui/icons-material/LocalShippingOutlined";
 import Section from "../../../src/shared/ui/section";
 import LeadDriverInfo from "../../../src/components/leads/lead-item/lead-driver-info";
+import LeadTransportationInfo from "../../../src/components/leads/lead-item/lead-transportation-info";
 
 const SharedLeadApp = () => {
   const [leadData, setLeadData] = useState(null);
@@ -86,7 +87,7 @@ const SharedLeadApp = () => {
 
         <LeadRouteInfo leadData={leadData} />
 
-        <LeadCustomerInfo leadData={leadData} />
+        <LeadTransportationInfo leadData={leadData} />
 
         <Section
           title={`Груз`}
@@ -110,6 +111,8 @@ const SharedLeadApp = () => {
             ))}
           </Box>
         </Section>
+
+        <LeadCustomerInfo leadData={leadData} />
 
         <LeadDriverInfo leadData={leadData} />
       </Box>
