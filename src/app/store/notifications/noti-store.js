@@ -10,6 +10,7 @@ import { isStaging } from "../../client";
 export const useNotificationsStore = create((set) => ({
   notifications: [],
   newNotification: null,
+  shownNotificationIds: new Set(),
   notificationDetails: null,
 
   isLoading: false,
@@ -19,7 +20,7 @@ export const useNotificationsStore = create((set) => ({
   total: 0,
   perPage: 1,
 
-  getNotifications: async (params) => {
+  getNotifications: async (params, { showSnackbar = false } = {}) => {
     try {
       set({ isLoading: true, error: null });
 
@@ -27,12 +28,25 @@ export const useNotificationsStore = create((set) => ({
 
       const newNotification = response.data.results[0];
 
-      set({
-        notifications: response.data.results,
-        newNotification: newNotification && !newNotification.is_viewed ? newNotification : null,
-        isLoading: false,
-        total: response.data.total,
-        perPage: response.data.per_page,
+      set((state) => {
+        const shouldShow =
+          showSnackbar &&
+          newNotification &&
+          !newNotification.is_viewed &&
+          !state.shownNotificationIds.has(newNotification.id);
+
+        return {
+          notifications: response.data.results,
+          ...(shouldShow && {
+            newNotification,
+            shownNotificationIds: new Set(state.shownNotificationIds).add(
+              newNotification.id,
+            ),
+          }),
+          isLoading: false,
+          total: response.data.total,
+          perPage: response.data.per_page,
+        };
       });
     } catch (e) {
       set({

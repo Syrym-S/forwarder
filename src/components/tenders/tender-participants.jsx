@@ -1,3 +1,4 @@
+import renderDriverOption from "../../shared/ui/render-driver-option";
 import {
   Autocomplete,
   Box,
@@ -49,6 +50,8 @@ const TenderParticipants = ({ tender }) => {
   };
 
   const handleAddParticipant = async () => {
+    if (!selectedDriver || selectedDriver.in_black_list === true) return;
+
     await addParticipant(tender.id, { participant_id: selectedDriver.id });
 
     handleCloseConfirmModal();
@@ -57,6 +60,7 @@ const TenderParticipants = ({ tender }) => {
   };
 
   const onDriverChange = (_, value) => {
+    if (value?.in_black_list === true) return;
     setSelectedDriver(value);
   };
 
@@ -113,25 +117,11 @@ const TenderParticipants = ({ tender }) => {
           <Autocomplete
             disabled={isLoading}
             options={drivers}
+            getOptionDisabled={(option) => option.in_black_list === true}
             getOptionLabel={(option) => option?.fio ?? ""}
             isOptionEqualToValue={(option, value) => option?.id === value?.id}
             onChange={onDriverChange}
-            renderOption={(props, option) => {
-              return (
-                <Box
-                  component="li"
-                  {...props}
-                  sx={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                    gap: 2,
-                  }}
-                >
-                  <Typography fontWeight={700}>{option.fio}</Typography>
-                </Box>
-              );
-            }}
+            renderOption={renderDriverOption}
             renderInput={(params) => (
               <TextField
                 {...params}
@@ -149,7 +139,7 @@ const TenderParticipants = ({ tender }) => {
             }}
           >
             <Button
-              disabled={!selectedDriver}
+              disabled={!selectedDriver || selectedDriver.in_black_list === true}
               variant="contained"
               color="primary"
               onClick={handleOpenConfirmModal}

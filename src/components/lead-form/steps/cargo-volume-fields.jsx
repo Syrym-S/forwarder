@@ -30,18 +30,10 @@ export default function CargoVolumeFields({ control, index }) {
             name={`${prefix}.${key}`}
             control={control}
             rules={{
-              validate: (value, values) => {
-                if (!hasCargoValue(value)) {
-                  return (
-                    isPositiveCargoNumber(
-                      values.cargos?.[index]?.cargo_demention,
-                    ) || "Укажите габарит или объём груза"
-                  );
-                }
-                return (
-                  isPositiveCargoNumber(value) || "Габарит должен быть больше 0"
-                );
-              },
+              validate: (value) =>
+                !hasCargoValue(value) ||
+                isPositiveCargoNumber(value) ||
+                "Габарит должен быть больше 0",
             }}
             value={cargo[key] ?? ""}
             label={labels[dimensionIndex]}
@@ -57,7 +49,6 @@ export default function CargoVolumeFields({ control, index }) {
         name={`${prefix}.cargo_demention`}
         control={control}
         rules={{
-          deps: cargoDimensionFields.map((key) => `${prefix}.${key}`),
           validate: (value) =>
             !hasCargoValue(value) ||
             isPositiveCargoNumber(value) ||

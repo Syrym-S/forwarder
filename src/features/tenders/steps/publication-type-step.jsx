@@ -1,3 +1,4 @@
+import renderDriverOption from "../../../shared/ui/render-driver-option";
 import {
   Autocomplete,
   Box,
@@ -37,6 +38,7 @@ const PublicationTypeStep = ({
   const isSelectedDriversExists = selectedDrivers?.length !== 0;
 
   const onDriverChange = (_, value) => {
+    if (value?.in_black_list === true) return;
     setSelectedDriver(value);
 
     if (!isPublic) {
@@ -45,6 +47,8 @@ const PublicationTypeStep = ({
   };
 
   const handleAddDriver = () => {
+    if (!selectedDriver || selectedDriver.in_black_list === true) return;
+
     setSelectedDrivers((prev) => [...prev, selectedDriver]);
     setSelectedDriver(null);
     setError(null);
@@ -89,26 +93,12 @@ const PublicationTypeStep = ({
         <Autocomplete
           disabled={isPublic || isLoading}
           options={drivers}
+          getOptionDisabled={(option) => option.in_black_list === true}
           value={selectedDriver}
           getOptionLabel={(option) => option?.fio ?? ""}
           isOptionEqualToValue={(option, value) => option?.id === value?.id}
           onChange={onDriverChange}
-          renderOption={(props, option) => {
-            return (
-              <Box
-                component="li"
-                {...props}
-                sx={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  gap: 2,
-                }}
-              >
-                <Typography fontSize={14} fontWeight={600}>{option.fio}</Typography>
-              </Box>
-            );
-          }}
+          renderOption={renderDriverOption}
           renderInput={(params) => (
             <FormInput
               {...params}
@@ -126,7 +116,7 @@ const PublicationTypeStep = ({
           }}
         >
           <Button
-            disabled={!selectedDriver}
+            disabled={!selectedDriver || selectedDriver.in_black_list === true}
             variant="contained"
             color="primary"
             onClick={handleAddDriver}

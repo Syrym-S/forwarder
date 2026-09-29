@@ -47,7 +47,7 @@ const AppContentContainer = () => {
       const socket = await connectNotifications();
 
       socket.onmessage = async () => {
-        await getNotifications();
+        await getNotifications(undefined, { showSnackbar: true });
       };
 
       socketRef.current = socket;
@@ -61,7 +61,7 @@ const AppContentContainer = () => {
   }, []);
 
   useEffect(() => {
-    getNotifications();
+    getNotifications(undefined, { showSnackbar: true });
   }, []);
 
   return (

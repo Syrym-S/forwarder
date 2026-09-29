@@ -14,6 +14,7 @@ import { useOptionsStore } from "../../../app/store/options";
 import { StepSection } from "../step-section";
 import { STATUS } from "../../../shared/const/tenders";
 import FormControllerInput from "../../../shared/ui/input/form-controller-input";
+import { hasCargoValue, isPositiveCargoNumber } from "../../../shared/lib/cargo-volume";
 
 const CargoStep = ({ control, errors, leadStatus }) => {
   const { fields, append, remove } = useFieldArray({
@@ -151,7 +152,9 @@ const CargoStepFieldsContent = ({ index, control, cargo }) => {
         control={control}
         rules={{
           required: "Обязательно нужно указать название товара",
+          validate: (value) => !!value?.trim() || "Укажите название груза",
         }}
+        required
         label="Название груза"
         size="small"
         fullWidth
@@ -203,12 +206,17 @@ const CargoStepFieldsContent = ({ index, control, cargo }) => {
         name={`cargos.${index}.weight_kg`}
         control={control}
         rules={{
-          required: "Укажите вес",
-          validate: (value) => Number(value) > 0 || "Вес должен быть больше 0",
+          validate: (value) =>
+            !hasCargoValue(value) ||
+            isPositiveCargoNumber(value) ||
+            "Вес должен быть больше 0",
         }}
-        render={({ field }) => (
+        render={({ field, fieldState }) => (
           <TextField
             {...field}
+            value={field.value ?? ""}
+            error={!!fieldState.error}
+            helperText={fieldState.error?.message}
             type="number"
             label="Вес, кг"
             onChange={(e) => {
@@ -233,8 +241,8 @@ const CargoStepFieldsContent = ({ index, control, cargo }) => {
         name={`cargos.${index}.cargo_price`}
         control={control}
         rules={{
-          required: "Укажите цену",
           validate: (value) =>
+            !hasCargoValue(value) ||
             Number(value) >= 0 || "Цена не может быть отрицательной",
         }}
         type="number"
