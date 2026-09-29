@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import {
+  banDriverApi,
   createDriverApi,
   getDriverDetailsApi,
   getDriversApi,
@@ -14,6 +15,7 @@ export const useDriverStore = create((set) => ({
 
   isLoading: false,
   isDetailsLoading: false,
+  isBanLoading: false,
 
   error: null,
   count: 0,
@@ -78,6 +80,7 @@ export const useDriverStore = create((set) => ({
       });
     }
   },
+
   createDriver: async (payload) => {
     try {
       set({ isLoading: true, error: null });
@@ -101,5 +104,24 @@ export const useDriverStore = create((set) => ({
 
   clearInviteLink: () => {
     set({ inviteLink: null });
+  },
+
+  banDriver: async (payload, id) => {
+    try {
+      set({ isBanLoading: true, error: null });
+
+      await banDriverApi(payload, id);
+
+      set({
+        isBanLoading: false,
+      });
+    } catch (e) {
+      set({
+        error: e.response?.data?.message || e.message,
+        isBanLoading: false,
+      });
+
+      throw e;
+    }
   },
 }));

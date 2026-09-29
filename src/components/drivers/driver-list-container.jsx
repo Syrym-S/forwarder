@@ -22,6 +22,7 @@ const DriverListContainer = ({ view }) => {
     (state) => state.clearDriverDetails,
   );
   const getDrivers = useDriverStore((state) => state.getDrivers);
+  const banDriver = useDriverStore((state) => state.banDriver);
 
   const isCardsView = view === VIEWS.cards;
   const isEmpty = drivers?.length === 0;
@@ -35,6 +36,11 @@ const DriverListContainer = ({ view }) => {
 
   const handlePageChange = (_, value) => {
     setPage(value);
+  };
+
+  const handleBanDriver = async (id, comment) => {
+    await banDriver({ comment }, id);
+    await getDrivers({ page });
   };
 
   useEffect(() => {
@@ -58,7 +64,11 @@ const DriverListContainer = ({ view }) => {
   return (
     <Box>
       {!isCardsView && (
-        <DriversTable drivers={drivers} setSelectedDriver={setSelectedDriver} />
+        <DriversTable
+          drivers={drivers}
+          setSelectedDriver={setSelectedDriver}
+          handleBanDriver={handleBanDriver}
+        />
       )}
 
       {isCardsView && (
@@ -92,6 +102,7 @@ const DriverListContainer = ({ view }) => {
                 key={driver.id}
                 driver={driver}
                 setSelectedDriver={setSelectedDriver}
+                handleBanDriver={handleBanDriver}
               />
             ))
           )}

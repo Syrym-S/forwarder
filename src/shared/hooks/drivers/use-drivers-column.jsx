@@ -1,8 +1,8 @@
-import { Box, Tooltip, Typography } from "@mui/material";
-import { NavLink } from "react-router-dom";
-import RenderStatus from "../../ui/render-status";
+import { Box, Chip, IconButton, Tooltip } from "@mui/material";
+import BlockOutlinedIcon from "@mui/icons-material/BlockOutlined";
+import ContentCopyOutlinedIcon from "@mui/icons-material/ContentCopyOutlined";
 
-const useDriversColumns = (setSelectedDriver) => {
+const useDriversColumns = (setSelectedDriver, onBlockDriver, onCopyLink) => {
   const columns = [
     {
       field: "id",
@@ -23,6 +23,21 @@ const useDriversColumns = (setSelectedDriver) => {
       field: "fio",
       headerName: "ФИО",
       width: 200,
+    },
+    {
+      field: "in_black_list",
+      headerName: "Статус",
+      width: 180,
+      type: "boolean",
+      renderCell: ({ value }) =>
+        value === true ? (
+          <Chip
+            label="Заблокирован"
+            color="error"
+            size="small"
+            icon={<BlockOutlinedIcon />}
+          />
+        ) : null,
     },
     {
       field: "email",
@@ -48,26 +63,80 @@ const useDriversColumns = (setSelectedDriver) => {
     },
     {
       field: "invite_link",
-      headerName: "Пригласительная ссылка",
-      width: 200,
-      renderCell: ({ value }) => (
-        <Tooltip title="Нажмите, чтобы скопировать">
-          <Typography
-            component="span"
-            onClick={() => navigator.clipboard.writeText(value)}
-            sx={{
-              cursor: "pointer",
-              color: "primary.main",
-              textDecoration: "underline",
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-              whiteSpace: "nowrap",
-            }}
-          >
-            {value}
-          </Typography>
+      headerName: "Ссылка",
+      width: 100,
+      align: "center",
+      headerAlign: "center",
+      resizable: false,
+      sortable: false,
+      filterable: false,
+      disableColumnMenu: true,
+      cellClassName: "driver-link-cell",
+      headerClassName: "driver-link-header",
+      renderCell: ({ value, hasFocus }) => (
+        <Tooltip
+          title={
+            value ? "Скопировать пригласительную ссылку" : "Ссылка отсутствует"
+          }
+        >
+          <span>
+            <IconButton
+              aria-label="Скопировать пригласительную ссылку"
+              color="primary"
+              disabled={!value}
+              tabIndex={hasFocus ? 0 : -1}
+              onClick={(event) => {
+                event.stopPropagation();
+                onCopyLink(value);
+              }}
+            >
+              <ContentCopyOutlinedIcon />
+            </IconButton>
+          </span>
         </Tooltip>
       ),
+    },
+    {
+      field: "actions",
+      headerName: "Действия",
+      width: 110,
+      align: "center",
+      headerAlign: "center",
+      resizable: false,
+      cellClassName: "driver-actions-cell",
+      headerClassName: "driver-actions-header",
+      sortable: false,
+      filterable: false,
+      disableColumnMenu: true,
+      renderCell: ({ row, hasFocus }) => {
+        if (row.in_black_list === true) {
+          return (
+            <Tooltip title="Водитель заблокирован">
+              <span aria-label="Водитель заблокирован">
+                <BlockOutlinedIcon
+                  color="error"
+                  sx={{ fontSize: 25, verticalAlign: "middle" }}
+                />
+              </span>
+            </Tooltip>
+          );
+        }
+        return (
+          <Tooltip title="Заблокировать водителя">
+            <IconButton
+              aria-label="Заблокировать водителя"
+              color="primary"
+              tabIndex={hasFocus ? 0 : -1}
+              onClick={(event) => {
+                event.stopPropagation();
+                onBlockDriver(row);
+              }}
+            >
+              <BlockOutlinedIcon sx={{ fontSize: 25 }} />
+            </IconButton>
+          </Tooltip>
+        );
+      },
     },
   ];
 

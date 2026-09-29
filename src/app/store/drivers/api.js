@@ -9,12 +9,7 @@ export const getDriversApi = async (params) => {
 };
 
 export const getDriverDetailsApi = async (driver_id) => {
-  const data = await api.get(`/forwarder/v1/driver/${driver_id}`, {
-    headers: {
-      // eslint-disable-next-line no-undef
-      "X-WP-Nonce": APP_DATA.nonce,
-    },
-  });
+  const data = await api.get(`/forwarder/v1/driver/${driver_id}`);
 
   return data;
 };
@@ -22,18 +17,22 @@ export const getDriverDetailsApi = async (driver_id) => {
 export const searchDriverApi = async (params) => {
   const data = await api.get(`/forwarder/v1/drivers/search`, {
     params,
-    headers: {
-      // eslint-disable-next-line no-undef
-      "X-WP-Nonce": APP_DATA.nonce,
-    },
   });
 
   return data;
 };
 
 export const createDriverApi = async (payload) => {
-  console.log("payload", payload);
   const data = await api.post(`/forwarder/v1/drivers/create`, payload);
+
+  return data;
+};
+
+export const banDriverApi = async (payload, driver_id) => {
+  const data = await api.post(
+    `/forwarder/v1/drivers/${driver_id}/black-list`,
+    payload,
+  );
 
   return data;
 };

@@ -1,100 +1,154 @@
-import { Box, Chip, Stack, Typography } from "@mui/material";
+import { useState } from "react";
+import {
+  Box,
+  Chip,
+  IconButton,
+  Stack,
+  Tooltip,
+  Typography,
+} from "@mui/material";
+import BlockDriverModal from "./block-driver-modal";
 import InfoItem from "../../shared/ui/info-item";
+import BlockOutlinedIcon from "@mui/icons-material/BlockOutlined";
 
-const DriverCard = ({ driver, setSelectedDriver }) => {
+const DriverCard = ({ driver, setSelectedDriver, handleBanDriver }) => {
+  const [isBlockModalOpen, setIsBlockModalOpen] = useState(false);
+  const isBlocked = driver.in_black_list === true;
+
+  const handleOpenBlockModal = (event) => {
+    event.stopPropagation();
+    if (isBlocked) return;
+    setIsBlockModalOpen(true);
+  };
+
+  const handleCloseBlockModal = () => {
+    setIsBlockModalOpen(false);
+  };
+
   const handleSetDriverDetails = () => {
     setSelectedDriver(driver);
   };
 
   return (
-    <Box
-      onClick={handleSetDriverDetails}
-      tabIndex={0}
-      sx={{
-        p: 3,
-        border: "2px solid",
-        borderColor: "divider",
-        borderRadius: 4,
-        backgroundColor: "background.paper",
-        boxShadow: "0 2px 8px rgba(0, 0, 0, 0.06)",
-        transition: "0.2s ease",
-        cursor: "pointer",
-        "&:hover": {
-          borderColor: "primary.light",
-          boxShadow: "0 8px 24px rgba(33, 150, 243, 0.12)",
-        },
-      }}
-    >
-      <Stack spacing={2.5}>
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "flex-start",
-            gap: 2,
-            flexWrap: "wrap",
-          }}
-        >
-          <Box>
-            <Typography
-              variant="body2"
-              color="text.secondary"
-              sx={{ mb: 0.75 }}
-            >
-              Водитель
-            </Typography>
-
-            <Typography
-              sx={{
-                lineHeight: 1.3,
-                fontSize: {
-                  xs: "16px",
-                  sm: "18px",
-                },
-                fontWeight: 500,
-              }}
-            >
-              {driver?.fio}
-            </Typography>
-          </Box>
-
-          <Stack
-            direction="row"
-            spacing={1}
-            flexWrap="wrap"
-            useFlexGap
-            sx={{
-              justifyContent: {
-                xs: "flex-start",
-                sm: "flex-end",
-              },
-            }}
-          >
-            <Chip
-              label={`ID# ${driver.id || "—"}`}
-              color="primary"
-              variant="outlined"
-              sx={{
-                borderRadius: 999,
-                fontWeight: 600,
-                backgroundColor: "rgba(33, 150, 243, 0.04)",
-              }}
-            />
-          </Stack>
-        </Box>
-      </Stack>
-
-      <Stack
+    <>
+      <Box
+        onClick={handleSetDriverDetails}
+        tabIndex={0}
         sx={{
-          my: 1,
-          gap: 3,
+          p: 3,
+          border: "2px solid",
+          borderColor: isBlocked ? "error.light" : "divider",
+          borderRadius: 4,
+          backgroundColor: isBlocked ? "#fff1f0" : "background.paper",
+          boxShadow: "0 2px 8px rgba(0, 0, 0, 0.06)",
+          transition: "0.2s ease",
+          cursor: "pointer",
+          "&:hover": {
+            borderColor: isBlocked ? "error.main" : "primary.light",
+            boxShadow: "0 8px 24px rgba(33, 150, 243, 0.12)",
+          },
         }}
       >
-        <InfoItem label="Адрес" value={driver?.legal_address} />
-        <InfoItem label="Email" value={driver?.email} />
-        <InfoItem label="ИИН" value={driver?.iin} />
-      </Stack>
-    </Box>
+        <Stack spacing={2.5}>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "flex-start",
+              gap: 2,
+              flexWrap: "wrap",
+            }}
+          >
+            <Box>
+              <Typography
+                variant="body2"
+                color="text.secondary"
+                sx={{ mb: 0.75 }}
+              >
+                Водитель
+              </Typography>
+
+              <Typography
+                sx={{
+                  lineHeight: 1.3,
+                  fontSize: {
+                    xs: "16px",
+                    sm: "18px",
+                  },
+                  fontWeight: 500,
+                }}
+              >
+                {driver?.fio}
+              </Typography>
+            </Box>
+
+            <Box
+              direction="row"
+              spacing={1}
+              flexWrap="wrap"
+              useFlexGap
+              sx={{
+                display: "flex",
+                gap: 1,
+                justifyContent: {
+                  xs: "flex-start",
+                  sm: "flex-end",
+                },
+                alignItems: "center",
+              }}
+            >
+              <Chip
+                label={`ID# ${driver.id || "—"}`}
+                color="primary"
+                variant="outlined"
+                sx={{
+                  borderRadius: 999,
+                  fontWeight: 600,
+                  backgroundColor: "rgba(33, 150, 243, 0.04)",
+                }}
+              />
+
+              {isBlocked ? (
+                <Chip
+                  label="Заблокирован"
+                  color="error"
+                  size="small"
+                  icon={<BlockOutlinedIcon />}
+                />
+              ) : (
+              <Tooltip title={"Заблокировать водителя"}>
+                <IconButton
+                  aria-label="Заблокировать водителя"
+                  color="primary"
+                  onClick={handleOpenBlockModal}
+                >
+                  <BlockOutlinedIcon sx={{ fontSize: 25 }} />
+                </IconButton>
+              </Tooltip>
+              )}
+            </Box>
+          </Box>
+        </Stack>
+
+        <Stack
+          sx={{
+            my: 1,
+            gap: 3,
+          }}
+        >
+          <InfoItem label="Адрес" value={driver?.legal_address} />
+          <InfoItem label="Email" value={driver?.email} />
+          <InfoItem label="ИИН" value={driver?.iin} />
+        </Stack>
+      </Box>
+      {isBlockModalOpen && !isBlocked && (
+        <BlockDriverModal
+          driver={driver}
+          onClose={handleCloseBlockModal}
+          onConfirm={handleBanDriver}
+        />
+      )}
+    </>
   );
 };
 

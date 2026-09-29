@@ -6,8 +6,11 @@ export const BetCard = ({ tender, bet }) => {
   const acceptBet = useTendersStore((state) => state.acceptBet);
   const getTenderDetails = useTendersStore((state) => state.getTenderDetails);
   const isWinning = bet.status === "winning";
+  const isBlocked = bet.in_black_list === true;
 
   const handleAcceptBet = () => {
+    if (isBlocked) return;
+
     acceptBet(tender.id, bet.index);
     getTenderDetails(tender.id);
   };
@@ -49,6 +52,7 @@ export const BetCard = ({ tender, bet }) => {
             size="small"
             color="primary"
             label={"Выбрать победителем"}
+            disabled={isBlocked}
             onClick={handleAcceptBet}
             sx={{
               borderRadius: 2,
@@ -71,6 +75,11 @@ export const BetCard = ({ tender, bet }) => {
       >
         {bet.fio} - ИИН:{bet.iin}
       </Typography>
+      {isBlocked && (
+        <Typography variant="caption" color="error" display="block">
+          Водитель заблокирован. Выбор победителем недоступен.
+        </Typography>
+      )}
     </Box>
   );
 };
