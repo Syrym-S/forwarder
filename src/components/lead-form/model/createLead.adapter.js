@@ -69,8 +69,9 @@ export function mapCreateLeadFormToApi(form) {
 
   addIfHasValue(payload, "waypoints", form.waypoints);
   for (const { name } of transportationParameters) {
-    if (form[name] !== undefined) {
-      payload[name] = normalizeText(form[name]?.name ?? form[name]) || null;
+    const value = normalizeText(form[name]?.name ?? form[name]);
+    if (value) {
+      payload[name] = value;
     }
   }
   addIfHasValue(payload, "loading_date", form.loadingDate);
