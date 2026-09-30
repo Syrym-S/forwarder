@@ -1,3 +1,4 @@
+import TooltipIconButton from "../../shared/ui/tooltip-icon-button";
 import { Controller, useForm, useWatch } from "react-hook-form";
 import { IMaskInput } from "react-imask";
 import {
@@ -11,7 +12,6 @@ import {
   DialogTitle,
   FormControlLabel,
   Grid,
-  IconButton,
   Stack,
   TextField,
   Typography,
@@ -179,13 +179,14 @@ const AddDriverForm = ({ open, onClose, setSavedData }) => {
             Заполните данные водителя, реквизиты и документы
           </Typography>
         </Box>
-        <IconButton
+        <TooltipIconButton
+          title="Закрыть форму"
           aria-label="Закрыть форму"
           onClick={onClose}
           disabled={isSubmitting}
         >
           <CloseRoundedIcon />
-        </IconButton>
+        </TooltipIconButton>
       </DialogTitle>
 
       <DialogContent
@@ -615,7 +616,9 @@ const AddDriverForm = ({ open, onClose, setSavedData }) => {
                         input: {
                           endAdornment: (
                             <InputAdornment position="end">
-                              <IconButton
+                              <TooltipIconButton
+                                title={showPassword ? "Скрыть пароль" : "Показать пароль"}
+                                aria-label={showPassword ? "Скрыть пароль" : "Показать пароль"}
                                 onClick={() => setShowPassword((prev) => !prev)}
                                 edge="end"
                               >
@@ -624,7 +627,7 @@ const AddDriverForm = ({ open, onClose, setSavedData }) => {
                                 ) : (
                                   <Visibility />
                                 )}
-                              </IconButton>
+                              </TooltipIconButton>
                             </InputAdornment>
                           ),
                         },
@@ -656,7 +659,9 @@ const AddDriverForm = ({ open, onClose, setSavedData }) => {
                         input: {
                           endAdornment: (
                             <InputAdornment position="end">
-                              <IconButton
+                              <TooltipIconButton
+                                title={showConfirmPassword ? "Скрыть подтверждение пароля" : "Показать подтверждение пароля"}
+                                aria-label={showConfirmPassword ? "Скрыть подтверждение пароля" : "Показать подтверждение пароля"}
                                 onClick={() =>
                                   setShowConfirmPassword((prev) => !prev)
                                 }
@@ -667,7 +672,7 @@ const AddDriverForm = ({ open, onClose, setSavedData }) => {
                                 ) : (
                                   <Visibility />
                                 )}
-                              </IconButton>
+                              </TooltipIconButton>
                             </InputAdornment>
                           ),
                         },
@@ -844,14 +849,16 @@ const AddDriverForm = ({ open, onClose, setSavedData }) => {
                             MB
                           </Typography>
                         </Box>
-                        <IconButton
+                        <TooltipIconButton
+                          title="Удалить документ"
+                          aria-label="Удалить документ"
                           color="error"
                           onClick={() => {
                             setRegistrationDocumentsToUpload(null);
                           }}
                         >
                           <DeleteOutlineOutlinedIcon />
-                        </IconButton>
+                        </TooltipIconButton>
                       </Box>
                     )}
 
@@ -987,7 +994,9 @@ const AddDriverForm = ({ open, onClose, setSavedData }) => {
                           </Typography>
                         </Box>
 
-                        <IconButton
+                        <TooltipIconButton
+                          title="Удалить документ"
+                          aria-label="Удалить документ"
                           // disabled={isSubmitting}
                           color="error"
                           onClick={() => {
@@ -996,7 +1005,7 @@ const AddDriverForm = ({ open, onClose, setSavedData }) => {
                           }}
                         >
                           <DeleteOutlineOutlinedIcon />
-                        </IconButton>
+                        </TooltipIconButton>
                       </Box>
                     )}
 

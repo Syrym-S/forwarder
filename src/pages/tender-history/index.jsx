@@ -1,3 +1,4 @@
+import Tooltip from "../../shared/ui/action-tooltip";
 import { useEffect, useState } from "react";
 import RootLayout from "../../components/layout/root-layout";
 import {
@@ -6,7 +7,6 @@ import {
   IconButton,
   Pagination,
   TextField,
-  Tooltip,
 } from "@mui/material";
 import { useTendersStore } from "../../app/store/tenders/tender-store";
 import { VIEWS } from "../../shared/const/leads";
@@ -130,7 +130,7 @@ const TenderHistory = () => {
           title="Cписок активных аукционов"
           onClick={handleNavigateToTenders}
         >
-          <IconButton>
+          <IconButton  aria-label="Cписок активных аукционов">
             <ContentPasteOutlinedIcon />
           </IconButton>
         </Tooltip>

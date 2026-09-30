@@ -1,3 +1,4 @@
+import Tooltip from "../../shared/ui/action-tooltip";
 import { Box, IconButton, Stack, Typography } from "@mui/material";
 import DeleteOutlineRoundedIcon from "@mui/icons-material/DeleteOutlineRounded";
 import dayjs from "dayjs";
@@ -69,13 +70,34 @@ const ParticipantCard = ({ tender, tender_id, participant }) => {
 
       {tender.status !== STATUS.closed &&
         tender.status !== STATUS.cancelled && (
-          <IconButton
-            aria-label="Удалить участника"
-            color="error"
-            onClick={handleDeleteParticipant}
+          <Tooltip
+            title="Удалить участника"
+            placement="top"
+            arrow
+            disableInteractive
+            slotProps={{
+              tooltip: {
+                sx: {
+                  bgcolor: "grey.900",
+                  px: 1.5,
+                  py: 1,
+                  borderRadius: 2,
+                  fontSize: 12,
+                  fontWeight: 500,
+                  boxShadow: 3,
+                },
+              },
+              arrow: { sx: { color: "grey.900" } },
+            }}
           >
-            <DeleteOutlineRoundedIcon />
-          </IconButton>
+            <IconButton
+              aria-label="Удалить участника"
+              color="error"
+              onClick={handleDeleteParticipant}
+            >
+              <DeleteOutlineRoundedIcon />
+            </IconButton>
+          </Tooltip>
         )}
     </Box>
   );

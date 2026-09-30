@@ -1,10 +1,10 @@
+import TooltipIconButton from "../../../shared/ui/tooltip-icon-button";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import InsertDriveFileOutlinedIcon from "@mui/icons-material/InsertDriveFileOutlined";
 import UploadFileOutlinedIcon from "@mui/icons-material/UploadFileOutlined";
 import {
   Box,
   Button,
-  IconButton,
   Stack,
   TextField,
   Typography,
@@ -241,13 +241,15 @@ export function DocumentsStep({ form, setValue }) {
                 </Typography>
               </Box>
 
-              <IconButton
+              <TooltipIconButton
+                title="Удалить документ"
+                aria-label="Удалить документ"
                 size="small"
                 color="error"
                 onClick={() => handleDeleteDocument(document.id)}
               >
                 <DeleteOutlineOutlinedIcon fontSize="small" />
-              </IconButton>
+              </TooltipIconButton>
             </Box>
           ))
         ) : form.documents?.length ? (
@@ -323,13 +325,15 @@ export function DocumentsStep({ form, setValue }) {
                   </Typography>
                 </Box>
 
-                <IconButton
+                <TooltipIconButton
+                  title="Удалить документ"
+                  aria-label="Удалить документ"
                   size="small"
                   color="error"
                   onClick={() => handleDeleteDocument(document.id)}
                 >
                   <DeleteOutlineOutlinedIcon fontSize="small" />
-                </IconButton>
+                </TooltipIconButton>
               </Box>
             ))}
           </Stack>

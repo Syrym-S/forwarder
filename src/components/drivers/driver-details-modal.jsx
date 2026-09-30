@@ -1,3 +1,4 @@
+import Tooltip from "../../shared/ui/action-tooltip";
 import {
   Box,
   Chip,
@@ -7,7 +8,6 @@ import {
   DialogTitle,
   IconButton,
   Stack,
-  Tooltip,
   Typography,
 } from "@mui/material";
 import React from "react";
@@ -67,7 +67,9 @@ const DriverDetailsModal = ({ selectedDriver, handleClear }) => {
         </Stack>
 
         <Tooltip title="Закрыть">
-          <HighlightOffOutlinedIcon color="error" onClick={handleClear} />
+        <IconButton  aria-label="Закрыть данные водителя" onClick={handleClear} sx={{ p: 0 }}>
+          <HighlightOffOutlinedIcon color="error" />
+        </IconButton>
         </Tooltip>
       </DialogTitle>
 

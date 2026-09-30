@@ -1,8 +1,8 @@
+import TooltipIconButton from "../../shared/ui/tooltip-icon-button";
 import {
   Box,
   Button,
   FormHelperText,
-  IconButton,
   Typography,
   Stack,
   TextField,
@@ -268,7 +268,9 @@ const EditDocumentDetails = ({
                   MB
                 </Typography>
               </Box>
-              <IconButton
+              <TooltipIconButton
+                title="Удалить документ"
+                aria-label="Удалить документ"
                 disabled={isSubmitting}
                 color="error"
                 onClick={() => {
@@ -276,7 +278,7 @@ const EditDocumentDetails = ({
                 }}
               >
                 <DeleteOutlineOutlinedIcon />
-              </IconButton>
+              </TooltipIconButton>
             </Box>
           )}
 
@@ -405,7 +407,9 @@ const EditDocumentDetails = ({
                 </Typography>
               </Box>
 
-              <IconButton
+              <TooltipIconButton
+                title="Удалить документ"
+                aria-label="Удалить документ"
                 disabled={isSubmitting}
                 color="error"
                 onClick={() => {
@@ -414,7 +418,7 @@ const EditDocumentDetails = ({
                 }}
               >
                 <DeleteOutlineOutlinedIcon />
-              </IconButton>
+              </TooltipIconButton>
             </Box>
           )}
 

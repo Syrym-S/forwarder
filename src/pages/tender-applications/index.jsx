@@ -1,3 +1,4 @@
+import Tooltip from "../../shared/ui/action-tooltip";
 import RootLayout from "../../components/layout/root-layout";
 import ApplicationsTenderCard from "../../components/tenders/applications-tender-card";
 import ViewTabs from "../../shared/ui/view-tabs";
@@ -11,7 +12,6 @@ import {
   IconButton,
   Pagination,
   TextField,
-  Tooltip,
   Typography,
 } from "@mui/material";
 import { useTendersStore } from "../../app/store/tenders/tender-store";
@@ -147,7 +147,7 @@ const TenderApplications = () => {
         />
 
         <Tooltip title="История участия в аукционах">
-          <IconButton onClick={handleNavigateToTenderHistory}>
+          <IconButton  aria-label="История участия в аукционах" onClick={handleNavigateToTenderHistory}>
             <HistoryOutlined />
           </IconButton>
         </Tooltip>

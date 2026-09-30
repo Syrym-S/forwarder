@@ -1,4 +1,5 @@
-import { Box, IconButton, Typography } from "@mui/material";
+import TooltipIconButton from "../../../shared/ui/tooltip-icon-button";
+import { Box, Typography } from "@mui/material";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import InsertDriveFileOutlinedIcon from "@mui/icons-material/InsertDriveFileOutlined";
 import { useParams } from "react-router-dom";
@@ -123,7 +124,9 @@ export function LeadDocumentCard({
           }}
         >
           {isForwarderFile && !isFileReadOnly && (
-            <IconButton
+            <TooltipIconButton
+              title="Удалить документ"
+              aria-label="Удалить документ"
               size="small"
               color="error"
               sx={{
@@ -133,7 +136,7 @@ export function LeadDocumentCard({
               onClick={() => onDelete(id, document.path)}
             >
               <DeleteOutlineOutlinedIcon fontSize="small" />
-            </IconButton>
+            </TooltipIconButton>
           )}
         </Box>
       </Box>

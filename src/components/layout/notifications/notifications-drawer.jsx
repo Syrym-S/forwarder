@@ -1,9 +1,9 @@
+import TooltipIconButton from "../../../shared/ui/tooltip-icon-button";
 import {
   Alert,
   Box,
   Button,
   Drawer,
-  IconButton,
   Pagination,
   Typography,
 } from "@mui/material";
@@ -78,12 +78,13 @@ const NotificationsDrawer = ({
           >
             Уведомления
           </Typography>
-          <IconButton
+          <TooltipIconButton
+            title="Закрыть уведомления"
             aria-label="Закрыть уведомления"
             onClick={handleCloseDrawer}
           >
             <CloseRoundedIcon />
-          </IconButton>
+          </TooltipIconButton>
         </Box>
         <Typography sx={{ mt: 0.5, fontSize: 13, color: "text.secondary" }}>
           Все события по вашим перевозкам и аукционам

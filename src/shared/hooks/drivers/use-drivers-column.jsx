@@ -1,4 +1,6 @@
-import { Box, Chip, IconButton, Tooltip } from "@mui/material";
+import Tooltip from "../../ui/action-tooltip";
+import TooltipIconButton from "../../ui/tooltip-icon-button";
+import { Box, Chip, IconButton } from "@mui/material";
 import BlockOutlinedIcon from "@mui/icons-material/BlockOutlined";
 import ContentCopyOutlinedIcon from "@mui/icons-material/ContentCopyOutlined";
 
@@ -80,7 +82,8 @@ const useDriversColumns = (setSelectedDriver, onBlockDriver, onCopyLink) => {
           }
         >
           <span>
-            <IconButton
+            <TooltipIconButton
+              title="Скопировать пригласительную ссылку"
               aria-label="Скопировать пригласительную ссылку"
               color="primary"
               disabled={!value}
@@ -91,7 +94,7 @@ const useDriversColumns = (setSelectedDriver, onBlockDriver, onCopyLink) => {
               }}
             >
               <ContentCopyOutlinedIcon />
-            </IconButton>
+            </TooltipIconButton>
           </span>
         </Tooltip>
       ),
@@ -124,6 +127,7 @@ const useDriversColumns = (setSelectedDriver, onBlockDriver, onCopyLink) => {
         return (
           <Tooltip title="Заблокировать водителя">
             <IconButton
+              
               aria-label="Заблокировать водителя"
               color="primary"
               tabIndex={hasFocus ? 0 : -1}

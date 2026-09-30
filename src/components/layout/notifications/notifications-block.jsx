@@ -1,4 +1,5 @@
-import { Badge, IconButton, Popover } from "@mui/material";
+import TooltipIconButton from "../../../shared/ui/tooltip-icon-button";
+import { Badge, Popover } from "@mui/material";
 import NotificationsNoneOutlinedIcon from "@mui/icons-material/NotificationsNoneOutlined";
 import { useState } from "react";
 import { useNotificationsStore } from "../../../app/store/notifications/noti-store";
@@ -44,7 +45,8 @@ const NotificationsBlock = () => {
 
   return (
     <>
-      <IconButton
+      <TooltipIconButton
+        title="Открыть уведомления"
         aria-label="Открыть уведомления"
         aria-expanded={isNotificationsOpen}
         aria-describedby={id}
@@ -64,7 +66,7 @@ const NotificationsBlock = () => {
         <Badge badgeContent={notViewedCount} max={99} color="error">
           <NotificationsNoneOutlinedIcon />
         </Badge>
-      </IconButton>
+      </TooltipIconButton>
 
       <Popover
         id={id}

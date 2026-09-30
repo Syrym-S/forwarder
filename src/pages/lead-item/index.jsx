@@ -1,3 +1,4 @@
+import Tooltip from "../../shared/ui/action-tooltip";
 import RootLayout from "../../components/layout/root-layout";
 import AddLeadForm from "../../features/leads/add-lead-form";
 import LeadHeading from "../../components/leads/lead-item/lead-heading";
@@ -14,7 +15,7 @@ import DoNotDisturbOnOutlinedIcon from "@mui/icons-material/DoNotDisturbOnOutlin
 import InfoItem from "../../shared/ui/info-item";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { Box, IconButton, Tab, Tabs, Tooltip } from "@mui/material";
+import { Box, IconButton, Tab, Tabs } from "@mui/material";
 import { useFormDefaultValues } from "../../shared/hooks/leads/use-form-default-values";
 import { useLeadsStore } from "../../app/store/leads/leads-store";
 import { LEAD_TABS } from "../../shared/const/leads";
@@ -241,6 +242,8 @@ const LeadItem = () => {
             {showEmergencyButton && (
               <Tooltip title="Сообщить об аварии" arrow>
                 <IconButton
+                  
+                  aria-label="Сообщить об аварии"
                   color="error"
                   onClick={handleOpenWarningModal}
                   sx={{
@@ -263,6 +266,8 @@ const LeadItem = () => {
             {leadData.status === STATUS.emergency_situation && (
               <Tooltip title="Закрыть аварийную ситуацию" arrow>
                 <IconButton
+                  
+                  aria-label="Закрыть аварийную ситуацию"
                   color="error"
                   onClick={handleOpenFinishEmergencyModal}
                   sx={{
@@ -284,6 +289,8 @@ const LeadItem = () => {
 
             <Tooltip title="Поделиться перевозкой" arrow>
               <IconButton
+                
+                aria-label="Поделиться перевозкой"
                 color="primary"
                 onClick={handleOpenShareModal}
                 sx={{

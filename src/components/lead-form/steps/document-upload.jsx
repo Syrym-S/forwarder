@@ -1,8 +1,8 @@
+import TooltipIconButton from "../../../shared/ui/tooltip-icon-button";
 import {
   Box,
   Button,
   CircularProgress,
-  IconButton,
   Stack,
   TextField,
   Typography,
@@ -101,6 +101,8 @@ const DocumentUpload = ({ setValue, uploadedFiles, setUploadedFiles }) => {
 
           <Box>
             <Button
+              title="Выбрать файл"
+              aria-label="Выбрать файл"
               component="label"
               variant={"outlined"}
               startIcon={<UploadFileOutlinedIcon />}
@@ -218,13 +220,15 @@ const DocumentUpload = ({ setValue, uploadedFiles, setUploadedFiles }) => {
                 </Typography>
               </Box>
               {file?.source === "forwarder" && (
-                <IconButton
+                <TooltipIconButton
+                  title="Удалить документ"
+                  aria-label="Удалить документ"
                   size="small"
                   color="error"
                   onClick={() => handleDeleteFileFromDB(id, file.path)}
                 >
                   <DeleteOutlineOutlinedIcon fontSize="small" />
-                </IconButton>
+                </TooltipIconButton>
               )}
             </Box>
           ))
@@ -300,13 +304,15 @@ const DocumentUpload = ({ setValue, uploadedFiles, setUploadedFiles }) => {
                 {file?.fileName || "Файл"}
               </Typography>
             </Box>
-            <IconButton
+            <TooltipIconButton
+              title="Удалить документ"
+              aria-label="Удалить документ"
               size="small"
               color="error"
               onClick={() => handleRemoveFile(file.id)}
             >
               <DeleteOutlineOutlinedIcon fontSize="small" />
-            </IconButton>
+            </TooltipIconButton>
           </Box>
         ))}
       </Stack>

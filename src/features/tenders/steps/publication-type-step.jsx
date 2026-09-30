@@ -1,3 +1,4 @@
+import TooltipIconButton from "../../../shared/ui/tooltip-icon-button";
 import renderDriverOption from "../../../shared/ui/render-driver-option";
 import {
   Autocomplete,
@@ -5,7 +6,6 @@ import {
   Button,
   Checkbox,
   FormControlLabel,
-  IconButton,
   Stack,
   TextField,
   Typography,
@@ -163,9 +163,9 @@ const PublicationTypeStep = ({
                 Участник {participant?.fio}
               </Typography>
 
-              <IconButton onClick={() => handleRemoveDriver(participant?.id)}>
+              <TooltipIconButton title="Удалить участника" aria-label="Удалить участника" onClick={() => handleRemoveDriver(participant?.id)}>
                 <HighlightOffIcon color="error" />
-              </IconButton>
+              </TooltipIconButton>
             </Box>
           ))}
           {currentTender?.participants?.map((participant) => (
@@ -191,11 +191,13 @@ const PublicationTypeStep = ({
                 Участник {participant?.participant_id}
               </Typography>
 
-              <IconButton
+              <TooltipIconButton
+                title="Удалить участника"
+                aria-label="Удалить участника"
               // onClick={() => handleRemoveDriver(participant?.participant_id)}
               >
                 <HighlightOffIcon color="error" />
-              </IconButton>
+              </TooltipIconButton>
             </Box>
           ))}
         </Box>

@@ -1,3 +1,4 @@
+import Tooltip from "../../shared/ui/action-tooltip";
 import {
   Box,
   Button,
@@ -6,7 +7,6 @@ import {
   DialogContent,
   DialogTitle,
   IconButton,
-  Tooltip,
   Typography,
 } from "@mui/material";
 import OpenInNewOutlinedIcon from "@mui/icons-material/OpenInNewOutlined";
@@ -115,6 +115,7 @@ const FileModal = ({ currentFile, setCurrentFile }) => {
           <Box>
             <Tooltip title="Открыть в новой вкладке">
               <IconButton
+                
                 component="a"
                 href={currentFile?.url}
                 target="_blank"
@@ -127,6 +128,7 @@ const FileModal = ({ currentFile, setCurrentFile }) => {
 
             <Tooltip title="Скачать">
               <IconButton
+                
                 component="a"
                 href={currentFile?.url}
                 download={currentFile?.name || true}

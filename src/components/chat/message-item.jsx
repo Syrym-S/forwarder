@@ -1,8 +1,8 @@
+import TooltipIconButton from "../../shared/ui/tooltip-icon-button";
 import {
   Box,
   Typography,
   TextField,
-  IconButton,
   CircularProgress,
 } from "@mui/material";
 import { ROLES, ROLES_ID } from "../../shared/const/roles";
@@ -258,7 +258,9 @@ const MessageItem = ({ message, participants, messageType }) => {
                   }}
                 />
 
-                <IconButton
+                <TooltipIconButton
+                  title="Отменить редактирование"
+                  aria-label="Отменить редактирование"
                   size="small"
                   onClick={handleCloseEdit}
                   sx={{
@@ -266,16 +268,16 @@ const MessageItem = ({ message, participants, messageType }) => {
                   }}
                 >
                   <CloseIcon fontSize="small" />
-                </IconButton>
+                </TooltipIconButton>
 
-                <IconButton size="small" onClick={handleConfirmEdit}>
+                <TooltipIconButton title="Сохранить изменения" aria-label="Сохранить изменения" size="small" onClick={handleConfirmEdit}>
                   <CheckIcon
                     fontSize="small"
                     sx={{
                       color: "white",
                     }}
                   />
-                </IconButton>
+                </TooltipIconButton>
               </Box>
             ) : (
               <>
@@ -342,14 +344,14 @@ const MessageItem = ({ message, participants, messageType }) => {
           </Box>
 
           {isForwarderSend && (
-            <IconButton aria-label="Действия с сообщением" size="small" onClick={handleContextMenu}
+            <TooltipIconButton title="Действия с сообщением" aria-label="Действия с сообщением" size="small" onClick={handleContextMenu}
               sx={{
                 display: {
                   xs: "block",
                   md: "none",
                 },
               }}
-            ><MoreVertIcon fontSize="small" /></IconButton>
+            ><MoreVertIcon fontSize="small" /></TooltipIconButton>
           )}
         </Box>
       </Box>

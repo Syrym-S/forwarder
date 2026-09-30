@@ -1,4 +1,5 @@
-import { Box, CircularProgress, IconButton, Typography } from "@mui/material";
+import TooltipIconButton from "../../shared/ui/tooltip-icon-button";
+import { Box, CircularProgress, Typography } from "@mui/material";
 import PictureAsPdfOutlinedIcon from "@mui/icons-material/PictureAsPdfOutlined";
 import InsertDriveFileOutlinedIcon from "@mui/icons-material/InsertDriveFileOutlined";
 import DownloadOutlinedIcon from "@mui/icons-material/DownloadOutlined";
@@ -115,9 +116,9 @@ const MessageFileCard = ({ file, messageType, isForwarderSend }) => {
           }}
         />
       ) : (
-        <IconButton aria-label={`Скачать ${file?.file_name || "файл"}`} onClick={handleDownload} size="small" sx={{ color: "inherit" }}>
+        <TooltipIconButton title={`Скачать ${file?.file_name || "файл"}`} aria-label={`Скачать ${file?.file_name || "файл"}`} onClick={handleDownload} size="small" sx={{ color: "inherit" }}>
           <DownloadOutlinedIcon />
-        </IconButton>
+        </TooltipIconButton>
       )}
     </Box>
   );

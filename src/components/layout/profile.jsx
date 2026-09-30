@@ -1,10 +1,11 @@
+import TooltipIconButton from "../../shared/ui/tooltip-icon-button";
 import Box from "@mui/material/Box";
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 import LogoutIcon from "@mui/icons-material/Logout";
 import LogoutModal from "./logout-modal";
 import ClickAwayListener from "@mui/material/ClickAwayListener";
 import { useState } from "react";
-import { Fade, IconButton, Stack, Typography } from "@mui/material";
+import { Fade, Stack, Typography } from "@mui/material";
 import { NavLink } from "react-router-dom";
 import { Person2Rounded } from "@mui/icons-material";
 import CustomNavLink from "../../shared/ui/custom-nav-link";
@@ -45,7 +46,9 @@ const Profile = ({ open, handleCloseProfile }) => {
             }}
           >
             <Typography>User Name</Typography>
-            <IconButton
+            <TooltipIconButton
+              title="Закрыть профиль"
+              aria-label="Закрыть профиль"
               sx={{
                 p: 0,
               }}
@@ -54,7 +57,7 @@ const Profile = ({ open, handleCloseProfile }) => {
               color="error"
             >
               <HighlightOffIcon />
-            </IconButton>
+            </TooltipIconButton>
           </Box>
 
           <Stack

@@ -1,10 +1,10 @@
+import Tooltip from "../../shared/ui/action-tooltip";
 import { useState } from "react";
 import {
   Box,
   Chip,
   IconButton,
   Stack,
-  Tooltip,
   Typography,
 } from "@mui/material";
 import BlockDriverModal from "./block-driver-modal";
@@ -118,6 +118,7 @@ const DriverCard = ({ driver, setSelectedDriver, handleBanDriver }) => {
               ) : (
               <Tooltip title={"Заблокировать водителя"}>
                 <IconButton
+                  
                   aria-label="Заблокировать водителя"
                   color="primary"
                   onClick={handleOpenBlockModal}

@@ -1,3 +1,4 @@
+import TooltipIconButton from "../../../shared/ui/tooltip-icon-button";
 import {
   Alert,
   Box,
@@ -6,7 +7,6 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
-  IconButton,
   Typography,
 } from "@mui/material";
 import { useEffect } from "react";
@@ -98,13 +98,14 @@ const NotificationPopup = ({
       >
         {selectedNotification?.theme || "Уведомление"}
       </DialogTitle>
-      <IconButton
+      <TooltipIconButton
+        title="Закрыть уведомление"
         aria-label="Закрыть уведомление"
         onClick={handleClose}
         sx={{ position: "absolute", right: 12, top: 16 }}
       >
         <CloseRoundedIcon />
-      </IconButton>
+      </TooltipIconButton>
       <DialogContent sx={{ p: 3, "&.MuiDialogContent-root": { pt: 3 } }}>
         {isNotificationDetailsLoading ? (
           <NotificationLoader />

@@ -1,3 +1,4 @@
+import Tooltip from "../../../shared/ui/action-tooltip";
 import {
   Box,
   Button,
@@ -5,7 +6,6 @@ import {
   Popover,
   Skeleton,
   TextField,
-  Tooltip,
   Typography,
 } from "@mui/material";
 import StatsHeader from "./stats-header";
@@ -145,6 +145,7 @@ const StatCard = ({
         {canBeFiltered && (
           <Tooltip title="Выбрать период">
             <IconButton
+              
               aria-label={`Выбрать период: ${title}`}
               aria-haspopup="dialog"
               aria-expanded={isCalendarOpen}

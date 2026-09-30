@@ -1,3 +1,4 @@
+import Tooltip from "../../shared/ui/action-tooltip";
 import {
   Box,
   Dialog,
@@ -6,7 +7,6 @@ import {
   DialogTitle,
   IconButton,
   Stack,
-  Tooltip,
   Typography,
 } from "@mui/material";
 import React from "react";
@@ -66,7 +66,9 @@ const CustomerDetailsModal = ({ selectedCustomer, handleClear }) => {
         </Stack>
 
         <Tooltip title="Закрыть">
-          <HighlightOffOutlinedIcon color="error" onClick={handleClear} />
+        <IconButton  aria-label="Закрыть данные заказчика" onClick={handleClear} sx={{ p: 0 }}>
+          <HighlightOffOutlinedIcon color="error" />
+        </IconButton>
         </Tooltip>
       </DialogTitle>
 

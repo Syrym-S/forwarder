@@ -1,4 +1,5 @@
-import { Alert, Box, IconButton, Typography } from '@mui/material';
+import TooltipIconButton from "./tooltip-icon-button";
+import { Alert, Box, Typography } from '@mui/material';
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import { useNotificationsStore } from '../../app/store/notifications-store';
 
@@ -46,13 +47,15 @@ export function NotificationsColumn() {
                severity={notification.type}
                variant='filled'
                action={
-                  <IconButton
+                  <TooltipIconButton
+                    title="Закрыть уведомление"
+                    aria-label="Закрыть уведомление"
                      size='small'
                      color='inherit'
                      onClick={() => removeNotification(notification.id)}
                   >
                      <CloseRoundedIcon fontSize='small' />
-                  </IconButton>
+                  </TooltipIconButton>
                }
                sx={{
                   width: '100%',

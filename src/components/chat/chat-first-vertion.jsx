@@ -1,8 +1,8 @@
+import TooltipIconButton from "../../shared/ui/tooltip-icon-button";
 import {
   Box,
   Paper,
   Typography,
-  IconButton,
   TextField,
   CircularProgress,
 } from "@mui/material";
@@ -269,7 +269,8 @@ const ChatMessageInput = ({ messageType }) => {
                   {file.name}
                 </Box>
 
-                <IconButton
+                <TooltipIconButton
+                  title={`Удалить вложение ${file.name}`}
                   size="small"
                   aria-label={`Удалить вложение ${file.name}`}
                   onClick={() => handleRemoveFile(index)}
@@ -282,7 +283,7 @@ const ChatMessageInput = ({ messageType }) => {
                   }}
                 >
                   ×
-                </IconButton>
+                </TooltipIconButton>
               </Box>
             ))}
           </Box>
@@ -318,7 +319,8 @@ const ChatMessageInput = ({ messageType }) => {
       />
 
       <Box sx={{ display: "flex", gap: 0.5, flexDirection: { xs: "column-reverse", sm: "row" } }}>
-        <IconButton
+        <TooltipIconButton
+          title="Отправить сообщение"
           aria-label="Отправить сообщение"
           disabled={isSendingLoading || (!inputValue.trim() && selectedFiles.length === 0)}
           onClick={handleSendMessage}
@@ -332,9 +334,10 @@ const ChatMessageInput = ({ messageType }) => {
           }}
         >
           {isSendingLoading ? <CircularProgress size={20} /> : <SendIcon />}
-        </IconButton>
+        </TooltipIconButton>
 
-        <IconButton
+        <TooltipIconButton
+          title="Прикрепить изображение"
           aria-label="Прикрепить изображение"
           onClick={() => fileInputRef.current?.click()}
           color="primary"
@@ -347,7 +350,7 @@ const ChatMessageInput = ({ messageType }) => {
           }}
         >
           <PanoramaOutlinedIcon />
-        </IconButton>
+        </TooltipIconButton>
       </Box>
     </Box>
   );

@@ -4,6 +4,7 @@ import ViewListRoundedIcon from "@mui/icons-material/ViewListRounded";
 import GridViewRoundedIcon from "@mui/icons-material/GridViewRounded";
 import ViewKanbanOutlinedIcon from "@mui/icons-material/ViewKanbanOutlined";
 import PrimaryButton from "./button/primary-button";
+import ActionTooltip from "./action-tooltip";
 
 const ViewTabs = ({
   view,
@@ -57,18 +58,24 @@ const ViewTabs = ({
             },
           }}
         >
-          <ToggleButton value={VIEWS.table}>
-            <ViewListRoundedIcon fontSize="small" />
-          </ToggleButton>
+          <ActionTooltip title="Показать таблицей">
+            <ToggleButton value={VIEWS.table} aria-label="Показать таблицей">
+              <ViewListRoundedIcon fontSize="small" />
+            </ToggleButton>
+          </ActionTooltip>
 
-          <ToggleButton value={VIEWS.cards}>
-            <GridViewRoundedIcon fontSize="small" />
-          </ToggleButton>
+          <ActionTooltip title="Показать карточками">
+            <ToggleButton value={VIEWS.cards} aria-label="Показать карточками">
+              <GridViewRoundedIcon fontSize="small" />
+            </ToggleButton>
+          </ActionTooltip>
 
           {!withoutKanban && (
-            <ToggleButton value={VIEWS.kanban}>
-              <ViewKanbanOutlinedIcon fontSize="small" />
-            </ToggleButton>
+            <ActionTooltip title="Показать канбан-доску">
+              <ToggleButton value={VIEWS.kanban} aria-label="Показать канбан-доску">
+                <ViewKanbanOutlinedIcon fontSize="small" />
+              </ToggleButton>
+            </ActionTooltip>
           )}
         </ToggleButtonGroup>
       )}

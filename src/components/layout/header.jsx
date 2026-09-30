@@ -1,3 +1,5 @@
+import TooltipIconButton from "../../shared/ui/tooltip-icon-button";
+import ActionTooltip from "../../shared/ui/action-tooltip";
 import { useEffect, useState } from "react";
 import LogoutModal from "./logout-modal";
 import MenuIcon from "@mui/icons-material/Menu";
@@ -89,19 +91,26 @@ const Header = ({ openMenu, setOpenMenu }) => {
           gap: 1,
         }}
       >
-        <MenuIcon
-          sx={{
-            transform: openMenu ? "rotate(90deg)" : "rotate(0)",
-            transition: "0.2s",
-            fontSize: "2rem",
-            display: {
-              xs: "block",
-              sm: "none",
-            },
-            cursor: "pointer",
-          }}
+        <TooltipIconButton
+          title={openMenu ? "Закрыть меню" : "Открыть меню"}
+          aria-label={openMenu ? "Закрыть меню" : "Открыть меню"}
+          aria-expanded={openMenu}
           onClick={handleToggleMenu}
-        />
+          sx={{ p: 0, color: "inherit", display: { xs: "inline-flex", sm: "none" } }}
+        >
+          <MenuIcon
+            sx={{
+              transform: openMenu ? "rotate(90deg)" : "rotate(0)",
+              transition: "0.2s",
+              fontSize: "2rem",
+              display: {
+                xs: "block",
+                sm: "none",
+              },
+              cursor: "pointer",
+            }}
+          />
+        </TooltipIconButton>
         <Box
           component="img"
           src={logo}
@@ -123,9 +132,11 @@ const Header = ({ openMenu, setOpenMenu }) => {
       >
         <NotificationsBlock />
 
+        <ActionTooltip title="Открыть меню профиля">
         <Button
           variant="outlined"
           onClick={handleOpenProfileMenu}
+          aria-label="Открыть меню профиля"
           sx={{
             borderColor: "primary.main",
             display: "flex",
@@ -141,7 +152,6 @@ const Header = ({ openMenu, setOpenMenu }) => {
               sm: 1,
             },
           }}
-          title={userEmail}
         >
           <Avatar
             src={profileData?.avatar || undefined}
@@ -171,6 +181,7 @@ const Header = ({ openMenu, setOpenMenu }) => {
             {userEmail}
           </Typography>
         </Button>
+        </ActionTooltip>
         <Menu
           anchorEl={profileAnchorEl}
           open={isProfileMenuOpen}

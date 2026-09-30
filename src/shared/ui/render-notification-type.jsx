@@ -7,13 +7,15 @@ const RenderNotificationType = ({ type }) => {
 
   switch (notification_type) {
     case NOTIFICATION_TYPE.lead:
-      return <Chip label={"ПЕРЕВОЗКА"} variant="contained" color="success" />;
+      return <Chip label={"Перевозка"} variant="contained" color="success" />;
     case NOTIFICATION_TYPE.shipping:
-      return <Chip label={"ПЕРЕВОЗКА"} variant="contained" color="primary" />;
+      return <Chip label={"Перевозка"} variant="contained" color="primary" />;
     case NOTIFICATION_TYPE.tender:
       return <Chip label={"Аукцион"} variant="contained" color="error" />;
     case NOTIFICATION_TYPE.factor:
       return <Chip label={"ФАКТОР"} variant="contained" color="warning" />;
+    case NOTIFICATION_TYPE.total:
+      return <Chip label={"Рассылка"} variant="contained" color="primary" />;
     default:
       return <>Нет Типа</>;
   }

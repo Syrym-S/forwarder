@@ -1,8 +1,8 @@
+import TooltipIconButton from "../../shared/ui/tooltip-icon-button";
 import {
   Box,
   Button,
   CircularProgress,
-  IconButton,
   Typography,
 } from "@mui/material";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
@@ -26,7 +26,7 @@ const UploadAvatar = ({
         alignItems: "center",
       }}
     >
-      <IconButton>
+      <TooltipIconButton title="Фото профиля" aria-label="Фото профиля">
         {isAvatarLoading || isProfileLoading ? (
           <Box
             sx={{
@@ -52,6 +52,7 @@ const UploadAvatar = ({
         ) : (
           <Box
             component="img"
+            alt="Фото профиля"
             sx={{
               display: "block",
               borderRadius: "100%",
@@ -65,7 +66,7 @@ const UploadAvatar = ({
             src={formValues?.avatar || preview}
           />
         )}
-      </IconButton>
+      </TooltipIconButton>
 
       <Box
         sx={{
