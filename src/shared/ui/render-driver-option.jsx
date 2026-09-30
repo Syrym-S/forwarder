@@ -1,6 +1,9 @@
-import { Box, Chip, Typography } from "@mui/material";
+import { Box, Chip, Rating, Typography } from "@mui/material";
 
 export default function renderDriverOption({ key, ...props }, option) {
+  const rating = Number(option.rating);
+  const hasRating = Number.isFinite(rating) && rating > 0 && rating <= 5;
+
   return (
     <Box
       component="li"
@@ -11,12 +14,12 @@ export default function renderDriverOption({ key, ...props }, option) {
         py: "10px !important",
         borderBottom: "1px solid",
         borderColor: "divider",
-  
+
         display: "flex !important",
         flexDirection: "column !important",
         alignItems: "flex-start !important",
         gap: "5px !important",
-  
+
         "&:last-child": {
           borderBottom: "none",
         },
@@ -41,15 +44,11 @@ export default function renderDriverOption({ key, ...props }, option) {
         >
           {option.fio || "Без имени"}
         </Typography>
-  
+
         {option.in_black_list === true && (
-          <Chip
-            label="Водитель заблокирован"
-            color="error"
-            size="small"
-          />
+          <Chip label="Водитель заблокирован" color="error" size="small" />
         )}
-  
+
         {option.company_name && (
           <Typography
             sx={{
@@ -66,7 +65,28 @@ export default function renderDriverOption({ key, ...props }, option) {
           </Typography>
         )}
       </Box>
-  
+
+      <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+        {hasRating ? (
+          <>
+            <Rating
+              value={rating}
+              precision={0.1}
+              readOnly
+              size="small"
+              getLabelText={(value) => `${value} из 5`}
+            />
+            <Typography variant="body2" sx={{ fontWeight: 600 }}>
+              {rating.toLocaleString("ru-RU")} / 5
+            </Typography>
+          </>
+        ) : (
+          <Typography variant="caption" color="text.secondary">
+            Пока нет оценок
+          </Typography>
+        )}
+      </Box>
+
       <Box
         sx={{
           display: "flex",
@@ -91,7 +111,7 @@ export default function renderDriverOption({ key, ...props }, option) {
             </Box>
           </Typography>
         )}
-  
+
         {option.phone && (
           <Typography
             sx={{
@@ -108,7 +128,7 @@ export default function renderDriverOption({ key, ...props }, option) {
             </Box>
           </Typography>
         )}
-  
+
         {option.email && (
           <Typography
             sx={{

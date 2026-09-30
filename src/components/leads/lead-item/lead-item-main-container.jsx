@@ -151,7 +151,9 @@ const LeadItemMainContainer = ({
       await confirmLeadDelivery(id);
       await getLeadItem(id);
     } catch (e) {
-      setDeliveryError(e.response?.data?.message || "Не удалось завершить рейс");
+      setDeliveryError(
+        e.response?.data?.message || "Не удалось завершить рейс",
+      );
     }
   };
 
@@ -219,8 +221,6 @@ const LeadItemMainContainer = ({
   useEffect(() => {
     if (leadData?.status !== STATUS.sign_avr) return;
 
-    // Подписание проходит в другой вкладке: проверяем статус при возвращении
-    // и периодически, пока ожидаются подписи.
     let isRefreshing = false;
     const refreshStatus = async () => {
       if (document.visibilityState === "hidden" || isRefreshing) return;
@@ -266,8 +266,14 @@ const LeadItemMainContainer = ({
           onConfirm={handleRateDriver}
         />
       )}
-      <Snackbar open={!!ratingNotice} autoHideDuration={4000} onClose={() => setRatingNotice(null)}>
-        <Alert severity="success" onClose={() => setRatingNotice(null)}>{ratingNotice}</Alert>
+      <Snackbar
+        open={!!ratingNotice}
+        autoHideDuration={4000}
+        onClose={() => setRatingNotice(null)}
+      >
+        <Alert severity="success" onClose={() => setRatingNotice(null)}>
+          {ratingNotice}
+        </Alert>
       </Snackbar>
       {deliveryError && <Alert severity="error">{deliveryError}</Alert>}
       <Box
@@ -333,7 +339,12 @@ const LeadItemMainContainer = ({
         }}
       >
         <LeadCustomerInfo leadData={leadData} canDetach />
-        <LeadDriverInfo leadData={leadData} canDetach />
+
+        <LeadDriverInfo
+          leadData={leadData}
+          canDetach
+          setRatingLead={setRatingLead}
+        />
       </Box>
 
       <Section

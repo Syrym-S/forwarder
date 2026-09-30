@@ -27,7 +27,7 @@ const labels = [
 ];
 
 const RateDriverModal = ({ onClose, onConfirm, driver }) => {
-  const [rate, setRate] = useState(0);
+  const [rate, setRate] = useState(1);
   const [comment, setComment] = useState("");
   const [isVisible, setIsVisible] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -35,7 +35,7 @@ const RateDriverModal = ({ onClose, onConfirm, driver }) => {
   const titleId = useId();
 
   const handleConfirm = async () => {
-    if (!rate || isSubmitting || !onConfirm) return;
+    if (rate < 1 || isSubmitting || !onConfirm) return;
     setIsSubmitting(true);
     setError(null);
     try {
@@ -71,7 +71,11 @@ const RateDriverModal = ({ onClose, onConfirm, driver }) => {
           >
             Оцените водителя
           </DialogTitle>
-          <IconButton aria-label="Закрыть" onClick={onClose} disabled={isSubmitting}>
+          <IconButton
+            aria-label="Закрыть"
+            onClick={onClose}
+            disabled={isSubmitting}
+          >
             <CloseRoundedIcon />
           </IconButton>
         </Box>
@@ -130,7 +134,7 @@ const RateDriverModal = ({ onClose, onConfirm, driver }) => {
             color: "#f5b31b",
             "& .MuiRating-iconEmpty": { color: "#e8eaf0" },
           }}
-          onChange={(_, value) => setRate(value ?? 0)}
+          onChange={(_, value) => setRate(Math.max(1, value ?? 1))}
         />
         <Typography
           variant="body2"
@@ -157,10 +161,20 @@ const RateDriverModal = ({ onClose, onConfirm, driver }) => {
         />
         <FormControlLabel
           sx={{ mt: 1, alignSelf: "flex-start" }}
-          control={<Switch checked={isVisible} disabled={isSubmitting} onChange={(_, checked) => setIsVisible(checked)} />}
+          control={
+            <Switch
+              checked={isVisible}
+              disabled={isSubmitting}
+              onChange={(_, checked) => setIsVisible(checked)}
+            />
+          }
           label="Показывать оценку"
         />
-        {error && <Alert severity="error" sx={{ mt: 2, width: "100%" }}>{error}</Alert>}
+        {error && (
+          <Alert severity="error" sx={{ mt: 2, width: "100%" }}>
+            {error}
+          </Alert>
+        )}
       </DialogContent>
 
       <DialogActions
@@ -174,13 +188,18 @@ const RateDriverModal = ({ onClose, onConfirm, driver }) => {
           "& > .MuiButton-root": { flex: 1, py: 1.2 },
         }}
       >
-        <Button onClick={onClose} disabled={isSubmitting} color="inherit" sx={{ borderRadius: 2 }}>
+        <Button
+          onClick={onClose}
+          disabled={isSubmitting}
+          color="inherit"
+          sx={{ borderRadius: 2 }}
+        >
           Закрыть
         </Button>
         <Button
           variant="contained"
           disableElevation
-          disabled={rate === 0 || isSubmitting || !onConfirm}
+          disabled={rate < 1 || isSubmitting || !onConfirm}
           onClick={handleConfirm}
           sx={{ borderRadius: 2 }}
         >
