@@ -23,13 +23,14 @@ const FactoringLineRingProgress = ({ line }) => {
       onClick={handleNavigateToDetailPage}
       role="link"
       tabIndex={0}
-      onKeyDown={(event) => { if (event.key === "Enter") handleNavigateToDetailPage(); }}
+      onKeyDown={(event) => {
+        if (event.key === "Enter") handleNavigateToDetailPage();
+      }}
       sx={{
         width: {
           xs: "100%",
           md: "100%",
         },
-
         mx: "auto",
         cursor: "pointer",
         border: "1px solid",
@@ -58,8 +59,15 @@ const FactoringLineRingProgress = ({ line }) => {
           borderColor: "divider",
         }}
       >
-        <Typography sx={{ fontSize: 14, fontWeight: 600, overflowWrap: "anywhere" }}> {factor.company_name}</Typography>
-        <Typography sx={{ fontSize: 12, color: "text.secondary" }}>БИН: {factor.company_bin}</Typography>
+        <Typography
+          sx={{ fontSize: 14, fontWeight: 600, overflowWrap: "anywhere" }}
+        >
+          {" "}
+          {factor.company_name}
+        </Typography>
+        <Typography sx={{ fontSize: 12, color: "text.secondary" }}>
+          БИН: {factor.company_bin}
+        </Typography>
       </Box>
       <Box
         sx={{
@@ -116,8 +124,8 @@ const FactoringLineRingProgress = ({ line }) => {
               flexDirection: "column",
               alignItems: "center",
               flexWrap: "wrap",
-            minWidth: 0,
-            justifyContent: "center",
+              minWidth: 0,
+              justifyContent: "center",
             }}
           >
             <Typography variant="h5" fontWeight={700}>

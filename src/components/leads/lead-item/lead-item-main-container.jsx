@@ -9,13 +9,15 @@ import LocalShippingOutlinedIcon from "@mui/icons-material/LocalShippingOutlined
 import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
 import LeadCargoFilesContainer from "../lead-cargo-files-container";
 import LeadDriverInfo from "./lead-driver-info";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { uploadLeadFileApi } from "../../../app/store/leads/api";
 import { useLeadsStore } from "../../../app/store/leads/leads-store";
 import { LeadDocumentsSection } from "../documents/LeadDocumentsSection";
 import { STATUS } from "../../../shared/const/tenders";
 import { useParams } from "react-router-dom";
-import { Box, Button } from "@mui/material";
+import { Alert, Box, Button, Snackbar } from "@mui/material";
+import RateDriverModal from "../../drivers/rate-driver-modal";
+import { rateDriverApi } from "../../../app/store/drivers/api";
 import { useNotificationsStore } from "../../../app/store/notifications/noti-store";
 import { parserNotificationType } from "../../../shared/helpers/notifications/parse-notification-type";
 import { NOTIFICATION_TYPE } from "../../../shared/const/notification-types";
@@ -70,6 +72,10 @@ const LeadItemMainContainer = ({
   const error = useLeadsStore((state) => state.error);
 
   const [isRefreshingAvr, setIsRefreshingAvr] = useState(false);
+  const [ratingLead, setRatingLead] = useState(null);
+  const previousLead = useRef({ id: leadData?.id, status: leadData?.status });
+  const [deliveryError, setDeliveryError] = useState(null);
+  const [ratingNotice, setRatingNotice] = useState(null);
   const [isDocumentUploading, setIsDocumentUploading] = useState(false);
   // eslint-disable-next-line no-unused-vars
   const [deletingDocumentIds, setDeletingDocumentIds] = useState([]);
@@ -139,8 +145,24 @@ const LeadItemMainContainer = ({
   const { notification_type } = parserNotificationType(newNotification?.type);
 
   const handleConfirmDelivery = async () => {
-    await confirmLeadDelivery(id);
-    await getLeadItem(id);
+    if (isConfirmLoading) return;
+    setDeliveryError(null);
+    try {
+      await confirmLeadDelivery(id);
+      await getLeadItem(id);
+    } catch (e) {
+      setDeliveryError(e.response?.data?.message || "Не удалось завершить рейс");
+    }
+  };
+
+  const handleCloseRating = () => {
+    setRatingLead(null);
+    getLeadItem(id);
+  };
+
+  const handleRateDriver = async (payload) => {
+    const response = await rateDriverApi(ratingLead.id, payload);
+    setRatingNotice(response.data.message || "Оценка сохранена");
   };
 
   const handleRefreshAvr = async () => {
@@ -180,6 +202,46 @@ const LeadItemMainContainer = ({
   };
 
   useEffect(() => {
+    const previous = previousLead.current;
+    previousLead.current = { id: leadData?.id, status: leadData?.status };
+
+    if (
+      String(leadData?.id) === String(id) &&
+      previous.id === leadData?.id &&
+      previous.status !== STATUS.finished &&
+      leadData?.status === STATUS.finished &&
+      leadData?.driver?.id
+    ) {
+      setRatingLead({ id, driver: leadData.driver });
+    }
+  }, [id, leadData]);
+
+  useEffect(() => {
+    if (leadData?.status !== STATUS.sign_avr) return;
+
+    // Подписание проходит в другой вкладке: проверяем статус при возвращении
+    // и периодически, пока ожидаются подписи.
+    let isRefreshing = false;
+    const refreshStatus = async () => {
+      if (document.visibilityState === "hidden" || isRefreshing) return;
+      isRefreshing = true;
+      try {
+        await getLeadItem(id);
+      } finally {
+        isRefreshing = false;
+      }
+    };
+    const interval = window.setInterval(refreshStatus, 10000);
+    window.addEventListener("focus", refreshStatus);
+    document.addEventListener("visibilitychange", refreshStatus);
+    return () => {
+      window.clearInterval(interval);
+      window.removeEventListener("focus", refreshStatus);
+      document.removeEventListener("visibilitychange", refreshStatus);
+    };
+  }, [id, leadData?.status, getLeadItem]);
+
+  useEffect(() => {
     if (
       leadData.status === STATUS.sign_avr ||
       leadData.status === STATUS.finished
@@ -187,7 +249,7 @@ const LeadItemMainContainer = ({
       getDriverAvrDocument(id);
       getCustomerAvrDocument(id);
     }
-  }, []);
+  }, [id, leadData.status, getDriverAvrDocument, getCustomerAvrDocument]);
 
   useEffect(() => {
     if (notification_type === NOTIFICATION_TYPE.shipping) {
@@ -197,6 +259,17 @@ const LeadItemMainContainer = ({
 
   return (
     <>
+      {ratingLead?.id === id && (
+        <RateDriverModal
+          driver={ratingLead.driver}
+          onClose={handleCloseRating}
+          onConfirm={handleRateDriver}
+        />
+      )}
+      <Snackbar open={!!ratingNotice} autoHideDuration={4000} onClose={() => setRatingNotice(null)}>
+        <Alert severity="success" onClose={() => setRatingNotice(null)}>{ratingNotice}</Alert>
+      </Snackbar>
+      {deliveryError && <Alert severity="error">{deliveryError}</Alert>}
       <Box
         sx={{
           border: "1px solid",

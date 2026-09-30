@@ -5,11 +5,7 @@ import { Alert, Snackbar } from "@mui/material";
 import BlockDriverModal from "./block-driver-modal";
 import useDriversColumns from "../../shared/hooks/drivers/use-drivers-column";
 
-const DriversTable = ({
-  drivers,
-  setSelectedDriver,
-  handleBanDriver,
-}) => {
+const DriversTable = ({ drivers, setSelectedDriver, handleBanDriver }) => {
   const apiRef = useGridApiRef();
   const tableRef = useRef(null);
   const [driverToBlock, setDriverToBlock] = useState(null);
@@ -109,13 +105,15 @@ const DriversTable = ({
           "& .driver-link-cell, & .driver-link-header": {
             right: 110,
           },
-          "& .driver-actions-cell, & .driver-link-cell": {
-            backgroundColor: "inherit",
-          },
-          "& .driver-actions-header, & .driver-link-header": {
-            backgroundColor: "background.paper",
-            zIndex: 3,
-          },
+          "& .driver-actions-cell, & .driver-link-cell":
+            {
+              backgroundColor: "inherit",
+            },
+          "& .driver-actions-header, & .driver-link-header":
+            {
+              backgroundColor: "background.paper",
+              zIndex: 3,
+            },
           "& .MuiDataGrid-row:nth-of-type(even)": {
             backgroundColor: "#f5f7fa",
           },

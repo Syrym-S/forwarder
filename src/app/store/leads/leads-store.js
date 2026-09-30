@@ -779,6 +779,10 @@ export const useLeadsStore = create((set) => ({
       return response;
     } catch (e) {
       console.log(e);
+
+      set({
+        isAvrLoading: false,
+      });
     }
   },
 
@@ -796,6 +800,9 @@ export const useLeadsStore = create((set) => ({
       return response;
     } catch (e) {
       console.log(e);
+      set({
+        isAvrLoading: false,
+      });
     }
   },
 

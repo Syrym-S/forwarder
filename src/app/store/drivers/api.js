@@ -1,5 +1,11 @@
 import { api } from "../../client";
 
+export const rateDriverApi = (leadId, payload) =>
+  api.post(`/forwarder/v1/lead/${leadId}/driver-rating`, payload);
+
+export const getDriverRatingsApi = (driverId, config = {}) =>
+  api.get(`/forwarder/v1/drivers/${driverId}/ratings`, config);
+
 export const getDriversApi = async (params) => {
   const data = await api.get(`/forwarder/v1/drivers`, {
     params,
