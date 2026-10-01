@@ -37,6 +37,9 @@ const useAppTenederColumns = () => {
     },
     {
       field: "lead",
+      type: "number",
+      valueGetter: (_, row) =>
+        row?.lead?.id == null ? null : Number(row.lead.id),
       headerName: "ID Перевозки",
       width: 200,
       renderCell: ({ row }) => (
@@ -52,6 +55,7 @@ const useAppTenederColumns = () => {
     },
     {
       field: "to_location",
+      valueGetter: (_, row) => row?.lead?.to_location?.address || "",
       headerName: "Куда",
       width: 200,
       renderCell: ({ row }) => (
@@ -60,6 +64,7 @@ const useAppTenederColumns = () => {
     },
     {
       field: "from_location",
+      valueGetter: (_, row) => row?.lead?.from_location?.address || "",
       headerName: "Откуда",
       width: 200,
       renderCell: ({ row }) => (

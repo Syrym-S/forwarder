@@ -37,6 +37,7 @@ const useFactoringColumns = () => {
     },
     {
       field: "factor",
+      valueGetter: (_, row) => row?.factor?.company_name || "",
       headerName: "Фактор",
       width: 200,
       renderCell: ({ row }) => {
@@ -87,6 +88,11 @@ const useFactoringColumns = () => {
     },
     {
       field: "created_at",
+      type: "date",
+      valueGetter: (_, row) => {
+        const date = row?.created_at?.date;
+        return date && dayjs(date).isValid() ? dayjs(date).toDate() : null;
+      },
       headerName: "Создано",
       width: 200,
       renderCell: ({ row }) => {
@@ -95,6 +101,9 @@ const useFactoringColumns = () => {
     },
     {
       field: "deb_summ",
+      type: "number",
+      valueGetter: (value) =>
+        value == null || value === "" ? null : Number(value),
       headerName: "Задолженность",
       width: 200,
       renderCell: ({ row }) => (
@@ -105,6 +114,9 @@ const useFactoringColumns = () => {
     },
     {
       field: "cred_summ",
+      type: "number",
+      valueGetter: (value) =>
+        value == null || value === "" ? null : Number(value),
       headerName: "Оплата за задолженность",
       width: 200,
       renderCell: ({ row }) => (
@@ -115,6 +127,9 @@ const useFactoringColumns = () => {
     },
     {
       field: "proc_factor",
+      type: "number",
+      valueGetter: (value) =>
+        value == null || value === "" ? null : Number(value),
       headerName: "Процент от фактора",
       width: 200,
       renderCell: ({ row }) => (
@@ -123,6 +138,9 @@ const useFactoringColumns = () => {
     },
     {
       field: "proc_service",
+      type: "number",
+      valueGetter: (value) =>
+        value == null || value === "" ? null : Number(value),
       headerName: "Процент от сервиса",
       width: 200,
       renderCell: ({ row }) => (

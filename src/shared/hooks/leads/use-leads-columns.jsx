@@ -40,6 +40,7 @@ const useLeadsColumns = () => {
       field: "driver",
       headerName: "Водитель",
       width: 200,
+      valueGetter: (_, row) => row?.driver?.fio || "",
       renderCell: ({ row }) => {
         return <Box>{row?.driver?.fio || "-"}</Box>;
       },
@@ -48,6 +49,7 @@ const useLeadsColumns = () => {
       field: "customer",
       headerName: "Заказчик",
       width: 200,
+      valueGetter: (_, row) => row?.customer?.name || "",
       renderCell: ({ row }) => {
         return <Box>{row?.customer?.name || "-"}</Box>;
       },
@@ -56,6 +58,7 @@ const useLeadsColumns = () => {
       field: "to_location",
       headerName: "Куда",
       width: 200,
+      valueGetter: (_, row) => row?.to_location?.address || row?.to || "",
       renderCell: ({ row }) => (
         <Box>{row?.to_location?.address || row?.to || "Битые данные"}</Box>
       ),
@@ -64,8 +67,9 @@ const useLeadsColumns = () => {
       field: "from_location",
       headerName: "Откуда",
       width: 200,
+      valueGetter: (_, row) => row?.from_location?.address || row?.from || "",
       renderCell: ({ row }) => (
-        <Box>{row?.from_location?.address || row?.to || "Битые данные"}</Box>
+        <Box>{row?.from_location?.address || row?.from || "Битые данные"}</Box>
       ),
     },
   ];

@@ -52,6 +52,7 @@ const useForwarderTenderColumns = () => {
     },
     {
       field: "to_location",
+      valueGetter: (_, row) => row?.lead?.to_location?.address || "",
       headerName: "Куда",
       width: 200,
       renderCell: ({ row }) => (
@@ -60,6 +61,7 @@ const useForwarderTenderColumns = () => {
     },
     {
       field: "from_location",
+      valueGetter: (_, row) => row?.lead?.from_location?.address || "",
       headerName: "Откуда",
       width: 200,
       renderCell: ({ row }) => (

@@ -43,6 +43,7 @@ const useFactoringLineColumns = () => {
     },
     {
       field: "factor",
+      valueGetter: (_, row) => row?.factor?.company_name || "",
       headerName: "Фактор",
       width: 200,
       renderCell: ({ row }) => {
@@ -93,6 +94,9 @@ const useFactoringLineColumns = () => {
     },
     {
       field: "summ_current",
+      type: "number",
+      valueGetter: (value) =>
+        value == null || value === "" ? null : Number(value),
       headerName: "Текущая сумма",
       flex: 1,
       minWidth: 160,
@@ -106,15 +110,15 @@ const useFactoringLineColumns = () => {
     },
     {
       field: "progress",
+      type: "number",
+      valueGetter: (_, row) =>
+        row.summ_max > 0
+          ? Math.round((row.summ_current / row.summ_max) * 100)
+          : 0,
       headerName: "Прогресс",
       flex: 1,
       minWidth: 300,
-      renderCell: ({ row }) => {
-        const usedPercent =
-          row.summ_max > 0
-            ? Math.round((row.summ_current / row.summ_max) * 100)
-            : 0;
-
+      renderCell: ({ value: usedPercent }) => {
         return (
           <Stack
             spacing={0.5}
@@ -155,6 +159,9 @@ const useFactoringLineColumns = () => {
     },
     {
       field: "summ_max",
+      type: "number",
+      valueGetter: (value) =>
+        value == null || value === "" ? null : Number(value),
       headerName: "Максимальная сумма",
       flex: 1,
       minWidth: 180,
@@ -169,22 +176,33 @@ const useFactoringLineColumns = () => {
 
     {
       field: "period_start",
+      type: "date",
+      valueGetter: (value) => {
+        const date = value?.date ? new Date(value.date) : null;
+        return date && !Number.isNaN(date.getTime()) ? date : null;
+      },
       headerName: "Дата начала",
       flex: 1,
       minWidth: 140,
       valueFormatter: (value) =>
-        new Date(value.date).toLocaleDateString("ru-RU"),
+        value?.toLocaleDateString("ru-RU") || "",
     },
     {
       field: "period_end",
+      type: "date",
+      valueGetter: (value) => {
+        const date = value?.date ? new Date(value.date) : null;
+        return date && !Number.isNaN(date.getTime()) ? date : null;
+      },
       headerName: "Дата окончания",
       flex: 1,
       minWidth: 150,
       valueFormatter: (value) =>
-        new Date(value.date).toLocaleDateString("ru-RU"),
+        value?.toLocaleDateString("ru-RU") || "",
     },
     {
       field: "salesRelations",
+      type: "number",
       headerName: "Связи продаж",
       flex: 1,
       minWidth: 150,
