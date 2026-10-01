@@ -393,6 +393,7 @@ const Map = ({
         </Box>
       )}
       <MapContainer
+        attributionControl={false}
         center={[43.238949, 76.889709]}
         zoom={13}
         style={{
