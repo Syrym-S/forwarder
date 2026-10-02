@@ -67,9 +67,13 @@ const DriverDetailsModal = ({ selectedDriver, handleClear }) => {
         </Stack>
 
         <Tooltip title="Закрыть">
-        <IconButton  aria-label="Закрыть данные водителя" onClick={handleClear} sx={{ p: 0 }}>
-          <HighlightOffOutlinedIcon color="error" />
-        </IconButton>
+          <IconButton
+            aria-label="Закрыть данные водителя"
+            onClick={handleClear}
+            sx={{ p: 0 }}
+          >
+            <HighlightOffOutlinedIcon color="error" />
+          </IconButton>
         </Tooltip>
       </DialogTitle>
 
@@ -118,15 +122,6 @@ const DriverDetailsModal = ({ selectedDriver, handleClear }) => {
             <InfoItem
               label={"Занятость"}
               value={driverDetails?.is_ip ? "ИП" : "Не ИП"}
-            />
-
-            <InfoItem
-              label={"Доверенность"}
-              value={
-                driverDetails?.trusted
-                  ? "Доверенное лицо"
-                  : "Не указан как доверенное лицо"
-              }
             />
 
             <InfoItem label={"ИИН"} value={driverDetails?.iin} />

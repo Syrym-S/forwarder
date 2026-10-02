@@ -19,8 +19,8 @@ import FactorItem from "../../pages/factor/factor-item";
 import ErrorPage from "../../pages/error";
 import { createBrowserRouter } from "react-router-dom";
 import { isStaging } from "../client";
-import Draft from "../../pages/handbook";
 import Handbook from "../../pages/handbook";
+import Complaints from "../../pages/complaints";
 
 export const router = createBrowserRouter(
   [
@@ -32,6 +32,11 @@ export const router = createBrowserRouter(
         breadcrumb: "Главная",
       },
       children: [
+        {
+          path: "/complaints",
+          element: <Complaints />,
+          handle: { breadcrumb: "Жалобы" },
+        },
         {
           index: true,
           element: <Dashboard />,

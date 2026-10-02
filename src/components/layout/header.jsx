@@ -221,6 +221,13 @@ const Header = ({ openMenu, setOpenMenu }) => {
             Настройки
           </MenuItem>
 
+          <MenuItem onClick={() => {
+            handleCloseProfileMenu();
+            navigate("/complaints");
+          }}>
+            Жалобы
+          </MenuItem>
+
           <MenuItem
             onClick={handleOpenLogoutModal}
             sx={{

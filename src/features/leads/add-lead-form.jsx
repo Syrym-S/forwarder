@@ -117,7 +117,7 @@ const AddLeadForm = ({
     try {
       setIsSubmitting(true);
 
-      const payload = mapCreateLeadFormToApi(data);
+      const payload = mapCreateLeadFormToApi(data, { isDraft });
       if (isDraft || !isEdit) {
         payload.is_draft = isDraft;
       }

@@ -1,4 +1,5 @@
 import { transportationParameters } from "../../../shared/const/leads/transportation-parameters";
+import { isInternationalRoute } from "../../../shared/lib/international-route";
 
 function hasValue(value) {
   return value !== null && value !== undefined && value !== "";
@@ -46,9 +47,24 @@ function normalizeText(value) {
   return String(value ?? "").trim();
 }
 
-export function mapCreateLeadFormToApi(form) {
+export function mapCreateLeadFormToApi(form, { isDraft = false } = {}) {
+  const cargos = form.cargos || [];
+  const cargoFields = [
+    "cargo_type",
+    "name",
+    "comment",
+    "weight_kg",
+    "length_cm",
+    "width_cm",
+    "height_cm",
+  ];
+  const hasEmptyCargos = cargos.every((cargo) =>
+    cargoFields.every((field) => !hasValue(cargo?.[field])),
+  );
+
   const payload = {
     pass_verify: form.pass_verify === true,
+    is_international: isInternationalRoute(form),
     from_country: form.from_location?.country,
     from_region: form.from_location?.region,
     from_city: form.from_location?.city,
@@ -62,7 +78,7 @@ export function mapCreateLeadFormToApi(form) {
     name: form.name || "Не указан",
     currency: form.currency || "KZT",
     price: form.price || 0,
-    cargos: form.cargos || [],
+    cargos: isDraft && hasEmptyCargos ? null : cargos,
     point_schedules: form.point_schedules || [],
   };
 
