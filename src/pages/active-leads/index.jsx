@@ -4,7 +4,7 @@ import AddLeadForm from "../../features/leads/add-lead-form";
 import ViewTabs from "../../shared/ui/view-tabs";
 import LeadListContainer from "../../components/leads/lead-list-container";
 import { useEffect, useState } from "react";
-import { Box, Typography } from "@mui/material";
+import { Alert, Box, TextField, Typography } from "@mui/material";
 import { VIEWS } from "../../shared/const/leads";
 import { useFormDefaultValues } from "../../shared/hooks/leads/use-form-default-values";
 import { useLeadsStore } from "../../app/store/leads/leads-store";
@@ -13,8 +13,13 @@ import { NOTIFICATION_TYPE } from "../../shared/const/notification-types";
 import { parserNotificationType } from "../../shared/helpers/notifications/parse-notification-type";
 import { ACTIVE_LEAD_STATUS_OPTIONS } from "../../shared/const/tenders";
 
+const DRAFT_OPTION = { value: "draft", label: "Черновик" };
+const STATUS_OPTIONS = [...ACTIVE_LEAD_STATUS_OPTIONS, DRAFT_OPTION];
+
 const ActiveLeads = () => {
   const [filterStatus, setFilterStatus] = useState(null);
+  const showDrafts = filterStatus?.value === DRAFT_OPTION.value;
+  const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const [openForm, setOpenForm] = useState(false);
   const [view, setView] = useState(VIEWS.table);
@@ -28,6 +33,7 @@ const ActiveLeads = () => {
   const count = useLeadsStore((state) => state.count);
   const perPage = useLeadsStore((state) => state.perPage);
   const isLoading = useLeadsStore((state) => state.isLoading);
+  const error = useLeadsStore((state) => state.error);
 
   const isCardsView = view === VIEWS.cards;
 
@@ -48,20 +54,24 @@ const ActiveLeads = () => {
 
   useEffect(() => {
     clearCurrentLead();
-  }, []);
+  }, [clearCurrentLead]);
 
   useEffect(() => {
     if (notification_type === NOTIFICATION_TYPE.lead) {
-      fetchLeads();
+      fetchLeads(useLeadsStore.getState().leadsParams);
     }
   }, [newNotification, notification_type, fetchLeads]);
 
   useEffect(() => {
-    fetchLeads({
-      page: page,
-      status: filterStatus,
-    });
-  }, [page, filterStatus, fetchLeads]);
+    const timer = setTimeout(() => {
+      fetchLeads({
+        page,
+        ...(showDrafts ? { is_draft: 1 } : { status: filterStatus?.value }),
+        ...(search.trim() ? { q: search.trim() } : {}),
+      });
+    }, search.trim() ? 300 : 0);
+    return () => clearTimeout(timer);
+  }, [page, filterStatus, showDrafts, search, fetchLeads]);
 
   return (
     <RootLayout withoutDataCheck>
@@ -73,13 +83,30 @@ const ActiveLeads = () => {
             сolor: "font_color.heading",
           }}
         >
-          Активные перевозки
+          {showDrafts ? "Черновики перевозок" : "Активные перевозки"}
         </Typography>
 
         <Typography color="text.secondary" fontSize={14}>
           Список заявок на перевозку
         </Typography>
       </Box>
+      {showDrafts && (
+        <Alert severity="warning" sx={{ my: 1 }}>
+          Здесь ваши неопубликованные перевозки. Откройте черновик, чтобы продолжить редактирование и опубликовать его.
+        </Alert>
+      )}
+      <TextField
+        label={showDrafts ? "Поиск черновиков" : "Поиск перевозок"}
+        value={search}
+        onChange={(event) => {
+          setSearch(event.target.value);
+          setPage(1);
+        }}
+        size="small"
+        fullWidth
+        sx={{ my: 2 }}
+      />
+      {error && <Alert severity="error">{error}</Alert>}
       <Box
         sx={{
           display: "flex",
@@ -109,22 +136,19 @@ const ActiveLeads = () => {
           label="Статус"
           options={[
             { value: "", label: "Все статусы" },
-            ...ACTIVE_LEAD_STATUS_OPTIONS,
+            ...STATUS_OPTIONS,
           ]}
           value={filterStatus?.value ?? ""}
           onChange={(event) => {
             const value = event.target.value;
 
             const selected =
-              ACTIVE_LEAD_STATUS_OPTIONS.find(
+              STATUS_OPTIONS.find(
                 (option) => option.value === value,
               ) ?? null;
 
             setFilterStatus(selected);
-
-            if (!value) {
-              fetchLeads();
-            }
+            setPage(1);
           }}
           sx={{ width: { xs: "100%", md: "35%" } }}
           slotProps={{
@@ -152,6 +176,11 @@ const ActiveLeads = () => {
           openForm={openForm}
           setOpenForm={setOpenForm}
           initialValues={deafultValues}
+          onSaved={({ isDraft }) => {
+            setPage(1);
+            setFilterStatus(isDraft ? DRAFT_OPTION : null);
+            setSearch("");
+          }}
         />
       )}
     </RootLayout>

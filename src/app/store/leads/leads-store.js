@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { isDraftLead } from "../../../shared/lib/lead-draft";
 import {
   confirmLeadDeliveryApi,
   createLeadApi,
@@ -35,8 +36,9 @@ import {
   signCustomerAvrDocumentApi,
 } from "./api";
 
-export const useLeadsStore = create((set) => ({
+export const useLeadsStore = create((set, get) => ({
   leads: [],
+  leadsParams: {},
   searchedLeads: [],
   historyLeads: [],
   files: [],
@@ -86,19 +88,27 @@ export const useLeadsStore = create((set) => ({
     set({ notificationPopUpCurrentLead: null, error: null });
   },
 
-  fetchLeads: async (params) => {
+  fetchLeads: async (params = {}) => {
+    const requestParams = { ...params };
     try {
-      set({ isLoading: true, error: null });
+      set({ isLoading: true, error: null, leadsParams: requestParams });
 
-      const response = await getLeads(params);
+      const response = await (requestParams.q
+        ? searchLeadsApi(requestParams)
+        : getLeads(requestParams));
+      if (get().leadsParams !== requestParams) return;
 
       set({
-        leads: response.data.results,
-        count: response.data.count,
+        leads: (response.data.results || []).map((lead) => ({
+          ...lead,
+          is_draft: isDraftLead(requestParams) || isDraftLead(lead),
+        })),
+        count: response.data.count ?? response.data.total ?? 0,
         perPage: response.data.per_page,
         isLoading: false,
       });
     } catch (e) {
+      if (get().leadsParams !== requestParams) return;
       set({
         error: e.message,
         isLoading: false,
@@ -231,10 +241,7 @@ export const useLeadsStore = create((set) => ({
 
       const response = await createLeadApi(payload);
 
-      set((state) => ({
-        leads: [response.data, ...state.leads],
-        isLoading: false,
-      }));
+      await get().fetchLeads(get().leadsParams);
 
       return response.data;
     } catch (e) {

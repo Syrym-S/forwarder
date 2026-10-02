@@ -19,6 +19,7 @@ import { Box, IconButton, Tab, Tabs } from "@mui/material";
 import { useFormDefaultValues } from "../../shared/hooks/leads/use-form-default-values";
 import { useLeadsStore } from "../../app/store/leads/leads-store";
 import { LEAD_TABS } from "../../shared/const/leads";
+import { isDraftLead } from "../../shared/lib/lead-draft";
 import {
   FINISHED_LEAD_STATUSES,
   IN_PROGRESS_STATUSES,
@@ -39,6 +40,7 @@ const LeadItem = () => {
   const [emergencyComment, setEmergencyComment] = useState("");
 
   const leadData = useLeadsStore((state) => state.currentLead);
+  const isDraft = isDraftLead(leadData);
   const files = useLeadsStore((state) => state.files);
   const showEmergencyButton = IN_PROGRESS_STATUSES.includes(leadData?.status);
   const defaultValues = useFormDefaultValues(leadData, files);
@@ -168,7 +170,7 @@ const LeadItem = () => {
             p: 1,
             my: 2,
             gap: 1.5,
-            borderBottom: "1px solid",
+            borderBottom: isDraft ? "none" : "1px solid",
             borderColor: "divider",
             boxSizing: "border-box",
             width: "100%",
@@ -216,13 +218,13 @@ const LeadItem = () => {
 
             <Tab
               value={LEAD_TABS.customer_chat}
-              disabled={!leadData.customer.name}
+              disabled={isDraft || !leadData.customer?.name}
               label="Чат с заказчиком"
             />
 
             <Tab
               value={LEAD_TABS.driver_chat}
-              disabled={!leadData.driver.fio}
+              disabled={isDraft || !leadData.driver?.fio}
               label="Чат с водителем"
             />
 
@@ -242,7 +244,6 @@ const LeadItem = () => {
             {showEmergencyButton && (
               <Tooltip title="Сообщить об аварии" arrow>
                 <IconButton
-                  
                   aria-label="Сообщить об аварии"
                   color="error"
                   onClick={handleOpenWarningModal}
@@ -266,7 +267,6 @@ const LeadItem = () => {
             {leadData.status === STATUS.emergency_situation && (
               <Tooltip title="Закрыть аварийную ситуацию" arrow>
                 <IconButton
-                  
                   aria-label="Закрыть аварийную ситуацию"
                   color="error"
                   onClick={handleOpenFinishEmergencyModal}
@@ -287,27 +287,28 @@ const LeadItem = () => {
               </Tooltip>
             )}
 
-            <Tooltip title="Поделиться перевозкой" arrow>
-              <IconButton
-                
-                aria-label="Поделиться перевозкой"
-                color="primary"
-                onClick={handleOpenShareModal}
-                sx={{
-                  height: 40,
-                  width: 40,
-                  p: 1,
-                  borderRadius: 2,
-                  bgcolor: "background.default",
-                }}
-              >
-                <IosShareOutlinedIcon
+            {!isDraft && (
+              <Tooltip title="Поделиться перевозкой" arrow>
+                <IconButton
+                  aria-label="Поделиться перевозкой"
+                  color="primary"
+                  onClick={handleOpenShareModal}
                   sx={{
-                    fontSize: 22,
+                    height: 40,
+                    width: 40,
+                    p: 1,
+                    borderRadius: 2,
+                    bgcolor: "background.default",
                   }}
-                />
-              </IconButton>
-            </Tooltip>
+                >
+                  <IosShareOutlinedIcon
+                    sx={{
+                      fontSize: 22,
+                    }}
+                  />
+                </IconButton>
+              </Tooltip>
+            )}
           </Box>
         </Box>
 
@@ -329,7 +330,7 @@ const LeadItem = () => {
           )}
         </Box>
 
-        {openShareModal && (
+        {!isDraft && openShareModal && (
           <ShareModal
             leadId={id}
             openShareModal={openShareModal}
@@ -338,7 +339,7 @@ const LeadItem = () => {
           />
         )}
 
-        {shareUrl && (
+        {!isDraft && shareUrl && (
           <ShareLeadLinkBlock
             open={shareUrl}
             link={shareUrl.url}

@@ -3,6 +3,7 @@ import PrimaryButton from "../../shared/ui/button/primary-button";
 
 export function FormNavButtons({
   isEdit,
+  isDraft = false,
   isFirstStep,
   isLastStep,
   hasCurrentStepErrors,
@@ -31,7 +32,7 @@ export function FormNavButtons({
       />
 
       <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
-        {!isEdit && onSaveDraft && (
+        {onSaveDraft && (
           <PrimaryButton
             variant="outlined"
             onClick={onSaveDraft}
@@ -53,7 +54,7 @@ export function FormNavButtons({
             variant="contained"
             disabled={isSubmitting || hasCurrentStepErrors}
             onClick={onSubmit}
-            text={isEdit ? "Сохранить" : "Создать маршрут"}
+            text={isDraft ? "Опубликовать" : isEdit ? "Сохранить" : "Создать маршрут"}
           />
         ) : (
           <PrimaryButton

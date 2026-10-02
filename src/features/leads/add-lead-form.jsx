@@ -7,15 +7,16 @@ import TransportationParameters from "../../components/lead-form/steps/transport
 import DriverStep from "../../components/lead-form/steps/driver-step";
 import RouteStep from "../../components/lead-form/steps/route-step";
 import CustomerStep from "../../components/lead-form/steps/customer-step";
-import { Box, Dialog, DialogContent } from "@mui/material";
+import { Alert, Box, Dialog, DialogContent } from "@mui/material";
 import { useState } from "react";
 import { FormNavButtons } from "../../components/lead-form/form-nav-buttons";
 import { useForm, useWatch } from "react-hook-form";
 import { LastStep } from "../../components/lead-form/steps/last-step";
 import { CreateLeadResultModal } from "../../components/lead-form/create-lead-result-modal";
 import { mapCreateLeadFormToApi } from "../../components/lead-form/model/createLead.adapter";
-import { uploadLeadFileApi } from "../../app/store/leads/api";
+import { publishLeadApi, uploadLeadFileApi } from "../../app/store/leads/api";
 import { useLeadsStore } from "../../app/store/leads/leads-store";
+import { isDraftLead } from "../../shared/lib/lead-draft";
 
 const steps = [
   { id: 1, label: "Маршрут" },
@@ -41,12 +42,13 @@ const AddLeadForm = ({
   openForm,
   setOpenForm,
   initialValues,
+  onSaved,
 }) => {
   const currentLead = useLeadsStore((state) => state.currentLead);
   const createLead = useLeadsStore((state) => state.createLead);
   const updateLead = useLeadsStore((state) => state.updateLead);
   const getLeadItem = useLeadsStore((state) => state.getLeadItem);
-  const clearCurrentLead = useLeadsStore((state) => state.clearCurrentLead);
+  const isEditingDraft = isEdit && isDraftLead(currentLead);
 
   const [uploadedFiles, setUploadedFiles] = useState([]);
   const [activeStep, setActiveStep] = useState(1);
@@ -63,7 +65,9 @@ const AddLeadForm = ({
     documents: [],
     pass_verify: false,
     ...initialValues,
-    cargos: initialValues?.cargos?.length ? initialValues.cargos : [{ name: "" }],
+    cargos: initialValues?.cargos?.length
+      ? initialValues.cargos
+      : [{ name: "" }],
   };
 
   const {
@@ -81,8 +85,6 @@ const AddLeadForm = ({
   });
 
   const formValues = useWatch({ control });
-
-  console.log("formValues", formValues);
 
   const isLastStep = activeStep === steps.length;
 
@@ -102,7 +104,7 @@ const AddLeadForm = ({
       return;
     }
 
-    for (const file of documents) {
+    for (const file of documents.filter((document) => document.file)) {
       await uploadLeadFileApi(leadId, file);
     }
   }
@@ -116,8 +118,8 @@ const AddLeadForm = ({
       setIsSubmitting(true);
 
       const payload = mapCreateLeadFormToApi(data);
-      if (isDraft) {
-        payload.status = "draft";
+      if (isDraft || !isEdit) {
+        payload.is_draft = isDraft;
       }
 
       let createdLeadId = editingItemId;
@@ -126,8 +128,6 @@ const AddLeadForm = ({
       if (isEdit) {
         delete payload.pass_verify;
         await updateLead(editingItemId, payload);
-        clearCurrentLead();
-        await getLeadItem(editingItemId);
 
         if (payload.documents?.length > 0 && createdLeadId) {
           try {
@@ -157,17 +157,27 @@ const AddLeadForm = ({
         }
       }
 
-      handleClose();
+      if (isEditingDraft && !isDraft) {
+        await publishLeadApi(editingItemId);
+      }
+      if (isEdit) {
+        await getLeadItem(editingItemId);
+      }
 
       setResultModal({
         open: true,
         type: "success",
+        isDraft,
         title: isDraft
           ? "Черновик сохранён"
-          : isEdit ? "Перевозка отредактирована" : "Перевозка создана",
+          : isEditingDraft
+            ? "Перевозка опубликована"
+            : isEdit
+              ? "Перевозка отредактирована"
+              : "Перевозка создана",
         message: documentsUploadFailed
           ? `${isDraft ? "Черновик сохранён" : "Перевозка сохранена"}, но часть документов не загрузилась`
-          : `${isDraft ? "Черновик успешно сохранён" : `Перевозка успешно ${isEdit ? "изменена" : "создана"}`}${
+          : `${isDraft ? "Черновик успешно сохранён" : `Перевозка успешно ${isEditingDraft ? "опубликована" : isEdit ? "изменена" : "создана"}`}${
               createdLeadId ? `: ${createdLeadId}` : ""
             }`,
       });
@@ -175,11 +185,17 @@ const AddLeadForm = ({
       setResultModal({
         open: true,
         type: "error",
-        title: isDraft ? "Ошибка сохранения черновика" : "Ошибка создания",
+        title: isDraft
+          ? "Ошибка сохранения черновика"
+          : isEditingDraft
+            ? "Ошибка публикации"
+            : "Ошибка сохранения",
         message:
           error.response?.data?.message ||
           error.message ||
-          (isDraft ? "Не удалось сохранить черновик" : "Не удалось создать перевозку"),
+          (isDraft
+            ? "Не удалось сохранить черновик"
+            : "Не удалось сохранить перевозку"),
       });
     } finally {
       setIsSubmitting(false);
@@ -213,11 +229,11 @@ const AddLeadForm = ({
         return (
           <Box sx={{ display: "grid", gap: 2 }}>
             <TransportationParameters control={control} />
-          <CargoStep
-            control={control}
-            errors={errors}
-            leadStatus={currentLead?.status}
-          />
+            <CargoStep
+              control={control}
+              errors={errors}
+              leadStatus={currentLead?.status}
+            />
           </Box>
         );
       case 3:
@@ -286,15 +302,28 @@ const AddLeadForm = ({
     setActiveStep((prevStep) => prevStep + 1);
   }
 
+  console.log("formValues", formValues);
+
   return (
     <>
-      <Dialog open={openForm} onClose={handleClose} maxWidth="md" fullWidth>
+      <Dialog
+        open={openForm && resultModal.type !== "success"}
+        onClose={isSubmitting ? undefined : handleClose}
+        maxWidth="md"
+        fullWidth
+      >
         <FormHeader
           isEdit={isEdit}
           activeStep={activeStep}
           stepsCount={steps.length}
         />
         <DialogContent sx={{ px: 3 }}>
+          {isEditingDraft && (
+            <Alert severity="warning" sx={{ mb: 2 }}>
+              Черновик. Можно сохранить изменения и продолжить позже или
+              опубликовать перевозку на шаге «Проверка».
+            </Alert>
+          )}
           <LeadFormTabs
             steps={steps}
             activeStep={activeStep}
@@ -306,6 +335,7 @@ const AddLeadForm = ({
 
           <FormNavButtons
             isEdit={isEdit}
+            isDraft={isEditingDraft}
             isFirstStep={activeStep === 1}
             isLastStep={activeStep === steps.length}
             hasCurrentStepErrors={hasStepError}
@@ -324,14 +354,18 @@ const AddLeadForm = ({
         type={resultModal.type}
         title={resultModal.title}
         message={resultModal.message}
-        onClose={() =>
+        onClose={() => {
+          if (resultModal.type === "success") {
+            onSaved?.({ isDraft: resultModal.isDraft });
+            handleClose();
+          }
           setResultModal({
             open: false,
             type: null,
             title: "",
             message: "",
-          })
-        }
+          });
+        }}
       />
     </>
   );

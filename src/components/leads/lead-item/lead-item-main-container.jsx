@@ -21,6 +21,7 @@ import { rateDriverApi } from "../../../app/store/drivers/api";
 import { useNotificationsStore } from "../../../app/store/notifications/noti-store";
 import { parserNotificationType } from "../../../shared/helpers/notifications/parse-notification-type";
 import { NOTIFICATION_TYPE } from "../../../shared/const/notification-types";
+import { isDraftLead } from "../../../shared/lib/lead-draft";
 
 const LeadItemMainContainer = ({
   leadData,
@@ -90,12 +91,12 @@ const LeadItemMainContainer = ({
   const isAllPassed = leadPoints.every((item) => item?.is_passed);
 
   const from = {
-    lat: leadData?.from_location.lat,
-    lon: leadData?.from_location.lon,
+    lat: leadData?.from_location?.lat,
+    lon: leadData?.from_location?.lon,
   };
   const to = {
-    lat: leadData?.to_location.lat,
-    lon: leadData?.to_location.lon,
+    lat: leadData?.to_location?.lat,
+    lon: leadData?.to_location?.lon,
   };
 
   const waypoints = leadData?.waypoints?.map((waypoint) => {
@@ -276,17 +277,19 @@ const LeadItemMainContainer = ({
         </Alert>
       </Snackbar>
       {deliveryError && <Alert severity="error">{deliveryError}</Alert>}
-      <Box
-        sx={{
-          border: "1px solid",
-          borderColor: "divider",
-          borderRadius: 3,
-          overflow: "hidden",
-          my: 2,
-        }}
-      >
-        <LeadMap waypoints={waypoints} from={from} to={to} id={id} />
-      </Box>
+      {!isDraftLead(leadData) && (
+        <Box
+          sx={{
+            border: "1px solid",
+            borderColor: "divider",
+            borderRadius: 3,
+            overflow: "hidden",
+            my: 2,
+          }}
+        >
+          <LeadMap waypoints={waypoints} from={from} to={to} id={id} />
+        </Box>
+      )}
 
       {((leadData.status === STATUS.sign_avr && isMustSignDocument) ||
         (leadData.status === STATUS.finished && isMustSignDocument)) && (

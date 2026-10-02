@@ -5,18 +5,18 @@ export const useFormDefaultValues = (lead = null, files = []) => {
   return {
     ...Object.fromEntries(transportationParameters.map(({ name }) => [name, lead?.[name]?.name ?? lead?.[name] ?? ""])),
     pass_verify: lead?.pass_verify === true,
-    loading_date: lead?.created_at.date || null,
+    loading_date: lead?.created_at?.date || null,
     driver: lead?.driver,
     summ: lead?.summ || null,
     currency: lead?.currency || null,
     vat: lead?.vat,
     to_location: {
-      address: lead?.to_location.address || null,
-      city: lead?.to_location.city || null,
-      country: lead?.to_location.country || null,
-      lat: lead?.to_location.lat || null,
-      lon: lead?.to_location.lon || null,
-      region: lead?.to_location.region || null,
+      address: lead?.to_location?.address || null,
+      city: lead?.to_location?.city || null,
+      country: lead?.to_location?.country || null,
+      lat: lead?.to_location?.lat || null,
+      lon: lead?.to_location?.lon || null,
+      region: lead?.to_location?.region || null,
     },
     waypoints:
       lead?.waypoints?.map((waypoint) => ({
@@ -29,19 +29,19 @@ export const useFormDefaultValues = (lead = null, files = []) => {
         region: waypoint.region || null,
       })) || [],
     from_location: {
-      address: lead?.from_location.address || null,
-      city: lead?.from_location.city || null,
-      country: lead?.from_location.country || null,
-      lat: lead?.from_location.lat || null,
-      lon: lead?.from_location.lon || null,
-      region: lead?.from_location.region || null,
+      address: lead?.from_location?.address || null,
+      city: lead?.from_location?.city || null,
+      country: lead?.from_location?.country || null,
+      lat: lead?.from_location?.lat || null,
+      lon: lead?.from_location?.lon || null,
+      region: lead?.from_location?.region || null,
     },
     customer: lead?.customer,
     price: lead?.price,
     transportation_price: lead?.transportation_price || null,
     documents: files || [],
     point_schedules:
-      lead?.point_schedules.map((point) => ({
+      lead?.point_schedules?.map((point) => ({
         point_index: point.point_index,
         start_at: point.start_at
           ? dayjs(point.start_at).format("YYYY-MM-DD")

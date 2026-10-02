@@ -1,5 +1,5 @@
 import EditNoteRoundedIcon from "@mui/icons-material/EditNoteRounded";
-import RenderStatus from "../../../shared/ui/render-status";
+import LeadStatus from "../../../shared/ui/lead-status";
 import {
   Box,
   Button,
@@ -79,7 +79,7 @@ const LeadHeading = ({ leadData, openEditForm }) => {
           }}
         >
           {isLoading && <CircularProgress size={14} />}
-          <RenderStatus status={leadData.status} />
+          <LeadStatus lead={leadData} />
         </Box>
         {canBeEdited && (
           <Button

@@ -53,7 +53,7 @@ const LeadDriverInfo = ({ leadData, canDetach = false, setRatingLead }) => {
       </Section>
     );
 
-  if (!driver.fio && !driver.id)
+  if (!driver?.fio && !driver?.id)
     return (
       <Section title="Водитель" icon={<PersonOutlinedIcon color="primary" />}>
         <InfoBadge label={""} value={"Водитель не указан"} />

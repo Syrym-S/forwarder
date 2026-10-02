@@ -1,6 +1,7 @@
 import { Box } from "@mui/material";
 import { NavLink } from "react-router-dom";
-import RenderStatus from "../../ui/render-status";
+import LeadStatus from "../../ui/lead-status";
+import { isDraftLead } from "../../lib/lead-draft";
 
 const useLeadsColumns = () => {
   const columns = [
@@ -21,6 +22,7 @@ const useLeadsColumns = () => {
     },
     {
       field: "status",
+      valueGetter: (_, row) => (isDraftLead(row) ? "Черновик" : row.status),
       headerName: "Статус",
       width: 200,
       renderCell: ({ row }) => (
@@ -31,7 +33,7 @@ const useLeadsColumns = () => {
             alignItems: "center",
           }}
         >
-          <RenderStatus status={row.status} />
+          <LeadStatus lead={row} />
         </Box>
       ),
     },
@@ -60,7 +62,7 @@ const useLeadsColumns = () => {
       width: 200,
       valueGetter: (_, row) => row?.to_location?.address || row?.to || "",
       renderCell: ({ row }) => (
-        <Box>{row?.to_location?.address || row?.to || "Битые данные"}</Box>
+        <Box>{row?.to_location?.address || row?.to || "Не указан"}</Box>
       ),
     },
     {
@@ -69,7 +71,7 @@ const useLeadsColumns = () => {
       width: 200,
       valueGetter: (_, row) => row?.from_location?.address || row?.from || "",
       renderCell: ({ row }) => (
-        <Box>{row?.from_location?.address || row?.from || "Битые данные"}</Box>
+        <Box>{row?.from_location?.address || row?.from || "Не указан"}</Box>
       ),
     },
   ];

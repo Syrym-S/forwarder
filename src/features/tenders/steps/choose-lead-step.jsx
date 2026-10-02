@@ -7,6 +7,7 @@ import { STATUS } from "../../../shared/const/tenders";
 import FormInput from "../../../shared/ui/input/form-input";
 import FormControllerInput from "../../../shared/ui/input/form-controller-input";
 import { useTendersStore } from "../../../app/store/tenders/tender-store";
+import { isDraftLead } from "../../../shared/lib/lead-draft";
 
 const ChooseLeadStep = ({ control, setValue, isEdit }) => {
   const searchLeadsWithoutDriver = useTendersStore(
@@ -85,9 +86,11 @@ const ChooseLeadStep = ({ control, setValue, isEdit }) => {
         control={control}
         rules={{
           required: "Выбор перевозки обязателен",
-          validate: (value) =>
-            value?.status === STATUS.new ||
-            "Нужно выбрать перевозку без назначенного водителя",
+          validate: (value) => {
+            if (isDraftLead(value)) return "Нельзя создать аукцион для черновика";
+            return value?.status === STATUS.new ||
+              "Нужно выбрать перевозку без назначенного водителя";
+          },
         }}
         render={({ field, fieldState }) => (
           <Autocomplete
@@ -106,7 +109,7 @@ const ChooseLeadStep = ({ control, setValue, isEdit }) => {
             inputValue={inputValue}
             loading={isSearchLoading}
             disabled={isEdit}
-            options={isSearchLoading ? [] : [...leadsWithoutDriver]}
+            options={isSearchLoading ? [] : leadsWithoutDriver.filter((lead) => !isDraftLead(lead))}
             noOptionsText="Введите два символа"
             onInputChange={(_, newInputValue, reason) => {
               if (reason === "input") {

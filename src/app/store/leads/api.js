@@ -81,6 +81,10 @@ export const updateLeadApi = async (id, payload) => {
   return data;
 };
 
+export const publishLeadApi = async (id) => {
+  return api.post(`/forwarder/v1/leads/${id}/publish`, null);
+};
+
 export const getLeadFilesApi = async (leadId) => {
   const data = await api.get(`/forwarder/v1/leads/${leadId}/files`, {
     headers: {

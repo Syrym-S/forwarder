@@ -4,7 +4,8 @@ import TripOriginIcon from "@mui/icons-material/TripOrigin";
 import ArrowDownwardRoundedIcon from "@mui/icons-material/ArrowDownwardRounded";
 import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
 import { useNavigate } from "react-router-dom";
-import RenderStatus from "../../shared/ui/render-status";
+import LeadStatus from "../../shared/ui/lead-status";
+import { isDraftLead } from "../../shared/lib/lead-draft";
 import InfoItem from "../../shared/ui/info-item";
 
 const LeadCard = ({ lead }) => {
@@ -25,7 +26,7 @@ const LeadCard = ({ lead }) => {
         },
         maxWidth: "100%",
         border: "2px solid",
-        borderColor: "divider",
+        borderColor: isDraftLead(lead) ? "warning.main" : "divider",
         borderRadius: 7,
         backgroundColor: "background.paper",
         boxShadow: "0 2px 8px rgba(0, 0, 0, 0.06)",
@@ -76,7 +77,7 @@ const LeadCard = ({ lead }) => {
               #{lead.num || "—"}
             </Typography>
 
-            <RenderStatus status={lead.status} />
+            <LeadStatus lead={lead} />
           </Stack>
         </Box>
 
@@ -106,7 +107,7 @@ const LeadCard = ({ lead }) => {
                 lineHeight: 1.35,
               }}
             >
-              {lead?.from_location?.address || lead?.from || "Битые данные"}
+              {lead?.from_location?.address || lead?.from || "Не указан"}
             </Typography>
           </Box>
 
@@ -141,7 +142,7 @@ const LeadCard = ({ lead }) => {
                 lineHeight: 1.35,
               }}
             >
-              {lead?.to_location?.address || lead?.from || "Битые данные"}
+              {lead?.to_location?.address || lead?.from || "Не указан"}
             </Typography>
           </Box>
         </Box>

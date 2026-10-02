@@ -1,4 +1,3 @@
-import { mapCargoToApi } from "../../../shared/lib/cargo-volume";
 import { transportationParameters } from "../../../shared/const/leads/transportation-parameters";
 
 function hasValue(value) {
@@ -63,7 +62,7 @@ export function mapCreateLeadFormToApi(form) {
     name: form.name || "Не указан",
     currency: form.currency || "KZT",
     price: form.price || 0,
-    cargos: (form.cargos || []).map(mapCargoToApi),
+    cargos: form.cargos || [],
     point_schedules: form.point_schedules || [],
   };
 
