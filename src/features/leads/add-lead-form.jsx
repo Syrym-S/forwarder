@@ -69,6 +69,7 @@ const AddLeadForm = ({
   const {
     control,
     handleSubmit,
+    getValues,
     reset,
     trigger,
     setValue,
@@ -106,11 +107,18 @@ const AddLeadForm = ({
     }
   }
 
-  async function handleCreateRoute(data) {
+  async function handleCreateRoute(data, { isDraft = false } = {}) {
+    if (isSubmitting) {
+      return;
+    }
+
     try {
       setIsSubmitting(true);
 
       const payload = mapCreateLeadFormToApi(data);
+      if (isDraft) {
+        payload.status = "draft";
+      }
 
       let createdLeadId = editingItemId;
       let documentsUploadFailed = false;
@@ -121,7 +129,7 @@ const AddLeadForm = ({
         clearCurrentLead();
         await getLeadItem(editingItemId);
 
-        if (payload.documents.length > 0 && createdLeadId) {
+        if (payload.documents?.length > 0 && createdLeadId) {
           try {
             await uploadCreateLeadDocuments(createdLeadId, payload.documents);
           } catch (documentError) {
@@ -134,9 +142,9 @@ const AddLeadForm = ({
         }
       } else {
         const response = await createLead(payload);
-        const createdLeadId = getCreatedLeadId(response);
+        createdLeadId = getCreatedLeadId(response);
 
-        if (payload.documents.length > 0 && createdLeadId) {
+        if (payload.documents?.length > 0 && createdLeadId) {
           try {
             await uploadCreateLeadDocuments(createdLeadId, payload.documents);
           } catch (documentError) {
@@ -154,10 +162,12 @@ const AddLeadForm = ({
       setResultModal({
         open: true,
         type: "success",
-        title: isEdit ? "Перевозка отредактирована" : "Перевозка создана",
+        title: isDraft
+          ? "Черновик сохранён"
+          : isEdit ? "Перевозка отредактирована" : "Перевозка создана",
         message: documentsUploadFailed
-          ? "Перевозка создана, но часть документов не загрузилась"
-          : `Перевозка успешно ${isEdit ? "изменена" : "создана"}${
+          ? `${isDraft ? "Черновик сохранён" : "Перевозка сохранена"}, но часть документов не загрузилась`
+          : `${isDraft ? "Черновик успешно сохранён" : `Перевозка успешно ${isEdit ? "изменена" : "создана"}`}${
               createdLeadId ? `: ${createdLeadId}` : ""
             }`,
       });
@@ -165,11 +175,11 @@ const AddLeadForm = ({
       setResultModal({
         open: true,
         type: "error",
-        title: "Ошибка создания",
+        title: isDraft ? "Ошибка сохранения черновика" : "Ошибка создания",
         message:
           error.response?.data?.message ||
           error.message ||
-          "Не удалось создать перевозку",
+          (isDraft ? "Не удалось сохранить черновик" : "Не удалось создать перевозку"),
       });
     } finally {
       setIsSubmitting(false);
@@ -181,7 +191,11 @@ const AddLeadForm = ({
       return;
     }
 
-    await handleSubmit(handleCreateRoute)();
+    await handleSubmit((data) => handleCreateRoute(data))();
+  }
+
+  async function handleSaveDraft() {
+    await handleCreateRoute(getValues(), { isDraft: true });
   }
 
   const renderContent = (step) => {
@@ -300,6 +314,7 @@ const AddLeadForm = ({
             onBack={handleBack}
             onNext={handleNext}
             onSubmit={handleSubmitClick}
+            onSaveDraft={handleSaveDraft}
           />
         </DialogContent>
       </Dialog>

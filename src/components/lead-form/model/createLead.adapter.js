@@ -50,15 +50,15 @@ function normalizeText(value) {
 export function mapCreateLeadFormToApi(form) {
   const payload = {
     pass_verify: form.pass_verify === true,
-    from_country: form.from_location.country,
-    from_region: form.from_location.region,
-    from_city: form.from_location.city,
-    from_address: form.from_location.address,
+    from_country: form.from_location?.country,
+    from_region: form.from_location?.region,
+    from_city: form.from_location?.city,
+    from_address: form.from_location?.address,
 
-    to_country: form.to_location.country,
-    to_region: form.to_location.region,
-    to_city: form.to_location.city,
-    to_address: form.to_location.address,
+    to_country: form.to_location?.country,
+    to_region: form.to_location?.region,
+    to_city: form.to_location?.city,
+    to_address: form.to_location?.address,
 
     name: form.name || "Не указан",
     currency: form.currency || "KZT",
@@ -82,12 +82,12 @@ export function mapCreateLeadFormToApi(form) {
 
   addNumberIfHasValue(payload, "from_lat", form.fromLat);
   addNumberIfHasValue(payload, "from_lon", form.fromLng);
-  addNumberIfHasValue(payload, "from_lat", form.from_location.lat);
-  addNumberIfHasValue(payload, "from_lon", form.from_location.lon);
+  addNumberIfHasValue(payload, "from_lat", form.from_location?.lat);
+  addNumberIfHasValue(payload, "from_lon", form.from_location?.lon);
   addNumberIfHasValue(payload, "to_lat", form.toLat);
   addNumberIfHasValue(payload, "to_lon", form.toLng);
-  addNumberIfHasValue(payload, "to_lat", form.to_location.lat);
-  addNumberIfHasValue(payload, "to_lon", form.to_location.lon);
+  addNumberIfHasValue(payload, "to_lat", form.to_location?.lat);
+  addNumberIfHasValue(payload, "to_lon", form.to_location?.lon);
 
   addNumberIfHasValue(payload, "cargo_weight", form.weight_kg);
   addNumberIfHasValue(payload, "cargo_length", form.length_cm);

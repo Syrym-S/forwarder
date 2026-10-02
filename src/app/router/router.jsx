@@ -19,6 +19,8 @@ import FactorItem from "../../pages/factor/factor-item";
 import ErrorPage from "../../pages/error";
 import { createBrowserRouter } from "react-router-dom";
 import { isStaging } from "../client";
+import Draft from "../../pages/handbook";
+import Handbook from "../../pages/handbook";
 
 export const router = createBrowserRouter(
   [
@@ -146,6 +148,13 @@ export const router = createBrowserRouter(
           handle: {
             breadcrumb: ({ params }) =>
               `Факторинговые компании / ${params.breadcrumbs}`,
+          },
+        },
+        {
+          path: "/handbook",
+          element: <Handbook />,
+          handle: {
+            breadcrumb: "Cправочник",
           },
         },
       ],

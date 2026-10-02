@@ -1,5 +1,4 @@
-import { Box, Button, DialogActions } from "@mui/material";
-import PropTypes from "prop-types";
+import { Box, DialogActions } from "@mui/material";
 import PrimaryButton from "../../shared/ui/button/primary-button";
 
 export function FormNavButtons({
@@ -12,6 +11,7 @@ export function FormNavButtons({
   onBack,
   onNext,
   onSubmit,
+  onSaveDraft,
 }) {
   return (
     <DialogActions
@@ -19,6 +19,8 @@ export function FormNavButtons({
         pb: 3,
         pt: 2,
         justifyContent: "space-between",
+        flexWrap: "wrap",
+        gap: 1,
       }}
     >
       <PrimaryButton
@@ -28,7 +30,15 @@ export function FormNavButtons({
         text={"Отмена"}
       />
 
-      <Box sx={{ display: "flex", gap: 1 }}>
+      <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
+        {!isEdit && onSaveDraft && (
+          <PrimaryButton
+            variant="outlined"
+            onClick={onSaveDraft}
+            disabled={isSubmitting}
+            text="Сохранить как черновик"
+          />
+        )}
         {!isFirstStep && (
           <PrimaryButton
             variant="outlined"

@@ -13,6 +13,7 @@ import RequestQuoteOutlined from "@mui/icons-material/RequestQuoteOutlined";
 import RouteOutlined from "@mui/icons-material/RouteOutlined";
 import PhoneOutlinedIcon from "@mui/icons-material/PhoneOutlined";
 import MarkunreadOutlinedIcon from "@mui/icons-material/MarkunreadOutlined";
+import LibraryBooksOutlinedIcon from "@mui/icons-material/LibraryBooksOutlined";
 import "./style.css";
 
 export function SupportContacts() {
@@ -137,6 +138,25 @@ const menuItems = [
   },
   {
     id: 2,
+    label: null,
+    sub_items: [
+      {
+        id: 1,
+        path: "/handbook",
+        lable: "Cправочник",
+        icon: (
+          <LibraryBooksOutlinedIcon
+            sx={{
+              fontSize: "1.1rem",
+            }}
+          />
+        ),
+        tooltip_text: "Отображение всех маршрутов на карте",
+      },
+    ],
+  },
+  {
+    id: 3,
     label: "Перевозки",
     sub_items: [
       {
@@ -154,7 +174,7 @@ const menuItems = [
           "Созданные вами и заказчиками активные перевозки. Возможность создать перевозку",
       },
       {
-        id: 2,
+        id: 4,
         path: "/history-leads",
         lable: "История перевозок",
         icon: (
@@ -169,7 +189,7 @@ const menuItems = [
     ],
   },
   {
-    id: 3,
+    id: 4,
     label: "Финансы",
     sub_items: [
       {
@@ -216,7 +236,7 @@ const menuItems = [
     ],
   },
   {
-    id: 4,
+    id: 5,
     label: "Каталог",
     sub_items: [
       {
@@ -248,7 +268,7 @@ const menuItems = [
     ],
   },
   {
-    id: 5,
+    id: 6,
     label: "Аукционы",
     sub_items: [
       {
