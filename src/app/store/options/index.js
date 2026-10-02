@@ -3,6 +3,7 @@ import {
   getCargoTypesApi,
   getCurrenciesApi,
   getLeadParamsApi,
+  getTNVEDApi,
   searchCargoTypeApi,
 } from "./api";
 
@@ -13,6 +14,9 @@ export const useOptionsStore = create((set, get) => ({
 
   cargoTypes: [],
   currencies: [],
+  tnvedOptions: [],
+  isTNVEDLoading: false,
+  tnvedError: null,
 
   isCargoTypesLoading: false,
   isCurrenciesLoading: false,
@@ -92,6 +96,19 @@ export const useOptionsStore = create((set, get) => ({
         leadParamsError:
           error.message || "Не удалось загрузить параметры перевозки",
         isLeadParamsLoading: false,
+      });
+    }
+  },
+
+  getLTNVEDOptions: async (params) => {
+    set({ isTNVEDLoading: true, tnvedError: null });
+    try {
+      const response = await getTNVEDApi(params);
+      set({ tnvedOptions: response.data, isTNVEDLoading: false });
+    } catch (error) {
+      set({
+        tnvedError: error.message || "Не удалось загрузить справочник ТН ВЭД",
+        isTNVEDLoading: false,
       });
     }
   },

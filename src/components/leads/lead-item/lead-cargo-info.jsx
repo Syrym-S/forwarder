@@ -14,6 +14,9 @@ const CargoCard = ({
 }) => {
   const canEditStatus =
     lead?.status === STATUS.new || lead?.status === STATUS.add_driver;
+  const tnvedCode = cargo?.tnved?.code ?? cargo?.tnved_code ??
+    (typeof cargo?.tnved === "string" ? cargo.tnved : "");
+  const tnvedLabel = [tnvedCode, cargo?.tnved?.name].filter(Boolean).join(" — ");
   const getLeadItem = useLeadsStore((state) => state.getLeadItem);
   const deleteCargo = useLeadsStore((state) => state.deleteCargo);
   const isLoading = useLeadsStore((state) => state.isLoading);
@@ -62,22 +65,32 @@ const CargoCard = ({
 
         <InfoItem label="Тип" value={cargo?.type} />
 
+        <InfoItem label="Код товара" value={tnvedLabel || "Не указан"} />
+
         <InfoItem
           label="Вес"
           value={cargo?.weight_kg ? `${cargo?.weight_kg} кг` : "Вес не указан"}
         />
 
-        <InfoItem label="Цена груза" value={moneySpacingFormat(cargo?.cargo_price)} />
+        <InfoItem
+          label="Цена груза"
+          value={moneySpacingFormat(cargo?.cargo_price)}
+        />
 
         {getCargoVolume(cargo) != null && (
           <InfoItem label="Объём" value={`${getCargoVolume(cargo)} м³`} />
         )}
         {(cargo?.height_cm || cargo?.width_cm || cargo?.length_cm) && (
-          <InfoItem label="Размеры" value={[
-            cargo.length_cm && `Длина: ${cargo.length_cm} см`,
-            cargo.width_cm && `Ширина: ${cargo.width_cm} см`,
-            cargo.height_cm && `Высота: ${cargo.height_cm} см`,
-          ].filter(Boolean).join(" × ")} />
+          <InfoItem
+            label="Размеры"
+            value={[
+              cargo.length_cm && `Длина: ${cargo.length_cm} см`,
+              cargo.width_cm && `Ширина: ${cargo.width_cm} см`,
+              cargo.height_cm && `Высота: ${cargo.height_cm} см`,
+            ]
+              .filter(Boolean)
+              .join(" × ")}
+          />
         )}
       </Box>
 

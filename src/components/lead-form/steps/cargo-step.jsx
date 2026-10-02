@@ -1,4 +1,5 @@
 import CargoVolumeFields from "./cargo-volume-fields";
+import CargoTnvedField from "./cargo-tnved-field";
 import { Controller, useFieldArray, useWatch } from "react-hook-form";
 import {
   Autocomplete,
@@ -17,6 +18,19 @@ import FormControllerInput from "../../../shared/ui/input/form-controller-input"
 import { hasCargoValue, isPositiveCargoNumber } from "../../../shared/lib/cargo-volume";
 
 const CargoStep = ({ control, errors, leadStatus }) => {
+  const tnvedOptions = useOptionsStore((state) => state.tnvedOptions);
+  const getLTNVEDOptions = useOptionsStore((state) => state.getLTNVEDOptions);
+  const isTNVEDLoading = useOptionsStore((state) => state.isTNVEDLoading);
+  const tnvedError = useOptionsStore((state) => state.tnvedError);
+  const sections = Array.isArray(tnvedOptions)
+    ? tnvedOptions
+    : tnvedOptions?.results ?? tnvedOptions?.items ?? tnvedOptions?.data ?? [];
+
+  useEffect(() => {
+    const state = useOptionsStore.getState();
+    if (!state.isTNVEDLoading) getLTNVEDOptions();
+  }, [getLTNVEDOptions]);
+
   const { fields, append, remove } = useFieldArray({
     control,
     name: "cargos",
@@ -59,6 +73,10 @@ const CargoStep = ({ control, errors, leadStatus }) => {
               errors={errors}
               remove={remove}
               cargo={field}
+              tnvedSections={sections}
+              isTNVEDLoading={isTNVEDLoading}
+              tnvedError={tnvedError}
+              getLTNVEDOptions={getLTNVEDOptions}
             />
 
             {fields.length !== 1 && (
@@ -84,6 +102,7 @@ const CargoStep = ({ control, errors, leadStatus }) => {
             append({
               cargo_type: null,
               name: "",
+              tnved_code: "",
               comment: "",
               weight_kg: null,
               length_cm: null,
@@ -105,7 +124,7 @@ const CargoStep = ({ control, errors, leadStatus }) => {
 
 export default CargoStep;
 
-const CargoStepFieldsContent = ({ index, control, cargo }) => {
+const CargoStepFieldsContent = ({ index, control, cargo, tnvedSections, isTNVEDLoading, tnvedError, getLTNVEDOptions }) => {
   const searchCargoType = useOptionsStore((state) => state.searchCargoType);
   const cargoTypes = useOptionsStore((state) => state.cargoTypes);
   const getCargoTypes = useOptionsStore((state) => state.getCargoTypes);
@@ -233,6 +252,15 @@ const CargoStepFieldsContent = ({ index, control, cargo }) => {
             }}
           />
         )}
+      />
+
+      <CargoTnvedField
+        control={control}
+        index={index}
+        sections={tnvedSections}
+        loading={isTNVEDLoading}
+        error={tnvedError}
+        onRetry={() => getLTNVEDOptions()}
       />
 
       <CargoVolumeFields control={control} index={index} />

@@ -52,6 +52,7 @@ export function mapCreateLeadFormToApi(form, { isDraft = false } = {}) {
   const cargoFields = [
     "cargo_type",
     "name",
+    "tnved_code",
     "comment",
     "weight_kg",
     "length_cm",

@@ -33,3 +33,11 @@ export const searchCurrencyApi = async (params) => {
 
   return data;
 };
+
+export const getTNVEDApi = async (params = {}) => {
+  const data = await api.get(`/forwarder/v1/tnved`, {
+    params,
+  });
+
+  return data;
+};

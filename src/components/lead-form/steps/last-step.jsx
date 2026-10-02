@@ -139,6 +139,7 @@ export function LastStep({ form }) {
                   }}
                 >
                   <InfoBadge label="Тип груза" value={cargo.type} />
+                  <InfoBadge label="Код ТН ВЭД" value={cargo.tnved_code || "Не указан"} />
 
                   <InfoBadge
                     label="Вес"
