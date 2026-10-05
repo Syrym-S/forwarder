@@ -7,6 +7,8 @@ import {
   searchCargoTypeApi,
 } from "./api";
 
+let tnvedRequestId = 0;
+
 export const useOptionsStore = create((set, get) => ({
   leadParams: {},
   isLeadParamsLoading: false,
@@ -22,6 +24,9 @@ export const useOptionsStore = create((set, get) => ({
   isCurrenciesLoading: false,
 
   count: 0,
+  tnvedCount: 0,
+
+  tnvedPerPage: 1,
   perPage: 1,
 
   error: null,
@@ -101,11 +106,20 @@ export const useOptionsStore = create((set, get) => ({
   },
 
   getLTNVEDOptions: async (params) => {
+    const requestId = ++tnvedRequestId;
     set({ isTNVEDLoading: true, tnvedError: null });
     try {
       const response = await getTNVEDApi(params);
-      set({ tnvedOptions: response.data, isTNVEDLoading: false });
+      if (requestId !== tnvedRequestId) return;
+
+      console.log(response);
+      set({
+        tnvedOptions: response.data,
+        isTNVEDLoading: false,
+        tnvedCount: response.data.count,
+      });
     } catch (error) {
+      if (requestId !== tnvedRequestId) return;
       set({
         tnvedError: error.message || "Не удалось загрузить справочник ТН ВЭД",
         isTNVEDLoading: false,

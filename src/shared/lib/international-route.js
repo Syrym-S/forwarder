@@ -13,7 +13,7 @@ export function isInternationalRoute(form = {}) {
   const points = [
     form.from_location,
     ...(form.waypoints || []),
-    form.to_locatoni,
+    form.to_location,
   ];
 
   return points.some((point) => {

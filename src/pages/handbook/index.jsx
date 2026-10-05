@@ -1,10 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   Alert,
   Box,
   Button,
   LinearProgress,
   Paper,
+  Pagination,
   Table,
   TableBody,
   TableCell,
@@ -20,28 +21,46 @@ import RootLayout from "../../components/layout/root-layout";
 const Handbook = () => {
   const tnvedOptions = useOptionsStore((state) => state.tnvedOptions);
   const getLTNVEDOptions = useOptionsStore((state) => state.getLTNVEDOptions);
+  const tnvedCount = useOptionsStore((state) => state.tnvedCount);
   const isLoading = useOptionsStore((state) => state.isTNVEDLoading);
   const error = useOptionsStore((state) => state.tnvedError);
   const [search, setSearch] = useState("");
-  const [query, setQuery] = useState("");
-  const [page, setPage] = useState(1);
-
-  const items = Array.isArray(tnvedOptions)
-    ? tnvedOptions
-    : (tnvedOptions?.results ??
-      tnvedOptions?.items ??
-      tnvedOptions?.data ??
-      []);
-  const rows = flattenRows(Array.isArray(items) ? items : [], query);
-  const total = rows.length;
-  const totalPages = Math.max(1, Math.ceil(total / 100));
-  const currentPage = Math.min(page, totalPages);
-  const visibleRows = rows.slice((currentPage - 1) * 100, currentPage * 100);
-  const hasNextPage = currentPage < totalPages;
+  const [request, setRequest] = useState(null);
+  const { query = "", page = 1 } = request ?? {};
+  const pendingSearch = search.trim() !== query;
 
   useEffect(() => {
-    getLTNVEDOptions();
-  }, [getLTNVEDOptions]);
+    const timeout = setTimeout(() => {
+      setRequest((previous) =>
+        search.trim() === (previous?.query ?? "")
+          ? previous
+          : search.trim() ? { query: search.trim(), page: 1 } : null,
+      );
+    }, 400);
+    return () => clearTimeout(timeout);
+  }, [search]);
+
+  const rows = useMemo(() => {
+    const items = Array.isArray(tnvedOptions)
+      ? tnvedOptions
+      : (tnvedOptions?.results ??
+        tnvedOptions?.items ??
+        tnvedOptions?.data ??
+        []);
+    return flattenRows(Array.isArray(items) ? items : []);
+  }, [tnvedOptions]);
+  const perPage = Number(tnvedOptions?.per_page) || 100;
+  const totalPages = Math.max(1, Math.ceil(tnvedCount / perPage));
+  const currentPage = Math.min(page, totalPages);
+
+  useEffect(() => {
+    if (request === null) {
+      getLTNVEDOptions();
+      return;
+    }
+    getLTNVEDOptions({ page: request.page, q: request.query });
+  }, [request, getLTNVEDOptions]);
+
   return (
     <RootLayout withoutDataCheck>
       <Typography variant="h5" fontWeight={600} sx={{ mb: 2 }}>
@@ -51,8 +70,7 @@ const Handbook = () => {
         component="form"
         onSubmit={(event) => {
           event.preventDefault();
-          setPage(1);
-          setQuery(search.trim());
+          setRequest(search.trim() ? { query: search.trim(), page: 1 } : null);
         }}
         sx={{ display: "flex", gap: 1, mb: 2, flexWrap: "wrap" }}
       >
@@ -60,7 +78,11 @@ const Handbook = () => {
           label="Код или наименование"
           size="small"
           value={search}
-          onChange={(event) => setSearch(event.target.value)}
+          onChange={(event) => {
+            const value = event.target.value;
+            setSearch(value);
+            if (!value.trim()) setRequest(null);
+          }}
           sx={{ flex: 1, minWidth: 220 }}
         />
         <Button type="submit" variant="contained" disabled={isLoading}>
@@ -70,8 +92,7 @@ const Handbook = () => {
           disabled={isLoading || (!search && !query)}
           onClick={() => {
             setSearch("");
-            setQuery("");
-            setPage(1);
+            setRequest(null);
           }}
         >
           Сбросить
@@ -82,12 +103,7 @@ const Handbook = () => {
           {error}
         </Alert>
       )}
-      {!error && !isLoading && (
-        <Typography variant="body2" sx={{ mb: 2, color: "#00366a" }}>
-          Найдено записей: {total ?? rows.length}. Родительские группы
-          отображаются перед дочерними записями.
-        </Typography>
-      )}
+
       <TableContainer
         component={Paper}
         aria-busy={isLoading}
@@ -128,7 +144,7 @@ const Handbook = () => {
               </TableRow>
             )}
             {!error &&
-              visibleRows.map((row) => (
+              rows.map((row) => (
                 <TableRow
                   key={row.key}
                   hover
@@ -164,49 +180,48 @@ const Handbook = () => {
           </TableBody>
         </Table>
       </TableContainer>
-      <Box
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          gap: 2,
-          mt: 2,
-          flexWrap: "wrap",
-        }}
-      >
-        <Button
-          disabled={isLoading || currentPage === 1}
-          onClick={() => setPage(currentPage - 1)}
-        >
-          Назад
-        </Button>
-        <Typography variant="body2">
-          Страница {currentPage}
-          {totalPages > 0 ? ` из ${totalPages}` : ""} · По 100 записей
-        </Typography>
-        <Button
-          disabled={isLoading || !!error || !hasNextPage}
-          onClick={() => setPage(currentPage + 1)}
-        >
-          Далее
-        </Button>
-      </Box>
+      {!error && tnvedCount > 0 && (
+        <Pagination
+          shape="rounded"
+          page={currentPage}
+          count={totalPages}
+          disabled={isLoading || pendingSearch}
+          onChange={(_, nextPage) => setRequest({ query, page: nextPage })}
+          sx={{
+            width: "fit-content",
+            mx: "auto",
+            mt: 2,
+            "& .MuiPaginationItem-root": {
+              color: "#1F2937",
+              fontWeight: 500,
+            },
+            "& .MuiPaginationItem-root.Mui-selected": {
+              backgroundColor: "primary.main",
+              color: "#fff",
+              "&:hover": {
+                backgroundColor: "primary.main",
+              },
+            },
+          }}
+        />
+      )}
     </RootLayout>
   );
 };
 
 export default Handbook;
 
-function flattenRows(items, query = "", depth = 0, parentKey = "", parentMatches = false) {
-  const normalizedQuery = query.toLocaleLowerCase("ru");
+function flattenRows(items, depth = 0, parentKey = "") {
   return items.flatMap((item, index) => {
     const key = `${parentKey}/${item.id ?? item.code ?? index}-${index}`;
-    const children = ["groups", "positions", "subpositions", "codes", "children"]
-      .flatMap((field) => Array.isArray(item[field]) ? item[field] : []);
-    const matches = parentMatches || !normalizedQuery ||
-      String(item.code ?? "").toLocaleLowerCase("ru").includes(normalizedQuery) ||
-      String(item.name ?? "").toLocaleLowerCase("ru").includes(normalizedQuery);
-    const childRows = flattenRows(children, query, depth + 1, key, matches);
-    if (!matches && childRows.length === 0) return [];
+    const children = [
+      "groups",
+      "positions",
+      "subpositions",
+      "codes",
+      "children",
+    ].flatMap((field) => (Array.isArray(item[field]) ? item[field] : []));
+    const childRows = flattenRows(children, depth + 1, key);
 
     return [
       {

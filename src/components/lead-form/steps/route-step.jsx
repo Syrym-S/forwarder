@@ -19,6 +19,8 @@ import { useRouteMapPicker } from "../use-route-map-picker";
 import { STATUS } from "../../../shared/const/tenders";
 import { useLeadsStore } from "../../../app/store/leads/leads-store";
 import PrimaryButton from "../../../shared/ui/button/primary-button";
+import { isInternationalRoute } from "../../../shared/lib/international-route";
+import { useEffect } from "react";
 
 const waypointTypes = [
   { id: 1, value: "check_passes", label: "Транзит" },
@@ -28,6 +30,13 @@ const waypointTypes = [
 
 const RouteStep = ({ control, form, setValue, isEdit = false }) => {
   const currentLead = useLeadsStore((state) => state.currentLead);
+  const isInternational = isInternationalRoute(form);
+
+  useEffect(() => {
+    if (form.is_international !== isInternational) {
+      setValue("is_international", isInternational, { shouldValidate: true });
+    }
+  }, [form.is_international, isInternational, setValue]);
 
   const { fields, append, remove } = useFieldArray({
     control,
@@ -264,8 +273,6 @@ const RouteStep = ({ control, form, setValue, isEdit = false }) => {
         />
       </Box>
 
-      {/* ================= LOCK MESSAGE ================= */}
-
       {currentLead && !canEditStatus && (
         <Box
           sx={{
@@ -295,8 +302,6 @@ const RouteStep = ({ control, form, setValue, isEdit = false }) => {
           gap: 2,
         }}
       >
-        {/* ================= FROM ================= */}
-
         <Box
           sx={{
             display: "grid",
@@ -330,8 +335,6 @@ const RouteStep = ({ control, form, setValue, isEdit = false }) => {
             }}
           />
 
-          {/* FROM START */}
-
           <FormControllerInput
             name="point_schedules[0].start_at"
             control={control}
@@ -353,8 +356,6 @@ const RouteStep = ({ control, form, setValue, isEdit = false }) => {
               },
             }}
           />
-
-          {/* FROM END */}
 
           <FormControllerInput
             name="point_schedules[0].end_at"
@@ -378,8 +379,6 @@ const RouteStep = ({ control, form, setValue, isEdit = false }) => {
             }}
           />
         </Box>
-
-        {/* ================= WAYPOINTS ================= */}
 
         {fields.length > 0 && (
           <Box
@@ -509,8 +508,6 @@ const RouteStep = ({ control, form, setValue, isEdit = false }) => {
           </Box>
         )}
 
-        {/* ================= TO ================= */}
-
         <Box
           sx={{
             display: "grid",
@@ -598,8 +595,6 @@ const RouteStep = ({ control, form, setValue, isEdit = false }) => {
         </Box>
       </Box>
 
-      {/* ================= ERROR SNACKBAR ================= */}
-
       <Snackbar
         open={hasFromCityError || hasToCityError || hasCrossPointCityError}
         autoHideDuration={1000}
@@ -612,6 +607,46 @@ const RouteStep = ({ control, form, setValue, isEdit = false }) => {
           Неправильные параметры города. Попытайтесь выбрать другую точку
         </Alert>
       </Snackbar>
+
+      <Box
+        sx={{
+          mt: 2,
+          p: 2,
+          border: "1px solid",
+          borderColor: "divider",
+          borderRadius: 2,
+        }}
+      >
+        <Controller
+          name="is_international"
+          control={control}
+          defaultValue={false}
+          render={({ field }) => (
+            <FormControlLabel
+              control={
+                <Checkbox
+                  name={field.name}
+                  checked={isInternational}
+                  onBlur={field.onBlur}
+                  inputRef={field.ref}
+                  disabled
+                />
+              }
+              label="Перевозка является международной"
+            />
+          )}
+        />
+        <Typography variant="body2" color="text.secondary">
+          Определяется автоматически по странам точек маршрута. Для международной
+          перевозки обязательно нужно добавить код TNVED.
+        </Typography>
+        {form.pass_verify === true && !isEdit && (
+          <Alert severity="warning" sx={{ mt: 1.5, borderRadius: 2 }}>
+            После создания лида изменить эту настройку будет нельзя. Пропуск
+            подтверждения файлов погрузки/разгрузки останется включённым.
+          </Alert>
+        )}
+      </Box>
       <Box
         sx={{
           mt: 2,
