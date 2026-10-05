@@ -13,11 +13,13 @@ export function isInternationalRoute(form = {}) {
   const points = [
     form.from_location,
     ...(form.waypoints || []),
-    form.to_location,
+    form.to_locatoni,
   ];
 
   return points.some((point) => {
-    const country = String(point?.country ?? "").trim().toLowerCase();
+    const country = String(point?.country ?? "")
+      .trim()
+      .toLowerCase();
     return country !== "" && !kazakhstanNames.has(country);
   });
 }

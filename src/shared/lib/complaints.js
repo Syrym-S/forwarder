@@ -17,10 +17,20 @@ export function validateComplaint(request, files = []) {
 }
 
 export function getComplaintStatus(complaint) {
-  if (complaint.final_status === "completed") return { label: "Завершена", color: "success" };
-  if (complaint.final_status === "rejected") return { label: "Отклонена", color: "error" };
-  if (complaint.acceptance_at) return { label: "В работе", color: "info" };
+  if (complaint.final_status === "completed" || complaint.state === "completed") return { label: "Завершена", color: "success" };
+  if (complaint.final_status === "rejected" || complaint.state === "rejected") return { label: "Отклонена", color: "error" };
+  if (complaint.state === "in_work" || complaint.acceptance_at) return { label: "В работе", color: "info" };
   return { label: "Ожидает рассмотрения", color: "default" };
+}
+
+export function getComplaintTargetLabel(target) {
+  if (target.type === "factoring") {
+    return ["Факторинг", target.lead_num != null && `по перевозке №${target.lead_num}`,
+      target.factor, target.summ != null && `${Number(target.summ).toLocaleString("ru-RU")} ${target.currency || ""}`]
+      .filter(Boolean).join(" · ");
+  }
+  return [target.num != null ? `Перевозка №${target.num}` : "Перевозка",
+    [target.from_city, target.to_city].filter(Boolean).join(" → ")].filter(Boolean).join(" · ");
 }
 
 export function complaintsSince(now = new Date()) {
