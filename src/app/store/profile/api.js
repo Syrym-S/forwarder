@@ -19,6 +19,16 @@ export async function editProfileApi(payload) {
   return response.data;
 }
 
+export async function deleteProfileApi(password) {
+  const response = await api.post(
+    "forwarder/profile/v1/delete",
+    { password },
+    { withCredentials: true },
+  );
+
+  return response.data;
+}
+
 export async function uploadAvatarApi(payload) {
   const formData = new FormData();
 

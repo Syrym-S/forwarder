@@ -1,5 +1,6 @@
 import RootLayout from "../../components/layout/root-layout";
 import EditProfileForm from "../../features/profile/edit-profile-data";
+import DeleteAccountBlock from "../../components/profile/delete-account-block";
 import PageLoader from "../../shared/ui/loaders/page-loader";
 import { useEffect } from "react";
 import { Box, Container, Paper, Stack, Typography } from "@mui/material";
@@ -57,6 +58,7 @@ const Profile = () => {
             />
           </Stack>
         </Paper>
+        <DeleteAccountBlock />
       </Container>
     </RootLayout>
   );
