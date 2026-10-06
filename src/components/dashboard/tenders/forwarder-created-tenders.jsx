@@ -2,9 +2,9 @@ import {
   Alert,
   Box,
   CircularProgress,
+  FormControlLabel,
   Paper,
   Switch,
-  Tooltip,
   Typography,
 } from "@mui/material";
 import { useEffect, useState } from "react";
@@ -22,7 +22,7 @@ const ForwarderCreatedTenders = () => {
     setChecked(event.target.checked);
   };
 
-  const pulicTenders = tenders.filter(
+  const publicTenders = tenders.filter(
     (tender) => tender.publication_type === "public",
   );
 
@@ -30,8 +30,8 @@ const ForwarderCreatedTenders = () => {
     (tender) => tender.publication_type === "private",
   );
 
-  const isTendersEmpty = tenders.length === 0;
-  const isPulicTendersEmpty = pulicTenders.length === 0;
+  const isPrivateTendersEmpty = privateTenders.length === 0;
+  const isPublicTendersEmpty = publicTenders.length === 0;
 
   useEffect(() => {
     getTenders();
@@ -57,6 +57,7 @@ const ForwarderCreatedTenders = () => {
 
   return (
     <Paper
+      className="dashboard-tenders-scroll"
       elevation={0}
       variant="outlined"
       sx={{
@@ -99,27 +100,23 @@ const ForwarderCreatedTenders = () => {
           Аукционы для водителей
         </Typography>
 
-        <Tooltip
-          title={
-            checked ? "Показать только публичные" : "Показать только приватные"
+        <FormControlLabel
+          sx={{ m: 0, gap: 0.5 }}
+          label={checked ? "Публичные аукционы" : "Приватные аукцоны"}
+          slotProps={{ typography: { fontSize: 13, color: "text.secondary" } }}
+          control={
+            <Switch
+              checked={checked}
+              onChange={handleChange}
+              slotProps={{
+                input: { "aria-label": "???????? ????????? ????????" },
+              }}
+            />
           }
-        >
-          <Switch
-            onChange={handleChange}
-            sx={{
-              "& .MuiSwitch-switchBase.Mui-checked": {
-                color: "primary.main",
-              },
-
-              "& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track": {
-                color: "primary.main",
-              },
-            }}
-          />
-        </Tooltip>
+        />
       </Box>
 
-      {isTendersEmpty && checked && (
+      {isPrivateTendersEmpty && !checked && (
         <Box
           sx={{
             display: "grid",
@@ -140,7 +137,7 @@ const ForwarderCreatedTenders = () => {
         </Box>
       )}
 
-      {isPulicTendersEmpty && !checked && (
+      {isPublicTendersEmpty && checked && (
         <Box
           sx={{
             display: "grid",
@@ -163,7 +160,7 @@ const ForwarderCreatedTenders = () => {
 
       <Box sx={{ display: "grid", gridTemplateColumns: "1fr", gap: 2 }}>
         {checked
-          ? pulicTenders.map((tender) => (
+          ? publicTenders.map((tender) => (
               <ForwarderTenderItem key={tender.id} tender={tender} />
             ))
           : privateTenders.map((tender) => (

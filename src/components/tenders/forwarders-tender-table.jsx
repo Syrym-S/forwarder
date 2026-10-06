@@ -8,6 +8,7 @@ const ForwardersTenderTable = (tenders) => {
   return (
     <Paper sx={{ height: "70vh", my: "10px" }}>
       <DataGrid
+        hideFooter
         rows={tenders.tenders}
         getRowId={(row) => row.id}
         columns={columns}

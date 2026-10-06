@@ -37,7 +37,7 @@ const FactoringLineCard = ({ line }) => {
         width: "100%",
         border: "2px solid",
         borderColor: "divider",
-        borderRadius: 7,
+        borderRadius: 4,
         backgroundColor: "background.paper",
         boxShadow: "0 2px 8px rgba(0, 0, 0, 0.06)",
         transition: "0.2s ease",
@@ -100,8 +100,7 @@ const FactoringLineCard = ({ line }) => {
                   fontSize: "1.3rem",
                 }}
               >
-                {moneySpacingFormat(summ_current)}{" "}
-                {currency}
+                {moneySpacingFormat(summ_current)} {currency}
               </Typography>
             </Stack>
 
@@ -124,8 +123,7 @@ const FactoringLineCard = ({ line }) => {
                   fontSize: "1.3rem",
                 }}
               >
-                {moneySpacingFormat(Math.round(summ_free))}{" "}
-                {currency}
+                {moneySpacingFormat(Math.round(summ_free))} {currency}
               </Typography>
             </Stack>
           </Box>

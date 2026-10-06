@@ -1,4 +1,5 @@
-import Tooltip from "../../shared/ui/action-tooltip";
+import FormInput from "../../shared/ui/input/form-input";
+import PrimaryButton from "../../shared/ui/button/primary-button";
 import RootLayout from "../../components/layout/root-layout";
 import ApplicationsTenderCard from "../../components/tenders/applications-tender-card";
 import ViewTabs from "../../shared/ui/view-tabs";
@@ -6,14 +7,7 @@ import ApplicationsTenderTable from "../../components/tenders/applications-tende
 import HistoryOutlined from "@mui/icons-material/HistoryOutlined";
 import DataContainer from "../../shared/ui/data-container";
 import { useEffect, useState } from "react";
-import {
-  Alert,
-  Box,
-  IconButton,
-  Pagination,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Alert, Box, Pagination, Typography } from "@mui/material";
 import { useTendersStore } from "../../app/store/tenders/tender-store";
 import { VIEWS } from "../../shared/const/leads";
 import { useNotificationsStore } from "../../app/store/notifications/noti-store";
@@ -27,10 +21,9 @@ const TenderApplications = () => {
   const [inputValue, setInputValue] = useState("");
 
   const navigate = useNavigate();
+  const [refresh, setRefresh] = useState(0);
 
-  const newNotification = useNotificationsStore(
-    (state) => state.newNotification,
-  );
+
   const customerTenders = useTendersStore((state) => state.customerTenders);
   const clearCurrentTender = useTendersStore(
     (state) => state.clearCurrentTender,
@@ -46,29 +39,29 @@ const TenderApplications = () => {
   const PAGE_COUNT = Math.ceil(customerCount / customerPerPage);
   const isCardsView = view === VIEWS.cards;
 
-  const { notification_type } = parserNotificationType(
-    newNotification?.type || "",
-  );
+
 
   const handlePageChange = (_, value) => {
     setPage(value);
   };
 
-  useEffect(() => {
-    getCustomerTenders({
-      page: page,
-    });
-  }, [page]);
+
 
   useEffect(() => {
     clearCurrentTender();
-  }, []);
+  }, [clearCurrentTender]);
 
   useEffect(() => {
-    if (notification_type === NOTIFICATION_TYPE.tender) {
-      getCustomerTenders();
-    }
-  }, [newNotification]);
+    return useNotificationsStore.subscribe((state, previous) => {
+      if (state.newNotification === previous.newNotification) return;
+      const { notification_type } = parserNotificationType(
+        state.newNotification?.type || "",
+      );
+      if (notification_type === NOTIFICATION_TYPE.tender) {
+        setRefresh((value) => value + 1);
+      }
+    });
+  }, []);
 
   const isTenderEmpty = customerTenders.length === 0;
 
@@ -77,22 +70,15 @@ const TenderApplications = () => {
   };
 
   useEffect(() => {
-    const value = inputValue?.trim();
+    const value = inputValue.trim();
+    if (value && value.length < 2) return;
 
     const timer = setTimeout(() => {
-      if (!value) {
-        getCustomerTenders();
-
-        return;
-      }
-
-      if (value.length >= 2) {
-        getCustomerTenders({ q: value });
-      }
-    }, 1000);
+      getCustomerTenders({ page, ...(value ? { q: value } : {}) });
+    }, value ? 1000 : 0);
 
     return () => clearTimeout(timer);
-  }, [inputValue]);
+  }, [page, inputValue, getCustomerTenders, refresh]);
 
   return (
     <RootLayout withoutDataCheck>
@@ -117,6 +103,9 @@ const TenderApplications = () => {
           mb: 1,
           mx: "auto",
           display: "flex",
+          alignItems: "center",
+          flexWrap: { xs: "wrap", sm: "nowrap" },
+          gap: 2,
           justifyContent: "space-between",
           width: {
             xs: "100%",
@@ -124,33 +113,49 @@ const TenderApplications = () => {
           },
         }}
       >
-        <ViewTabs view={view} setView={setView} withoutKanban withoutDataAdd />
+        <ViewTabs
+          view={view}
+          setView={setView}
+          withoutKanban
+          withoutDataAdd
+          sx={{ width: { xs: "100%", sm: "auto" }, flex: { sm: 1 }, minWidth: 0, mx: 0, gap: 2 }}
+        />
 
-        <TextField
+        <PrimaryButton
+          text="История участия"
+          aria-label="История участия в аукционах"
+          variant="outlined"
+          size="medium"
+          startIcon={<HistoryOutlined />}
+          onClick={handleNavigateToTenderHistory}
+          sx={{
+            minHeight: 40,
+            px: 2,
+            fontWeight: 500,
+            flexShrink: 0,
+            width: { xs: "100%", sm: "auto" },
+          }}
+        />
+
+        <FormInput
           onChange={(e) => {
             setInputValue(e.target.value);
+            setPage(1);
           }}
           label="Поиск аукциона"
           fullWidth
           size="small"
           sx={{
-            display: "block",
+            width: { xs: "100%", sm: 300 },
+            maxWidth: { sm: 300 },
+            minWidth: 0,
+            flexShrink: 1,
+            ml: { sm: "auto" },
             my: 1,
-            mx: 2,
-            width: {
-              xs: "100%",
-              sm: "300px",
-            },
-            borderRadius: "50px",
-            zIndex: 0,
           }}
         />
 
-        <Tooltip title="История участия в аукционах">
-          <IconButton  aria-label="История участия в аукционах" onClick={handleNavigateToTenderHistory}>
-            <HistoryOutlined />
-          </IconButton>
-        </Tooltip>
+
       </Box>
 
       <DataContainer isLoading={isLoading}>

@@ -8,6 +8,7 @@ const FactorLineTable = (factorLine) => {
   return (
     <Paper sx={{ my: "10px" }}>
       <DataGrid
+        hideFooter
         rows={factorLine.factorLine}
         getRowId={(row) => row.id}
         columns={columns}

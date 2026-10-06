@@ -1,6 +1,6 @@
 import { TextField } from "@mui/material";
 
-const FormInput = ({ field, slotProps, ...props }) => {
+const FormInput = ({ field, slotProps, sx, ...props }) => {
   return (
     <TextField
       {...field}
@@ -12,11 +12,14 @@ const FormInput = ({ field, slotProps, ...props }) => {
           ...slotProps?.inputLabel,
         },
       }}
-      sx={{
-        "& .MuiOutlinedInput-root": {
-          borderRadius: 2,
+      sx={[
+        {
+          "& .MuiOutlinedInput-root": {
+            borderRadius: 2,
+          },
         },
-      }}
+        ...(Array.isArray(sx) ? sx : sx ? [sx] : []),
+      ]}
     />
   );
 };

@@ -14,6 +14,7 @@ const ViewTabs = ({
   withoutDataAdd = false,
   isLeadsEmpty,
   buttonText = "Добавить",
+  sx = {},
 }) => {
   const isCardsView = view === VIEWS.cards;
 
@@ -28,6 +29,7 @@ const ViewTabs = ({
           xs: "100%",
           sm: isCardsView ? "60%" : "100%",
         },
+        ...sx,
       }}
     >
       {!isLeadsEmpty && (

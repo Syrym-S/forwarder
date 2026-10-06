@@ -1,13 +1,8 @@
-import Tooltip from "../../shared/ui/action-tooltip";
+import PrimaryButton from "../../shared/ui/button/primary-button";
 import { useEffect, useState } from "react";
 import RootLayout from "../../components/layout/root-layout";
-import {
-  Alert,
-  Box,
-  IconButton,
-  Pagination,
-  TextField,
-} from "@mui/material";
+import FormInput from "../../shared/ui/input/form-input";
+import { Alert, Box, Pagination, Typography } from "@mui/material";
 import { useTendersStore } from "../../app/store/tenders/tender-store";
 import { VIEWS } from "../../shared/const/leads";
 import ApplicationsTenderCard from "../../components/tenders/applications-tender-card";
@@ -26,10 +21,9 @@ const TenderHistory = () => {
   const [inputValue, setInputValue] = useState("");
 
   const navigate = useNavigate();
+  const [refresh, setRefresh] = useState(0);
 
-  const newNotification = useNotificationsStore(
-    (state) => state.newNotification,
-  );
+
   const tendersHistory = useTendersStore((state) => state.tendersHistory);
   const clearCurrentTender = useTendersStore(
     (state) => state.clearCurrentTender,
@@ -42,9 +36,7 @@ const TenderHistory = () => {
   const PAGE_COUNT = Math.ceil(historyCount / historyPerPage);
   const isCardsView = view === VIEWS.cards;
 
-  const { notification_type } = parserNotificationType(
-    newNotification?.type || "",
-  );
+
 
   const handleNavigateToTenders = () => {
     navigate("/tender-applications");
@@ -54,48 +46,62 @@ const TenderHistory = () => {
     setPage(value);
   };
 
-  useEffect(() => {
-    getTendersHistory({
-      page: page,
-    });
-  }, [page]);
+
 
   useEffect(() => {
     clearCurrentTender();
-  }, []);
+  }, [clearCurrentTender]);
 
   useEffect(() => {
-    if (notification_type === NOTIFICATION_TYPE.tender) {
-      getTendersHistory();
-    }
-  }, [newNotification]);
+    return useNotificationsStore.subscribe((state, previous) => {
+      if (state.newNotification === previous.newNotification) return;
+      const { notification_type } = parserNotificationType(
+        state.newNotification?.type || "",
+      );
+      if (notification_type === NOTIFICATION_TYPE.tender) {
+        setRefresh((value) => value + 1);
+      }
+    });
+  }, []);
 
   const isTenderEmplty = tendersHistory.length === 0;
 
   useEffect(() => {
-    const value = inputValue?.trim();
+    const value = inputValue.trim();
+    if (value && value.length < 2) return;
 
     const timer = setTimeout(() => {
-      if (!value) {
-        getTendersHistory();
-
-        return;
-      }
-
-      if (value.length >= 2) {
-        getTendersHistory({ q: value });
-      }
-    }, 1000);
+      getTendersHistory({ page, ...(value ? { q: value } : {}) });
+    }, value ? 1000 : 0);
 
     return () => clearTimeout(timer);
-  }, [inputValue]);
+  }, [page, inputValue, getTendersHistory, refresh]);
 
   return (
     <RootLayout withoutDataCheck>
+      <Box>
+        <Typography
+          sx={{
+            fontWeight: 600,
+            fontSize: "1.5rem",
+            сolor: "font_color.heading",
+          }}
+        >
+          История аукционов
+        </Typography>
+
+        <Typography color="text.secondary" fontSize={14}>
+          История участия в аукционах созданных заказчиками
+        </Typography>
+      </Box>
+
       <Box
         sx={{
           mb: 1,
           display: "flex",
+          alignItems: "center",
+          flexWrap: { xs: "wrap", sm: "nowrap" },
+          gap: 2,
           justifyContent: "space-between",
           mx: "auto",
           width: {
@@ -104,36 +110,53 @@ const TenderHistory = () => {
           },
         }}
       >
-        <ViewTabs view={view} setView={setView} withoutDataAdd withoutKanban />
+        <ViewTabs
+          view={view}
+          setView={setView}
+          withoutDataAdd
+          withoutKanban
+          sx={{
+            width: { xs: "100%", sm: "auto" },
+            flex: { sm: 1 },
+            minWidth: 0,
+            mx: 0,
+            gap: 2,
+          }}
+        />
 
-        <TextField
+        <PrimaryButton
+          text="Активные аукционы"
+          aria-label="Перейти к активным аукционам"
+          variant="outlined"
+          size="medium"
+          startIcon={<ContentPasteOutlinedIcon />}
+          onClick={handleNavigateToTenders}
+          sx={{
+            minHeight: 40,
+            px: 2,
+            fontWeight: 500,
+            flexShrink: 0,
+            width: { xs: "100%", sm: "auto" },
+          }}
+        />
+
+        <FormInput
           onChange={(e) => {
             setInputValue(e.target.value);
+            setPage(1);
           }}
           label="Поиск аукциона"
           fullWidth
           size="small"
           sx={{
-            display: "block",
+            width: { xs: "100%", sm: 300 },
+            maxWidth: { sm: 300 },
+            minWidth: 0,
+            flexShrink: 1,
+            ml: { sm: "auto" },
             my: 1,
-            mx: 2,
-            width: {
-              xs: "100%",
-              sm: "300px",
-            },
-            borderRadius: "50px",
-            zIndex: 0,
           }}
         />
-
-        <Tooltip
-          title="Cписок активных аукционов"
-          onClick={handleNavigateToTenders}
-        >
-          <IconButton  aria-label="Cписок активных аукционов">
-            <ContentPasteOutlinedIcon />
-          </IconButton>
-        </Tooltip>
       </Box>
 
       <DataContainer isLoading={isLoading}>

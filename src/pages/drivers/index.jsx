@@ -5,7 +5,8 @@ import DriverListContainer from "../../components/drivers/driver-list-container"
 import SavedDataModal from "../../components/drivers/saved-data-modal";
 import { useEffect, useState } from "react";
 import { useDriverStore } from "../../app/store/drivers/driver-store";
-import { Box, TextField, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
+import FormInput from "../../shared/ui/input/form-input";
 import { VIEWS } from "../../shared/const/leads";
 
 const Drivers = () => {
@@ -74,16 +75,18 @@ const Drivers = () => {
       <Box
         sx={{
           mx: "auto",
+          my: 1,
           width: {
             xs: "100%",
             sm: isCardsView ? "60%" : "100%",
           },
           display: "flex",
+          alignItems: "center",
           flexDirection: {
             xs: "column",
             sm: "row",
           },
-          gap: 3,
+          gap: 1,
           justifyContent: "space-between",
         }}
       >
@@ -93,8 +96,10 @@ const Drivers = () => {
           setView={setView}
           handleOpenForm={handleOpenForm}
           buttonText="Пригласить водителя"
+          sx={{ width: { xs: "100%", sm: "auto" }, flex: { sm: 1 }, minWidth: 0, mx: 0, gap: 2 }}
         />
-        <TextField
+
+        <FormInput
           onChange={(e) => {
             setInputValue(e.target.value);
           }}
@@ -102,14 +107,12 @@ const Drivers = () => {
           fullWidth
           size="small"
           sx={{
-            display: "block",
+            width: { xs: "100%", sm: 300 },
+            maxWidth: { sm: 300 },
+            minWidth: 0,
+            flexShrink: 1,
+            ml: { sm: "auto" },
             my: 1,
-            width: {
-              xs: "100%",
-              sm: "300px",
-            },
-            borderRadius: "50px",
-            zIndex: 0,
           }}
         />
       </Box>

@@ -6,7 +6,8 @@ import ForwardersTenderTable from "../../components/tenders/forwarders-tender-ta
 import EmptyListUi from "../../shared/ui/common/empty-list-ui";
 import DataContainer from "../../shared/ui/data-container";
 import { useEffect, useState } from "react";
-import { Box, Pagination, TextField, Typography } from "@mui/material";
+import { Box, Pagination, Typography } from "@mui/material";
+import FormInput from "../../shared/ui/input/form-input";
 import { useTendersStore } from "../../app/store/tenders/tender-store";
 import { VIEWS } from "../../shared/const/leads";
 
@@ -50,33 +51,22 @@ const TenderForwarders = () => {
     setOpenForm(false);
   };
 
-  useEffect(() => {
-    getTenders({
-      page: page,
-    });
-  }, [page]);
+
 
   useEffect(() => {
     clearCurrentTender();
-  }, []);
+  }, [clearCurrentTender]);
 
   useEffect(() => {
-    const value = inputValue?.trim();
+    const value = inputValue.trim();
+    if (value && value.length < 2) return;
 
     const timer = setTimeout(() => {
-      if (!value) {
-        getTenders();
-
-        return;
-      }
-
-      if (value.length >= 2) {
-        getTenders({ q: value });
-      }
-    }, 1000);
+      getTenders({ page, ...(value ? { q: value } : {}) });
+    }, value ? 1000 : 0);
 
     return () => clearTimeout(timer);
-  }, [inputValue]);
+  }, [page, inputValue, getTenders]);
 
   return (
     <RootLayout withoutDataCheck>
@@ -101,6 +91,7 @@ const TenderForwarders = () => {
           sx={{
             mx: "auto",
             display: "flex",
+            alignItems: "center",
             gap: 1,
             width: {
               xs: "100%",
@@ -113,26 +104,26 @@ const TenderForwarders = () => {
             setView={setView}
             withoutKanban
             handleOpenForm={handleOpenForm}
-          />
+          sx={{ width: { xs: "100%", sm: "auto" }, flex: { sm: 1 }, minWidth: 0, mx: 0, gap: 2 }}
+        />
 
-          <TextField
+          <FormInput
             onChange={(e) => {
               setInputValue(e.target.value);
+              setPage(1);
             }}
             label="Поиск аукциона"
             fullWidth
             size="small"
-            sx={{
-              display: "block",
-              my: 1,
-              width: {
-                xs: "100%",
-                sm: "300px",
-              },
-              borderRadius: "50px",
-              zIndex: 0,
-            }}
-          />
+          sx={{
+            width: { xs: "100%", sm: 300 },
+            maxWidth: { sm: 300 },
+            minWidth: 0,
+            flexShrink: 1,
+            ml: { sm: "auto" },
+            my: 1,
+          }}
+        />
         </Box>
 
         {openForm && (

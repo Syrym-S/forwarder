@@ -1,10 +1,11 @@
 import CustomSelect from "../../shared/ui/input/custom-select";
+import FormInput from "../../shared/ui/input/form-input";
 import RootLayout from "../../components/layout/root-layout";
 import AddLeadForm from "../../features/leads/add-lead-form";
 import ViewTabs from "../../shared/ui/view-tabs";
 import LeadListContainer from "../../components/leads/lead-list-container";
 import { useEffect, useState } from "react";
-import { Alert, Box, TextField, Typography } from "@mui/material";
+import { Alert, Box, Typography } from "@mui/material";
 import { VIEWS } from "../../shared/const/leads";
 import { useFormDefaultValues } from "../../shared/hooks/leads/use-form-default-values";
 import { useLeadsStore } from "../../app/store/leads/leads-store";
@@ -63,13 +64,16 @@ const ActiveLeads = () => {
   }, [newNotification, notification_type, fetchLeads]);
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      fetchLeads({
-        page,
-        ...(showDrafts ? { is_draft: 1 } : { status: filterStatus?.value }),
-        ...(search.trim() ? { q: search.trim() } : {}),
-      });
-    }, search.trim() ? 300 : 0);
+    const timer = setTimeout(
+      () => {
+        fetchLeads({
+          page,
+          ...(showDrafts ? { is_draft: 1 } : { status: filterStatus?.value }),
+          ...(search.trim() ? { q: search.trim() } : {}),
+        });
+      },
+      search.trim() ? 300 : 0,
+    );
     return () => clearTimeout(timer);
   }, [page, filterStatus, showDrafts, search, fetchLeads]);
 
@@ -92,20 +96,11 @@ const ActiveLeads = () => {
       </Box>
       {showDrafts && (
         <Alert severity="warning" sx={{ my: 1 }}>
-          Здесь ваши неопубликованные перевозки. Откройте черновик, чтобы продолжить редактирование и опубликовать его.
+          Здесь ваши неопубликованные перевозки. Откройте черновик, чтобы
+          продолжить редактирование и опубликовать его.
         </Alert>
       )}
-      <TextField
-        label={showDrafts ? "Поиск черновиков" : "Поиск перевозок"}
-        value={search}
-        onChange={(event) => {
-          setSearch(event.target.value);
-          setPage(1);
-        }}
-        size="small"
-        fullWidth
-        sx={{ my: 2 }}
-      />
+
       {error && <Alert severity="error">{error}</Alert>}
       <Box
         sx={{
@@ -134,18 +129,13 @@ const ActiveLeads = () => {
         <CustomSelect
           id="active-lead-status"
           label="Статус"
-          options={[
-            { value: "", label: "Все статусы" },
-            ...STATUS_OPTIONS,
-          ]}
+          options={[{ value: "", label: "Все статусы" }, ...STATUS_OPTIONS]}
           value={filterStatus?.value ?? ""}
           onChange={(event) => {
             const value = event.target.value;
 
             const selected =
-              STATUS_OPTIONS.find(
-                (option) => option.value === value,
-              ) ?? null;
+              STATUS_OPTIONS.find((option) => option.value === value) ?? null;
 
             setFilterStatus(selected);
             setPage(1);
@@ -155,6 +145,25 @@ const ActiveLeads = () => {
             select: {
               MenuProps: { slotProps: { paper: { sx: { maxHeight: 430 } } } },
             },
+          }}
+        />
+
+        <FormInput
+          label={showDrafts ? "Поиск черновиков" : "Поиск перевозок"}
+          value={search}
+          onChange={(event) => {
+            setSearch(event.target.value);
+            setPage(1);
+          }}
+          size="small"
+          fullWidth
+          sx={{
+            width: { xs: "100%", sm: 300 },
+            maxWidth: { sm: 300 },
+            minWidth: 0,
+            flexShrink: 1,
+            ml: { sm: "auto" },
+            my: 1,
           }}
         />
       </Box>

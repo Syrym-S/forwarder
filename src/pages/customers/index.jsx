@@ -3,7 +3,8 @@ import ViewTabs from "../../shared/ui/view-tabs";
 import AddCustomerForm from "../../features/customer/add-customer-form";
 import InviteLinkModal from "../../components/customers/invite-link-modal";
 import CustomerListContainer from "../../components/customers/customer-list-container";
-import { Box, TextField, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
+import FormInput from "../../shared/ui/input/form-input";
 import { useEffect, useState } from "react";
 import { useCustomerStore } from "../../app/store/customers/customers-store";
 import { VIEWS } from "../../shared/const/leads";
@@ -77,11 +78,12 @@ const Customers = () => {
             sm: isCardsView ? "60%" : "100%",
           },
           display: "flex",
+          alignItems: "center",
           flexDirection: {
             xs: "column",
             sm: "row",
           },
-          gap: 3,
+          gap: 1,
           justifyContent: "space-between",
         }}
       >
@@ -91,6 +93,7 @@ const Customers = () => {
           setView={setView}
           handleOpenForm={handleOpenForm}
           buttonText="Пригласить заказчика"
+          sx={{ width: { xs: "100%", sm: "auto" }, flex: { sm: 1 }, minWidth: 0, mx: 0, gap: 2 }}
         />
 
         {open && <AddCustomerForm open={open} handleClose={handleCloseForm} />}
@@ -102,7 +105,7 @@ const Customers = () => {
           />
         )}
 
-        <TextField
+        <FormInput
           onChange={(e) => {
             setInputValue(e.target.value);
           }}
@@ -110,14 +113,12 @@ const Customers = () => {
           fullWidth
           size="small"
           sx={{
-            display: "block",
+            width: { xs: "100%", sm: 300 },
+            maxWidth: { sm: 300 },
+            minWidth: 0,
+            flexShrink: 1,
+            ml: { sm: "auto" },
             my: 1,
-            width: {
-              xs: "100%",
-              sm: "300px",
-            },
-            borderRadius: "50px",
-            zIndex: 0,
           }}
         />
       </Box>

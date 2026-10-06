@@ -21,7 +21,7 @@ const FactoringCard = ({ factoring }) => {
         p: 3,
         border: "2px solid",
         borderColor: "divider",
-        borderRadius: 7,
+        borderRadius: 4,
         backgroundColor: "background.paper",
         boxShadow: "0 2px 8px rgba(0, 0, 0, 0.06)",
         transition: "0.2s ease",

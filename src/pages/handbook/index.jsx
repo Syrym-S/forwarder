@@ -2,7 +2,6 @@ import { useEffect, useMemo, useState } from "react";
 import {
   Alert,
   Box,
-  Button,
   LinearProgress,
   Paper,
   Pagination,
@@ -12,11 +11,12 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  TextField,
   Typography,
 } from "@mui/material";
 import { useOptionsStore } from "../../app/store/options";
 import RootLayout from "../../components/layout/root-layout";
+import FormInput from "../../shared/ui/input/form-input";
+import PrimaryButton from "../../shared/ui/button/primary-button";
 
 const Handbook = () => {
   const tnvedOptions = useOptionsStore((state) => state.tnvedOptions);
@@ -34,7 +34,9 @@ const Handbook = () => {
       setRequest((previous) =>
         search.trim() === (previous?.query ?? "")
           ? previous
-          : search.trim() ? { query: search.trim(), page: 1 } : null,
+          : search.trim()
+            ? { query: search.trim(), page: 1 }
+            : null,
       );
     }, 400);
     return () => clearTimeout(timeout);
@@ -63,9 +65,17 @@ const Handbook = () => {
 
   return (
     <RootLayout withoutDataCheck>
-      <Typography variant="h5" fontWeight={600} sx={{ mb: 2 }}>
-        Справочник ТН ВЭД
+      <Typography
+        sx={{
+          fontWeight: 600,
+          fontSize: "1.5rem",
+          сolor: "font_color.heading",
+          mb: 2,
+        }}
+      >
+        Справочник ТНВЭД
       </Typography>
+
       <Box
         component="form"
         onSubmit={(event) => {
@@ -74,29 +84,36 @@ const Handbook = () => {
         }}
         sx={{ display: "flex", gap: 1, mb: 2, flexWrap: "wrap" }}
       >
-        <TextField
-          label="Код или наименование"
+        <Box sx={{ flex: 1, minWidth: 220 }}>
+          <FormInput
+            label="Код или наименование"
+            size="small"
+            value={search}
+            onChange={(event) => {
+              const value = event.target.value;
+              setSearch(value);
+              if (!value.trim()) setRequest(null);
+            }}
+            fullWidth
+          />
+        </Box>
+        <PrimaryButton
+          type="submit"
           size="small"
-          value={search}
-          onChange={(event) => {
-            const value = event.target.value;
-            setSearch(value);
-            if (!value.trim()) setRequest(null);
-          }}
-          sx={{ flex: 1, minWidth: 220 }}
+          disabled={isLoading}
+          text="Найти"
         />
-        <Button type="submit" variant="contained" disabled={isLoading}>
-          Найти
-        </Button>
-        <Button
+        <PrimaryButton
+          type="button"
+          size="small"
+          variant="text"
+          text="Сбросить"
           disabled={isLoading || (!search && !query)}
           onClick={() => {
             setSearch("");
             setRequest(null);
           }}
-        >
-          Сбросить
-        </Button>
+        />
       </Box>
       {error && (
         <Alert severity="error" sx={{ mb: 2 }}>
@@ -107,22 +124,33 @@ const Handbook = () => {
       <TableContainer
         component={Paper}
         aria-busy={isLoading}
-        sx={{ border: "1px solid #dce3ed", borderRadius: 2, boxShadow: "none" }}
+        sx={{ my: "10px" }}
       >
         {isLoading && <LinearProgress />}
         <Table
           aria-label="Справочник ТН ВЭД"
           sx={{
             "& .MuiTableCell-root": {
-              color: "#00366a",
-              borderColor: "#e3eaf3",
-              px: 2.5,
-              py: 2.5,
+              color: "text.primary",
+              borderColor: "divider",
+              fontSize: "0.875rem",
+              px: 1.25,
+              py: 1.5,
             },
             "& .MuiTableCell-head": {
-              bgcolor: "#f0f4f9",
-              color: "#61788f",
-              fontWeight: 600,
+              bgcolor: "background.paper",
+              fontWeight: 500,
+              height: 56,
+              py: 0,
+            },
+            "& .MuiTableBody-root .MuiTableRow-root:nth-of-type(even)": {
+              backgroundColor: "#f5f7fa",
+            },
+            "& .MuiTableBody-root .MuiTableRow-root:nth-of-type(odd)": {
+              backgroundColor: "#ffffff",
+            },
+            "& .MuiTableBody-root .MuiTableRow-root:hover": {
+              backgroundColor: "action.hover",
             },
             "& .MuiTableRow-root:last-child .MuiTableCell-body": {
               borderBottom: 0,
@@ -148,9 +176,6 @@ const Handbook = () => {
                 <TableRow
                   key={row.key}
                   hover
-                  sx={{
-                    bgcolor: row.isParent ? "#f5f5f5" : "background.paper",
-                  }}
                 >
                   <TableCell
                     sx={{ whiteSpace: "nowrap", verticalAlign: "top" }}
@@ -161,7 +186,8 @@ const Handbook = () => {
                         display: "inline-block",
                         ml: row.depth * 3.75,
                         pl: row.depth ? 1.25 : 0,
-                        borderLeft: row.depth ? "2px solid #dce3ed" : "none",
+                        borderLeft: row.depth ? "2px solid" : "none",
+                        borderColor: "divider",
                         fontWeight: row.isParent ? 600 : 400,
                       }}
                     >

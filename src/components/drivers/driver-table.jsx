@@ -77,6 +77,7 @@ const DriversTable = ({ drivers, setSelectedDriver, handleBanDriver }) => {
         />
       )}
       <DataGrid
+        hideFooter
         apiRef={apiRef}
         rows={drivers}
         getRowId={(row) => row.id}

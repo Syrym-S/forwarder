@@ -20,14 +20,11 @@ const LeadCard = ({ lead }) => {
       onClick={navigateToLeadItem}
       tabIndex={0}
       sx={{
-        p: {
-          xs: 1,
-          sm: 3,
-        },
+        p: 3,
         maxWidth: "100%",
         border: "2px solid",
         borderColor: isDraftLead(lead) ? "warning.main" : "divider",
-        borderRadius: 7,
+        borderRadius: 4,
         backgroundColor: "background.paper",
         boxShadow: "0 2px 8px rgba(0, 0, 0, 0.06)",
         transition: "0.2s ease",

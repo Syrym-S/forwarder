@@ -2,9 +2,9 @@ import {
   Alert,
   Box,
   CircularProgress,
+  FormControlLabel,
   Paper,
   Switch,
-  Tooltip,
   Typography,
 } from "@mui/material";
 import { useTendersStore } from "../../../app/store/tenders/tender-store";
@@ -14,17 +14,17 @@ import CustomerTenderItem from "./customer-tender-item";
 const CustomerCreatedTenders = () => {
   const tenders = useTendersStore((state) => state.customerTenders);
   const publicTenders = tenders.filter(
-    (tender) => tender.publication_type === "private",
+    (tender) => tender.publication_type === "public",
   );
   const privateTenders = tenders.filter(
-    (tender) => tender.publication_type === "public",
+    (tender) => tender.publication_type === "private",
   );
   const getCustomerTenders = useTendersStore(
     (state) => state.getCustomerTenders,
   );
   const isLoading = useTendersStore((state) => state.isLoading);
 
-  const [checked, setChecked] = useState(false);
+  const [checked, setChecked] = useState(true);
 
   const handleChange = (event) => {
     setChecked(event.target.checked);
@@ -58,6 +58,7 @@ const CustomerCreatedTenders = () => {
 
   return (
     <Paper
+      className="dashboard-tenders-scroll"
       elevation={0}
       variant="outlined"
       sx={{
@@ -101,24 +102,26 @@ const CustomerCreatedTenders = () => {
           Аукционы заказчиков
         </Typography>
 
-        <Tooltip
-          title={
-            checked ? "Показать только публичные" : "Показать только приватные"
-          }
-        >
-          <Switch
-            onChange={handleChange}
-            sx={{
-              "& .MuiSwitch-switchBase.Mui-checked": {
-                color: "primary.main",
-              },
+        <FormControlLabel
+          sx={{ m: 0, gap: 0.5 }}
+          label={checked ? "Публичные аукционы" : "Приватные аукцоны"}
+          slotProps={{ typography: { fontSize: 13, color: "text.secondary" } }}
+          control={
+            <Switch
+              checked={checked}
+              onChange={handleChange}
+              sx={{
+                "& .MuiSwitch-switchBase.Mui-checked": {
+                  color: "primary.main",
+                },
 
-              "& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track": {
-                color: "primary.main",
-              },
-            }}
-          />
-        </Tooltip>
+                "& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track": {
+                  color: "primary.main",
+                },
+              }}
+            />
+          }
+        />
       </Box>
 
       {isPublicTendersEmpty && checked && (

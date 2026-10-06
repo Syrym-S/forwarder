@@ -138,25 +138,6 @@ const menuItems = [
   },
   {
     id: 2,
-    label: null,
-    sub_items: [
-      {
-        id: 1,
-        path: "/handbook",
-        lable: "Cправочник",
-        icon: (
-          <LibraryBooksOutlinedIcon
-            sx={{
-              fontSize: "1.1rem",
-            }}
-          />
-        ),
-        tooltip_text: "Отображение всех маршрутов на карте",
-      },
-    ],
-  },
-  {
-    id: 3,
     label: "Перевозки",
     sub_items: [
       {
@@ -189,7 +170,7 @@ const menuItems = [
     ],
   },
   {
-    id: 4,
+    id: 3,
     label: "Финансы",
     sub_items: [
       {
@@ -236,7 +217,7 @@ const menuItems = [
     ],
   },
   {
-    id: 5,
+    id: 4,
     label: "Каталог",
     sub_items: [
       {
@@ -265,10 +246,23 @@ const menuItems = [
         ),
         tooltip_text: "Список всех водителей",
       },
+      {
+        id: 3,
+        path: "/handbook",
+        lable: "Cправочник ТНВЭД",
+        icon: (
+          <LibraryBooksOutlinedIcon
+            sx={{
+              fontSize: "1.1rem",
+            }}
+          />
+        ),
+        tooltip_text: "Отображение всех маршрутов на карте",
+      },
     ],
   },
   {
-    id: 6,
+    id: 5,
     label: "Аукционы",
     sub_items: [
       {

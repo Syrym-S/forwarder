@@ -8,6 +8,7 @@ const CustomersTable = ({ customers, setSelectedCustomer }) => {
   return (
     <Paper sx={{ my: "10px" }}>
       <DataGrid
+        hideFooter
         rows={customers}
         getRowId={(row) => row.id}
         columns={columns}

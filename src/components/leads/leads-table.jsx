@@ -9,6 +9,7 @@ const LeadsTable = ({ leads }) => {
   return (
     <Paper sx={{ my: "10px" }}>
       <DataGrid
+        hideFooter
         rows={leads}
         getRowId={(row) => row.id}
         getRowClassName={({ row }) => (isDraftLead(row) ? "lead-draft" : "")}

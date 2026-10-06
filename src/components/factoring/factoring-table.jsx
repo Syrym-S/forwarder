@@ -29,6 +29,7 @@ const FactoringTable = ({ factorings }) => {
             backgroundColor: "#ffffff",
           },
         }}
+        hideFooter
       />
     </Paper>
   );

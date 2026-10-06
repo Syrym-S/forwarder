@@ -56,7 +56,7 @@ const Factor = () => {
       </Box>
       <Box
         sx={{
-          p: 1,
+          py: 1,
         }}
       >
         <ViewTabs
