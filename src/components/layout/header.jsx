@@ -18,6 +18,7 @@ import { useNotificationsStore } from "../../app/store/notifications/noti-store"
 import NotificationsBlock from "./notifications/notifications-block";
 import { useProfileStore } from "../../app/store/profile/profile-store";
 import logo from "../../../assets/logo.png";
+import ChatsContainer from "../chat/chats-container";
 
 const Header = ({ openMenu, setOpenMenu }) => {
   const navigate = useNavigate();
@@ -131,6 +132,7 @@ const Header = ({ openMenu, setOpenMenu }) => {
         }}
       >
         <NotificationsBlock />
+        <ChatsContainer />
 
         <ActionTooltip title="Открыть меню профиля">
         <Button
