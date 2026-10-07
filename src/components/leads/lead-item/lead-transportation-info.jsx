@@ -85,6 +85,13 @@ export default function LeadTransportationInfo({ leadData }) {
             value={leadData?.[name]?.name || leadData?.[name] || "Не указан"}
           />
         ))}
+        {leadData?.grace_period_days != null &&
+          String(leadData.grace_period_days).trim() !== "" && (
+            <InfoItem
+              label="Доступная отсрочка"
+              value={`${leadData.grace_period_days} дн.`}
+            />
+          )}
       </Box>
     </Section>
   );

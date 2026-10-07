@@ -1,6 +1,7 @@
 import FormControllerSelect from "../../../shared/ui/input/form-controller-select";
 import dayjs from "dayjs";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
 import FormControllerInput from "../../../shared/ui/input/form-controller-input";
 import {
   Alert,
@@ -10,6 +11,8 @@ import {
   FormControlLabel,
   Snackbar,
   Typography,
+  IconButton,
+  InputAdornment,
 } from "@mui/material";
 import { StepSection } from "../step-section";
 import { useCustomerMap } from "../use-customer-map";
@@ -325,12 +328,19 @@ const RouteStep = ({ control, form, setValue, isEdit = false }) => {
                 message: "Минимум 3 символа",
               },
             }}
-            onChange={() => {
-              clearFromPoint();
-            }}
             slotProps={{
               input: {
-                readOnly: true,
+                readOnly: false,
+                endAdornment: form.from_location?.address ? (
+                  <InputAdornment position="end">
+                    <IconButton size="small" aria-label="Очистить адрес отправления" onClick={() => {
+                      clearFromPoint();
+                      setValue("from_location", { address: "", city: "", country: "", region: "", lat: "", lng: "" }, { shouldDirty: true, shouldValidate: true });
+                    }}>
+                      <CloseOutlinedIcon fontSize="small" />
+                    </IconButton>
+                  </InputAdornment>
+                ) : null,
               },
             }}
           />
@@ -424,10 +434,9 @@ const RouteStep = ({ control, form, setValue, isEdit = false }) => {
                     label={`Промежуточная точка #${index + 1}`}
                     fullWidth
                     size="small"
-                    disabled={currentLead && !canEditStatus}
                     slotProps={{
                       input: {
-                        readOnly: true,
+                        readOnly: false,
                       },
                     }}
                   />
@@ -524,7 +533,6 @@ const RouteStep = ({ control, form, setValue, isEdit = false }) => {
             label="Куда"
             fullWidth
             size="small"
-            onChange={clearToPoint}
             rules={{
               required: "Укажите место назначения",
               minLength: {
@@ -534,7 +542,17 @@ const RouteStep = ({ control, form, setValue, isEdit = false }) => {
             }}
             slotProps={{
               input: {
-                readOnly: true,
+                readOnly: false,
+                endAdornment: form.to_location?.address ? (
+                  <InputAdornment position="end">
+                    <IconButton size="small" aria-label="Очистить адрес назначения" onClick={() => {
+                      clearToPoint();
+                      setValue("to_location", { address: "", city: "", country: "", region: "", lat: "", lng: "" }, { shouldDirty: true, shouldValidate: true });
+                    }}>
+                      <CloseOutlinedIcon fontSize="small" />
+                    </IconButton>
+                  </InputAdornment>
+                ) : null,
               },
             }}
           />

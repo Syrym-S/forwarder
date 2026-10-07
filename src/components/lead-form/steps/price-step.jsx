@@ -17,6 +17,8 @@ const PriceStep = ({ control }) => {
       >
         <FormControllerInput
           name="price"
+          type="number"
+          slotProps={{ htmlInput: { min: 0, step: "any" } }}
           control={control}
           label="Цена заказчика"
           size="small"
@@ -25,6 +27,8 @@ const PriceStep = ({ control }) => {
 
         <FormControllerInput
           name="transportation_price"
+          type="number"
+          slotProps={{ htmlInput: { min: 0, step: "any" } }}
           control={control}
           label="Ваша цена за перевозку"
           size="small"

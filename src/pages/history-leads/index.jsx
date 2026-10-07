@@ -2,6 +2,7 @@ import CustomSelect from "../../shared/ui/input/custom-select";
 import RootLayout from "../../components/layout/root-layout";
 import ViewTabs from "../../shared/ui/view-tabs";
 import LeadListContainer from "../../components/leads/lead-list-container";
+import LeadsExportButton from "../../components/leads/leads-export-button";
 import { useEffect, useState } from "react";
 import { Typography } from "@mui/material";
 import { Box } from "@mui/material";
@@ -79,6 +80,8 @@ const HistoryLeads = () => {
       >
         <ViewTabs view={view} setView={setView} withoutDataAdd withoutKanban />
 
+        <LeadsExportButton />
+
         <Controller
           name="status"
           control={control}
@@ -112,7 +115,9 @@ const HistoryLeads = () => {
               sx={{ width: { xs: "100%", sm: 300 } }}
               slotProps={{
                 select: {
-                  MenuProps: { slotProps: { paper: { sx: { maxHeight: 430 } } } },
+                  MenuProps: {
+                    slotProps: { paper: { sx: { maxHeight: 430 } } },
+                  },
                 },
               }}
             />

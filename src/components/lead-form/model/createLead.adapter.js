@@ -48,7 +48,13 @@ function normalizeText(value) {
 }
 
 export function mapCreateLeadFormToApi(form, { isDraft = false } = {}) {
-  const cargos = form.cargos || [];
+  const isInternational = isInternationalRoute(form);
+  const cargos = (form.cargos || []).map((cargo) => {
+    if (isInternational) return cargo;
+    const domesticCargo = { ...cargo };
+    delete domesticCargo.tnved_code;
+    return domesticCargo;
+  });
   const cargoFields = [
     "cargo_type",
     "name",
@@ -65,15 +71,15 @@ export function mapCreateLeadFormToApi(form, { isDraft = false } = {}) {
 
   const payload = {
     pass_verify: form.pass_verify === true,
-    is_international: isInternationalRoute(form),
-    from_country: form.from_location?.country,
-    from_region: form.from_location?.region,
-    from_city: form.from_location?.city,
+    is_international: isInternational,
+    from_country: form.from_location?.address,
+    from_region: form.from_location?.address,
+    from_city: form.from_location?.address,
     from_address: form.from_location?.address,
 
-    to_country: form.to_location?.country,
-    to_region: form.to_location?.region,
-    to_city: form.to_location?.city,
+    to_country: form.to_location?.address,
+    to_region: form.to_location?.address,
+    to_city: form.to_location?.address,
     to_address: form.to_location?.address,
 
     name: form.name || "Не указан",
@@ -96,14 +102,10 @@ export function mapCreateLeadFormToApi(form, { isDraft = false } = {}) {
   addIfHasValue(payload, "customer", form.customer?.id);
   addIfHasValue(payload, "documents", form.documents);
 
-  addNumberIfHasValue(payload, "from_lat", form.fromLat);
-  addNumberIfHasValue(payload, "from_lon", form.fromLng);
-  addNumberIfHasValue(payload, "from_lat", form.from_location?.lat);
-  addNumberIfHasValue(payload, "from_lon", form.from_location?.lon);
-  addNumberIfHasValue(payload, "to_lat", form.toLat);
-  addNumberIfHasValue(payload, "to_lon", form.toLng);
-  addNumberIfHasValue(payload, "to_lat", form.to_location?.lat);
-  addNumberIfHasValue(payload, "to_lon", form.to_location?.lon);
+  addNumberIfHasValue(payload, "from_lat", hasValue(form.fromLat) ? form.fromLat : form.from_location?.lat);
+  addNumberIfHasValue(payload, "from_lon", hasValue(form.fromLng) ? form.fromLng : form.from_location?.lng ?? form.from_location?.lon);
+  addNumberIfHasValue(payload, "to_lat", hasValue(form.toLat) ? form.toLat : form.to_location?.lat);
+  addNumberIfHasValue(payload, "to_lon", hasValue(form.toLng) ? form.toLng : form.to_location?.lng ?? form.to_location?.lon);
 
   addNumberIfHasValue(payload, "cargo_weight", form.weight_kg);
   addNumberIfHasValue(payload, "cargo_length", form.length_cm);

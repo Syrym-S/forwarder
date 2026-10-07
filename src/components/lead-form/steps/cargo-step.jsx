@@ -16,8 +16,11 @@ import { StepSection } from "../step-section";
 import { STATUS } from "../../../shared/const/tenders";
 import FormControllerInput from "../../../shared/ui/input/form-controller-input";
 import { hasCargoValue, isPositiveCargoNumber } from "../../../shared/lib/cargo-volume";
+import { isInternationalRoute } from "../../../shared/lib/international-route";
 
 const CargoStep = ({ control, errors, leadStatus }) => {
+  const form = useWatch({ control });
+  const isInternational = isInternationalRoute(form);
   const tnvedOptions = useOptionsStore((state) => state.tnvedOptions);
   const getLTNVEDOptions = useOptionsStore((state) => state.getLTNVEDOptions);
   const isTNVEDLoading = useOptionsStore((state) => state.isTNVEDLoading);
@@ -28,8 +31,8 @@ const CargoStep = ({ control, errors, leadStatus }) => {
 
   useEffect(() => {
     const state = useOptionsStore.getState();
-    if (!state.isTNVEDLoading) getLTNVEDOptions();
-  }, [getLTNVEDOptions]);
+    if (isInternational && !state.isTNVEDLoading) getLTNVEDOptions();
+  }, [getLTNVEDOptions, isInternational]);
 
   const { fields, append, remove } = useFieldArray({
     control,
@@ -73,6 +76,7 @@ const CargoStep = ({ control, errors, leadStatus }) => {
               errors={errors}
               remove={remove}
               cargo={field}
+              isInternational={isInternational}
               tnvedSections={sections}
               isTNVEDLoading={isTNVEDLoading}
               tnvedError={tnvedError}
@@ -124,7 +128,7 @@ const CargoStep = ({ control, errors, leadStatus }) => {
 
 export default CargoStep;
 
-const CargoStepFieldsContent = ({ index, control, cargo, tnvedSections, isTNVEDLoading, tnvedError, getLTNVEDOptions }) => {
+const CargoStepFieldsContent = ({ index, control, cargo, isInternational, tnvedSections, isTNVEDLoading, tnvedError, getLTNVEDOptions }) => {
   const searchCargoType = useOptionsStore((state) => state.searchCargoType);
   const cargoTypes = useOptionsStore((state) => state.cargoTypes);
   const getCargoTypes = useOptionsStore((state) => state.getCargoTypes);
@@ -237,6 +241,7 @@ const CargoStepFieldsContent = ({ index, control, cargo, tnvedSections, isTNVEDL
             error={!!fieldState.error}
             helperText={fieldState.error?.message}
             type="number"
+            slotProps={{ htmlInput: { min: 0, step: "any" } }}
             label="Вес, кг"
             onChange={(e) => {
               const value = e.target.value;
@@ -255,6 +260,7 @@ const CargoStepFieldsContent = ({ index, control, cargo, tnvedSections, isTNVEDL
       />
 
       <CargoTnvedField
+        disabled={!isInternational}
         control={control}
         index={index}
         sections={tnvedSections}
@@ -274,6 +280,7 @@ const CargoStepFieldsContent = ({ index, control, cargo, tnvedSections, isTNVEDL
             Number(value) >= 0 || "Цена не может быть отрицательной",
         }}
         type="number"
+        slotProps={{ htmlInput: { min: 0, step: "any" } }}
         label="Цена"
         fullWidth
         size="small"

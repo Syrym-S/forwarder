@@ -7,6 +7,7 @@ import RoutePoint from "../../leads/lead-item/route-point";
 import { useOptionsStore } from "../../../app/store/options";
 import { useEffect } from "react";
 import InfoItem from "../../../shared/ui/info-item";
+import { isInternationalRoute } from "../../../shared/lib/international-route";
 
 export function LastStep({ form }) {
   const leadParams = useOptionsStore((state) => state.leadParams);
@@ -139,7 +140,7 @@ export function LastStep({ form }) {
                   }}
                 >
                   <InfoBadge label="Тип груза" value={cargo.type} />
-                  <InfoBadge label="Код ТН ВЭД" value={cargo.tnved_code || "Не указан"} />
+                  {isInternationalRoute(form) && <InfoBadge label="Код ТН ВЭД" value={cargo.tnved_code || "Не указан"} />}
 
                   <InfoBadge
                     label="Вес"
