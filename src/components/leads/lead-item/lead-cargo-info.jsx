@@ -11,6 +11,7 @@ const CargoCard = ({
   index,
   cargosCount,
   isLeadsPage = false,
+  hidePrices = false,
 }) => {
   const canEditStatus =
     lead?.status === STATUS.new || lead?.status === STATUS.add_driver;
@@ -72,10 +73,12 @@ const CargoCard = ({
           value={cargo?.weight_kg ? `${cargo?.weight_kg} кг` : "Вес не указан"}
         />
 
-        <InfoItem
-          label="Цена груза"
-          value={moneySpacingFormat(cargo?.cargo_price)}
-        />
+        {!hidePrices && (
+          <InfoItem
+            label="Цена груза"
+            value={moneySpacingFormat(cargo?.cargo_price)}
+          />
+        )}
 
         {getCargoVolume(cargo) != null && (
           <InfoItem label="Объём" value={`${getCargoVolume(cargo)} м³`} />

@@ -287,7 +287,7 @@ const LeadItemMainContainer = ({
             my: 2,
           }}
         >
-          <LeadMap waypoints={waypoints} from={from} to={to} id={id} />
+          <LeadMap waypoints={waypoints} from={from} to={to} id={id} leadData={leadData} />
         </Box>
       )}
 

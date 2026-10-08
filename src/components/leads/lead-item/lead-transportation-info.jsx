@@ -11,13 +11,13 @@ const prices = [
   { name: "transportation_price", label: "Ваша цена за перевозку", color: "success" },
 ];
 
-export default function LeadTransportationInfo({ leadData }) {
+export default function LeadTransportationInfo({ leadData, hidePrices = false }) {
   return (
     <Section
-      title="Стоимость и параметры перевозки"
+      title={hidePrices ? "Параметры перевозки" : "Стоимость и параметры перевозки"}
       icon={<PaymentsOutlinedIcon color="primary" />}
     >
-      <Box
+      {!hidePrices && <Box
         sx={{
           display: "grid",
           gridTemplateColumns: { xs: "minmax(0, 1fr)", sm: "repeat(2, minmax(0, 1fr))" },
@@ -65,7 +65,7 @@ export default function LeadTransportationInfo({ leadData }) {
             </Box>
           );
         })}
-      </Box>
+      </Box>}
 
       <Box
         sx={{

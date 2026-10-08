@@ -86,12 +86,12 @@ const SharedLeadApp = () => {
             my: 3,
           }}
         >
-          <LeadMap waypoints={waypoints} from={from} to={to} id={leadId} />
+          <LeadMap waypoints={waypoints} from={from} to={to} id={leadId} leadData={leadData} />
         </Box>
 
         <LeadRouteInfo leadData={leadData} />
 
-        <LeadTransportationInfo leadData={leadData} />
+        <LeadTransportationInfo leadData={leadData} hidePrices />
 
         <Section
           title={`Груз`}
@@ -106,11 +106,13 @@ const SharedLeadApp = () => {
           >
             {leadData?.cargos?.map((cargo, index) => (
               <LeadCargoInfo
+                key={cargo.id || index}
                 cargosCount={cargosCount}
                 cargo={cargo}
                 lead={leadData}
                 index={index}
                 isLeadsPage
+                hidePrices
               />
             ))}
           </Box>
@@ -118,7 +120,7 @@ const SharedLeadApp = () => {
 
         <LeadCustomerInfo leadData={leadData} />
 
-        <LeadDriverInfo leadData={leadData} />
+        <LeadDriverInfo leadData={leadData} hideRatingAction />
       </Box>
     </>
   );

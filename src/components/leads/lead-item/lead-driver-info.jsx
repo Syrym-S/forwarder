@@ -14,7 +14,7 @@ import InfoItem from "../../../shared/ui/info-item";
 import PrimaryButton from "../../../shared/ui/button/primary-button";
 import StarBorderRoundedIcon from "@mui/icons-material/StarBorderRounded";
 
-const LeadDriverInfo = ({ leadData, canDetach = false, setRatingLead }) => {
+const LeadDriverInfo = ({ leadData, canDetach = false, setRatingLead, hideRatingAction = false }) => {
   const driver = leadData?.driver;
   const isDriverRated = !!leadData?.driver_rate;
   const driverRate = Number(leadData?.driver_rate);
@@ -79,7 +79,7 @@ const LeadDriverInfo = ({ leadData, canDetach = false, setRatingLead }) => {
             Водитель
           </Typography>
 
-          {!isDriverRated && isFinished && (
+          {!hideRatingAction && !isDriverRated && isFinished && (
             <Button
               onClick={handleOpenRateModal}
               startIcon={<StarBorderRoundedIcon />}

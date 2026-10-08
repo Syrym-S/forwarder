@@ -1,0 +1,21 @@
+.driver-position-popup .leaflet-popup-content-wrapper {
+  border-radius: 16px;
+}
+
+.driver-position-popup .leaflet-popup-content {
+  margin: 18px 26px;
+  font-size: 14px;
+  line-height: 1.4;
+  color: #333333;
+  overflow-wrap: anywhere;
+}
+
+.driver-position-popup .leaflet-popup-content strong {
+  display: block;
+  font-weight: 700;
+}
+
+.driver-position-popup .leaflet-popup-close-button {
+  top: 5px;
+  right: 5px;
+}

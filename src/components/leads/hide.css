@@ -9,16 +9,15 @@
 
 .map-marker {
   position: relative;
-  /* 
   width: 34px;
-  height: 48px; */
+  height: 48px;
 
   display: flex;
   justify-content: center;
 }
 
 /* синий хвост */
-/* .map-marker::before {
+.map-marker::before {
   content: "";
 
   position: absolute;
@@ -26,7 +25,7 @@
   left: 50%;
 
   width: 12px;
-  height: 25px;
+  height: 23px;
 
   background: #1976d2;
 
@@ -34,10 +33,10 @@
   clip-path: polygon(0 0, 100% 0, 50% 100%);
 
   z-index: 1;
-} */
+}
 
 /* белая обводка хвоста */
-/* .map-marker::after {
+.map-marker::after {
   content: "";
 
   position: absolute;
@@ -45,7 +44,7 @@
   left: 50%;
 
   width: 18px;
-  height: 29px;
+  height: 27px;
 
   background: white;
 
@@ -53,7 +52,7 @@
   clip-path: polygon(0 0, 100% 0, 50% 100%);
 
   z-index: 0;
-} */
+}
 
 /* круглая голова */
 .map-marker__circle {

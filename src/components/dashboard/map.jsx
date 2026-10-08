@@ -15,6 +15,7 @@ import { isStaging } from "../../app/client";
 import { fetchCachedRouteDetails } from "../../shared/helpers/route-cache";
 import "./marker.style.css";
 import { driverIcon } from "../../shared/ui/driver-marker-icon";
+import DriverPositionPopup from "../../shared/ui/driver-position-popup";
 
 const createMarkerIcon = (label, subLabel) => {
   return L.divIcon({
@@ -197,6 +198,7 @@ const Map = ({
   const [routes, setRoutes] = useState([]);
   const [open, setOpen] = useState(false);
   const [points, setPoints] = useState(null);
+  const [driverPoint, setDriverPoint] = useState(null);
 
   const [passedRoute, setPassedRoute] = useState([]);
   const [routeHistory, setRouteHistory] = useState([]);
@@ -310,6 +312,7 @@ const Map = ({
           setRouteHistory(history);
 
           if (lastPoint) {
+            setDriverPoint(lastPoint);
             const point = [lastPoint.latitude, lastPoint.longitude];
 
             setPoints([lastPoint.latitude, lastPoint.longitude]);
@@ -469,7 +472,11 @@ const Map = ({
                   }}
                 />
               )}
-              {points && <Marker position={points} icon={driverIcon} />}
+              {points && (
+                <Marker position={points} icon={driverIcon}>
+                  <DriverPositionPopup leadData={route.lead} point={driverPoint} />
+                </Marker>
+              )}
             </Fragment>
           );
         })}

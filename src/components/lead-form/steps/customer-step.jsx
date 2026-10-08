@@ -169,7 +169,7 @@ const CustomerStep = ({ control, errors, setValue }) => {
                     </Typography>
                   )}
                   {option.persons?.map((person, index) =>
-                    person && (person.fio || person.iin || person.phone) ? (
+                    person && (person.fio || person.iin || person.phone || person.email) ? (
                       <Box
                         key={index}
                         sx={{
@@ -199,6 +199,16 @@ const CustomerStep = ({ control, errors, setValue }) => {
                             Тел:{" "}
                             <Box component="span" sx={{ color: "text.primary", fontWeight: 500 }}>
                               +{String(person.phone).replace(/^\+/, "")}
+                            </Box>
+                          </Typography>
+                        )}
+                        {person.email && (
+                          <Typography
+                            sx={{ fontSize: 12, color: "text.secondary", overflowWrap: "anywhere" }}
+                          >
+                            Email:{" "}
+                            <Box component="span" sx={{ color: "text.primary", fontWeight: 500 }}>
+                              {person.email}
                             </Box>
                           </Typography>
                         )}

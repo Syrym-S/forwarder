@@ -6,6 +6,7 @@ import { isStaging } from "../../app/client";
 import { fetchCachedRoute } from "../../shared/helpers/route-cache";
 import "./hide.css";
 import { driverIcon } from "../../shared/ui/driver-marker-icon";
+import DriverPositionPopup from "../../shared/ui/driver-position-popup";
 
 const createMarkerIcon = (label, subLabel) => {
   return L.divIcon({
@@ -30,7 +31,7 @@ const createMarkerIcon = (label, subLabel) => {
   });
 };
 
-export default function LeadMap({ from, waypoints = [], to, id }) {
+export default function LeadMap({ from, waypoints = [], to, id, leadData }) {
   const start = !from?.lat ? [43.241141, 76.871399] : [from?.lat, from?.lon];
   const cross = waypoints.map((waypoint) => [waypoint.lat, waypoint.lon]);
   const end = !to?.lat ? [43.241141, 76.871399] : [to?.lat, to?.lon];
@@ -41,6 +42,7 @@ export default function LeadMap({ from, waypoints = [], to, id }) {
     .join(";");
 
   const [points, setPoints] = useState(null);
+  const [driverPoint, setDriverPoint] = useState(null);
   const [routeData, setRouteData] = useState(null);
   const route = routeData?.coordinates === coordinates ? routeData.points : [];
 
@@ -129,6 +131,7 @@ export default function LeadMap({ from, waypoints = [], to, id }) {
           setRouteHistory(history);
 
           if (lastPoint) {
+            setDriverPoint(lastPoint);
             const point = [lastPoint.latitude, lastPoint.longitude];
 
             setPoints([lastPoint.latitude, lastPoint.longitude]);
@@ -187,7 +190,11 @@ export default function LeadMap({ from, waypoints = [], to, id }) {
         />
       )}
 
-      {points && <Marker position={points} icon={driverIcon} />}
+      {points && (
+        <Marker position={points} icon={driverIcon}>
+          <DriverPositionPopup leadData={leadData} point={driverPoint} />
+        </Marker>
+      )}
     </MapContainer>
   );
 }
