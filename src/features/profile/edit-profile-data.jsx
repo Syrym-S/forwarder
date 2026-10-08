@@ -32,6 +32,7 @@ const EditProfileForm = ({ profileData, legalDocuments }) => {
 
   const [selectedImg, setSelectedImg] = useState(null);
   const [preview, setPreview] = useState(null);
+  const [isAvatarRemoved, setIsAvatarRemoved] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const {
@@ -51,19 +52,14 @@ const EditProfileForm = ({ profileData, legalDocuments }) => {
     if (file) {
       setSelectedImg(file);
       setPreview(URL.createObjectURL(file));
+      setIsAvatarRemoved(false);
     }
   };
 
-  const handleClearAvatar = async () => {
-    if (formValues.avatar) {
-      await deleteAvatar();
-      setSelectedImg(null);
-      setPreview(null);
-      getProfileData();
-    } else {
-      setSelectedImg(null);
-      setPreview(null);
-    }
+  const handleClearAvatar = () => {
+    setSelectedImg(null);
+    setPreview(null);
+    setIsAvatarRemoved(Boolean(profileData?.avatar));
   };
 
   const onEditSubmit = async (data) => {
@@ -91,6 +87,8 @@ const EditProfileForm = ({ profileData, legalDocuments }) => {
           name: selectedImg.name,
           context: "avatar",
         });
+      } else if (isAvatarRemoved) {
+        await deleteAvatar();
       }
 
       await getProfileData();
@@ -98,6 +96,7 @@ const EditProfileForm = ({ profileData, legalDocuments }) => {
 
       setSelectedImg(null);
       setPreview(null);
+      setIsAvatarRemoved(false);
 
       setValue("registration_document", null);
       setValue("employer_document", null);
@@ -114,6 +113,7 @@ const EditProfileForm = ({ profileData, legalDocuments }) => {
         formValues={formValues}
         selectedImg={selectedImg}
         preview={preview}
+        isAvatarRemoved={isAvatarRemoved}
         handleFileChange={handleFileChange}
         handleClearAvatar={handleClearAvatar}
       />
@@ -149,6 +149,7 @@ const EditProfileForm = ({ profileData, legalDocuments }) => {
           disabled={
             (!isDirty &&
               !selectedImg &&
+              !isAvatarRemoved &&
               !registrationDocumentsToUpload &&
               !employerDocumentToUpload) ||
             isSubmitting

@@ -14,6 +14,7 @@ import L from "leaflet";
 import { isStaging } from "../../app/client";
 import { fetchCachedRouteDetails } from "../../shared/helpers/route-cache";
 import "./marker.style.css";
+import { driverIcon } from "../../shared/ui/driver-marker-icon";
 
 const createMarkerIcon = (label, subLabel) => {
   return L.divIcon({
@@ -37,14 +38,6 @@ const createMarkerIcon = (label, subLabel) => {
     iconAnchor: [17, 48],
   });
 };
-
-const driverIcon = L.divIcon({
-  className: "driver-marker",
-  html: '<div class="driver-marker__icon">🚚</div>',
-  iconSize: [38, 38],
-  iconAnchor: [19, 19],
-  popupAnchor: [0, -18],
-});
 
 const getLocationLatitude = (location) => {
   return location?.lat ?? location?.latitude;

@@ -67,8 +67,12 @@ const SharedLeadApp = () => {
 
       <Box
         sx={{
+          px: 3,
           my: 4,
-          width: "60%",
+          width: {
+            xs: "90%",
+            md: "60%",
+          },
           mx: "auto",
           mb: 5,
           height: "100vh",

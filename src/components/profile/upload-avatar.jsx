@@ -11,12 +11,14 @@ import { useProfileStore } from "../../app/store/profile/profile-store";
 const UploadAvatar = ({
   selectedImg,
   preview,
+  isAvatarRemoved,
   handleFileChange,
   formValues,
   handleClearAvatar,
 }) => {
   const isProfileLoading = useProfileStore((state) => state.isProfileLoading);
   const isAvatarLoading = useProfileStore((state) => state.isAvatarLoading);
+  const avatar = isAvatarRemoved ? null : formValues?.avatar;
 
   return (
     <Box
@@ -42,7 +44,7 @@ const UploadAvatar = ({
           >
             <CircularProgress />
           </Box>
-        ) : !selectedImg && !formValues?.avatar ? (
+        ) : !selectedImg && !avatar ? (
           <AccountCircleIcon
             color="primary"
             sx={{
@@ -63,7 +65,7 @@ const UploadAvatar = ({
               maxHeight: 200,
               objectFit: "contain",
             }}
-            src={formValues?.avatar || preview}
+            src={preview || avatar}
           />
         )}
       </TooltipIconButton>
@@ -108,7 +110,7 @@ const UploadAvatar = ({
               onChange={handleFileChange}
             />
           </Button>
-          {(selectedImg || formValues?.avatar) && (
+          {(selectedImg || avatar) && (
             <Button
               color="error"
               variant="outlined"

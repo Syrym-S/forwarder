@@ -5,6 +5,7 @@ import L from "leaflet";
 import { isStaging } from "../../app/client";
 import { fetchCachedRoute } from "../../shared/helpers/route-cache";
 import "./hide.css";
+import { driverIcon } from "../../shared/ui/driver-marker-icon";
 
 const createMarkerIcon = (label, subLabel) => {
   return L.divIcon({
@@ -29,21 +30,15 @@ const createMarkerIcon = (label, subLabel) => {
   });
 };
 
-const driverIcon = L.divIcon({
-  className: "driver-marker",
-  html: '<div class="driver-marker__icon">🚚</div>',
-  iconSize: [38, 38],
-  iconAnchor: [19, 19],
-  popupAnchor: [0, -18],
-});
-
 export default function LeadMap({ from, waypoints = [], to, id }) {
   const start = !from?.lat ? [43.241141, 76.871399] : [from?.lat, from?.lon];
   const cross = waypoints.map((waypoint) => [waypoint.lat, waypoint.lon]);
   const end = !to?.lat ? [43.241141, 76.871399] : [to?.lat, to?.lon];
 
   const routePoints = [start, ...cross, end];
-  const coordinates = routePoints.map(([lat, lon]) => `${lon},${lat}`).join(";");
+  const coordinates = routePoints
+    .map(([lat, lon]) => `${lon},${lat}`)
+    .join(";");
 
   const [points, setPoints] = useState(null);
   const [routeData, setRouteData] = useState(null);
