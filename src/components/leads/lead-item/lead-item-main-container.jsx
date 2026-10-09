@@ -17,6 +17,7 @@ import { STATUS } from "../../../shared/const/tenders";
 import { useParams } from "react-router-dom";
 import { Alert, Box, Button, Snackbar } from "@mui/material";
 import RateDriverModal from "../../drivers/rate-driver-modal";
+import StraightOutlinedIcon from "@mui/icons-material/StraightOutlined";
 import { rateDriverApi } from "../../../app/store/drivers/api";
 import { useNotificationsStore } from "../../../app/store/notifications/noti-store";
 import { parserNotificationType } from "../../../shared/helpers/notifications/parse-notification-type";
@@ -287,7 +288,13 @@ const LeadItemMainContainer = ({
             my: 2,
           }}
         >
-          <LeadMap waypoints={waypoints} from={from} to={to} id={id} leadData={leadData} />
+          <LeadMap
+            waypoints={waypoints}
+            from={from}
+            to={to}
+            id={id}
+            leadData={leadData}
+          />
         </Box>
       )}
 

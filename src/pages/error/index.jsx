@@ -2,21 +2,25 @@ import { Box, Button, Stack, Typography } from "@mui/material";
 import WarningAmberRoundedIcon from "@mui/icons-material/WarningAmberRounded";
 import RefreshRoundedIcon from "@mui/icons-material/RefreshRounded";
 import ArrowBackRoundedIcon from "@mui/icons-material/ArrowBackRounded";
+import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import {
   isRouteErrorResponse,
   useNavigate,
   useRouteError,
 } from "react-router-dom";
+import notFoundIllustration from "./assets/not-found-logistics.png";
 
 const ErrorPage = () => {
   const error = useRouteError();
   const navigate = useNavigate();
-
-  let message = error.message;
+  const isNotFound = error?.status === 404;
+  let message =
+    error?.message || "Попробуйте обновить страницу или вернуться назад.";
 
   if (isRouteErrorResponse(error)) {
-    if (error.status === 404) {
-      message = "Запрашиваемая страница не найдена.";
+    if (isNotFound) {
+      message =
+        "Похоже, вы свернули с маршрута. Страница перемещена или ссылка устарела. Вернитесь на главную, чтобы продолжить работу с перевозками.";
     } else if (error.status >= 500) {
       message = "Произошла ошибка на сервере. Попробуйте позже.";
     } else {
@@ -26,145 +30,114 @@ const ErrorPage = () => {
 
   return (
     <Box
+      component="main"
       sx={{
-        minHeight: "100vh",
+        minHeight: "100dvh",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        px: 2,
-        backgroundColor: "#F5F6F8",
+        p: { xs: 2, sm: 4 },
+        bgcolor: "background.default",
       }}
     >
       <Box
         sx={{
           width: "100%",
-          maxWidth: 430,
+          maxWidth: 880,
           overflow: "hidden",
-          borderRadius: 1,
-          backgroundColor: "#fff",
-          boxShadow: "0 12px 40px rgba(0, 0, 0, 0.12)",
+          borderRadius: 3,
+          bgcolor: "background.paper",
+          border: "1px solid",
+          borderColor: "divider",
+          boxShadow: "0 12px 40px rgba(22, 36, 62, 0.06)",
+          textAlign: "center",
+          px: { xs: 3, sm: 6, md: 8 },
+          py: { xs: 4, sm: 5 },
         }}
       >
-        <Box
+        {isNotFound ? (
+          <Box
+            component="img"
+            src={notFoundIllustration}
+            alt="404 — грузовик на маршруте"
+            sx={{
+              display: "block",
+              width: "100%",
+              maxWidth: 660,
+              mx: "auto",
+              mb: { xs: 3, sm: 4 },
+              mixBlendMode: "multiply",
+            }}
+          />
+        ) : (
+          <WarningAmberRoundedIcon
+            sx={{
+              display: "block",
+              fontSize: 90,
+              color: "primary.main",
+              mx: "auto",
+              mb: 4,
+            }}
+          />
+        )}
+        <Typography
+          component="h1"
           sx={{
-            height: 150,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            background: "linear-gradient(135deg, #1976D2 0%, #1070d0 100%)",
+            color: "font_color.heading",
+            fontWeight: 600,
+            fontSize: { xs: 26, sm: 34 },
+            lineHeight: 1.25,
+            mb: 1.5,
           }}
         >
-          {error.status === 404 && (
-            <Typography
-              sx={{
-                fontSize: "clamp(100px, 18vw, 130px)",
-                lineHeight: 0.9,
-                fontWeight: 800,
-                letterSpacing: "-0.08em",
-                color: "white",
-                userSelect: "none",
-              }}
-            >
-              404
-            </Typography>
-          )}
-          {/* <Box
-            sx={{
-              width: 82,
-              height: 82,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              border: "3px solid rgba(255,255,255,0.95)",
-              borderRadius: "10%",
-            }}
-          >
-            <WarningAmberRoundedIcon
-              sx={{
-                fontSize: 48,
-                color: "#fff",
-              }}
-            />
-          </Box> */}
-        </Box>
-
-        {/* Контент */}
+          {isNotFound ? "Этой точки нет на маршруте" : "Что-то пошло не так"}
+        </Typography>
+        {isNotFound && (
+          <Typography sx={{ color: "primary.main", fontSize: 13, mb: 2 }}>
+            Ошибка 404 · Страница не найдена
+          </Typography>
+        )}
+        <Typography
+          sx={{
+            color: "text.secondary",
+            fontSize: { xs: 14, sm: 16 },
+            lineHeight: 1.7,
+            maxWidth: 570,
+            mx: "auto",
+          }}
+        >
+          {message}
+        </Typography>
         <Stack
-          spacing={2}
-          alignItems="center"
-          textAlign="center"
-          sx={{
-            px: 4,
-            py: 4,
-          }}
+          direction={{ xs: "column", sm: "row" }}
+          justifyContent="center"
+          spacing={1.5}
+          sx={{ mt: 3.5 }}
         >
-          <Typography
-            variant="h4"
-            sx={{
-              fontWeight: 700,
-              color: "#27364D",
-              fontSize: {
-                xs: 28,
-                sm: 32,
-              },
-            }}
-          >
-            Что-то пошло не так
-          </Typography>
-
-          <Typography
-            sx={{
-              color: "#6B7280",
-              fontSize: 16,
-              lineHeight: 1.5,
-              maxWidth: 330,
-            }}
-          >
-            {message}
-          </Typography>
-
           <Button
             variant="contained"
-            startIcon={<RefreshRoundedIcon />}
-            onClick={() => window.location.reload()}
+            startIcon={
+              isNotFound ? <HomeOutlinedIcon /> : <RefreshRoundedIcon />
+            }
+            onClick={() =>
+              isNotFound ? navigate("/") : window.location.reload()
+            }
             sx={{
-              mt: 1,
-              minWidth: 150,
-              height: 44,
-              borderRadius: "22px",
+              borderRadius: 2,
+              px: 3,
+              py: 1.3,
               textTransform: "none",
-              fontSize: 15,
-              fontWeight: 600,
-              backgroundColor: "#1976D2",
+              fontWeight: 500,
               boxShadow: "none",
-
-              "&:hover": {
-                backgroundColor: "#2651dc",
-                boxShadow: "0 5px 15px rgba(68, 136, 239, 0.25)",
-              },
             }}
           >
-            Обновить
+            {isNotFound ? "На главную" : "Обновить страницу"}
           </Button>
           <Button
             variant="outlined"
             startIcon={<ArrowBackRoundedIcon />}
             onClick={() => navigate(-1)}
-            sx={{
-              height: 44,
-              minWidth: 130,
-              borderRadius: "22px",
-              textTransform: "none",
-              fontSize: 15,
-              fontWeight: 600,
-              borderColor: "#D1D5DB",
-              color: "#4B5563",
-
-              "&:hover": {
-                borderColor: "#9CA3AF",
-                backgroundColor: "#F9FAFB",
-              },
-            }}
+            sx={{ borderRadius: 2, px: 3, py: 1.3, textTransform: "none" }}
           >
             Назад
           </Button>

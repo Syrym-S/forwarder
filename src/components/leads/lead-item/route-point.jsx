@@ -3,6 +3,7 @@ import TripOriginIcon from "@mui/icons-material/TripOrigin";
 import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
 import dayjs from "dayjs";
 import RenderType from "../../../shared/ui/render-type";
+import StraightOutlinedIcon from "@mui/icons-material/StraightOutlined";
 
 const RoutePoint = ({
   label,
@@ -10,12 +11,11 @@ const RoutePoint = ({
   status,
   isFrom,
   isTo,
+  isWaypoint,
   date,
   isPassed,
   type,
 }) => {
-  const Icon = isFrom ? TripOriginIcon : LocationOnOutlinedIcon;
-
   return (
     <Box
       sx={{
@@ -79,13 +79,34 @@ const RoutePoint = ({
           minWidth: 0,
         }}
       >
-        <Icon
-          sx={{
-            fontSize: 14,
-            color: "primary.main",
-            flexShrink: 0,
-          }}
-        />
+        {isFrom && (
+          <TripOriginIcon
+            sx={{
+              fontSize: 14,
+              color: "primary.main",
+              flexShrink: 0,
+            }}
+          />
+        )}
+        {isTo && (
+          <LocationOnOutlinedIcon
+            sx={{
+              fontSize: 14,
+              color: "primary.main",
+              flexShrink: 0,
+            }}
+          />
+        )}
+        {isWaypoint && (
+          <StraightOutlinedIcon
+            sx={{
+              rotate: "180deg",
+              fontSize: 14,
+              color: "primary.main",
+              flexShrink: 0,
+            }}
+          />
+        )}
 
         <Typography
           sx={{

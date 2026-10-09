@@ -173,19 +173,19 @@ const menuItems = [
     id: 3,
     label: "Финансы",
     sub_items: [
-      {
-        id: 1,
-        path: "/account",
-        lable: "Счёт",
-        icon: (
-          <ReceiptLongOutlined
-            sx={{
-              fontSize: "1.1rem",
-            }}
-          />
-        ),
-        tooltip_text: "Скоро",
-      },
+      // {
+      //   id: 1,
+      //   path: "/account",
+      //   lable: "Счёт",
+      //   icon: (
+      //     <ReceiptLongOutlined
+      //       sx={{
+      //         fontSize: "1.1rem",
+      //       }}
+      //     />
+      //   ),
+      //   tooltip_text: "Скоро",
+      // },
       {
         id: 2,
         path: "/factorings",

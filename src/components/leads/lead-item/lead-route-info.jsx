@@ -48,6 +48,7 @@ const LeadRouteInfo = ({ leadData }) => {
           <RoutePoint
             key={point?.id || `${point?.address}-${index}`}
             isPassed={point?.is_passed}
+            isWaypoint
             label={`Промежуточная точка #${index + 1}`}
             address={point?.address || "Не указан"}
             status={point?.is_passed ? "Точка пройдена" : "Точка не пройдена"}
