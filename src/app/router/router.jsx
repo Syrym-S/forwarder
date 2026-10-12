@@ -52,6 +52,10 @@ export const router = createBrowserRouter(
           path: "leads/:id",
           element: <LeadItem />,
           handle: {
+            title: ({ params, currentLead }) =>
+              String(currentLead?.id) === params.id && currentLead?.num
+                ? `Перевозка #${currentLead.num}`
+                : "Перевозка",
             breadcrumb: ({ params }) => `Перевозкa / ${params.id}`,
           },
         },
@@ -151,6 +155,7 @@ export const router = createBrowserRouter(
           path: "/factoring-lines/:id/:breadcrumbs",
           element: <FactorItem />,
           handle: {
+            title: ({ params }) => `Линия - ${params.breadcrumbs}`,
             breadcrumb: ({ params }) =>
               `Факторинговые компании / ${params.breadcrumbs}`,
           },

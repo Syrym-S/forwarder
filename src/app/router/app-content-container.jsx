@@ -3,9 +3,10 @@ import SideBar from "../../components/layout/menu";
 import NotificationPopup from "../../components/layout/notifications/notification-popup";
 import RenderNotificationIcon from "../../shared/ui/render-notification-icon";
 import { useEffect, useRef, useState } from "react";
-import { Outlet } from "react-router-dom";
+import { Outlet, useMatches } from "react-router-dom";
 import { Box, Slide, Snackbar, Typography } from "@mui/material";
 import { useNotificationsStore } from "../store/notifications/noti-store";
+import { useLeadsStore } from "../store/leads/leads-store";
 
 const AppContentContainer = () => {
   const [openMenu, setOpenMenu] = useState(false);
@@ -13,14 +14,27 @@ const AppContentContainer = () => {
   const connectNotifications = useNotificationsStore(
     (state) => state.connectNotifications,
   );
-
   const newNotification = useNotificationsStore(
     (state) => state.newNotification,
   );
 
-  // Keep the content mounted while the Snackbar finishes its exit transition.
   const [displayedNotification, setDisplayedNotification] =
     useState(newNotification);
+
+  const matches = useMatches();
+  const currentLead = useLeadsStore((state) => state.currentLead);
+  const titleMatch = [...matches]
+    .reverse()
+    .find((match) => match.handle?.title || match.handle?.breadcrumb);
+  const titleValue = titleMatch?.handle?.title || titleMatch?.handle?.breadcrumb;
+  const title =
+    typeof titleValue === "function"
+      ? titleValue({ ...titleMatch, currentLead })
+      : titleValue || "Главная";
+
+  useEffect(() => {
+    document.title = title;
+  }, [title]);
 
   if (newNotification && newNotification !== displayedNotification) {
     setDisplayedNotification(newNotification);

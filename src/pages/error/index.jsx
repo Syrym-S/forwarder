@@ -9,11 +9,16 @@ import {
   useRouteError,
 } from "react-router-dom";
 import notFoundIllustration from "./assets/not-found-logistics.png";
+import { useEffect } from "react";
 
 const ErrorPage = () => {
   const error = useRouteError();
   const navigate = useNavigate();
   const isNotFound = error?.status === 404;
+  useEffect(() => {
+    document.title = isNotFound ? "Страница не найдена" : "Ошибка";
+  }, [isNotFound]);
+
   let message =
     error?.message || "Попробуйте обновить страницу или вернуться назад.";
 
