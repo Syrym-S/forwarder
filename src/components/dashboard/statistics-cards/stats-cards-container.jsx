@@ -5,14 +5,17 @@ import {
   IconButton,
   Popover,
   Skeleton,
-  TextField,
   Typography,
 } from "@mui/material";
 import StatsHeader from "./stats-header";
+import StatsComparison from "./stats-comparison";
+import BarChartOutlined from "@mui/icons-material/BarChartOutlined";
 import { useEffect, useId, useState } from "react";
 import dayjs from "dayjs";
 import { useStatsStore } from "../../../app/store/stats/use-stats-store";
 import CustomSelect from "../../../shared/ui/input/custom-select";
+import FormInput from "../../../shared/ui/input/form-input";
+import PrimaryButton from "../../../shared/ui/button/primary-button";
 import LocalShippingOutlined from "@mui/icons-material/LocalShippingOutlined";
 import AccountBalanceWalletOutlined from "@mui/icons-material/AccountBalanceWalletOutlined";
 import GavelOutlined from "@mui/icons-material/GavelOutlined";
@@ -54,11 +57,13 @@ const StatCard = ({
   valueKey,
   emptyText,
   canBeFiltered,
+  filterKey,
   filter,
   onFilterChange,
   isLoading,
   icon: Icon = LocalShippingOutlined,
 }) => {
+  const [isComparing, setIsComparing] = useState(false);
   const [calendarAnchor, setCalendarAnchor] = useState(null);
   const [draftFilter, setDraftFilter] = useState(filter ?? {});
   const calendarId = useId();
@@ -89,7 +94,7 @@ const StatCard = ({
 
   return (
     <Box
-      aria-busy={isLoading}
+      aria-busy={!isComparing && isLoading}
       sx={{
         minWidth: 0,
         minHeight: canBeFiltered ? 200 : 170,
@@ -142,10 +147,9 @@ const StatCard = ({
             {title}
           </Typography>
         </Box>
-        {canBeFiltered && (
+        {canBeFiltered && !isComparing && (
           <Tooltip title="Выбрать период">
             <IconButton
-              
               aria-label={`Выбрать период: ${title}`}
               aria-haspopup="dialog"
               aria-expanded={isCalendarOpen}
@@ -232,7 +236,7 @@ const StatCard = ({
 
             {period === "custom" && (
               <>
-                <TextField
+                <FormInput
                   type="date"
                   size="small"
                   label="От"
@@ -251,7 +255,7 @@ const StatCard = ({
                   }}
                 />
 
-                <TextField
+                <FormInput
                   type="date"
                   size="small"
                   label="До"
@@ -294,98 +298,128 @@ const StatCard = ({
         </Popover>
       )}
 
-      {canBeFiltered && (
-        <Typography
+      {canBeFiltered && filterKey === "leads" && (
+        <PrimaryButton
+          size="small"
+          text={isComparing ? "Вернуться к статистике" : "Сравнить"}
+          startIcon={<BarChartOutlined />}
+          variant={isComparing ? "contained" : "outlined"}
+          disableElevation
+          aria-pressed={isComparing}
+          onClick={() => setIsComparing((previous) => !previous)}
           sx={{
-            order: 3,
-            display: "flex",
-            alignItems: "center",
-            gap: 0.75,
-            fontSize: 12,
-            color: "text.secondary",
-            mt: 2,
+            alignSelf: "flex-start",
+            mb: 2,
+            borderRadius: 2,
+            textTransform: "none",
           }}
-        >
-          <CalendarMonthOutlined sx={{ fontSize: 16, flexShrink: 0 }} />
-          За период: {periodLabel}
-        </Typography>
+        />
       )}
 
-      <Box
-        sx={{
-          display: "flex",
-          alignItems: "baseline",
-          gap: 1,
-          mb: 1.5,
-          flexWrap: "wrap",
-        }}
-      >
-        <Typography
-          sx={{
-            fontSize: 32,
-            lineHeight: 1.1,
-            letterSpacing: "-0.035em",
-            fontVariantNumeric: "tabular-nums",
-            fontWeight: 700,
-            color: "font_color.heading",
-          }}
-        >
-          {isLoading ? <Skeleton width={50} /> : count}
-        </Typography>
-
-        <Typography
-          sx={{
-            fontSize: 13,
-            color: "text.secondary",
-          }}
-        >
-          {countLabel}
-        </Typography>
-      </Box>
-
-      {isLoading ? (
-        <Skeleton width="45%" />
-      ) : currencies?.length > 0 ? (
-        <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.75, mb: "auto" }}>
-          {currencies.map((item) => {
-            const value = valueKey ? item[valueKey] : null;
-
-            if (value === null || value === undefined) {
-              return null;
-            }
-
-            return (
-              <Typography
-                key={item.currency}
-                sx={{
-                  fontSize: 14,
-                  fontWeight: 600,
-                  color: "color.slate_2",
-                  bgcolor: "background.default",
-                  borderRadius: 1.5,
-                  px: 1,
-                  py: 0.5,
-                  overflowWrap: "anywhere",
-                  fontVariantNumeric: "tabular-nums",
-                  lineHeight: 1.5,
-                }}
-              >
-                {formatMoney(value)} {item.currency}
-              </Typography>
-            );
-          })}
-        </Box>
+      {isComparing ? (
+        <StatsComparison
+          metric={filterKey}
+          title={title}
+          countLabel={countLabel}
+        />
       ) : (
-        emptyText && (
-          <Typography
+        <>
+          {canBeFiltered && (
+            <Typography
+              sx={{
+                order: 3,
+                display: "flex",
+                alignItems: "center",
+                gap: 0.75,
+                fontSize: 12,
+                color: "text.secondary",
+                mt: 2,
+              }}
+            >
+              <CalendarMonthOutlined sx={{ fontSize: 16, flexShrink: 0 }} />
+              За период: {periodLabel}
+            </Typography>
+          )}
+
+          <Box
             sx={{
-              fontSize: 14,
-              color: "text.secondary",
+              display: "flex",
+              alignItems: "baseline",
+              gap: 1,
+              mb: 1.5,
+              flexWrap: "wrap",
             }}
           >
-            {emptyText}
-          </Typography>
-        )
+            <Typography
+              sx={{
+                fontSize: 32,
+                lineHeight: 1.1,
+                letterSpacing: "-0.035em",
+                fontVariantNumeric: "tabular-nums",
+                fontWeight: 700,
+                color: "font_color.heading",
+              }}
+            >
+              {isLoading ? <Skeleton width={50} /> : count}
+            </Typography>
+
+            <Typography
+              sx={{
+                fontSize: 13,
+                color: "text.secondary",
+              }}
+            >
+              {countLabel}
+            </Typography>
+          </Box>
+
+          {isLoading ? (
+            <Skeleton width="45%" />
+          ) : currencies?.length > 0 ? (
+            <Box
+              sx={{ display: "flex", flexWrap: "wrap", gap: 0.75, mb: "auto" }}
+            >
+              {currencies.map((item) => {
+                const value = valueKey ? item[valueKey] : null;
+
+                if (value === null || value === undefined) {
+                  return null;
+                }
+
+                return (
+                  <Typography
+                    key={item.currency}
+                    sx={{
+                      fontSize: 14,
+                      fontWeight: 600,
+                      color: "color.slate_2",
+                      bgcolor: "background.default",
+                      borderRadius: 1.5,
+                      px: 1,
+                      py: 0.5,
+                      overflowWrap: "anywhere",
+                      fontVariantNumeric: "tabular-nums",
+                      lineHeight: 1.5,
+                    }}
+                  >
+                    {formatMoney(value)} {item.currency}
+                  </Typography>
+                );
+              })}
+            </Box>
+          ) : (
+            emptyText && (
+              <Typography
+                sx={{
+                  fontSize: 14,
+                  color: "text.secondary",
+                }}
+              >
+                {emptyText}
+              </Typography>
+            )
+          )}
+        </>
       )}
     </Box>
   );
