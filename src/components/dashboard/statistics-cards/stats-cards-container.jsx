@@ -9,6 +9,8 @@ import {
   Typography,
 } from "@mui/material";
 import StatsHeader from "./stats-header";
+import StatsComparison from "./stats-comparison";
+import BarChartOutlined from "@mui/icons-material/BarChartOutlined";
 import { useEffect, useId, useState } from "react";
 import dayjs from "dayjs";
 import { useStatsStore } from "../../../app/store/stats/use-stats-store";
@@ -54,11 +56,13 @@ const StatCard = ({
   valueKey,
   emptyText,
   canBeFiltered,
+  filterKey,
   filter,
   onFilterChange,
   isLoading,
   icon: Icon = LocalShippingOutlined,
 }) => {
+  const [isComparing, setIsComparing] = useState(false);
   const [calendarAnchor, setCalendarAnchor] = useState(null);
   const [draftFilter, setDraftFilter] = useState(filter ?? {});
   const calendarId = useId();
@@ -89,7 +93,7 @@ const StatCard = ({
 
   return (
     <Box
-      aria-busy={isLoading}
+      aria-busy={!isComparing && isLoading}
       sx={{
         minWidth: 0,
         minHeight: canBeFiltered ? 200 : 170,
@@ -142,7 +146,7 @@ const StatCard = ({
             {title}
           </Typography>
         </Box>
-        {canBeFiltered && (
+        {canBeFiltered && !isComparing && (
           <Tooltip title="Выбрать период">
             <IconButton
               
@@ -295,6 +299,23 @@ const StatCard = ({
       )}
 
       {canBeFiltered && (
+        <Button
+          startIcon={<BarChartOutlined />}
+          variant={isComparing ? "contained" : "outlined"}
+          disableElevation
+          aria-pressed={isComparing}
+          onClick={() => setIsComparing((previous) => !previous)}
+          sx={{ alignSelf: "flex-start", mb: 2, borderRadius: 2, textTransform: "none" }}
+        >
+          {isComparing ? "Вернуться к статистике" : "Сравнить"}
+        </Button>
+      )}
+
+      {isComparing ? (
+        <StatsComparison metric={filterKey} title={title} countLabel={countLabel} />
+      ) : (
+        <>
+      {canBeFiltered && (
         <Typography
           sx={{
             order: 3,
@@ -386,6 +407,8 @@ const StatCard = ({
             {emptyText}
           </Typography>
         )
+      )}
+        </>
       )}
     </Box>
   );
