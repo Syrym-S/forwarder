@@ -32,7 +32,7 @@ const ChatsContainer = () => {
               if (event.key === "Escape") setIsOpen(false);
             }}
             sx={{
-              width: { xs: "calc(100vw - 32px)", sm: 360 },
+              width: { xs: "calc(100vw - 32px)", sm: 480 },
               height: "min(480px, calc(100dvh - 88px))",
               display: "flex",
               flexDirection: "column",
@@ -72,7 +72,7 @@ const ChatsContainer = () => {
                 )}
                 <Typography noWrap sx={{ fontSize: 16 }}>
                   {activeChat
-                    ? (activeChat.title ??
+                    ? (activeChat.chat_type === "support" ? "Тех поддержка" : activeChat.title ??
                       activeChat.name ??
                       `Перевозка №${activeChat.lead?.num ?? activeChat.lead_id ?? activeChat.lead?.id}`)
                     : "Чаты перевозок"}

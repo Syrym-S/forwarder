@@ -10,14 +10,15 @@ import PictureAsPdfOutlinedIcon from "@mui/icons-material/PictureAsPdfOutlined";
 import { useState } from "react";
 import dayjs from "dayjs";
 import { deleteMessageApi, editMessageApi } from "../../app/store/leads/api";
+import { editSupportMessageApi, deleteSupportMessageApi } from "../../app/store/support-chat/api";
 import { ROLES, ROLES_ID } from "../../shared/const/roles";
 
-const FloatingMessageItem = ({ message, participants, leadId, chatType, onReload, onError, onDownload, downloadingId }) => {
+const FloatingMessageItem = ({ message, participants, leadId, chatType, onReload, onError, onDownload, downloadingId, participantId }) => {
   const [menu, setMenu] = useState(null);
   const [editing, setEditing] = useState(false);
   const [draft, setDraft] = useState("");
   const [busy, setBusy] = useState(false);
-  const own = Number(message.participant?.role_id) === ROLES_ID.forwarder;
+  const own = chatType === "support" ? participantId != null && String(message.participant_id) === String(participantId) : Number(message.participant?.role_id) === ROLES_ID.forwarder;
   const role = Number(message.participant?.role_id) === ROLES_ID.factor ? ROLES.factor : Number(message.participant?.role_id) === ROLES_ID.customer ? ROLES.customer : null;
   const sender = participants.find((participant) => participant.id != null && String(participant.id) === String(message.participant_id ?? message.participant?.id)) ?? participants.find((participant) => role && participant.role === role) ?? message.participant;
   const canChange = own && !message.is_deleted && !busy;
@@ -32,10 +33,12 @@ const FloatingMessageItem = ({ message, participants, leadId, chatType, onReload
     setBusy(true);
     try {
       if (action === "edit") {
-        await editMessageApi(leadId, message.id, { chat_type: chatType, message: draft.trim() });
+        if (chatType === "support") await editSupportMessageApi(message.id, draft.trim());
+        else await editMessageApi(leadId, message.id, { chat_type: chatType, message: draft.trim() });
         setEditing(false);
       } else {
-        await deleteMessageApi(leadId, message.id, { chat_type: chatType });
+        if (chatType === "support") await deleteSupportMessageApi(message.id);
+        else await deleteMessageApi(leadId, message.id, { chat_type: chatType });
       }
       await onReload();
     } catch (error) { onError(error.response?.data?.message || "Не удалось изменить сообщение"); }
@@ -45,7 +48,7 @@ const FloatingMessageItem = ({ message, participants, leadId, chatType, onReload
     <Box sx={{ display: "flex", flexDirection: "column", alignItems: own ? "flex-end" : "flex-start", mb: 2 }}>
       {!own && <Box sx={{ display: "flex", alignItems: "center", gap: 0.75, mb: 0.5 }}>
         <Avatar src={sender?.avatar} sx={{ width: 24, height: 24, fontSize: 12 }}>{(sender?.person_fio ?? sender?.name ?? "У").charAt(0)}</Avatar>
-        <Typography color="primary" sx={{ fontSize: 11 }}>{sender?.person_fio ?? sender?.name}</Typography>
+        <Typography color="primary" sx={{ fontSize: 11 }}>{sender?.person_fio ?? sender?.name ?? (chatType === "support" ? "Тех поддержка" : "")}</Typography>
       </Box>}
       <Box sx={{ display: "flex", alignItems: "flex-start", maxWidth: "100%", minWidth: 0 }}>
         <Box onContextMenu={openMenu} sx={{ minWidth: 0, px: 1.25, py: 1, borderRadius: 2, bgcolor: own ? "primary.main" : "action.hover", color: own ? "primary.contrastText" : "text.primary" }}>

@@ -1,6 +1,7 @@
 import {
   Alert,
   Avatar,
+  Badge,
   Box,
   Button,
   CircularProgress,
@@ -14,7 +15,7 @@ import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import { useSoketLeadMessagesStore } from "../../app/store/soket-lead-messages/soket-lead-messages-store";
 
-const chatAvatars = { lead: "З", cargo: "В", factoring: "Ф#" };
+const chatAvatars = { lead: "З", cargo: "В", factoring: "Ф#", support: "ТП" };
 
 const Chatlist = ({ setChat }) => {
   const [type, setType] = useState("all");
@@ -24,7 +25,8 @@ const Chatlist = ({ setChat }) => {
     (state) => state.isChatsLoading,
   );
   const chatsError = useSoketLeadMessagesStore((state) => state.chatsError);
-  const filteredChats = chats.filter((chat) => type === "all" || (chat.chat_type ?? chat.type ?? "lead") === type);
+  const availableChats = chats.some((chat) => chat.chat_type === "support") ? chats : [...chats, { chat_type: "support", last_message: "Напишите в тех поддержку" }];
+  const filteredChats = availableChats.filter((chat) => type === "all" || (chat.chat_type ?? chat.type ?? "lead") === type);
 
   useEffect(() => {
     getChats();
@@ -32,12 +34,22 @@ const Chatlist = ({ setChat }) => {
 
   return (
     <Box sx={{ flex: 1, minHeight: 0, overflowY: "auto", px: 1.25, pt: 1 }}>
-      <Tabs value={type} onChange={(_, value) => setType(value)} variant="scrollable" scrollButtons="auto" aria-label="Тип чата"
-        sx={{ minHeight: 36, "& .MuiTab-root": { minWidth: 0, minHeight: 36, px: 1, fontSize: 12, textTransform: "none" } }}>
+      <Tabs value={type} onChange={(_, value) => setType(value)} scrollButtons={false} aria-label="Тип чата"
+        sx={{
+          minHeight: 36,
+          "& .MuiTabs-list, & .MuiTabs-flexContainer": { flexWrap: "wrap" },
+          "& .MuiTabs-indicator": { display: "none" },
+          "& .MuiTab-root": {
+            minWidth: 0, minHeight: 36, px: 1.25, fontSize: 12,
+            textTransform: "none", borderBottom: "2px solid transparent",
+            "&.Mui-selected": { borderBottomColor: "primary.main" },
+          },
+        }}>
         <Tab value="all" label="Все" />
         <Tab value="lead" label="Заказчики" />
         <Tab value="cargo" label="Водители" />
         <Tab value="factoring" label="Факторы" />
+        <Tab value="support" label="Тех поддержка" />
       </Tabs>
       {isChatsLoading ? (
         <Box sx={{ display: "flex", justifyContent: "center", p: 4 }}>
@@ -74,17 +86,17 @@ const Chatlist = ({ setChat }) => {
               lead.from_location?.city ?? lead.from_location?.address;
             const to = lead.to_location?.city ?? lead.to_location?.address;
             const title =
-              chat.title ??
+              (chatType === "support" ? "Тех поддержка" : null) ?? chat.title ??
               chat.name ??
               (from && to ? `${from} - ${to}` : `Перевозка №${leadNum ?? "—"}`);
             const date =
-              lastMessage?.created_at ?? chat.updated_at ?? chat.created_at;
+              chat.last_message_at ?? lastMessage?.created_at ?? chat.updated_at ?? chat.created_at;
             const formattedDate =
               date && dayjs(date).isValid() ? dayjs(date).format("DD.MM") : "";
             return (
               <ListItemButton
-                key={chat.id ?? `${leadId}-${chatType}`}
-                disabled={!leadId}
+                key={chat.chat_id ?? chat.id ?? `${leadId}-${chatType}`}
+                disabled={chatType !== "support" && !leadId}
                 onClick={() => setChat(chat)}
                 sx={{
                   px: { xs: 1, sm: 1.25 },
@@ -95,6 +107,7 @@ const Chatlist = ({ setChat }) => {
                   borderColor: "divider",
                 }}
               >
+                <Badge badgeContent={chat.unread_count ?? 0} color="error">
                 <Avatar
                   src={chat.avatar || undefined}
                   sx={{
@@ -108,6 +121,7 @@ const Chatlist = ({ setChat }) => {
                 >
                   {chatAvatars[chatType] ?? "Ч"}
                 </Avatar>
+                </Badge>
                 <Box sx={{ flex: 1, minWidth: 0 }}>
                   <Typography
                     noWrap
