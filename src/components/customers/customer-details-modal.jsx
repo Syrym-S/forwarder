@@ -97,20 +97,30 @@ const CustomerDetailsModal = ({ selectedCustomer, handleClear }) => {
         </Stack>
 
         <Tooltip title="Закрыть">
-          <IconButton aria-label="Закрыть данные заказчика" onClick={handleClear} sx={{ p: 0 }}>
+          <IconButton
+            aria-label="Закрыть данные заказчика"
+            onClick={handleClear}
+            sx={{ p: 0 }}
+          >
             <HighlightOffOutlinedIcon color="error" />
           </IconButton>
         </Tooltip>
       </DialogTitle>
 
-      <DialogContent sx={{ bgcolor: "background.default", p: { xs: 2, sm: 3 } }}>
+      <DialogContent
+        sx={{ bgcolor: "background.default", p: { xs: 2, sm: 3 } }}
+      >
         <Section
           icon={<BusinessOutlinedIcon color="primary" />}
-          title="Данные заказчика — компания"
+          title="Данные заказчика - компания"
         >
           <Box sx={infoGridSx}>
             {companyFields.map(([key, label]) => (
-              <InfoItem key={key} label={label} value={customerDetails[key] || null} />
+              <InfoItem
+                key={key}
+                label={label}
+                value={customerDetails[key] || null}
+              />
             ))}
           </Box>
         </Section>
@@ -125,18 +135,32 @@ const CustomerDetailsModal = ({ selectedCustomer, handleClear }) => {
               <Box sx={infoGridSx}>
                 {personFields.map(([key, label]) => {
                   const value = person[key];
-                  const displayValue = key === "document_issue_date" && value && dayjs(value).isValid()
-                    ? dayjs(value).format("DD.MM.YYYY")
-                    : value;
+                  const displayValue =
+                    key === "document_issue_date" &&
+                    value &&
+                    dayjs(value).isValid()
+                      ? dayjs(value).format("DD.MM.YYYY")
+                      : value;
 
-                  return <InfoItem key={key} label={label} value={displayValue || null} />;
+                  return (
+                    <InfoItem
+                      key={key}
+                      label={label}
+                      value={displayValue || null}
+                    />
+                  );
                 })}
               </Box>
             </Section>
           ))
         ) : (
-          <Section icon={<PersonOutlineRoundedIcon color="primary" />} title="Данные контактного лица">
-            <Typography color="text.secondary">Контактное лицо не указано</Typography>
+          <Section
+            icon={<PersonOutlineRoundedIcon color="primary" />}
+            title="Данные контактного лица"
+          >
+            <Typography color="text.secondary">
+              Контактное лицо не указано
+            </Typography>
           </Section>
         )}
       </DialogContent>

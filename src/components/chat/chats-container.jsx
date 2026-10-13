@@ -54,9 +54,29 @@ const ChatsContainer = () => {
                 zIndex: 1,
               }}
             >
-              <Box sx={{ display: "flex", alignItems: "center", gap: 0.5, minWidth: 0 }}>
-                {activeChat && <IconButton aria-label="Назад к списку чатов" onClick={() => setActiveChat(null)}><ArrowBackOutlinedIcon /></IconButton>}
-                <Typography noWrap sx={{ fontSize: 16 }}>{activeChat ? activeChat.title ?? activeChat.name ?? `Перевозка №${activeChat.lead?.num ?? activeChat.lead_id ?? activeChat.lead?.id}` : "Чаты перевозок"}</Typography>
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 0.5,
+                  minWidth: 0,
+                }}
+              >
+                {activeChat && (
+                  <IconButton
+                    aria-label="Назад к списку чатов"
+                    onClick={() => setActiveChat(null)}
+                  >
+                    <ArrowBackOutlinedIcon />
+                  </IconButton>
+                )}
+                <Typography noWrap sx={{ fontSize: 16 }}>
+                  {activeChat
+                    ? (activeChat.title ??
+                      activeChat.name ??
+                      `Перевозка №${activeChat.lead?.num ?? activeChat.lead_id ?? activeChat.lead?.id}`)
+                    : "Чаты перевозок"}
+                </Typography>
               </Box>
               <IconButton
                 color="error"
@@ -66,7 +86,14 @@ const ChatsContainer = () => {
                 <CloseOutlinedIcon />
               </IconButton>
             </Box>
-            {activeChat ? <FloatingChatMessages key={`${activeChat.lead_id ?? activeChat.lead?.id}-${activeChat.chat_type ?? activeChat.type ?? "lead"}`} chat={activeChat} /> : <Chatlist setChat={openChat} />}
+            {activeChat ? (
+              <FloatingChatMessages
+                key={`${activeChat.lead_id ?? activeChat.lead?.id}-${activeChat.chat_type ?? activeChat.type ?? "lead"}`}
+                chat={activeChat}
+              />
+            ) : (
+              <Chatlist setChat={openChat} />
+            )}
           </Paper>
         ) : (
           <IconButton
