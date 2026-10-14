@@ -11,11 +11,16 @@ import { Box, CircularProgress, Typography } from "@mui/material";
 import "leaflet/dist/leaflet.css";
 import { useLeadsStore } from "../../app/store/leads/leads-store";
 import L from "leaflet";
-import { isStaging } from "../../app/client";
+import Echo from "laravel-echo";
+import Pusher from "pusher-js";
+import polyline from "@mapbox/polyline";
+import { api, isStaging } from "../../app/client";
 import { fetchCachedRouteDetails } from "../../shared/helpers/route-cache";
 import "./marker.style.css";
 import { driverIcon } from "../../shared/ui/driver-marker-icon";
 import DriverPositionPopup from "../../shared/ui/driver-position-popup";
+
+window.Pusher = Pusher;
 
 const createMarkerIcon = (label, subLabel) => {
   return L.divIcon({
@@ -197,11 +202,14 @@ const Map = ({
 
   const [routes, setRoutes] = useState([]);
   const [open, setOpen] = useState(false);
-  const [points, setPoints] = useState(null);
-  const [driverPoint, setDriverPoint] = useState(null);
-
-  const [passedRoute, setPassedRoute] = useState([]);
-  const [routeHistory, setRouteHistory] = useState([]);
+  const [tracking, setTracking] = useState(null);
+  const selectedTracking =
+    tracking && String(tracking.leadId) === String(selectedLeadId)
+      ? tracking
+      : null;
+  const trackedLead = leads.find(
+    (lead) => String(lead.id) === String(selectedLeadId),
+  );
 
   useEffect(() => {
     let isMounted = true;
@@ -250,82 +258,150 @@ const Map = ({
   }, [leads]);
 
   useEffect(() => {
+    if (!selectedLeadId) return;
+
+    const controller = new AbortController();
+    let isActive = true;
+    let echo;
+
     async function connect() {
-      const BASE_URL = isStaging
-        ? "/staging/wp-json/geows/v1/token"
-        : "/wp-json/geows/v1/token";
+      try {
+        const BASE_URL = isStaging
+          ? "/staging/wp-json/geows/v1/token"
+          : "/wp-json/geows/v1/token";
 
-      const addRes = await fetch(BASE_URL, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "X-WP-Nonce": window.GeoWS_Config?.nonce,
-        },
-        body: JSON.stringify({
-          lead_id: selectedLeadId,
-          type: "add",
-        }),
-      }).then((r) => r.json());
-
-      const wsAdd = new WebSocket(
-        `wss://geo.360logistics.kz/socket?token=${addRes.token}`,
-      );
-      wsAdd.onopen = () => {
-        console.log("add connected");
-        wsAdd.send(
-          JSON.stringify({
-            point: { latitude: 43.238, longitude: 76.8829, altitude: 620 },
+        const addRes = await fetch(BASE_URL, {
+          method: "POST",
+          signal: controller.signal,
+          headers: {
+            "Content-Type": "application/json",
+            "X-WP-Nonce": window.GeoWS_Config?.nonce,
+          },
+          body: JSON.stringify({
+            lead_id: selectedLeadId,
+            type: "read",
           }),
-        );
-      };
+        }).then((r) => {
+          if (!r.ok) throw new Error("Не удалось получить токен геотрекинга");
+          return r.json();
+        });
 
-      const res = await fetch(BASE_URL, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "X-WP-Nonce": window.GeoWS_Config?.nonce,
-        },
-        body: JSON.stringify({
-          lead_id: selectedLeadId,
-          type: "admin",
-        }),
-      }).then((r) => r.json());
-
-      const ws = new WebSocket(
-        `wss://geo.360logistics.kz/socket?token=${res.token}`,
-      );
-      ws.onopen = () => {
-        console.log("connected");
-        ws.send("{}");
-      };
-
-      ws.onmessage = (event) => {
-        const message = JSON.parse(event.data);
-
-        if (message.type === "get_points") {
-          const lastPoint = message.data.at(-1);
-          const history = message.data.map((point) => [
-            point.latitude,
-            point.longitude,
-          ]);
-
-          setRouteHistory(history);
-
-          if (lastPoint) {
-            setDriverPoint(lastPoint);
-            const point = [lastPoint.latitude, lastPoint.longitude];
-
-            setPoints([lastPoint.latitude, lastPoint.longitude]);
-
-            setPassedRoute((prev) => [...prev, point]);
-          }
+        if (!isActive) return;
+        if (!addRes.token || !addRes.url) {
+          throw new Error("Сервис не вернул токен или URL геотрекинга");
         }
-      };
+
+        const response = await api.get(`${addRes.url}`, {
+          signal: controller.signal,
+          headers: {
+            Authorization: `Bearer ${addRes.token}`,
+            key: window.GeoWS_Config?.key,
+            wsHost: window.GeoWS_Config?.ws,
+          },
+        });
+
+        if (!isActive) return;
+
+        const {
+          polyline: encodedPolyline,
+          encoding,
+          websocket,
+        } = response.data.data;
+        if (encodedPolyline && encoding !== "google") {
+          throw new Error("Неподдерживаемая кодировка маршрута геотрекинга");
+        }
+        const coordinates = encodedPolyline
+          ? polyline.decode(encodedPolyline)
+          : [];
+        const lastPoint = coordinates.at(-1);
+        setTracking({
+          leadId: selectedLeadId,
+          coordinates,
+          point: lastPoint
+            ? { latitude: lastPoint[0], longitude: lastPoint[1] }
+            : null,
+        });
+
+        const key =
+          window.GeoWS_Config?.key ||
+          import.meta.env.VITE_REVERB_APP_KEY ||
+          "0094d41122b08a5e800dcd84c9a387d258e9e64ee67a61efa4718a7d28504816";
+        if (!key) {
+          throw new Error(
+            "Задайте ключ Reverb в GeoWS_Config.key или VITE_REVERB_APP_KEY",
+          );
+        }
+        if (
+          !websocket?.channel ||
+          !websocket.event ||
+          !websocket.auth_endpoint
+        ) {
+          throw new Error("Сервис не вернул настройки подписки геотрекинга");
+        }
+
+        const wsAddress = window.GeoWS_Config?.ws ||
+          (isStaging ? "geo.staging.360logistics.kz" : "geo.v2.360logistics.kz");
+        const wsUrl = new URL(
+          wsAddress.includes("://") ? wsAddress : `wss://${wsAddress}`,
+        );
+
+        echo = new Echo({
+          broadcaster: "reverb",
+          key,
+          wsHost: wsUrl.hostname,
+          wssPort: Number(wsUrl.port) || 443,
+          forceTLS: true,
+          enabledTransports: ["ws", "wss"],
+          authEndpoint: websocket.auth_endpoint,
+          auth: { headers: { Authorization: `Bearer ${addRes.token}` } },
+        });
+
+        echo
+          .private(websocket.channel)
+          .listen(`.${websocket.event}`, (message) => {
+            if (!isActive) return;
+            const coords = message?.data?.coords;
+            if (coords?.lat == null || coords?.lon == null) return;
+            const latitude = Number(coords.lat);
+            const longitude = Number(coords.lon);
+            if (
+              !Number.isFinite(latitude) ||
+              !Number.isFinite(longitude) ||
+              Math.abs(latitude) > 90 ||
+              Math.abs(longitude) > 180
+            )
+              return;
+
+            setTracking((prev) => {
+              const history = prev?.coordinates || [];
+              const last = history.at(-1);
+              const duplicate =
+                last?.[0] === latitude && last?.[1] === longitude;
+              return {
+                leadId: selectedLeadId,
+                coordinates: duplicate
+                  ? history
+                  : [...history, [latitude, longitude]],
+                point: { ...message.data, ...coords, latitude, longitude },
+              };
+            });
+          })
+          .error((error) => {
+            if (isActive)
+              console.error("Не удалось подписаться на геотрекинг", error);
+          });
+      } catch (error) {
+        if (isActive) console.error("Не удалось подключить геотрекинг", error);
+      }
     }
 
-    if (selectedLeadId) {
-      connect();
-    }
+    connect();
+
+    return () => {
+      isActive = false;
+      controller.abort();
+      echo?.disconnect();
+    };
   }, [selectedLeadId]);
 
   const selectedRoute = useMemo(() => {
@@ -452,34 +528,29 @@ const Map = ({
               >
                 <MapTooltip route={route} open={open} setOpen={setOpen} />
               </Polyline>
-              {passedRoute && (
-                <Polyline
-                  positions={passedRoute}
-                  pathOptions={{
-                    color: "#1976d2",
-                    weight: 5,
-                    dashArray: "10 10",
-                  }}
-                />
-              )}
-              {routeHistory && (
-                <Polyline
-                  positions={routeHistory}
-                  pathOptions={{
-                    color: "#1976d2",
-                    weight: 5,
-                    dashArray: "10 10",
-                  }}
-                />
-              )}
-              {points && (
-                <Marker position={points} icon={driverIcon}>
-                  <DriverPositionPopup leadData={route.lead} point={driverPoint} />
-                </Marker>
-              )}
             </Fragment>
           );
         })}
+        {selectedTracking?.coordinates.length > 0 && (
+          <Polyline
+            positions={selectedTracking.coordinates}
+            pathOptions={{ color: "#1976d2", weight: 5, dashArray: "10 10" }}
+          />
+        )}
+        {selectedTracking?.point && (
+          <Marker
+            position={[
+              selectedTracking.point.latitude,
+              selectedTracking.point.longitude,
+            ]}
+            icon={driverIcon}
+          >
+            <DriverPositionPopup
+              leadData={trackedLead}
+              point={selectedTracking.point}
+            />
+          </Marker>
+        )}
       </MapContainer>
     </Box>
   );
