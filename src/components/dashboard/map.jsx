@@ -339,8 +339,11 @@ const Map = ({
           throw new Error("Сервис не вернул настройки подписки геотрекинга");
         }
 
-        const wsAddress = window.GeoWS_Config?.ws ||
-          (isStaging ? "geo.staging.360logistics.kz" : "geo.v2.360logistics.kz");
+        const wsAddress =
+          window.GeoWS_Config?.ws ||
+          (isStaging
+            ? "geo.staging.360logistics.kz"
+            : "geo.v2.360logistics.kz");
         const wsUrl = new URL(
           wsAddress.includes("://") ? wsAddress : `wss://${wsAddress}`,
         );

@@ -1,5 +1,5 @@
 import { transportationParameters } from "../../../shared/const/leads/transportation-parameters";
-import { isInternationalRoute } from "../../../shared/lib/international-route";
+import { getRoutePointCountry, isInternationalRoute } from "../../../shared/lib/international-route";
 
 function hasValue(value) {
   return value !== null && value !== undefined && value !== "";
@@ -72,12 +72,12 @@ export function mapCreateLeadFormToApi(form, { isDraft = false } = {}) {
   const payload = {
     pass_verify: form.pass_verify === true,
     is_international: isInternational,
-    from_country: form.from_location?.address,
+    from_country: getRoutePointCountry(form.from_location),
     from_region: form.from_location?.address,
     from_city: form.from_location?.address,
     from_address: form.from_location?.address,
 
-    to_country: form.to_location?.address,
+    to_country: getRoutePointCountry(form.to_location),
     to_region: form.to_location?.address,
     to_city: form.to_location?.address,
     to_address: form.to_location?.address,
@@ -89,7 +89,10 @@ export function mapCreateLeadFormToApi(form, { isDraft = false } = {}) {
     point_schedules: form.point_schedules || [],
   };
 
-  addIfHasValue(payload, "waypoints", form.waypoints);
+  addIfHasValue(payload, "waypoints", form.waypoints?.map((point) => ({
+    ...point,
+    country: getRoutePointCountry(point),
+  })));
   for (const { name } of transportationParameters) {
     const value = normalizeText(form[name]?.name ?? form[name]);
     if (value) {

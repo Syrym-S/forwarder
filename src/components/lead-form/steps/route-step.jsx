@@ -6,7 +6,6 @@ import FormControllerInput from "../../../shared/ui/input/form-controller-input"
 import {
   Alert,
   Box,
-  Button,
   Checkbox,
   FormControlLabel,
   Snackbar,
@@ -333,10 +332,25 @@ const RouteStep = ({ control, form, setValue, isEdit = false }) => {
                 readOnly: false,
                 endAdornment: form.from_location?.address ? (
                   <InputAdornment position="end">
-                    <IconButton size="small" aria-label="Очистить адрес отправления" onClick={() => {
-                      clearFromPoint();
-                      setValue("from_location", { address: "", city: "", country: "", region: "", lat: "", lng: "" }, { shouldDirty: true, shouldValidate: true });
-                    }}>
+                    <IconButton
+                      size="small"
+                      aria-label="Очистить адрес отправления"
+                      onClick={() => {
+                        clearFromPoint();
+                        setValue(
+                          "from_location",
+                          {
+                            address: "",
+                            city: "",
+                            country: "",
+                            region: "",
+                            lat: "",
+                            lng: "",
+                          },
+                          { shouldDirty: true, shouldValidate: true },
+                        );
+                      }}
+                    >
                       <CloseOutlinedIcon fontSize="small" />
                     </IconButton>
                   </InputAdornment>
@@ -545,10 +559,25 @@ const RouteStep = ({ control, form, setValue, isEdit = false }) => {
                 readOnly: false,
                 endAdornment: form.to_location?.address ? (
                   <InputAdornment position="end">
-                    <IconButton size="small" aria-label="Очистить адрес назначения" onClick={() => {
-                      clearToPoint();
-                      setValue("to_location", { address: "", city: "", country: "", region: "", lat: "", lng: "" }, { shouldDirty: true, shouldValidate: true });
-                    }}>
+                    <IconButton
+                      size="small"
+                      aria-label="Очистить адрес назначения"
+                      onClick={() => {
+                        clearToPoint();
+                        setValue(
+                          "to_location",
+                          {
+                            address: "",
+                            city: "",
+                            country: "",
+                            region: "",
+                            lat: "",
+                            lng: "",
+                          },
+                          { shouldDirty: true, shouldValidate: true },
+                        );
+                      }}
+                    >
                       <CloseOutlinedIcon fontSize="small" />
                     </IconButton>
                   </InputAdornment>
@@ -647,7 +676,6 @@ const RouteStep = ({ control, form, setValue, isEdit = false }) => {
                   checked={isInternational}
                   onBlur={field.onBlur}
                   inputRef={field.ref}
-                  disabled
                 />
               }
               label="Перевозка является международной"
@@ -655,15 +683,9 @@ const RouteStep = ({ control, form, setValue, isEdit = false }) => {
           )}
         />
         <Typography variant="body2" color="text.secondary">
-          Определяется автоматически по странам точек маршрута. Для международной
-          перевозки обязательно нужно добавить код TNVED.
+          Определяется автоматически по странам точек маршрута. Для
+          международной перевозки обязательно нужно добавить код TNVED.
         </Typography>
-        {form.pass_verify === true && !isEdit && (
-          <Alert severity="warning" sx={{ mt: 1.5, borderRadius: 2 }}>
-            После создания лида изменить эту настройку будет нельзя. Пропуск
-            подтверждения файлов погрузки/разгрузки останется включённым.
-          </Alert>
-        )}
       </Box>
       <Box
         sx={{
