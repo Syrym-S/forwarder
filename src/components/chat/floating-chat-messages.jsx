@@ -23,7 +23,13 @@ import {
   sendMessageApi,
 } from "../../app/store/leads/api";
 
-import { getSupportMessagesApi, sendSupportMessageApi, readSupportMessagesApi, downloadSupportFileApi, getSupportTokenApi } from "../../app/store/support-chat/api";
+import {
+  getSupportMessagesApi,
+  sendSupportMessageApi,
+  readSupportMessagesApi,
+  downloadSupportFileApi,
+  getSupportTokenApi,
+} from "../../app/store/support-chat/api";
 
 const FloatingChatMessages = ({ chat }) => {
   const leadId = chat.lead_id ?? chat.lead?.id;
@@ -54,19 +60,39 @@ const FloatingChatMessages = ({ chat }) => {
     const load = async () => {
       const currentRequest = ++request;
       try {
-        const supportResponses = isSupport ? await Promise.all(
-          Array.from({ length: loadedSupportPages.current }, (_, index) => getSupportMessagesApi(index + 1)),
-        ) : null;
-        const response = isSupport ? supportResponses[0] : await getLeadMessagesApi(leadId, {
-          chat_type: chatType,
-        });
+        const supportResponses = isSupport
+          ? await Promise.all(
+              Array.from({ length: loadedSupportPages.current }, (_, index) =>
+                getSupportMessagesApi(index + 1),
+              ),
+            )
+          : null;
+        const response = isSupport
+          ? supportResponses[0]
+          : await getLeadMessagesApi(leadId, {
+              chat_type: chatType,
+            });
         if (!disposed && currentRequest === request) {
-          setMessages(() => isSupport
-            ? [...new Map(supportResponses.flatMap((page) => page.data.data ?? []).map((message) => [message.id, message])).values()].sort((a, b) => a.id - b.id)
-            : response.data.data ?? []);
+          setMessages(() =>
+            isSupport
+              ? [
+                  ...new Map(
+                    supportResponses
+                      .flatMap((page) => page.data.data ?? [])
+                      .map((message) => [message.id, message]),
+                  ).values(),
+                ].sort((a, b) => a.id - b.id)
+              : (response.data.data ?? []),
+          );
           if (isSupport) {
             setParticipantId(response.data.participant_id);
-            setOlderPage((previous) => previous === undefined ? (response.data.meta?.last_page > 1 ? 2 : null) : previous);
+            setOlderPage((previous) =>
+              previous === undefined
+                ? response.data.meta?.last_page > 1
+                  ? 2
+                  : null
+                : previous,
+            );
           }
           setError(null);
         }
@@ -82,7 +108,9 @@ const FloatingChatMessages = ({ chat }) => {
     reload.current = load;
     const connect = async () => {
       try {
-        const response = isSupport ? await getSupportTokenApi() : await getChatTokenApi(leadId, chatType);
+        const response = isSupport
+          ? await getSupportTokenApi()
+          : await getChatTokenApi(leadId, chatType);
         if (disposed) return;
         const { token, chat_id } = response.data;
         if (isSupport) setParticipantId(response.data.participant_id);
@@ -107,13 +135,20 @@ const FloatingChatMessages = ({ chat }) => {
           ".message.deleted",
           ".message.updated",
           ".messages.read",
-        ].forEach((event) => channel.listen(event, async () => {
-          if (disposed) return;
-          if (isSupport && event === ".message.sent") {
-            try { await readSupportMessagesApi(); } catch { if (!disposed) setError("Не удалось отметить сообщения прочитанными"); }
-          }
-          if (!disposed) await load();
-        }));
+        ].forEach((event) =>
+          channel.listen(event, async () => {
+            if (disposed) return;
+            if (isSupport && event === ".message.sent") {
+              try {
+                await readSupportMessagesApi();
+              } catch {
+                if (!disposed)
+                  setError("Не удалось отметить сообщения прочитанными");
+              }
+            }
+            if (!disposed) await load();
+          }),
+        );
         await load();
       } catch {
         if (!disposed)
@@ -123,14 +158,15 @@ const FloatingChatMessages = ({ chat }) => {
       }
     };
     load();
-    if (!isSupport) getMessageParticipantInfoApi(leadId, chatType)
-      .then((response) => {
-        if (!disposed) setParticipants(response.data.data ?? []);
-      })
-      .catch(() => {
-        if (!disposed)
-          setParticipantError("Не удалось загрузить участников чата");
-      });
+    if (!isSupport)
+      getMessageParticipantInfoApi(leadId, chatType)
+        .then((response) => {
+          if (!disposed) setParticipants(response.data.data ?? []);
+        })
+        .catch(() => {
+          if (!disposed)
+            setParticipantError("Не удалось загрузить участников чата");
+        });
     connect();
     return () => {
       disposed = true;
@@ -169,7 +205,9 @@ const FloatingChatMessages = ({ chat }) => {
   const download = async (file) => {
     setDownloadingId(file.id);
     try {
-      const response = isSupport ? await downloadSupportFileApi(file.id) : await downloadMessageFileApi(leadId, file.id, chatType);
+      const response = isSupport
+        ? await downloadSupportFileApi(file.id)
+        : await downloadMessageFileApi(leadId, file.id, chatType);
       const url = URL.createObjectURL(response.data);
       const link = document.createElement("a");
       link.href = url;
@@ -182,6 +220,20 @@ const FloatingChatMessages = ({ chat }) => {
       setDownloadingId(null);
     }
   };
+
+  if (messages.length === 0)
+    return (
+      <Box
+        sx={{
+          height: "100%",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <CircularProgress />
+      </Box>
+    );
 
   return (
     <Box
@@ -251,16 +303,39 @@ const FloatingChatMessages = ({ chat }) => {
         </Alert>
       )}
       <Box sx={{ flex: 1, minHeight: 0, overflowY: "auto", p: 1.5 }}>
-        {isSupport && olderPage && <Button disabled={loadingOlder} onClick={async () => {
-          setLoadingOlder(true);
-          try {
-            const response = await getSupportMessagesApi(olderPage);
-            loadedSupportPages.current = olderPage;
-            setMessages((previous) => [...new Map([...(response.data.data ?? []), ...previous].map((message) => [message.id, message])).values()].sort((a, b) => a.id - b.id));
-            setOlderPage(response.data.meta?.current_page < response.data.meta?.last_page ? olderPage + 1 : null);
-          } catch { setError("Не удалось загрузить историю сообщений"); }
-          finally { setLoadingOlder(false); }
-        }}>{loadingOlder ? "Загрузка…" : "Ранние сообщения"}</Button>}
+        {isSupport && olderPage && (
+          <Button
+            disabled={loadingOlder}
+            onClick={async () => {
+              setLoadingOlder(true);
+              try {
+                const response = await getSupportMessagesApi(olderPage);
+                loadedSupportPages.current = olderPage;
+                setMessages((previous) =>
+                  [
+                    ...new Map(
+                      [...(response.data.data ?? []), ...previous].map(
+                        (message) => [message.id, message],
+                      ),
+                    ).values(),
+                  ].sort((a, b) => a.id - b.id),
+                );
+                setOlderPage(
+                  response.data.meta?.current_page <
+                    response.data.meta?.last_page
+                    ? olderPage + 1
+                    : null,
+                );
+              } catch {
+                setError("Не удалось загрузить историю сообщений");
+              } finally {
+                setLoadingOlder(false);
+              }
+            }}
+          >
+            {loadingOlder ? "Загрузка…" : "Ранние сообщения"}
+          </Button>
+        )}
         {loading ? (
           <Box sx={{ textAlign: "center", p: 3 }}>
             <CircularProgress size={28} />
@@ -335,7 +410,9 @@ const FloatingChatMessages = ({ chat }) => {
           </IconButton>
           <IconButton
             color="primary"
-            aria-label={isSupport ? "Прикрепить файл" : "Прикрепить изображение"}
+            aria-label={
+              isSupport ? "Прикрепить файл" : "Прикрепить изображение"
+            }
             disabled={sending}
             onClick={() => fileInput.current?.click()}
           >

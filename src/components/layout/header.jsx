@@ -97,7 +97,11 @@ const Header = ({ openMenu, setOpenMenu }) => {
           aria-label={openMenu ? "Закрыть меню" : "Открыть меню"}
           aria-expanded={openMenu}
           onClick={handleToggleMenu}
-          sx={{ p: 0, color: "inherit", display: { xs: "inline-flex", sm: "none" } }}
+          sx={{
+            p: 0,
+            color: "inherit",
+            display: { xs: "inline-flex", sm: "none" },
+          }}
         >
           <MenuIcon
             sx={{
@@ -133,56 +137,55 @@ const Header = ({ openMenu, setOpenMenu }) => {
       >
         <NotificationsBlock />
         <ChatsContainer />
-
         <ActionTooltip title="Открыть меню профиля">
-        <Button
-          variant="outlined"
-          onClick={handleOpenProfileMenu}
-          aria-label="Открыть меню профиля"
-          sx={{
-            borderColor: "primary.main",
-            display: "flex",
-            gap: 1,
-            width: "fit-content",
-            textTransform: "none",
-            overflow: "hidden",
-            textOverflow: "ellipsis",
-            whiteSpace: "nowrap",
-            borderRadius: 2,
-            px: {
-              xs: 0,
-              sm: 1,
-            },
-          }}
-        >
-          <Avatar
-            src={profileData?.avatar || undefined}
+          <Button
+            variant="outlined"
+            onClick={handleOpenProfileMenu}
+            aria-label="Открыть меню профиля"
             sx={{
-              width: {
-                xs: 24,
-                sm: 28,
+              borderColor: "primary.main",
+              display: "flex",
+              gap: 1,
+              width: "fit-content",
+              textTransform: "none",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              whiteSpace: "nowrap",
+              borderRadius: 2,
+              px: {
+                xs: 0,
+                sm: 1,
               },
-              height: {
-                xs: 24,
-                sm: 28,
-              },
-
-              fontSize: 13,
-              flexShrink: 0,
-            }}
-          />
-          <Typography
-            sx={{
-              display: {
-                xs: "none",
-                sm: "inline",
-              },
-              color: "primary.main",
             }}
           >
-            {userEmail}
-          </Typography>
-        </Button>
+            <Avatar
+              src={profileData?.avatar || undefined}
+              sx={{
+                width: {
+                  xs: 24,
+                  sm: 28,
+                },
+                height: {
+                  xs: 24,
+                  sm: 28,
+                },
+
+                fontSize: 13,
+                flexShrink: 0,
+              }}
+            />
+            <Typography
+              sx={{
+                display: {
+                  xs: "none",
+                  sm: "inline",
+                },
+                color: "primary.main",
+              }}
+            >
+              {userEmail}
+            </Typography>
+          </Button>
         </ActionTooltip>
         <Menu
           anchorEl={profileAnchorEl}
@@ -223,10 +226,12 @@ const Header = ({ openMenu, setOpenMenu }) => {
             Настройки
           </MenuItem>
 
-          <MenuItem onClick={() => {
-            handleCloseProfileMenu();
-            navigate("/complaints");
-          }}>
+          <MenuItem
+            onClick={() => {
+              handleCloseProfileMenu();
+              navigate("/complaints");
+            }}
+          >
             Жалобы
           </MenuItem>
 
@@ -244,7 +249,6 @@ const Header = ({ openMenu, setOpenMenu }) => {
             Выход
           </MenuItem>
         </Menu>
-
         {isLogoutModalOpen && (
           <LogoutModal
             open={isLogoutModalOpen}

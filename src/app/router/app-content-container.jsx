@@ -26,7 +26,8 @@ const AppContentContainer = () => {
   const titleMatch = [...matches]
     .reverse()
     .find((match) => match.handle?.title || match.handle?.breadcrumb);
-  const titleValue = titleMatch?.handle?.title || titleMatch?.handle?.breadcrumb;
+  const titleValue =
+    titleMatch?.handle?.title || titleMatch?.handle?.breadcrumb;
   const title =
     typeof titleValue === "function"
       ? titleValue({ ...titleMatch, currentLead })
