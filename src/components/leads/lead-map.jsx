@@ -223,7 +223,10 @@ export default function LeadMap({ from, waypoints = [], to, id, leadData }) {
       zoom={13}
       style={{ height: "300px", width: "100%", zIndex: 0 }}
     >
-      <TileLayer url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png?key=cb1_33bl_1_e67a46f1e67e6cbad8143c4e" />
+      <TileLayer
+        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
+        url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png?key=cb1_33bl_1_e67a46f1e67e6cbad8143c4e"
+      />
 
       <Marker position={start} icon={createMarkerIcon("A")} />
 

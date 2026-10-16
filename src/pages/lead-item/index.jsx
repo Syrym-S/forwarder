@@ -231,7 +231,7 @@ const LeadItem = () => {
             <Tab
               value={LEAD_TABS.factor_chat}
               label="Чат с фактором"
-              disabled={isActive}
+              disabled={isActive || !leadData.factor_id}
             />
           </Tabs>
 

@@ -468,7 +468,6 @@ const Map = ({
         </Box>
       )}
       <MapContainer
-        attributionControl={false}
         center={[43.238949, 76.889709]}
         zoom={13}
         style={{
@@ -478,7 +477,7 @@ const Map = ({
         }}
       >
         <TileLayer
-          attribution="&copy; OpenStreetMap contributors"
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
           url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png?key=cb1_33bl_1_e67a46f1e67e6cbad8143c4e"
         />
 

@@ -1,6 +1,7 @@
 import { moneySpacingFormat } from "../../../shared/helpers/money-spacing";
 import { getCargoVolume } from "../../../shared/lib/cargo-volume";
 import InfoItem from "../../../shared/ui/info-item";
+import ActionTooltip from "../../../shared/ui/action-tooltip";
 import { Box, Button, CircularProgress, Typography } from "@mui/material";
 import { STATUS } from "../../../shared/const/tenders";
 import { useLeadsStore } from "../../../app/store/leads/leads-store";
@@ -17,7 +18,6 @@ const CargoCard = ({
     lead?.status === STATUS.new || lead?.status === STATUS.add_driver;
   const tnvedCode = cargo?.tnved?.code ?? cargo?.tnved_code ??
     (typeof cargo?.tnved === "string" ? cargo.tnved : "");
-  const tnvedLabel = [tnvedCode, cargo?.tnved?.name].filter(Boolean).join(" — ");
   const getLeadItem = useLeadsStore((state) => state.getLeadItem);
   const deleteCargo = useLeadsStore((state) => state.deleteCargo);
   const isLoading = useLeadsStore((state) => state.isLoading);
@@ -66,7 +66,14 @@ const CargoCard = ({
 
         <InfoItem label="Тип" value={cargo?.type} />
 
-        <InfoItem label="Код товара" value={tnvedLabel || "Не указан"} />
+        <InfoItem
+          label="Код товара"
+          value={tnvedCode ? (
+            <ActionTooltip title={cargo?.tnved?.name || ""}>
+              <span>{tnvedCode}</span>
+            </ActionTooltip>
+          ) : "Не указан"}
+        />
 
         <InfoItem
           label="Вес"
