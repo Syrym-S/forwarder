@@ -6,6 +6,7 @@ import { STATUS } from "../../../shared/const/tenders";
 import { InfoBadge } from "../../lead-form/info-badge";
 import InfoItem from "../../../shared/ui/info-item";
 import PrimaryButton from "../../../shared/ui/button/primary-button";
+import EmptyInfo from "../../../shared/ui/empty/empty-info";
 
 const LeadCustomerInfo = ({ leadData, canDetach = false }) => {
   const customer = leadData?.customer;
@@ -50,7 +51,10 @@ const LeadCustomerInfo = ({ leadData, canDetach = false }) => {
         title="Данные о заказчике"
         icon={<BusinessOutlinedIcon color="primary" />}
       >
-        <InfoBadge label={""} value={"Заказчик не указан"} />
+        <EmptyInfo
+          label="Заказчик не указан"
+          subLabel="Нельзя начать рейс без заказчика"
+        />
       </Section>
     );
 

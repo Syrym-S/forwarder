@@ -9,12 +9,17 @@ import {
 } from "@mui/material";
 import { useLeadsStore } from "../../../app/store/leads/leads-store";
 import { STATUS } from "../../../shared/const/tenders";
-import { InfoBadge } from "../../lead-form/info-badge";
 import InfoItem from "../../../shared/ui/info-item";
 import PrimaryButton from "../../../shared/ui/button/primary-button";
 import StarBorderRoundedIcon from "@mui/icons-material/StarBorderRounded";
+import EmptyInfo from "../../../shared/ui/empty/empty-info";
 
-const LeadDriverInfo = ({ leadData, canDetach = false, setRatingLead, hideRatingAction = false }) => {
+const LeadDriverInfo = ({
+  leadData,
+  canDetach = false,
+  setRatingLead,
+  hideRatingAction = false,
+}) => {
   const driver = leadData?.driver;
   const isDriverRated = !!leadData?.driver_rate;
   const driverRate = Number(leadData?.driver_rate);
@@ -56,7 +61,10 @@ const LeadDriverInfo = ({ leadData, canDetach = false, setRatingLead, hideRating
   if (!driver?.fio && !driver?.id)
     return (
       <Section title="Водитель" icon={<PersonOutlinedIcon color="primary" />}>
-        <InfoBadge label={""} value={"Водитель не указан"} />
+        <EmptyInfo
+          label="Водитель не указан"
+          subLabel="Нельзя начать рейс без водителя"
+        />
       </Section>
     );
 

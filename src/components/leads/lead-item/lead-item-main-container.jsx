@@ -339,13 +339,14 @@ const LeadItemMainContainer = ({
 
       <Box
         sx={{
+          minHeight: "250px",
           display: "grid",
           gridTemplateColumns: {
             xs: "minmax(0, 1fr)",
             xl: "repeat(2, minmax(0, 1fr))",
           },
           gap: 2,
-          alignItems: "start",
+          alignItems: "stretch",
         }}
       >
         <LeadCustomerInfo leadData={leadData} canDetach />
