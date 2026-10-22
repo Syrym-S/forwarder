@@ -63,6 +63,7 @@ const AddLeadForm = ({
 
   const defaultValues = {
     documents: [],
+    auto_start: false,
     pass_verify: false,
     ...initialValues,
     cargos: initialValues?.cargos?.length

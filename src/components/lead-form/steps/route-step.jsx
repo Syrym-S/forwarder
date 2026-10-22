@@ -9,6 +9,7 @@ import {
   Checkbox,
   FormControlLabel,
   Snackbar,
+  Stack,
   Typography,
   IconButton,
   InputAdornment,
@@ -727,6 +728,36 @@ const RouteStep = ({ control, form, setValue, isEdit = false }) => {
           </Alert>
         )}
       </Box>
+      <Controller
+        name="auto_start"
+        control={control}
+        defaultValue={false}
+        render={({ field }) => (
+          <Stack spacing={1} sx={{ mt: 2 }}>
+            <FormControlLabel
+              label="Автоматически привязать перевозку к водителю"
+              control={
+                <Checkbox
+                  name={field.name}
+                  checked={field.value === true}
+                  onChange={(_, checked) => field.onChange(checked)}
+                  onBlur={field.onBlur}
+                  slotProps={{
+                    input: {
+                      ref: field.ref,
+                      "aria-describedby": "auto-start-warning",
+                    },
+                  }}
+                />
+              }
+            />
+            <Alert id="auto-start-warning" severity="warning">
+              После создания перевозки изменить настройку автоматической
+              привязки будет нельзя.
+            </Alert>
+          </Stack>
+        )}
+      />
     </StepSection>
   );
 };

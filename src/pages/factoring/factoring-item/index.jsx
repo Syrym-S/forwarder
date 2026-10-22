@@ -184,65 +184,63 @@ const FactoringItem = () => {
           />
         </Box>
 
-        {(factoringDetails?.verified_forwarder || isMustSignDocument) && (
-          <Section
-            title="Подтвердить факторинг"
-            icon={<DescriptionOutlinedIcon color="primary" />}
-          >
-            {factoringDetails?.verified_forwarder ? (
-              <Alert severity="success" sx={{ borderRadius: 2 }}>
-                Вы подписали договор!
-              </Alert>
-            ) : (
-              <>
-                <Typography
-                  sx={{ mb: 2, color: "text.secondary", fontSize: 14 }}
-                >
-                  Подпишите договор для подтверждения факторинга. При
-                  необходимости вы можете перегенерировать документ перед
-                  подписанием.
-                </Typography>
-                <Box
-                  sx={{
-                    display: "flex",
-                    flexWrap: "wrap",
-                    gap: 1.5,
-                    "& .MuiButton-root": { width: { xs: "100%", sm: "auto" } },
-                  }}
-                >
-                  <PrimaryButton
-                    size="medium"
-                    isLoading={isConfirmLoading}
-                    disabled={
-                      isConfirmLoading || isLoading || isRegenerateLoading
-                    }
-                    onClick={handleAcceptFactoring}
-                    text={
-                      isConfirmLoading ? "Идёт подтверждение..." : "Подтвердить"
-                    }
-                  />
-                  <PrimaryButton
-                    variant="outlined"
-                    size="medium"
-                    isLoading={isRegenerateLoading}
-                    disabled={isConfirmLoading || isLoading}
-                    onClick={handleRegenerateFactoring}
-                    text={
-                      isRegenerateLoading
-                        ? "Перегенерация..."
-                        : "Перегенерировать документ"
-                    }
-                  />
-                </Box>
-                {regenerateFeedback && (
-                  <Alert severity={regenerateFeedback.severity} sx={{ mt: 2 }}>
-                    {regenerateFeedback.message}
-                  </Alert>
-                )}
-              </>
-            )}
-          </Section>
-        )}
+        {/* {(factoringDetails?.verified_forwarder || isMustSignDocument) && ( */}
+        <Section
+          title="Подтвердить факторинг"
+          icon={<DescriptionOutlinedIcon color="primary" />}
+        >
+          {factoringDetails?.verified_forwarder ? (
+            <Alert severity="success" sx={{ borderRadius: 2 }}>
+              Вы подписали договор!
+            </Alert>
+          ) : (
+            <>
+              <Typography sx={{ mb: 2, color: "text.secondary", fontSize: 14 }}>
+                Подпишите договор для подтверждения факторинга. При
+                необходимости вы можете перегенерировать документ перед
+                подписанием.
+              </Typography>
+              <Box
+                sx={{
+                  display: "flex",
+                  flexWrap: "wrap",
+                  gap: 1.5,
+                  "& .MuiButton-root": { width: { xs: "100%", sm: "auto" } },
+                }}
+              >
+                <PrimaryButton
+                  size="medium"
+                  isLoading={isConfirmLoading}
+                  disabled={
+                    isConfirmLoading || isLoading || isRegenerateLoading
+                  }
+                  onClick={handleAcceptFactoring}
+                  text={
+                    isConfirmLoading ? "Идёт подтверждение..." : "Подтвердить"
+                  }
+                />
+                <PrimaryButton
+                  variant="outlined"
+                  size="medium"
+                  isLoading={isRegenerateLoading}
+                  disabled={isConfirmLoading || isLoading}
+                  onClick={handleRegenerateFactoring}
+                  text={
+                    isRegenerateLoading
+                      ? "Перегенерация..."
+                      : "Перегенерировать документ"
+                  }
+                />
+              </Box>
+              {regenerateFeedback && (
+                <Alert severity={regenerateFeedback.severity} sx={{ mt: 2 }}>
+                  {regenerateFeedback.message}
+                </Alert>
+              )}
+            </>
+          )}
+        </Section>
+        {/* )} */}
 
         {/* <ConfirmModal /> */}
 

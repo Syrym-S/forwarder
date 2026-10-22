@@ -70,6 +70,7 @@ export function mapCreateLeadFormToApi(form, { isDraft = false } = {}) {
   );
 
   const payload = {
+    auto_start: form.auto_start === true,
     pass_verify: form.pass_verify === true,
     is_international: isInternational,
     from_country: getRoutePointCountry(form.from_location),

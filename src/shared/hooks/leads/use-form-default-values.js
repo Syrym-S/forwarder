@@ -4,6 +4,7 @@ import { transportationParameters } from "../../const/leads/transportation-param
 export const useFormDefaultValues = (lead = null, files = []) => {
   return {
     ...Object.fromEntries(transportationParameters.map(({ name }) => [name, lead?.[name]?.name ?? lead?.[name] ?? ""])),
+    auto_start: lead?.auto_start === true,
     pass_verify: lead?.pass_verify === true,
     loading_date: lead?.created_at?.date || null,
     driver: lead?.driver,
