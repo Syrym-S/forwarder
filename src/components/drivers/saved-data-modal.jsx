@@ -40,7 +40,7 @@ const SavedDataModal = ({ savedData, setSavedData }) => {
             borderRadius={1}
           >
             <Box>
-              <InfoItem label={"Логин"} value={savedData?.login} />
+              <InfoItem label={"Логин"} value={savedData?.email} />
             </Box>
           </Box>
 

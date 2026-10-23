@@ -2,7 +2,7 @@ import Header from "../../components/layout/header";
 import SideBar from "../../components/layout/menu";
 import NotificationPopup from "../../components/layout/notifications/notification-popup";
 import RenderNotificationIcon from "../../shared/ui/render-notification-icon";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { Outlet, useMatches } from "react-router-dom";
 import { Box, Slide, Snackbar, Typography } from "@mui/material";
 import { useNotificationsStore } from "../store/notifications/noti-store";
@@ -51,33 +51,17 @@ const AppContentContainer = () => {
 
   const [notificationPopUpItem, setNotificationPopUpItem] = useState(null);
 
-  const socketRef = useRef(null);
-
   const handleOpenPopUp = () => {
     setNotificationPopUpItem(newNotification);
   };
 
   useEffect(() => {
-    const init = async () => {
-      const socket = await connectNotifications();
-
-      socket.onmessage = async () => {
-        await getNotifications(undefined, { showSnackbar: true });
-      };
-
-      socketRef.current = socket;
-    };
-
-    init();
-
-    return () => {
-      socketRef.current?.close();
-    };
-  }, []);
+    return connectNotifications();
+  }, [connectNotifications]);
 
   useEffect(() => {
     getNotifications(undefined, { showSnackbar: true });
-  }, []);
+  }, [getNotifications]);
 
   return (
     <>
