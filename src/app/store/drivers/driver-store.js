@@ -4,6 +4,7 @@ import {
   createDriverApi,
   getDriverDetailsApi,
   getDriversApi,
+  regenerateLinkApi,
   searchDriverApi,
 } from "./api";
 
@@ -16,6 +17,7 @@ export const useDriverStore = create((set) => ({
   isLoading: false,
   isDetailsLoading: false,
   isBanLoading: false,
+  isLinkLoading: false,
 
   error: null,
   count: 0,
@@ -119,6 +121,26 @@ export const useDriverStore = create((set) => ({
       set({
         error: e.response?.data?.message || e.message,
         isBanLoading: false,
+      });
+
+      throw e;
+    }
+  },
+
+  regenerateDriverLink: async (payload, id) => {
+    try {
+      set({ isLinkLoading: true, error: null });
+
+      const response = await regenerateLinkApi(payload, id);
+
+      set({
+        isLinkLoading: false,
+      });
+      return response;
+    } catch (e) {
+      set({
+        error: e.response?.data?.message || e.message,
+        isLinkLoading: false,
       });
 
       throw e;

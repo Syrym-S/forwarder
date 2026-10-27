@@ -8,6 +8,8 @@ const useDriversColumns = (
   setSelectedDriver,
   onBlockDriver,
   onCopyLink,
+  isLinkLoading,
+  regeneratingDriverId,
 ) => {
   const columns = [
     {
@@ -79,28 +81,20 @@ const useDriversColumns = (
       disableColumnMenu: true,
       cellClassName: "driver-link-cell",
       headerClassName: "driver-link-header",
-      renderCell: ({ value, hasFocus }) => (
-        <Tooltip
-          title={
-            value ? "Скопировать пригласительную ссылку" : "Ссылка отсутствует"
-          }
+      renderCell: ({ row, hasFocus }) => (
+        <TooltipIconButton
+          title="Перегенерировать и скопировать ссылку"
+          color="primary"
+          disabled={isLinkLoading || regeneratingDriverId !== null}
+          loading={regeneratingDriverId === row.id}
+          tabIndex={hasFocus ? 0 : -1}
+          onClick={(event) => {
+            event.stopPropagation();
+            onCopyLink(row.id);
+          }}
         >
-          <span>
-            <TooltipIconButton
-              title="Скопировать пригласительную ссылку"
-              aria-label="Скопировать пригласительную ссылку"
-              color="primary"
-              disabled={!value}
-              tabIndex={hasFocus ? 0 : -1}
-              onClick={(event) => {
-                event.stopPropagation();
-                onCopyLink(value);
-              }}
-            >
-              <ContentCopyOutlinedIcon />
-            </TooltipIconButton>
-          </span>
-        </Tooltip>
+          <ContentCopyOutlinedIcon />
+        </TooltipIconButton>
       ),
     },
     {

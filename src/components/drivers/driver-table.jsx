@@ -4,12 +4,19 @@ import { useEffect, useRef, useState } from "react";
 import { Alert, Snackbar } from "@mui/material";
 import BlockDriverModal from "./block-driver-modal";
 import useDriversColumns from "../../shared/hooks/drivers/use-drivers-column";
+import { useDriverStore } from "../../app/store/drivers/driver-store";
 
 const DriversTable = ({ drivers, setSelectedDriver, handleBanDriver }) => {
   const apiRef = useGridApiRef();
   const tableRef = useRef(null);
   const [driverToBlock, setDriverToBlock] = useState(null);
   const [copyNotice, setCopyNotice] = useState(null);
+  const [regeneratingDriverId, setRegeneratingDriverId] = useState(null);
+  const copyInProgressRef = useRef(false);
+  const regenerateDriverLink = useDriverStore(
+    (state) => state.regenerateDriverLink,
+  );
+  const isLinkLoading = useDriverStore((state) => state.isLinkLoading);
 
   useEffect(() => {
     apiRef.current.unstable_setColumnVirtualization(false);
@@ -41,21 +48,57 @@ const DriversTable = ({ drivers, setSelectedDriver, handleBanDriver }) => {
     };
   }, []);
 
-  const handleCopyLink = async (link) => {
+  const handleCopyLink = async (driverId) => {
+    if (copyInProgressRef.current || useDriverStore.getState().isLinkLoading) {
+      return;
+    }
+
+    copyInProgressRef.current = true;
+    setRegeneratingDriverId(driverId);
     try {
-      await navigator.clipboard.writeText(link);
-      setCopyNotice({ severity: "success", message: "Ссылка скопирована" });
-    } catch {
+      const response = await regenerateDriverLink(null, driverId);
+      const data = response.data;
+      const link =
+        typeof data === "string"
+          ? data
+          : data?.login_url_android ||
+            data?.login_url_ios ||
+            data?.invite_link ||
+            data?.login_url ||
+            data?.login_link ||
+            data?.link ||
+            data?.url;
+
+      if (typeof link !== "string" || !link.trim()) {
+        throw new Error("Сервер не вернул ссылку для копирования");
+      }
+
+      try {
+        await navigator.clipboard.writeText(link);
+      } catch {
+        throw new Error("Ссылка перегенерирована, но не удалось её скопировать");
+      }
+      setCopyNotice({ severity: "success", message: "Новая ссылка скопирована" });
+    } catch (error) {
       setCopyNotice({
         severity: "error",
-        message: "Не удалось скопировать ссылку",
+        message:
+          error.response?.data?.message ||
+          error.message ||
+          "Не удалось перегенерировать ссылку",
       });
+    } finally {
+      copyInProgressRef.current = false;
+      setRegeneratingDriverId(null);
     }
   };
+
   const columns = useDriversColumns(
     setSelectedDriver,
     setDriverToBlock,
     handleCopyLink,
+    isLinkLoading,
+    regeneratingDriverId,
   );
 
   return (

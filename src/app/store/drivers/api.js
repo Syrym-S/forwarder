@@ -42,3 +42,12 @@ export const banDriverApi = async (payload, driver_id) => {
 
   return data;
 };
+
+export const regenerateLinkApi = async (payload, driver_id) => {
+  const data = await api.post(
+    `/forwarder/v1/drivers/${driver_id}/login-link`,
+    payload,
+  );
+
+  return data;
+};
