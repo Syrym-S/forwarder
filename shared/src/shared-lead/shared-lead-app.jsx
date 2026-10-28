@@ -1,6 +1,5 @@
-import { Box, CircularProgress } from "@mui/material";
-import { useEffect, useState } from "react";
-import { getSharedLeadApi } from "./api/index.api";
+import { Box } from "@mui/material";
+import { useLoaderData, useParams } from "react-router-dom";
 import LeadCustomerInfo from "../../../src/components/leads/lead-item/lead-customer-info";
 import LeadRouteInfo from "../../../src/components/leads/lead-item/lead-route-info";
 import LeadMap from "../../../src/components/leads/lead-map";
@@ -12,28 +11,10 @@ import LeadDriverInfo from "../../../src/components/leads/lead-item/lead-driver-
 import LeadTransportationInfo from "../../../src/components/leads/lead-item/lead-transportation-info";
 
 const SharedLeadApp = () => {
-  const [leadData, setLeadData] = useState(null);
-
-  const path = window.location.pathname;
-
-  const parts = path.split("/").filter(Boolean);
-
-  const sharedIndex = parts.indexOf("shared");
-
-  const leadId = parts[sharedIndex + 1];
-  const token = parts[sharedIndex + 2];
+  const leadData = useLoaderData();
+  const { leadId } = useParams();
 
   const cargosCount = leadData?.cargos?.length;
-
-  const getSharedLead = async () => {
-    try {
-      const response = await getSharedLeadApi(leadId, token);
-
-      setLeadData(response.data.data);
-    } catch (e) {
-      console.log(e);
-    }
-  };
 
   const waypoints = leadData?.waypoints?.map((waypoint) => {
     return {
@@ -50,16 +31,6 @@ const SharedLeadApp = () => {
     lat: leadData?.to_location.lat,
     lon: leadData?.to_location.lon,
   };
-
-  useEffect(() => {
-    const load = async () => {
-      await getSharedLead();
-    };
-
-    load();
-  }, []);
-
-  if (!leadData) return <CircularProgress />;
 
   return (
     <>
