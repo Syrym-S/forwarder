@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import {
   Alert,
   Box,
@@ -12,6 +13,7 @@ import { useEffect, useState } from "react";
 import CustomerTenderItem from "./customer-tender-item";
 
 const CustomerCreatedTenders = () => {
+  const { t } = useTranslation();
   const tenders = useTendersStore((state) => state.customerTenders);
   const publicTenders = tenders.filter(
     (tender) => tender.publication_type === "public",
@@ -99,12 +101,12 @@ const CustomerCreatedTenders = () => {
             color: "font_color.heading",
           }}
         >
-          Аукционы заказчиков
+          {t("dashboard.customer_auctions")}
         </Typography>
 
         <FormControlLabel
           sx={{ m: 0, gap: 0.5 }}
-          label={checked ? "Публичные аукционы" : "Приватные аукцоны"}
+          label={checked ? t("dashboard.public_auctions") : t("dashboard.private_auctions")}
           slotProps={{ typography: { fontSize: 13, color: "text.secondary" } }}
           control={
             <Switch
@@ -141,7 +143,7 @@ const CustomerCreatedTenders = () => {
             }}
           >
             <Alert severity="info">
-              Список приватных аукционов от заказчиков пуст!
+              {t("dashboard.no_private_customer_auctions")}
             </Alert>
           </Box>
         </Box>
@@ -164,7 +166,7 @@ const CustomerCreatedTenders = () => {
             }}
           >
             <Alert severity="info">
-              Список публичных аукционов от заказчиков пуст!
+              {t("dashboard.no_public_customer_auctions")}
             </Alert>
           </Box>
         </Box>

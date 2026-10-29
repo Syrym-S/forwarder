@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import React from "react";
 import useFactoringColumns from "../../shared/hooks/fatorings/use-factoring-columns";
 import { DataGrid } from "@mui/x-data-grid";
@@ -5,6 +6,7 @@ import { CircularProgress, Paper } from "@mui/material";
 import { useFactoringStore } from "../../app/store/factoring/factoring-store";
 
 const FactoringTable = ({ factorings }) => {
+  const { t } = useTranslation();
   const columns = useFactoringColumns(factorings);
 
   const isLoading = useFactoringStore((state) => state.isLoading);
@@ -18,7 +20,7 @@ const FactoringTable = ({ factorings }) => {
         checkboxSelection
         rowHeight={70}
         localeText={{
-          noRowsLabel: isLoading ? <CircularProgress /> : "Список пуст",
+          noRowsLabel: isLoading ? <CircularProgress /> : t("dashboard.list_empty"),
         }}
         sx={{
           "& .MuiDataGrid-row:nth-of-type(even)": {

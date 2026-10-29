@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import {
   Alert,
   Box,
@@ -12,6 +13,7 @@ import { useTendersStore } from "../../../app/store/tenders/tender-store";
 import ForwarderTenderItem from "./forwarder-tender-item";
 
 const ForwarderCreatedTenders = () => {
+  const { t } = useTranslation();
   const tenders = useTendersStore((state) => state.tenders);
   const getTenders = useTendersStore((state) => state.getTenders);
   const isLoading = useTendersStore((state) => state.isLoading);
@@ -97,12 +99,12 @@ const ForwarderCreatedTenders = () => {
             color: "font_color.heading",
           }}
         >
-          Аукционы для водителей
+          {t("dashboard.driver_auctions")}
         </Typography>
 
         <FormControlLabel
           sx={{ m: 0, gap: 0.5 }}
-          label={checked ? "Публичные аукционы" : "Приватные аукцоны"}
+          label={checked ? t("dashboard.public_auctions") : t("dashboard.private_auctions")}
           slotProps={{ typography: { fontSize: 13, color: "text.secondary" } }}
           control={
             <Switch
@@ -132,7 +134,7 @@ const ForwarderCreatedTenders = () => {
               alignItems: "center",
             }}
           >
-            <Alert severity="info">Список аукционов для водителей пуст!</Alert>
+            <Alert severity="info">{t("dashboard.driver_auction_list_empty")}</Alert>
           </Box>
         </Box>
       )}
@@ -153,7 +155,7 @@ const ForwarderCreatedTenders = () => {
               alignItems: "center",
             }}
           >
-            <Alert severity="info">Нет публичных аукционов!</Alert>
+            <Alert severity="info">{t("dashboard.no_public_auctions")}</Alert>
           </Box>
         </Box>
       )}

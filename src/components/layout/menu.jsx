@@ -152,12 +152,12 @@ const menuItems = [
             }}
           />
         ),
-        tooltip_text: "active_shipments_tooltip",
+        tooltip_text: "active_leads_tooltip",
       },
       {
         id: 4,
         path: "/history-leads",
-        lable: "menu.leads_history",
+        lable: "menu.lead_history",
         icon: (
           <HistoryOutlined
             sx={{
@@ -165,7 +165,7 @@ const menuItems = [
             }}
           />
         ),
-        tooltip_text: "shipment_history_tooltip",
+        tooltip_text: "lead_history_tooltip",
       },
     ],
   },

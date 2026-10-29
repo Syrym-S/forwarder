@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { useEffect, useMemo, useState } from "react";
 import {
   Alert,
@@ -22,6 +23,7 @@ const DashboardLeadsList = ({
   onHoverLead,
   onLeaveLead,
 }) => {
+  const { t } = useTranslation();
   const [page, setPage] = useState(1);
 
   const pageCount = Math.max(
@@ -69,7 +71,7 @@ const DashboardLeadsList = ({
             color: "font_color.heading",
           }}
         >
-          Активные перевозки
+          {t("dashboard.active_leads")}
         </Typography>
 
         <Typography
@@ -79,7 +81,7 @@ const DashboardLeadsList = ({
             color: "text.secondary",
           }}
         >
-          Выберите перевозку, чтобы подсветить маршрут на карте
+          {t("dashboard.select_lead_to_highlight_route")}
         </Typography>
       </Box>
 
@@ -110,7 +112,7 @@ const DashboardLeadsList = ({
         )}
 
         {!isLoading && !leads.length && (
-          <Alert severity="info">Активных перевозок пока нет</Alert>
+          <Alert severity="info">{t("dashboard.no_active_leads_yet")}</Alert>
         )}
 
         {!isLoading && Boolean(leads.length) && (

@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { useState, useEffect } from "react";
 import { Box, Container, Typography } from "@mui/material";
 
@@ -14,6 +15,7 @@ import DashboardStats from "../../components/dashboard/statistics-cards/stats-ca
 import { useStatsStore } from "../../app/store/stats/use-stats-store";
 
 const Dashboard = () => {
+  const { t } = useTranslation();
   const stats = useStatsStore((state) => state.stats);
   const leads = useLeadsStore((state) => state.acceptedLeads);
   const factorings = useFactoringStore((state) => state.factorings);
@@ -83,8 +85,8 @@ const Dashboard = () => {
             }}
           >
             <Box sx={{ p: 2, borderBottom: "1px solid", borderColor: "divider" }}>
-              <Typography component="h2" sx={{ fontSize: 16, fontWeight: 600, color: "font_color.heading" }}>Карта перевозок</Typography>
-              <Typography sx={{ mt: 0.5, fontSize: 13, color: "text.secondary" }}>Маршруты активных перевозок</Typography>
+              <Typography component="h2" sx={{ fontSize: 16, fontWeight: 600, color: "font_color.heading" }}>{t("dashboard.lead_map")}</Typography>
+              <Typography sx={{ mt: 0.5, fontSize: 13, color: "text.secondary" }}>{t("dashboard.active_lead_routes")}</Typography>
             </Box>
             <Map
               leads={leads}
@@ -110,8 +112,8 @@ const Dashboard = () => {
         <FactoringProgressBarContainer />
 
         <Box sx={{ minWidth: 0, p: 2, bgcolor: "background.paper", border: "1px solid", borderColor: "divider", borderRadius: 3, "& > .MuiPaper-root": { boxShadow: "none", my: 0, height: 420 }, "& .MuiDataGrid-root": { border: 0, fontSize: 13 }, "& .MuiDataGrid-columnHeader": { bgcolor: "background.default" } }}>
-          <Typography component="h2" sx={{ fontSize: 16, fontWeight: 600, color: "font_color.heading", mb: 0.5 }}>Факторинг в ожидании</Typography>
-          <Typography sx={{ fontSize: 13, color: "text.secondary", mb: 2 }}>Заявки на подтверждении и в ожидании оплаты</Typography>
+          <Typography component="h2" sx={{ fontSize: 16, fontWeight: 600, color: "font_color.heading", mb: 0.5 }}>{t("dashboard.pending_factoring")}</Typography>
+          <Typography sx={{ fontSize: 13, color: "text.secondary", mb: 2 }}>{t("dashboard.pending_requests_description")}</Typography>
           <FactoringTable factorings={awaitingApproveFactorings} />
         </Box>
       </Container>

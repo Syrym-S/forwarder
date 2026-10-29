@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import {
   Box,
   Button,
@@ -11,16 +12,16 @@ import { useNavigate } from "react-router-dom";
 
 import RenderStatus from "../../../shared/ui/render-status";
 
-function formatLocation(location) {
-  return location?.address || "Адрес не указан";
+function formatLocation(location, t) {
+  return location?.address || t("dashboard.address_not_specified");
 }
 
-function formatLeadPrice(price, currency) {
+function formatLeadPrice(price, currency, t, language) {
   if (price === null || price === undefined || price === "") {
-    return "Цена не указана";
+    return t("dashboard.price_not_specified");
   }
 
-  return `${Number(price).toLocaleString("ru-RU")} ${currency || ""}`;
+  return `${Number(price).toLocaleString(language)} ${currency || ""}`;
 }
 
 function hasRouteCoordinates(lead) {
@@ -40,6 +41,7 @@ const DashboardLeadItem = ({
   onHoverLead,
   onLeaveLead,
 }) => {
+  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const leadId = lead?.id;
   const hasRoute = hasRouteCoordinates(lead);
@@ -91,7 +93,7 @@ const DashboardLeadItem = ({
           }}
         >
           <Chip
-            label={`Перевозка # ${lead?.num || "—"}`}
+            label={t("dashboard.lead_number", { number: lead?.num || "—" })}
             size="small"
             variant={isSelected ? "filled" : "outlined"}
             sx={{
@@ -107,7 +109,7 @@ const DashboardLeadItem = ({
 
         <Box>
           <Typography variant="caption" color="text.secondary">
-            Откуда
+            {t("dashboard.origin")}
           </Typography>
 
           <Typography
@@ -118,7 +120,7 @@ const DashboardLeadItem = ({
               overflowWrap: "anywhere",
             }}
           >
-            {formatLocation(lead?.from_location)}
+            {formatLocation(lead?.from_location, t)}
           </Typography>
         </Box>
 
@@ -126,7 +128,7 @@ const DashboardLeadItem = ({
 
         <Box>
           <Typography variant="caption" color="text.secondary">
-            Куда
+            {t("dashboard.destination")}
           </Typography>
 
           <Typography
@@ -137,7 +139,7 @@ const DashboardLeadItem = ({
               overflowWrap: "anywhere",
             }}
           >
-            {formatLocation(lead?.to_location)}
+            {formatLocation(lead?.to_location, t)}
           </Typography>
         </Box>
 
@@ -156,7 +158,7 @@ const DashboardLeadItem = ({
               color: "primary.main",
             }}
           >
-            Цена заказчика: {formatLeadPrice(lead?.price, lead?.currency)}
+            {t("dashboard.customer_price")}: {formatLeadPrice(lead?.price, lead?.currency, t, i18n.resolvedLanguage)}
           </Typography>
           <Typography
             sx={{
@@ -165,13 +167,13 @@ const DashboardLeadItem = ({
               color: "primary.main",
             }}
           >
-            Ваша цена за перевозку:
-            {formatLeadPrice(lead?.transportation_price, lead?.currency)}
+            {t("dashboard.your_lead_price")}:
+            {formatLeadPrice(lead?.transportation_price, lead?.currency, t, i18n.resolvedLanguage)}
           </Typography>
 
           {!hasRoute && (
             <Chip
-              label="Нет координат"
+              label={t("dashboard.no_coordinates")}
               size="small"
               color="warning"
               variant="outlined"
@@ -190,7 +192,7 @@ const DashboardLeadItem = ({
             borderRadius: 2,
           }}
         >
-          Подробнее о перевозке
+          {t("dashboard.lead_details_link")}
         </Button>
       </Stack>
     </Paper>

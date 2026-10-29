@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import Tooltip from "../../../shared/ui/action-tooltip";
 import {
   Box,
@@ -21,38 +22,38 @@ import AccountBalanceWalletOutlined from "@mui/icons-material/AccountBalanceWall
 import GavelOutlined from "@mui/icons-material/GavelOutlined";
 import CalendarMonthOutlined from "@mui/icons-material/CalendarMonthOutlined";
 
-const formatMoney = (value) => {
+const formatMoney = (value, language) => {
   if (value === null || value === undefined) return null;
 
-  return new Intl.NumberFormat("ru-RU", {
+  return new Intl.NumberFormat(language, {
     maximumFractionDigits: 2,
   }).format(value);
 };
 
 const PERIOD_OPTIONS = [
-  { value: "day", label: "День" },
+  { value: "day", label: "dashboard.day" },
   {
     value: "week",
-    label: "Неделя",
+    label: "dashboard.week",
   },
   {
     value: "month",
-    label: "Месяц",
+    label: "dashboard.month",
   },
   {
     value: "year",
-    label: "Год",
+    label: "dashboard.year",
   },
   {
     value: "custom",
-    label: "Выбрать период",
+    label: "dashboard.select_period",
   },
 ];
 
 const StatCard = ({
   title,
   count = 0,
-  countLabel,
+  countLabelKey,
   currencies = [],
   valueKey,
   emptyText,
@@ -63,6 +64,7 @@ const StatCard = ({
   isLoading,
   icon: Icon = LocalShippingOutlined,
 }) => {
+  const { t, i18n } = useTranslation();
   const [isComparing, setIsComparing] = useState(false);
   const [calendarAnchor, setCalendarAnchor] = useState(null);
   const [draftFilter, setDraftFilter] = useState(filter ?? {});
@@ -89,8 +91,8 @@ const StatCard = ({
         ? dayjs(filter.from).format("DD.MM.YYYY") +
           " — " +
           dayjs(filter.to).format("DD.MM.YYYY")
-        : "Укажите корректный период"
-      : PERIOD_OPTIONS.find((option) => option.value === filter?.period)?.label;
+        : t("dashboard.enter_valid_period")
+      : t(PERIOD_OPTIONS.find((option) => option.value === filter?.period)?.label || "");
 
   return (
     <Box
@@ -148,9 +150,9 @@ const StatCard = ({
           </Typography>
         </Box>
         {canBeFiltered && !isComparing && (
-          <Tooltip title="Выбрать период">
+          <Tooltip title={t("dashboard.select_period")}>
             <IconButton
-              aria-label={`Выбрать период: ${title}`}
+              aria-label={`${t("dashboard.select_period")}: ${title}`}
               aria-haspopup="dialog"
               aria-expanded={isCalendarOpen}
               aria-controls={isCalendarOpen ? calendarId : undefined}
@@ -192,7 +194,7 @@ const StatCard = ({
             paper: {
               id: calendarId,
               role: "dialog",
-              "aria-label": `Период: ${title}`,
+              "aria-label": `${t("dashboard.period")}: ${title}`,
               sx: {
                 mt: 1,
                 width: 300,
@@ -225,12 +227,12 @@ const StatCard = ({
                 color: "font_color.heading",
               }}
             >
-              Выбор периода
+              {t("dashboard.period_selection")}
             </Typography>
             <CustomSelect
-              options={PERIOD_OPTIONS}
+              options={PERIOD_OPTIONS.map(option => ({ ...option, label: t(option.label) }))}
               value={period}
-              label="Период"
+              label={t("dashboard.period")}
               onChange={handlePeriodChange}
             />
 
@@ -239,7 +241,7 @@ const StatCard = ({
                 <FormInput
                   type="date"
                   size="small"
-                  label="От"
+                  label={t("dashboard.from")}
                   value={dateRange.from}
                   error={Boolean(from && to && from > to)}
                   onChange={(event) =>
@@ -258,7 +260,7 @@ const StatCard = ({
                 <FormInput
                   type="date"
                   size="small"
-                  label="До"
+                  label={t("dashboard.to")}
                   value={dateRange.to}
                   onChange={(event) =>
                     setDateRange((prev) => ({
@@ -282,7 +284,7 @@ const StatCard = ({
                 onClick={() => setCalendarAnchor(null)}
                 sx={{ textTransform: "none" }}
               >
-                Отмена
+                {t("dashboard.cancel")}
               </Button>
               <Button
                 variant="contained"
@@ -291,7 +293,7 @@ const StatCard = ({
                 onClick={applyFilter}
                 sx={{ borderRadius: 2, textTransform: "none" }}
               >
-                Применить
+                {t("dashboard.apply")}
               </Button>
             </Box>
           </Box>
@@ -301,7 +303,7 @@ const StatCard = ({
       {canBeFiltered && filterKey === "leads" && (
         <PrimaryButton
           size="small"
-          text={isComparing ? "Вернуться к статистике" : "Сравнить"}
+          text={isComparing ? t("dashboard.back_to_statistics") : t("dashboard.compare")}
           startIcon={<BarChartOutlined />}
           variant={isComparing ? "contained" : "outlined"}
           disableElevation
@@ -320,7 +322,7 @@ const StatCard = ({
         <StatsComparison
           metric={filterKey}
           title={title}
-          countLabel={countLabel}
+          countLabelKey={countLabelKey}
         />
       ) : (
         <>
@@ -337,7 +339,7 @@ const StatCard = ({
               }}
             >
               <CalendarMonthOutlined sx={{ fontSize: 16, flexShrink: 0 }} />
-              За период: {periodLabel}
+              {t("dashboard.for_period")}: {periodLabel}
             </Typography>
           )}
 
@@ -369,7 +371,7 @@ const StatCard = ({
                 color: "text.secondary",
               }}
             >
-              {countLabel}
+              {t(countLabelKey, { count })}
             </Typography>
           </Box>
 
@@ -402,7 +404,7 @@ const StatCard = ({
                       lineHeight: 1.5,
                     }}
                   >
-                    {formatMoney(value)} {item.currency}
+                    {formatMoney(value, i18n.resolvedLanguage)} {item.currency}
                   </Typography>
                 );
               })}
@@ -426,6 +428,7 @@ const StatCard = ({
 };
 
 const DashboardStats = ({ data }) => {
+  const { t } = useTranslation();
   const [filters, setFilters] = useState(() => {
     const initial = {
       period: "month",
@@ -457,19 +460,19 @@ const DashboardStats = ({ data }) => {
   // Меняются при изменении периода
   const periodCards = [
     {
-      title: "Завершенные перевозки",
+      title: t("dashboard.completed_leads"),
       filterKey: "leads",
       count: data.leads_period?.count ?? 0,
-      countLabel: "перевозка",
+      countLabelKey: "dashboard.lead_count",
       currencies: data.leads_period?.currencies,
       valueKey: "price",
     },
     {
-      title: "Продажи факторинга",
+      title: t("dashboard.factoring_sales"),
       filterKey: "factorings",
       icon: AccountBalanceWalletOutlined,
       count: data.factorings_period?.count ?? 0,
-      countLabel: "продаж",
+      countLabelKey: "dashboard.sale_count",
       currencies: data.factorings_period?.currencies,
       valueKey: "sum",
     },
@@ -478,24 +481,27 @@ const DashboardStats = ({ data }) => {
   // Не зависят от периода
   const activeCards = [
     {
-      title: "Активные перевозки",
+      id: "leads",
+      title: t("dashboard.active_leads"),
       count: data.leads_active?.count ?? 0,
-      countLabel: "перевозок",
+      countLabelKey: "dashboard.lead_count",
       currencies: data.leads_active?.currencies,
       valueKey: "price",
-      emptyText: "Нет данных",
+      emptyText: t("dashboard.no_data"),
     },
     {
-      title: "Активные аукционы",
+      id: "auctions",
+      title: t("dashboard.active_auctions"),
       icon: GavelOutlined,
       count: data.tenders_forwarder_active?.count ?? 0,
-      countLabel: "аукционов",
+      countLabelKey: "dashboard.auction_count",
     },
     {
-      title: "Активные продажи факторинга",
+      id: "factorings",
+      title: t("dashboard.active_factoring_sales"),
       icon: AccountBalanceWalletOutlined,
       count: data.factorings_active?.count ?? 0,
-      countLabel: "продаж",
+      countLabelKey: "dashboard.sale_count",
       currencies: data.factorings_active?.currencies,
       valueKey: "sum",
     },
@@ -504,7 +510,7 @@ const DashboardStats = ({ data }) => {
   return (
     <Box>
       <StatsHeader />
-      {error && <Typography color="error">Ошибка загрузки: {error}</Typography>}
+      {error && <Typography color="error">{t("dashboard.loading_error")}: {error}</Typography>}
 
       {/* За выбранный период */}
       <Box sx={{ mt: 2.5 }}>
@@ -516,7 +522,7 @@ const DashboardStats = ({ data }) => {
             mb: 1.5,
           }}
         >
-          За выбранный период
+          {t("dashboard.for_selected_period")}
         </Typography>
 
         <Box
@@ -556,7 +562,7 @@ const DashboardStats = ({ data }) => {
             mb: 1.5,
           }}
         >
-          Активные
+          {t("dashboard.active_section")}
         </Typography>
 
         <Box
@@ -571,7 +577,7 @@ const DashboardStats = ({ data }) => {
           }}
         >
           {activeCards.map((card) => (
-            <StatCard key={card.title} {...card} isLoading={isLoading} />
+            <StatCard key={card.id} {...card} isLoading={isLoading} />
           ))}
         </Box>
       </Box>

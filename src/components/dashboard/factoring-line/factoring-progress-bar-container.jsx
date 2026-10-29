@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { Alert, Box, CircularProgress, Paper, Typography } from "@mui/material";
 import { useEffect } from "react";
 import { useFactorStore } from "../../../app/store/factor/factor-store";
@@ -5,6 +6,7 @@ import FactoringLineRingProgress from "./factoring-line-ring-progress";
 import { STATUS } from "../../../shared/const/tenders";
 
 const FactoringProgressBarContainer = () => {
+  const { t } = useTranslation();
   const factoringsLine = useFactorStore((state) => state.factoringsLine);
   const isLoading = useFactorStore((state) => state.isLoading);
   const getFactoringsLine = useFactorStore((state) => state.getFactoringsLine);
@@ -51,7 +53,7 @@ const FactoringProgressBarContainer = () => {
             color: "font_color.heading",
           }}
         >
-          Подтверждённые факторинговые линии
+          {t("dashboard.confirmed_factoring_lines")}
         </Typography>
       </Box>
       {isLoading ? (
@@ -76,7 +78,7 @@ const FactoringProgressBarContainer = () => {
             gap: 2,
           }}
         >
-          {isEmpty && <Alert severity="info">Список пуст</Alert>}
+          {isEmpty && <Alert severity="info">{t("dashboard.list_empty")}</Alert>}
 
           {approvedLines.map((line) => (
             <FactoringLineRingProgress key={line.id} line={line} />

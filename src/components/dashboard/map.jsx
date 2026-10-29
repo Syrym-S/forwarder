@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { useState, useEffect, useMemo, Fragment } from "react";
 import {
   MapContainer,
@@ -79,7 +80,7 @@ const getLocationPoint = (location) => {
 };
 
 const getLocationAddress = (location) => {
-  return location?.address || "Адрес не указан";
+  return location?.address || "";
 };
 
 const getRoute = async (points) => {
@@ -93,23 +94,24 @@ const getRoute = async (points) => {
   }
 };
 
-const formatDistance = (distance) => {
+const formatDistance = (distance, t) => {
   if (!Number.isFinite(Number(distance))) {
     return "—";
   }
 
-  return `${Math.round(Number(distance) / 1000)} км`;
+  return `${Math.round(Number(distance) / 1000)} ${t("dashboard.kilometers")}`;
 };
 
-const formatDuration = (duration) => {
+const formatDuration = (duration, t) => {
   if (!Number.isFinite(Number(duration))) {
     return "—";
   }
 
-  return `${Math.round(Number(duration) / 60)} мин`;
+  return `${Math.round(Number(duration) / 60)} ${t("dashboard.minutes")}`;
 };
 
 const MapTooltip = ({ route, open, setOpen }) => {
+  const { t } = useTranslation();
   return (
     <Tooltip
       sticky
@@ -129,14 +131,14 @@ const MapTooltip = ({ route, open, setOpen }) => {
               fontWeight: 600,
             }}
           >
-            Откуда:
+            {t("dashboard.origin")}:
           </Typography>{" "}
           <Typography
             sx={{
               fontSize: "0.75rem",
             }}
           >
-            {route.from}
+            {route.from || t("dashboard.address_not_specified")}
           </Typography>
         </Box>
 
@@ -149,23 +151,23 @@ const MapTooltip = ({ route, open, setOpen }) => {
               fontWeight: 600,
             }}
           >
-            Куда:
+            {t("dashboard.destination")}:
           </Typography>{" "}
           <Typography
             sx={{
               fontSize: "0.75rem",
             }}
           >
-            {route.to}
+            {route.to || t("dashboard.address_not_specified")}
           </Typography>
         </Box>
 
         <Typography sx={{ fontSize: "0.75rem" }}>
-          Дистанция: {formatDistance(route.distance)}
+          {t("dashboard.distance")}: {formatDistance(route.distance, t)}
         </Typography>
 
         <Typography sx={{ fontSize: "0.75rem" }}>
-          Длительность: {formatDuration(route.duration)}
+          {t("dashboard.duration")}: {formatDuration(route.duration, t)}
         </Typography>
       </Box>
     </Tooltip>
@@ -195,6 +197,7 @@ const Map = ({
   highlightedLeadId,
   onSelectLead,
 }) => {
+  const { t } = useTranslation();
   const isLoading = useLeadsStore((state) => state.isLoading);
   const storeLeads = useLeadsStore((state) => state.leads);
 
@@ -462,7 +465,7 @@ const Map = ({
                 fontSize: "0.7rem",
               }}
             >
-              Загрузка карты...
+              {t("dashboard.loading_map")}
             </Typography>
           </Box>
         </Box>

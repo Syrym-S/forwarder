@@ -1,13 +1,15 @@
+import { useTranslation } from "react-i18next";
 import { Box, Chip, Divider, Stack, Typography } from "@mui/material";
 import RenderStatus from "../../../shared/ui/render-status";
 import dayjs from "dayjs";
 import { useNavigate } from "react-router-dom";
 
-function formatLocation(location) {
-  return location?.address || "Адрес не указан";
+function formatLocation(location, t) {
+  return location?.address || t("dashboard.address_not_specified");
 }
 
 const CustomerTenderItem = ({ tender }) => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const leadData = tender?.lead;
 
@@ -49,7 +51,7 @@ const CustomerTenderItem = ({ tender }) => {
           }}
         >
           <Chip
-            label={`Аукцион # ${tender.id || "—"}`}
+            label={t("dashboard.auction_number", { number: tender.id || "—" })}
             variant={"outlined"}
             size="small"
             sx={{
@@ -63,7 +65,7 @@ const CustomerTenderItem = ({ tender }) => {
           {leadData?.status && <RenderStatus status={tender?.status} />}
 
           <Chip
-            label={`Осталось: ${remainingDays} дн.`}
+            label={t("dashboard.remaining_days", { count: remainingDays })}
             variant={"outlined"}
             size="small"
             sx={{
@@ -75,7 +77,7 @@ const CustomerTenderItem = ({ tender }) => {
 
         <Chip
           label={
-            tender?.publication_type === "public" ? "Публичный" : "Приватный"
+            tender?.publication_type === "public" ? t("dashboard.public") : t("dashboard.private")
           }
           color={"primary"}
           variant={"outlined"}
@@ -89,7 +91,7 @@ const CustomerTenderItem = ({ tender }) => {
 
         <Box>
           <Typography variant="caption" color="text.secondary">
-            Откуда
+            {t("dashboard.origin")}
           </Typography>
 
           <Typography
@@ -100,7 +102,7 @@ const CustomerTenderItem = ({ tender }) => {
               overflowWrap: "anywhere",
             }}
           >
-            {formatLocation(leadData?.from_location)}
+            {formatLocation(leadData?.from_location, t)}
           </Typography>
         </Box>
 
@@ -108,7 +110,7 @@ const CustomerTenderItem = ({ tender }) => {
 
         <Box>
           <Typography variant="caption" color="text.secondary">
-            Куда
+            {t("dashboard.destination")}
           </Typography>
 
           <Typography
@@ -119,7 +121,7 @@ const CustomerTenderItem = ({ tender }) => {
               overflowWrap: "anywhere",
             }}
           >
-            {formatLocation(leadData?.to_location)}
+            {formatLocation(leadData?.to_location, t)}
           </Typography>
         </Box>
 
@@ -143,7 +145,7 @@ const CustomerTenderItem = ({ tender }) => {
 
           {!hasRoute && (
             <Chip
-              label="Нет координат"
+              label={t("dashboard.no_coordinates")}
               size="small"
               color="warning"
               variant="outlined"

@@ -1,9 +1,11 @@
+import { useTranslation } from "react-i18next";
 import { moneySpacingFormat } from "../../../shared/helpers/money-spacing";
 import { Box, CircularProgress, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { renderLineColor } from "../../../shared/helpers/factoring/render-progress-line-color";
 
 const FactoringLineRingProgress = ({ line }) => {
+  const { t } = useTranslation();
   const factor = line.factor;
   const usedPercent =
     line.summ_max > 0
@@ -66,7 +68,7 @@ const FactoringLineRingProgress = ({ line }) => {
           {factor.company_name}
         </Typography>
         <Typography sx={{ fontSize: 12, color: "text.secondary" }}>
-          БИН: {factor.company_bin}
+          {t("dashboard.bin")}: {factor.company_bin}
         </Typography>
       </Box>
       <Box
@@ -133,7 +135,7 @@ const FactoringLineRingProgress = ({ line }) => {
             </Typography>
 
             <Typography variant="body2" color="text.secondary">
-              использовано
+              {t("dashboard.used")}
             </Typography>
           </Box>
         </Box>
@@ -169,7 +171,7 @@ const FactoringLineRingProgress = ({ line }) => {
                 mb: 0.25,
               }}
             >
-              Максимальная сумма
+              {t("dashboard.maximum_amount")}
             </Typography>
 
             <Typography
@@ -200,7 +202,7 @@ const FactoringLineRingProgress = ({ line }) => {
                 mb: 0.25,
               }}
             >
-              Потрачено
+              {t("dashboard.spent")}
             </Typography>
 
             <Typography
@@ -231,7 +233,7 @@ const FactoringLineRingProgress = ({ line }) => {
                 mb: 0.25,
               }}
             >
-              Свободно
+              {t("dashboard.available")}
             </Typography>
 
             <Typography
@@ -262,7 +264,7 @@ const FactoringLineRingProgress = ({ line }) => {
                 mb: 0.25,
               }}
             >
-              Срок
+              {t("dashboard.term")}
             </Typography>
 
             <Typography

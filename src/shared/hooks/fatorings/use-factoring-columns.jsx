@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { Box, Typography } from "@mui/material";
 import RenderStatus, { RenderStatusContent } from "../../ui/render-status";
 import dayjs from "dayjs";
@@ -5,6 +6,7 @@ import CustomNavLink from "../../ui/custom-nav-link";
 import { moneySpacingFormat } from "../../helpers/money-spacing";
 
 const useFactoringColumns = () => {
+  const { t } = useTranslation();
   const columns = [
     {
       field: "id",
@@ -16,7 +18,7 @@ const useFactoringColumns = () => {
     },
     {
       field: "status",
-      headerName: "Статус",
+      headerName: t("dashboard.status"),
       width: 200,
       renderCell: ({ row }) => (
         <Box
@@ -32,13 +34,13 @@ const useFactoringColumns = () => {
     },
     {
       field: "lead_id",
-      headerName: "ID перевозки",
+      headerName: t("dashboard.lead_id"),
       width: 200,
     },
     {
       field: "factor",
       valueGetter: (_, row) => row?.factor?.company_name || "",
-      headerName: "Фактор",
+      headerName: t("dashboard.factor"),
       width: 200,
       renderCell: ({ row }) => {
         return (
@@ -62,7 +64,7 @@ const useFactoringColumns = () => {
                 fontWeight: 300,
               }}
             >
-              БИН: {row.factor.bin}
+              {t("dashboard.bin")}: {row.factor.bin}
             </Typography>
             <Typography
               sx={{
@@ -93,7 +95,7 @@ const useFactoringColumns = () => {
         const date = row?.created_at?.date;
         return date && dayjs(date).isValid() ? dayjs(date).toDate() : null;
       },
-      headerName: "Создано",
+      headerName: t("dashboard.created"),
       width: 200,
       renderCell: ({ row }) => {
         return <Box>{dayjs(row?.created_at?.date).format("DD-MM-YYYY")}</Box>;
@@ -104,7 +106,7 @@ const useFactoringColumns = () => {
       type: "number",
       valueGetter: (value) =>
         value == null || value === "" ? null : Number(value),
-      headerName: "Задолженность",
+      headerName: t("dashboard.debt"),
       width: 200,
       renderCell: ({ row }) => (
         <Box>
@@ -117,7 +119,7 @@ const useFactoringColumns = () => {
       type: "number",
       valueGetter: (value) =>
         value == null || value === "" ? null : Number(value),
-      headerName: "Оплата за задолженность",
+      headerName: t("dashboard.debt_payment"),
       width: 200,
       renderCell: ({ row }) => (
         <Box>
@@ -130,7 +132,7 @@ const useFactoringColumns = () => {
       type: "number",
       valueGetter: (value) =>
         value == null || value === "" ? null : Number(value),
-      headerName: "Процент от фактора",
+      headerName: t("dashboard.percentage_from_factor"),
       width: 200,
       renderCell: ({ row }) => (
         <Box>{(row?.proc_factor * 100).toFixed(1)} %</Box>
@@ -141,7 +143,7 @@ const useFactoringColumns = () => {
       type: "number",
       valueGetter: (value) =>
         value == null || value === "" ? null : Number(value),
-      headerName: "Процент от сервиса",
+      headerName: t("dashboard.percentage_from_service"),
       width: 200,
       renderCell: ({ row }) => (
         <Box>{(row?.proc_service * 100).toFixed(1)} %</Box>
@@ -149,7 +151,7 @@ const useFactoringColumns = () => {
     },
     {
       field: "verified_customer",
-      headerName: "Подтверждение от заказчика",
+      headerName: t("dashboard.confirmation_from_customer"),
       width: 200,
       renderCell: ({ row }) => (
         <Box
@@ -160,7 +162,7 @@ const useFactoringColumns = () => {
           }}
         >
           <RenderStatusContent
-            label={row?.verified_customer ? "Подтвержден" : "В ожидании"}
+            label={row?.verified_customer ? t("dashboard.confirmed") : t("dashboard.pending")}
             color={row?.verified_customer ? "#51d861" : "#e9821b"}
           />
         </Box>
@@ -168,7 +170,7 @@ const useFactoringColumns = () => {
     },
     {
       field: "verified_factor",
-      headerName: "Подтверждение от фактора",
+      headerName: t("dashboard.confirmation_from_factor"),
       width: 200,
       renderCell: ({ row }) => (
         <Box
@@ -179,7 +181,7 @@ const useFactoringColumns = () => {
           }}
         >
           <RenderStatusContent
-            label={row?.verified_factor ? "Подтвержден" : "В ожидании"}
+            label={row?.verified_factor ? t("dashboard.confirmed") : t("dashboard.pending")}
             color={row?.verified_factor ? "#51d861" : "#e9821b"}
           />
         </Box>
@@ -187,7 +189,7 @@ const useFactoringColumns = () => {
     },
     {
       field: "verified_forwarder",
-      headerName: "Подтверждение от вас",
+      headerName: t("dashboard.confirmation_from_you"),
       width: 200,
       renderCell: ({ row }) => (
         <Box
@@ -198,7 +200,7 @@ const useFactoringColumns = () => {
           }}
         >
           <RenderStatusContent
-            label={row?.verified_forwarder ? "Подтвержден" : "В ожидании"}
+            label={row?.verified_forwarder ? t("dashboard.confirmed") : t("dashboard.pending")}
             color={row?.verified_forwarder ? "#51d861" : "#e9821b"}
           />
         </Box>
