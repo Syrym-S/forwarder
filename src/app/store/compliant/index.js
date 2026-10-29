@@ -1,3 +1,4 @@
+import appI18n from "../../../i18n/index.js";
 import { create } from "zustand";
 import {
   createComplaintApi, getComplaintApi, getComplaintFileApi,
@@ -5,7 +6,7 @@ import {
 } from "./api";
 import { getComplaintTargetLabel } from "../../../shared/lib/complaints";
 
-const errorMessage = (error) => error.response?.data?.message || error.message || "Не удалось выполнить запрос";
+const errorMessage = (error) => error.response?.data?.message || error.message || appI18n.t("ui.request_failed");
 
 export const useComplaintStore = create((set, get) => ({
   items: [], targets: [], detail: null, selectedId: null,
@@ -66,7 +67,7 @@ export const useComplaintStore = create((set, get) => ({
       const url = URL.createObjectURL(data);
       const link = document.createElement("a");
       link.href = url;
-      link.download = file.name || "Файл";
+      link.download = file.name || appI18n.t("ui.file");
       document.body.appendChild(link);
       link.click();
       link.remove();

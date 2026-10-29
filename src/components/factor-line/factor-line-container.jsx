@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { Box } from "@mui/material";
 import { VIEWS } from "../../shared/const/leads";
 import FactorLineTable from "./factor-line-table";
@@ -6,6 +7,7 @@ import { useFactorStore } from "../../app/store/factor/factor-store";
 import DataContainer from "../../shared/ui/data-container";
 
 const FactorLineContainer = ({ view }) => {
+  const { t } = useTranslation();
   const factoringsLine = useFactorStore((state) => state.factoringsLine);
   const isLoading = useFactorStore((state) => state.isLoading);
 
@@ -24,7 +26,7 @@ const FactorLineContainer = ({ view }) => {
       <DataContainer
         isLoading={isLoading}
         isEmpty={isFactoringsLineEmpty}
-        emptyText="Список факторинговых линий пуст"
+        emptyText={t("ui.factoring_line_list_empty")}
       >
         {isCardView && (
           <Box

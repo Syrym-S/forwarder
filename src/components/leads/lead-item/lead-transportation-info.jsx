@@ -1,3 +1,5 @@
+import appI18n from "../../../i18n/index.js";
+import { useTranslation } from "react-i18next";
 import { Box, Typography } from "@mui/material";
 import { alpha } from "@mui/material/styles";
 import PaymentsOutlinedIcon from "@mui/icons-material/PaymentsOutlined";
@@ -7,14 +9,15 @@ import InfoItem from "../../../shared/ui/info-item";
 import Section from "./lead-detail-section";
 
 const prices = [
-  { name: "price", label: "Цена заказчика", color: "primary" },
-  { name: "transportation_price", label: "Ваша цена за перевозку", color: "success" },
+  { name: "price", get label() { return appI18n.t("ui.customer_price"); }, color: "primary" },
+  { name: "transportation_price", get label() { return appI18n.t("ui.your_lead_price"); }, color: "success" },
 ];
 
 export default function LeadTransportationInfo({ leadData, hidePrices = false }) {
+  const { t } = useTranslation();
   return (
     <Section
-      title={hidePrices ? "Параметры перевозки" : "Стоимость и параметры перевозки"}
+      title={hidePrices ? t("ui.lead_parameters") : t("ui.lead_cost_and_parameters")}
       icon={<PaymentsOutlinedIcon color="primary" />}
     >
       {!hidePrices && <Box
@@ -54,7 +57,7 @@ export default function LeadTransportationInfo({ leadData, hidePrices = false })
                     lineHeight: 1.2,
                   }}
                 >
-                  {hasPrice ? moneySpacingFormat(value) : "Не указана"}
+                  {hasPrice ? moneySpacingFormat(value) : t("ui.not_specified_3")}
                 </Typography>
                 {hasPrice && leadData?.currency && (
                   <Typography sx={{ fontSize: 14, fontWeight: 500, color: "text.secondary" }}>
@@ -82,14 +85,14 @@ export default function LeadTransportationInfo({ leadData, hidePrices = false })
           <InfoItem
             key={name}
             label={label}
-            value={leadData?.[name]?.name || leadData?.[name] || "Не указан"}
+            value={leadData?.[name]?.name || leadData?.[name] || t("ui.not_specified")}
           />
         ))}
         {leadData?.grace_period_days != null &&
           String(leadData.grace_period_days).trim() !== "" && (
             <InfoItem
-              label="Доступная отсрочка"
-              value={`${leadData.grace_period_days} дн.`}
+              label={t("ui.available_payment_deferral")}
+              value={t("ui.days_value", { value1: leadData.grace_period_days })}
             />
           )}
       </Box>

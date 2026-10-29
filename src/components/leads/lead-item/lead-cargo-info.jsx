@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { moneySpacingFormat } from "../../../shared/helpers/money-spacing";
 import { getCargoVolume } from "../../../shared/lib/cargo-volume";
 import InfoItem from "../../../shared/ui/info-item";
@@ -14,6 +15,7 @@ const CargoCard = ({
   isLeadsPage = false,
   hidePrices = false,
 }) => {
+  const { t } = useTranslation();
   const canEditStatus =
     lead?.status === STATUS.new || lead?.status === STATUS.add_driver;
   const tnvedCode = cargo?.tnved?.code ?? cargo?.tnved_code ??
@@ -46,9 +48,7 @@ const CargoCard = ({
           fontWeight: 600,
           mb: 1.5,
         }}
-      >
-        Груз #{index + 1}
-      </Typography>
+      >{t("ui.cargo_number_label", { value1: index + 1 })}</Typography>
 
       <Box
         sx={{
@@ -62,41 +62,41 @@ const CargoCard = ({
           mb: 1.2,
         }}
       >
-        <InfoItem label="Наименование" value={cargo?.name} />
+        <InfoItem label={t("ui.item_name")} value={cargo?.name} />
 
-        <InfoItem label="Тип" value={cargo?.type} />
+        <InfoItem label={t("ui.type")} value={cargo?.type} />
 
         <InfoItem
-          label="Код товара"
+          label={t("ui.product_code")}
           value={tnvedCode ? (
             <ActionTooltip title={cargo?.tnved?.name || ""}>
               <span>{tnvedCode}</span>
             </ActionTooltip>
-          ) : "Не указан"}
+          ) : t("ui.not_specified")}
         />
 
         <InfoItem
-          label="Вес"
-          value={cargo?.weight_kg ? `${cargo?.weight_kg} кг` : "Вес не указан"}
+          label={t("ui.weight")}
+          value={cargo?.weight_kg ? t("ui.weight_kilograms", { value1: cargo?.weight_kg }) : t("ui.weight_not_specified")}
         />
 
         {!hidePrices && (
           <InfoItem
-            label="Цена груза"
+            label={t("ui.cargo_price")}
             value={moneySpacingFormat(cargo?.cargo_price)}
           />
         )}
 
         {getCargoVolume(cargo) != null && (
-          <InfoItem label="Объём" value={`${getCargoVolume(cargo)} м³`} />
+          <InfoItem label={t("ui.volume")} value={t("ui.volume_cubic_meters", { value1: getCargoVolume(cargo) })} />
         )}
         {(cargo?.height_cm || cargo?.width_cm || cargo?.length_cm) && (
           <InfoItem
-            label="Размеры"
+            label={t("ui.dimensions")}
             value={[
-              cargo.length_cm && `Длина: ${cargo.length_cm} см`,
-              cargo.width_cm && `Ширина: ${cargo.width_cm} см`,
-              cargo.height_cm && `Высота: ${cargo.height_cm} см`,
+              cargo.length_cm && t("ui.length_centimeters", { value1: cargo.length_cm }),
+              cargo.width_cm && t("ui.width_centimeters", { value1: cargo.width_cm }),
+              cargo.height_cm && t("ui.height_centimeters", { value1: cargo.height_cm }),
             ]
               .filter(Boolean)
               .join(" × ")}
@@ -104,7 +104,7 @@ const CargoCard = ({
         )}
       </Box>
 
-      <InfoItem label="Описание" value={`${cargo?.description || "--"}`} />
+      <InfoItem label={t("ui.description")} value={`${cargo?.description || "--"}`} />
       {cargosCount !== 1 && isLeadsPage && canEditStatus && (
         <Button
           onClick={handleDeleteCargo}
@@ -119,9 +119,7 @@ const CargoCard = ({
         >
           {(isCargoDeleteLoading || isLoading) && (
             <CircularProgress size={13} />
-          )}
-          Удалить груз
-        </Button>
+          )}{t("ui.delete_cargo")}</Button>
       )}
     </Box>
   );

@@ -1,10 +1,12 @@
+import { useTranslation } from "react-i18next";
 import { Stack, TextField, Typography } from "@mui/material";
 import { Controller } from "react-hook-form";
 
 const EditCompanyFileds = ({ control }) => {
+  const { t } = useTranslation();
   return (
     <Stack spacing={2}>
-      <Typography fontWeight={600}>Компания</Typography>
+      <Typography fontWeight={600}>{t("ui.company")}</Typography>
 
       <Controller
         control={control}
@@ -12,7 +14,7 @@ const EditCompanyFileds = ({ control }) => {
         render={({ field }) => (
           <TextField
             {...field}
-            label="Название компании"
+            label={t("ui.company_name")}
             // value={form.companyName}.
             // onChange={handleChange}
             // error={Boolean(errors.companyName)}
@@ -33,7 +35,7 @@ const EditCompanyFileds = ({ control }) => {
         render={({ field }) => (
           <TextField
             {...field}
-            label="БИН компании"
+            label={t("ui.company_bin")}
             // value={form.companyName}.
             // onChange={handleChange}
             // error={Boolean(errors.companyName)}
@@ -54,7 +56,7 @@ const EditCompanyFileds = ({ control }) => {
         render={({ field }) => (
           <TextField
             {...field}
-            label="Юридический адрес"
+            label={t("ui.registered_address")}
             // value={form.companyName}.
             // onChange={handleChange}
             // error={Boolean(errors.companyName)}

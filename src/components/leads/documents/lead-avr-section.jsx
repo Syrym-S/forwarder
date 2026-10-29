@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { useState } from "react";
 import {
   Alert,
@@ -29,6 +30,7 @@ const LeadAvrSection = ({
   onSignDriver,
   onSignCustomer,
 }) => {
+  const { t } = useTranslation();
   const [downloadingKey, setDownloadingKey] = useState(null);
   const [downloadError, setDownloadError] = useState("");
 
@@ -51,7 +53,7 @@ const LeadAvrSection = ({
       link.remove();
       setTimeout(() => URL.revokeObjectURL(url), 1000);
     } catch {
-      setDownloadError("Не удалось скачать документ. Попробуйте ещё раз.");
+      setDownloadError(t("ui.document_download_failed_retry"));
     } finally {
       setDownloadingKey(null);
     }
@@ -60,8 +62,8 @@ const LeadAvrSection = ({
   const documents = [
     {
       key: "driver",
-      title: "Акт с водителем",
-      parties: "Экспедитор и водитель",
+      title: t("ui.driver_completion_certificate"),
+      parties: t("ui.forwarder_and_driver"),
       document: driverDocument?.document,
       signed: driverSigned,
       available: true,
@@ -69,8 +71,8 @@ const LeadAvrSection = ({
     },
     {
       key: "customer",
-      title: "Акт с заказчиком",
-      parties: "Экспедитор и заказчик",
+      title: t("ui.customer_completion_certificate"),
+      parties: t("ui.forwarder_and_customer"),
       document: customerDocument?.document,
       signed: customerSigned,
       available: Boolean(driverSigned),
@@ -121,13 +123,11 @@ const LeadAvrSection = ({
                 fontWeight: 600,
                 color: "font_color.heading",
               }}
-            >
-              Акты выполненных работ
-            </Typography>
+            >{t("ui.work_completion_certificates")}</Typography>
             <Typography sx={{ mt: 0.5, fontSize: 13, color: "text.secondary" }}>
               {readOnly
-                ? "Документы по завершённой перевозке"
-                : "Создание и подписание актов с водителем и заказчиком"}
+                ? t("ui.completed_lead_documents")
+                : t("ui.completion_certificates_description")}
             </Typography>
           </Box>
         </Stack>
@@ -138,16 +138,11 @@ const LeadAvrSection = ({
             isLoading ? <CircularProgress size={16} /> : <RefreshRoundedIcon />
           }
           sx={{ flexShrink: 0, textTransform: "none", borderRadius: 2 }}
-        >
-          Обновить статус
-        </Button>
+        >{t("ui.refresh_status")}</Button>
       </Stack>
 
       {!readOnly && (
-        <Alert severity="info" sx={{ mb: 2, borderRadius: 2 }}>
-          Сначала подпишите акт с водителем, затем — с заказчиком. После
-          подписания в новой вкладке нажмите «Обновить статус».
-        </Alert>
+        <Alert severity="info" sx={{ mb: 2, borderRadius: 2 }}>{t("ui.completion_certificate_signing_order")}</Alert>
       )}
       {error && (
         <Alert severity="error" sx={{ mb: 2, borderRadius: 2 }}>
@@ -175,12 +170,12 @@ const LeadAvrSection = ({
           ({ key, title, parties, document, signed, available, onSign }) => {
             const locked = !readOnly && !available && !signed;
             const status = signed
-              ? "Подписан"
+              ? t("ui.signed")
               : locked
-                ? "Следующий этап"
+                ? t("ui.next_stage")
                 : document
-                  ? "Ожидает подписи"
-                  : "Не создан";
+                  ? t("ui.awaiting_signature")
+                  : t("ui.not_created");
             const canAct = !readOnly && available && !signed;
 
             return (
@@ -216,7 +211,7 @@ const LeadAvrSection = ({
                     </Typography>
                   </Box>
                   <Chip
-                    label={isLoading ? "Загрузка…" : status}
+                    label={isLoading ? t("ui.loading") : status}
                     icon={
                       signed ? <CheckCircleOutlineRoundedIcon /> : undefined
                     }
@@ -258,9 +253,7 @@ const LeadAvrSection = ({
                       <CircularProgress size={18} />
                       <Typography
                         sx={{ fontSize: 13, color: "text.secondary" }}
-                      >
-                        Загружаем документ…
-                      </Typography>
+                      >{t("ui.loading_document")}</Typography>
                     </Stack>
                   ) : document ? (
                     <>
@@ -271,7 +264,7 @@ const LeadAvrSection = ({
                           overflowWrap: "anywhere",
                         }}
                       >
-                        {document.name || "Акт выполненных работ (AVR)"}
+                        {document.name || t("ui.work_completion_certificate_avr")}
                       </Typography>
                       {document.context && (
                         <Typography
@@ -299,8 +292,8 @@ const LeadAvrSection = ({
                         sx={{ mt: 1, textTransform: "none" }}
                       >
                         {downloadingKey === key
-                          ? "Скачивание…"
-                          : "Скачать документ"}
+                          ? t("ui.downloading")
+                          : t("ui.download_document")}
                       </Button>
                     </>
                   ) : (
@@ -312,10 +305,10 @@ const LeadAvrSection = ({
                       }}
                     >
                       {locked
-                        ? "Создание акта станет доступно после подписания акта с водителем."
+                        ? t("ui.customer_certificate_creation_hint")
                         : readOnly || signed
-                          ? "Файл документа пока недоступен. Попробуйте обновить статус."
-                          : "Акт ещё не создан. Создайте документ для подписания."}
+                          ? t("ui.document_file_unavailable")
+                          : t("ui.certificate_not_created_hint")}
                     </Typography>
                   )}
                 </Box>
@@ -341,8 +334,8 @@ const LeadAvrSection = ({
                         sx={{ textTransform: "none", borderRadius: 2 }}
                       >
                         {isSigning
-                          ? "Открываем подписание…"
-                          : "Перейти к подписанию"}
+                          ? t("ui.opening_signing")
+                          : t("ui.proceed_to_signing")}
                       </Button>
                     )}
                     <Button
@@ -358,10 +351,10 @@ const LeadAvrSection = ({
                       sx={{ textTransform: "none", borderRadius: 2 }}
                     >
                       {isGenerating
-                        ? "Создаём акт…"
+                        ? t("ui.creating_certificate")
                         : document
-                          ? "Создать заново"
-                          : "Создать акт"}
+                          ? t("ui.recreate")
+                          : t("ui.create_certificate")}
                     </Button>
                   </Stack>
                 )}

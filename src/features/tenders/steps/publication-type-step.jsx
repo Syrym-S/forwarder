@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import TooltipIconButton from "../../../shared/ui/tooltip-icon-button";
 import renderDriverOption from "../../../shared/ui/render-driver-option";
 import {
@@ -28,6 +29,7 @@ const PublicationTypeStep = ({
   setSelectedDrivers,
   setValue,
 }) => {
+  const { t } = useTranslation();
   const [selectedDriver, setSelectedDriver] = useState(null);
 
   const drivers = useDriverStore((state) => state.drivers);
@@ -69,7 +71,7 @@ const PublicationTypeStep = ({
         control={control}
         render={({ field }) => (
           <FormControlLabel
-            label="Публичный аукцион"
+            label={t("ui.public_auction")}
             control={
               <Checkbox
                 checked={field.value}
@@ -85,8 +87,8 @@ const PublicationTypeStep = ({
         control={control}
         disabled={!isPublic}
         type="number"
-        label="Количество участников"
-        helperText="0 - без лимита"
+        label={t("ui.participant_count_2")}
+        helperText={t("ui.zero_means_unlimited")}
       />
 
       <Stack>
@@ -102,8 +104,8 @@ const PublicationTypeStep = ({
           renderInput={(params) => (
             <FormInput
               {...params}
-              label={isLoading ? "...Загрузка данных" : "Водитель"}
-              placeholder="Выберите водителя"
+              label={isLoading ? t("ui.loading_2") : t("ui.driver")}
+              placeholder={t("ui.select_driver")}
             />
           )}
         />
@@ -120,9 +122,7 @@ const PublicationTypeStep = ({
             variant="contained"
             color="primary"
             onClick={handleAddDriver}
-          >
-            Добавить
-          </Button>
+          >{t("ui.add")}</Button>
         </Box>
 
         <Box
@@ -159,11 +159,9 @@ const PublicationTypeStep = ({
                   fontWeight: 500,
                   color: "color.slate_2",
                 }}
-              >
-                Участник {participant?.fio}
-              </Typography>
+              >{t("ui.participant_number", { value1: participant?.fio })}</Typography>
 
-              <TooltipIconButton title="Удалить участника" aria-label="Удалить участника" onClick={() => handleRemoveDriver(participant?.id)}>
+              <TooltipIconButton title={t("ui.remove_participant")} aria-label={t("ui.remove_participant")} onClick={() => handleRemoveDriver(participant?.id)}>
                 <HighlightOffIcon color="error" />
               </TooltipIconButton>
             </Box>
@@ -187,13 +185,11 @@ const PublicationTypeStep = ({
                   fontWeight: 500,
                   color: "color.slate_2",
                 }}
-              >
-                Участник {participant?.participant_id}
-              </Typography>
+              >{t("ui.participant_number", { value1: participant?.participant_id })}</Typography>
 
               <TooltipIconButton
-                title="Удалить участника"
-                aria-label="Удалить участника"
+                title={t("ui.remove_participant")}
+                aria-label={t("ui.remove_participant")}
               // onClick={() => handleRemoveDriver(participant?.participant_id)}
               >
                 <HighlightOffIcon color="error" />

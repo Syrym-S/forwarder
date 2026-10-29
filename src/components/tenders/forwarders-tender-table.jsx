@@ -1,8 +1,10 @@
-import { DataGrid } from "@mui/x-data-grid";
+import { useTranslation } from "react-i18next";
+import DataGrid from "../../shared/ui/localized-data-grid";
 import Paper from "@mui/material/Paper";
 import useForwarderTenderColumns from "../../shared/hooks/tenders/use-forwarder-tender-columns";
 
 const ForwardersTenderTable = (tenders) => {
+  const { t } = useTranslation();
   const columns = useForwarderTenderColumns(tenders);
 
   return (
@@ -14,7 +16,7 @@ const ForwardersTenderTable = (tenders) => {
         columns={columns}
         checkboxSelection
         localeText={{
-          noRowsLabel: "Список пуст. Добавьте аукцион",
+          noRowsLabel: t("ui.add_auction_empty_hint"),
         }}
         sx={{
           border: 0,

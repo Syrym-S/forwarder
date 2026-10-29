@@ -2,7 +2,7 @@ import { MenuItem, Select } from "@mui/material";
 import { useTranslation } from "react-i18next";
 
 const LanguageSelect = () => {
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const handleLanguageChange = (event) => {
     const language = event.target.value;
@@ -15,7 +15,7 @@ const LanguageSelect = () => {
       value={i18n.resolvedLanguage || "ru"}
       onChange={handleLanguageChange}
       size="small"
-      inputProps={{ "aria-label": "Выбрать язык" }}
+      inputProps={{ "aria-label": t("ui.select_language") }}
       MenuProps={{
         slotProps: {
           paper: {

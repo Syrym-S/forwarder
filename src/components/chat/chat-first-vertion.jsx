@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import TooltipIconButton from "../../shared/ui/tooltip-icon-button";
 import {
   Box,
@@ -17,6 +18,7 @@ import ForumOutlinedIcon from "@mui/icons-material/ForumOutlined";
 import ParticipantData from "./participants/participant-data";
 
 const ChatFirstVertion = ({ messageType }) => {
+  const { t } = useTranslation();
   const { id } = useParams();
 
   const participantData = useLeadsStore((state) => state.participantData);
@@ -103,9 +105,7 @@ const ChatFirstVertion = ({ messageType }) => {
               fontWeight: 600,
               mb: 0.5,
             }}
-          >
-            Сообщений пока что нет
-          </Typography>
+          >{t("ui.no_messages_yet")}</Typography>
 
           <Typography
             variant="body2"
@@ -114,9 +114,7 @@ const ChatFirstVertion = ({ messageType }) => {
               maxWidth: 240,
               lineHeight: 1.5,
             }}
-          >
-            Здесь будут отображаться ваши диалоги и новые сообщения.
-          </Typography>
+          >{t("ui.chat_list_description")}</Typography>
         </Box>
       )}
 
@@ -130,6 +128,7 @@ const ChatFirstVertion = ({ messageType }) => {
 export default ChatFirstVertion;
 
 const ChatMessageInput = ({ messageType }) => {
+  const { t } = useTranslation();
   const { id } = useParams();
 
   const sendMessage = useLeadsStore((state) => state.sendMessage);
@@ -270,9 +269,9 @@ const ChatMessageInput = ({ messageType }) => {
                 </Box>
 
                 <TooltipIconButton
-                  title={`Удалить вложение ${file.name}`}
+                  title={t("ui.delete_named_attachment", { value1: file.name })}
                   size="small"
-                  aria-label={`Удалить вложение ${file.name}`}
+                  aria-label={t("ui.delete_named_attachment", { value1: file.name })}
                   onClick={() => handleRemoveFile(index)}
                   sx={{
                     position: "absolute",
@@ -292,7 +291,7 @@ const ChatMessageInput = ({ messageType }) => {
         <TextField
           value={inputValue}
           fullWidth
-          placeholder="Напишите сообщение…"
+          placeholder={t("ui.write_message")}
           sx={{ "& .MuiInputBase-root": { fontSize: 14 } }}
           multiline
           maxRows={4}
@@ -301,7 +300,7 @@ const ChatMessageInput = ({ messageType }) => {
             setInputValue(e.target.value);
           }}
           slotProps={{
-            htmlInput: { "aria-label": "Текст сообщения" },
+            htmlInput: { "aria-label": t("ui.message_text") },
             input: {
               disableUnderline: true,
             },
@@ -320,8 +319,8 @@ const ChatMessageInput = ({ messageType }) => {
 
       <Box sx={{ display: "flex", gap: 0.5, flexDirection: { xs: "column-reverse", sm: "row" } }}>
         <TooltipIconButton
-          title="Отправить сообщение"
-          aria-label="Отправить сообщение"
+          title={t("ui.send_message")}
+          aria-label={t("ui.send_message")}
           disabled={isSendingLoading || (!inputValue.trim() && selectedFiles.length === 0)}
           onClick={handleSendMessage}
           color="primary"
@@ -337,8 +336,8 @@ const ChatMessageInput = ({ messageType }) => {
         </TooltipIconButton>
 
         <TooltipIconButton
-          title="Прикрепить изображение"
-          aria-label="Прикрепить изображение"
+          title={t("ui.attach_image")}
+          aria-label={t("ui.attach_image")}
           onClick={() => fileInputRef.current?.click()}
           color="primary"
           sx={{

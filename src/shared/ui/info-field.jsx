@@ -1,7 +1,7 @@
+import { useTranslation } from "react-i18next";
 import { Box, Typography } from "@mui/material";
 
-const InfoField = ({ label, value, accent = false }) => (
-  <Box
+const InfoField = ({ label, value, accent = false }) => { const { t } = useTranslation(); return (<Box
     sx={{
       py: 0.5,
       px: 1.5,
@@ -27,9 +27,8 @@ const InfoField = ({ label, value, accent = false }) => (
         color: "primary.main",
       }}
     >
-      {value || "Не указано"}
+      {value || t("ui.not_specified_2")}
     </Typography>
-  </Box>
-);
+  </Box>); };
 
 export default InfoField;

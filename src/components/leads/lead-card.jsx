@@ -7,8 +7,10 @@ import { useNavigate } from "react-router-dom";
 import LeadStatus from "../../shared/ui/lead-status";
 import { isDraftLead } from "../../shared/lib/lead-draft";
 import InfoItem from "../../shared/ui/info-item";
+import { useTranslation } from "react-i18next";
 
 const LeadCard = ({ lead }) => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
 
   const navigateToLeadItem = () => {
@@ -47,7 +49,7 @@ const LeadCard = ({ lead }) => {
               fontSize: 20,
             }}
           >
-            Заказчик: {lead?.customer?.name || "Не указан"}
+            {t("active_leads.customer")}: {lead?.customer?.name || t("active_leads.not_specified")}
           </Typography>
 
           <Stack
@@ -93,7 +95,7 @@ const LeadCard = ({ lead }) => {
                   fontSize: 12,
                 }}
               >
-                Откуда
+                {t("active_leads.origin")}
               </Typography>
             </Box>
 
@@ -104,7 +106,7 @@ const LeadCard = ({ lead }) => {
                 lineHeight: 1.35,
               }}
             >
-              {lead?.from_location?.address || lead?.from || "Не указан"}
+              {lead?.from_location?.address || lead?.from || t("active_leads.not_specified")}
             </Typography>
           </Box>
 
@@ -129,7 +131,7 @@ const LeadCard = ({ lead }) => {
                   fontSize: 12,
                 }}
               >
-                Куда
+                {t("active_leads.destination")}
               </Typography>
             </Box>
 
@@ -139,18 +141,18 @@ const LeadCard = ({ lead }) => {
                 lineHeight: 1.35,
               }}
             >
-              {lead?.to_location?.address || lead?.from || "Не указан"}
+              {lead?.to_location?.address || lead?.from || t("active_leads.not_specified")}
             </Typography>
           </Box>
         </Box>
 
         <InfoItem
-          label="Цена заказчика"
+          label={t("active_leads.customer_price")}
           value={`${moneySpacingFormat(lead?.price)} ${lead?.currency}`}
         />
 
         <InfoItem
-          label="Ваша цена за перевозку"
+          label={t("active_leads.your_lead_price")}
           value={`${moneySpacingFormat(lead?.transportation_price)} ${lead?.currency}`}
         />
       </Stack>

@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import Section from "../../shared/ui/section";
 import { Box } from "@mui/material";
 import InfoField from "../../shared/ui/info-field";
@@ -5,9 +6,10 @@ import LocalShippingOutlinedIcon from "@mui/icons-material/LocalShippingOutlined
 import ArrowRightAltRoundedIcon from "@mui/icons-material/ArrowRightAltRounded";
 
 const TransportationInfo = ({ tender }) => {
+  const { t } = useTranslation();
   return (
     <Section
-      title="Данные перевозки"
+      title={t("ui.lead_data")}
       icon={<LocalShippingOutlinedIcon color="primary" />}
     >
       <Box
@@ -22,11 +24,11 @@ const TransportationInfo = ({ tender }) => {
         }}
       >
         <InfoField
-          label="Откуда"
+          label={t("ui.origin")}
           value={
             tender?.lead?.from_location?.address ||
             tender?.lead?.from_location?.city ||
-            "Битые данные"
+            t("ui.invalid_data")
           }
         />
 
@@ -43,11 +45,11 @@ const TransportationInfo = ({ tender }) => {
         />
 
         <InfoField
-          label="Куда"
+          label={t("ui.destination")}
           value={
             tender?.lead?.to_location?.address ||
             tender?.lead?.to_location?.city ||
-            "Битые данные"
+            t("ui.invalid_data")
           }
         />
       </Box>

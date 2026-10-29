@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { moneySpacingFormat } from "../../../shared/helpers/money-spacing";
 import React, { useEffect } from "react";
 import FactoringLineCard from "../../factor-line/factor-line-card";
@@ -14,6 +15,7 @@ import RenderErrorContext from "../../../shared/ui/errors/render-error-context";
 import { renderLineColor } from "../../../shared/helpers/factoring/render-progress-line-color";
 
 const FactoringSettingsInfoStep = ({ line, approvedLine }) => {
+  const { t } = useTranslation();
   const isLoading = useFactorStore((state) => state.isLoading);
   const factoringLineDetails = useFactorStore(
     (state) => state.factoringLineDetails,
@@ -59,7 +61,7 @@ const FactoringSettingsInfoStep = ({ line, approvedLine }) => {
           py: 1,
         }}
       >
-        <RenderErrorContext error={"Факторинговая линия отсутствует"} />
+        <RenderErrorContext error={t("ui.factoring_line_missing")} />
       </Stack>
     );
 
@@ -72,9 +74,7 @@ const FactoringSettingsInfoStep = ({ line, approvedLine }) => {
         }}
       >
         {!approvedLine && (
-          <Alert severity="error">
-            Факторинг не может быть создан, так как линия ожидает подтверждения
-          </Alert>
+          <Alert severity="error">{t("ui.factoring_line_pending_creation_blocked")}</Alert>
         )}
         <Box
           sx={{
@@ -90,9 +90,7 @@ const FactoringSettingsInfoStep = ({ line, approvedLine }) => {
                 color: "#1a1a1a",
                 fontSize: "1rem",
               }}
-            >
-              Использовано
-            </Typography>
+            >{t("ui.used")}</Typography>
             <Typography
               variant="body2"
               color="text.secondary"
@@ -114,9 +112,7 @@ const FactoringSettingsInfoStep = ({ line, approvedLine }) => {
                 color: "#1a1a1a",
                 fontSize: "1rem",
               }}
-            >
-              Свободно
-            </Typography>
+            >{t("ui.available")}</Typography>
             <Typography
               variant="body2"
               color="text.secondary"

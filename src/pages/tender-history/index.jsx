@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import PrimaryButton from "../../shared/ui/button/primary-button";
 import { useEffect, useState } from "react";
 import RootLayout from "../../components/layout/root-layout";
@@ -16,6 +17,7 @@ import ContentPasteOutlinedIcon from "@mui/icons-material/ContentPasteOutlined";
 import DataContainer from "../../shared/ui/data-container";
 
 const TenderHistory = () => {
+  const { t } = useTranslation();
   const [view, setView] = useState(VIEWS.table);
   const [page, setPage] = useState(1);
   const [inputValue, setInputValue] = useState("");
@@ -86,13 +88,9 @@ const TenderHistory = () => {
             fontSize: "1.5rem",
             сolor: "font_color.heading",
           }}
-        >
-          История аукционов
-        </Typography>
+        >{t("ui.auction_history")}</Typography>
 
-        <Typography color="text.secondary" fontSize={14}>
-          История участия в аукционах созданных заказчиками
-        </Typography>
+        <Typography color="text.secondary" fontSize={14}>{t("ui.customer_auction_participation_history")}</Typography>
       </Box>
 
       <Box
@@ -125,8 +123,8 @@ const TenderHistory = () => {
         />
 
         <PrimaryButton
-          text="Активные аукционы"
-          aria-label="Перейти к активным аукционам"
+          text={t("ui.active_auctions")}
+          aria-label={t("ui.go_to_active_auctions")}
           variant="outlined"
           size="medium"
           startIcon={<ContentPasteOutlinedIcon />}
@@ -145,7 +143,7 @@ const TenderHistory = () => {
             setInputValue(e.target.value);
             setPage(1);
           }}
-          label="Поиск аукциона"
+          label={t("ui.search_auction")}
           fullWidth
           size="small"
           sx={{
@@ -169,9 +167,7 @@ const TenderHistory = () => {
                 sm: isCardsView ? "60%" : "100%",
               },
             }}
-          >
-            Доступных аукционов нет
-          </Alert>
+          >{t("ui.no_auctions_available")}</Alert>
         )}
 
         {isCardsView && view === VIEWS.cards && (

@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import React from "react";
 import Section from "./lead-item/lead-detail-section";
 import Inventory2SharpIcon from "@mui/icons-material/Inventory2Sharp";
@@ -9,20 +10,19 @@ const LeadCargoFilesContainer = ({
   cargoActions = [],
   pass_verify = false,
 }) => {
+  const { t } = useTranslation();
   const isFilesEmpty = cargoActions.length === 0;
 
   return (
     <Section
-      title="Информация о погрузках и разгрузках"
+      title={t("ui.loading_unloading_information")}
       icon={<Inventory2SharpIcon color="primary" />}
     >
       {pass_verify && (
-        <Alert severity="info" sx={{ mb: 2 }}>
-          Подтверждение файлов погрузки/разгрузки экспедитором не требуется.
-        </Alert>
+        <Alert severity="info" sx={{ mb: 2 }}>{t("ui.forwarder_file_confirmation_not_required")}</Alert>
       )}
       {isFilesEmpty && !pass_verify && (
-        <Alert severity="info">Список загруженных файлов пуст</Alert>
+        <Alert severity="info">{t("ui.uploaded_file_list_empty")}</Alert>
       )}
       {cargoActions.map((cargoAction) => {
         return (

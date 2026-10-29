@@ -1,9 +1,11 @@
+import { useTranslation } from "react-i18next";
 import { Typography } from "@mui/material";
 import DangerousOutlinedIcon from "@mui/icons-material/DangerousOutlined";
 import { Box } from "@mui/system";
 import React from "react";
 
 const EmptyListUI = () => {
+  const { t } = useTranslation();
   return (
     <Box
       sx={{
@@ -18,7 +20,7 @@ const EmptyListUI = () => {
           fontSize: "4rem",
         }}
       />
-      <Typography>Ничего не найдено</Typography>
+      <Typography>{t("ui.nothing_found")}</Typography>
     </Box>
   );
 };

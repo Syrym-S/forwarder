@@ -1,15 +1,18 @@
+import appI18n from "../../i18n/index.js";
+import { useTranslation } from "react-i18next";
 import TooltipIconButton from "./tooltip-icon-button";
 import { Alert, Box, Typography } from '@mui/material';
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import { useNotificationsStore } from '../../app/store/notifications-store';
 
 const notificationTitleMap = {
-   error: 'Ошибка',
-   warning: 'Предупреждение',
-   success: 'Успешно',
+   get error() { return appI18n.t("ui.error"); },
+   get warning() { return appI18n.t("ui.warning"); },
+   get success() { return appI18n.t("ui.success"); },
 };
 
 export function NotificationsColumn() {
+  const { t } = useTranslation();
    const { notifications, removeNotification } = useNotificationsStore();
 
    if (notifications.length === 0) {
@@ -48,8 +51,8 @@ export function NotificationsColumn() {
                variant='filled'
                action={
                   <TooltipIconButton
-                    title="Закрыть уведомление"
-                    aria-label="Закрыть уведомление"
+                    title={t("ui.close_notification")}
+                    aria-label={t("ui.close_notification")}
                      size='small'
                      color='inherit'
                      onClick={() => removeNotification(notification.id)}
@@ -73,7 +76,7 @@ export function NotificationsColumn() {
                      mb: 0.25,
                   }}
                >
-                  {notificationTitleMap[notification.type] || 'Сообщение'}
+                  {notificationTitleMap[notification.type] || t("ui.message")}
                </Typography>
 
                <Typography

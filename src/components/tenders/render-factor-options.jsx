@@ -1,7 +1,9 @@
+import { useTranslation } from "react-i18next";
 import { Box, Chip, Stack, Typography } from "@mui/material";
 import FactoringLineInfo from "../factoring/factoring-line-info";
 
 const RenderFactorOptions = ({ option, ...props }) => {
+  const { t } = useTranslation();
   const isSettingsExist = option?.factor_setting;
 
   const approvedLine = option?.lines?.find(
@@ -42,9 +44,7 @@ const RenderFactorOptions = ({ option, ...props }) => {
         <Typography variant="body2" fontWeight={600} color="text.primary">
           {option.company_name}
         </Typography>
-        <Typography variant="body2" fontWeight={600} color="text.primary">
-          БИН: {option.company_bin}
-        </Typography>
+        <Typography variant="body2" fontWeight={600} color="text.primary">{t("ui.bin_value", { value1: option.company_bin })}</Typography>
       </Stack>
 
       <Stack
@@ -61,7 +61,7 @@ const RenderFactorOptions = ({ option, ...props }) => {
           sx={{
             width: "fit-content",
           }}
-          label={isLinesExist || !isSettingsExist ? "Открыт" : "Закрыт"}
+          label={isLinesExist || !isSettingsExist ? t("ui.open_status") : t("ui.closed")}
           color={isLinesExist || !isSettingsExist ? "primary" : "error"}
           variant="outlined"
           size="small"

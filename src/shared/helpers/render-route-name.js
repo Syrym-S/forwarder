@@ -1,15 +1,16 @@
+import appI18n from "../../i18n/index.js";
 import { PAGE_ROUTES } from "../const/page-routes";
 
 export const ROUTE_NAMES = {
-  [PAGE_ROUTES.routes]: "МАРШРУТЫ",
-  [PAGE_ROUTES.active_leads]: "АКТИВНЫЕ ПЕРЕВОЗКИ",
-  [PAGE_ROUTES.history_leads]: "ИСТОРИЯ ПЕРЕВОЗОК",
-  [PAGE_ROUTES.account]: "АККАУНТ",
-  [PAGE_ROUTES.factorings]: "ФАКТОРИНГ",
-  [PAGE_ROUTES.customers]: "ЗАКАЗЧИКИ",
-  [PAGE_ROUTES.drivers]: "ВОДИТЕЛИ",
-  [PAGE_ROUTES.tender_applications]: "ТЕНДЕРНЫЕ ЗАЯВКИ",
-  [PAGE_ROUTES.tender_forwarders]: "ТЕНДЕРА ПЕРЕВОЗЧИКОВ",
+  get [PAGE_ROUTES.routes]() { return appI18n.t("ui.routes"); },
+  get [PAGE_ROUTES.active_leads]() { return appI18n.t("ui.active_leads_2"); },
+  get [PAGE_ROUTES.history_leads]() { return appI18n.t("ui.lead_history_2"); },
+  get [PAGE_ROUTES.account]() { return appI18n.t("ui.account_2"); },
+  get [PAGE_ROUTES.factorings]() { return appI18n.t("ui.factoring_2"); },
+  get [PAGE_ROUTES.customers]() { return appI18n.t("ui.customers_2"); },
+  get [PAGE_ROUTES.drivers]() { return appI18n.t("ui.drivers_2"); },
+  get [PAGE_ROUTES.tender_applications]() { return appI18n.t("ui.tender_requests"); },
+  get [PAGE_ROUTES.tender_forwarders]() { return appI18n.t("ui.carrier_tenders"); },
 };
 
 export const renderRouteName = (route) => {

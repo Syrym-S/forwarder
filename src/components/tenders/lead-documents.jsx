@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { useEffect, useState } from "react";
 import Section from "./tender-section";
 import { LeadDocumentCard } from "../leads/documents/LeadDocumentCard";
@@ -7,6 +8,7 @@ import FileModal from "./file-modal";
 import { useLeadsStore } from "../../app/store/leads/leads-store";
 
 const LeadDocuments = ({ tender }) => {
+  const { t } = useTranslation();
   const [currentFile, setCurrentFile] = useState(null);
   const files = useLeadsStore((state) => state.files);
 
@@ -23,7 +25,7 @@ const LeadDocuments = ({ tender }) => {
   if (!files)
     return (
       <Section
-        title="Документы перевозки"
+        title={t("ui.lead_documents")}
         icon={<DescriptionOutlinedIcon color="primary" />}
       >
         <Box
@@ -40,7 +42,7 @@ const LeadDocuments = ({ tender }) => {
 
   return (
     <Section
-      title="Документы перевозки"
+      title={t("ui.lead_documents")}
       icon={<DescriptionOutlinedIcon color="primary" />}
     >
       <Box
@@ -54,7 +56,7 @@ const LeadDocuments = ({ tender }) => {
           gap: 2,
         }}
       >
-        {isEmpty && "Cписок пуст"}
+        {isEmpty && t("ui.list_empty_2")}
         {!isEmpty &&
           files.map((file) => (
             <LeadDocumentCard

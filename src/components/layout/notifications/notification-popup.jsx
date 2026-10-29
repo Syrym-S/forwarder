@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import TooltipIconButton from "../../../shared/ui/tooltip-icon-button";
 import {
   Alert,
@@ -26,6 +27,7 @@ const NotificationPopup = ({
   selectedNotification,
   setSelectedNotification,
 }) => {
+  const { t } = useTranslation();
   const currentLead = useLeadsStore(
     (state) => state.notificationPopUpCurrentLead,
   );
@@ -96,11 +98,11 @@ const NotificationPopup = ({
           overflowWrap: "anywhere",
         }}
       >
-        {selectedNotification?.theme || "Уведомление"}
+        {selectedNotification?.theme || t("ui.notification")}
       </DialogTitle>
       <TooltipIconButton
-        title="Закрыть уведомление"
-        aria-label="Закрыть уведомление"
+        title={t("ui.close_notification")}
+        aria-label={t("ui.close_notification")}
         onClick={handleClose}
         sx={{ position: "absolute", right: 12, top: 16 }}
       >
@@ -110,10 +112,7 @@ const NotificationPopup = ({
         {isNotificationDetailsLoading ? (
           <NotificationLoader />
         ) : error ? (
-          <Alert severity="error">
-            Не удалось загрузить уведомление. Закройте окно и попробуйте ещё
-            раз.
-          </Alert>
+          <Alert severity="error">{t("ui.notification_load_failed_retry")}</Alert>
         ) : (
           <>
             <Box
@@ -170,9 +169,7 @@ const NotificationPopup = ({
                     fontSize: 14,
                     color: "font_color.heading",
                   }}
-                >
-                  Документы
-                </Typography>
+                >{t("ui.documents")}</Typography>
                 <Box
                   sx={{
                     display: "grid",
@@ -207,9 +204,7 @@ const NotificationPopup = ({
         <Button
           onClick={handleClose}
           sx={{ textTransform: "none", borderRadius: 2 }}
-        >
-          Закрыть
-        </Button>
+        >{t("ui.close")}</Button>
         {!isNotificationDetailsLoading &&
           !error &&
           notificationDetails?.link && (
@@ -221,9 +216,7 @@ const NotificationPopup = ({
               disableElevation
               endIcon={<ArrowForwardRoundedIcon />}
               sx={{ textTransform: "none", borderRadius: 2 }}
-            >
-              Перейти
-            </Button>
+            >{t("ui.go_to")}</Button>
           )}
       </DialogActions>
     </Dialog>

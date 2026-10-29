@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import {
   Box,
   ClickAwayListener,
@@ -13,6 +14,7 @@ import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
 import Chatlist from "./chat-list";
 
 const ChatsContainer = () => {
+  const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
   const [activeChat, setActiveChat] = useState(null);
 
@@ -27,7 +29,7 @@ const ChatsContainer = () => {
           <Paper
             elevation={6}
             role="dialog"
-            aria-label="Список чатов"
+            aria-label={t("ui.chat_list")}
             onKeyDown={(event) => {
               if (event.key === "Escape") setIsOpen(false);
             }}
@@ -64,7 +66,7 @@ const ChatsContainer = () => {
               >
                 {activeChat && (
                   <IconButton
-                    aria-label="Назад к списку чатов"
+                    aria-label={t("ui.back_to_chat_list")}
                     onClick={() => setActiveChat(null)}
                   >
                     <ArrowBackOutlinedIcon />
@@ -72,15 +74,15 @@ const ChatsContainer = () => {
                 )}
                 <Typography noWrap sx={{ fontSize: 16 }}>
                   {activeChat
-                    ? (activeChat.chat_type === "support" ? "Тех поддержка" : activeChat.title ??
+                    ? (activeChat.chat_type === "support" ? t("ui.technical_support") : activeChat.title ??
                       activeChat.name ??
-                      `Перевозка №${activeChat.lead?.num ?? activeChat.lead_id ?? activeChat.lead?.id}`)
-                    : "Чаты перевозок"}
+                      t("ui.lead_number_label", { value1: activeChat.lead?.num ?? activeChat.lead_id ?? activeChat.lead?.id }))
+                    : t("ui.lead_chats")}
                 </Typography>
               </Box>
               <IconButton
                 color="error"
-                aria-label="Закрыть список чатов"
+                aria-label={t("ui.close_chat_list")}
                 onClick={() => setIsOpen(false)}
               >
                 <CloseOutlinedIcon />
@@ -97,8 +99,8 @@ const ChatsContainer = () => {
           </Paper>
         ) : (
           <IconButton
-            title="Открыть список чатов"
-            aria-label="Открыть список чатов"
+            title={t("ui.open_chat_list")}
+            aria-label={t("ui.open_chat_list")}
             aria-expanded={isOpen}
             onClick={() => setIsOpen(true)}
             sx={{

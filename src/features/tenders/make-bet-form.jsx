@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { moneySpacingFormat } from "../../shared/helpers/money-spacing";
 import CustomSelect from "../../shared/ui/input/custom-select";
 import { CURRENCY_OPTIONS } from "../../shared/const/currencies";
@@ -16,6 +17,7 @@ const defaultValues = {
 };
 
 const MakeBetForm = ({ tender, handleHideBetField }) => {
+  const { t } = useTranslation();
   const [openConfirmModal, setOpenConfirmModal] = useState(false);
 
   const makeBet = useTendersStore((state) => state.makeBet);
@@ -53,7 +55,7 @@ const MakeBetForm = ({ tender, handleHideBetField }) => {
 
   return (
     <Section
-      title="Новая ставка"
+      title={t("ui.new_bid")}
       icon={<PaidOutlinedIcon color="primary" />}
     >
       <Box
@@ -66,17 +68,17 @@ const MakeBetForm = ({ tender, handleHideBetField }) => {
         <Controller
           name="amount"
           rules={{
-            required: "Введите сумму ставки",
+            required: t("ui.enter_bid_amount"),
             min: {
               value: 1,
-              message: "Сумма должна быть больше 0",
+              message: t("ui.amount_must_be_positive"),
             },
           }}
           control={control}
           render={({ field, fieldState }) => (
             <TextField
               {...field}
-              label="Сумма ставки"
+              label={t("ui.bid_amount")}
               size="small"
               type="number"
               error={!!fieldState.error}
@@ -93,7 +95,7 @@ const MakeBetForm = ({ tender, handleHideBetField }) => {
             <CustomSelect
               {...field}
               inputRef={ref}
-              label="Валюта"
+              label={t("ui.currency")}
               fullWidth
               options={CURRENCY_OPTIONS}
             />
@@ -106,7 +108,7 @@ const MakeBetForm = ({ tender, handleHideBetField }) => {
           render={({ field }) => (
             <TextField
               {...field}
-              label="Комментарий"
+              label={t("ui.comment")}
               fullWidth
               multiline
               minRows={3}
@@ -136,25 +138,17 @@ const MakeBetForm = ({ tender, handleHideBetField }) => {
           disableElevation
           color="primary"
           onClick={handleOpenConfirmModal}
-        >
-          Сделать ставку
-        </Button>
+        >{t("ui.place_bid")}</Button>
 
-        <Button variant="outlined" color="primary" onClick={handleHideBetField}>
-          Отмена
-        </Button>
+        <Button variant="outlined" color="primary" onClick={handleHideBetField}>{t("ui.cancel")}</Button>
       </Box>
 
       <ConfirmModal
-        title="Подтверждение ставки"
+        title={t("ui.bid_confirmation")}
         description={
           <>
-            <Typography>
-              Вы уверены, что хотите сделать ставку на этот аукцион?
-            </Typography>
-            <Typography>
-              Сумма: {moneySpacingFormat(formValues.amount)} {formValues.currency}
-            </Typography>
+            <Typography>{t("ui.place_bid_confirmation")}</Typography>
+            <Typography>{t("ui.amount_value", { value1: moneySpacingFormat(formValues.amount), value2: formValues.currency })}</Typography>
           </>
         }
         open={openConfirmModal}

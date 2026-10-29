@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { useState } from "react";
 import {
   Dialog,
@@ -11,6 +12,7 @@ import {
 } from "@mui/material";
 
 function InviteLinkModal({ inviteLink, clearInviteLink }) {
+  const { t } = useTranslation();
   const [copied, setCopied] = useState(false);
 
   const handleCopy = async () => {
@@ -30,7 +32,7 @@ function InviteLinkModal({ inviteLink, clearInviteLink }) {
         maxWidth="sm"
         fullWidth
       >
-        <DialogTitle>Ссылка-приглашение</DialogTitle>
+        <DialogTitle>{t("ui.invitation_link")}</DialogTitle>
 
         <DialogContent>
           <TextField
@@ -50,10 +52,8 @@ function InviteLinkModal({ inviteLink, clearInviteLink }) {
         </DialogContent>
 
         <DialogActions>
-          <Button onClick={clearInviteLink}>Закрыть</Button>
-          <Button variant="contained" onClick={handleCopy}>
-            Копировать
-          </Button>
+          <Button onClick={clearInviteLink}>{t("ui.close")}</Button>
+          <Button variant="contained" onClick={handleCopy}>{t("ui.copy")}</Button>
         </DialogActions>
       </Dialog>
 
@@ -71,9 +71,7 @@ function InviteLinkModal({ inviteLink, clearInviteLink }) {
           severity="success"
           variant="filled"
           sx={{ width: "100%" }}
-        >
-          Ссылка скопирована
-        </Alert>
+        >{t("ui.link_copied")}</Alert>
       </Snackbar>
     </>
   );

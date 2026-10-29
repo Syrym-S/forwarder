@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import {
   Box,
   Button,
@@ -11,21 +12,20 @@ import {
 import InfoItem from "../../shared/ui/info-item";
 
 const SavedDataModal = ({ savedData, setSavedData }) => {
+  const { t } = useTranslation();
   const handleClose = () => {
     setSavedData(null);
   };
 
   const handleCopy = async (url) => {
-    const text = `Логин: ${savedData?.email}
-      Пароль: ${savedData?.password}
-      Ссылка: ${url}`;
+    const text = t("ui.login_credentials", { value1: savedData?.email, value2: savedData?.password, value3: url });
 
     await navigator.clipboard.writeText(text);
   };
 
   return (
     <Dialog open={true} maxWidth="sm" fullWidth>
-      <DialogTitle>Сохранённые данные</DialogTitle>
+      <DialogTitle>{t("ui.saved_details")}</DialogTitle>
 
       <DialogContent>
         <Stack spacing={2}>
@@ -40,7 +40,7 @@ const SavedDataModal = ({ savedData, setSavedData }) => {
             borderRadius={1}
           >
             <Box>
-              <InfoItem label={"Логин"} value={savedData?.email} />
+              <InfoItem label={t("ui.login")} value={savedData?.email} />
             </Box>
           </Box>
 
@@ -55,7 +55,7 @@ const SavedDataModal = ({ savedData, setSavedData }) => {
             borderRadius={1}
           >
             <Box>
-              <InfoItem label={"Пароль"} value={savedData?.password} />
+              <InfoItem label={t("ui.password")} value={savedData?.password} />
             </Box>
           </Box>
 
@@ -71,7 +71,7 @@ const SavedDataModal = ({ savedData, setSavedData }) => {
           >
             <Box sx={{ flex: 1, minWidth: 0 }}>
               <InfoItem
-                label="Ссылка входа"
+                label={t("ui.login_link")}
                 value={
                   <Box
                     sx={{
@@ -100,9 +100,7 @@ const SavedDataModal = ({ savedData, setSavedData }) => {
                       sx={{
                         flexShrink: 0,
                       }}
-                    >
-                      Копировать
-                    </Button>
+                    >{t("ui.copy")}</Button>
                   </Box>
                 }
               />
@@ -159,7 +157,7 @@ const SavedDataModal = ({ savedData, setSavedData }) => {
       </DialogContent>
 
       <DialogActions>
-        <Button onClick={handleClose}>Закрыть</Button>
+        <Button onClick={handleClose}>{t("ui.close")}</Button>
       </DialogActions>
     </Dialog>
   );

@@ -1,3 +1,5 @@
+import appI18n from "../../i18n/index.js";
+import { useTranslation } from "react-i18next";
 import {
   Box,
   Button,
@@ -18,8 +20,8 @@ import { useLeadsStore } from "../../app/store/leads/leads-store";
 import { useDriverStore } from "../../app/store/drivers/driver-store";
 
 const steps = [
-  { id: 1, name: "Выбор перевозки" },
-  { id: 2, name: "Тип публикации" },
+  { id: 1, get name() { return appI18n.t("ui.lead_selection"); } },
+  { id: 2, get name() { return appI18n.t("ui.publication_type"); } },
 ];
 
 const stepFields = {
@@ -46,6 +48,7 @@ const TenderForm = ({
   handleCloseForm,
   defaultValues = {},
 }) => {
+  const { t } = useTranslation();
   const [step, setStep] = useState(1);
   const [error, setError] = useState(null);
   const [isSubmitLoading, setIsSubmitLoading] = useState(false);
@@ -117,7 +120,7 @@ const TenderForm = ({
     const payload = prepareTenderData(formValues, selectedDrivers);
 
     if (!isSelectedDriversExists && !formValues?.publication_type) {
-      setError("Добавьте хотя бы одного водителя!");
+      setError(t("ui.add_at_least_one_driver"));
 
       return;
     }
@@ -178,7 +181,7 @@ const TenderForm = ({
       }}
     >
       <DialogTitle>
-        {isEdit ? "Редактирование аукциона" : "Создание аукциона"}
+        {isEdit ? t("ui.edit_auction") : t("ui.create_auction_heading")}
       </DialogTitle>
 
       <DialogContent
@@ -197,13 +200,9 @@ const TenderForm = ({
           }}
         >
           {isFirstStep ? (
-            <Button variant="outlined" color="error" onClick={handleCloseForm}>
-              Отмена
-            </Button>
+            <Button variant="outlined" color="error" onClick={handleCloseForm}>{t("ui.cancel")}</Button>
           ) : (
-            <Button variant="outlined" color="error" onClick={handlePrevStep}>
-              Назад
-            </Button>
+            <Button variant="outlined" color="error" onClick={handlePrevStep}>{t("ui.back")}</Button>
           )}
 
           {isLastStep ? (
@@ -223,12 +222,10 @@ const TenderForm = ({
                   }}
                 />
               )}
-              {isEdit ? "Cохранить" : "Создать"}
+              {isEdit ? t("ui.save_2") : t("ui.create_2")}
             </Button>
           ) : (
-            <Button variant="contained" onClick={handleNextStep}>
-              Дальше
-            </Button>
+            <Button variant="contained" onClick={handleNextStep}>{t("ui.next")}</Button>
           )}
         </Box>
       </DialogContent>

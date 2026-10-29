@@ -1,3 +1,5 @@
+import appI18n from "../../i18n/index.js";
+import { useTranslation } from "react-i18next";
 import { useEffect, useState } from "react";
 import {
   Accordion,
@@ -36,18 +38,19 @@ import {
 } from "../../shared/lib/complaints";
 
 const dateLabel = (value) =>
-  value ? new Date(value).toLocaleString("ru-RU") : "";
+  value ? new Date(value).toLocaleString(appI18n.resolvedLanguage) : "";
 import { useComplaintStore } from "../../app/store/compliant";
 import { useProfileStore } from "../../app/store/profile/profile-store";
 
 const complaintGroups = [
-  { key: "default", title: "Новые", label: "Новая", color: "warning" },
-  { key: "info", title: "В работе", label: "В работе", color: "info" },
-  { key: "success", title: "Принятые", label: "Принята", color: "success" },
-  { key: "error", title: "Отклонённые", label: "Отклонена", color: "error" },
+  { key: "default", get title() { return appI18n.t("ui.new"); }, get label() { return appI18n.t("ui.new_2"); }, color: "warning" },
+  { key: "info", get title() { return appI18n.t("ui.in_progress"); }, get label() { return appI18n.t("ui.in_progress"); }, color: "info" },
+  { key: "success", get title() { return appI18n.t("ui.accepted_plural"); }, get label() { return appI18n.t("ui.accepted_feminine"); }, color: "success" },
+  { key: "error", get title() { return appI18n.t("ui.rejected_plural"); }, get label() { return appI18n.t("ui.rejected_feminine"); }, color: "error" },
 ];
 
 export default function Complaints() {
+  const { t } = useTranslation();
   const profileData = useProfileStore((state) => state.profileData);
   const [request, setRequest] = useState("");
   const [target, setTarget] = useState(null);
@@ -111,7 +114,7 @@ export default function Complaints() {
   function addFiles(event) {
     const next = [...files, ...Array.from(event.target.files || [])];
     event.target.value = "";
-    const validation = validateComplaint("Описание", next);
+    const validation = validateComplaint(t("ui.description"), next);
     setFormError(validation);
     if (!validation) setFiles(next);
   }
@@ -123,12 +126,8 @@ export default function Complaints() {
           <Typography
             variant="h5"
             sx={{ fontWeight: 600, color: "font_color.heading", mb: 0.5 }}
-          >
-            Жалобы
-          </Typography>
-          <Typography variant="body2" color="text.secondary">
-            Отправьте обращение и следите за его рассмотрением.
-          </Typography>
+          >{t("ui.complaints")}</Typography>
+          <Typography variant="body2" color="text.secondary">{t("ui.complaints_description")}</Typography>
         </Box>
         <Paper
           component="form"
@@ -166,31 +165,27 @@ export default function Complaints() {
               <Typography
                 variant="h6"
                 sx={{ fontWeight: 600, color: "font_color.heading" }}
-              >
-                Новое обращение
-              </Typography>
-              <Typography variant="body2" color="text.secondary">
-                Расскажите, что произошло, и приложите подтверждающие файлы.
-              </Typography>
+              >{t("ui.new_complaint")}</Typography>
+              <Typography variant="body2" color="text.secondary">{t("ui.complaint_form_description")}</Typography>
             </Box>
           </Stack>
           <Stack spacing={3} sx={{ p: { xs: 2, sm: 3 } }}>
-            {success && <Alert severity="success">Жалоба отправлена</Alert>}
+            {success && <Alert severity="success">{t("ui.complaint_sent")}</Alert>}
             {(formError || submitError) && (
               <Alert severity="error">{formError || submitError}</Alert>
             )}
             {targetsError && (
               <Alert
                 severity="error"
-                action={<Button onClick={getTargets}>Повторить</Button>}
+                action={<Button onClick={getTargets}>{t("ui.retry")}</Button>}
               >
                 {targetsError}
               </Alert>
             )}
             <FormInput
               disabled={isSubmitting}
-              label="Описание жалобы"
-              placeholder="Опишите ситуацию и укажите детали, которые помогут разобраться в обращении"
+              label={t("ui.complaint_description")}
+              placeholder={t("ui.complaint_description_hint")}
               required
               fullWidth
               multiline
@@ -207,7 +202,7 @@ export default function Complaints() {
               options={targets}
               value={target}
               loading={isTargetsLoading}
-              loadingText="Загрузка…"
+              loadingText={t("ui.loading")}
               disabled={
                 isSubmitting || isTargetsLoading || Boolean(targetsError)
               }
@@ -216,13 +211,13 @@ export default function Complaints() {
               isOptionEqualToValue={(option, value) =>
                 option.type === value.type && option.id === value.id
               }
-              noOptionsText="Нет перевозок или факторингов за последние 30 дней"
+              noOptionsText={t("ui.no_recent_leads_or_factoring")}
               renderInput={(params) => (
                 <FormInput
                   {...params}
-                  label="Перевозка / факторинг"
-                  placeholder="Выберите связанную перевозку или факторинг"
-                  helperText="Необязательно. Доступны записи за последние 30 дней."
+                  label={t("ui.lead_or_factoring")}
+                  placeholder={t("ui.select_related_lead_or_factoring")}
+                  helperText={t("ui.recent_records_optional_hint")}
                 />
               )}
             />
@@ -242,15 +237,9 @@ export default function Complaints() {
                 justifyContent="space-between"
               >
                 <Box>
-                  <Typography variant="subtitle2" sx={{ mb: 0.5 }}>
-                    Подтверждающие файлы
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    Изображения, видео, DOCX или PDF
-                  </Typography>
-                  <Typography variant="caption" color="text.secondary">
-                    До {MAX_COMPLAINT_FILES} файлов, каждый до 100 МБ
-                  </Typography>
+                  <Typography variant="subtitle2" sx={{ mb: 0.5 }}>{t("ui.supporting_files")}</Typography>
+                  <Typography variant="body2" color="text.secondary">{t("ui.supporting_file_formats")}</Typography>
+                  <Typography variant="caption" color="text.secondary">{t("ui.complaint_files_limit", { value1: MAX_COMPLAINT_FILES })}</Typography>
                 </Box>
                 <Button
                   component="label"
@@ -263,9 +252,7 @@ export default function Complaints() {
                     flexShrink: 0,
                     bgcolor: "background.paper",
                   }}
-                >
-                  Добавить файлы
-                  <input
+                >{t("ui.add_files")}<input
                     hidden
                     type="file"
                     multiple
@@ -299,9 +286,7 @@ export default function Complaints() {
                       }}
                     />
                   ))}
-                  <Typography variant="caption" color="text.secondary">
-                    Прикреплено: {files.length} / {MAX_COMPLAINT_FILES}
-                  </Typography>
+                  <Typography variant="caption" color="text.secondary">{t("ui.attached_files_count", { value1: files.length, value2: MAX_COMPLAINT_FILES })}</Typography>
                 </Stack>
               )}
             </Box>
@@ -318,16 +303,14 @@ export default function Complaints() {
                 type="submit"
                 isLoading={isSubmitting}
                 startIcon={!isSubmitting && <SendRoundedIcon />}
-                text={isSubmitting ? "Отправка…" : "Отправить жалобу"}
+                text={isSubmitting ? t("ui.sending") : t("ui.submit_complaint")}
                 sx={{ width: { xs: "100%", sm: "auto" }, px: 3 }}
               />
             </Box>
           </Stack>
         </Paper>
         <Stack spacing={2.5} sx={{ color: "font_color.heading" }}>
-          <Typography variant="h6" sx={{ fontWeight: 400 }}>
-            Просмотр обращений и ответы по результатам рассмотрения
-          </Typography>
+          <Typography variant="h6" sx={{ fontWeight: 400 }}>{t("ui.complaint_history_description")}</Typography>
           <Stack
             direction="row"
             alignItems="center"
@@ -335,23 +318,19 @@ export default function Complaints() {
             spacing={2}
           >
             <Box>
-              <Typography>Всего жалоб: {recentItems.length}</Typography>
-              <Typography variant="caption" color="text.secondary">
-                За последние 30 дней
-              </Typography>
+              <Typography>{t("ui.total_complaints_count", { value1: recentItems.length })}</Typography>
+              <Typography variant="caption" color="text.secondary">{t("ui.last_thirty_days")}</Typography>
             </Box>
             <Button
               onClick={getComplaints}
               disabled={isLoading}
               sx={{ textTransform: "none" }}
-            >
-              Обновить
-            </Button>
+            >{t("ui.refresh")}</Button>
           </Stack>
           {isLoading && (
             <Box
               role="status"
-              aria-label="Загрузка жалоб"
+              aria-label={t("ui.loading_complaints")}
               sx={{ display: "flex", justifyContent: "center", py: 2 }}
             >
               <CircularProgress size={24} />
@@ -360,7 +339,7 @@ export default function Complaints() {
           {listError && (
             <Alert
               severity="error"
-              action={<Button onClick={getComplaints}>Повторить</Button>}
+              action={<Button onClick={getComplaints}>{t("ui.retry")}</Button>}
             >
               {listError}
             </Alert>
@@ -430,9 +409,7 @@ export default function Complaints() {
                         variant="body2"
                         color="text.secondary"
                         sx={{ py: 1 }}
-                      >
-                        В этой группе пока нет обращений.
-                      </Typography>
+                      >{t("ui.no_complaints_in_group")}</Typography>
                     )}
                     {groupItems.map((item) => (
                       <Paper
@@ -464,7 +441,7 @@ export default function Complaints() {
                             >
                               <Typography sx={{ overflowWrap: "anywhere" }}>
                                 {profileData?.personFio ||
-                                  `Обращение №${item.id}`}
+                                  t("ui.support_request_number", { value1: item.id })}
                               </Typography>
                               <Chip
                                 label={group.label}
@@ -541,9 +518,7 @@ export default function Complaints() {
                                 sx={{
                                   height: "fit-content",
                                 }}
-                              >
-                                Посмотреть ответ
-                              </Button>
+                              >{t("ui.view_response")}</Button>
                             )}
                             <Button
                               variant="outlined"
@@ -552,9 +527,7 @@ export default function Complaints() {
                               sx={{
                                 height: "fit-content",
                               }}
-                            >
-                              Подробнее
-                            </Button>
+                            >{t("ui.details")}</Button>
                           </Box>
                         </Stack>
                         {(item.response || group.key === "info") && (
@@ -590,7 +563,7 @@ export default function Complaints() {
                               }}
                             >
                               {item.response ||
-                                "Обращение находится на рассмотрении. Ответ появится после завершения проверки."}
+                                t("ui.complaint_under_review_hint")}
                             </Typography>
                           </Box>
                         )}
@@ -610,7 +583,7 @@ export default function Complaints() {
         maxWidth="sm"
       >
         <DialogTitle>
-          {detailMode === "response" ? "Ответ по обращению" : "Жалоба"}
+          {detailMode === "response" ? t("ui.complaint_response") : t("ui.complaint")}
         </DialogTitle>
         <DialogContent>
           <Stack spacing={2}>
@@ -619,9 +592,7 @@ export default function Complaints() {
               <Alert
                 severity="error"
                 action={
-                  <Button onClick={() => getComplaint(selectedId)}>
-                    Повторить
-                  </Button>
+                  <Button onClick={() => getComplaint(selectedId)}>{t("ui.retry")}</Button>
                 }
               >
                 {detailError}
@@ -644,9 +615,7 @@ export default function Complaints() {
                 )}
                 {detailMode === "details" && (
                   <>
-                    <Typography variant="subtitle2">
-                      Причина обращения
-                    </Typography>
+                    <Typography variant="subtitle2">{t("ui.complaint_reason")}</Typography>
                     <Typography
                       sx={{ whiteSpace: "pre-wrap", overflowWrap: "anywhere" }}
                     >
@@ -654,21 +623,17 @@ export default function Complaints() {
                     </Typography>
                   </>
                 )}
-                <Typography variant="subtitle2">Ответ</Typography>
+                <Typography variant="subtitle2">{t("ui.response")}</Typography>
                 <Typography
                   sx={{ whiteSpace: "pre-wrap", overflowWrap: "anywhere" }}
                 >
-                  {detail.response || "Ответа пока нет"}
+                  {detail.response || t("ui.no_response_yet")}
                 </Typography>
                 {detail.acceptance_at && (
-                  <Typography variant="caption">
-                    Принята: {dateLabel(detail.acceptance_at)}
-                  </Typography>
+                  <Typography variant="caption">{t("ui.complaint_accepted_date", { value1: dateLabel(detail.acceptance_at) })}</Typography>
                 )}
                 {detail.finished_at && (
-                  <Typography variant="caption">
-                    Закрыта: {dateLabel(detail.finished_at)}
-                  </Typography>
+                  <Typography variant="caption">{t("ui.complaint_closed_date", { value1: dateLabel(detail.finished_at) })}</Typography>
                 )}
                 {(detail.files || []).map((file) => (
                   <Button
@@ -677,7 +642,7 @@ export default function Complaints() {
                     onClick={() => downloadFile(detail.id, file)}
                     sx={{ justifyContent: "start", overflowWrap: "anywhere" }}
                   >
-                    {file.name || "Скачать файл"}
+                    {file.name || t("ui.download_file")}
                   </Button>
                 ))}
               </>
@@ -685,7 +650,7 @@ export default function Complaints() {
           </Stack>
         </DialogContent>
         <DialogActions>
-          <Button onClick={closeComplaint}>Закрыть</Button>
+          <Button onClick={closeComplaint}>{t("ui.close")}</Button>
         </DialogActions>
       </Dialog>
     </RootLayout>

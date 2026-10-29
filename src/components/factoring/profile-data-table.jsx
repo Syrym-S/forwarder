@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import {
   Box,
   Paper,
@@ -10,11 +11,12 @@ import {
 import { useProfileStore } from "../../app/store/profile/profile-store";
 
 const ProfileDataTable = () => {
+  const { t } = useTranslation();
   const profileData = useProfileStore((state) => state.profileData);
 
   const rows = [
     {
-      label: "ФИО",
+      label: t("ui.full_name"),
       value: profileData?.personFio,
     },
     {
@@ -22,23 +24,23 @@ const ProfileDataTable = () => {
       value: profileData?.personEmail,
     },
     {
-      label: "ИИН",
+      label: t("ui.iin"),
       value: profileData?.personIin,
     },
     {
-      label: "Номер",
+      label: t("ui.number"),
       value: profileData?.personPhone,
     },
     {
-      label: "Компания",
+      label: t("ui.company"),
       value: profileData?.companyName,
     },
     {
-      label: "БИН",
+      label: t("ui.bin"),
       value: profileData?.companyBin,
     },
     {
-      label: "Адрес компании",
+      label: t("ui.company_address"),
       value: profileData?.companyAddress,
     },
   ];
@@ -50,7 +52,7 @@ const ProfileDataTable = () => {
           {rows.map((row) => (
             <TableRow>
               <TableCell>{row.label}:</TableCell>
-              <TableCell>{row.value || "Не указан"}</TableCell>
+              <TableCell>{row.value || t("ui.not_specified")}</TableCell>
             </TableRow>
           ))}
         </TableBody>

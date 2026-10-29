@@ -1,16 +1,16 @@
+import { useTranslation } from "react-i18next";
 import { Alert } from "@mui/material";
 
 const RenderErroMessage = ({ error }) => {
+  const { t } = useTranslation();
   switch (error) {
     case "Image dimensions must not exceed 600x600px":
       return (
-        <Alert severity="error">
-          Размер фото для профиля должен быть от 400 × 400 до 600 × 600 пикселей
-        </Alert>
+        <Alert severity="error">{t("ui.profile_photo_dimensions_error")}</Alert>
       );
     case "Only PNG and JPEG images are allowed":
       return (
-        <Alert severity="error">Фото должно быть формата PNG или JPEG</Alert>
+        <Alert severity="error">{t("ui.profile_photo_format_error")}</Alert>
       );
   }
 };

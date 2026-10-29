@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { Box, Chip, Stack, Typography } from "@mui/material";
 import dayjs from "dayjs";
 import { useNavigate } from "react-router-dom";
@@ -9,6 +10,7 @@ import ArrowRightAltRoundedIcon from "@mui/icons-material/ArrowRightAltRounded";
 import InfoBadge from "../../shared/ui/info-badge";
 
 const ApplicationsTenderCard = ({ tender }) => {
+  const { t } = useTranslation();
   const daysLeft = dayjs(tender.end_date_time).diff(dayjs(), "day");
   const shouldShowTimeLeft =
     tender.status !== "closed" && tender.status !== "cancelled";
@@ -55,9 +57,7 @@ const ApplicationsTenderCard = ({ tender }) => {
               variant="body2"
               color="text.secondary"
               sx={{ mb: 0.75 }}
-            >
-              Аукцион
-            </Typography>
+            >{t("ui.auction")}</Typography>
 
             <Typography
               sx={{
@@ -68,9 +68,7 @@ const ApplicationsTenderCard = ({ tender }) => {
                 },
                 fontWeight: 500,
               }}
-            >
-              Аукцион #{tender.id || "—"}
-            </Typography>
+            >{t("ui.auction_number", { value1: tender.id || "—" })}</Typography>
           </Box>
 
           <Stack
@@ -124,9 +122,7 @@ const ApplicationsTenderCard = ({ tender }) => {
                 color: "text.secondary",
                 mb: 0.5,
               }}
-            >
-              Откуда
-            </Typography>
+            >{t("ui.origin")}</Typography>
 
             <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
               <TripOriginIcon sx={{ fontSize: 18, color: "primary.main" }} />
@@ -138,7 +134,7 @@ const ApplicationsTenderCard = ({ tender }) => {
                   lineHeight: 1.35,
                 }}
               >
-                {tender?.lead?.from_location?.address || "Не указано"}
+                {tender?.lead?.from_location?.address || t("ui.not_specified_2")}
               </Typography>
             </Box>
           </Box>
@@ -184,9 +180,7 @@ const ApplicationsTenderCard = ({ tender }) => {
                 color: "text.secondary",
                 mb: 0.5,
               }}
-            >
-              Куда
-            </Typography>
+            >{t("ui.destination")}</Typography>
 
             <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
               <LocationOnOutlinedIcon
@@ -200,7 +194,7 @@ const ApplicationsTenderCard = ({ tender }) => {
                   lineHeight: 1.35,
                 }}
               >
-                {tender?.lead?.to_location?.address || "Не указано"}
+                {tender?.lead?.to_location?.address || t("ui.not_specified_2")}
               </Typography>
             </Box>
           </Box>
@@ -217,18 +211,18 @@ const ApplicationsTenderCard = ({ tender }) => {
           }}
         >
           <InfoBadge
-            label="Вес"
+            label={t("ui.weight")}
             value={
               tender?.lead?.cargo?.weight_kg
-                ? `${tender?.lead?.cargo?.weight_kg} кг`
-                : "Не указано"
+                ? t("ui.weight_kilograms", { value1: tender?.lead?.cargo?.weight_kg })
+                : t("ui.not_specified_2")
             }
             muted={isCancelled}
           />
 
           <InfoBadge
-            label="Тип"
-            value={tender?.lead?.cargo?.type || "Не указан"}
+            label={t("ui.type")}
+            value={tender?.lead?.cargo?.type || t("ui.not_specified")}
             muted={isCancelled}
           />
 
@@ -249,6 +243,7 @@ const ApplicationsTenderCard = ({ tender }) => {
 };
 
 function TimeLeftBadge({ value }) {
+  const { t } = useTranslation();
   return (
     <Box
       sx={{
@@ -269,9 +264,7 @@ function TimeLeftBadge({ value }) {
           lineHeight: 1.2,
           color: "text.secondary",
         }}
-      >
-        Осталось
-      </Typography>
+      >{t("ui.remaining")}</Typography>
 
       <Typography
         sx={{
@@ -281,7 +274,7 @@ function TimeLeftBadge({ value }) {
           color: "text.primary",
         }}
       >
-        {value || "Не указано"}
+        {value || t("ui.not_specified_2")}
       </Typography>
     </Box>
   );

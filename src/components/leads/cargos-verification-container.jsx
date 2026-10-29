@@ -1,3 +1,5 @@
+import appI18n from "../../i18n/index.js";
+import { useTranslation } from "react-i18next";
 import React, { useState } from "react";
 import Section from "./lead-item/lead-detail-section";
 import NewReleasesIcon from "@mui/icons-material/NewReleases";
@@ -13,19 +15,20 @@ const renderTitleText = (stage, isVerified) => {
   let title = "";
 
   if (stage === WAYPOINT_TYPES.loading && isVerified) {
-    title = "Погрузка подтверждена";
+    title = appI18n.t("ui.loading_confirmed");
   } else if (stage === WAYPOINT_TYPES.loading && !isVerified) {
-    title = "Подтверждение погрузки";
+    title = appI18n.t("ui.loading_confirmation");
   } else if (stage === WAYPOINT_TYPES.unloading && isVerified) {
-    title = "Разгрузка подтверждена";
+    title = appI18n.t("ui.unloading_confirmed");
   } else if (stage === WAYPOINT_TYPES.unloading && !isVerified) {
-    title = "Подтверждение разгрузки";
+    title = appI18n.t("ui.unloading_confirmation");
   }
 
   return title;
 };
 
 const CargosVerificationContainer = ({ cargoAction, pass_verify = false }) => {
+  const { t } = useTranslation();
   const { id } = useParams();
   const [currentFile, setCurrentFile] = useState(null);
 
@@ -40,8 +43,8 @@ const CargosVerificationContainer = ({ cargoAction, pass_verify = false }) => {
   const isVerified = cargoAction.is_verified;
   const title = pass_verify
     ? cargoAction.stage === WAYPOINT_TYPES.loading
-      ? "Погрузка — без подтверждения"
-      : "Разгрузка — без подтверждения"
+      ? t("ui.loading_without_confirmation")
+      : t("ui.unloading_without_confirmation")
     : renderTitleText(cargoAction.stage, isVerified);
 
   const handleVerifyCargoLoad = async () => {
@@ -124,17 +127,15 @@ const CargosVerificationContainer = ({ cargoAction, pass_verify = false }) => {
             onClick={handleVerify}
           >
             {isLoadLoading || isUnloadLoading
-              ? "Идет подтверждение"
-              : "Подтвердить"}
+              ? t("ui.confirmation_in_progress_2")
+              : t("ui.confirm")}
           </Button>
           <Button
             disabled={isLoadLoading || isUnloadLoading}
             color="error"
             variant="outlined"
             onClick={handleReject}
-          >
-            Отклонить
-          </Button>
+          >{t("ui.reject")}</Button>
         </Box>
       )}
     </Section>

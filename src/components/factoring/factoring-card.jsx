@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { Box, Chip, Stack, Typography } from "@mui/material";
 import RenderStatus, {
   RenderStatusContent,
@@ -7,6 +8,7 @@ import { moneySpacingFormat } from "../../shared/helpers/money-spacing";
 import InfoItem from "../../shared/ui/info-item";
 
 const FactoringCard = ({ factoring }) => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
 
   const handleNavigateToDetailsPage = () => {
@@ -47,9 +49,7 @@ const FactoringCard = ({ factoring }) => {
               variant="body2"
               color="text.secondary"
               sx={{ mb: 0.75 }}
-            >
-              Факторинг
-            </Typography>
+            >{t("ui.factoring")}</Typography>
 
             <Typography
               sx={{
@@ -100,11 +100,11 @@ const FactoringCard = ({ factoring }) => {
           }}
         >
           <InfoItem
-            label={"Фактора"}
+            label={t("ui.factor_details_heading")}
             value={factoring?.factor?.company_name || "-"}
           />
-          <InfoItem label={"ФИО Фактора"} value={factoring?.factor?.fio} />
-          <InfoItem label={"БИН Фактора"} value={factoring?.factor?.bin} />
+          <InfoItem label={t("ui.factor_full_name")} value={factoring?.factor?.fio} />
+          <InfoItem label={t("ui.factor_bin")} value={factoring?.factor?.bin} />
         </Box>
         <Box
           sx={{
@@ -117,11 +117,11 @@ const FactoringCard = ({ factoring }) => {
           }}
         >
           <InfoItem
-            label={"Задолженность"}
+            label={t("ui.debt")}
             value={`${moneySpacingFormat(factoring?.deb_summ)} ${factoring?.deb_currency}`}
           />
           <InfoItem
-            label={"Оплата за задолженность"}
+            label={t("ui.debt_payment")}
             value={`${moneySpacingFormat(factoring?.cred_summ)} ${factoring?.currency}`}
           />
         </Box>
@@ -136,11 +136,11 @@ const FactoringCard = ({ factoring }) => {
           }}
         >
           <InfoItem
-            label={"Процент фактора"}
+            label={t("ui.factor_percentage")}
             value={`${(factoring?.proc_factor * 100).toFixed(1)}%`}
           />
           <InfoItem
-            label={"Процент сервиса"}
+            label={t("ui.service_percentage")}
             value={`${(factoring?.proc_service * 100).toFixed(1)}%`}
           />
         </Box>
@@ -148,15 +148,15 @@ const FactoringCard = ({ factoring }) => {
 
       <Box sx={{ py: 1, display: "flex", gap: 4 }}>
         <RenderStatusContent
-          label={`Вы: ${factoring?.verified_forwarder ? "Подтвержден" : "Не подтверждено"}`}
+          label={t("ui.your_confirmation", { value1: factoring?.verified_forwarder ? t("ui.confirmed_2") : t("ui.not_confirmed") })}
           color={factoring?.verified_customer ? "#51d861" : "#e9821b"}
         />
         <RenderStatusContent
-          label={`Фактор: ${factoring?.verified_factor ? "Подтвержден" : "Не подтверждено"}`}
+          label={t("ui.factor_confirmation", { value1: factoring?.verified_factor ? t("ui.confirmed_2") : t("ui.not_confirmed") })}
           color={factoring?.verified_customer ? "#51d861" : "#e9821b"}
         />
         <RenderStatusContent
-          label={`Заказчик: ${factoring?.verified_customer ? "Подтвержден" : "Не подтверждено"}`}
+          label={t("ui.customer_confirmation", { value1: factoring?.verified_customer ? t("ui.confirmed_2") : t("ui.not_confirmed") })}
           color={factoring?.verified_customer ? "#51d861" : "#e9821b"}
         />
       </Box>

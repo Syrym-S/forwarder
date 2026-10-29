@@ -1,3 +1,4 @@
+import appI18n from "../../i18n/index.js";
 import Dashboard from "../../pages/dashboard";
 import LeadItem from "../../pages/lead-item";
 import Profile from "../../pages/profile";
@@ -29,13 +30,14 @@ export const router = createBrowserRouter(
       element: <AppContentContainer />,
       errorElement: <ErrorPage />,
       handle: {
-        breadcrumb: "Главная",
+        get breadcrumb() { return appI18n.t("ui.home_page"); },
+        breadcrumbKey: "menu.home_page",
       },
       children: [
         {
           path: "/complaints",
           element: <Complaints />,
-          handle: { breadcrumb: "Жалобы" },
+          handle: { get breadcrumb() { return appI18n.t("ui.complaints"); } },
         },
         {
           index: true,
@@ -45,7 +47,8 @@ export const router = createBrowserRouter(
           path: "active-leads",
           element: <ActiveLeads />,
           handle: {
-            breadcrumb: "Активные перевозки",
+            get breadcrumb() { return appI18n.t("ui.active_leads"); },
+            breadcrumbKey: "menu.active_leads",
           },
         },
         {
@@ -54,51 +57,51 @@ export const router = createBrowserRouter(
           handle: {
             title: ({ params, currentLead }) =>
               String(currentLead?.id) === params.id && currentLead?.num
-                ? `Перевозка #${currentLead.num}`
-                : "Перевозка",
-            breadcrumb: ({ params }) => `Перевозкa / ${params.id}`,
+                ? appI18n.t("ui.lead_number", { value1: currentLead.num })
+                : appI18n.t("ui.lead"),
+            breadcrumb: ({ params }) => appI18n.t("ui.lead_breadcrumb", { value1: params.id }),
           },
         },
         {
           path: "/history-leads",
           element: <HistoryLeads />,
           handle: {
-            breadcrumb: "История перевозок",
+            get breadcrumb() { return appI18n.t("ui.lead_history"); },
           },
         },
         {
           path: "/account",
           element: <Account />,
           handle: {
-            breadcrumb: "Аккаунт",
+            get breadcrumb() { return appI18n.t("ui.account"); },
           },
         },
         {
           path: "/factorings",
           element: <Factoring />,
           handle: {
-            breadcrumb: "Факторинги",
+            get breadcrumb() { return appI18n.t("ui.factorings"); },
           },
         },
         {
           path: "/factoring/:id",
           element: <FactoringItem />,
           handle: {
-            breadcrumb: `Факторинг продажи`,
+            breadcrumb: appI18n.t("ui.factoring_sales"),
           },
         },
         {
           path: "/customers",
           element: <Customers />,
           handle: {
-            breadcrumb: "Заказчики",
+            get breadcrumb() { return appI18n.t("ui.customers"); },
           },
         },
         {
           path: "/drivers",
           element: <Drivers />,
           handle: {
-            breadcrumb: "Водители",
+            get breadcrumb() { return appI18n.t("ui.drivers"); },
           },
         },
 
@@ -106,65 +109,65 @@ export const router = createBrowserRouter(
           path: "/profile",
           element: <Profile />,
           handle: {
-            breadcrumb: "Профиль",
+            get breadcrumb() { return appI18n.t("ui.profile"); },
           },
         },
         {
           path: "/tender-applications",
           element: <TenderApplications />,
           handle: {
-            breadcrumb: "Аукционные заявки",
+            get breadcrumb() { return appI18n.t("ui.auction_requests"); },
           },
         },
         {
           path: "/tenders/:id", /// Линк с нотификации приходит так
           element: <TenderApplicationsItem />,
           handle: {
-            breadcrumb: ({ params }) => `Аукционная заявка / ${params.id}`,
+            breadcrumb: ({ params }) => appI18n.t("ui.auction_request_breadcrumb", { value1: params.id }),
           },
         },
         {
           path: "/tender-forwarders",
           element: <TenderForwarders />,
           handle: {
-            breadcrumb: "Аукционы перевозчиков",
+            get breadcrumb() { return appI18n.t("ui.carrier_auctions"); },
           },
         },
         {
           path: "/tenders-driver/:id", /// Линк с нотификации приходит так
           element: <TenderForwardersItem />,
           handle: {
-            breadcrumb: ({ params }) => `Аукцион / ${params.id}`,
+            breadcrumb: ({ params }) => appI18n.t("ui.auction_breadcrumb", { value1: params.id }),
           },
         },
         {
           path: "/tenders-history/",
           element: <TenderHistory />,
           handle: {
-            breadcrumb: "История аукционов",
+            get breadcrumb() { return appI18n.t("ui.auction_history"); },
           },
         },
         {
           path: "/factoring-lines",
           element: <Factor />,
           handle: {
-            breadcrumb: "Факторинговые компании",
+            get breadcrumb() { return appI18n.t("ui.factoring_companies"); },
           },
         },
         {
           path: "/factoring-lines/:id/:breadcrumbs",
           element: <FactorItem />,
           handle: {
-            title: ({ params }) => `Линия - ${params.breadcrumbs}`,
+            title: ({ params }) => appI18n.t("ui.line_title", { value1: params.breadcrumbs }),
             breadcrumb: ({ params }) =>
-              `Факторинговые компании / ${params.breadcrumbs}`,
+              appI18n.t("ui.factoring_company_breadcrumb", { value1: params.breadcrumbs }),
           },
         },
         {
           path: "/handbook",
           element: <Handbook />,
           handle: {
-            breadcrumb: "Cправочник",
+            get breadcrumb() { return appI18n.t("ui.catalog"); },
           },
         },
       ],

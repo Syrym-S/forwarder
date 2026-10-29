@@ -13,11 +13,29 @@ import { useNotificationsStore } from "../../app/store/notifications/noti-store"
 import { NOTIFICATION_TYPE } from "../../shared/const/notification-types";
 import { parserNotificationType } from "../../shared/helpers/notifications/parse-notification-type";
 import { ACTIVE_LEAD_STATUS_OPTIONS } from "../../shared/const/tenders";
+import { useTranslation } from "react-i18next";
 
-const DRAFT_OPTION = { value: "draft", label: "Черновик" };
-const STATUS_OPTIONS = [...ACTIVE_LEAD_STATUS_OPTIONS, DRAFT_OPTION];
+const STATUS_LABEL_KEYS = {
+  new: "dashboard.new",
+  add_driver: "dashboard.driver_added",
+  start_driver: "dashboard.trip_started",
+  start_loading: "dashboard.loading_operation",
+  verification_loading: "dashboard.loading_confirmed",
+  start_unloading: "dashboard.unloading_operation",
+  verification_unloading: "dashboard.unloading_confirmed",
+  emergency_situation: "dashboard.emergency",
+};
+const DRAFT_OPTION = { value: "draft", label: "active_leads.draft" };
+const STATUS_OPTIONS = [
+  ...ACTIVE_LEAD_STATUS_OPTIONS.map((option) => ({
+    ...option,
+    label: STATUS_LABEL_KEYS[option.value],
+  })),
+  DRAFT_OPTION,
+];
 
 const ActiveLeads = () => {
+  const { t } = useTranslation();
   const [filterStatus, setFilterStatus] = useState(null);
   const showDrafts = filterStatus?.value === DRAFT_OPTION.value;
   const [search, setSearch] = useState("");
@@ -87,17 +105,16 @@ const ActiveLeads = () => {
             сolor: "font_color.heading",
           }}
         >
-          {showDrafts ? "Черновики перевозок" : "Активные перевозки"}
+          {t(showDrafts ? "active_leads.drafts_title" : "active_leads.title")}
         </Typography>
 
         <Typography color="text.secondary" fontSize={14}>
-          Список заявок на перевозку
+          {t("active_leads.description")}
         </Typography>
       </Box>
       {showDrafts && (
         <Alert severity="warning" sx={{ my: 1 }}>
-          Здесь ваши неопубликованные перевозки. Откройте черновик, чтобы
-          продолжить редактирование и опубликовать его.
+          {t("active_leads.drafts_description")}
         </Alert>
       )}
 
@@ -128,8 +145,11 @@ const ActiveLeads = () => {
 
         <CustomSelect
           id="active-lead-status"
-          label="Статус"
-          options={[{ value: "", label: "Все статусы" }, ...STATUS_OPTIONS]}
+          label={t("active_leads.status")}
+          options={[
+            { value: "", label: t("active_leads.all_statuses") },
+            ...STATUS_OPTIONS.map((option) => ({ ...option, label: t(option.label) })),
+          ]}
           value={filterStatus?.value ?? ""}
           onChange={(event) => {
             const value = event.target.value;
@@ -149,7 +169,7 @@ const ActiveLeads = () => {
         />
 
         <FormInput
-          label={showDrafts ? "Поиск черновиков" : "Поиск перевозок"}
+          label={t(showDrafts ? "active_leads.search_drafts" : "active_leads.search_leads")}
           value={search}
           onChange={(event) => {
             setSearch(event.target.value);

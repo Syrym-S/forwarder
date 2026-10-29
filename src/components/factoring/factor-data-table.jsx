@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import {
   Box,
   Table,
@@ -9,9 +10,10 @@ import {
 import React from "react";
 
 const FactorDataTable = ({ factor }) => {
+  const { t } = useTranslation();
   const rows = [
     {
-      label: "ФИО",
+      label: t("ui.full_name"),
       value: factor?.fio,
     },
     {
@@ -19,23 +21,23 @@ const FactorDataTable = ({ factor }) => {
       value: factor?.email,
     },
     {
-      label: "ИИН",
+      label: t("ui.iin"),
       value: factor?.iin,
     },
     {
-      label: "Номер",
+      label: t("ui.number"),
       value: factor?.phone,
     },
     {
-      label: "Компания",
+      label: t("ui.company"),
       value: factor?.company_name,
     },
     {
-      label: "БИН",
+      label: t("ui.bin"),
       value: factor?.bin || factor?.company_bin,
     },
     {
-      label: "Адрес компании",
+      label: t("ui.company_address"),
       value: factor?.company_address,
     },
   ];
@@ -47,7 +49,7 @@ const FactorDataTable = ({ factor }) => {
           {rows.map((row) => (
             <TableRow>
               <TableCell>{row.label}:</TableCell>
-              <TableCell>{row.value || "Не указан"}</TableCell>
+              <TableCell>{row.value || t("ui.not_specified")}</TableCell>
             </TableRow>
           ))}
         </TableBody>

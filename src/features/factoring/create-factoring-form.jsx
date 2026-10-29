@@ -1,23 +1,18 @@
+import { useTranslation } from "react-i18next";
 import {
   Alert,
-  Autocomplete,
   Box,
   Button,
   CircularProgress,
   Dialog,
   DialogContent,
   DialogTitle,
-  InputAdornment,
-  MenuItem,
-  TextField,
   Typography,
 } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useLeadsStore } from "../../app/store/leads/leads-store";
-import { Controller, useForm, useWatch } from "react-hook-form";
-import RenderLeadOptions from "../../components/tenders/render-lead-options";
+import { useForm, useWatch } from "react-hook-form";
 import { useFactoringStore } from "../../app/store/factoring/factoring-store";
-import RenderFactorOptions from "../../components/tenders/render-factor-options";
 import ChooseLeadAndFactor from "../../components/factoring/factoring-form/choose-lead-and-factor";
 import FactoringSettingsInfoStep from "../../components/factoring/factoring-form/factoring-settings-info-step";
 
@@ -32,6 +27,7 @@ const defaultValues = {
 };
 
 const CreateFactoringForm = ({ openFormModal, handleModalClose }) => {
+  const { t } = useTranslation();
   const [step, setStep] = useState(1);
   const [selectedLead, setSelectedLead] = useState();
   const [selectedFactor, setSelectedFactor] = useState();
@@ -162,7 +158,7 @@ const CreateFactoringForm = ({ openFormModal, handleModalClose }) => {
             fontWeight: "600",
           }}
         >
-          Создание факторинга
+          {t("ui.create_factoring_heading")}
         </Typography>
         <Typography
           sx={{
@@ -170,14 +166,14 @@ const CreateFactoringForm = ({ openFormModal, handleModalClose }) => {
             fontWeight: "400",
           }}
         >
-          Выберите завершённую перевозку, фактор и укажите параметры факторинга
+          {t("ui.create_factoring_description")}
         </Typography>
       </DialogTitle>
 
       <DialogContent>
         {canBeSubmitted && (
           <Alert severity="error" sx={{ my: 1 }}>
-            Факторинг не может быть создан, так как линия ожидает подтверждения
+            {t("ui.factoring_line_pending_creation_blocked")}
           </Alert>
         )}
         {renderFormStep(step)}
@@ -195,7 +191,7 @@ const CreateFactoringForm = ({ openFormModal, handleModalClose }) => {
             color="error"
             onClick={isFirstStep ? handleModalClose : handlePrevStep}
           >
-            {isFirstStep ? "Отмена" : "Назад"}
+            {isFirstStep ? t("ui.cancel") : t("ui.back")}
           </Button>
           <Button
             variant="contained"
@@ -215,7 +211,7 @@ const CreateFactoringForm = ({ openFormModal, handleModalClose }) => {
                 }}
               />
             )}
-            {isLast || !isSettingsExist ? "Cоздать" : "Дальше"}
+            {isLast || !isSettingsExist ? t("ui.create") : t("ui.next")}
           </Button>
         </Box>
       </DialogContent>

@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { useState } from "react";
 import {
   Alert,
@@ -24,6 +25,7 @@ export function LeadDocumentsSection({
   uploadError = "",
   deletingDocumentIds = [],
 }) {
+  const { t } = useTranslation();
   const isFilesEmpty = documents.length === 0;
   const isFinishedOrDelted =
     leadStatus === STATUS.finished || leadStatus === STATUS.deleted;
@@ -79,12 +81,12 @@ export function LeadDocumentsSection({
           >
             <FormInput
               name="name"
-              label="Название документа"
+              label={t("ui.document_name")}
               size="small"
               fullWidth
             />
 
-            <FormInput name="context" label="Описание" size="small" fullWidth />
+            <FormInput name="context" label={t("ui.description")} size="small" fullWidth />
 
             <Box>
               <Button
@@ -99,7 +101,7 @@ export function LeadDocumentsSection({
                   },
                 }}
               >
-                {selectedFileName ? "Файл выбран" : "Файл"}
+                {selectedFileName ? t("ui.file_selected") : t("ui.file")}
 
                 <input
                   name="file"
@@ -143,7 +145,7 @@ export function LeadDocumentsSection({
                 },
                 justifySelf: "flex-start",
               }}
-              text={isUploading ? "Добавление..." : "Добавить документ"}
+              text={isUploading ? t("ui.adding") : t("ui.add_document")}
             />
           </Box>
         )}
@@ -151,9 +153,9 @@ export function LeadDocumentsSection({
         {uploadError && <Alert severity="error">{uploadError}</Alert>}
 
         {isFilesEmpty ? (
-          <Alert severity="info">Список загруженных файлов пуст</Alert>
+          <Alert severity="info">{t("ui.uploaded_file_list_empty")}</Alert>
         ) : isLoading ? (
-          <> ....Загрузка </>
+          <>{t("ui.loading_4")}{" "}</>
         ) : (
           <Stack
             spacing={1}

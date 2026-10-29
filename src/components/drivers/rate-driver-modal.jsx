@@ -1,4 +1,6 @@
-﻿import { useId, useState } from "react";
+import appI18n from "../../i18n/index.js";
+import { useTranslation } from "react-i18next";
+import { useId, useState } from "react";
 import {
   Box,
   Alert,
@@ -17,16 +19,17 @@ import {
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import StarRoundedIcon from "@mui/icons-material/StarRounded";
 
-const labels = [
-  "Выберите оценку",
-  "Плохо",
-  "Есть замечания",
-  "Хорошо",
-  "Очень хорошо",
-  "Отлично!",
+const labels = () => [
+  appI18n.t("ui.select_rating"),
+  appI18n.t("ui.rating_poor"),
+  appI18n.t("ui.rating_needs_improvement"),
+  appI18n.t("ui.rating_good"),
+  appI18n.t("ui.rating_very_good"),
+  appI18n.t("ui.rating_excellent"),
 ];
 
 const RateDriverModal = ({ onClose, onConfirm, driver }) => {
+  const { t } = useTranslation();
   const [rate, setRate] = useState(1);
   const [comment, setComment] = useState("");
   const [isVisible, setIsVisible] = useState(true);
@@ -42,7 +45,7 @@ const RateDriverModal = ({ onClose, onConfirm, driver }) => {
       await onConfirm({ rate, comment: comment.trim(), is_visible: isVisible });
       onClose();
     } catch (e) {
-      setError(e.response?.data?.message || "Не удалось сохранить оценку");
+      setError(e.response?.data?.message || t("ui.save_rating_failed"));
     } finally {
       setIsSubmitting(false);
     }
@@ -68,11 +71,9 @@ const RateDriverModal = ({ onClose, onConfirm, driver }) => {
           <DialogTitle
             id={titleId}
             sx={{ p: 0, flex: 1, fontWeight: 700, fontSize: 24 }}
-          >
-            Оцените водителя
-          </DialogTitle>
+          >{t("ui.rate_driver")}</DialogTitle>
           <IconButton
-            aria-label="Закрыть"
+            aria-label={t("ui.close")}
             onClick={onClose}
             disabled={isSubmitting}
           >
@@ -83,7 +84,7 @@ const RateDriverModal = ({ onClose, onConfirm, driver }) => {
           color="text.secondary"
           sx={{ mt: 1, overflowWrap: "anywhere" }}
         >
-          {driver?.fio || "Водитель"}
+          {driver?.fio || t("ui.driver")}
         </Typography>
       </Box>
 
@@ -99,9 +100,7 @@ const RateDriverModal = ({ onClose, onConfirm, driver }) => {
           textAlign: "center",
         }}
       >
-        <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-          Как прошла работа с водителем?
-        </Typography>
+        <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>{t("ui.driver_experience_question")}</Typography>
         <Typography
           sx={{
             fontSize: "4rem",
@@ -117,15 +116,13 @@ const RateDriverModal = ({ onClose, onConfirm, driver }) => {
           variant="body2"
           color="text.secondary"
           sx={{ mt: 0.5, mb: 2.5 }}
-        >
-          из 5 баллов
-        </Typography>
+        >{t("ui.out_of_five_points_lowercase")}</Typography>
         <Rating
           name="driver-rating"
           disabled={isSubmitting}
           value={rate}
           precision={0.5}
-          getLabelText={(value) => `${value} из 5`}
+          getLabelText={(value) => t("ui.rating_out_of_five", { value1: value })}
           icon={<StarRoundedIcon fontSize="inherit" />}
           emptyIcon={<StarRoundedIcon fontSize="inherit" />}
           sx={{
@@ -141,13 +138,13 @@ const RateDriverModal = ({ onClose, onConfirm, driver }) => {
           color="text.secondary"
           sx={{ mt: 2, minHeight: 24 }}
         >
-          {labels[Math.ceil(rate)]}
+          {labels()[Math.ceil(rate)]}
         </Typography>
         <TextField
-          label="Комментарий"
+          label={t("ui.comment")}
           disabled={isSubmitting}
-          placeholder="Расскажите о работе с водителем"
-          helperText="Необязательно"
+          placeholder={t("ui.describe_driver_experience")}
+          helperText={t("ui.optional")}
           multiline
           minRows={3}
           fullWidth
@@ -168,7 +165,7 @@ const RateDriverModal = ({ onClose, onConfirm, driver }) => {
               onChange={(_, checked) => setIsVisible(checked)}
             />
           }
-          label="Показывать оценку"
+          label={t("ui.show_rating")}
         />
         {error && (
           <Alert severity="error" sx={{ mt: 2, width: "100%" }}>
@@ -193,9 +190,7 @@ const RateDriverModal = ({ onClose, onConfirm, driver }) => {
           disabled={isSubmitting}
           color="inherit"
           sx={{ borderRadius: 2 }}
-        >
-          Закрыть
-        </Button>
+        >{t("ui.close")}</Button>
         <Button
           variant="contained"
           disableElevation
@@ -203,7 +198,7 @@ const RateDriverModal = ({ onClose, onConfirm, driver }) => {
           onClick={handleConfirm}
           sx={{ borderRadius: 2 }}
         >
-          {isSubmitting ? "Сохранение…" : "Подтвердить"}
+          {isSubmitting ? t("ui.saving") : t("ui.confirm")}
         </Button>
       </DialogActions>
     </Dialog>

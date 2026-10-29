@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import LeadAvrSection from "../documents/lead-avr-section";
 import CargoCard from "./lead-cargo-info";
 import LeadMap from "../lead-map";
@@ -29,6 +30,7 @@ const LeadItemMainContainer = ({
   documentError,
   setDocumentError,
 }) => {
+  const { t } = useTranslation();
   const { id } = useParams();
 
   const features = window.APP_DATA?.features || {};
@@ -132,7 +134,7 @@ const LeadItemMainContainer = ({
       setDocumentError(
         error.response?.data?.message ||
           error.message ||
-          "Не удалось загрузить документ",
+          t("ui.document_upload_failed"),
       );
     } finally {
       setIsDocumentUploading(false);
@@ -154,7 +156,7 @@ const LeadItemMainContainer = ({
       await getLeadItem(id);
     } catch (e) {
       setDeliveryError(
-        e.response?.data?.message || "Не удалось завершить рейс",
+        e.response?.data?.message || t("ui.complete_trip_failed"),
       );
     }
   };
@@ -166,7 +168,7 @@ const LeadItemMainContainer = ({
 
   const handleRateDriver = async (payload) => {
     const response = await rateDriverApi(ratingLead.id, payload);
-    setRatingNotice(response.data.message || "Оценка сохранена");
+    setRatingNotice(response.data.message || t("ui.rating_saved"));
   };
 
   const handleRefreshAvr = async () => {
@@ -319,7 +321,7 @@ const LeadItemMainContainer = ({
 
       {isAllPassed && leadData.status === STATUS.verification_unloading && (
         <Section
-          title="Завершить рейс"
+          title={t("ui.complete_trip")}
           icon={<DescriptionOutlinedIcon color="primary" />}
         >
           <Button
@@ -328,7 +330,7 @@ const LeadItemMainContainer = ({
             disabled={isConfirmLoading}
             onClick={handleConfirmDelivery}
           >
-            {isConfirmLoading ? "...Завершение рейса" : "Завершить рейс"}
+            {isConfirmLoading ? t("ui.completing_trip") : t("ui.complete_trip")}
           </Button>
         </Section>
       )}
@@ -359,7 +361,7 @@ const LeadItemMainContainer = ({
       </Box>
 
       <Section
-        title={`Груз`}
+        title={t("ui.cargo")}
         icon={<LocalShippingOutlinedIcon color="primary" />}
       >
         <Box
@@ -388,7 +390,7 @@ const LeadItemMainContainer = ({
       />
 
       <Section
-        title="Документы"
+        title={t("ui.documents")}
         icon={<DescriptionOutlinedIcon color="primary" />}
       >
         <LeadDocumentsSection

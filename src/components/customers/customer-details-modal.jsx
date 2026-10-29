@@ -1,3 +1,5 @@
+import appI18n from "../../i18n/index.js";
+import { useTranslation } from "react-i18next";
 import Tooltip from "../../shared/ui/action-tooltip";
 import {
   Box,
@@ -17,25 +19,25 @@ import { useCustomerStore } from "../../app/store/customers/customers-store";
 import ModalLoader from "../../shared/ui/loaders/modal-loader";
 import InfoItem from "../../shared/ui/info-item";
 
-const companyFields = [
-  ["name", "Название компании"],
-  ["bin", "БИН"],
-  ["type", "Тип организации"],
-  ["legal_address", "Юридический адрес"],
-  ["bik", "БИК"],
-  ["account_number", "Расчётный счёт"],
-  ["bank_name", "Банк"],
+const companyFields = () => [
+  ["name", appI18n.t("ui.company_name")],
+  ["bin", appI18n.t("ui.bin")],
+  ["type", appI18n.t("ui.organization_type")],
+  ["legal_address", appI18n.t("ui.registered_address")],
+  ["bik", appI18n.t("ui.bic")],
+  ["account_number", appI18n.t("ui.current_account")],
+  ["bank_name", appI18n.t("ui.bank")],
 ];
 
-const personFields = [
-  ["fio", "ФИО"],
-  ["iin", "ИИН"],
-  ["phone", "Номер телефона"],
+const personFields = () => [
+  ["fio", appI18n.t("ui.full_name")],
+  ["iin", appI18n.t("ui.iin")],
+  ["phone", appI18n.t("ui.phone")],
   ["email", "Email"],
-  ["document_number", "Номер документа"],
-  ["issue_country", "Страна выдачи документа"],
-  ["document_issue_date", "Дата выдачи документа"],
-  ["document_issued_by", "Кем выдан документ"],
+  ["document_number", appI18n.t("ui.document_number")],
+  ["issue_country", appI18n.t("ui.document_issuing_country")],
+  ["document_issue_date", appI18n.t("ui.document_issue_date")],
+  ["document_issued_by", appI18n.t("ui.document_issued_by")],
 ];
 
 const infoGridSx = {
@@ -46,6 +48,7 @@ const infoGridSx = {
 };
 
 const CustomerDetailsModal = ({ selectedCustomer, handleClear }) => {
+  const { t } = useTranslation();
   const customerDetails = useCustomerStore((state) => state.customerDetails);
   const isDetailsLoading = useCustomerStore((state) => state.isDetailsLoading);
 
@@ -84,9 +87,7 @@ const CustomerDetailsModal = ({ selectedCustomer, handleClear }) => {
             sx={{
               fontSize: "1rem",
             }}
-          >
-            Заказчик
-          </Typography>
+          >{t("ui.customer")}</Typography>
           <Typography
             sx={{
               fontSize: "1.3rem",
@@ -96,9 +97,9 @@ const CustomerDetailsModal = ({ selectedCustomer, handleClear }) => {
           </Typography>
         </Stack>
 
-        <Tooltip title="Закрыть">
+        <Tooltip title={t("ui.close")}>
           <IconButton
-            aria-label="Закрыть данные заказчика"
+            aria-label={t("ui.close_customer_details")}
             onClick={handleClear}
             sx={{ p: 0 }}
           >
@@ -112,10 +113,10 @@ const CustomerDetailsModal = ({ selectedCustomer, handleClear }) => {
       >
         <Section
           icon={<BusinessOutlinedIcon color="primary" />}
-          title="Данные заказчика - компания"
+          title={t("ui.customer_company_details")}
         >
           <Box sx={infoGridSx}>
-            {companyFields.map(([key, label]) => (
+            {companyFields().map(([key, label]) => (
               <InfoItem
                 key={key}
                 label={label}
@@ -130,10 +131,10 @@ const CustomerDetailsModal = ({ selectedCustomer, handleClear }) => {
             <Section
               key={index}
               icon={<PersonOutlineRoundedIcon color="primary" />}
-              title={`Данные контактного лица${customerDetails.persons.length > 1 ? ` №${index + 1}` : ""}`}
+              title={t("ui.contact_person_details_number", { value1: customerDetails.persons.length > 1 ? ` №${index + 1}` : "" })}
             >
               <Box sx={infoGridSx}>
-                {personFields.map(([key, label]) => {
+                {personFields().map(([key, label]) => {
                   const value = person[key];
                   const displayValue =
                     key === "document_issue_date" &&
@@ -156,11 +157,9 @@ const CustomerDetailsModal = ({ selectedCustomer, handleClear }) => {
         ) : (
           <Section
             icon={<PersonOutlineRoundedIcon color="primary" />}
-            title="Данные контактного лица"
+            title={t("ui.contact_person_details")}
           >
-            <Typography color="text.secondary">
-              Контактное лицо не указано
-            </Typography>
+            <Typography color="text.secondary">{t("ui.contact_person_not_specified")}</Typography>
           </Section>
         )}
       </DialogContent>

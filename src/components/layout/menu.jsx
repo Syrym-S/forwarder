@@ -48,8 +48,8 @@ export function SupportContacts() {
         <Button
           component="a"
           href={`mailto:${supportEmail}?subject=${encodeURIComponent(
-            t("support_request_subject"),
-          )}&body=${encodeURIComponent(t("support_request_body"))}`}
+            t("ui.support_request_subject"),
+          )}&body=${encodeURIComponent(t("ui.support_request_body"))}`}
           sx={{
             boxShadow: 0,
             fontSize: 12,
@@ -83,7 +83,7 @@ export function SupportContacts() {
       </Tooltip>
 
       <Tooltip
-        title={copied ? t("copied") : t("copy_number")}
+        title={copied ? t("ui.copied") : t("ui.copy_number")}
         placement="top"
         arrow
         open={copied ? true : undefined}
@@ -133,7 +133,7 @@ const menuItems = [
             }}
           />
         ),
-        tooltip_text: "map_routes_tooltip",
+        tooltip_text: "ui.map_routes_tooltip",
       },
     ],
   },
@@ -152,7 +152,7 @@ const menuItems = [
             }}
           />
         ),
-        tooltip_text: "active_leads_tooltip",
+        tooltip_text: "ui.active_leads_tooltip",
       },
       {
         id: 4,
@@ -165,7 +165,7 @@ const menuItems = [
             }}
           />
         ),
-        tooltip_text: "lead_history_tooltip",
+        tooltip_text: "ui.lead_history_tooltip",
       },
     ],
   },
@@ -197,7 +197,7 @@ const menuItems = [
             }}
           />
         ),
-        tooltip_text: "factorings_tooltip",
+        tooltip_text: "ui.factorings_tooltip",
       },
       {
         id: 3,
@@ -210,7 +210,7 @@ const menuItems = [
             }}
           />
         ),
-        tooltip_text: "factoring_lines_tooltip",
+        tooltip_text: "ui.factoring_lines_tooltip",
       },
     ],
   },
@@ -229,7 +229,7 @@ const menuItems = [
             }}
           />
         ),
-        tooltip_text: "customers_tooltip",
+        tooltip_text: "ui.customers_tooltip",
       },
       {
         id: 2,
@@ -242,7 +242,7 @@ const menuItems = [
             }}
           />
         ),
-        tooltip_text: "drivers_tooltip",
+        tooltip_text: "ui.drivers_tooltip",
       },
       {
         id: 3,
@@ -274,7 +274,7 @@ const menuItems = [
             }}
           />
         ),
-        tooltip_text: "customer_auctions_tooltip",
+        tooltip_text: "ui.customer_auctions_tooltip",
       },
       {
         id: 2,
@@ -287,7 +287,7 @@ const menuItems = [
             }}
           />
         ),
-        tooltip_text: "your_auctions_tooltip",
+        tooltip_text: "ui.your_auctions_tooltip",
       },
     ],
   },
@@ -384,7 +384,7 @@ const SideBar = ({ openMenu, setOpenMenu }) => {
             color: "rgb(22, 36, 62)",
           }}
         >
-          {t("need_help")}
+          {t("ui.need_help")}
         </Typography>
         <Typography
           sx={{
@@ -392,7 +392,7 @@ const SideBar = ({ openMenu, setOpenMenu }) => {
             fontSize: 12,
           }}
         >
-          {t("support_availability")}
+          {t("ui.support_availability")}
         </Typography>
 
         <Box

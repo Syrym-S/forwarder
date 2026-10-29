@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { useId, useState } from "react";
 import {
   Button,
@@ -11,6 +12,7 @@ import {
 } from "@mui/material";
 
 const BlockDriverModal = ({ driver, onClose, onConfirm }) => {
+  const { t } = useTranslation();
   const blockModalTitleId = useId();
   const [comment, setComment] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -26,7 +28,7 @@ const BlockDriverModal = ({ driver, onClose, onConfirm }) => {
       await onConfirm(driver.id, trimmedComment);
       onClose();
     } catch (e) {
-      setError(e.response?.data?.message || "Не удалось заблокировать водителя");
+      setError(e.response?.data?.message || t("ui.block_driver_failed"));
     } finally {
       setIsSubmitting(false);
     }
@@ -40,7 +42,7 @@ const BlockDriverModal = ({ driver, onClose, onConfirm }) => {
       maxWidth="sm"
       fullWidth
     >
-      <DialogTitle id={blockModalTitleId}>Заблокировать водителя</DialogTitle>
+      <DialogTitle id={blockModalTitleId}>{t("ui.block_driver")}</DialogTitle>
       <DialogContent>
         <Typography color="text.secondary" sx={{ mb: 2 }}>
           {driver?.fio}
@@ -48,25 +50,23 @@ const BlockDriverModal = ({ driver, onClose, onConfirm }) => {
         <TextField
           required
           disabled={isSubmitting}
-          helperText="Комментарий обязателен"
+          helperText={t("ui.comment_required")}
           autoFocus
           fullWidth
           multiline
           minRows={3}
           margin="dense"
-          label="Комментарий"
-          placeholder="Укажите причину блокировки"
+          label={t("ui.comment")}
+          placeholder={t("ui.enter_block_reason")}
           value={comment}
           onChange={(event) => setComment(event.target.value)}
         />
         {error && <Alert severity="error">{error}</Alert>}
       </DialogContent>
       <DialogActions>
-        <Button onClick={onClose} disabled={isSubmitting}>Отмена</Button>
+        <Button onClick={onClose} disabled={isSubmitting}>{t("ui.cancel")}</Button>
 
-        <Button onClick={handleConfirm} disabled={!comment.trim() || isSubmitting}>
-          Заблокировать
-        </Button>
+        <Button onClick={handleConfirm} disabled={!comment.trim() || isSubmitting}>{t("ui.block")}</Button>
       </DialogActions>
     </Dialog>
   );

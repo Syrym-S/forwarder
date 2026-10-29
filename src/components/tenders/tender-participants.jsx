@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import renderDriverOption from "../../shared/ui/render-driver-option";
 import {
   Autocomplete,
@@ -21,6 +22,7 @@ import { STATUS } from "../../shared/const/tenders";
 import ConfirmModal from "../../shared/ui/confirm-modal";
 
 const TenderParticipants = ({ tender }) => {
+  const { t } = useTranslation();
   const [openConfirm, setOpenConfirm] = useState(false);
   const [selectedDriver, setSelectedDriver] = useState(null);
   const [showParticipantField, setShowParticipantField] = useState(false);
@@ -88,7 +90,7 @@ const TenderParticipants = ({ tender }) => {
             alignItems: "center",
           }}
         >
-          <Typography sx={{ fontWeight: 600, fontSize: 16 }}>Участники</Typography>
+          <Typography sx={{ fontWeight: 600, fontSize: 16 }}>{t("ui.participants_2")}</Typography>
 
           {isInLimit || !isPublic ? (
             <Button
@@ -100,13 +102,9 @@ const TenderParticipants = ({ tender }) => {
                   color={canAddParticipant ? "primary" : ""}
                 />
               }
-            >
-              Добавить участника
-            </Button>
+            >{t("ui.add_participant")}</Button>
           ) : (
-            <Button variant="outlined" disabled>
-              Максимальное количество участников
-            </Button>
+            <Button variant="outlined" disabled>{t("ui.maximum_participants_2")}</Button>
           )}
         </Box>
       }
@@ -125,8 +123,8 @@ const TenderParticipants = ({ tender }) => {
             renderInput={(params) => (
               <TextField
                 {...params}
-                label={isLoading ? "...Загрузка данных" : "Водитель"}
-                placeholder="Выберите водителя"
+                label={isLoading ? t("ui.loading_2") : t("ui.driver")}
+                placeholder={t("ui.select_driver")}
               />
             )}
           />
@@ -143,23 +141,19 @@ const TenderParticipants = ({ tender }) => {
               variant="contained"
               color="primary"
               onClick={handleOpenConfirmModal}
-            >
-              Добавить
-            </Button>
+            >{t("ui.add")}</Button>
             <Button
               disabled={isAddingLoading}
               variant="outlined"
               color="error"
               onClick={handleHideParticipantField}
-            >
-              Отмена
-            </Button>
+            >{t("ui.cancel")}</Button>
           </Box>
 
           <ConfirmModal
             open={openConfirm}
-            title="Добавить участника"
-            description="Добавление участника запустит аукцион!"
+            title={t("ui.add_participant")}
+            description={t("ui.adding_participant_starts_auction")}
             onConfirm={handleAddParticipant}
             onCancel={handleCloseConfirmModal}
             isLoading={isAddingLoading}
@@ -167,7 +161,7 @@ const TenderParticipants = ({ tender }) => {
         </Stack>
       )}
 
-      {isEmpty && <>Список пустой</>}
+      {isEmpty && <>{t("ui.list_empty_3")}</>}
 
       {!isEmpty && (
         <Box
@@ -178,7 +172,7 @@ const TenderParticipants = ({ tender }) => {
           }}
         >
           {isLoadingCurrentTenderLoading || isAddingLoading ? (
-            <>...Загрузка</>
+            <>{t("ui.loading_3")}</>
           ) : (
             tender?.participants?.map((participant) => (
               <ParticipantCard

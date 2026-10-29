@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { moneySpacingFormat } from "../../../shared/helpers/money-spacing";
 import {
   Button,
@@ -15,28 +16,21 @@ const CancelBetModal = ({
   handleCloseCancelModal,
   confirmCancel,
 }) => {
+  const { t } = useTranslation();
   return (
     <Dialog open={openCancelModal} maxWidth="sm" fullWidth>
-      <DialogTitle>Отменить ставку</DialogTitle>
+      <DialogTitle>{t("ui.cancel_bid")}</DialogTitle>
       <DialogContent>
-        <Typography>
-          Вы уверены что хотите отменить ставку на этот аукцион?
-        </Typography>
-        <Typography>
-          Сумма ставки: {moneySpacingFormat(bet.amount)} {bet.currency}
-        </Typography>
+        <Typography>{t("ui.cancel_bid_confirmation")}</Typography>
+        <Typography>{t("ui.bid_amount_value", { value1: moneySpacingFormat(bet.amount), value2: bet.currency })}</Typography>
       </DialogContent>
       <DialogActions>
         <Button
           variant="outlined"
           color="primary"
           onClick={handleCloseCancelModal}
-        >
-          Нет назад
-        </Button>
-        <Button variant="contained" color="error" onClick={confirmCancel}>
-          Да отменить
-        </Button>
+        >{t("ui.back_2")}</Button>
+        <Button variant="contained" color="error" onClick={confirmCancel}>{t("ui.yes_cancel")}</Button>
       </DialogActions>
     </Dialog>
   );

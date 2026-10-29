@@ -1,3 +1,4 @@
+import appI18n from "../../i18n/index.js";
 import { Box, Chip, Rating, Typography } from "@mui/material";
 
 export default function renderDriverOption({ key, ...props }, option) {
@@ -42,11 +43,11 @@ export default function renderDriverOption({ key, ...props }, option) {
             lineHeight: 1.3,
           }}
         >
-          {option.fio || "Без имени"}
+          {option.fio || appI18n.t("ui.unnamed")}
         </Typography>
 
         {option.in_black_list === true && (
-          <Chip label="Водитель заблокирован" color="error" size="small" />
+          <Chip label={appI18n.t("ui.driver_blocked")} color="error" size="small" />
         )}
 
         {option.company_name && (
@@ -74,16 +75,14 @@ export default function renderDriverOption({ key, ...props }, option) {
               precision={0.1}
               readOnly
               size="small"
-              getLabelText={(value) => `${value} из 5`}
+              getLabelText={(value) => appI18n.t("ui.rating_out_of_five", { value1: value })}
             />
             <Typography variant="body2" sx={{ fontWeight: 600 }}>
-              {rating.toLocaleString("ru-RU")} / 5
+              {rating.toLocaleString(appI18n.resolvedLanguage)} / 5
             </Typography>
           </>
         ) : (
-          <Typography variant="caption" color="text.secondary">
-            Пока нет оценок
-          </Typography>
+          <Typography variant="caption" color="text.secondary">{appI18n.t("ui.no_ratings_yet")}</Typography>
         )}
       </Box>
 
@@ -101,8 +100,7 @@ export default function renderDriverOption({ key, ...props }, option) {
               fontSize: 12,
               color: "text.secondary",
             }}
-          >
-            ИИН:{" "}
+          >{appI18n.t("ui.iin_label")}{" "}
             <Box
               component="span"
               sx={{ color: "text.primary", fontWeight: 500 }}
@@ -118,8 +116,7 @@ export default function renderDriverOption({ key, ...props }, option) {
               fontSize: 12,
               color: "text.secondary",
             }}
-          >
-            Тел:{" "}
+          >{appI18n.t("ui.phone_label")}{" "}
             <Box
               component="span"
               sx={{ color: "text.primary", fontWeight: 500 }}

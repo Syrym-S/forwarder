@@ -1,3 +1,4 @@
+import appI18n from "../../../i18n/index.js";
 import { create } from "zustand";
 import {
   acceptFactoringApi,
@@ -248,7 +249,7 @@ export const useFactoringStore = create((set) => ({
         error:
           e.response?.data?.message ||
           e.message ||
-          "Не удалось перегенерировать документ",
+          appI18n.t("ui.document_regeneration_failed"),
       });
       throw e;
     } finally {

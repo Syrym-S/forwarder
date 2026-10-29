@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { moneySpacingFormat } from "../../../shared/helpers/money-spacing";
 import {
   Box,
@@ -18,11 +19,12 @@ const ConfirmBetModal = ({
   submitBetForm,
   handleCloseConfirmModal,
 }) => {
+  const { t } = useTranslation();
   const isLoading = useTendersStore((state) => state.isLoading);
 
   return (
     <Dialog open={openConfirmModal} maxWidth="sm" fullWidth>
-      <DialogTitle>Поставить ставку</DialogTitle>
+      <DialogTitle>{t("ui.place_bid_2")}</DialogTitle>
       {isLoading ? (
         <Box
           sx={{
@@ -36,12 +38,8 @@ const ConfirmBetModal = ({
         </Box>
       ) : (
         <DialogContent>
-          <Typography>
-            Вы уверены что хотите сделать ставку на этот аукцион?
-          </Typography>
-          <Typography>
-            Сумма: {moneySpacingFormat(formValues.amount)} {formValues.currency}
-          </Typography>
+          <Typography>{t("ui.confirm_auction_bid")}</Typography>
+          <Typography>{t("ui.amount_value", { value1: moneySpacingFormat(formValues.amount), value2: formValues.currency })}</Typography>
         </DialogContent>
       )}
       <DialogActions>
@@ -50,17 +48,13 @@ const ConfirmBetModal = ({
           color="error"
           onClick={handleCloseConfirmModal}
           disabled={isLoading}
-        >
-          Отменить
-        </Button>
+        >{t("ui.cancel_2")}</Button>
         <Button
           variant="contained"
           color="primary"
           onClick={submitBetForm}
           disabled={isLoading}
-        >
-          Сделать ставку
-        </Button>
+        >{t("ui.place_bid")}</Button>
       </DialogActions>
     </Dialog>
   );

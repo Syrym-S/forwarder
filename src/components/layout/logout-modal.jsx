@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import React from "react";
 import Box from "@mui/material/Box";
 import Dialog from "@mui/material/Dialog";
@@ -8,6 +9,7 @@ import { NavLink } from "react-router-dom";
 import { api, isStaging } from "../../app/client";
 
 const LogoutModal = ({ open, handleOpenModal, handleCloseProfile }) => {
+  const { t } = useTranslation();
   const handleLogout = async () => {
     handleOpenModal();
     handleCloseProfile();
@@ -18,7 +20,7 @@ const LogoutModal = ({ open, handleOpenModal, handleCloseProfile }) => {
 
   return (
     <Dialog open={open}>
-      <DialogTitle>Вы уверены, что хотите выйти?</DialogTitle>
+      <DialogTitle>{t("ui.logout_confirmation_question")}</DialogTitle>
       <DialogActions
         sx={{
           display: "flex",
@@ -38,9 +40,7 @@ const LogoutModal = ({ open, handleOpenModal, handleCloseProfile }) => {
               color: "white",
             }}
             onClick={handleLogout}
-          >
-            Выйти
-          </NavLink>
+          >{t("ui.logout")}</NavLink>
         </Button>
         <Button
           onClick={handleLogout}
@@ -49,9 +49,7 @@ const LogoutModal = ({ open, handleOpenModal, handleCloseProfile }) => {
           }}
           color="error"
           variant="outlined"
-        >
-          Отмена
-        </Button>
+        >{t("ui.cancel")}</Button>
       </DialogActions>
     </Dialog>
   );

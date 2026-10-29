@@ -1,4 +1,5 @@
-﻿import { useState } from "react";
+import { useTranslation } from "react-i18next";
+import { useState } from "react";
 import {
   Alert,
   Box,
@@ -22,6 +23,7 @@ const getToday = () =>
   }).format(new Date());
 
 const LeadsExportButton = () => {
+  const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   const [dateTo, setDateTo] = useState(getToday);
   const [dateFrom, setDateFrom] = useState(
@@ -43,7 +45,7 @@ const LeadsExportButton = () => {
       const contentType = response.headers["content-type"] || "";
       if (contentType.includes("json")) {
         const data = JSON.parse(await response.data.text());
-        throw new Error(data.message || "Сервер не вернул файл экспорта");
+        throw new Error(data.message || t("ui.export_file_missing"));
       }
       const disposition = response.headers["content-disposition"] || "";
       const encodedName = disposition.match(/filename\*=UTF-8''([^;]+)/i)?.[1];
@@ -76,7 +78,7 @@ const LeadsExportButton = () => {
       setTimeout(() => URL.revokeObjectURL(url), 1000);
       setOpen(false);
     } catch (failure) {
-      let message = failure.message || "Не удалось экспортировать данные";
+      let message = failure.message || t("ui.data_export_failed");
       if (failure.response?.data instanceof Blob) {
         try {
           message =
@@ -95,7 +97,7 @@ const LeadsExportButton = () => {
     <>
       <PrimaryButton
         variant="outlined"
-        text="Выгрузка данных"
+        text={t("ui.data_export")}
         sx={{
           width: 300,
         }}
@@ -114,9 +116,9 @@ const LeadsExportButton = () => {
         maxWidth="xs"
         slotProps={{ paper: { sx: { borderRadius: "16px", border: "2px solid #1f1f1f", boxShadow: "0 4px 20px rgba(0, 0, 0, 0.15)", overflow: "hidden" } } }}
       >
-        <DialogTitle sx={{ px: 3, pt: 2.5, pb: 1, fontSize: "1.3rem", fontWeight: 700, color: "#263244" }}>Выгрузка истории перевозок</DialogTitle>
+        <DialogTitle sx={{ px: 3, pt: 2.5, pb: 1, fontSize: "1.3rem", fontWeight: 700, color: "#263244" }}>{t("ui.lead_history_export")}</DialogTitle>
         <DialogContent sx={{ px: 3, pt: "6px !important", pb: 1 }}>
-          <Typography sx={{ fontSize: 14, color: "text.secondary", mb: 2 }}>Выберите период для выгрузки данных.</Typography>
+          <Typography sx={{ fontSize: 14, color: "text.secondary", mb: 2 }}>{t("ui.select_export_period")}</Typography>
           <Box
             sx={{
               display: "flex",
@@ -126,7 +128,7 @@ const LeadsExportButton = () => {
             }}
           >
             <FormInput
-              label="Дата с"
+              label={t("ui.date_from")}
               type="date"
               value={dateFrom}
               disabled={loading}
@@ -135,7 +137,7 @@ const LeadsExportButton = () => {
               size="small"
             />
             <FormInput
-              label="Дата по"
+              label={t("ui.date_to")}
               type="date"
               value={dateTo}
               disabled={loading}
@@ -145,9 +147,7 @@ const LeadsExportButton = () => {
             />
           </Box>
           {dateFrom && dateTo && dateFrom > dateTo && (
-            <Alert severity="warning" sx={{ mt: 2 }}>
-              Дата начала должна быть не позже даты окончания.
-            </Alert>
+            <Alert severity="warning" sx={{ mt: 2 }}>{t("ui.export_date_range_invalid")}</Alert>
           )}
           {error && (
             <Alert severity="error" sx={{ mt: 2 }}>
@@ -156,13 +156,13 @@ const LeadsExportButton = () => {
           )}
         </DialogContent>
         <DialogActions sx={{ px: 3, pt: 2, pb: 2.5, gap: 1 }}>
-          <PrimaryButton variant="outlined" disabled={loading} onClick={() => setOpen(false)} text="Отмена" />
+          <PrimaryButton variant="outlined" disabled={loading} onClick={() => setOpen(false)} text={t("ui.cancel")} />
           <PrimaryButton
             isLoading={loading}
             disabled={!valid}
             onClick={download}
             startIcon={!loading && <FileDownloadOutlinedIcon />}
-            text={loading ? "Выгрузка…" : "Скачать"}
+            text={loading ? t("ui.exporting") : t("ui.download")}
           />
         </DialogActions>
       </Dialog>

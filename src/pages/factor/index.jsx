@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import RootLayout from "../../components/layout/root-layout";
 import FactorLineForm from "../../features/factor-line/factor-line-form";
 import ViewTabs from "../../shared/ui/view-tabs";
@@ -11,6 +12,7 @@ import { parserNotificationType } from "../../shared/helpers/notifications/parse
 import { NOTIFICATION_TYPE } from "../../shared/const/notification-types";
 
 const Factor = () => {
+  const { t } = useTranslation();
   const newNotification = useNotificationsStore(
     (state) => state.newNotification,
   );
@@ -46,13 +48,9 @@ const Factor = () => {
             fontSize: "1.5rem",
             сolor: "font_color.heading",
           }}
-        >
-          Факторинговые линии
-        </Typography>
+        >{t("ui.factoring_lines")}</Typography>
 
-        <Typography color="text.secondary" fontSize={14}>
-          Заявки на факторинговые линии
-        </Typography>
+        <Typography color="text.secondary" fontSize={14}>{t("ui.factoring_line_requests")}</Typography>
       </Box>
       <Box
         sx={{

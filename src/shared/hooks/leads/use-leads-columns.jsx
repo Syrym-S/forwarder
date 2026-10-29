@@ -2,8 +2,10 @@ import { Box } from "@mui/material";
 import { NavLink } from "react-router-dom";
 import LeadStatus from "../../ui/lead-status";
 import { isDraftLead } from "../../lib/lead-draft";
+import { useTranslation } from "react-i18next";
 
 const useLeadsColumns = () => {
+  const { t } = useTranslation();
   const columns = [
     {
       field: "id",
@@ -22,8 +24,8 @@ const useLeadsColumns = () => {
     },
     {
       field: "status",
-      valueGetter: (_, row) => (isDraftLead(row) ? "Черновик" : row.status),
-      headerName: "Статус",
+      valueGetter: (_, row) => (isDraftLead(row) ? t("active_leads.draft") : row.status),
+      headerName: t("active_leads.status"),
       width: 200,
       renderCell: ({ row }) => (
         <Box
@@ -37,10 +39,10 @@ const useLeadsColumns = () => {
         </Box>
       ),
     },
-    { field: "num", headerName: "Номер", width: 200 },
+    { field: "num", headerName: t("active_leads.number"), width: 200 },
     {
       field: "driver",
-      headerName: "Водитель",
+      headerName: t("active_leads.driver"),
       width: 200,
       valueGetter: (_, row) => row?.driver?.fio || "",
       renderCell: ({ row }) => {
@@ -49,7 +51,7 @@ const useLeadsColumns = () => {
     },
     {
       field: "customer",
-      headerName: "Заказчик",
+      headerName: t("active_leads.customer"),
       width: 200,
       valueGetter: (_, row) => row?.customer?.name || "",
       renderCell: ({ row }) => {
@@ -58,20 +60,20 @@ const useLeadsColumns = () => {
     },
     {
       field: "to_location",
-      headerName: "Куда",
+      headerName: t("active_leads.destination"),
       width: 200,
       valueGetter: (_, row) => row?.to_location?.address || row?.to || "",
       renderCell: ({ row }) => (
-        <Box>{row?.to_location?.address || row?.to || "Не указан"}</Box>
+        <Box>{row?.to_location?.address || row?.to || t("active_leads.not_specified")}</Box>
       ),
     },
     {
       field: "from_location",
-      headerName: "Откуда",
+      headerName: t("active_leads.origin"),
       width: 200,
       valueGetter: (_, row) => row?.from_location?.address || row?.from || "",
       renderCell: ({ row }) => (
-        <Box>{row?.from_location?.address || row?.from || "Не указан"}</Box>
+        <Box>{row?.from_location?.address || row?.from || t("active_leads.not_specified")}</Box>
       ),
     },
   ];

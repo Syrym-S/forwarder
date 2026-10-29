@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import Tooltip from "../../shared/ui/action-tooltip";
 import { Box, IconButton, Stack, Typography } from "@mui/material";
 import DeleteOutlineRoundedIcon from "@mui/icons-material/DeleteOutlineRounded";
@@ -6,6 +7,7 @@ import { useTendersStore } from "../../app/store/tenders/tender-store";
 import { STATUS } from "../../shared/const/tenders";
 
 const ParticipantCard = ({ tender, tender_id, participant }) => {
+  const { t } = useTranslation();
   const deleteParticipant = useTendersStore((state) => state.deleteParticipant);
   const getTenderDetails = useTendersStore((state) => state.getTenderDetails);
 
@@ -34,9 +36,7 @@ const ParticipantCard = ({ tender, tender_id, participant }) => {
             color: "text.secondary",
           }}
           display="block"
-        >
-          Дата добавления {dayjs(participant.date).format("YYYY/MM/DD")}
-        </Typography>
+        >{t("ui.added_date", { value1: dayjs(participant.date).format("YYYY/MM/DD") })}</Typography>
 
         <Box
           sx={{
@@ -52,9 +52,7 @@ const ParticipantCard = ({ tender, tender_id, participant }) => {
               overflowWrap: "anywhere",
               color: "color.slate_2",
             }}
-          >
-            Имя: {participant.fio}
-          </Typography>
+          >{t("ui.person_name", { value1: participant.fio })}</Typography>
           <Typography
             sx={{
               fontWeight: 500,
@@ -62,16 +60,14 @@ const ParticipantCard = ({ tender, tender_id, participant }) => {
               overflowWrap: "anywhere",
               color: "color.slate_2",
             }}
-          >
-            ИИН: {participant.iin}
-          </Typography>
+          >{t("ui.iin_value", { value1: participant.iin })}</Typography>
         </Box>
       </Stack>
 
       {tender.status !== STATUS.closed &&
         tender.status !== STATUS.cancelled && (
           <Tooltip
-            title="Удалить участника"
+            title={t("ui.remove_participant")}
             placement="top"
             arrow
             disableInteractive
@@ -91,7 +87,7 @@ const ParticipantCard = ({ tender, tender_id, participant }) => {
             }}
           >
             <IconButton
-              aria-label="Удалить участника"
+              aria-label={t("ui.remove_participant")}
               color="error"
               onClick={handleDeleteParticipant}
             >

@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import TooltipIconButton from "../../shared/ui/tooltip-icon-button";
 import { Controller, useForm, useWatch } from "react-hook-form";
 import { IMaskInput } from "react-imask";
@@ -52,6 +53,7 @@ const defaultValues = {
 };
 
 const AddDriverForm = ({ open, onClose, setSavedData }) => {
+  const { t } = useTranslation();
   const getDrivers = useDriverStore((state) => state.getDrivers);
   const createDriver = useDriverStore((state) => state.createDriver);
   const error = useDriverStore((state) => state.error);
@@ -84,8 +86,8 @@ const AddDriverForm = ({ open, onClose, setSavedData }) => {
   const submitDriverCreate = async (data) => {
     const preparedData = prepareDriverData({
       ...data,
-      registration_document_name: "Свидетельство о госрегистрации",
-      employer_document_name: "Приказ о назначении",
+      registration_document_name: t("ui.state_registration_certificate"),
+      employer_document_name: t("ui.appointment_order"),
     });
 
     const formData = new FormData();
@@ -172,16 +174,12 @@ const AddDriverForm = ({ open, onClose, setSavedData }) => {
             id="driver-form-title"
             component="h2"
             sx={{ fontSize: 20, fontWeight: 600, color: "font_color.heading" }}
-          >
-            Добавление водителя
-          </Typography>
-          <Typography sx={{ mt: 0.5, fontSize: 13, color: "text.secondary" }}>
-            Заполните данные водителя, реквизиты и документы
-          </Typography>
+          >{t("ui.adding_driver")}</Typography>
+          <Typography sx={{ mt: 0.5, fontSize: 13, color: "text.secondary" }}>{t("ui.fill_driver_details")}</Typography>
         </Box>
         <TooltipIconButton
-          title="Закрыть форму"
-          aria-label="Закрыть форму"
+          title={t("ui.close_form")}
+          aria-label={t("ui.close_form")}
           onClick={onClose}
           disabled={isSubmitting}
         >
@@ -234,14 +232,10 @@ const AddDriverForm = ({ open, onClose, setSavedData }) => {
                   fontWeight: 600,
                   color: "font_color.heading",
                 }}
-              >
-                Личные данные
-              </Typography>
+              >{t("ui.personal_details")}</Typography>
               <Typography
                 sx={{ mt: 0.5, fontSize: 12, color: "text.secondary" }}
-              >
-                Контактная информация водителя
-              </Typography>
+              >{t("ui.driver_contact_information")}</Typography>
             </Grid>
 
             <Grid size={{ xs: 12, sm: 6 }}>
@@ -249,7 +243,7 @@ const AddDriverForm = ({ open, onClose, setSavedData }) => {
                 name="fio"
                 control={control}
                 render={({ field }) => (
-                  <TextField {...field} label="ФИО" fullWidth size="small" />
+                  <TextField {...field} label={t("ui.full_name")} fullWidth size="small" />
                 )}
               />
             </Grid>
@@ -260,7 +254,7 @@ const AddDriverForm = ({ open, onClose, setSavedData }) => {
                   name="iin"
                   control={control}
                   render={({ field }) => (
-                    <TextField {...field} label="ИИН" fullWidth size="small" />
+                    <TextField {...field} label={t("ui.iin")} fullWidth size="small" />
                   )}
                 />
               </Grid>
@@ -273,7 +267,7 @@ const AddDriverForm = ({ open, onClose, setSavedData }) => {
                 render={({ field }) => (
                   <TextField
                     {...field}
-                    label="Телефон"
+                    label={t("ui.phone_2")}
                     fullWidth
                     size="small"
                     slotProps={{
@@ -316,15 +310,10 @@ const AddDriverForm = ({ open, onClose, setSavedData }) => {
                   fontWeight: 600,
                   color: "font_color.heading",
                 }}
-              >
-                ИП и реквизиты
-              </Typography>
+              >{t("ui.entrepreneur_and_bank_details")}</Typography>
               <Typography
                 sx={{ mt: 0.5, fontSize: 12, color: "text.secondary" }}
-              >
-                Регистрация ИП обязательна. Укажите данные ИП и банковского
-                счёта
-              </Typography>
+              >{t("ui.entrepreneur_registration_required")}</Typography>
             </Grid>
 
             <Grid size={{ xs: 12, sm: 6 }}>
@@ -334,7 +323,7 @@ const AddDriverForm = ({ open, onClose, setSavedData }) => {
                 render={({ field }) => (
                   <TextField
                     {...field}
-                    label="Название ИП"
+                    label={t("ui.entrepreneur_name")}
                     slotProps={{ inputLabel: { required: true } }}
                     fullWidth
                     size="small"
@@ -350,7 +339,7 @@ const AddDriverForm = ({ open, onClose, setSavedData }) => {
                 render={({ field }) => (
                   <TextField
                     {...field}
-                    label="БИН компании"
+                    label={t("ui.company_bin")}
                     fullWidth
                     size="small"
                   />
@@ -365,7 +354,7 @@ const AddDriverForm = ({ open, onClose, setSavedData }) => {
                 render={({ field }) => (
                   <TextField
                     {...field}
-                    label="Юридический адрес"
+                    label={t("ui.registered_address")}
                     fullWidth
                     size="small"
                   />
@@ -378,7 +367,7 @@ const AddDriverForm = ({ open, onClose, setSavedData }) => {
                 name="bik"
                 control={control}
                 render={({ field }) => (
-                  <TextField {...field} label="БИК" fullWidth size="small" />
+                  <TextField {...field} label={t("ui.bic")} fullWidth size="small" />
                 )}
               />
             </Grid>
@@ -388,7 +377,7 @@ const AddDriverForm = ({ open, onClose, setSavedData }) => {
                 name="iik"
                 control={control}
                 render={({ field }) => (
-                  <TextField {...field} label="ИИК" fullWidth size="small" />
+                  <TextField {...field} label={t("ui.iban")} fullWidth size="small" />
                 )}
               />
             </Grid>
@@ -409,14 +398,10 @@ const AddDriverForm = ({ open, onClose, setSavedData }) => {
                   fontWeight: 600,
                   color: "font_color.heading",
                 }}
-              >
-                Удостоверяющий документ
-              </Typography>
+              >{t("ui.identity_document")}</Typography>
               <Typography
                 sx={{ mt: 0.5, fontSize: 12, color: "text.secondary" }}
-              >
-                Номер, страна и дата выдачи документа
-              </Typography>
+              >{t("ui.identity_document_details_hint")}</Typography>
             </Grid>
 
             <Grid size={12}>
@@ -441,7 +426,7 @@ const AddDriverForm = ({ open, onClose, setSavedData }) => {
                           }}
                         />
                       }
-                      label="Иностранец"
+                      label={t("ui.foreign_national")}
                     />
                   )}
                 />
@@ -455,7 +440,7 @@ const AddDriverForm = ({ open, onClose, setSavedData }) => {
                 render={({ field }) => (
                   <TextField
                     {...field}
-                    label="Номер документа удостоверения личности / паспорта"
+                    label={t("ui.identity_document_number")}
                     slotProps={{ inputLabel: { required: true, shrink: true } }}
                     fullWidth
                     size="small"
@@ -471,7 +456,7 @@ const AddDriverForm = ({ open, onClose, setSavedData }) => {
                 render={({ field }) => (
                   <TextField
                     {...field}
-                    label={"Страна выдачи"}
+                    label={t("ui.issuing_country")}
                     slotProps={{ inputLabel: { required: true } }}
                     fullWidth
                     size="small"
@@ -489,12 +474,12 @@ const AddDriverForm = ({ open, onClose, setSavedData }) => {
                     render={({ field }) => (
                       <TextField
                         {...field}
-                        label="Когда выдан документ"
+                        label={t("ui.document_issue_date_2")}
                         type="date"
                         disabled={isForeigner}
                         fullWidth
                         size="small"
-                        helperText="Дата выдачи не позднее сегодняшнего дня"
+                        helperText={t("ui.issue_date_not_in_future")}
                         slotProps={{
                           htmlInput: { max: maxIssueDate },
                           inputLabel: {
@@ -514,17 +499,17 @@ const AddDriverForm = ({ open, onClose, setSavedData }) => {
                       <TextField
                         {...field}
                         select
-                        label="Кем выдан документ"
+                        label={t("ui.document_issued_by")}
                         fullWidth
                         size="small"
                         slotProps={{ inputLabel: { required: true } }}
                         error={Boolean(fieldState.error)}
                         helperText={
-                          fieldState.error?.message || "Выберите орган выдачи"
+                          fieldState.error?.message || t("ui.select_issuing_authority")
                         }
                       >
-                        <MenuItem value="МЮ РК">МЮ РК</MenuItem>
-                        <MenuItem value="МВД РК">МВД РК</MenuItem>
+                        <MenuItem value="МЮ РК">{t("ui.kazakhstan_ministry_of_justice")}</MenuItem>
+                        <MenuItem value="МВД РК">{t("ui.kazakhstan_ministry_of_internal_affairs")}</MenuItem>
                       </TextField>
                     )}
                   />
@@ -548,15 +533,10 @@ const AddDriverForm = ({ open, onClose, setSavedData }) => {
                   fontWeight: 600,
                   color: "font_color.heading",
                 }}
-              >
-                Доступ к аккаунту
-              </Typography>
+              >{t("ui.account_access")}</Typography>
               <Typography
                 sx={{ mt: 0.5, fontSize: 12, color: "text.secondary" }}
-              >
-                Минимум 6 символов: заглавная и строчная буквы, цифра и
-                специальный символ
-              </Typography>
+              >{t("ui.password_requirements_hint")}</Typography>
             </Grid>
 
             <Grid
@@ -575,29 +555,29 @@ const AddDriverForm = ({ open, onClose, setSavedData }) => {
                   name="password"
                   control={control}
                   rules={{
-                    required: "Введите пароль",
+                    required: t("ui.enter_password"),
 
                     validate: (value) => {
                       if (value.length < 6) {
-                        return "Пароль должен содержать минимум 6 символов";
+                        return t("ui.password_minimum_length");
                       }
 
                       if (!/[A-Z]/.test(value)) {
-                        return "Пароль должен содержать хотя бы одну заглавную букву";
+                        return t("ui.password_uppercase_required");
                       }
 
                       if (!/[a-z]/.test(value)) {
-                        return "Пароль должен содержать хотя бы одну строчную букву";
+                        return t("ui.password_lowercase_required");
                       }
 
                       if (!/\d/.test(value)) {
-                        return "Пароль должен содержать хотя бы одну цифру";
+                        return t("ui.password_digit_required");
                       }
 
                       if (
                         !/[!@#$%^&*(),.?":{}|<>_\-+=\\/[\];'`~]/.test(value)
                       ) {
-                        return "Пароль должен содержать хотя бы один специальный символ";
+                        return t("ui.password_special_character_required");
                       }
 
                       return true;
@@ -607,7 +587,7 @@ const AddDriverForm = ({ open, onClose, setSavedData }) => {
                     <TextField
                       {...field}
                       type={showPassword ? "text" : "password"}
-                      label="Пароль"
+                      label={t("ui.password")}
                       fullWidth
                       size="small"
                       error={!!error}
@@ -617,8 +597,8 @@ const AddDriverForm = ({ open, onClose, setSavedData }) => {
                           endAdornment: (
                             <InputAdornment position="end">
                               <TooltipIconButton
-                                title={showPassword ? "Скрыть пароль" : "Показать пароль"}
-                                aria-label={showPassword ? "Скрыть пароль" : "Показать пароль"}
+                                title={showPassword ? t("ui.hide_password") : t("ui.show_password")}
+                                aria-label={showPassword ? t("ui.hide_password") : t("ui.show_password")}
                                 onClick={() => setShowPassword((prev) => !prev)}
                                 edge="end"
                               >
@@ -642,15 +622,15 @@ const AddDriverForm = ({ open, onClose, setSavedData }) => {
                   name="confirm_password"
                   control={control}
                   rules={{
-                    required: "Подтвердите пароль",
+                    required: t("ui.confirm_password_prompt"),
                     validate: (value) =>
-                      value === formValues.password || "Пароли не совпадают",
+                      value === formValues.password || t("ui.passwords_do_not_match"),
                   }}
                   render={({ field, fieldState: { error } }) => (
                     <TextField
                       {...field}
                       type={showConfirmPassword ? "text" : "password"}
-                      label="Подтверждение пароля"
+                      label={t("ui.password_confirmation")}
                       fullWidth
                       size="small"
                       error={!!error}
@@ -660,8 +640,8 @@ const AddDriverForm = ({ open, onClose, setSavedData }) => {
                           endAdornment: (
                             <InputAdornment position="end">
                               <TooltipIconButton
-                                title={showConfirmPassword ? "Скрыть подтверждение пароля" : "Показать подтверждение пароля"}
-                                aria-label={showConfirmPassword ? "Скрыть подтверждение пароля" : "Показать подтверждение пароля"}
+                                title={showConfirmPassword ? t("ui.hide_password_confirmation") : t("ui.show_password_confirmation")}
+                                aria-label={showConfirmPassword ? t("ui.hide_password_confirmation") : t("ui.show_password_confirmation")}
                                 onClick={() =>
                                   setShowConfirmPassword((prev) => !prev)
                                 }
@@ -701,14 +681,10 @@ const AddDriverForm = ({ open, onClose, setSavedData }) => {
                       fontWeight: 600,
                       color: "font_color.heading",
                     }}
-                  >
-                    Документы
-                  </Typography>
+                  >{t("ui.documents")}</Typography>
                   <Typography
                     sx={{ mt: 0.5, fontSize: 12, color: "text.secondary" }}
-                  >
-                    Загрузка документов обязательна
-                  </Typography>
+                  >{t("ui.required_document_upload")}</Typography>
                 </Grid>
                 <Box
                   sx={{
@@ -751,9 +727,7 @@ const AddDriverForm = ({ open, onClose, setSavedData }) => {
                             letterSpacing: "0.00938em",
                             fontWeight: 500,
                           }}
-                        >
-                          Документ о регистрации юридического лица *
-                        </Typography>
+                        >{t("ui.legal_entity_registration_document_required")}</Typography>
 
                         <Button
                           component="label"
@@ -761,8 +735,8 @@ const AddDriverForm = ({ open, onClose, setSavedData }) => {
                           startIcon={<UploadFileIcon />}
                         >
                           {registrationDocumentsToUpload?.length
-                            ? "Заменить документ"
-                            : "Выбрать файл"}
+                            ? t("ui.replace_document")
+                            : t("ui.choose_file")}
                           <input
                             hidden
                             type="file"
@@ -850,8 +824,8 @@ const AddDriverForm = ({ open, onClose, setSavedData }) => {
                           </Typography>
                         </Box>
                         <TooltipIconButton
-                          title="Удалить документ"
-                          aria-label="Удалить документ"
+                          title={t("ui.delete_document")}
+                          aria-label={t("ui.delete_document")}
                           color="error"
                           onClick={() => {
                             setRegistrationDocumentsToUpload(null);
@@ -895,9 +869,7 @@ const AddDriverForm = ({ open, onClose, setSavedData }) => {
                             letterSpacing: "0.00938em",
                             fontWeight: 500,
                           }}
-                        >
-                          Документ о трудоустройстве сотрудника *
-                        </Typography>
+                        >{t("ui.employee_employment_document_required")}</Typography>
 
                         <Button
                           component="label"
@@ -905,8 +877,8 @@ const AddDriverForm = ({ open, onClose, setSavedData }) => {
                           startIcon={<UploadFileIcon />}
                         >
                           {employerDocumentToUpload?.length
-                            ? "Заменить документ"
-                            : "Выбрать файл"}
+                            ? t("ui.replace_document")
+                            : t("ui.choose_file")}
                           <input
                             hidden
                             type="file"
@@ -995,8 +967,8 @@ const AddDriverForm = ({ open, onClose, setSavedData }) => {
                         </Box>
 
                         <TooltipIconButton
-                          title="Удалить документ"
-                          aria-label="Удалить документ"
+                          title={t("ui.delete_document")}
+                          aria-label={t("ui.delete_document")}
                           // disabled={isSubmitting}
                           color="error"
                           onClick={() => {
@@ -1030,13 +1002,13 @@ const AddDriverForm = ({ open, onClose, setSavedData }) => {
           variant="outlined"
           onClick={onClose}
           disabled={isSubmitting}
-          text="Отмена"
+          text={t("ui.cancel")}
         />
         <PrimaryButton
           type="submit"
           form="driver-form"
           isLoading={isSubmitting}
-          text={isSubmitting ? "Сохранение…" : "Добавить водителя"}
+          text={isSubmitting ? t("ui.saving") : t("ui.add_driver")}
         />
       </DialogActions>
     </Dialog>

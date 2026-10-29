@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import EditNoteRoundedIcon from "@mui/icons-material/EditNoteRounded";
 import LeadStatus from "../../../shared/ui/lead-status";
 import {
@@ -15,6 +16,7 @@ import { parserNotificationType } from "../../../shared/helpers/notifications/pa
 import { NOTIFICATION_TYPE } from "../../../shared/const/notification-types";
 
 const LeadHeading = ({ leadData, openEditForm }) => {
+  const { t } = useTranslation();
   const canBeEdited = !FINISHED_LEAD_STATUSES.includes(leadData.status);
 
   const newNotification = useNotificationsStore(
@@ -50,12 +52,8 @@ const LeadHeading = ({ leadData, openEditForm }) => {
             fontWeight: 600,
             color: "font_color.heading",
           }}
-        >
-          Перевозка #{leadData.num || "—"}
-        </Typography>
-        <Typography sx={{ fontSize: 14, color: "text.secondary" }}>
-          Маршрут, участники и документы заявки
-        </Typography>
+        >{t("ui.lead_number", { value1: leadData.num || "—" })}</Typography>
+        <Typography sx={{ fontSize: 14, color: "text.secondary" }}>{t("ui.lead_overview_description")}</Typography>
       </Stack>
       <Box
         sx={{
@@ -87,9 +85,7 @@ const LeadHeading = ({ leadData, openEditForm }) => {
             startIcon={<EditNoteRoundedIcon />}
             onClick={openEditForm}
             sx={{ textTransform: "none", borderRadius: 2, height: 40 }}
-          >
-            Редактировать
-          </Button>
+          >{t("ui.edit")}</Button>
         )}
       </Box>
     </Box>

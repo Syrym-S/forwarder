@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import {
   Autocomplete,
   Box,
@@ -33,6 +34,7 @@ const prepareData = (data, factorDetails) => {
 };
 
 const FactorLineForm = ({ open, setOpenForm, setSuccessModal }) => {
+  const { t } = useTranslation();
   const [inputValueFactor, setInputValueFactor] = useState("");
   const [selectedFactor, setSelectedFactor] = useState();
 
@@ -102,7 +104,7 @@ const FactorLineForm = ({ open, setOpenForm, setSuccessModal }) => {
       fullWidth
       maxWidth="sm"
     >
-      <DialogTitle>Cоздание заявки</DialogTitle>
+      <DialogTitle>{t("ui.create_request")}</DialogTitle>
       <DialogContent>
         <Controller
           name="factor_id"
@@ -113,7 +115,7 @@ const FactorLineForm = ({ open, setOpenForm, setSuccessModal }) => {
               inputValue={inputValueFactor}
               loading={isFactorsLoading}
               options={factors || []}
-              noOptionsText={<>Введите два символа</>}
+              noOptionsText={<>{t("ui.enter_two_characters")}</>}
               onInputChange={(_, value) => {
                 setInputValueFactor(value);
               }}
@@ -129,14 +131,14 @@ const FactorLineForm = ({ open, setOpenForm, setSuccessModal }) => {
                 setSelectedFactor(value);
               }}
               getOptionLabel={(option) =>
-                `[ФИО:${option?.fio}] | [Компания: ${option?.company_name}]`
+                t("ui.person_company_option", { value1: option?.fio, value2: option?.company_name })
               }
               renderInput={(params) => (
                 <TextField
                   {...params}
-                  label="Фактор"
-                  placeholder="Выбор фактора"
-                  helperText="Поиск по БИН или ИИН: введите все 12 символов"
+                  label={t("ui.factor")}
+                  placeholder={t("ui.factor_selection")}
+                  helperText={t("ui.bin_iin_search_hint")}
                 />
               )}
               renderOption={(props, option) => {
@@ -169,7 +171,7 @@ const FactorLineForm = ({ open, setOpenForm, setSuccessModal }) => {
               <TextField
                 {...field}
                 disabled={!factorDetails || !factorDetails.is_sum_changeable}
-                label="Максимальная сумма"
+                label={t("ui.maximum_amount")}
                 type="number"
                 fullWidth
                 error={!!fieldState.error}
@@ -190,7 +192,7 @@ const FactorLineForm = ({ open, setOpenForm, setSuccessModal }) => {
               <TextField
                 {...field}
                 disabled={!factorDetails || !factorDetails.is_period_changeable}
-                label="Период, дней"
+                label={t("ui.period")}
                 type="number"
                 fullWidth
                 error={!!fieldState.error}
@@ -213,7 +215,7 @@ const FactorLineForm = ({ open, setOpenForm, setSuccessModal }) => {
                 disabled={
                   !factorDetails || !factorDetails.is_currency_changeable
                 }
-                label="Валюта"
+                label={t("ui.currency")}
                 fullWidth
                 error={!!fieldState.error}
                 helperText={fieldState.error?.message}
@@ -232,7 +234,7 @@ const FactorLineForm = ({ open, setOpenForm, setSuccessModal }) => {
           }}
         >
           {isCreateLoading && <CircularProgress size={13} />}
-          {isCreateLoading ? "...Cоздание" : "Создать заявку"}
+          {isCreateLoading ? t("ui.creating_2") : t("ui.create_request_2")}
         </Button>
       </DialogContent>
     </Dialog>

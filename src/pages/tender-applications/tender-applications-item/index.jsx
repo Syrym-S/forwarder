@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import RootLayout from "../../../components/layout/root-layout";
 import LocalShippingOutlinedIcon from "@mui/icons-material/LocalShippingOutlined";
 import LeadMap from "../../../components/leads/lead-map";
@@ -22,6 +23,7 @@ import LeadRouteInfo from "../../../components/leads/lead-item/lead-route-info";
 import LeadTransportationInfo from "../../../components/leads/lead-item/lead-transportation-info";
 
 const TenderApplicationsItem = () => {
+  const { t } = useTranslation();
   const { id } = useParams();
 
   const [showBetField, setShowBetField] = useState();
@@ -109,7 +111,7 @@ const TenderApplicationsItem = () => {
         <TenderInfo tender={customerCurrentTender} />
 
         <Section
-          title={`Груз`}
+          title={t("ui.cargo")}
           icon={<LocalShippingOutlinedIcon color="primary" />}
         >
           <Box

@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import TooltipIconButton from "../../shared/ui/tooltip-icon-button";
 import Box from "@mui/material/Box";
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
@@ -11,6 +12,7 @@ import { Person2Rounded } from "@mui/icons-material";
 import CustomNavLink from "../../shared/ui/custom-nav-link";
 
 const Profile = ({ open, handleCloseProfile }) => {
+  const { t } = useTranslation();
   const [openModal, setOpenModal] = useState(false);
 
   const handleOpenModal = () => {
@@ -47,8 +49,8 @@ const Profile = ({ open, handleCloseProfile }) => {
           >
             <Typography>User Name</Typography>
             <TooltipIconButton
-              title="Закрыть профиль"
-              aria-label="Закрыть профиль"
+              title={t("ui.close_profile")}
+              aria-label={t("ui.close_profile")}
               sx={{
                 p: 0,
               }}
@@ -97,9 +99,7 @@ const Profile = ({ open, handleCloseProfile }) => {
               sx={{
                 fontSize: "13px",
               }}
-            >
-              Выйти из аккаунта
-            </Typography>
+            >{t("ui.sign_out_of_account")}</Typography>
             <LogoutIcon color="error" />
           </Box>
           <LogoutModal

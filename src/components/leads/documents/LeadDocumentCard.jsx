@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import TooltipIconButton from "../../../shared/ui/tooltip-icon-button";
 import { Box, Typography } from "@mui/material";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
@@ -13,6 +14,7 @@ export function LeadDocumentCard({
   onDelete,
   isDeleting = false,
 }) {
+  const { t } = useTranslation();
   const { id } = useParams();
   const fileType = getFileType(document);
   const isForwarderFile = document?.source === ROLES.forwarder;
@@ -81,7 +83,7 @@ export function LeadDocumentCard({
               lineHeight: 1.35,
             }}
           >
-            {document?.name?.slice(0, 20) + "..." || "Документ"}
+            {document?.name?.slice(0, 20) + "..." || t("ui.document")}
           </Typography>
 
           <Typography
@@ -95,7 +97,7 @@ export function LeadDocumentCard({
           >
             {document?.context
               ? document.context?.slice(0, 20) + "..."
-              : "Описание не указано"}
+              : t("ui.description_not_specified")}
           </Typography>
 
           <Typography
@@ -108,7 +110,7 @@ export function LeadDocumentCard({
               wordBreak: "break-word",
             }}
           >
-            {document?.fileName || "Файл"}
+            {document?.fileName || t("ui.file")}
           </Typography>
         </Box>
 
@@ -125,8 +127,8 @@ export function LeadDocumentCard({
         >
           {isForwarderFile && !isFileReadOnly && (
             <TooltipIconButton
-              title="Удалить документ"
-              aria-label="Удалить документ"
+              title={t("ui.delete_document")}
+              aria-label={t("ui.delete_document")}
               size="small"
               color="error"
               sx={{
@@ -144,7 +146,7 @@ export function LeadDocumentCard({
       {fileType === "image" && (
         <Box
           component="img"
-          title={document.name || "Документ перевозки"}
+          title={document.name || t("ui.lead_document")}
           sx={{
             display: "block",
             borderRadius: 2,
@@ -166,7 +168,7 @@ export function LeadDocumentCard({
       {fileType === "pdf" && (
         <Box
           component="iframe"
-          title={document.name || "Документ перевозки"}
+          title={document.name || t("ui.lead_document")}
           sx={{
             display: "block",
             width: "100%",

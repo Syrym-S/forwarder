@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import Header from "../../components/layout/header";
 import SideBar from "../../components/layout/menu";
 import NotificationPopup from "../../components/layout/notifications/notification-popup";
@@ -9,6 +10,7 @@ import { useNotificationsStore } from "../store/notifications/noti-store";
 import { useLeadsStore } from "../store/leads/leads-store";
 
 const AppContentContainer = () => {
+  const { t } = useTranslation();
   const [openMenu, setOpenMenu] = useState(false);
 
   const connectNotifications = useNotificationsStore(
@@ -31,7 +33,7 @@ const AppContentContainer = () => {
   const title =
     typeof titleValue === "function"
       ? titleValue({ ...titleMatch, currentLead })
-      : titleValue || "Главная";
+      : titleValue || t("ui.home_page");
 
   useEffect(() => {
     document.title = title;

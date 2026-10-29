@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import CustomSelect from "../../../shared/ui/input/custom-select";
 import { CURRENCY_OPTIONS } from "../../../shared/const/currencies";
 import { useEffect, useState } from "react";
@@ -21,6 +22,7 @@ const ChooseLeadAndFactor = ({
   setSelectedFactor,
   setValue,
 }) => {
+  const { t } = useTranslation();
   const [inputValueLead, setInputValueLead] = useState("");
   const [inputValueFactor, setInputValueFactor] = useState("");
 
@@ -65,7 +67,7 @@ const ChooseLeadAndFactor = ({
           name="lead_id"
           control={control}
           rules={{
-            required: "Выбор перевозки обязателен",
+            required: t("ui.lead_selection_required"),
           }}
           render={({ field, fieldState }) => (
             <Autocomplete
@@ -73,7 +75,7 @@ const ChooseLeadAndFactor = ({
               inputValue={inputValueLead}
               loading={isSearchLoading}
               options={finishedLeads}
-              noOptionsText={<>Введите два символа</>}
+              noOptionsText={<>{t("ui.enter_two_characters")}</>}
               onInputChange={(_, value, reason) => {
                 if (reason === "input") {
                   setInputValueLead(value);
@@ -111,13 +113,13 @@ const ChooseLeadAndFactor = ({
               renderInput={(params) => (
                 <TextField
                   {...params}
-                  label="Перевозка"
-                  placeholder="Выберите перевозку"
+                  label={t("ui.lead")}
+                  placeholder={t("ui.select_lead")}
                   error={!!fieldState.error}
                   helperText={
                     fieldState.error
                       ? fieldState.error?.message
-                      : "Поиск по городу"
+                      : t("ui.search_by_city")
                   }
                 />
               )}
@@ -138,7 +140,7 @@ const ChooseLeadAndFactor = ({
           name="factor_id"
           control={control}
           rules={{
-            required: "Выбор фактора обязателен",
+            required: t("ui.factor_selection_required"),
           }}
           render={({ field, fieldState }) => (
             <Autocomplete
@@ -146,7 +148,7 @@ const ChooseLeadAndFactor = ({
               inputValue={inputValueFactor}
               loading={isFactorsLoading}
               options={factors}
-              noOptionsText={<>Введите два символа</>}
+              noOptionsText={<>{t("ui.enter_two_characters")}</>}
               onInputChange={(_, value) => {
                 setInputValueFactor(value);
               }}
@@ -162,18 +164,18 @@ const ChooseLeadAndFactor = ({
                 setSelectedFactor(value);
               }}
               getOptionLabel={(option) =>
-                `[ФИО:${option?.fio}] | [Компания: ${option?.company_name}]`
+                t("ui.person_company_option", { value1: option?.fio, value2: option?.company_name })
               }
               renderInput={(params) => (
                 <TextField
                   {...params}
-                  label="Фактор"
-                  placeholder="Выбор фактора"
+                  label={t("ui.factor")}
+                  placeholder={t("ui.factor_selection")}
                   error={!!fieldState.error}
                   helperText={
                     fieldState.error
                       ? fieldState.error?.message
-                      : "Поиск по БИН или ИИН: введите все 12 символов"
+                      : t("ui.bin_iin_search_hint")
                   }
                 />
               )}
@@ -208,7 +210,7 @@ const ChooseLeadAndFactor = ({
                 {...field}
                 type="number"
                 size="small"
-                label="Cумма дебиторской задолженности"
+                label={t("ui.accounts_receivable_amount")}
                 slotProps={{
                   inputLabel: {
                     shrink: isLeadLoading || !!currentLead,
@@ -243,7 +245,7 @@ const ChooseLeadAndFactor = ({
                   },
                 }}
                 disabled
-                label="Валюта"
+                label={t("ui.currency")}
                 fullWidth
                 size="small"
                 options={CURRENCY_OPTIONS}

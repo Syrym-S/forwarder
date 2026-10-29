@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { Alert, Box, Button, Chip, Typography } from "@mui/material";
 import ArrowForwardRoundedIcon from "@mui/icons-material/ArrowForwardRounded";
 import { useNotificationsStore } from "../../../app/store/notifications/noti-store";
@@ -11,6 +12,7 @@ const NotificationsList = ({
   handleNotificationsClose,
   handleOpenDrawer,
 }) => {
+  const { t } = useTranslation();
   const isLoading = useNotificationsStore((state) => state.isLoading);
   const error = useNotificationsStore((state) => state.error);
   return (
@@ -27,9 +29,7 @@ const NotificationsList = ({
         <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
           <Typography
             sx={{ fontSize: 18, fontWeight: 600, color: "font_color.heading" }}
-          >
-            Уведомления
-          </Typography>
+          >{t("ui.notifications")}</Typography>
           {notViewedCount > 0 && (
             <Chip
               size="small"
@@ -39,15 +39,11 @@ const NotificationsList = ({
             />
           )}
         </Box>
-        <Typography sx={{ mt: 0.75, fontSize: 13, color: "text.secondary" }}>
-          Последние события по перевозкам и аукционам
-        </Typography>
+        <Typography sx={{ mt: 0.75, fontSize: 13, color: "text.secondary" }}>{t("ui.latest_lead_auction_events")}</Typography>
       </Box>
       <Box sx={{ overflowY: "auto", minHeight: 0 }}>
         {error ? (
-          <Alert severity="error" sx={{ m: 2 }}>
-            Не удалось загрузить уведомления. Попробуйте открыть список ещё раз.
-          </Alert>
+          <Alert severity="error" sx={{ m: 2 }}>{t("ui.notifications_load_failed_retry")}</Alert>
         ) : isLoading || !notifications.length ? (
           <NotificationState loading={isLoading} />
         ) : (
@@ -69,9 +65,7 @@ const NotificationsList = ({
           onClick={handleOpenDrawer}
           endIcon={<ArrowForwardRoundedIcon />}
           sx={{ textTransform: "none", borderRadius: 2, py: 1 }}
-        >
-          Все уведомления
-        </Button>
+        >{t("ui.all_notifications")}</Button>
       </Box>
     </Box>
   );

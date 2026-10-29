@@ -1,3 +1,5 @@
+import appI18n from "../../i18n/index.js";
+import { useTranslation } from "react-i18next";
 import Tooltip from "../../shared/ui/action-tooltip";
 import RootLayout from "../../components/layout/root-layout";
 import AddLeadForm from "../../features/leads/add-lead-form";
@@ -27,6 +29,7 @@ import {
 } from "../../shared/const/tenders";
 
 const LeadItem = () => {
+  const { t } = useTranslation();
   const { id } = useParams();
 
   const [currentTab, setCurrentTab] = useState(LEAD_TABS.lead_details);
@@ -122,7 +125,7 @@ const LeadItem = () => {
           setDocumentError(
             error.response?.data?.message ||
               error.message ||
-              "Не удалось загрузить документы",
+              appI18n.t("ui.documents_load_failed"),
           );
         }
       }
@@ -193,7 +196,7 @@ const LeadItem = () => {
             }}
             variant="scrollable"
             scrollButtons="auto"
-            aria-label="Переключение разделов"
+            aria-label={t("ui.switch_sections")}
             sx={{
               alignSelf: {
                 xs: "stretch",
@@ -214,23 +217,23 @@ const LeadItem = () => {
               },
             }}
           >
-            <Tab value={LEAD_TABS.lead_details} label="Детали перевозки" />
+            <Tab value={LEAD_TABS.lead_details} label={t("ui.lead_details")} />
 
             <Tab
               value={LEAD_TABS.customer_chat}
               disabled={isDraft || !leadData.customer?.name}
-              label="Чат с заказчиком"
+              label={t("ui.customer_chat")}
             />
 
             <Tab
               value={LEAD_TABS.driver_chat}
               disabled={isDraft || !leadData.driver?.fio}
-              label="Чат с водителем"
+              label={t("ui.driver_chat")}
             />
 
             <Tab
               value={LEAD_TABS.factor_chat}
-              label="Чат с фактором"
+              label={t("ui.factor_chat")}
               disabled={isActive || !leadData.factor_id}
             />
           </Tabs>
@@ -242,9 +245,9 @@ const LeadItem = () => {
             }}
           >
             {showEmergencyButton && (
-              <Tooltip title="Сообщить об аварии" arrow>
+              <Tooltip title={t("ui.report_emergency")} arrow>
                 <IconButton
-                  aria-label="Сообщить об аварии"
+                  aria-label={t("ui.report_emergency")}
                   color="error"
                   onClick={handleOpenWarningModal}
                   sx={{
@@ -265,9 +268,9 @@ const LeadItem = () => {
             )}
 
             {leadData.status === STATUS.emergency_situation && (
-              <Tooltip title="Закрыть аварийную ситуацию" arrow>
+              <Tooltip title={t("ui.close_emergency")} arrow>
                 <IconButton
-                  aria-label="Закрыть аварийную ситуацию"
+                  aria-label={t("ui.close_emergency")}
                   color="error"
                   onClick={handleOpenFinishEmergencyModal}
                   sx={{
@@ -288,9 +291,9 @@ const LeadItem = () => {
             )}
 
             {!isDraft && (
-              <Tooltip title="Поделиться перевозкой" arrow>
+              <Tooltip title={t("ui.share_lead")} arrow>
                 <IconButton
-                  aria-label="Поделиться перевозкой"
+                  aria-label={t("ui.share_lead")}
                   color="primary"
                   onClick={handleOpenShareModal}
                   sx={{
@@ -324,7 +327,7 @@ const LeadItem = () => {
           {leadData.emergency_situation_comment && (
             <InfoItem
               color="error"
-              label={"Комментарий по аварийному случаю"}
+              label={t("ui.emergency_comment")}
               value={leadData.emergency_situation_comment}
             />
           )}
@@ -362,9 +365,9 @@ const LeadItem = () => {
           <ConfirmModal
             warning
             open={confirm}
-            title={"Внимание!"}
+            title={t("ui.attention")}
             description={
-              "Вы уверены, что хотите сообщить об аварийном случае? Данное действие может привести к отмене факторинга и завершению перевозки. Отменить это действие будет невозможно."
+              t("ui.report_emergency_confirmation")
             }
             onCancel={() => setConfirm(false)}
             onConfirm={handleSendEmergencySituation}
@@ -375,9 +378,9 @@ const LeadItem = () => {
         {openFinishEmergency && (
           <ConfirmModal
             open={openFinishEmergency}
-            title={"Внимание!"}
+            title={t("ui.attention")}
             description={
-              "Вы уверены, что хотите закрыть аварийную ситуацию? Данное действие завершит отслеживание перевозки, и закроет перевозку"
+              t("ui.close_emergency_confirmation")
             }
             onCancel={handleCloseFinishEmergencyModal}
             onConfirm={handleFinishEmergencySituation}

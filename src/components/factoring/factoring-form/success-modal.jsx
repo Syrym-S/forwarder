@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import {
   Box,
   Button,
@@ -9,6 +10,7 @@ import {
 import HourglassEmptyRoundedIcon from "@mui/icons-material/HourglassEmptyRounded";
 
 const SuccessModal = ({ open, setOpen }) => {
+  const { t } = useTranslation();
   const handleClose = () => setOpen(false);
 
   return (
@@ -27,17 +29,13 @@ const SuccessModal = ({ open, setOpen }) => {
       <DialogContent sx={{ p: 4 }}>
         <Stack alignItems="center" textAlign="center" spacing={2.5}>
           <Box>
-            <Typography variant="h6" fontWeight={700} mb={1}>
-              Состояние факторинга
-            </Typography>
+            <Typography variant="h6" fontWeight={700} mb={1}>{t("ui.factoring_state")}</Typography>
 
             <Typography
               variant="body1"
               color="text.secondary"
               sx={{ lineHeight: 1.6 }}
-            >
-              В ожидании подтверждения линии
-            </Typography>
+            >{t("ui.awaiting_line_confirmation")}</Typography>
           </Box>
 
           <Box
@@ -50,9 +48,7 @@ const SuccessModal = ({ open, setOpen }) => {
               borderColor: "grey.200",
             }}
           >
-            <Typography variant="body2" color="text.secondary">
-              Факторинг можно создать после подтверждения факторинговой линии.
-            </Typography>
+            <Typography variant="body2" color="text.secondary">{t("ui.factoring_creation_after_line_confirmation")}</Typography>
           </Box>
 
           <Button
@@ -66,9 +62,7 @@ const SuccessModal = ({ open, setOpen }) => {
               textTransform: "none",
               fontWeight: 600,
             }}
-          >
-            Ок
-          </Button>
+          >{t("ui.ok")}</Button>
         </Stack>
       </DialogContent>
     </Dialog>

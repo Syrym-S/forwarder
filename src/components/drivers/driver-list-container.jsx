@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import DriversTable from "./driver-table";
 import DriverCard from "./driver-card";
 import PageLoader from "../../shared/ui/loaders/page-loader";
@@ -9,6 +10,7 @@ import { VIEWS } from "../../shared/const/leads";
 import { useSearchParams } from "react-router-dom";
 
 const DriverListContainer = ({ view }) => {
+  const { t } = useTranslation();
   const [_, setSearchParams] = useSearchParams();
   const [selectedDriver, setSelectedDriver] = useState(null);
   const [page, setPage] = useState(1);
@@ -93,9 +95,7 @@ const DriverListContainer = ({ view }) => {
                 },
                 my: 1,
               }}
-            >
-              Список заказчиков пуст
-            </Alert>
+            >{t("ui.customer_list_empty")}</Alert>
           ) : (
             drivers.map((driver) => (
               <DriverCard

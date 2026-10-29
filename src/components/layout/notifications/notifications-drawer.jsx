@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import TooltipIconButton from "../../../shared/ui/tooltip-icon-button";
 import {
   Alert,
@@ -20,6 +21,7 @@ const NotificationsDrawer = ({
   setSelectedNotification,
   handleNotificationsClose,
 }) => {
+  const { t } = useTranslation();
   const [page, setPage] = useState(1);
   const {
     total,
@@ -75,34 +77,26 @@ const NotificationsDrawer = ({
         >
           <Typography
             sx={{ fontSize: 22, fontWeight: 600, color: "font_color.heading" }}
-          >
-            Уведомления
-          </Typography>
+          >{t("ui.notifications")}</Typography>
           <TooltipIconButton
-            title="Закрыть уведомления"
-            aria-label="Закрыть уведомления"
+            title={t("ui.close_notifications")}
+            aria-label={t("ui.close_notifications")}
             onClick={handleCloseDrawer}
           >
             <CloseRoundedIcon />
           </TooltipIconButton>
         </Box>
-        <Typography sx={{ mt: 0.5, fontSize: 13, color: "text.secondary" }}>
-          Все события по вашим перевозкам и аукционам
-        </Typography>
+        <Typography sx={{ mt: 0.5, fontSize: 13, color: "text.secondary" }}>{t("ui.notifications_description")}</Typography>
         <Button
           onClick={handleReadAll}
           disabled={isLoading || !total}
           startIcon={<DoneAllRoundedIcon />}
           sx={{ mt: 2, textTransform: "none", borderRadius: 2 }}
-        >
-          Отметить все прочитанными
-        </Button>
+        >{t("ui.mark_all_read")}</Button>
       </Box>
       <Box sx={{ flex: 1, minHeight: 0, overflowY: "auto" }}>
         {error ? (
-          <Alert severity="error" sx={{ m: 2 }}>
-            Не удалось выполнить действие. Попробуйте ещё раз.
-          </Alert>
+          <Alert severity="error" sx={{ m: 2 }}>{t("ui.action_failed_retry")}</Alert>
         ) : isLoading || !notifications.length ? (
           <NotificationState loading={isLoading} />
         ) : (

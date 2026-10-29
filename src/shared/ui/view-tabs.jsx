@@ -5,6 +5,7 @@ import GridViewRoundedIcon from "@mui/icons-material/GridViewRounded";
 import ViewKanbanOutlinedIcon from "@mui/icons-material/ViewKanbanOutlined";
 import PrimaryButton from "./button/primary-button";
 import ActionTooltip from "./action-tooltip";
+import { useTranslation } from "react-i18next";
 
 const ViewTabs = ({
   view,
@@ -13,9 +14,10 @@ const ViewTabs = ({
   withoutKanban = false,
   withoutDataAdd = false,
   isLeadsEmpty,
-  buttonText = "Добавить",
+  buttonText,
   sx = {},
 }) => {
+  const { t } = useTranslation();
   const isCardsView = view === VIEWS.cards;
 
   return (
@@ -42,7 +44,7 @@ const ViewTabs = ({
             }
           }}
           size="small"
-          aria-label="Переключение отображения экспедиторов"
+          aria-label={t("common.change_view")}
           sx={{
             alignSelf: {
               xs: "stretch",
@@ -60,21 +62,21 @@ const ViewTabs = ({
             },
           }}
         >
-          <ActionTooltip title="Показать таблицей">
-            <ToggleButton value={VIEWS.table} aria-label="Показать таблицей">
+          <ActionTooltip title={t("common.table_view")}>
+            <ToggleButton value={VIEWS.table} aria-label={t("common.table_view")}>
               <ViewListRoundedIcon fontSize="small" />
             </ToggleButton>
           </ActionTooltip>
 
-          <ActionTooltip title="Показать карточками">
-            <ToggleButton value={VIEWS.cards} aria-label="Показать карточками">
+          <ActionTooltip title={t("common.cards_view")}>
+            <ToggleButton value={VIEWS.cards} aria-label={t("common.cards_view")}>
               <GridViewRoundedIcon fontSize="small" />
             </ToggleButton>
           </ActionTooltip>
 
           {!withoutKanban && (
-            <ActionTooltip title="Показать канбан-доску">
-              <ToggleButton value={VIEWS.kanban} aria-label="Показать канбан-доску">
+            <ActionTooltip title={t("common.kanban_view")}>
+              <ToggleButton value={VIEWS.kanban} aria-label={t("common.kanban_view")}>
                 <ViewKanbanOutlinedIcon fontSize="small" />
               </ToggleButton>
             </ActionTooltip>
@@ -97,7 +99,7 @@ const ViewTabs = ({
       )} */}
 
       {!withoutDataAdd && (
-        <PrimaryButton text={buttonText} onClick={handleOpenForm} />
+        <PrimaryButton text={buttonText ?? t("common.add")} onClick={handleOpenForm} />
       )}
     </Box>
   );

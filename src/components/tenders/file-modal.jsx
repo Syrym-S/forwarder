@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import Tooltip from "../../shared/ui/action-tooltip";
 import {
   Box,
@@ -16,6 +17,7 @@ import { getFileType } from "../../shared/helpers/file/get-file-type";
 import { ROLES } from "../../shared/const/roles";
 
 const FileModal = ({ currentFile, setCurrentFile }) => {
+  const { t } = useTranslation();
   const fileType = getFileType(currentFile);
   // const isForwarderFile = currentFile?.source === ROLES.forwarder;
 
@@ -65,7 +67,7 @@ const FileModal = ({ currentFile, setCurrentFile }) => {
               {fileType === "image" && (
                 <Box
                   component="img"
-                  title={currentFile.name || "Документ перевозки"}
+                  title={currentFile.name || t("ui.lead_document")}
                   sx={{
                     display: "block",
                     width: "100%",
@@ -85,7 +87,7 @@ const FileModal = ({ currentFile, setCurrentFile }) => {
               {fileType === "pdf" && (
                 <Box
                   component="iframe"
-                  title={currentFile.name || "Документ перевозки"}
+                  title={currentFile.name || t("ui.lead_document")}
                   sx={{
                     display: "block",
                     width: "100%",
@@ -113,35 +115,33 @@ const FileModal = ({ currentFile, setCurrentFile }) => {
           }}
         >
           <Box>
-            <Tooltip title="Открыть в новой вкладке">
+            <Tooltip title={t("ui.open_in_new_tab")}>
               <IconButton
                 
                 component="a"
                 href={currentFile?.url}
                 target="_blank"
                 rel="noreferrer"
-                aria-label="Открыть в новой вкладке"
+                aria-label={t("ui.open_in_new_tab")}
               >
                 <OpenInNewOutlinedIcon />
               </IconButton>
             </Tooltip>
 
-            <Tooltip title="Скачать">
+            <Tooltip title={t("ui.download")}>
               <IconButton
                 
                 component="a"
                 href={currentFile?.url}
                 download={currentFile?.name || true}
-                aria-label="Скачать"
+                aria-label={t("ui.download")}
               >
                 <DownloadOutlinedIcon />
               </IconButton>
             </Tooltip>
           </Box>
           <Box>
-            <Button color="error" variant="outlined" onClick={handleCloseModal}>
-              Закрыть
-            </Button>
+            <Button color="error" variant="outlined" onClick={handleCloseModal}>{t("ui.close")}</Button>
           </Box>
         </DialogActions>
       </DialogContent>

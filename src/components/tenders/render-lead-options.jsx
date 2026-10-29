@@ -1,9 +1,12 @@
+import appI18n from "../../i18n/index.js";
+import { useTranslation } from "react-i18next";
 import { Box, Typography } from "@mui/material";
 import RenderStatus from "../../shared/ui/render-status";
 
 const RenderLeadOptions = ({ option, ...props }) => {
-  const from = option.from_location?.address || option.from || "Адрес не указан";
-  const to = option.to_location?.address || option.to || "Адрес не указан";
+  const { t } = useTranslation();
+  const from = option.from_location?.address || option.from || t("ui.address_not_specified");
+  const to = option.to_location?.address || option.to || t("ui.address_not_specified");
   const title = option.title || option.label || (typeof option.cargo === "string" ? option.cargo : option.cargo?.name);
   const stops = option.waypoints?.length || 0;
   const hasPrice = option.price !== null && option.price !== undefined && option.price !== "" && Number.isFinite(Number(option.price));
@@ -29,17 +32,17 @@ const RenderLeadOptions = ({ option, ...props }) => {
         </Typography>
         <Box sx={{ display: "flex", alignItems: "center", flexWrap: "wrap", gap: 1.25 }}>
           {option.status && <RenderStatus status={option.status} />}
-          {hasPrice && <Typography sx={{ fontSize: 13, fontWeight: 600, color: "font_color.heading" }}>{Number(option.price).toLocaleString("ru-RU")} {option.currency || "KZT"}</Typography>}
+          {hasPrice && <Typography sx={{ fontSize: 13, fontWeight: 600, color: "font_color.heading" }}>{Number(option.price).toLocaleString(appI18n.resolvedLanguage)} {option.currency || "KZT"}</Typography>}
         </Box>
       </Box>
 
       <Box sx={{ display: "grid", gridTemplateColumns: "26px minmax(0, 1fr)", columnGap: 1.25, rowGap: 0.75, position: "relative", "&::before": { content: '""', position: "absolute", left: 12, top: 13, bottom: 13, borderLeft: "2px dotted", borderColor: "divider" } }}>
-        {[{ letter: "А", address: from }, { letter: "Б", address: to }].map(({ letter, address }, index) => (
+        {[{ letter: t("ui.origin_marker"), address: from }, { letter: t("ui.destination_marker"), address: to }].map(({ letter, address }, index) => (
           <Box key={letter} sx={{ display: "contents" }}>
             <Box sx={{ width: 26, height: 26, borderRadius: "50%", bgcolor: "primary.main", color: "common.white", display: "grid", placeItems: "center", fontSize: 12, fontWeight: 600, zIndex: 1 }}>{letter}</Box>
             <Box sx={{ minWidth: 0, alignSelf: "center" }}>
               <Typography title={address} noWrap sx={{ fontSize: 13, color: "text.primary", lineHeight: 1.5 }}>{address}</Typography>
-              {index === 0 && stops > 0 && <Typography sx={{ fontSize: 11, color: "text.secondary", mt: 0.25 }}>Промежуточных точек: {stops}</Typography>}
+              {index === 0 && stops > 0 && <Typography sx={{ fontSize: 11, color: "text.secondary", mt: 0.25 }}>{t("ui.waypoints_count", { value1: stops })}</Typography>}
             </Box>
           </Box>
         ))}

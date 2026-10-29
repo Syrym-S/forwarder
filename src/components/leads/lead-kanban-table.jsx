@@ -1,3 +1,5 @@
+import appI18n from "../../i18n/index.js";
+import { useTranslation } from "react-i18next";
 import React from "react";
 import RootLayout from "../layout/root-layout";
 import {
@@ -12,19 +14,19 @@ import {
 import KanbanCard from "./kanban-item-card";
 
 const STATUS_COLUMNS = [
-  { id: "new", title: "Новые", color: "#1976d2" },
-  { id: "add_driver", title: "Добавлен водитель", color: "#1976d2" },
-  { id: "start_driver", title: "Поездка начата", color: "#1976d2" },
-  { id: "start_loading", title: "Погрузка", color: "#1976d2" },
+  { id: "new", get title() { return appI18n.t("ui.new"); }, color: "#1976d2" },
+  { id: "add_driver", get title() { return appI18n.t("ui.driver_added"); }, color: "#1976d2" },
+  { id: "start_driver", get title() { return appI18n.t("ui.trip_started"); }, color: "#1976d2" },
+  { id: "start_loading", get title() { return appI18n.t("ui.loading_operation"); }, color: "#1976d2" },
   {
     id: "verification_loading",
-    title: "Погрузка подтверждена",
+    get title() { return appI18n.t("ui.loading_confirmed"); },
     color: "#1976d2",
   },
-  { id: "start_unloading", title: "Разгрузка", color: "#1976d2" },
+  { id: "start_unloading", get title() { return appI18n.t("ui.unloading_operation"); }, color: "#1976d2" },
   {
     id: "verification_unloading",
-    title: "Разгрузка подтверждена",
+    get title() { return appI18n.t("ui.unloading_confirmed"); },
     color: "#1976d2",
   },
 ];
@@ -39,6 +41,7 @@ const parseLeadToColumns = (leads) => {
 };
 
 const LeadKanbanTable = ({ leads }) => {
+  useTranslation();
   const columns = parseLeadToColumns(leads);
 
   return (

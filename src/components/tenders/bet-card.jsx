@@ -1,8 +1,10 @@
+import { useTranslation } from "react-i18next";
 import { moneySpacingFormat } from "../../shared/helpers/money-spacing";
 import { Box, Chip, Typography } from "@mui/material";
 import { useTendersStore } from "../../app/store/tenders/tender-store";
 
 export const BetCard = ({ tender, bet }) => {
+  const { t } = useTranslation();
   const acceptBet = useTendersStore((state) => state.acceptBet);
   const getTenderDetails = useTendersStore((state) => state.getTenderDetails);
   const isWinning = bet.status === "winning";
@@ -46,12 +48,12 @@ export const BetCard = ({ tender, bet }) => {
         </Typography>
 
         {isWinning ? (
-          <Chip size="small" color="success" label={"Победитель"} />
+          <Chip size="small" color="success" label={t("ui.winner")} />
         ) : (
           <Chip
             size="small"
             color="primary"
-            label={"Выбрать победителем"}
+            label={t("ui.select_as_winner")}
             disabled={isBlocked}
             onClick={handleAcceptBet}
             sx={{
@@ -72,13 +74,9 @@ export const BetCard = ({ tender, bet }) => {
           color: "text.secondary",
         }}
         display="block"
-      >
-        {bet.fio} - ИИН:{bet.iin}
-      </Typography>
+      >{t("ui.person_iin", { value1: bet.fio, value2: bet.iin })}</Typography>
       {isBlocked && (
-        <Typography variant="caption" color="error" display="block">
-          Водитель заблокирован. Выбор победителем недоступен.
-        </Typography>
+        <Typography variant="caption" color="error" display="block">{t("ui.blocked_driver_cannot_win")}</Typography>
       )}
     </Box>
   );

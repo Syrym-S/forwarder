@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import React from "react";
 import Section from "../../shared/ui/section";
 import BusinessOutlinedIcon from "@mui/icons-material/BusinessOutlined";
@@ -6,19 +7,20 @@ import { Box, Chip } from "@mui/material";
 import InfoItem from "../../shared/ui/info-item";
 
 const FactoringCustomerInfo = ({ customer, verified_customer }) => {
+  const { t } = useTranslation();
   if (!customer)
     return (
       <Section
-        title="Данные заказчика"
+        title={t("ui.customer_details")}
         icon={<BusinessOutlinedIcon color="primary" />}
       >
-        <InfoField label={""} value={"Заказчик не указан"} />
+        <InfoField label={""} value={t("ui.customer_not_specified")} />
       </Section>
     );
 
   return (
     <Section
-      title="Данные заказчика"
+      title={t("ui.customer_details")}
       icon={<BusinessOutlinedIcon color="primary" />}
     >
       <Box
@@ -34,17 +36,17 @@ const FactoringCustomerInfo = ({ customer, verified_customer }) => {
           },
         }}
       >
-        <InfoItem label={"Имя"} value={customer.fullname} />
+        <InfoItem label={t("ui.name")} value={customer.fullname} />
         <InfoItem label={"ID"} value={customer.id} />
-        <InfoItem label={"БИН"} value={customer.bin} />
+        <InfoItem label={t("ui.bin")} value={customer.bin} />
         <InfoItem
-          label={"Подтверждение"}
+          label={t("ui.confirmation")}
           value={
             <Chip
               label={
                 verified_customer
-                  ? "Заказчик подтвердил"
-                  : "Заказчик не подтвердил"
+                  ? t("ui.customer_confirmed")
+                  : t("ui.customer_not_confirmed")
               }
               variant="outlined"
               color={verified_customer ? "success" : "error"}

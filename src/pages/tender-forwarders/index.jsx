@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import RootLayout from "../../components/layout/root-layout";
 import TenderForm from "../../features/tenders/tender-form";
 import ForwardersTenderCard from "../../components/tenders/forwarders-tender-card";
@@ -21,6 +22,7 @@ const defaultValues = {
 };
 
 const TenderForwarders = () => {
+  const { t } = useTranslation();
   const [view, setView] = useState(VIEWS.table);
   const [openForm, setOpenForm] = useState(false);
   const [page, setPage] = useState(1);
@@ -77,14 +79,9 @@ const TenderForwarders = () => {
             fontSize: "1.5rem",
             сolor: "font_color.heading",
           }}
-        >
-          Аукционы перевозчиков
-        </Typography>
+        >{t("ui.carrier_auctions")}</Typography>
 
-        <Typography color="text.secondary" fontSize={14}>
-          созданные вами для водителейСписок аукционов, созданных вами для
-          водителей
-        </Typography>
+        <Typography color="text.secondary" fontSize={14}>{t("ui.your_driver_auctions_description")}</Typography>
       </Box>
       <Box>
         <Box
@@ -112,7 +109,7 @@ const TenderForwarders = () => {
               setInputValue(e.target.value);
               setPage(1);
             }}
-            label="Поиск аукциона"
+            label={t("ui.search_auction")}
             fullWidth
             size="small"
           sx={{
@@ -151,7 +148,7 @@ const TenderForwarders = () => {
               }}
             >
               {isTendersEmpty ? (
-                <EmptyListUi text="Список пуст. Добавьте аукцион!" />
+                <EmptyListUi text={t("ui.add_auction_empty_hint_2")} />
               ) : (
                 tenders.map((tender) => (
                   <ForwardersTenderCard key={tender.id} tender={tender} />

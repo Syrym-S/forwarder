@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import CustomSelect from "../../shared/ui/input/custom-select";
 import RootLayout from "../../components/layout/root-layout";
 import ViewTabs from "../../shared/ui/view-tabs";
@@ -12,6 +13,7 @@ import { HISTORY_LEAD_STATUS_OPTIONS } from "../../shared/const/tenders";
 import { Controller, useForm } from "react-hook-form";
 
 const HistoryLeads = () => {
+  const { t } = useTranslation();
   const [filterStatus, setFilterStatus] = useState(null);
 
   const { control } = useForm();
@@ -53,13 +55,9 @@ const HistoryLeads = () => {
             fontSize: "1.5rem",
             сolor: "font_color.heading",
           }}
-        >
-          История перевозок
-        </Typography>
+        >{t("ui.lead_history")}</Typography>
 
-        <Typography color="text.secondary" fontSize={14}>
-          Список завершенных или удаленных перевозок
-        </Typography>
+        <Typography color="text.secondary" fontSize={14}>{t("ui.completed_deleted_lead_list")}</Typography>
       </Box>
 
       <Box
@@ -90,9 +88,9 @@ const HistoryLeads = () => {
             <CustomSelect
               {...field}
               inputRef={ref}
-              label="Статус"
+              label={t("ui.status")}
               options={[
-                { value: "", label: "Все статусы" },
+                { value: "", label: t("ui.all_statuses") },
                 ...HISTORY_LEAD_STATUS_OPTIONS,
               ]}
               value={field.value ?? ""}

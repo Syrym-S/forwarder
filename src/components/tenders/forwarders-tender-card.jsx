@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { Box, Stack, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import RenderStatus from "../../shared/ui/render-status";
@@ -7,6 +8,7 @@ import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
 import InfoItem from "../../shared/ui/info-item";
 
 const ForwardersTenderCard = ({ tender }) => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
 
   const navigateToDetailPage = () => {
@@ -48,9 +50,7 @@ const ForwardersTenderCard = ({ tender }) => {
               variant="body2"
               color="text.secondary"
               sx={{ mb: 0.75 }}
-            >
-              Аукцион
-            </Typography>
+            >{t("ui.auction")}</Typography>
 
             <Typography
               sx={{
@@ -61,9 +61,7 @@ const ForwardersTenderCard = ({ tender }) => {
                 },
                 fontWeight: 500,
               }}
-            >
-              Аукцион #{tender.id || "—"}
-            </Typography>
+            >{t("ui.auction_number", { value1: tender.id || "—" })}</Typography>
           </Box>
 
           <Stack
@@ -96,9 +94,7 @@ const ForwardersTenderCard = ({ tender }) => {
                 sx={{
                   fontSize: 12,
                 }}
-              >
-                Откуда
-              </Typography>
+              >{t("ui.origin")}</Typography>
             </Box>
 
             <Typography
@@ -110,7 +106,7 @@ const ForwardersTenderCard = ({ tender }) => {
             >
               {tender?.lead?.from_location?.address ||
                 tender?.lead?.from ||
-                "Битые данные"}
+                t("ui.invalid_data")}
             </Typography>
           </Box>
 
@@ -134,9 +130,7 @@ const ForwardersTenderCard = ({ tender }) => {
                 sx={{
                   fontSize: 12,
                 }}
-              >
-                Куда
-              </Typography>
+              >{t("ui.destination")}</Typography>
             </Box>
 
             <Typography
@@ -147,7 +141,7 @@ const ForwardersTenderCard = ({ tender }) => {
             >
               {tender?.lead?.to_location?.address ||
                 tender?.lead?.from ||
-                "Битые данные"}
+                t("ui.invalid_data")}
             </Typography>
           </Box>
         </Box>
@@ -162,9 +156,9 @@ const ForwardersTenderCard = ({ tender }) => {
             gap: 1,
           }}
         >
-          <InfoItem label="Дата публикации" value={tender?.public_date_time} />
-          <InfoItem label="Дата закрытия" value={tender?.end_date_time} />
-          <InfoItem label="Кол-во участников" value={tender?.bets_count} />
+          <InfoItem label={t("ui.publication_date")} value={tender?.public_date_time} />
+          <InfoItem label={t("ui.closing_date")} value={tender?.end_date_time} />
+          <InfoItem label={t("ui.participant_count")} value={tender?.bets_count} />
         </Box>
       </Stack>
     </Box>

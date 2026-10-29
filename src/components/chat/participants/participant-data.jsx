@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { useLeadsStore } from "../../../app/store/leads/leads-store";
 import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 import {
@@ -9,6 +10,7 @@ import {
 } from "@mui/material";
 
 const ParticipantData = ({ participantData, isFactoringChat }) => {
+  const { t } = useTranslation();
   const isParticipantLoading = useLeadsStore(
     (state) => state.isParticipantLoading,
   );
@@ -61,7 +63,7 @@ const ParticipantData = ({ participantData, isFactoringChat }) => {
               <Box
                 key={participant.id || index}
                 component="img"
-                alt={participant.person_fio || "Участник чата"}
+                alt={participant.person_fio || t("ui.chat_participant")}
                 src={participant?.avatar}
                 sx={{
                   display: "block",
@@ -142,9 +144,7 @@ const ParticipantData = ({ participantData, isFactoringChat }) => {
               sx={{
                 fontSize: 16,
               }}
-            >
-              Чат о факторинговой покупке
-            </Typography>
+            >{t("ui.factoring_purchase_chat")}</Typography>
           )}
         </Box>
       </Box>

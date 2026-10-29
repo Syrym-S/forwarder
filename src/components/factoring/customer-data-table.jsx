@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import {
   Box,
   Chip,
@@ -9,21 +10,22 @@ import {
 } from "@mui/material";
 
 const CustomerDataTable = ({ customer, verified_customer }) => {
+  const { t } = useTranslation();
   const rows = [
     {
-      label: "ФИО",
+      label: t("ui.full_name"),
       value: customer?.fullname,
     },
     {
-      label: "БИН",
+      label: t("ui.bin"),
       value: customer?.bin || customer?.company_bin,
     },
     {
-      label: "Подтверждение",
+      label: t("ui.confirmation"),
       value: (
         <Chip
           label={
-            verified_customer ? "Заказчик подтвердил" : "Заказчик не подтвердил"
+            verified_customer ? t("ui.customer_confirmed") : t("ui.customer_not_confirmed")
           }
           variant="outlined"
           color={verified_customer ? "success" : "error"}
@@ -39,7 +41,7 @@ const CustomerDataTable = ({ customer, verified_customer }) => {
           {rows.map((row) => (
             <TableRow>
               <TableCell>{row.label}:</TableCell>
-              <TableCell>{row.value || "Не указан"}</TableCell>
+              <TableCell>{row.value || t("ui.not_specified")}</TableCell>
             </TableRow>
           ))}
         </TableBody>

@@ -1,4 +1,4 @@
-import { DataGrid } from "@mui/x-data-grid";
+import DataGrid from "../../shared/ui/localized-data-grid";
 import Paper from "@mui/material/Paper";
 import useAppTenederColumns from "../../shared/hooks/tenders/use-app-tender-columns";
 

@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import RootLayout from "../../components/layout/root-layout";
 import CreateFactoringForm from "../../features/factoring/create-factoring-form";
 import FactoringCard from "../../components/factoring/factoring-card";
@@ -16,6 +17,7 @@ import { VIEWS } from "../../shared/const/leads";
 import { useLeadsStore } from "../../app/store/leads/leads-store";
 
 const Factoring = () => {
+  const { t } = useTranslation();
   const factorings = useFactoringStore((state) => state.factorings);
   const isLoading = useFactoringStore((state) => state.isLoading);
   const getFactorings = useFactoringStore((state) => state.getFactorings);
@@ -82,13 +84,9 @@ const Factoring = () => {
             fontSize: "1.5rem",
             сolor: "font_color.heading",
           }}
-        >
-          Факторинги
-        </Typography>
+        >{t("ui.factorings")}</Typography>
 
-        <Typography color="text.secondary" fontSize={14}>
-          Факторинги по завершенным перевозкам
-        </Typography>
+        <Typography color="text.secondary" fontSize={14}>{t("ui.completed_lead_factoring")}</Typography>
       </Box>
       <ViewTabs
         view={view}
@@ -99,7 +97,7 @@ const Factoring = () => {
       <DataContainer
         isLoading={isLoading}
         isEmpty={isFactoringsEmpty}
-        emptyText="Доступных факторингов нет"
+        emptyText={t("ui.no_factoring_available")}
       >
         {isCradsView && (
           <Box

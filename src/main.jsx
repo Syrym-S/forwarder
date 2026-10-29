@@ -2,15 +2,15 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import App from "./App";
 import "./index.css";
-import { CssBaseline, ThemeProvider } from "@mui/material";
-import { theme } from "./app/theme/theme";
+import { CssBaseline } from "@mui/material";
+import LocalizedThemeProvider from "./app/theme/localized-theme-provider";
 import "./leaflet-icon";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <ThemeProvider theme={theme}>
+    <LocalizedThemeProvider>
       <CssBaseline />
       <App />
-    </ThemeProvider>
+    </LocalizedThemeProvider>
   </StrictMode>,
 );

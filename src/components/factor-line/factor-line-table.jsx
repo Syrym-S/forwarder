@@ -1,8 +1,10 @@
+import { useTranslation } from "react-i18next";
 import { Paper } from "@mui/material";
-import { DataGrid } from "@mui/x-data-grid";
+import DataGrid from "../../shared/ui/localized-data-grid";
 import useFactoringLineColumns from "../../shared/hooks/factor-line";
 
 const FactorLineTable = (factorLine) => {
+  const { t } = useTranslation();
   const columns = useFactoringLineColumns();
 
   return (
@@ -24,7 +26,7 @@ const FactorLineTable = (factorLine) => {
           },
         }}
         localeText={{
-          noRowsLabel: "Список пуст",
+          noRowsLabel: t("ui.list_empty"),
         }}
       />
     </Paper>

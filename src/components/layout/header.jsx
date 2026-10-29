@@ -36,7 +36,7 @@ const Header = ({ openMenu, setOpenMenu }) => {
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
 
   const isProfileMenuOpen = Boolean(profileAnchorEl);
-  const userEmail = window?.APP_DATA?.user_email || "Пользователь";
+  const userEmail = window?.APP_DATA?.user_email || t("ui.user");
 
   const handleToggleMenu = () => {
     setOpenMenu((prev) => !prev);
@@ -96,8 +96,8 @@ const Header = ({ openMenu, setOpenMenu }) => {
         }}
       >
         <TooltipIconButton
-          title={t(openMenu ? "close_menu" : "open_menu")}
-          aria-label={t(openMenu ? "close_menu" : "open_menu")}
+          title={t(openMenu ? "ui.close_menu" : "ui.open_menu")}
+          aria-label={t(openMenu ? "ui.close_menu" : "ui.open_menu")}
           aria-expanded={openMenu}
           onClick={handleToggleMenu}
           sx={{
@@ -144,11 +144,11 @@ const Header = ({ openMenu, setOpenMenu }) => {
 
         <ChatsContainer />
 
-        <ActionTooltip title={t("open_profile_menu")}>
+        <ActionTooltip title={t("ui.open_profile_menu")}>
           <Button
             variant="outlined"
             onClick={handleOpenProfileMenu}
-            aria-label={t("open_profile_menu")}
+            aria-label={t("ui.open_profile_menu")}
             sx={{
               borderColor: "primary.main",
               display: "flex",

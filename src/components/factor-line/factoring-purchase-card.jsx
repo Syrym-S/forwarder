@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { moneySpacingFormat } from "../../shared/helpers/money-spacing";
 import {
   Box,
@@ -14,8 +15,7 @@ import RenderStatus from "../../shared/ui/render-status";
 const formatDate = (value) =>
   value ? dayjs(value).format("DD.MM.YYYY HH:mm") : "—";
 
-const InfoItem = ({ label, value }) => (
-  <Box>
+const InfoItem = ({ label, value }) => { useTranslation(); return (<Box>
     <Typography variant="caption" color="text.secondary">
       {label}
     </Typography>
@@ -23,24 +23,22 @@ const InfoItem = ({ label, value }) => (
     <Typography variant="body1" fontWeight={500}>
       {value ?? "—"}
     </Typography>
-  </Box>
-);
+  </Box>); };
 
-const VerificationItem = ({ label, verified, date }) => (
-  <Stack direction="row" spacing={1} alignItems="center">
+const VerificationItem = ({ label, verified, date }) => { const { t } = useTranslation(); return (<Stack direction="row" spacing={1} alignItems="center">
     <Chip
       size="small"
-      label={verified ? "Подтверждено" : "Не подтверждено"}
+      label={verified ? t("ui.confirmed") : t("ui.not_confirmed")}
       color={verified ? "success" : "default"}
     />
 
     <Typography variant="body2" color="text.secondary">
       {label}: {formatDate(date)}
     </Typography>
-  </Stack>
-);
+  </Stack>); };
 
 const FactoringPurchaseCard = ({ data }) => {
+  const { t } = useTranslation();
   console.log(data);
 
   return (
@@ -63,9 +61,7 @@ const FactoringPurchaseCard = ({ data }) => {
                 sx={{
                   fontWeight: 600,
                 }}
-              >
-                Покупка
-              </Typography>
+              >{t("ui.purchase")}</Typography>
               <Typography
                 sx={{
                   fontWeight: 400,
@@ -87,9 +83,7 @@ const FactoringPurchaseCard = ({ data }) => {
                   fontSize: "0.8rem",
                   color: "#454545",
                 }}
-              >
-                Сумма сделки
-              </Typography>
+              >{t("ui.transaction_amount")}</Typography>
               <Typography
                 sx={{
                   fontWeight: 400,
@@ -114,9 +108,7 @@ const FactoringPurchaseCard = ({ data }) => {
                   fontSize: "0.8rem",
                   color: "#454545",
                 }}
-              >
-                Профинансировано
-              </Typography>
+              >{t("ui.financed")}</Typography>
               <Typography
                 sx={{
                   fontWeight: 400,

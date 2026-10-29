@@ -1,8 +1,10 @@
 import { Breadcrumbs, Link, Typography } from "@mui/material";
 import ArrowBackIosNewRoundedIcon from "@mui/icons-material/ArrowBackIosNewRounded";
 import { Link as RouterLink, useMatches, useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 export default function AppBreadcrumbs() {
+  const { t } = useTranslation();
   const matches = useMatches();
   const navigate = useNavigate();
 
@@ -35,15 +37,16 @@ export default function AppBreadcrumbs() {
               },
             }}
           />
-          Назад
+          {t("common.back")}
         </Link>
       )}
 
       {crumbs.map((match, index) => {
         const last = index === crumbs.length - 1;
 
-        const label =
-          typeof match.handle.breadcrumb === "function"
+        const label = match.handle.breadcrumbKey
+          ? t(match.handle.breadcrumbKey)
+          : typeof match.handle.breadcrumb === "function"
             ? match.handle.breadcrumb(match)
             : match.handle.breadcrumb;
 

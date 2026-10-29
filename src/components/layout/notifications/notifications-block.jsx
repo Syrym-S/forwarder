@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import TooltipIconButton from "../../../shared/ui/tooltip-icon-button";
 import { Badge, Popover } from "@mui/material";
 import NotificationsNoneOutlinedIcon from "@mui/icons-material/NotificationsNoneOutlined";
@@ -8,6 +9,7 @@ import NotificationPopup from "./notification-popup";
 import NotificationsDrawer from "./notifications-drawer";
 
 const NotificationsBlock = () => {
+  const { t } = useTranslation();
   const notifications = useNotificationsStore((state) => state.notifications);
   const getNotifications = useNotificationsStore(
     (state) => state.getNotifications,
@@ -46,8 +48,8 @@ const NotificationsBlock = () => {
   return (
     <>
       <TooltipIconButton
-        title="Открыть уведомления"
-        aria-label="Открыть уведомления"
+        title={t("ui.open_notifications")}
+        aria-label={t("ui.open_notifications")}
         aria-expanded={isNotificationsOpen}
         aria-describedby={id}
         onClick={handleNotificationsClick}

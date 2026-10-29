@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import FormInput from "../../shared/ui/input/form-input";
 import PrimaryButton from "../../shared/ui/button/primary-button";
 import RootLayout from "../../components/layout/root-layout";
@@ -16,6 +17,7 @@ import { parserNotificationType } from "../../shared/helpers/notifications/parse
 import { useNavigate } from "react-router-dom";
 
 const TenderApplications = () => {
+  const { t } = useTranslation();
   const [view, setView] = useState(VIEWS.table);
   const [page, setPage] = useState(1);
   const [inputValue, setInputValue] = useState("");
@@ -89,13 +91,9 @@ const TenderApplications = () => {
             fontSize: "1.5rem",
             сolor: "font_color.heading",
           }}
-        >
-          Аукционные заявки
-        </Typography>
+        >{t("ui.auction_requests")}</Typography>
 
-        <Typography color="text.secondary" fontSize={14}>
-          Список аукционов созданные заказчиками для экспедиторов
-        </Typography>
+        <Typography color="text.secondary" fontSize={14}>{t("ui.customer_auctions_for_forwarders")}</Typography>
       </Box>
 
       <Box
@@ -122,8 +120,8 @@ const TenderApplications = () => {
         />
 
         <PrimaryButton
-          text="История участия"
-          aria-label="История участия в аукционах"
+          text={t("ui.participation_history")}
+          aria-label={t("ui.auction_participation_history")}
           variant="outlined"
           size="medium"
           startIcon={<HistoryOutlined />}
@@ -142,7 +140,7 @@ const TenderApplications = () => {
             setInputValue(e.target.value);
             setPage(1);
           }}
-          label="Поиск аукциона"
+          label={t("ui.search_auction")}
           fullWidth
           size="small"
           sx={{
@@ -169,9 +167,7 @@ const TenderApplications = () => {
                 sm: isCardsView ? "60%" : "100%",
               },
             }}
-          >
-            Доступных аукционов нет
-          </Alert>
+          >{t("ui.no_auctions_available")}</Alert>
         )}
 
         {isCardsView && !isTenderEmpty && (

@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { useRef, useState } from "react";
 import {
   Alert,
@@ -16,6 +17,7 @@ import { deleteProfileApi } from "../../app/store/profile/api";
 import { isStaging } from "../../app/client";
 
 const DeleteAccountBlock = () => {
+  const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -42,13 +44,13 @@ const DeleteAccountBlock = () => {
       const status = requestError.response?.status;
       const message = requestError.response?.data?.message;
       if (status === 403 && message === "Invalid password") {
-        setError("Неверный пароль. Проверьте пароль и попробуйте снова.");
+        setError(t("ui.incorrect_password_retry"));
       } else if (status === 409 && message === "User has an active lead") {
-        setError("Нельзя удалить аккаунт, пока есть активная перевозка.");
+        setError(t("ui.account_delete_active_lead"));
       } else if (status === 409 && message === "User has an active factoring") {
-        setError("Нельзя удалить аккаунт, пока есть активный факторинг.");
+        setError(t("ui.account_delete_active_factoring"));
       } else {
-        setError("Не удалось удалить аккаунт. Попробуйте позже.");
+        setError(t("ui.account_delete_failed"));
       }
       submitting.current = false;
       setIsLoading(false);
@@ -66,11 +68,9 @@ const DeleteAccountBlock = () => {
         sx={{ mt: 3, p: { xs: 2, sm: 3 }, borderRadius: 5 }}
       >
         <Stack spacing={2} alignItems="flex-start">
-          <Typography fontWeight={600} fontSize="1.1rem">
-            Удаление аккаунта
-          </Typography>
+          <Typography fontWeight={600} fontSize="1.1rem">{t("ui.account_deletion")}</Typography>
           <PrimaryButton
-            text="Удалить аккаунт"
+            text={t("ui.delete_account")}
             error
             variant="outlined"
             startIcon={<DeleteOutlineRoundedIcon />}
@@ -79,11 +79,7 @@ const DeleteAccountBlock = () => {
               width: "fit-content",
             }}
           />
-          <Typography color="text.secondary" fontSize={14}>
-            Аккаунт нельзя удалить, если есть активная перевозка или активный
-            факторинг. Для восстановления удалённого аккаунта обратитесь к
-            администратору.
-          </Typography>
+          <Typography color="text.secondary" fontSize={14}>{t("ui.account_deletion_hint")}</Typography>
         </Stack>
       </Paper>
 
@@ -96,16 +92,13 @@ const DeleteAccountBlock = () => {
         slotProps={{ paper: { sx: { borderRadius: 3 } } }}
       >
         <form onSubmit={handleDelete}>
-          <DialogTitle id="delete-account-title">Удалить аккаунт?</DialogTitle>
+          <DialogTitle id="delete-account-title">{t("ui.delete_account_question")}</DialogTitle>
           <DialogContent>
             <Stack spacing={2} sx={{ pt: 1 }}>
-              <Typography color="text.secondary" fontSize={14}>
-                Введите текущий пароль для подтверждения удаления. Восстановить
-                аккаунт можно через администратора.
-              </Typography>
+              <Typography color="text.secondary" fontSize={14}>{t("ui.confirm_account_deletion_hint")}</Typography>
               <FormInput
                 id="delete-account-password"
-                label="Текущий пароль"
+                label={t("ui.current_password")}
                 type="password"
                 autoComplete="current-password"
                 autoFocus
@@ -124,14 +117,14 @@ const DeleteAccountBlock = () => {
           </DialogContent>
           <DialogActions sx={{ px: 3, pb: 3, gap: 1 }}>
             <PrimaryButton
-              text="Отмена"
+              text={t("ui.cancel")}
               variant="outlined"
               size="medium"
               disabled={isLoading}
               onClick={handleClose}
             />
             <PrimaryButton
-              text="Удалить аккаунт"
+              text={t("ui.delete_account")}
               type="submit"
               error
               size="medium"

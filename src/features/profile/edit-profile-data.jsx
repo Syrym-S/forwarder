@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import React, { useState } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import UploadAvatar from "../../components/profile/upload-avatar";
@@ -12,6 +13,7 @@ import { mapProfileFormToChangedApi } from "../profile-edit/profile-form-helpers
 import RenderErrorContext from "../../shared/ui/errors/render-error-context";
 
 const EditProfileForm = ({ profileData, legalDocuments }) => {
+  const { t } = useTranslation();
   const [registrationDocumentsToUpload, setRegistrationDocumentsToUpload] =
     useState(null);
   const [employerDocumentToUpload, setEmployerDocumentToUpload] =
@@ -157,10 +159,10 @@ const EditProfileForm = ({ profileData, legalDocuments }) => {
         >
           {isSubmitting && <CircularProgress size={16} />}
           {isSubmitting && !uploadAvatarError
-            ? "Сохранение..."
+            ? t("ui.saving_2")
             : uploadAvatarError
-              ? "Попробовать еще раз"
-              : "Сохранить"}
+              ? t("ui.try_again")
+              : t("ui.save")}
         </Button>
       </Box>
     </>

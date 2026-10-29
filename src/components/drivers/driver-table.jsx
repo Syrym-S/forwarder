@@ -1,4 +1,6 @@
-import { DataGrid, useGridApiRef } from "@mui/x-data-grid";
+import { useTranslation } from "react-i18next";
+import DataGrid from "../../shared/ui/localized-data-grid";
+import { useGridApiRef } from "@mui/x-data-grid";
 import Paper from "@mui/material/Paper";
 import { useEffect, useRef, useState } from "react";
 import { Alert, Snackbar } from "@mui/material";
@@ -7,6 +9,7 @@ import useDriversColumns from "../../shared/hooks/drivers/use-drivers-column";
 import { useDriverStore } from "../../app/store/drivers/driver-store";
 
 const DriversTable = ({ drivers, setSelectedDriver, handleBanDriver }) => {
+  const { t } = useTranslation();
   const apiRef = useGridApiRef();
   const tableRef = useRef(null);
   const [driverToBlock, setDriverToBlock] = useState(null);
@@ -78,14 +81,14 @@ const DriversTable = ({ drivers, setSelectedDriver, handleBanDriver }) => {
       } catch {
         throw new Error("Ссылка перегенерирована, но не удалось её скопировать");
       }
-      setCopyNotice({ severity: "success", message: "Новая ссылка скопирована" });
+      setCopyNotice({ severity: "success", message: t("ui.new_link_copied") });
     } catch (error) {
       setCopyNotice({
         severity: "error",
         message:
           error.response?.data?.message ||
           error.message ||
-          "Не удалось перегенерировать ссылку",
+          t("ui.link_regeneration_failed"),
       });
     } finally {
       copyInProgressRef.current = false;
@@ -173,7 +176,7 @@ const DriversTable = ({ drivers, setSelectedDriver, handleBanDriver }) => {
           },
         }}
         localeText={{
-          noRowsLabel: "Список водителей пуст",
+          noRowsLabel: t("ui.driver_list_empty"),
         }}
       />
       <Snackbar

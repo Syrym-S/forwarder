@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { useEffect, useMemo, useState } from "react";
 import {
   Alert,
@@ -19,6 +20,7 @@ import FormInput from "../../shared/ui/input/form-input";
 import PrimaryButton from "../../shared/ui/button/primary-button";
 
 const Handbook = () => {
+  const { t } = useTranslation();
   const tnvedOptions = useOptionsStore((state) => state.tnvedOptions);
   const getLTNVEDOptions = useOptionsStore((state) => state.getLTNVEDOptions);
   const tnvedCount = useOptionsStore((state) => state.tnvedCount);
@@ -72,9 +74,7 @@ const Handbook = () => {
           сolor: "font_color.heading",
           mb: 2,
         }}
-      >
-        Справочник ТНВЭД
-      </Typography>
+      >{t("ui.commodity_directory")}</Typography>
 
       <Box
         component="form"
@@ -86,7 +86,7 @@ const Handbook = () => {
       >
         <Box sx={{ flex: 1, minWidth: 220 }}>
           <FormInput
-            label="Код или наименование"
+            label={t("ui.code_or_name")}
             size="small"
             value={search}
             onChange={(event) => {
@@ -101,13 +101,13 @@ const Handbook = () => {
           type="submit"
           size="small"
           disabled={isLoading}
-          text="Найти"
+          text={t("ui.find")}
         />
         <PrimaryButton
           type="button"
           size="small"
           variant="text"
-          text="Сбросить"
+          text={t("ui.reset")}
           disabled={isLoading || (!search && !query)}
           onClick={() => {
             setSearch("");
@@ -128,7 +128,7 @@ const Handbook = () => {
       >
         {isLoading && <LinearProgress />}
         <Table
-          aria-label="Справочник ТН ВЭД"
+          aria-label={t("ui.commodity_directory_2")}
           sx={{
             "& .MuiTableCell-root": {
               color: "text.primary",
@@ -159,15 +159,15 @@ const Handbook = () => {
         >
           <TableHead>
             <TableRow>
-              <TableCell sx={{ width: { xs: 150, md: 300 } }}>Код</TableCell>
-              <TableCell>Наименование</TableCell>
+              <TableCell sx={{ width: { xs: 150, md: 300 } }}>{t("ui.code")}</TableCell>
+              <TableCell>{t("ui.item_name")}</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {!isLoading && !error && rows.length === 0 && (
               <TableRow>
                 <TableCell colSpan={2} align="center">
-                  {query ? "Ничего не найдено" : "Справочник пуст"}
+                  {query ? t("ui.nothing_found") : t("ui.directory_empty")}
                 </TableCell>
               </TableRow>
             )}

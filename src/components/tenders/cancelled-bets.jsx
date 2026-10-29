@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { moneySpacingFormat } from "../../shared/helpers/money-spacing";
 import { Box, Chip } from "@mui/material";
 import React from "react";
@@ -6,8 +7,9 @@ import DoDisturbIcon from "@mui/icons-material/DoDisturb";
 import { STATUS } from "../../shared/const/tenders";
 
 const CancelledBets = ({ bets }) => {
+  const { t } = useTranslation();
   return (
-    <Section title="Отмененные ставки" icon={<DoDisturbIcon color="error" />}>
+    <Section title={t("ui.cancelled_bids")} icon={<DoDisturbIcon color="error" />}>
       <Box
         sx={{
           display: "flex",

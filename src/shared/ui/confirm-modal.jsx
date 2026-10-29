@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import {
   Alert,
   Button,
@@ -13,13 +14,14 @@ import PrimaryButton from "./button/primary-button";
 
 const ConfirmModal = ({
   open,
-  title = "Подтверждение",
+  title,
   description,
   onConfirm,
   onCancel,
   isLoading,
   warning = false,
 }) => {
+  const { t } = useTranslation();
   return (
     <Dialog
       open={open}
@@ -58,7 +60,7 @@ const ConfirmModal = ({
           />
         )}
 
-        {title}
+        {title ?? t("ui.confirmation")}
       </DialogTitle>
 
       <DialogContent
@@ -118,13 +120,13 @@ const ConfirmModal = ({
           variant="outlined"
           isLoading={isLoading}
           onClick={onCancel}
-          text="Отмена"
+          text={t("ui.cancel")}
         />
 
         <PrimaryButton
           isLoading={isLoading}
           onClick={onConfirm}
-          text={isLoading ? "Подтверждение" : "Подтвердить"}
+          text={isLoading ? t("ui.confirmation") : t("ui.confirm")}
         />
 
         {/* <Button

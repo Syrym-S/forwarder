@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { moneySpacingFormat } from "../../shared/helpers/money-spacing";
 import { Box, Divider, LinearProgress, Stack, Typography } from "@mui/material";
 import RenderStatus from "../../shared/ui/render-status";
@@ -6,6 +7,7 @@ import { renderLineColor } from "../../shared/helpers/factoring/render-progress-
 import dayjs from "dayjs";
 
 const FactoringLineCard = ({ line }) => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const {
     id,
@@ -60,18 +62,14 @@ const FactoringLineCard = ({ line }) => {
             fontWeight: 600,
             fontSize: "1.5rem",
           }}
-        >
-          Факторинговая линия
-        </Typography>
+        >{t("ui.factoring_line")}</Typography>
 
         <RenderStatus status={status} />
       </Box>
 
       <Stack spacing={2.5}>
         <Box>
-          <Typography variant="body2" color="text.secondary" mb={0.5}>
-            Лимит
-          </Typography>
+          <Typography variant="body2" color="text.secondary" mb={0.5}>{t("ui.limit")}</Typography>
         </Box>
 
         <Box>
@@ -89,9 +87,7 @@ const FactoringLineCard = ({ line }) => {
                   color: "#1a1a1a",
                   fontSize: "1rem",
                 }}
-              >
-                Использовано
-              </Typography>
+              >{t("ui.used")}</Typography>
               <Typography
                 variant="body2"
                 color="text.secondary"
@@ -112,9 +108,7 @@ const FactoringLineCard = ({ line }) => {
                   color: "#1a1a1a",
                   fontSize: "1rem",
                 }}
-              >
-                Свободно
-              </Typography>
+              >{t("ui.available")}</Typography>
               <Typography
                 variant="body2"
                 color="text.secondary"
@@ -154,9 +148,7 @@ const FactoringLineCard = ({ line }) => {
         }}
       >
         <Box>
-          <Typography variant="caption" color="text.secondary">
-            Дата начала
-          </Typography>
+          <Typography variant="caption" color="text.secondary">{t("ui.start_date")}</Typography>
 
           <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
             <Typography
@@ -185,9 +177,7 @@ const FactoringLineCard = ({ line }) => {
         </Box>
 
         <Box textAlign="right">
-          <Typography variant="caption" color="text.secondary">
-            Дата окончания
-          </Typography>
+          <Typography variant="caption" color="text.secondary">{t("ui.end_date")}</Typography>
 
           <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
             <Typography

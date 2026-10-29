@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { Box, Chip, Typography } from "@mui/material";
 import TripOriginIcon from "@mui/icons-material/TripOrigin";
 import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
@@ -16,6 +17,7 @@ const RoutePoint = ({
   isPassed,
   type,
 }) => {
+  const { t } = useTranslation();
   return (
     <Box
       sx={{
@@ -118,7 +120,7 @@ const RoutePoint = ({
             overflowWrap: "anywhere",
           }}
         >
-          {address || "Адрес не указан"}
+          {address || t("ui.address_not_specified")}
         </Typography>
       </Box>
       {(date?.start_at || date?.end_at) && (
@@ -137,8 +139,7 @@ const RoutePoint = ({
                 fontSize: 13,
                 color: "text.secondary",
               }}
-            >
-              Дата начала:{" "}
+            >{t("ui.start_date_label")}{" "}
               <Box
                 component="span"
                 sx={{
@@ -158,8 +159,7 @@ const RoutePoint = ({
                 fontSize: 13,
                 color: "text.secondary",
               }}
-            >
-              Дата окончания:{" "}
+            >{t("ui.end_date_label")}{" "}
               <Box
                 component="span"
                 sx={{

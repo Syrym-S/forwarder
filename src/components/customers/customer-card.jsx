@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { Box, Chip, Stack, Typography } from "@mui/material";
 import React from "react";
 import InfoField from "../../shared/ui/info-field";
@@ -5,6 +6,7 @@ import PersonPinOutlinedIcon from "@mui/icons-material/PersonPinOutlined";
 import InfoItem from "../../shared/ui/info-item";
 
 const CustomerCard = ({ customer, setSelectedCustomer }) => {
+  const { t } = useTranslation();
   const handleSetCustomerDetails = () => {
     setSelectedCustomer(customer);
   };
@@ -39,9 +41,7 @@ const CustomerCard = ({ customer, setSelectedCustomer }) => {
             variant="body2"
             color="text.secondary"
             sx={{ mb: 0.75, display: "flex", alignItems: "center" }}
-          >
-            Заказчик
-          </Typography>
+          >{t("ui.customer")}</Typography>
 
           <Typography
             sx={{
@@ -72,9 +72,9 @@ const CustomerCard = ({ customer, setSelectedCustomer }) => {
           my: 2,
         }}
       >
-        <InfoItem label="Банк" value={customer?.bank_name} />
+        <InfoItem label={t("ui.bank")} value={customer?.bank_name} />
         <InfoItem label="BIN" value={customer?.bin} />
-        <InfoItem label="Адрес заказчиков" value={customer?.legal_address} />
+        <InfoItem label={t("ui.customer_addresses")} value={customer?.legal_address} />
       </Box>
     </Box>
   );

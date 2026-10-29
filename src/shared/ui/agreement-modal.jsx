@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { useEffect, useState } from "react";
 import {
   Box,
@@ -13,6 +14,7 @@ import { signContractApi } from "../../app/store/agreement/api";
 import { useProfileStore } from "../../app/store/profile/profile-store";
 
 const AgreementInfo = ({ openModal, setOpenModal }) => {
+  const { t } = useTranslation();
   const getProfileData = useProfileStore((state) => state.getProfileData);
 
   const [isLoading, setIsLoading] = useState(false);
@@ -91,18 +93,13 @@ const AgreementInfo = ({ openModal, setOpenModal }) => {
           }}
         >
           <DescriptionOutlinedIcon />
-        </Box>
-        Наличие договора
-      </DialogTitle>
+        </Box>{t("ui.contract_availability")}</DialogTitle>
 
       <DialogContent sx={{ px: 3, pb: 3 }}>
         <Typography
           id="agreement-modal-description"
           sx={{ fontSize: "0.95rem", lineHeight: 1.6, color: "color.slate_2" }}
-        >
-          Срок действия вашего договора истёк. Подпишите договор, чтобы
-          продолжить работу на платформе.
-        </Typography>
+        >{t("ui.contract_expired_hint")}</Typography>
       </DialogContent>
 
       <DialogActions
@@ -117,7 +114,7 @@ const AgreementInfo = ({ openModal, setOpenModal }) => {
           fullWidth
           onClick={handleContractAnswer}
           isLoading={isLoading}
-          text={isLoading ? "Подписание..." : "Подписать договор"}
+          text={isLoading ? t("ui.signing") : t("ui.sign_contract")}
         />
       </DialogActions>
     </Dialog>

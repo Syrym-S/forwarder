@@ -2,9 +2,13 @@ import { DataGrid } from "@mui/x-data-grid";
 import Paper from "@mui/material/Paper";
 import useLeadsColumns from "../../shared/hooks/leads/use-leads-columns";
 import { isDraftLead } from "../../shared/lib/lead-draft";
+import { useTranslation } from "react-i18next";
+import { enUS, ruRU } from "@mui/x-data-grid/locales";
 
 const LeadsTable = ({ leads }) => {
+  const { t, i18n } = useTranslation();
   const columns = useLeadsColumns();
+  const baseLocale = i18n.resolvedLanguage === "ru" ? ruRU : enUS;
 
   return (
     <Paper sx={{ my: "10px" }}>
@@ -33,7 +37,13 @@ const LeadsTable = ({ leads }) => {
           },
         }}
         localeText={{
-          noRowsLabel: "Список перевозок пуст",
+          ...baseLocale.components.MuiDataGrid.defaultProps.localeText,
+          ...t("active_leads.table", { returnObjects: true }),
+          noRowsLabel: t("active_leads.empty_list"),
+          columnMenuAriaLabel: (columnName) =>
+            t("active_leads.table.columnMenuAriaLabel", { columnName }),
+          columnHeaderFiltersTooltipActive: (count) =>
+            t("active_leads.table.columnHeaderFiltersTooltipActive", { count }),
         }}
       />
     </Paper>

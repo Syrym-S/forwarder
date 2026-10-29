@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import React from "react";
 import Section from "../../shared/ui/section";
 import { Box } from "@mui/material";
@@ -8,9 +9,10 @@ import RenderStatus from "../../shared/ui/render-status";
 import { moneySpacingFormat } from "../../shared/helpers/money-spacing";
 
 const FactoringTransportationInfo = ({ lead }) => {
+  const { t } = useTranslation();
   return (
     <Section
-      title="Данные перевозки"
+      title={t("ui.lead_data")}
       icon={<LocalShippingOutlinedIcon color="primary" />}
     >
       <Box
@@ -25,11 +27,11 @@ const FactoringTransportationInfo = ({ lead }) => {
         }}
       >
         <InfoField
-          label="Откуда"
+          label={t("ui.origin")}
           value={
             lead?.from_location?.address ||
             lead?.from_location?.city ||
-            "Битые данные"
+            t("ui.invalid_data")
           }
         />
 
@@ -46,11 +48,11 @@ const FactoringTransportationInfo = ({ lead }) => {
         />
 
         <InfoField
-          label="Куда"
+          label={t("ui.destination")}
           value={
             lead?.to_location?.address ||
             lead?.to_location?.city ||
-            "Битые данные"
+            t("ui.invalid_data")
           }
         />
       </Box>
@@ -68,18 +70,18 @@ const FactoringTransportationInfo = ({ lead }) => {
           }}
         >
           <InfoField
-            label="Цена груза"
+            label={t("ui.cargo_price")}
             value={`${moneySpacingFormat(lead?.price)} ${lead?.currency}`}
           />
 
           <InfoField
-            label="Статус"
+            label={t("ui.status")}
             value={<RenderStatus status={lead?.status} />}
           />
 
           <InfoField
-            label="Описание груза"
-            value={`Груз заявки #${lead?.id}`}
+            label={t("ui.cargo_description")}
+            value={t("ui.lead_cargo_number", { value1: lead?.id })}
           />
         </Box>
       </Box>

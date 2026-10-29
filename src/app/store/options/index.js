@@ -1,3 +1,4 @@
+import appI18n from "../../../i18n/index.js";
 import { create } from "zustand";
 import {
   getCargoTypesApi,
@@ -99,7 +100,7 @@ export const useOptionsStore = create((set, get) => ({
     } catch (error) {
       set({
         leadParamsError:
-          error.message || "Не удалось загрузить параметры перевозки",
+          error.message || appI18n.t("ui.lead_parameters_load_failed"),
         isLeadParamsLoading: false,
       });
     }
@@ -121,7 +122,7 @@ export const useOptionsStore = create((set, get) => ({
     } catch (error) {
       if (requestId !== tnvedRequestId) return;
       set({
-        tnvedError: error.message || "Не удалось загрузить справочник ТН ВЭД",
+        tnvedError: error.message || appI18n.t("ui.commodity_directory_load_failed"),
         isTNVEDLoading: false,
       });
     }

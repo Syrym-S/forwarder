@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import {
   Box,
   Button,
@@ -14,6 +15,7 @@ const WarningModal = ({
   comment,
   setComment,
 }) => {
+  const { t } = useTranslation();
   const handleShareLead = async () => {
     setConfirm(true);
   };
@@ -42,9 +44,7 @@ const WarningModal = ({
           fontWeight: 700,
           color: "#263244",
         }}
-      >
-        Перенос перевозки в статус "Аварийная ситуация"
-      </DialogTitle>
+      >{t("ui.move_lead_to_emergency")}</DialogTitle>
 
       <DialogContent
         sx={{
@@ -57,8 +57,8 @@ const WarningModal = ({
           multiline
           minRows={3}
           maxRows={6}
-          label="Причина"
-          placeholder="Введите комментарий..."
+          label={t("ui.reason")}
+          placeholder={t("ui.enter_comment")}
           value={comment}
           onChange={(event) => setComment(event.target.value)}
           sx={{
@@ -91,9 +91,7 @@ const WarningModal = ({
               fontWeight: 600,
               textTransform: "none",
             }}
-          >
-            Отмена
-          </Button>
+          >{t("ui.cancel")}</Button>
 
           <Button
             color="primary"
@@ -112,9 +110,7 @@ const WarningModal = ({
                 boxShadow: "0 5px 12px rgba(25, 103, 210, 0.3)",
               },
             }}
-          >
-            Сообщить об аварии
-          </Button>
+          >{t("ui.report_emergency")}</Button>
         </Box>
       </DialogContent>
     </Dialog>

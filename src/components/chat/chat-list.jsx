@@ -1,3 +1,5 @@
+import appI18n from "../../i18n/index.js";
+import { useTranslation } from "react-i18next";
 import {
   Alert,
   Avatar,
@@ -15,9 +17,10 @@ import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import { useSoketLeadMessagesStore } from "../../app/store/soket-lead-messages/soket-lead-messages-store";
 
-const chatAvatars = { lead: "З", cargo: "В", factoring: "Ф#", support: "ТП" };
+const chatAvatars = { get lead() { return appI18n.t("ui.customer_initial"); }, get cargo() { return appI18n.t("ui.driver_initial"); }, get factoring() { return appI18n.t("ui.factor_initial"); }, get support() { return appI18n.t("ui.support_initials"); } };
 
 const Chatlist = ({ setChat }) => {
+  const { t } = useTranslation();
   const [type, setType] = useState("all");
   const chats = useSoketLeadMessagesStore((state) => state.chats);
   const getChats = useSoketLeadMessagesStore((state) => state.getChats);
@@ -25,7 +28,7 @@ const Chatlist = ({ setChat }) => {
     (state) => state.isChatsLoading,
   );
   const chatsError = useSoketLeadMessagesStore((state) => state.chatsError);
-  const availableChats = chats.some((chat) => chat.chat_type === "support") ? chats : [...chats, { chat_type: "support", last_message: "Напишите в тех поддержку" }];
+  const availableChats = chats.some((chat) => chat.chat_type === "support") ? chats : [...chats, { chat_type: "support", last_message: t("ui.contact_technical_support") }];
   const filteredChats = availableChats.filter((chat) => type === "all" || (chat.chat_type ?? chat.type ?? "lead") === type);
 
   useEffect(() => {
@@ -34,7 +37,7 @@ const Chatlist = ({ setChat }) => {
 
   return (
     <Box sx={{ flex: 1, minHeight: 0, overflowY: "auto", px: 1.25, pt: 1 }}>
-      <Tabs value={type} onChange={(_, value) => setType(value)} scrollButtons={false} aria-label="Тип чата"
+      <Tabs value={type} onChange={(_, value) => setType(value)} scrollButtons={false} aria-label={t("ui.chat_type")}
         sx={{
           minHeight: 36,
           "& .MuiTabs-list, & .MuiTabs-flexContainer": { flexWrap: "wrap" },
@@ -45,31 +48,27 @@ const Chatlist = ({ setChat }) => {
             "&.Mui-selected": { borderBottomColor: "primary.main" },
           },
         }}>
-        <Tab value="all" label="Все" />
-        <Tab value="lead" label="Заказчики" />
-        <Tab value="cargo" label="Водители" />
-        <Tab value="factoring" label="Факторы" />
-        <Tab value="support" label="Тех поддержка" />
+        <Tab value="all" label={t("ui.all")} />
+        <Tab value="lead" label={t("ui.customers")} />
+        <Tab value="cargo" label={t("ui.drivers")} />
+        <Tab value="factoring" label={t("ui.factors")} />
+        <Tab value="support" label={t("ui.technical_support")} />
       </Tabs>
       {isChatsLoading ? (
         <Box sx={{ display: "flex", justifyContent: "center", p: 4 }}>
-          <CircularProgress aria-label="Загрузка чатов" />
+          <CircularProgress aria-label={t("ui.loading_chats")} />
         </Box>
       ) : chatsError ? (
         <Alert
           severity="error"
           action={
-            <Button color="inherit" onClick={getChats}>
-              Повторить
-            </Button>
+            <Button color="inherit" onClick={getChats}>{t("ui.retry")}</Button>
           }
         >
           {chatsError}
         </Alert>
       ) : filteredChats.length === 0 ? (
-        <Typography color="text.secondary" sx={{ p: 3, textAlign: "center" }}>
-          Чатов пока нет
-        </Typography>
+        <Typography color="text.secondary" sx={{ p: 3, textAlign: "center" }}>{t("ui.no_chats_yet")}</Typography>
       ) : (
         <List disablePadding>
           {filteredChats.map((chat) => {
@@ -86,9 +85,9 @@ const Chatlist = ({ setChat }) => {
               lead.from_location?.city ?? lead.from_location?.address;
             const to = lead.to_location?.city ?? lead.to_location?.address;
             const title =
-              (chatType === "support" ? "Тех поддержка" : null) ?? chat.title ??
+              (chatType === "support" ? t("ui.technical_support") : null) ?? chat.title ??
               chat.name ??
-              (from && to ? `${from} - ${to}` : `Перевозка №${leadNum ?? "—"}`);
+              (from && to ? `${from} - ${to}` : t("ui.lead_number_label", { value1: leadNum ?? "—" }));
             const date =
               chat.last_message_at ?? lastMessage?.created_at ?? chat.updated_at ?? chat.created_at;
             const formattedDate =
@@ -119,7 +118,7 @@ const Chatlist = ({ setChat }) => {
                     fontWeight: 700,
                   }}
                 >
-                  {chatAvatars[chatType] ?? "Ч"}
+                  {chatAvatars[chatType] ?? t("ui.chat_initial")}
                 </Avatar>
                 </Badge>
                 <Box sx={{ flex: 1, minWidth: 0 }}>
@@ -136,8 +135,8 @@ const Chatlist = ({ setChat }) => {
                   >
                     {preview ||
                       (lastMessage?.attachments?.length
-                        ? "Вложение"
-                        : "Нет сообщений")}
+                        ? t("ui.attachment")
+                        : t("ui.no_messages"))}
                   </Typography>
                 </Box>
                 <Typography

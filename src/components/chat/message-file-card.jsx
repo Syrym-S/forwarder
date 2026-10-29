@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import TooltipIconButton from "../../shared/ui/tooltip-icon-button";
 import { Box, CircularProgress, Typography } from "@mui/material";
 import PictureAsPdfOutlinedIcon from "@mui/icons-material/PictureAsPdfOutlined";
@@ -22,6 +23,7 @@ const checkFileFormat = (file) => {
 };
 
 const MessageFileCard = ({ file, messageType, isForwarderSend }) => {
+  const { t } = useTranslation();
   const { id } = useParams();
 
   const downloadFile = useLeadsStore((state) => state.downloadMessageFile);
@@ -58,15 +60,15 @@ const MessageFileCard = ({ file, messageType, isForwarderSend }) => {
   const fileInfo = {
     image: {
       icon: <InsertDriveFileOutlinedIcon />,
-      label: "Изображение",
+      label: t("ui.image"),
     },
     pdf: {
       icon: <PictureAsPdfOutlinedIcon color="error" />,
-      label: "PDF документ",
+      label: t("ui.pdf_document"),
     },
     file: {
       icon: <InsertDriveFileOutlinedIcon />,
-      label: "Документ",
+      label: t("ui.document"),
     },
   };
 
@@ -116,7 +118,7 @@ const MessageFileCard = ({ file, messageType, isForwarderSend }) => {
           }}
         />
       ) : (
-        <TooltipIconButton title={`Скачать ${file?.file_name || "файл"}`} aria-label={`Скачать ${file?.file_name || "файл"}`} onClick={handleDownload} size="small" sx={{ color: "inherit" }}>
+        <TooltipIconButton title={t("ui.download_named_file", { value1: file?.file_name || t("ui.file_lowercase") })} aria-label={t("ui.download_named_file", { value1: file?.file_name || t("ui.file_lowercase") })} onClick={handleDownload} size="small" sx={{ color: "inherit" }}>
           <DownloadOutlinedIcon />
         </TooltipIconButton>
       )}

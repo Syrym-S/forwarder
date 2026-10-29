@@ -1,12 +1,14 @@
+import { useTranslation } from "react-i18next";
 import Section from "./tender-section";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import InfoItem from "../../shared/ui/info-item";
 import { Box } from "@mui/material";
 
 const TenderInfo = ({ tender }) => {
+  const { t } = useTranslation();
   return (
     <Section
-      title="Информация об аукционе"
+      title={t("ui.auction_information")}
       icon={<InfoOutlinedIcon color="primary" />}
     >
       <Box
@@ -21,20 +23,20 @@ const TenderInfo = ({ tender }) => {
           mb: 0,
         }}
       >
-        <InfoItem label="Для кого" value={"-"} />
+        <InfoItem label={t("ui.target_audience")} value={"-"} />
 
         <InfoItem
-          label="Тип публикации"
+          label={t("ui.publication_type")}
           value={
-            tender?.publication_type === "public" ? "Публичный" : "Приватный"
+            tender?.publication_type === "public" ? t("ui.public") : t("ui.private")
           }
         />
 
         <InfoItem
-          label="Макс. участников"
+          label={t("ui.maximum_participants")}
           value={tender?.max_participants_count}
         />
-        <InfoItem label="Участников" value={tender?.participants_count} />
+        <InfoItem label={t("ui.participants")} value={tender?.participants_count} />
       </Box>
     </Section>
   );

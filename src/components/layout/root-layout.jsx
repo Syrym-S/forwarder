@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { Alert, AlertTitle, Box, Breadcrumbs, Typography } from "@mui/material";
 import React, { useEffect } from "react";
 import Skeleton from "@mui/material/Skeleton";
@@ -13,6 +14,7 @@ const RootLayout = ({
   children,
   ...props
 }) => {
+  const { t } = useTranslation();
   const { pathname } = useLocation();
 
   const setPath = usePageRoutesStore((state) => state.setPath);
@@ -39,10 +41,8 @@ const RootLayout = ({
             height: "fit-content",
           }}
         >
-          <AlertTitle>Пусто!</AlertTitle>
-          <Typography color="text.secondary">
-            Данные временно отсутствуют
-          </Typography>
+          <AlertTitle>{t("ui.empty_exclamation")}</AlertTitle>
+          <Typography color="text.secondary">{t("ui.data_temporarily_unavailable")}</Typography>
         </Alert>
       </Box>
     );

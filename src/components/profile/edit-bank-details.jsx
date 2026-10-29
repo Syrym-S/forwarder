@@ -1,10 +1,12 @@
+import { useTranslation } from "react-i18next";
 import { Stack, TextField, Typography } from "@mui/material";
 import { Controller } from "react-hook-form";
 
 const EditBankDetails = ({ control }) => {
+  const { t } = useTranslation();
   return (
     <Stack spacing={2}>
-      <Typography fontWeight={600}>Банковские реквизиты</Typography>
+      <Typography fontWeight={600}>{t("ui.bank_details")}</Typography>
 
       <Controller
         control={control}
@@ -12,7 +14,7 @@ const EditBankDetails = ({ control }) => {
         render={({ field }) => (
           <TextField
             {...field}
-            label="Расчетный счет"
+            label={t("ui.current_account_2")}
             // value={form.companyName}.
             // onChange={handleChange}
             // error={Boolean(errors.companyName)}
@@ -33,7 +35,7 @@ const EditBankDetails = ({ control }) => {
         render={({ field }) => (
           <TextField
             {...field}
-            label="БИК"
+            label={t("ui.bic")}
             // value={form.companyName}.
             // onChange={handleChange}
             // error={Boolean(errors.companyName)}

@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import RootLayout from "../../components/layout/root-layout";
 import ViewTabs from "../../shared/ui/view-tabs";
 import AddCustomerForm from "../../features/customer/add-customer-form";
@@ -10,6 +11,7 @@ import { useCustomerStore } from "../../app/store/customers/customers-store";
 import { VIEWS } from "../../shared/const/leads";
 
 const Customers = () => {
+  const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   const [view, setView] = useState(VIEWS.table);
   //Позже венру если нужно будет , показывает по какому слово пошел запрос поиска
@@ -61,13 +63,9 @@ const Customers = () => {
             fontSize: "1.5rem",
             сolor: "font_color.heading",
           }}
-        >
-          Заказчики
-        </Typography>
+        >{t("ui.customers")}</Typography>
 
-        <Typography color="text.secondary" fontSize={14}>
-          Список заказчиков
-        </Typography>
+        <Typography color="text.secondary" fontSize={14}>{t("ui.customer_list")}</Typography>
       </Box>
 
       <Box
@@ -92,7 +90,7 @@ const Customers = () => {
           withoutKanban
           setView={setView}
           handleOpenForm={handleOpenForm}
-          buttonText="Пригласить заказчика"
+          buttonText={t("ui.invite_customer")}
           sx={{ width: { xs: "100%", sm: "auto" }, flex: { sm: 1 }, minWidth: 0, mx: 0, gap: 2 }}
         />
 
@@ -109,7 +107,7 @@ const Customers = () => {
           onChange={(e) => {
             setInputValue(e.target.value);
           }}
-          label="Поиск заказчика"
+          label={t("ui.search_customer")}
           fullWidth
           size="small"
           sx={{

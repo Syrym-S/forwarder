@@ -1,8 +1,10 @@
-import { DataGrid } from "@mui/x-data-grid";
+import { useTranslation } from "react-i18next";
+import DataGrid from "../../shared/ui/localized-data-grid";
 import Paper from "@mui/material/Paper";
 import useCustomersColumns from "../../shared/hooks/customers/use-customers-columns";
 
 const CustomersTable = ({ customers, setSelectedCustomer }) => {
+  const { t } = useTranslation();
   const columns = useCustomersColumns(setSelectedCustomer);
 
   return (
@@ -26,7 +28,7 @@ const CustomersTable = ({ customers, setSelectedCustomer }) => {
           },
         }}
         localeText={{
-          noRowsLabel: "Список заказчиков пуст",
+          noRowsLabel: t("ui.customer_list_empty"),
         }}
       />
     </Paper>

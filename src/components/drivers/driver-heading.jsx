@@ -1,6 +1,8 @@
+import { useTranslation } from "react-i18next";
 import { Box, Stack, Typography } from "@mui/material";
 
 const DriverHeading = ({ driver }) => {
+  const { t } = useTranslation();
   return (
     <Box
       spacing={0.5}
@@ -26,9 +28,7 @@ const DriverHeading = ({ driver }) => {
         }}
       >
         <Stack>
-          <Typography variant="h5" fontWeight={700}>
-            Информация о перевозке
-          </Typography>
+          <Typography variant="h5" fontWeight={700}>{t("ui.lead_information")}</Typography>
 
           <Typography
             sx={{

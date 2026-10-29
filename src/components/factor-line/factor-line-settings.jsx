@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import {
   Box,
   Card,
@@ -13,6 +14,7 @@ import { useFactoringStore } from "../../app/store/factoring/factoring-store";
 import RenderErrorContext from "../../shared/ui/errors/render-error-context";
 
 const FactorLineSettings = () => {
+  const { t } = useTranslation();
   const factorDetails = useFactoringStore((state) => state.factorDetails);
   const isFactorDetailsLoading = useFactoringStore(
     (state) => state.isFactorDetailsLoading,
@@ -21,19 +23,19 @@ const FactorLineSettings = () => {
 
   const items = [
     {
-      label: "Изменение валюты",
+      label: t("ui.currency_change"),
       value: factorDetails?.is_currency_changeable,
     },
     {
-      label: "Открытая линия",
+      label: t("ui.open_line"),
       value: factorDetails?.is_open,
     },
     {
-      label: "Изменение периода",
+      label: t("ui.period_change"),
       value: factorDetails?.is_period_changeable,
     },
     {
-      label: "Изменение суммы",
+      label: t("ui.amount_change"),
       value: factorDetails?.is_sum_changeable,
     },
   ];
@@ -66,9 +68,7 @@ const FactorLineSettings = () => {
       }}
     >
       <CardContent>
-        <Typography variant="h6" fontWeight={600} mb={2}>
-          Параметры факторинговой линии
-        </Typography>
+        <Typography variant="h6" fontWeight={600} mb={2}>{t("ui.factoring_line_parameters")}</Typography>
 
         <Box
           sx={{
@@ -102,7 +102,7 @@ const FactorLineSettings = () => {
                       <CancelOutlinedIcon />
                     )
                   }
-                  label={item.value ? "Да" : "Нет"}
+                  label={item.value ? t("ui.yes") : t("ui.no")}
                   color={item.value ? "success" : "default"}
                   variant="outlined"
                 />

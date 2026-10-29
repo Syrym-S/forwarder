@@ -5,6 +5,7 @@ import LeadsTable from "./leads-table";
 import LeadKanbanTable from "./lead-kanban-table";
 import LeadsTableSkeleton from "./skeleton/leads-table-skeleton";
 import PageLoader from "../../shared/ui/loaders/page-loader";
+import { useTranslation } from "react-i18next";
 
 const LeadListContainer = ({
   leads,
@@ -17,6 +18,7 @@ const LeadListContainer = ({
   isLoading,
   handlePageChange,
 }) => {
+  const { t } = useTranslation();
   const PAGE_COUNT = Math.ceil(count / perPage);
   const isCardsView = view === VIEWS.cards;
   const isTableView = view === VIEWS.table;
@@ -39,7 +41,7 @@ const LeadListContainer = ({
             my: 1,
           }}
         >
-          По статусу "{filterStatus.label}" активных перевозок нет!
+          {t("active_leads.empty_status", { status: t(filterStatus.label) })}
         </Alert>
       )}
       {isCardsView && (
@@ -69,7 +71,7 @@ const LeadListContainer = ({
                 my: 1,
               }}
             >
-              Список перевозок пуст
+              {t("active_leads.empty_list")}
             </Alert>
           ) : (
             leads.map((lead) => <LeadCard key={lead.id} lead={lead} />)
@@ -80,6 +82,14 @@ const LeadListContainer = ({
       {isKanbanView && <LeadKanbanTable leads={leads} />}
       {!isLeadsEmpty && (
         <Pagination
+          aria-label={t("active_leads.pagination.label")}
+          getItemAriaLabel={(type, pageNumber, selected) => {
+            if (type.endsWith("ellipsis")) return undefined;
+            return t(
+              `active_leads.pagination.${type === "page" && selected ? "selected_page" : type}`,
+              { page: pageNumber },
+            );
+          }}
           shape="rounded"
           page={page}
           count={PAGE_COUNT}

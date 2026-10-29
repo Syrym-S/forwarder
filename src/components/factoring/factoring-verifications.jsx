@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { Box, Chip, Stack, Typography } from "@mui/material";
 import FactCheckOutlinedIcon from "@mui/icons-material/FactCheckOutlined";
 import {
@@ -9,11 +10,12 @@ import Section from "../leads/lead-item/lead-detail-section";
 import InfoBadge from "../../shared/ui/info-badge";
 
 const FactoringVerifications = ({ factoring }) => {
+  const { t } = useTranslation();
   return (
     <Section
       icon={<FactCheckOutlinedIcon color="primary" />}
-      title="Подтверждения"
-      subtitle="Статусы подтверждения сторон"
+      title={t("ui.confirmations")}
+      subtitle={t("ui.party_confirmation_statuses")}
     >
       <Box
         sx={{
@@ -44,7 +46,7 @@ const FactoringVerifications = ({ factoring }) => {
                 flexWrap: "wrap",
               }}
             >
-              <Typography fontWeight={700}>Подтверждение заказчика</Typography>
+              <Typography fontWeight={700}>{t("ui.customer_confirmation_2")}</Typography>
 
               <Chip
                 size="small"
@@ -55,7 +57,7 @@ const FactoringVerifications = ({ factoring }) => {
             </Box>
 
             <InfoBadge
-              label="Дата подтверждения"
+              label={t("ui.confirmation_date")}
               value={formatDate(factoring.date_verified_customer)}
               fullWidth
             />
@@ -81,9 +83,7 @@ const FactoringVerifications = ({ factoring }) => {
                 flexWrap: "wrap",
               }}
             >
-              <Typography fontWeight={700}>
-                Подтверждение экспедитора
-              </Typography>
+              <Typography fontWeight={700}>{t("ui.forwarder_confirmation")}</Typography>
 
               <Chip
                 size="small"
@@ -94,7 +94,7 @@ const FactoringVerifications = ({ factoring }) => {
             </Box>
 
             <InfoBadge
-              label="Дата подтверждения"
+              label={t("ui.confirmation_date")}
               value={formatDate(factoring.date_verified_forwarder)}
               fullWidth
             />
@@ -120,7 +120,7 @@ const FactoringVerifications = ({ factoring }) => {
                 flexWrap: "wrap",
               }}
             >
-              <Typography fontWeight={700}>Подтверждение фактора</Typography>
+              <Typography fontWeight={700}>{t("ui.factor_confirmation_2")}</Typography>
 
               <Chip
                 size="small"
@@ -131,7 +131,7 @@ const FactoringVerifications = ({ factoring }) => {
             </Box>
 
             <InfoBadge
-              label="Дата подтверждения"
+              label={t("ui.confirmation_date")}
               value={formatDate(factoring.verified_factor)}
               fullWidth
             />

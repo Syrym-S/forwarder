@@ -1,9 +1,11 @@
+import { useTranslation } from "react-i18next";
 import { useEffect, useRef, useState } from "react";
 import { Box, CircularProgress, Typography } from "@mui/material";
 import { renderAsync } from "docx-preview";
 import { useProfileStore } from "../../app/store/profile/profile-store";
 
 const LegalDocumentViewer = ({ file }) => {
+  const { t } = useTranslation();
   const isLegalDocumentsLoading = useProfileStore(
     (state) => state.isLegalDocumentsLoading,
   );
@@ -98,12 +100,12 @@ const LegalDocumentViewer = ({ file }) => {
   }
 
   if (!file) {
-    return <Typography color="text.secondary">Документ не найден</Typography>;
+    return <Typography color="text.secondary">{t("ui.document_not_found")}</Typography>;
   }
 
   if (!fileUrl) {
     return (
-      <Typography color="text.secondary">Загрузка предпросмотра...</Typography>
+      <Typography color="text.secondary">{t("ui.loading_preview")}</Typography>
     );
   }
 
@@ -155,9 +157,7 @@ const LegalDocumentViewer = ({ file }) => {
   }
 
   return (
-    <Typography color="text.secondary">
-      Предпросмотр файла типа {file.mime} не поддерживается
-    </Typography>
+    <Typography color="text.secondary">{t("ui.file_type_preview_unsupported", { value1: file.mime })}</Typography>
   );
 };
 

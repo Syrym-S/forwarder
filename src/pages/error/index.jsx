@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { Box, Button, Stack, Typography } from "@mui/material";
 import WarningAmberRoundedIcon from "@mui/icons-material/WarningAmberRounded";
 import RefreshRoundedIcon from "@mui/icons-material/RefreshRounded";
@@ -12,22 +13,23 @@ import notFoundIllustration from "./assets/not-found-logistics.png";
 import { useEffect } from "react";
 
 const ErrorPage = () => {
+  const { t } = useTranslation();
   const error = useRouteError();
   const navigate = useNavigate();
   const isNotFound = error?.status === 404;
   useEffect(() => {
-    document.title = isNotFound ? "Страница не найдена" : "Ошибка";
-  }, [isNotFound]);
+    document.title = isNotFound ? t("ui.page_not_found") : t("ui.error");
+  }, [isNotFound, t]);
 
   let message =
-    error?.message || "Попробуйте обновить страницу или вернуться назад.";
+    error?.message || t("ui.refresh_or_back_hint");
 
   if (isRouteErrorResponse(error)) {
     if (isNotFound) {
       message =
-        "Похоже, вы свернули с маршрута. Страница перемещена или ссылка устарела. Вернитесь на главную, чтобы продолжить работу с перевозками.";
+        t("ui.page_not_found_description");
     } else if (error.status >= 500) {
-      message = "Произошла ошибка на сервере. Попробуйте позже.";
+      message = t("ui.server_error_try_later");
     } else {
       message = error.statusText || message;
     }
@@ -64,7 +66,7 @@ const ErrorPage = () => {
           <Box
             component="img"
             src={notFoundIllustration}
-            alt="404 — грузовик на маршруте"
+            alt={t("ui.not_found_truck_alt")}
             sx={{
               display: "block",
               width: "100%",
@@ -95,12 +97,10 @@ const ErrorPage = () => {
             mb: 1.5,
           }}
         >
-          {isNotFound ? "Этой точки нет на маршруте" : "Что-то пошло не так"}
+          {isNotFound ? t("ui.point_not_on_route") : t("ui.something_went_wrong")}
         </Typography>
         {isNotFound && (
-          <Typography sx={{ color: "primary.main", fontSize: 13, mb: 2 }}>
-            Ошибка 404 · Страница не найдена
-          </Typography>
+          <Typography sx={{ color: "primary.main", fontSize: 13, mb: 2 }}>{t("ui.page_not_found_error_title")}</Typography>
         )}
         <Typography
           sx={{
@@ -136,16 +136,14 @@ const ErrorPage = () => {
               boxShadow: "none",
             }}
           >
-            {isNotFound ? "На главную" : "Обновить страницу"}
+            {isNotFound ? t("ui.go_home") : t("ui.refresh_page")}
           </Button>
           <Button
             variant="outlined"
             startIcon={<ArrowBackRoundedIcon />}
             onClick={() => navigate(-1)}
             sx={{ borderRadius: 2, px: 3, py: 1.3, textTransform: "none" }}
-          >
-            Назад
-          </Button>
+          >{t("ui.back")}</Button>
         </Stack>
       </Box>
     </Box>

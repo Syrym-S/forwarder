@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import TooltipIconButton from "../../shared/ui/tooltip-icon-button";
 import {
   Box,
@@ -24,6 +25,7 @@ const EditDocumentDetails = ({
   setEmployerDocumentToUpload,
   isSubmitting,
 }) => {
+  const { t } = useTranslation();
   const today = new Date();
   const maxIssueDate = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, "0")}-${String(today.getDate()).padStart(2, "0")}`;
   const registrationDocument =
@@ -37,7 +39,7 @@ const EditDocumentDetails = ({
 
   return (
     <Stack spacing={2}>
-      <Typography fontWeight={600}>Документ</Typography>
+      <Typography fontWeight={600}>{t("ui.document")}</Typography>
 
       <Controller
         control={control}
@@ -45,7 +47,7 @@ const EditDocumentDetails = ({
         render={({ field }) => (
           <TextField
             {...field}
-            label="Номер документа"
+            label={t("ui.document_number")}
             type="number"
             // value={form.companyName}.
             // onChange={handleChange}
@@ -67,7 +69,7 @@ const EditDocumentDetails = ({
         render={({ field }) => (
           <TextField
             {...field}
-            label="Страна"
+            label={t("ui.country")}
             // value={form.personIssueCountry}
             // onChange={handleChange}
             // error={Boolean(errors.personIssueCountry)}
@@ -98,11 +100,11 @@ const EditDocumentDetails = ({
             <TextField
               {...field}
               value={field.value ?? ""}
-              label="Когда выдан документ"
+              label={t("ui.document_issue_date_2")}
               type="date"
               fullWidth
               error={Boolean(fieldState.error)}
-              helperText={fieldState.error?.message || "Дата выдачи не позднее сегодняшнего дня"}
+              helperText={fieldState.error?.message || t("ui.issue_date_not_in_future")}
               slotProps={{
                 htmlInput: { max: maxIssueDate },
                 inputLabel: { shrink: true, required: true },
@@ -120,15 +122,15 @@ const EditDocumentDetails = ({
               {...field}
               value={field.value ?? ""}
               select
-              label="Кем выдан документ"
+              label={t("ui.document_issued_by")}
               fullWidth
               error={Boolean(fieldState.error)}
-              helperText={fieldState.error?.message || "Выберите орган выдачи"}
+              helperText={fieldState.error?.message || t("ui.select_issuing_authority")}
               slotProps={{ inputLabel: { required: true } }}
               sx={{ "& .MuiOutlinedInput-root": { borderRadius: 2 } }}
             >
-              <MenuItem value="МЮ РК">МЮ РК</MenuItem>
-              <MenuItem value="МВД РК">МВД РК</MenuItem>
+              <MenuItem value="МЮ РК">{t("ui.kazakhstan_ministry_of_justice")}</MenuItem>
+              <MenuItem value="МВД РК">{t("ui.kazakhstan_ministry_of_internal_affairs")}</MenuItem>
             </TextField>
           )}
         />
@@ -173,17 +175,13 @@ const EditDocumentDetails = ({
                   letterSpacing: "0.00938em",
                   fontWeight: 400,
                 }}
-              >
-                Документ о регистрации юридического лица
-              </Typography>
+              >{t("ui.legal_entity_registration_document")}</Typography>
 
               <Button
                 component="label"
                 variant="outlined"
                 startIcon={<UploadFileIcon />}
-              >
-                Заменить документ
-                <input
+              >{t("ui.replace_document")}<input
                   hidden
                   type="file"
                   accept=".pdf,.jpg,.jpeg,.png"
@@ -269,8 +267,8 @@ const EditDocumentDetails = ({
                 </Typography>
               </Box>
               <TooltipIconButton
-                title="Удалить документ"
-                aria-label="Удалить документ"
+                title={t("ui.delete_document")}
+                aria-label={t("ui.delete_document")}
                 disabled={isSubmitting}
                 color="error"
                 onClick={() => {
@@ -314,17 +312,13 @@ const EditDocumentDetails = ({
                   letterSpacing: "0.00938em",
                   fontWeight: 400,
                 }}
-              >
-                Документ о трудоустройстве сотрудника
-              </Typography>
+              >{t("ui.employee_employment_document")}</Typography>
 
               <Button
                 component="label"
                 variant="outlined"
                 startIcon={<UploadFileIcon />}
-              >
-                Заменить документ
-                <input
+              >{t("ui.replace_document")}<input
                   hidden
                   type="file"
                   accept=".pdf,.jpg,.jpeg,.png"
@@ -408,8 +402,8 @@ const EditDocumentDetails = ({
               </Box>
 
               <TooltipIconButton
-                title="Удалить документ"
-                aria-label="Удалить документ"
+                title={t("ui.delete_document")}
+                aria-label={t("ui.delete_document")}
                 disabled={isSubmitting}
                 color="error"
                 onClick={() => {
@@ -456,9 +450,7 @@ const EditDocumentDetails = ({
                   letterSpacing: "0.00938em",
                   fontWeight: 400,
                 }}
-              >
-                Документ подписи контракта
-              </Typography>
+              >{t("ui.contract_signing_document")}</Typography>
             </Stack>
 
             <LegalDocumentViewer file={signContract} />

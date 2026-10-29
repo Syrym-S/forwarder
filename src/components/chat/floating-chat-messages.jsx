@@ -1,3 +1,5 @@
+import appI18n from "../../i18n/index.js";
+import { useTranslation } from "react-i18next";
 import {
   Alert,
   Avatar,
@@ -32,6 +34,7 @@ import {
 } from "../../app/store/support-chat/api";
 
 const FloatingChatMessages = ({ chat }) => {
+  const { t } = useTranslation();
   const leadId = chat.lead_id ?? chat.lead?.id;
   const chatType = chat.chat_type ?? chat.type ?? "lead";
   const isSupport = chatType === "support";
@@ -99,7 +102,7 @@ const FloatingChatMessages = ({ chat }) => {
       } catch (failure) {
         if (!disposed)
           setError(
-            failure.response?.data?.message || "Не удалось загрузить сообщения",
+            failure.response?.data?.message || appI18n.t("ui.messages_load_failed"),
           );
       } finally {
         if (!disposed) setLoading(false);
@@ -143,7 +146,7 @@ const FloatingChatMessages = ({ chat }) => {
                 await readSupportMessagesApi();
               } catch {
                 if (!disposed)
-                  setError("Не удалось отметить сообщения прочитанными");
+                  setError(appI18n.t("ui.mark_messages_read_failed"));
               }
             }
             if (!disposed) await load();
@@ -153,7 +156,7 @@ const FloatingChatMessages = ({ chat }) => {
       } catch {
         if (!disposed)
           setSocketError(
-            "Не удалось подключить обновления чата. Откройте чат повторно, чтобы переподключиться.",
+            appI18n.t("ui.chat_connection_failed"),
           );
       }
     };
@@ -165,7 +168,7 @@ const FloatingChatMessages = ({ chat }) => {
         })
         .catch(() => {
           if (!disposed)
-            setParticipantError("Не удалось загрузить участников чата");
+            setParticipantError(appI18n.t("ui.chat_participants_load_failed"));
         });
     connect();
     return () => {
@@ -195,7 +198,7 @@ const FloatingChatMessages = ({ chat }) => {
       await reload.current?.();
     } catch (failure) {
       setError(
-        failure.response?.data?.message || "Не удалось отправить сообщение",
+        failure.response?.data?.message || t("ui.send_message_failed"),
       );
     } finally {
       setSending(false);
@@ -215,7 +218,7 @@ const FloatingChatMessages = ({ chat }) => {
       link.click();
       setTimeout(() => URL.revokeObjectURL(url), 1000);
     } catch {
-      setError("Не удалось скачать вложение");
+      setError(t("ui.attachment_download_failed"));
     } finally {
       setDownloadingId(null);
     }
@@ -250,11 +253,11 @@ const FloatingChatMessages = ({ chat }) => {
       >
         <Typography sx={{ fontSize: 12, fontWeight: 600 }}>
           {{
-            support: "Тех поддержка",
-            lead: "Чат с заказчиком",
-            cargo: "Чат с водителем",
-            factoring: "Чат о факторинговой покупке",
-          }[chatType] ?? "Чат"}
+            support: t("ui.technical_support"),
+            lead: t("ui.customer_chat"),
+            cargo: t("ui.driver_chat"),
+            factoring: t("ui.factoring_purchase_chat"),
+          }[chatType] ?? t("ui.chat")}
         </Typography>
         <Box sx={{ display: "flex", gap: 0.75, mt: 0.5, overflowX: "auto" }}>
           {participants.map((participant, index) => (
@@ -271,7 +274,7 @@ const FloatingChatMessages = ({ chat }) => {
                 src={participant.avatar}
                 sx={{ width: 24, height: 24, fontSize: 11 }}
               >
-                {(participant.person_fio ?? participant.name ?? "У").charAt(0)}
+                {(participant.person_fio ?? participant.name ?? t("ui.participant_initial")).charAt(0)}
               </Avatar>
               <Typography sx={{ fontSize: 11 }}>
                 {participant.person_fio ?? participant.name ?? participant.role}
@@ -294,9 +297,7 @@ const FloatingChatMessages = ({ chat }) => {
         <Alert
           severity="error"
           action={
-            <Button color="inherit" onClick={() => reload.current?.()}>
-              Повторить
-            </Button>
+            <Button color="inherit" onClick={() => reload.current?.()}>{t("ui.retry")}</Button>
           }
         >
           {error}
@@ -327,13 +328,13 @@ const FloatingChatMessages = ({ chat }) => {
                     : null,
                 );
               } catch {
-                setError("Не удалось загрузить историю сообщений");
+                setError(t("ui.message_history_load_failed"));
               } finally {
                 setLoadingOlder(false);
               }
             }}
           >
-            {loadingOlder ? "Загрузка…" : "Ранние сообщения"}
+            {loadingOlder ? t("ui.loading") : t("ui.earlier_messages")}
           </Button>
         )}
         {loading ? (
@@ -341,9 +342,7 @@ const FloatingChatMessages = ({ chat }) => {
             <CircularProgress size={28} />
           </Box>
         ) : !messages.length ? (
-          <Typography color="text.secondary" align="center" sx={{ py: 4 }}>
-            Сообщений пока нет
-          </Typography>
+          <Typography color="text.secondary" align="center" sx={{ py: 4 }}>{t("ui.no_messages_yet_2")}</Typography>
         ) : (
           messages.map((message) => (
             <FloatingMessageItem
@@ -390,15 +389,15 @@ const FloatingChatMessages = ({ chat }) => {
             multiline
             maxRows={3}
             size="small"
-            placeholder="Введите сообщение…"
+            placeholder={t("ui.enter_message")}
             value={text}
             disabled={sending}
             onChange={(event) => setText(event.target.value)}
-            slotProps={{ htmlInput: { "aria-label": "Текст сообщения" } }}
+            slotProps={{ htmlInput: { "aria-label": t("ui.message_text") } }}
           />
           <IconButton
             color="primary"
-            aria-label="Отправить сообщение"
+            aria-label={t("ui.send_message")}
             disabled={loading || sending || (!text.trim() && !files.length)}
             onClick={send}
           >
@@ -411,7 +410,7 @@ const FloatingChatMessages = ({ chat }) => {
           <IconButton
             color="primary"
             aria-label={
-              isSupport ? "Прикрепить файл" : "Прикрепить изображение"
+              isSupport ? t("ui.attach_file") : t("ui.attach_image")
             }
             disabled={sending}
             onClick={() => fileInput.current?.click()}

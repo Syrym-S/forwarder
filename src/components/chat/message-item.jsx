@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import TooltipIconButton from "../../shared/ui/tooltip-icon-button";
 import {
   Box,
@@ -20,6 +21,7 @@ import MessageStatus from "./message-status";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 
 const MessageItem = ({ message, participants, messageType }) => {
+  const { t } = useTranslation();
   const { id } = useParams();
   const [contextMenu, setContextMenu] = useState(null);
   const [editedMessage, setEditedMessage] = useState(null);
@@ -209,9 +211,7 @@ const MessageItem = ({ message, participants, messageType }) => {
                     fontStyle: "italic",
                     color: isForwarderSend ? "rgba(255,255,255,0.8)" : "text.secondary",
                   }}
-                >
-                  Сообщение удалено
-                </Typography>
+                >{t("ui.message_deleted")}</Typography>
               </Box>
             )}
 
@@ -259,8 +259,8 @@ const MessageItem = ({ message, participants, messageType }) => {
                 />
 
                 <TooltipIconButton
-                  title="Отменить редактирование"
-                  aria-label="Отменить редактирование"
+                  title={t("ui.cancel_editing")}
+                  aria-label={t("ui.cancel_editing")}
                   size="small"
                   onClick={handleCloseEdit}
                   sx={{
@@ -270,7 +270,7 @@ const MessageItem = ({ message, participants, messageType }) => {
                   <CloseIcon fontSize="small" />
                 </TooltipIconButton>
 
-                <TooltipIconButton title="Сохранить изменения" aria-label="Сохранить изменения" size="small" onClick={handleConfirmEdit}>
+                <TooltipIconButton title={t("ui.save_changes")} aria-label={t("ui.save_changes")} size="small" onClick={handleConfirmEdit}>
                   <CheckIcon
                     fontSize="small"
                     sx={{
@@ -327,9 +327,7 @@ const MessageItem = ({ message, participants, messageType }) => {
                         fontStyle: "italic",
                         color: isForwarderSend ? "rgba(255,255,255,0.8)" : "text.secondary",
                       }}
-                    >
-                      изменено
-                    </Typography>
+                    >{t("ui.edited_lowercase")}</Typography>
                   )}
 
                   {isForwarderSend && (
@@ -344,7 +342,7 @@ const MessageItem = ({ message, participants, messageType }) => {
           </Box>
 
           {isForwarderSend && (
-            <TooltipIconButton title="Действия с сообщением" aria-label="Действия с сообщением" size="small" onClick={handleContextMenu}
+            <TooltipIconButton title={t("ui.message_actions")} aria-label={t("ui.message_actions")} size="small" onClick={handleContextMenu}
               sx={{
                 display: {
                   xs: "block",

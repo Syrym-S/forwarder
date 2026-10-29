@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import {
   Box,
   Button,
@@ -14,6 +15,7 @@ const ShareModal = ({
   handleCloseShareModal,
   setShareUrl,
 }) => {
+  const { t } = useTranslation();
   const shareLead = useLeadsStore((state) => state.shareLead);
 
   const handleShareLead = async () => {
@@ -51,9 +53,7 @@ const ShareModal = ({
           fontWeight: 700,
           color: "#263244",
         }}
-      >
-        Поделиться перевозкой
-      </DialogTitle>
+      >{t("ui.share_lead")}</DialogTitle>
 
       <DialogContent
         sx={{
@@ -68,10 +68,7 @@ const ShareModal = ({
             color: "#667892",
             lineHeight: 1.5,
           }}
-        >
-          Вы уверены, что хотите поделиться информацией о перевозке с третьими
-          лицами? Информация будет доступна по ссылке любому, у кого она есть.
-        </Typography>
+        >{t("ui.share_lead_confirmation")}</Typography>
 
         <Box
           sx={{
@@ -94,9 +91,7 @@ const ShareModal = ({
               fontWeight: 600,
               textTransform: "none",
             }}
-          >
-            Отмена
-          </Button>
+          >{t("ui.cancel")}</Button>
 
           <Button
             color="primary"
@@ -114,9 +109,7 @@ const ShareModal = ({
                 boxShadow: "0 5px 12px rgba(25, 103, 210, 0.3)",
               },
             }}
-          >
-            Поделиться
-          </Button>
+          >{t("ui.share")}</Button>
         </Box>
       </DialogContent>
     </Dialog>

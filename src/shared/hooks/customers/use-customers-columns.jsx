@@ -1,8 +1,10 @@
+import { useTranslation } from "react-i18next";
 import { Box, Tooltip, Typography } from "@mui/material";
 import { NavLink } from "react-router-dom";
 import RenderStatus from "../../ui/render-status";
 
 const useCustomersColumns = (setSelectedCustomer) => {
+  const { t } = useTranslation();
   const columns = [
     {
       field: "id",
@@ -21,26 +23,26 @@ const useCustomersColumns = (setSelectedCustomer) => {
     },
     {
       field: "name",
-      headerName: "ИМЯ",
+      headerName: t("ui.name_2"),
       width: 200,
     },
-    { field: "bin", headerName: "БИН", width: 200 },
+    { field: "bin", headerName: t("ui.bin"), width: 200 },
     {
       field: "type",
-      headerName: "Тип компании",
+      headerName: t("ui.company_type"),
       width: 200,
     },
     {
       field: "legal_address",
-      headerName: "Адрес",
+      headerName: t("ui.address"),
       width: 200,
     },
     {
       field: "invite_link",
-      headerName: "Пригласительная ссылка",
+      headerName: t("ui.invitation_link_2"),
       width: 200,
       renderCell: ({ value }) => (
-        <Tooltip title="Нажмите, чтобы скопировать">
+        <Tooltip title={t("ui.click_to_copy")}>
           <Typography
             component="span"
             onClick={() => navigator.clipboard.writeText(value)}

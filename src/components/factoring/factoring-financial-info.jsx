@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { Box } from "@mui/material";
 import Section from "../leads/lead-item/lead-detail-section";
 import CurrencyExchangeOutlinedIcon from "@mui/icons-material/CurrencyExchangeOutlined";
@@ -5,9 +6,10 @@ import { moneySpacingFormat } from "../../shared/helpers/money-spacing";
 import InfoItem from "../../shared/ui/info-item";
 
 const FactoringFinancialInfo = ({ factoring }) => {
+  const { t } = useTranslation();
   return (
     <Section
-      title="Данные о денежных средствах"
+      title={t("ui.funds_details")}
       icon={<CurrencyExchangeOutlinedIcon color="primary" />}
     >
       <Box
@@ -22,19 +24,19 @@ const FactoringFinancialInfo = ({ factoring }) => {
         }}
       >
         <InfoItem
-          label={"Задолженность"}
+          label={t("ui.debt")}
           value={`${moneySpacingFormat(factoring?.deb_summ)} ${factoring?.deb_currency}`}
         />
         <InfoItem
-          label={"Оплата за задолженность"}
+          label={t("ui.debt_payment")}
           value={`${moneySpacingFormat(factoring?.cred_summ)} ${factoring?.currency}`}
         />
         <InfoItem
-          label={"Процент фактора"}
+          label={t("ui.factor_percentage")}
           value={`${(factoring?.proc_factor * 100).toFixed(1)}%`}
         />
         <InfoItem
-          label={"Процент сервиса"}
+          label={t("ui.service_percentage")}
           value={`${(factoring?.proc_service * 100).toFixed(1)}%`}
         />
       </Box>

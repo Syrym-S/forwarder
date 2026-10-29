@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import RootLayout from "../../../components/layout/root-layout";
 import LocalShippingOutlinedIcon from "@mui/icons-material/LocalShippingOutlined";
 import LeadMap from "../../../components/leads/lead-map";
@@ -23,6 +24,7 @@ import PrimaryButton from "../../../shared/ui/button/primary-button";
 import LeadTransportationInfo from "../../../components/leads/lead-item/lead-transportation-info";
 
 const TenderForwardersItem = () => {
+  const { t } = useTranslation();
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -151,7 +153,7 @@ const TenderForwardersItem = () => {
         <TenderInfo tender={currentTender} />
 
         <Section
-          title={`Груз`}
+          title={t("ui.cargo")}
           icon={<LocalShippingOutlinedIcon color="primary" />}
         >
           <Box
@@ -208,7 +210,7 @@ const TenderForwardersItem = () => {
               variant="contained"
               color="success"
               onClick={handleStartTender}
-              text="Запустить аукцион"
+              text={t("ui.start_auction")}
             />
           )}
           {/* {isNew && (
@@ -224,7 +226,7 @@ const TenderForwardersItem = () => {
             <PrimaryButton
               onClick={handleCancelTender}
               variant="outlined"
-              text="Отменить аукцион"
+              text={t("ui.cancel_auction")}
               color="warning"
             />
           )}
@@ -234,7 +236,7 @@ const TenderForwardersItem = () => {
               variant="outlined"
               onClick={handleDeleteTender}
               color="error"
-              text="Удалить аукцион"
+              text={t("ui.delete_auction")}
             />
           )}
         </Box>

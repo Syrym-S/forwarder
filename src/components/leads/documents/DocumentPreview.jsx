@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 "Нужно удалить потом";
 
 import { Box, Typography } from "@mui/material";
@@ -42,13 +43,14 @@ function hasPreviewUrl(document) {
 }
 
 export function DocumentPreview({ document }) {
+  const { t } = useTranslation();
   if (!document) {
     return null;
   }
 
   if (!hasPreviewUrl(document)) {
     return (
-      <PreviewFallback text="Для этого mock-документа нет файла для предпросмотра" />
+      <PreviewFallback text={t("ui.document_preview_missing")} />
     );
   }
 
@@ -100,7 +102,7 @@ export function DocumentPreview({ document }) {
         <Box
           component="img"
           src={document.fileUrl}
-          alt={document.name || document.fileName || "Документ"}
+          alt={document.name || document.fileName || t("ui.document")}
           sx={{
             maxWidth: "100%",
             height: "auto",
@@ -138,11 +140,12 @@ export function DocumentPreview({ document }) {
   }
 
   return (
-    <PreviewFallback text="Предпросмотр для этого типа файла пока не поддерживается" />
+    <PreviewFallback text={t("ui.file_preview_unsupported")} />
   );
 }
 
 function PreviewFallback({ text }) {
+  useTranslation();
   return (
     <Box
       sx={{

@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { Box, Typography } from "@mui/material";
 
 const InfoBadge = ({
@@ -7,6 +8,7 @@ const InfoBadge = ({
   muted = false,
   sx = {},
 }) => {
+  const { t } = useTranslation();
   return (
     <Box
       sx={{
@@ -42,7 +44,7 @@ const InfoBadge = ({
               : "text.primary",
         }}
       >
-        {value || "Не указано"}
+        {value || t("ui.not_specified_2")}
       </Typography>
     </Box>
   );

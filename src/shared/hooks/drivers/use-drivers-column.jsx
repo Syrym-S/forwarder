@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import Tooltip from "../../ui/action-tooltip";
 import TooltipIconButton from "../../ui/tooltip-icon-button";
 import { Box, Chip, IconButton } from "@mui/material";
@@ -11,6 +12,7 @@ const useDriversColumns = (
   isLinkLoading,
   regeneratingDriverId,
 ) => {
+  const { t } = useTranslation();
   const columns = [
     {
       field: "id",
@@ -29,18 +31,18 @@ const useDriversColumns = (
     },
     {
       field: "fio",
-      headerName: "ФИО",
+      headerName: t("ui.full_name"),
       width: 200,
     },
     {
       field: "in_black_list",
-      headerName: "Статус",
+      headerName: t("ui.status"),
       width: 180,
       type: "boolean",
       renderCell: ({ value }) =>
         value === true ? (
           <Chip
-            label="Заблокирован"
+            label={t("ui.blocked")}
             color="error"
             size="small"
             icon={<BlockOutlinedIcon />}
@@ -54,24 +56,24 @@ const useDriversColumns = (
     },
     {
       field: "iin",
-      headerName: "ИИН",
+      headerName: t("ui.iin"),
       width: 200,
     },
     {
       field: "company_name",
-      headerName: "Компания",
+      headerName: t("ui.company"),
       width: 200,
-      renderCell: ({ row }) => <>{row?.company_name || "Не указан"}</>,
+      renderCell: ({ row }) => <>{row?.company_name || t("ui.not_specified")}</>,
     },
     {
       field: "legal_address",
-      headerName: "Адрес",
+      headerName: t("ui.address"),
       width: 200,
-      renderCell: ({ row }) => <>{row?.legal_address || "Не указан"}</>,
+      renderCell: ({ row }) => <>{row?.legal_address || t("ui.not_specified")}</>,
     },
     {
       field: "invite_link",
-      headerName: "Ссылка",
+      headerName: t("ui.link"),
       width: 100,
       align: "center",
       headerAlign: "center",
@@ -83,7 +85,7 @@ const useDriversColumns = (
       headerClassName: "driver-link-header",
       renderCell: ({ row, hasFocus }) => (
         <TooltipIconButton
-          title="Перегенерировать и скопировать ссылку"
+          title={t("ui.regenerate_and_copy_link")}
           color="primary"
           disabled={isLinkLoading || regeneratingDriverId !== null}
           loading={regeneratingDriverId === row.id}
@@ -99,7 +101,7 @@ const useDriversColumns = (
     },
     {
       field: "actions",
-      headerName: "Действия",
+      headerName: t("ui.actions"),
       width: 110,
       align: "center",
       headerAlign: "center",
@@ -112,8 +114,8 @@ const useDriversColumns = (
       renderCell: ({ row, hasFocus }) => {
         if (row.in_black_list === true) {
           return (
-            <Tooltip title="Водитель заблокирован">
-              <span aria-label="Водитель заблокирован">
+            <Tooltip title={t("ui.driver_blocked")}>
+              <span aria-label={t("ui.driver_blocked")}>
                 <BlockOutlinedIcon
                   color="error"
                   sx={{ fontSize: 25, verticalAlign: "middle" }}
@@ -123,9 +125,9 @@ const useDriversColumns = (
           );
         }
         return (
-          <Tooltip title="Заблокировать водителя">
+          <Tooltip title={t("ui.block_driver")}>
             <IconButton
-              aria-label="Заблокировать водителя"
+              aria-label={t("ui.block_driver")}
               color="primary"
               tabIndex={hasFocus ? 0 : -1}
               onClick={(event) => {

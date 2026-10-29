@@ -1,11 +1,13 @@
+import { useTranslation } from "react-i18next";
 import { Stack, TextField, Typography } from "@mui/material";
 import React from "react";
 import { Controller } from "react-hook-form";
 
 const EditContactPerson = ({ control }) => {
+  const { t } = useTranslation();
   return (
     <Stack spacing={2}>
-      <Typography fontWeight={600}>Контактное лицо</Typography>
+      <Typography fontWeight={600}>{t("ui.contact_person")}</Typography>
 
       <Controller
         control={control}
@@ -13,7 +15,7 @@ const EditContactPerson = ({ control }) => {
         render={({ field }) => (
           <TextField
             {...field}
-            label="ФИО"
+            label={t("ui.full_name")}
             // value={form.companyName}.
             // onChange={handleChange}
             // error={Boolean(errors.companyName)}
@@ -34,7 +36,7 @@ const EditContactPerson = ({ control }) => {
         render={({ field }) => (
           <TextField
             {...field}
-            label="Телефон"
+            label={t("ui.phone_2")}
             // value={form.companyName}.
             // onChange={handleChange}
             // error={Boolean(errors.companyName)}
@@ -76,7 +78,7 @@ const EditContactPerson = ({ control }) => {
         render={({ field }) => (
           <TextField
             {...field}
-            label="ИИН"
+            label={t("ui.iin")}
             // value={form.companyName}.
             // onChange={handleChange}
             // error={Boolean(errors.companyName)}

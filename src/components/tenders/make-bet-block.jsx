@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { moneySpacingFormat } from "../../shared/helpers/money-spacing";
 import {
   Alert,
@@ -19,6 +20,7 @@ import RenderStatus from "../../shared/ui/render-status";
 import ConfirmModal from "../../shared/ui/confirm-modal";
 
 const MakeBetBlock = ({ tender, setShowBetField }) => {
+  const { t } = useTranslation();
   const [openCancelModal, setOpenCancelModal] = useState(false);
 
   const getCustomerTenderDetails = useTendersStore(
@@ -52,7 +54,7 @@ const MakeBetBlock = ({ tender, setShowBetField }) => {
 
   if (isLoading)
     return (
-      <Section title="Ваша ставка" icon={<PaidOutlinedIcon color="primary" />}>
+      <Section title={t("ui.your_bid")} icon={<PaidOutlinedIcon color="primary" />}>
         <Box
           sx={{
             display: "flex",
@@ -66,7 +68,7 @@ const MakeBetBlock = ({ tender, setShowBetField }) => {
     );
 
   return (
-    <Section title="Ваша ставка" icon={<PaidOutlinedIcon color="primary" />}>
+    <Section title={t("ui.your_bid")} icon={<PaidOutlinedIcon color="primary" />}>
       {!isBetExist && (
         <>
           <Button
@@ -74,9 +76,7 @@ const MakeBetBlock = ({ tender, setShowBetField }) => {
             variant="contained"
             color="primary"
             onClick={handleShowBetField}
-          >
-            Сделать ставку
-          </Button>
+          >{t("ui.place_bid")}</Button>
           {!isTenderActive && (
             <Alert
               severity="warning"
@@ -84,9 +84,7 @@ const MakeBetBlock = ({ tender, setShowBetField }) => {
                 fontSize: "0.8rem",
                 my: 1,
               }}
-            >
-              Нельзя делать ставки, пока аукцион не активен
-            </Alert>
+            >{t("ui.inactive_auction_bidding_blocked")}</Alert>
           )}
         </>
       )}
@@ -124,9 +122,7 @@ const MakeBetBlock = ({ tender, setShowBetField }) => {
                           color: "text.secondary",
                           mb: 0.25,
                         }}
-                      >
-                        Комментарий
-                      </Typography>
+                      >{t("ui.comment")}</Typography>
 
                       <Typography
                         sx={{
@@ -163,9 +159,7 @@ const MakeBetBlock = ({ tender, setShowBetField }) => {
                             color: "text.secondary",
                             mb: 0.5,
                           }}
-                        >
-                          Сумма
-                        </Typography>
+                        >{t("ui.amount")}</Typography>
 
                         <Typography
                           sx={{
@@ -192,9 +186,7 @@ const MakeBetBlock = ({ tender, setShowBetField }) => {
                             color: "text.secondary",
                             mb: 0.5,
                           }}
-                        >
-                          Статус
-                        </Typography>
+                        >{t("ui.status")}</Typography>
 
                         <Box
                           sx={{
@@ -224,23 +216,16 @@ const MakeBetBlock = ({ tender, setShowBetField }) => {
                           fontWeight: 500,
                           py: 0.8,
                         }}
-                      >
-                        Отменить ставку
-                      </Button>
+                      >{t("ui.cancel_bid")}</Button>
                     )}
 
                     <ConfirmModal
                       open={openCancelModal}
-                      title="Отмена ставки"
+                      title={t("ui.bid_cancellation")}
                       description={
                         <>
-                          <Typography>
-                            Вы уверены что хотите отменить ставку на этот
-                            аукцион?
-                          </Typography>
-                          <Typography>
-                            Сумма ставки: {moneySpacingFormat(bet.amount)} {bet.currency}
-                          </Typography>
+                          <Typography>{t("ui.cancel_bid_confirmation")}</Typography>
+                          <Typography>{t("ui.bid_amount_value", { value1: moneySpacingFormat(bet.amount), value2: bet.currency })}</Typography>
                         </>
                       }
                       onCancel={handleCloseCancelModal}

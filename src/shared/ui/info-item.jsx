@@ -1,6 +1,8 @@
+import { useTranslation } from "react-i18next";
 import { Box, Typography } from "@mui/material";
 
 const InfoItem = ({ label, value, color }) => {
+  const { t } = useTranslation();
   const isError = color === "error";
 
   return (
@@ -33,7 +35,7 @@ const InfoItem = ({ label, value, color }) => {
           lineHeight: 1.3,
         }}
       >
-        {value ?? "Не указано"}
+        {value ?? t("ui.not_specified_2")}
       </Typography>
     </Box>
   );

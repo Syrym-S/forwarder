@@ -1,10 +1,12 @@
+import { useTranslation } from "react-i18next";
 import { Stack, TextField, Typography } from "@mui/material";
 import { Controller } from "react-hook-form";
 
 const EditPassword = ({ control }) => {
+  const { t } = useTranslation();
   return (
     <Stack spacing={2}>
-      <Typography fontWeight={600}>Смена пароля</Typography>
+      <Typography fontWeight={600}>{t("ui.change_password")}</Typography>
 
       <Controller
         control={control}
@@ -12,7 +14,7 @@ const EditPassword = ({ control }) => {
         render={({ field }) => (
           <TextField
             {...field}
-            label="Текущий пароль"
+            label={t("ui.current_password")}
             type="password"
             // value={form.companyName}.
             // onChange={handleChange}
@@ -34,7 +36,7 @@ const EditPassword = ({ control }) => {
         render={({ field }) => (
           <TextField
             {...field}
-            label="Новый пароль"
+            label={t("ui.new_password")}
             type="password"
             // value={form.companyName}.
             // onChange={handleChange}
@@ -56,7 +58,7 @@ const EditPassword = ({ control }) => {
         render={({ field }) => (
           <TextField
             {...field}
-            label="Повторите новый пароль"
+            label={t("ui.repeat_new_password")}
             type="password"
             // value={form.companyName}.
             // onChange={handleChange}

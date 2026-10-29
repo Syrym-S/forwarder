@@ -1,3 +1,5 @@
+import appI18n from "../../../i18n/index.js";
+import { useTranslation } from "react-i18next";
 import Section from "./lead-detail-section";
 import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 import {
@@ -20,6 +22,7 @@ const LeadDriverInfo = ({
   setRatingLead,
   hideRatingAction = false,
 }) => {
+  const { t } = useTranslation();
   const driver = leadData?.driver;
   const isDriverRated = !!leadData?.driver_rate;
   const driverRate = Number(leadData?.driver_rate);
@@ -45,7 +48,7 @@ const LeadDriverInfo = ({
 
   if (isDriverDetachLoading)
     return (
-      <Section title="Водитель" icon={<PersonOutlinedIcon color="primary" />}>
+      <Section title={t("ui.driver")} icon={<PersonOutlinedIcon color="primary" />}>
         <Box
           sx={{
             display: "flex",
@@ -60,10 +63,10 @@ const LeadDriverInfo = ({
 
   if (!driver?.fio && !driver?.id)
     return (
-      <Section title="Водитель" icon={<PersonOutlinedIcon color="primary" />}>
+      <Section title={t("ui.driver")} icon={<PersonOutlinedIcon color="primary" />}>
         <EmptyInfo
-          label="Водитель не указан"
-          subLabel="Нельзя начать рейс без водителя"
+          label={t("ui.driver_not_specified")}
+          subLabel={t("ui.driver_required_to_start_trip")}
         />
       </Section>
     );
@@ -83,9 +86,7 @@ const LeadDriverInfo = ({
               color: "font_color.heading",
               fontSize: 16,
             }}
-          >
-            Водитель
-          </Typography>
+          >{t("ui.driver")}</Typography>
 
           {!hideRatingAction && !isDriverRated && isFinished && (
             <Button
@@ -94,9 +95,7 @@ const LeadDriverInfo = ({
               color="warning"
               size="small"
               sx={{ ml: 1, textTransform: "none" }}
-            >
-              Оценить водителя
-            </Button>
+            >{t("ui.rate_driver_2")}</Button>
           )}
         </Box>
       }
@@ -107,7 +106,7 @@ const LeadDriverInfo = ({
           color="error"
           variant="outlined"
           onClick={handleDetachDriver}
-          text="Отвязать водителя"
+          text={t("ui.unassign_driver")}
         />
       )}
       <Box
@@ -121,10 +120,10 @@ const LeadDriverInfo = ({
           gap: 1.5,
         }}
       >
-        <InfoItem label={"ID водителя"} value={driver.id} />
-        <InfoItem label={"ФИО"} value={driver.fio} />
+        <InfoItem label={t("ui.driver_id")} value={driver.id} />
+        <InfoItem label={t("ui.full_name")} value={driver.fio} />
         <InfoItem
-          label="Ваш оценка"
+          label={t("ui.your_rating")}
           value={
             hasDriverRate ? (
               <Box
@@ -141,24 +140,24 @@ const LeadDriverInfo = ({
                   precision={0.5}
                   readOnly
                   size="small"
-                  getLabelText={(value) => `${value} из 5`}
+                  getLabelText={(value) => t("ui.rating_out_of_five", { value1: value })}
                 />
                 <Box component="span" sx={{ fontWeight: 600 }}>
-                  {driverRate.toLocaleString("ru-RU")} / 5
+                  {driverRate.toLocaleString(appI18n.resolvedLanguage)} / 5
                 </Box>
               </Box>
             ) : (
-              "Пока нет оценки"
+              t("ui.no_ratings_yet_2")
             )
           }
         />
         {driver.phone && (
-          <InfoItem label={"Номер телефона"} value={driver.phone} />
+          <InfoItem label={t("ui.phone")} value={driver.phone} />
         )}
         {leadData?.driver_rate_comment?.trim() && (
           <Box sx={{ gridColumn: "1 / -1", minWidth: 0 }}>
             <InfoItem
-              label="Комментарий экспедитора"
+              label={t("ui.forwarder_comment")}
               value={
                 <Box
                   component="span"

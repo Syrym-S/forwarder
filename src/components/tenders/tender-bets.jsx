@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import PaidOutlinedIcon from "@mui/icons-material/PaidOutlined";
 import Section from "./tender-section";
 import { Box } from "@mui/material";
@@ -5,6 +6,7 @@ import { BetCard } from "./bet-card";
 import { STATUS } from "../../shared/const/tenders";
 
 const TenderBets = ({ tender }) => {
+  const { t } = useTranslation();
   const bets = tender?.bets?.filter((bet) => bet.status !== "closed") || [];
   const isEmpty = bets.length === 0;
   const isClosed = tender.status === STATUS.closed;
@@ -12,7 +14,7 @@ const TenderBets = ({ tender }) => {
 
   return (
     <Section
-      title={`Ставки · ${bets?.length}`}
+      title={t("ui.bids_count", { value1: bets?.length })}
       icon={<PaidOutlinedIcon color="primary" />}
     >
       <Box
@@ -22,7 +24,7 @@ const TenderBets = ({ tender }) => {
           gap: 1,
         }}
       >
-        {isEmpty && <>Ставок пока что нет</>}
+        {isEmpty && <>{t("ui.no_bids_yet")}</>}
 
         {!isEmpty && (
           <>

@@ -1,3 +1,4 @@
+import appI18n from "../../../i18n/index.js";
 import { create } from "zustand";
 import {
   approveFactoreLineApi,
@@ -53,7 +54,7 @@ export const useFactorStore = create((set) => ({
         regenerateError:
           error.response?.data?.message ||
           error.message ||
-          "Не удалось перегенерировать документ факторинговой линии",
+          appI18n.t("ui.factoring_line_document_regeneration_failed"),
       });
       throw error;
     } finally {

@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { useEffect, useState } from "react";
 import dayjs from "dayjs";
 import { Controller, useWatch } from "react-hook-form";
@@ -10,6 +11,7 @@ import { useTendersStore } from "../../../app/store/tenders/tender-store";
 import { isDraftLead } from "../../../shared/lib/lead-draft";
 
 const ChooseLeadStep = ({ control, setValue, isEdit }) => {
+  const { t } = useTranslation();
   const searchLeadsWithoutDriver = useTendersStore(
     (state) => state.searchLeadsWithoutDriver,
   );
@@ -85,11 +87,11 @@ const ChooseLeadStep = ({ control, setValue, isEdit }) => {
         name="lead"
         control={control}
         rules={{
-          required: "Выбор перевозки обязателен",
+          required: t("ui.lead_selection_required"),
           validate: (value) => {
-            if (isDraftLead(value)) return "Нельзя создать аукцион для черновика";
+            if (isDraftLead(value)) return t("ui.draft_auction_not_allowed");
             return value?.status === STATUS.new ||
-              "Нужно выбрать перевозку без назначенного водителя";
+              t("ui.select_lead_without_driver");
           },
         }}
         render={({ field, fieldState }) => (
@@ -110,7 +112,7 @@ const ChooseLeadStep = ({ control, setValue, isEdit }) => {
             loading={isSearchLoading}
             disabled={isEdit}
             options={isSearchLoading ? [] : leadsWithoutDriver.filter((lead) => !isDraftLead(lead))}
-            noOptionsText="Введите два символа"
+            noOptionsText={t("ui.enter_two_characters")}
             onInputChange={(_, newInputValue, reason) => {
               if (reason === "input") {
                 setInputValue(newInputValue);
@@ -138,8 +140,8 @@ const ChooseLeadStep = ({ control, setValue, isEdit }) => {
             renderInput={(params) => (
               <FormInput
                 {...params}
-                label="Перевозка"
-                placeholder="Выберите перевозку"
+                label={t("ui.lead")}
+                placeholder={t("ui.select_lead")}
                 error={!!fieldState.error}
                 helperText={fieldState.error?.message}
               />
@@ -170,18 +172,18 @@ const ChooseLeadStep = ({ control, setValue, isEdit }) => {
           name="public_date"
           control={control}
           rules={{
-            required: "Выберите дату публикации",
+            required: t("ui.select_publication_date"),
 
             validate: (value) => {
               if (!value) return true;
 
               return (
                 !dayjs(value).isBefore(dayjs(), "day") ||
-                "Дата не может быть раньше сегодняшнего дня"
+                t("ui.date_cannot_be_before_today")
               );
             },
           }}
-          label="Дата публикации"
+          label={t("ui.publication_date")}
           type="date"
           onChange={(event) => {
             if (!event.target.value) return;
@@ -206,7 +208,7 @@ const ChooseLeadStep = ({ control, setValue, isEdit }) => {
           name="public_time"
           control={control}
           rules={{
-            required: "Укажите время публикации",
+            required: t("ui.enter_publication_time"),
 
             validate: (value) => {
               if (!value || !publicDate) return true;
@@ -220,11 +222,11 @@ const ChooseLeadStep = ({ control, setValue, isEdit }) => {
 
               return (
                 !selectedDateTime.isBefore(dayjs(), "minute") ||
-                "Время не может быть раньше текущего"
+                t("ui.time_cannot_be_in_past")
               );
             },
           }}
-          label="Время"
+          label={t("ui.time")}
           type="time"
           fullWidth
           slotProps={{
@@ -257,18 +259,18 @@ const ChooseLeadStep = ({ control, setValue, isEdit }) => {
           name="end_date"
           control={control}
           rules={{
-            required: "Укажите дату окончания",
+            required: t("ui.enter_end_date"),
 
             validate: (value) => {
               if (!value || !publicDate) return true;
 
               return (
                 !dayjs(value).isBefore(dayjs(publicDate), "day") ||
-                "Дата окончания не может быть раньше даты публикации"
+                t("ui.end_date_before_publication")
               );
             },
           }}
-          label="Дата окончания"
+          label={t("ui.end_date")}
           type="date"
           onChange={(event) => {
             if (!event.target.value) return;
@@ -294,7 +296,7 @@ const ChooseLeadStep = ({ control, setValue, isEdit }) => {
           name="end_time"
           control={control}
           rules={{
-            required: "Укажите время окончания",
+            required: t("ui.enter_end_time"),
 
             validate: (value) => {
               if (!value || !endDate || !publicDate || !publicTime) {
@@ -307,11 +309,11 @@ const ChooseLeadStep = ({ control, setValue, isEdit }) => {
 
               return (
                 endDateTime.isAfter(publicationDateTime) ||
-                "Дата и время окончания должны быть позже публикации"
+                t("ui.end_datetime_after_publication")
               );
             },
           }}
-          label="Время"
+          label={t("ui.time")}
           type="time"
           fullWidth
           slotProps={{

@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import Tooltip from "../../shared/ui/action-tooltip";
 import { useState } from "react";
 import {
@@ -12,6 +13,7 @@ import InfoItem from "../../shared/ui/info-item";
 import BlockOutlinedIcon from "@mui/icons-material/BlockOutlined";
 
 const DriverCard = ({ driver, setSelectedDriver, handleBanDriver }) => {
+  const { t } = useTranslation();
   const [isBlockModalOpen, setIsBlockModalOpen] = useState(false);
   const isBlocked = driver.in_black_list === true;
 
@@ -64,9 +66,7 @@ const DriverCard = ({ driver, setSelectedDriver, handleBanDriver }) => {
                 variant="body2"
                 color="text.secondary"
                 sx={{ mb: 0.75 }}
-              >
-                Водитель
-              </Typography>
+              >{t("ui.driver")}</Typography>
 
               <Typography
                 sx={{
@@ -110,16 +110,16 @@ const DriverCard = ({ driver, setSelectedDriver, handleBanDriver }) => {
 
               {isBlocked ? (
                 <Chip
-                  label="Заблокирован"
+                  label={t("ui.blocked")}
                   color="error"
                   size="small"
                   icon={<BlockOutlinedIcon />}
                 />
               ) : (
-              <Tooltip title={"Заблокировать водителя"}>
+              <Tooltip title={t("ui.block_driver")}>
                 <IconButton
                   
-                  aria-label="Заблокировать водителя"
+                  aria-label={t("ui.block_driver")}
                   color="primary"
                   onClick={handleOpenBlockModal}
                 >
@@ -137,9 +137,9 @@ const DriverCard = ({ driver, setSelectedDriver, handleBanDriver }) => {
             gap: 3,
           }}
         >
-          <InfoItem label="Адрес" value={driver?.legal_address} />
+          <InfoItem label={t("ui.address")} value={driver?.legal_address} />
           <InfoItem label="Email" value={driver?.email} />
-          <InfoItem label="ИИН" value={driver?.iin} />
+          <InfoItem label={t("ui.iin")} value={driver?.iin} />
         </Stack>
       </Box>
       {isBlockModalOpen && !isBlocked && (

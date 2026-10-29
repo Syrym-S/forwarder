@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import BusinessOutlinedIcon from "@mui/icons-material/BusinessOutlined";
 import Section from "./lead-detail-section";
 import { Box, CircularProgress } from "@mui/material";
@@ -9,6 +10,7 @@ import PrimaryButton from "../../../shared/ui/button/primary-button";
 import EmptyInfo from "../../../shared/ui/empty/empty-info";
 
 const LeadCustomerInfo = ({ leadData, canDetach = false }) => {
+  const { t } = useTranslation();
   const customer = leadData?.customer;
 
   const createdByCustomer = leadData?.created_by === "customer";
@@ -30,7 +32,7 @@ const LeadCustomerInfo = ({ leadData, canDetach = false }) => {
   if (isCustomerDetachLoading)
     return (
       <Section
-        title="Данные о заказчике"
+        title={t("ui.customer_details_2")}
         icon={<BusinessOutlinedIcon color="primary" />}
       >
         <Box
@@ -48,19 +50,19 @@ const LeadCustomerInfo = ({ leadData, canDetach = false }) => {
   if (!customer?.name)
     return (
       <Section
-        title="Данные о заказчике"
+        title={t("ui.customer_details_2")}
         icon={<BusinessOutlinedIcon color="primary" />}
       >
         <EmptyInfo
-          label="Заказчик не указан"
-          subLabel="Нельзя начать рейс без заказчика"
+          label={t("ui.customer_not_specified")}
+          subLabel={t("ui.customer_required_to_start_trip")}
         />
       </Section>
     );
 
   return (
     <Section
-      title="Данные о заказчике"
+      title={t("ui.customer_details_2")}
       icon={<BusinessOutlinedIcon color="primary" />}
     >
       {(isAddDriverStatus || isNewStatus) && canDetach && (
@@ -69,7 +71,7 @@ const LeadCustomerInfo = ({ leadData, canDetach = false }) => {
           disabled={createdByCustomer}
           variant="outlined"
           onClick={handleDetachCustomer}
-          text={"Отвязать заказчика"}
+          text={t("ui.unassign_customer")}
         />
       )}
       <Box
@@ -83,10 +85,10 @@ const LeadCustomerInfo = ({ leadData, canDetach = false }) => {
           },
         }}
       >
-        <InfoItem label={"Имя"} value={customer.name} />
-        <InfoItem label={"Номер телефона"} value={customer.tel} />
-        <InfoItem label={"БИН"} value={customer.bin} />
-        <InfoItem label={"Контактное лицо"} value={customer.contact_person} />
+        <InfoItem label={t("ui.name")} value={customer.name} />
+        <InfoItem label={t("ui.phone")} value={customer.tel} />
+        <InfoItem label={t("ui.bin")} value={customer.bin} />
+        <InfoItem label={t("ui.contact_person")} value={customer.contact_person} />
       </Box>
     </Section>
   );

@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { useEffect, useState } from "react";
 import { useCustomerStore } from "../../app/store/customers/customers-store";
 import { VIEWS } from "../../shared/const/leads";
@@ -9,6 +10,7 @@ import CustomerCard from "./customer-card";
 import CustomerDetailsModal from "./customer-details-modal";
 
 const CustomerListContainer = ({ view }) => {
+  const { t } = useTranslation();
   const [selectedCustomer, setSelectedCustomer] = useState(null);
   const [page, setPage] = useState(1);
   const [_, setSearchParams] = useSearchParams();
@@ -89,9 +91,7 @@ const CustomerListContainer = ({ view }) => {
                 },
                 my: 1,
               }}
-            >
-              Список заказчиков пуст
-            </Alert>
+            >{t("ui.customer_list_empty")}</Alert>
           ) : (
             customers.map((customer) => (
               <>

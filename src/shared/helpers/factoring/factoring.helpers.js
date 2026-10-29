@@ -1,9 +1,10 @@
+import appI18n from "../../../i18n/index.js";
 export function formatMoney(amount, currency = "KZT") {
   if (amount === null || amount === undefined || amount === "") {
-    return "Не указано";
+    return appI18n.t("ui.not_specified_2");
   }
 
-  return `${Number(amount).toLocaleString("ru-RU")} ${currency || "KZT"}`;
+  return `${Number(amount).toLocaleString(appI18n.resolvedLanguage)} ${currency || "KZT"}`;
 }
 
 export function normalizeLeadsResponse(response) {
@@ -32,7 +33,7 @@ export function isFinishedLead(lead) {
 
 export function formatPercent(value) {
   if (value === null || value === undefined || value === "") {
-    return "Не указано";
+    return appI18n.t("ui.not_specified_2");
   }
 
   return `${(Number(value) * 100).toFixed(1)}%`;
@@ -40,7 +41,7 @@ export function formatPercent(value) {
 
 export function formatDate(value) {
   if (!value) {
-    return "Не указано";
+    return appI18n.t("ui.not_specified_2");
   }
 
   let dateValue = value;
@@ -50,7 +51,7 @@ export function formatDate(value) {
       value.date || value.datetime || value.value || value.created_at || "";
 
     if (!dateValue) {
-      return "Не указано";
+      return appI18n.t("ui.not_specified_2");
     }
   }
 
@@ -60,10 +61,10 @@ export function formatDate(value) {
   const date = new Date(normalizedDateValue);
 
   if (Number.isNaN(date.getTime())) {
-    return String(dateValue || "Не указано");
+    return String(dateValue || appI18n.t("ui.not_specified_2"));
   }
 
-  return date.toLocaleString("ru-RU", {
+  return date.toLocaleString(appI18n.resolvedLanguage, {
     year: "numeric",
     month: "2-digit",
     day: "2-digit",
@@ -74,14 +75,14 @@ export function formatDate(value) {
 
 export function getFactoringStatusLabel(status) {
   const labels = {
-    new: "Новый",
-    verified_participant: "Один участник подтвердил",
-    await_paid: "Ожидает оплаты",
-    finished: "Завершён",
-    cancelled: "Отменён",
+    new: appI18n.t("ui.new_4"),
+    verified_participant: appI18n.t("ui.one_participant_confirmed"),
+    await_paid: appI18n.t("ui.awaiting_payment"),
+    finished: appI18n.t("ui.completed_2"),
+    cancelled: appI18n.t("ui.cancelled"),
   };
 
-  return labels[status] || status || "Не указано";
+  return labels[status] || status || appI18n.t("ui.not_specified_2");
 }
 
 export function getFactoringStatusColor(status) {
@@ -97,7 +98,7 @@ export function getFactoringStatusColor(status) {
 }
 
 export function getVerificationLabel(value) {
-  return value ? "Подтверждено" : "Не подтверждено";
+  return value ? appI18n.t("ui.confirmed") : appI18n.t("ui.not_confirmed");
 }
 
 export function getVerificationColor(value) {

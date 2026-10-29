@@ -1,7 +1,9 @@
+import { useTranslation } from "react-i18next";
 import { Box, Chip, Stack, Typography } from "@mui/material";
 import RenderStatus from "../../shared/ui/render-status";
 
 const FactoringDetailsHeading = ({ factoring }) => {
+  const { t } = useTranslation();
   return (
     <Box
       sx={{
@@ -33,9 +35,7 @@ const FactoringDetailsHeading = ({ factoring }) => {
               fontSize: 22,
               color: "font_color.heading",
             }}
-          >
-            Информация о факторинге
-          </Typography>
+          >{t("ui.factoring_information")}</Typography>
 
           <Typography
             sx={{
@@ -43,9 +43,7 @@ const FactoringDetailsHeading = ({ factoring }) => {
               fontWeight: 500,
               fontSize: 15,
             }}
-          >
-            Подробные данные
-          </Typography>
+          >{t("ui.detailed_information")}</Typography>
         </Stack>
       </Box>
 
@@ -63,7 +61,7 @@ const FactoringDetailsHeading = ({ factoring }) => {
         }}
       >
         <Chip
-          label={`Факторинг #${factoring?.id}`}
+          label={t("ui.factoring_number", { value1: factoring?.id })}
           color="primary"
           variant="outlined"
         />

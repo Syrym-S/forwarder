@@ -1,3 +1,5 @@
+import appI18n from "../../i18n/index.js";
+import { useTranslation } from "react-i18next";
 import {
   Autocomplete,
   Box,
@@ -19,8 +21,8 @@ import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import BusinessOutlinedIcon from "@mui/icons-material/BusinessOutlined";
 
 const ORGANIZATION_TYPES = [
-  { label: "ТОО", value: "ТОО" },
-  { label: "ИП", value: "ИП" },
+  { get label() { return appI18n.t("ui.limited_liability_partnership"); }, value: "ТОО" },
+  { get label() { return appI18n.t("ui.individual_entrepreneur_2"); }, value: "ИП" },
 ];
 
 const defaultValues = {
@@ -58,6 +60,7 @@ const sectionTitleSx = {
 };
 
 const AddCustomerForm = ({ open, handleClose }) => {
+  const { t } = useTranslation();
   const createCustomer = useCustomerStore((state) => state.createCustomer);
 
   const { control, handleSubmit, formState: { isSubmitting } } = useForm({
@@ -101,14 +104,10 @@ const AddCustomerForm = ({ open, handleClose }) => {
           <BusinessOutlinedIcon />
         </Box>
         <Box sx={{ flex: 1 }}>
-          <Typography id="customer-form-title" component="h2" sx={{ fontSize: 20, fontWeight: 600, color: "font_color.heading" }}>
-            Приглашение заказчика
-          </Typography>
-          <Typography sx={{ mt: 0.5, fontSize: 13, color: "text.secondary" }}>
-            Заполните данные компании и контактного лица
-          </Typography>
+          <Typography id="customer-form-title" component="h2" sx={{ fontSize: 20, fontWeight: 600, color: "font_color.heading" }}>{t("ui.customer_invitation")}</Typography>
+          <Typography sx={{ mt: 0.5, fontSize: 13, color: "text.secondary" }}>{t("ui.fill_company_contact_details")}</Typography>
         </Box>
-        <TooltipIconButton title="Закрыть форму" aria-label="Закрыть форму" onClick={handleClose} disabled={isSubmitting}>
+        <TooltipIconButton title={t("ui.close_form")} aria-label={t("ui.close_form")} onClick={handleClose} disabled={isSubmitting}>
           <CloseRoundedIcon />
         </TooltipIconButton>
       </DialogTitle>
@@ -123,9 +122,7 @@ const AddCustomerForm = ({ open, handleClose }) => {
               gap: 2,
             }}
           >
-            <Typography component="h3" sx={{ ...sectionTitleSx, gridColumn: "1 / -1", mb: 0 }}>
-              Информация о компании
-            </Typography>
+            <Typography component="h3" sx={{ ...sectionTitleSx, gridColumn: "1 / -1", mb: 0 }}>{t("ui.company_information")}</Typography>
 
             <Controller
               name="full_name"
@@ -135,7 +132,7 @@ const AddCustomerForm = ({ open, handleClose }) => {
                   {...field}
                   size="small"
                   fullWidth
-                  label="Название компании"
+                  label={t("ui.company_name")}
                   error={!!fieldState.error}
                   helperText={fieldState.error?.message}
                 />
@@ -158,7 +155,7 @@ const AddCustomerForm = ({ open, handleClose }) => {
                     <TextField
                       {...params}
                       size="small"
-                      label="Тип организации"
+                      label={t("ui.organization_type")}
                       error={!!fieldState.error}
                       helperText={fieldState.error?.message}
                     />
@@ -174,7 +171,7 @@ const AddCustomerForm = ({ open, handleClose }) => {
                   {...field}
                   size="small"
                   fullWidth
-                  label="БИН"
+                  label={t("ui.bin")}
                   error={!!fieldState.error}
                   helperText={fieldState.error?.message}
                 />
@@ -189,7 +186,7 @@ const AddCustomerForm = ({ open, handleClose }) => {
                   {...field}
                   size="small"
                   fullWidth
-                  label="Юридический адрес"
+                  label={t("ui.registered_address")}
                   error={!!fieldState.error}
                   helperText={fieldState.error?.message}
                 />
@@ -204,7 +201,7 @@ const AddCustomerForm = ({ open, handleClose }) => {
                   {...field}
                   size="small"
                   fullWidth
-                  label="БИК"
+                  label={t("ui.bic")}
                   error={!!fieldState.error}
                   helperText={fieldState.error?.message}
                 />
@@ -219,7 +216,7 @@ const AddCustomerForm = ({ open, handleClose }) => {
                   size="small"
                   {...field}
                   fullWidth
-                  label="Расчетный счет"
+                  label={t("ui.current_account_2")}
                   error={!!fieldState.error}
                   helperText={fieldState.error?.message}
                 />
@@ -234,7 +231,7 @@ const AddCustomerForm = ({ open, handleClose }) => {
                   size="small"
                   {...field}
                   fullWidth
-                  label="Банк"
+                  label={t("ui.bank")}
                   error={!!fieldState.error}
                   helperText={fieldState.error?.message}
                 />
@@ -243,9 +240,7 @@ const AddCustomerForm = ({ open, handleClose }) => {
           </Box>
 
           <Box sx={sectionSx}>
-            <Typography component="h3" sx={sectionTitleSx}>
-              Контактное лицо
-            </Typography>
+            <Typography component="h3" sx={sectionTitleSx}>{t("ui.contact_person")}</Typography>
 
             <Grid container spacing={2}>
               <Grid size={{ xs: 12 }}>
@@ -257,7 +252,7 @@ const AddCustomerForm = ({ open, handleClose }) => {
                       size="small"
                       {...field}
                       fullWidth
-                      label="ФИО"
+                      label={t("ui.full_name")}
                       error={!!fieldState.error}
                       helperText={fieldState.error?.message}
                     />
@@ -274,7 +269,7 @@ const AddCustomerForm = ({ open, handleClose }) => {
                       {...field}
                       fullWidth
                       size="small"
-                      label="Номер телефона"
+                      label={t("ui.phone")}
                       error={!!fieldState.error}
                       helperText={fieldState.error?.message}
                       slotProps={{
@@ -320,7 +315,7 @@ const AddCustomerForm = ({ open, handleClose }) => {
                       {...field}
                       fullWidth
                       size="small"
-                      label="ИИН"
+                      label={t("ui.iin")}
                       error={!!fieldState.error}
                       helperText={fieldState.error?.message}
                     />
@@ -337,7 +332,7 @@ const AddCustomerForm = ({ open, handleClose }) => {
                       fullWidth
                       size="small"
                       type="date"
-                      label="Дата выдачи документа"
+                      label={t("ui.document_issue_date")}
                       error={!!fieldState.error}
                       helperText={fieldState.error?.message}
                       slotProps={{ inputLabel: { shrink: true } }}
@@ -354,7 +349,7 @@ const AddCustomerForm = ({ open, handleClose }) => {
                       {...field}
                       fullWidth
                       size="small"
-                      label="Кем выдан документ"
+                      label={t("ui.document_issued_by")}
                       error={!!fieldState.error}
                       helperText={fieldState.error?.message}
                     />
@@ -367,13 +362,13 @@ const AddCustomerForm = ({ open, handleClose }) => {
       </DialogContent>
 
       <DialogActions sx={{ px: { xs: 2, sm: 3 }, py: 2, gap: 1 }}>
-        <PrimaryButton variant="outlined" onClick={handleClose} text="Отмена" disabled={isSubmitting} />
+        <PrimaryButton variant="outlined" onClick={handleClose} text={t("ui.cancel")} disabled={isSubmitting} />
 
         <PrimaryButton
           type="submit"
           form="customer-form"
           disabled={isSubmitting}
-          text={isSubmitting ? "Создание…" : "Создать приглашение"}
+          text={isSubmitting ? t("ui.creating") : t("ui.create_invitation")}
         />
       </DialogActions>
     </Dialog>

@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import React, { useEffect, useState } from "react";
 import RootLayout from "../../../components/layout/root-layout";
 import { useParams } from "react-router-dom";
@@ -30,6 +31,7 @@ import { moneySpacingFormat } from "../../../shared/helpers/money-spacing";
 import PrimaryButton from "../../../shared/ui/button/primary-button";
 
 const FactorItem = () => {
+  const { t } = useTranslation();
   const { id } = useParams();
 
   const [openModal, setOpenModal] = useState(false);
@@ -95,7 +97,7 @@ const FactorItem = () => {
         severity: "error",
         message:
           error.response?.data?.message ||
-          "Не удалось перегенерировать документ. Попробуйте ещё раз.",
+          t("ui.document_regeneration_failed_retry"),
       });
       return;
     }
@@ -104,8 +106,8 @@ const FactorItem = () => {
     setRegenerateFeedback({
       severity: refreshed ? "success" : "warning",
       message: refreshed
-        ? "Документ факторинговой линии перегенерирован. Можно перейти к подписанию."
-        : "Документ перегенерирован, но не удалось обновить данные. Обновите страницу.",
+        ? t("ui.factoring_line_document_regenerated")
+        : t("ui.document_regenerated_refresh_failed"),
     });
   };
 
@@ -147,17 +149,13 @@ const FactorItem = () => {
                 fontSize: "1.5rem",
                 сolor: "font_color.heading",
               }}
-            >
-              Информация о факторинговой линии
-            </Typography>
+            >{t("ui.factoring_line_information")}</Typography>
 
             <Typography
               sx={{
                 color: "color.slate",
               }}
-            >
-              Подробные данные по заявке
-            </Typography>
+            >{t("ui.request_detailed_information")}</Typography>
           </Stack>
         </Box>
         <Box
@@ -179,7 +177,7 @@ const FactorItem = () => {
           spacing={1}
         >
           <Chip
-            label={`Линия #${factoringLineDetails?.id}`}
+            label={t("ui.line_number", { value1: factoringLineDetails?.id })}
             color="primary"
             variant="outlined"
           />
@@ -204,7 +202,7 @@ const FactorItem = () => {
 
       <Section
         icon={<RememberMeOutlinedIcon color="primary" />}
-        title={"Данные Фактора"}
+        title={t("ui.factor_details")}
       >
         <FactorDataTable factor={factoringLineDetails?.factor} />
       </Section>
@@ -212,14 +210,14 @@ const FactorItem = () => {
       {canBeApproved && (
         <Section
           icon={<RememberMeOutlinedIcon color="primary" />}
-          title={"Подтверждение"}
+          title={t("ui.confirmation")}
         >
           <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1.5 }}>
             <PrimaryButton
               onClick={handleOpenModal}
               variant="outlined"
               disabled={isApproveLoading || isRegenerateLoading || isLoading}
-              text="Подтвердить"
+              text={t("ui.confirm")}
             />
             <PrimaryButton
               onClick={handleRegenerateFactoringLine}
@@ -228,8 +226,8 @@ const FactorItem = () => {
               disabled={isApproveLoading || isLoading}
               text={
                 isRegenerateLoading
-                  ? "Перегенерация..."
-                  : "Перегенерировать документ"
+                  ? t("ui.regenerating_document")
+                  : t("ui.regenerate_document")
               }
             />
           </Box>
@@ -245,8 +243,8 @@ const FactorItem = () => {
       {openModal && (
         <ConfirmModal
           open={openModal}
-          title="Подтверждение факторинговой линии"
-          description="Вы уверены что хотите подтвердить линию?"
+          title={t("ui.factoring_line_confirmation")}
+          description={t("ui.confirm_factoring_line_question")}
           onCancel={handleCloseModal}
           onConfirm={handleApproveFactoringLine}
           isLoading={isApproveLoading}
@@ -255,7 +253,7 @@ const FactorItem = () => {
 
       <Section
         icon={<ShowChartOutlinedIcon color="primary" />}
-        title={"Прогресс"}
+        title={t("ui.progress")}
       >
         <Stack
           spacing={0.5}
@@ -277,9 +275,7 @@ const FactorItem = () => {
                   color: "#1a1a1a",
                   fontSize: "1rem",
                 }}
-              >
-                Использовано
-              </Typography>
+              >{t("ui.used")}</Typography>
               <Typography
                 variant="body2"
                 color="text.secondary"
@@ -301,9 +297,7 @@ const FactorItem = () => {
                   color: "#1a1a1a",
                   fontSize: "1rem",
                 }}
-              >
-                Свободно
-              </Typography>
+              >{t("ui.available")}</Typography>
               <Typography
                 variant="body2"
                 color="text.secondary"
@@ -338,7 +332,7 @@ const FactorItem = () => {
 
       <Section
         icon={<HandshakeIcon color="primary" />}
-        title={"Условия факторинга"}
+        title={t("ui.factoring_terms")}
       >
         <Box
           sx={{
@@ -351,11 +345,11 @@ const FactorItem = () => {
           }}
         >
           <InfoBadge
-            label="Сумма линии"
+            label={t("ui.line_amount")}
             value={`${moneySpacingFormat(factoringLineDetails?.summ_max || 0)} ${factoringLineDetails?.currency}`}
           />
           <InfoBadge
-            label="Период"
+            label={t("ui.period_2")}
             value={`${dayjs(factoringLineDetails?.period_start?.date).format(
               "DD.MM.YYYY",
             )} - ${dayjs(factoringLineDetails?.period_end?.date).format(
@@ -363,15 +357,15 @@ const FactorItem = () => {
             )}`}
           />
           <InfoBadge
-            label="Срок дней"
+            label={t("ui.term")}
             value={factoringLineDetails?.period_days}
           />
-          <InfoBadge label="Валюта" value={factoringLineDetails?.currency} />
+          <InfoBadge label={t("ui.currency")} value={factoringLineDetails?.currency} />
         </Box>
       </Section>
 
       <Section
-        title="Покупки"
+        title={t("ui.purchases")}
         icon={<ShoppingCartOutlinedIcon color="primary" />}
       >
         {isPurchasesEmpty && (
@@ -381,9 +375,7 @@ const FactorItem = () => {
               width: "100%",
               my: 1,
             }}
-          >
-            Список покупок пуст
-          </Alert>
+          >{t("ui.purchase_list_empty")}</Alert>
         )}
 
         <Box

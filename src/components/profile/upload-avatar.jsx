@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import TooltipIconButton from "../../shared/ui/tooltip-icon-button";
 import {
   Box,
@@ -16,6 +17,7 @@ const UploadAvatar = ({
   formValues,
   handleClearAvatar,
 }) => {
+  const { t } = useTranslation();
   const isProfileLoading = useProfileStore((state) => state.isProfileLoading);
   const isAvatarLoading = useProfileStore((state) => state.isAvatarLoading);
   const avatar = isAvatarRemoved ? null : formValues?.avatar;
@@ -28,7 +30,7 @@ const UploadAvatar = ({
         alignItems: "center",
       }}
     >
-      <TooltipIconButton title="Фото профиля" aria-label="Фото профиля">
+      <TooltipIconButton title={t("ui.profile_photo")} aria-label={t("ui.profile_photo")}>
         {isAvatarLoading || isProfileLoading ? (
           <Box
             sx={{
@@ -54,7 +56,7 @@ const UploadAvatar = ({
         ) : (
           <Box
             component="img"
-            alt="Фото профиля"
+            alt={t("ui.profile_photo")}
             sx={{
               display: "block",
               borderRadius: "100%",
@@ -78,8 +80,8 @@ const UploadAvatar = ({
           gap: 1,
         }}
       >
-        <Typography>Фото профиля</Typography>
-        <Typography>PNG или JPEG, размер от 400x400 до 600x600 px</Typography>
+        <Typography>{t("ui.profile_photo")}</Typography>
+        <Typography>{t("ui.profile_photo_format_hint")}</Typography>
         <Box
           sx={{
             display: "flex",
@@ -100,9 +102,7 @@ const UploadAvatar = ({
                 md: "auto",
               },
             }}
-          >
-            Загрузить фото
-            <input
+          >{t("ui.upload_photo")}<input
               name="file"
               type="file"
               hidden
@@ -115,9 +115,7 @@ const UploadAvatar = ({
               color="error"
               variant="outlined"
               onClick={handleClearAvatar}
-            >
-              Удалить
-            </Button>
+            >{t("ui.delete")}</Button>
           )}
         </Box>
       </Box>

@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import {
   Box,
   Button,
@@ -9,6 +10,7 @@ import {
 import { useState } from "react";
 
 const ShareLeadLinkModal = ({ open, link, expiresAt, onClose, onNavigate }) => {
+  const { t } = useTranslation();
   const [isCopied, setIsCopied] = useState(false);
 
   const handleCopy = async () => {
@@ -61,9 +63,7 @@ const ShareLeadLinkModal = ({ open, link, expiresAt, onClose, onNavigate }) => {
             color: "#1E293B",
             mb: 2,
           }}
-        >
-          Ссылка на перевозку
-        </Typography>
+        >{t("ui.lead_link")}</Typography>
 
         <Typography
           sx={{
@@ -71,9 +71,7 @@ const ShareLeadLinkModal = ({ open, link, expiresAt, onClose, onNavigate }) => {
             color: "#64748B",
             mb: 2,
           }}
-        >
-          Любой, у кого есть эта ссылка, сможет просмотреть информацию о перевозке.
-        </Typography>
+        >{t("ui.lead_link_access_hint")}</Typography>
 
         <TextField
           value={link}
@@ -100,9 +98,7 @@ const ShareLeadLinkModal = ({ open, link, expiresAt, onClose, onNavigate }) => {
             fontSize: "13px",
             color: "#1E293B",
           }}
-        >
-          Ссылка действительна до {expiresAt}
-        </Typography>
+        >{t("ui.link_expiry", { value1: expiresAt })}</Typography>
 
         <Box
           sx={{
@@ -122,9 +118,7 @@ const ShareLeadLinkModal = ({ open, link, expiresAt, onClose, onNavigate }) => {
               fontWeight: 600,
               color: "#1557C9",
             }}
-          >
-            Закрыть
-          </Button>
+          >{t("ui.close")}</Button>
 
           <Button
             variant="outlined"
@@ -142,7 +136,7 @@ const ShareLeadLinkModal = ({ open, link, expiresAt, onClose, onNavigate }) => {
               minWidth: "125px",
             }}
           >
-            {isCopied ? "Скопировано" : "Скопировать"}
+            {isCopied ? t("ui.copied") : t("ui.copy_2")}
           </Button>
           <Button
             variant="contained"
@@ -162,9 +156,7 @@ const ShareLeadLinkModal = ({ open, link, expiresAt, onClose, onNavigate }) => {
                 backgroundColor: "#174FAE",
               },
             }}
-          >
-            Перейти
-          </Button>
+          >{t("ui.go_to")}</Button>
         </Box>
       </DialogContent>
     </Dialog>

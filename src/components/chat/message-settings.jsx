@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { ListItemIcon, Menu, MenuItem } from "@mui/material";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import ModeEditOutlineOutlinedIcon from "@mui/icons-material/ModeEditOutlineOutlined";
@@ -8,6 +9,7 @@ const MessageSettings = ({
   contextMenu,
   handleCloseContextMenu,
 }) => {
+  const { t } = useTranslation();
   return (
     <Menu
       open={contextMenu !== null}
@@ -34,9 +36,7 @@ const MessageSettings = ({
       <MenuItem onClick={handleEdit}>
         <ListItemIcon>
           <ModeEditOutlineOutlinedIcon fontSize="small" />
-        </ListItemIcon>
-        Редактировать
-      </MenuItem>
+        </ListItemIcon>{t("ui.edit")}</MenuItem>
 
       <MenuItem
         onClick={handleDelete}
@@ -49,9 +49,7 @@ const MessageSettings = ({
             fontSize="small"
             sx={{ color: "error.main" }}
           />
-        </ListItemIcon>
-        Удалить
-      </MenuItem>
+        </ListItemIcon>{t("ui.delete")}</MenuItem>
     </Menu>
   );
 };

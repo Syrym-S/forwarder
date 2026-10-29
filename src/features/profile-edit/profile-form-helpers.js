@@ -1,3 +1,4 @@
+import appI18n from "../../i18n/index.js";
 export const initialProfileForm = {
   companyName: "",
   companyBin: "",
@@ -137,55 +138,55 @@ export function validateProfileForm(form) {
     currentPassword || newPassword || newPasswordConfirm;
 
   if (companyName && (companyName.length < 2 || companyName.length > 100)) {
-    errors.companyName = "От 2 до 100 символов";
+    errors.companyName = appI18n.t("ui.length_two_to_one_hundred");
   }
 
   if (companyBin && !/^\d{12}$/.test(companyBin)) {
-    errors.companyBin = "БИН должен содержать 12 цифр";
+    errors.companyBin = appI18n.t("ui.bin_twelve_digits");
   }
 
   if (
     companyAddress &&
     (companyAddress.length < 2 || companyAddress.length > 255)
   ) {
-    errors.companyAddress = "От 2 до 255 символов";
+    errors.companyAddress = appI18n.t("ui.length_two_to_two_hundred_fifty_five");
   }
 
   if (companyAccount && !/^KZ[A-Z0-9]{18}$/i.test(companyAccount)) {
-    errors.companyAccount = "Формат: KZ + 18 символов";
+    errors.companyAccount = appI18n.t("ui.iban_format_hint");
   }
 
   if (companyBik && companyBik.length !== 8) {
-    errors.companyBik = "БИК должен содержать 8 символов";
+    errors.companyBik = appI18n.t("ui.bic_eight_characters");
   }
 
   if (personEmail && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(personEmail)) {
-    errors.personEmail = "Некорректный email";
+    errors.personEmail = appI18n.t("ui.invalid_email");
   }
 
   if (personIin && !/^\d{12}$/.test(personIin)) {
-    errors.personIin = "ИИН должен содержать 12 цифр";
+    errors.personIin = appI18n.t("ui.iin_twelve_digits");
   }
 
   if (personIssueCountry && !/^[A-Z]{2}$/.test(personIssueCountry)) {
-    errors.personIssueCountry = "Введите 2 буквы, например KZ";
+    errors.personIssueCountry = appI18n.t("ui.country_code_hint");
   }
 
   if (wantsPasswordChange) {
     if (!currentPassword) {
-      errors.currentPassword = "Введите текущий пароль";
+      errors.currentPassword = appI18n.t("ui.enter_current_password");
     }
 
     if (!newPassword) {
-      errors.newPassword = "Введите новый пароль";
+      errors.newPassword = appI18n.t("ui.enter_new_password");
     } else if (newPassword.length < 6) {
-      errors.newPassword = "Минимум 6 символов";
+      errors.newPassword = appI18n.t("ui.minimum_six_characters");
     }
 
     if (!newPasswordConfirm) {
-      errors.newPasswordConfirm = "Повторите новый пароль";
+      errors.newPasswordConfirm = appI18n.t("ui.repeat_new_password");
     } else if (newPasswordConfirm !== newPassword) {
-      errors.newPasswordConfirm = "Пароли не совпадают";
+      errors.newPasswordConfirm = appI18n.t("ui.passwords_do_not_match");
     }
   }
 

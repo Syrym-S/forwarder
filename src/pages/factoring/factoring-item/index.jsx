@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { moneySpacingFormat } from "../../../shared/helpers/money-spacing";
 import RootLayout from "../../../components/layout/root-layout";
 import FactoringDetailsHeading from "../../../components/factoring/factoring-details-heading";
@@ -29,6 +30,7 @@ import CustomerDataTable from "../../../components/factoring/customer-data-table
 import LeadTransportationInfo from "../../../components/leads/lead-item/lead-transportation-info";
 
 const FactoringItem = () => {
+  const { t } = useTranslation();
   const { id } = useParams();
 
   const features = window.APP_DATA?.features || {};
@@ -93,7 +95,7 @@ const FactoringItem = () => {
         severity: "error",
         message:
           error.response?.data?.message ||
-          "Не удалось перегенерировать документ. Попробуйте ещё раз.",
+          t("ui.document_regeneration_failed_retry"),
       });
       return;
     }
@@ -102,13 +104,13 @@ const FactoringItem = () => {
       await getFactoringDetails(id);
       setRegenerateFeedback({
         severity: "success",
-        message: "Документ перегенерирован. Можно перейти к подписанию.",
+        message: t("ui.document_regenerated"),
       });
     } catch {
       setRegenerateFeedback({
         severity: "warning",
         message:
-          "Документ перегенерирован, но не удалось обновить данные. Обновите страницу.",
+          t("ui.document_regenerated_refresh_failed"),
       });
     }
   };
@@ -186,20 +188,14 @@ const FactoringItem = () => {
 
         {/* {(factoringDetails?.verified_forwarder || isMustSignDocument) && ( */}
         <Section
-          title="Подтвердить факторинг"
+          title={t("ui.confirm_factoring")}
           icon={<DescriptionOutlinedIcon color="primary" />}
         >
           {factoringDetails?.verified_forwarder ? (
-            <Alert severity="success" sx={{ borderRadius: 2 }}>
-              Вы подписали договор!
-            </Alert>
+            <Alert severity="success" sx={{ borderRadius: 2 }}>{t("ui.contract_signed_success")}</Alert>
           ) : (
             <>
-              <Typography sx={{ mb: 2, color: "text.secondary", fontSize: 14 }}>
-                Подпишите договор для подтверждения факторинга. При
-                необходимости вы можете перегенерировать документ перед
-                подписанием.
-              </Typography>
+              <Typography sx={{ mb: 2, color: "text.secondary", fontSize: 14 }}>{t("ui.factoring_contract_signing_hint")}</Typography>
               <Box
                 sx={{
                   display: "flex",
@@ -216,7 +212,7 @@ const FactoringItem = () => {
                   }
                   onClick={handleAcceptFactoring}
                   text={
-                    isConfirmLoading ? "Идёт подтверждение..." : "Подтвердить"
+                    isConfirmLoading ? t("ui.confirmation_in_progress_3") : t("ui.confirm")
                   }
                 />
                 <PrimaryButton
@@ -227,8 +223,8 @@ const FactoringItem = () => {
                   onClick={handleRegenerateFactoring}
                   text={
                     isRegenerateLoading
-                      ? "Перегенерация..."
-                      : "Перегенерировать документ"
+                      ? t("ui.regenerating_document")
+                      : t("ui.regenerate_document")
                   }
                 />
               </Box>
@@ -249,7 +245,7 @@ const FactoringItem = () => {
         <LeadTransportationInfo leadData={currentLead} />
 
         <Section
-          title={`Подтверждение оплаты`}
+          title={t("ui.payment_confirmation")}
           icon={<RequestQuoteOutlinedIcon color="primary" />}
         >
           {canBeApproved && (
@@ -260,7 +256,7 @@ const FactoringItem = () => {
               sx={{
                 my: 1,
               }}
-              text="Подтвердить оплату со стороны экспедитора"
+              text={t("ui.confirm_forwarder_payment")}
             />
           )}
 
@@ -275,29 +271,29 @@ const FactoringItem = () => {
             }}
           >
             <InfoItem
-              label={"Подтверждение оплаты Экспедитором от Фактора"}
+              label={t("ui.forwarder_confirms_factor_payment")}
               value={
                 <Chip
                   size="small"
                   color={factoringDetails.await_paid_ff ? "success" : "default"}
                   label={
                     factoringDetails.await_paid_ff
-                      ? "Подтверждено"
-                      : "Не подтверждено"
+                      ? t("ui.confirmed")
+                      : t("ui.not_confirmed")
                   }
                 />
               }
             />
             <InfoItem
-              label={"Подтверждение оплаты Фактором от Заказчика"}
+              label={t("ui.factor_confirms_customer_payment")}
               value={
                 <Chip
                   size="small"
                   color={factoringDetails.await_paid_cf ? "success" : "default"}
                   label={
                     factoringDetails.await_paid_cf
-                      ? "Подтверждено"
-                      : "Не подтверждено"
+                      ? t("ui.confirmed")
+                      : t("ui.not_confirmed")
                   }
                 />
               }
@@ -308,14 +304,14 @@ const FactoringItem = () => {
             <ConfirmModal
               open={openConfirmModal}
               onClose={handleCloseModal}
-              text={`Вы действительно хотите подтвердить факторинг на сумму ${moneySpacingFormat(currentLead?.price)} ${currentLead?.currency}`}
+              text={t("ui.confirm_factoring_amount", { value1: moneySpacingFormat(currentLead?.price), value2: currentLead?.currency })}
               onConfirm={handleApprovePaiment}
             />
           )}
         </Section>
 
         <Section
-          title={`Груз`}
+          title={t("ui.cargo")}
           icon={<LocalShippingOutlinedIcon color="primary" />}
         >
           <Box
@@ -353,21 +349,21 @@ const FactoringItem = () => {
         >
           <Section
             icon={<AccountCircleOutlinedIcon color="primary" />}
-            title={"Мои данные"}
+            title={t("ui.my_details")}
           >
             <ProfileDataTable />
           </Section>
 
           <Section
             icon={<RememberMeOutlinedIcon color="primary" />}
-            title={"Данные Фактора"}
+            title={t("ui.factor_details")}
           >
             <FactorDataTable factor={factoringDetails?.factor} />
           </Section>
 
           <Section
             icon={<RememberMeOutlinedIcon color="primary" />}
-            title={"Данные Заказчика"}
+            title={t("ui.customer_details_3")}
           >
             <CustomerDataTable
               customer={factoringDetails?.customer}
