@@ -1,4 +1,25 @@
 {
+  "menu": {
+    "home_page": "Home",
+    "leads": "Leads",
+    "active_leads": "Active leads",
+    "leads_history": "Leads history",
+    "finances": "Finances",
+    "factorings": "Factoring",
+    "factoring_companies": "Factoring companies",
+    "catalog": "Catalog",
+    "customers": "Customers",
+    "drivers": "Drivers",
+    "commodity_directory": "Commodity code directory",
+    "auctions": "Auctions",
+    "auction_requests": "Auction requests",
+    "carrier_auctions": "Carrier auctions",
+    "profile": "Profile",
+    "settings": "Settings",
+    "complaints": "Complaints",
+    "logout": "Sign out"
+  },
+
   "accepted_feminine": "Accepted",
   "accepted_plural": "Accepted",
   "account": "Account",
@@ -458,7 +479,6 @@
   "height": "Height",
   "hide_password": "Hide password",
   "hide_password_confirmation": "Hide password confirmation",
-  "home_page": "Home",
   "horizontal_scroll": "Horizontal scrolling",
   "iban": "IBAN",
   "iban_format_hint": "Format: KZ + 18 characters",

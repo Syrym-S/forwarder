@@ -5,6 +5,8 @@ import { useEffect, useState } from "react";
 import AgreementInfo from "./shared/ui/agreement-modal";
 import { getContractStatusApi } from "./app/store/agreement/api";
 
+import "./i18n";
+
 function App() {
   const [isContractSigned, setIsContractSigned] = useState(false);
 

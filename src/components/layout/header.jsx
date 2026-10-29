@@ -19,8 +19,11 @@ import NotificationsBlock from "./notifications/notifications-block";
 import { useProfileStore } from "../../app/store/profile/profile-store";
 import logo from "../../../assets/logo.png";
 import ChatsContainer from "../chat/chats-container";
+import LanguageSelect from "./language-select";
+import { useTranslation } from "react-i18next";
 
 const Header = ({ openMenu, setOpenMenu }) => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
 
   const profileData = useProfileStore((state) => state.profileData);
@@ -93,8 +96,8 @@ const Header = ({ openMenu, setOpenMenu }) => {
         }}
       >
         <TooltipIconButton
-          title={openMenu ? "Закрыть меню" : "Открыть меню"}
-          aria-label={openMenu ? "Закрыть меню" : "Открыть меню"}
+          title={t(openMenu ? "close_menu" : "open_menu")}
+          aria-label={t(openMenu ? "close_menu" : "open_menu")}
           aria-expanded={openMenu}
           onClick={handleToggleMenu}
           sx={{
@@ -135,13 +138,17 @@ const Header = ({ openMenu, setOpenMenu }) => {
           gap: 1,
         }}
       >
+        <LanguageSelect />
+
         <NotificationsBlock />
+
         <ChatsContainer />
-        <ActionTooltip title="Открыть меню профиля">
+
+        <ActionTooltip title={t("open_profile_menu")}>
           <Button
             variant="outlined"
             onClick={handleOpenProfileMenu}
-            aria-label="Открыть меню профиля"
+            aria-label={t("open_profile_menu")}
             sx={{
               borderColor: "primary.main",
               display: "flex",
@@ -187,6 +194,7 @@ const Header = ({ openMenu, setOpenMenu }) => {
             </Typography>
           </Button>
         </ActionTooltip>
+
         <Menu
           anchorEl={profileAnchorEl}
           open={isProfileMenuOpen}
@@ -210,7 +218,7 @@ const Header = ({ openMenu, setOpenMenu }) => {
               textAlign: "center",
             }}
           >
-            Профиль
+            {t("menu.profile")}
           </MenuItem>
 
           <MenuItem
@@ -223,7 +231,7 @@ const Header = ({ openMenu, setOpenMenu }) => {
               textAlign: "center",
             }}
           >
-            Настройки
+            {t("menu.settings")}
           </MenuItem>
 
           <MenuItem
@@ -232,7 +240,7 @@ const Header = ({ openMenu, setOpenMenu }) => {
               navigate("/complaints");
             }}
           >
-            Жалобы
+            {t("menu.complaints")}
           </MenuItem>
 
           <MenuItem
@@ -246,7 +254,7 @@ const Header = ({ openMenu, setOpenMenu }) => {
               textAlign: "center",
             }}
           >
-            Выход
+            {t("menu.logout")}
           </MenuItem>
         </Menu>
         {isLogoutModalOpen && (

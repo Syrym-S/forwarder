@@ -1,9 +1,8 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Box, Button, Tooltip, Typography } from "@mui/material";
 import { NavLink } from "react-router-dom";
 import LocalShippingOutlinedIcon from "@mui/icons-material/LocalShippingOutlined";
 import HistoryOutlined from "@mui/icons-material/HistoryOutlined";
-import ReceiptLongOutlined from "@mui/icons-material/ReceiptLongOutlined";
 import AccountBalanceOutlined from "@mui/icons-material/AccountBalanceOutlined";
 import HandshakeOutlined from "@mui/icons-material/HandshakeOutlined";
 import GroupsOutlined from "@mui/icons-material/GroupsOutlined";
@@ -15,8 +14,10 @@ import PhoneOutlinedIcon from "@mui/icons-material/PhoneOutlined";
 import MarkunreadOutlinedIcon from "@mui/icons-material/MarkunreadOutlined";
 import LibraryBooksOutlinedIcon from "@mui/icons-material/LibraryBooksOutlined";
 import "./style.css";
+import { useTranslation } from "react-i18next";
 
 export function SupportContacts() {
+  const { t } = useTranslation();
   const supportEmail = window?.APP_DATA?.support?.email;
   const supportPhone = window?.APP_DATA?.support?.phone;
 
@@ -47,8 +48,8 @@ export function SupportContacts() {
         <Button
           component="a"
           href={`mailto:${supportEmail}?subject=${encodeURIComponent(
-            "Обращение в поддержку",
-          )}&body=${encodeURIComponent("Здравствуйте! У меня возник вопрос.")}`}
+            t("support_request_subject"),
+          )}&body=${encodeURIComponent(t("support_request_body"))}`}
           sx={{
             boxShadow: 0,
             fontSize: 12,
@@ -82,7 +83,7 @@ export function SupportContacts() {
       </Tooltip>
 
       <Tooltip
-        title={copied ? "Скопировано" : "Скопировать номер"}
+        title={copied ? t("copied") : t("copy_number")}
         placement="top"
         arrow
         open={copied ? true : undefined}
@@ -124,7 +125,7 @@ const menuItems = [
       {
         id: 1,
         path: "/",
-        lable: "Главная",
+        lable: "menu.home_page",
         icon: (
           <RouteOutlined
             sx={{
@@ -132,18 +133,18 @@ const menuItems = [
             }}
           />
         ),
-        tooltip_text: "Отображение всех маршрутов на карте",
+        tooltip_text: "map_routes_tooltip",
       },
     ],
   },
   {
     id: 2,
-    label: "Перевозки",
+    label: "menu.leads",
     sub_items: [
       {
         id: 1,
         path: "/active-leads",
-        lable: "Активные перевозки",
+        lable: "menu.active_leads",
         icon: (
           <LocalShippingOutlinedIcon
             sx={{
@@ -151,13 +152,12 @@ const menuItems = [
             }}
           />
         ),
-        tooltip_text:
-          "Созданные вами и заказчиками активные перевозки. Возможность создать перевозку",
+        tooltip_text: "active_shipments_tooltip",
       },
       {
         id: 4,
         path: "/history-leads",
-        lable: "История перевозок",
+        lable: "menu.leads_history",
         icon: (
           <HistoryOutlined
             sx={{
@@ -165,13 +165,13 @@ const menuItems = [
             }}
           />
         ),
-        tooltip_text: "Список завершённых и удалённых перевозок",
+        tooltip_text: "shipment_history_tooltip",
       },
     ],
   },
   {
     id: 3,
-    label: "Финансы",
+    label: "menu.finances",
     sub_items: [
       // {
       //   id: 1,
@@ -189,7 +189,7 @@ const menuItems = [
       {
         id: 2,
         path: "/factorings",
-        lable: "Факторинги",
+        lable: "menu.factorings",
         icon: (
           <AccountBalanceOutlined
             sx={{
@@ -197,13 +197,12 @@ const menuItems = [
             }}
           />
         ),
-        tooltip_text:
-          "Список факторингов, созданных вами, заказчиками и факторами. Возможность создать факторинг",
+        tooltip_text: "factorings_tooltip",
       },
       {
         id: 3,
         path: "/factoring-lines",
-        lable: "Факторинговые компании",
+        lable: "menu.factoring_companies",
         icon: (
           <HandshakeOutlined
             sx={{
@@ -211,19 +210,18 @@ const menuItems = [
             }}
           />
         ),
-        tooltip_text:
-          "Список факторинговых линий. Возможность создать факторинг линию",
+        tooltip_text: "factoring_lines_tooltip",
       },
     ],
   },
   {
     id: 4,
-    label: "Каталог",
+    label: "menu.catalog",
     sub_items: [
       {
         id: 1,
         path: "/customers",
-        lable: "Заказчики",
+        lable: "menu.customers",
         icon: (
           <GroupsOutlined
             sx={{
@@ -231,12 +229,12 @@ const menuItems = [
             }}
           />
         ),
-        tooltip_text: "Список всех заказчиков",
+        tooltip_text: "customers_tooltip",
       },
       {
         id: 2,
         path: "/drivers",
-        lable: "Водители",
+        lable: "menu.drivers",
         icon: (
           <DriveEtaOutlined
             sx={{
@@ -244,12 +242,12 @@ const menuItems = [
             }}
           />
         ),
-        tooltip_text: "Список всех водителей",
+        tooltip_text: "drivers_tooltip",
       },
       {
         id: 3,
         path: "/handbook",
-        lable: "Cправочник ТНВЭД",
+        lable: "menu.commodity_directory",
         icon: (
           <LibraryBooksOutlinedIcon
             sx={{
@@ -257,18 +255,18 @@ const menuItems = [
             }}
           />
         ),
-        tooltip_text: "Отображение всех маршрутов на карте",
+        tooltip_text: "menu.commodity_directory",
       },
     ],
   },
   {
     id: 5,
-    label: "Аукционы",
+    label: "menu.auctions",
     sub_items: [
       {
         id: 1,
         path: "/tender-applications",
-        lable: "Аукционные заявки",
+        lable: "menu.auction_requests",
         icon: (
           <AssignmentOutlined
             sx={{
@@ -276,12 +274,12 @@ const menuItems = [
             }}
           />
         ),
-        tooltip_text: "Список аукционов от заказчиков",
+        tooltip_text: "customer_auctions_tooltip",
       },
       {
         id: 2,
         path: "/tender-forwarders",
-        lable: "Аукционы перевозчиков",
+        lable: "menu.carrier_auctions",
         icon: (
           <RequestQuoteOutlined
             sx={{
@@ -289,13 +287,15 @@ const menuItems = [
             }}
           />
         ),
-        tooltip_text: "Список аукционов, созданных вами",
+        tooltip_text: "your_auctions_tooltip",
       },
     ],
   },
 ];
 
 const SideBar = ({ openMenu, setOpenMenu }) => {
+  const { t } = useTranslation();
+
   return (
     <Box
       sx={{
@@ -336,13 +336,16 @@ const SideBar = ({ openMenu, setOpenMenu }) => {
                   letterSpacing: "0.1em",
                 }}
               >
-                {item.label}
+                {t(item.label)}
               </Typography>
             )}
             {item.sub_items.map((sub_item) => (
-              <Tooltip title={sub_item.tooltip_text} disableInteractive>
+              <Tooltip
+                key={sub_item.id}
+                title={t(sub_item.tooltip_text)}
+                disableInteractive
+              >
                 <NavLink
-                  key={sub_item.id}
                   className={"link"}
                   to={sub_item.path}
                   style={({ isActive }) => ({
@@ -357,7 +360,7 @@ const SideBar = ({ openMenu, setOpenMenu }) => {
                     fontSize: "0.9em",
                   })}
                 >
-                  {sub_item.icon} {sub_item.lable}
+                  {sub_item.icon} {t(sub_item.lable)}
                 </NavLink>
               </Tooltip>
             ))}
@@ -381,7 +384,7 @@ const SideBar = ({ openMenu, setOpenMenu }) => {
             color: "rgb(22, 36, 62)",
           }}
         >
-          Нужна помощь?
+          {t("need_help")}
         </Typography>
         <Typography
           sx={{
@@ -389,7 +392,7 @@ const SideBar = ({ openMenu, setOpenMenu }) => {
             fontSize: 12,
           }}
         >
-          Наша служба поддержки на связи 24/7
+          {t("support_availability")}
         </Typography>
 
         <Box

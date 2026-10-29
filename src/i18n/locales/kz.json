@@ -1,4 +1,25 @@
 {
+  "menu": {
+    "home_page": "Басты бет",
+    "shipments": "Тасымалдар",
+    "active_shipments": "Белсенді тасымалдар",
+    "shipment_history": "Тасымалдар тарихы",
+    "finances": "Қаржы",
+    "factorings": "Факторингтер",
+    "factoring_companies": "Факторинг компаниялары",
+    "catalog": "Каталог",
+    "customers": "Тапсырыс берушілер",
+    "drivers": "Жүргізушілер",
+    "commodity_directory": "СЭҚ ТН анықтамалығы",
+    "auctions": "Аукциондар",
+    "auction_requests": "Аукцион өтінімдері",
+    "carrier_auctions": "Тасымалдаушылар аукциондары",
+    "profile": "Профиль",
+    "settings": "Баптаулар",
+    "complaints": "Шағымдар",
+    "logout": "Шығу"
+  },
+
   "accepted_feminine": "Қабылданды",
   "accepted_plural": "Қабылданған",
   "account": "Аккаунт",

@@ -1,4 +1,25 @@
 {
+  "menu": {
+    "home_page": "Главная",
+    "shipments": "Перевозки",
+    "active_shipments": "Активные перевозки",
+    "shipment_history": "История перевозок",
+    "finances": "Финансы",
+    "factorings": "Факторинги",
+    "factoring_companies": "Факторинговые компании",
+    "catalog": "Каталог",
+    "customers": "Заказчики",
+    "drivers": "Водители",
+    "commodity_directory": "Справочник ТН ВЭД",
+    "auctions": "Аукционы",
+    "auction_requests": "Аукционные заявки",
+    "carrier_auctions": "Аукционы перевозчиков",
+    "profile": "Профиль",
+    "settings": "Настройки",
+    "complaints": "Жалобы",
+    "logout": "Выход"
+  },
+
   "accepted_feminine": "Принята",
   "accepted_plural": "Принятые",
   "account": "Аккаунт",
