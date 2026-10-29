@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import TooltipIconButton from "../../../shared/ui/tooltip-icon-button";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import InsertDriveFileOutlinedIcon from "@mui/icons-material/InsertDriveFileOutlined";
@@ -27,6 +28,7 @@ function createLocalDocument({ name, context, file }) {
 }
 
 export function DocumentsStep({ form, setValue }) {
+  const { t } = useTranslation();
   const { id } = useParams();
   const files = useLeadsStore((state) => state.files);
   const getFiles = useLeadsStore((state) => state.getLeadFiles);
@@ -101,12 +103,12 @@ export function DocumentsStep({ form, setValue }) {
         >
           <TextField
             name="name"
-            label="Название документа"
+            label={t("ui.document_name")}
             size="small"
             fullWidth
           />
 
-          <TextField name="context" label="Описание" size="small" fullWidth />
+          <TextField name="context" label={t("ui.description")} size="small" fullWidth />
 
           <Box>
             <Button
@@ -121,7 +123,7 @@ export function DocumentsStep({ form, setValue }) {
                 },
               }}
             >
-              {selectedFileName ? "Файл выбран" : "Файл"}
+              {selectedFileName ? t("ui.file_selected") : t("ui.file")}
 
               <input
                 name="file"
@@ -164,9 +166,7 @@ export function DocumentsStep({ form, setValue }) {
               },
               justifySelf: "flex-start",
             }}
-          >
-            Добавить документ
-          </Button>
+          >{t("ui.add_document")}</Button>
         </Box>
 
         {files.length !== 0 ? (
@@ -212,7 +212,7 @@ export function DocumentsStep({ form, setValue }) {
                     lineHeight: 1.35,
                   }}
                 >
-                  {document.name || "Документ"}
+                  {document.name || t("ui.document")}
                 </Typography>
 
                 <Typography
@@ -224,7 +224,7 @@ export function DocumentsStep({ form, setValue }) {
                     lineHeight: 1.35,
                   }}
                 >
-                  {document.context || "Описание не указано"}
+                  {document.context || t("ui.description_not_specified")}
                 </Typography>
 
                 <Typography
@@ -237,13 +237,13 @@ export function DocumentsStep({ form, setValue }) {
                     wordBreak: "break-word",
                   }}
                 >
-                  {document.fileName || "Файл"}
+                  {document.fileName || t("ui.file")}
                 </Typography>
               </Box>
 
               <TooltipIconButton
-                title="Удалить документ"
-                aria-label="Удалить документ"
+                title={t("ui.delete_document")}
+                aria-label={t("ui.delete_document")}
                 size="small"
                 color="error"
                 onClick={() => handleDeleteDocument(document.id)}
@@ -296,7 +296,7 @@ export function DocumentsStep({ form, setValue }) {
                       lineHeight: 1.35,
                     }}
                   >
-                    {document.name || "Документ"}
+                    {document.name || t("ui.document")}
                   </Typography>
 
                   <Typography
@@ -308,7 +308,7 @@ export function DocumentsStep({ form, setValue }) {
                       lineHeight: 1.35,
                     }}
                   >
-                    {document.context || "Описание не указано"}
+                    {document.context || t("ui.description_not_specified")}
                   </Typography>
 
                   <Typography
@@ -321,13 +321,13 @@ export function DocumentsStep({ form, setValue }) {
                       wordBreak: "break-word",
                     }}
                   >
-                    {document.fileName || "Файл"}
+                    {document.fileName || t("ui.file")}
                   </Typography>
                 </Box>
 
                 <TooltipIconButton
-                  title="Удалить документ"
-                  aria-label="Удалить документ"
+                  title={t("ui.delete_document")}
+                  aria-label={t("ui.delete_document")}
                   size="small"
                   color="error"
                   onClick={() => handleDeleteDocument(document.id)}
@@ -344,9 +344,7 @@ export function DocumentsStep({ form, setValue }) {
               fontSize: 12,
               color: "grey.600",
             }}
-          >
-            Документы не добавлены
-          </Typography>
+          >{t("lead_form.no_documents_added")}</Typography>
         )}
       </Stack>
     </Box>

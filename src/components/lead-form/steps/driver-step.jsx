@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import renderDriverOption from "../../../shared/ui/render-driver-option";
 import { Controller, useWatch } from "react-hook-form";
 import {
@@ -14,6 +15,7 @@ import { useDriverStore } from "../../../app/store/drivers/driver-store";
 import { useEffect, useState } from "react";
 
 const DriverStep = ({ control, errors, setValue }) => {
+  const { t } = useTranslation();
   const selectedDriver = useWatch({
     control,
     name: "driver",
@@ -43,8 +45,8 @@ const DriverStep = ({ control, errors, setValue }) => {
 
   return (
     <StepSection
-      title="Выбор водителя"
-      description="Найдите и выберите водителя, который будет закреплен за маршрутом"
+      title={t("lead_form.driver_selection")}
+      description={t("lead_form.select_driver_description")}
     >
       <Controller
         name="driver"
@@ -98,7 +100,7 @@ const DriverStep = ({ control, errors, setValue }) => {
               renderInput={(params) => (
                 <TextField
                   {...params}
-                  placeholder="Выберите водителя"
+                  placeholder={t("ui.select_driver")}
                   error={Boolean(errors.driver)}
                   helperText={errors.driver?.message}
                   sx={{
@@ -111,7 +113,7 @@ const DriverStep = ({ control, errors, setValue }) => {
             />
 
             {selectedDriver?.in_black_list === true && (
-              <Alert severity="error">Водитель заблокирован</Alert>
+              <Alert severity="error">{t("ui.driver_blocked")}</Alert>
             )}
 
             {selectedDriver && (
@@ -125,20 +127,20 @@ const DriverStep = ({ control, errors, setValue }) => {
                   gap: 1.5,
                 }}
               >
-                <InfoBadge label="ФИО водителя" value={selectedDriver.fio} />
+                <InfoBadge label={t("lead_form.driver_full_name")} value={selectedDriver.fio} />
 
                 <InfoBadge
-                  label="Телефон"
-                  value={selectedDriver.phone || "Не указан"}
+                  label={t("ui.phone_2")}
+                  value={selectedDriver.phone || t("ui.not_specified")}
                 />
 
                 <InfoBadge
                   label="Email"
-                  value={selectedDriver.email || "Не указан"}
+                  value={selectedDriver.email || t("ui.not_specified")}
                 />
                 <InfoBadge
-                  label="ИИН"
-                  value={selectedDriver.iin || "Не указан"}
+                  label={t("ui.iin")}
+                  value={selectedDriver.iin || t("ui.not_specified")}
                 />
               </Box>
             )}

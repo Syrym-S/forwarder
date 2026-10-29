@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { useRef, useState } from 'react';
 
 import { reverseGeocode } from '../api/geocoding.api';
@@ -15,6 +16,7 @@ const setValueOptions = {
 };
 
 export function useRouteMapPicker({ form, setValue }) {
+  const { t } = useTranslation();
    const [activeMapPoint, setActiveMapPoint] = useState('from');
    const [loadingPoints, setLoadingPoints] = useState({
       from: false,
@@ -32,7 +34,7 @@ export function useRouteMapPicker({ form, setValue }) {
    async function setFromPoint(lat, lng) {
       setValue('fromLat', lat, setValueOptions);
       setValue('fromLng', lng, setValueOptions);
-      setValue('fromLocation', 'Определяем адрес...', setValueOptions);
+      setValue('fromLocation', t("lead_form.resolving_address"), setValueOptions);
 
       const address = await getAddressForPoint('from', lat, lng);
 
@@ -46,7 +48,7 @@ export function useRouteMapPicker({ form, setValue }) {
    async function setToPoint(lat, lng) {
       setValue('toLat', lat, setValueOptions);
       setValue('toLng', lng, setValueOptions);
-      setValue('toLocation', 'Определяем адрес...', setValueOptions);
+      setValue('toLocation', t("lead_form.resolving_address"), setValueOptions);
 
       const address = await getAddressForPoint('to', lat, lng);
 

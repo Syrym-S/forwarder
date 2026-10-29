@@ -1,3 +1,5 @@
+import appI18n from "../../../i18n/index.js";
+import { useTranslation } from "react-i18next";
 import FormControllerSelect from "../../../shared/ui/input/form-controller-select";
 import dayjs from "dayjs";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
@@ -26,12 +28,13 @@ import { isInternationalRoute } from "../../../shared/lib/international-route";
 import { useEffect } from "react";
 
 const waypointTypes = [
-  { id: 1, value: "check_passes", label: "Транзит" },
-  { id: 2, value: "loading", label: "Погрузка" },
-  { id: 3, value: "unloading", label: "Разгрузка" },
+  { id: 1, value: "check_passes", get label() { return appI18n.t("lead_form.transit"); } },
+  { id: 2, value: "loading", get label() { return appI18n.t("ui.loading_operation"); } },
+  { id: 3, value: "unloading", get label() { return appI18n.t("ui.unloading_operation"); } },
 ];
 
 const RouteStep = ({ control, form, setValue, isEdit = false }) => {
+  const { t } = useTranslation();
   const currentLead = useLeadsStore((state) => state.currentLead);
   const isInternational = isInternationalRoute(form);
 
@@ -81,7 +84,7 @@ const RouteStep = ({ control, form, setValue, isEdit = false }) => {
     if (scheduleIndex === 0) {
       return (
         !dayjs(value).isBefore(dayjs(today), "day") ||
-        "Дата не может быть раньше сегодняшнего дня"
+        t("ui.date_cannot_be_before_today")
       );
     }
 
@@ -93,7 +96,7 @@ const RouteStep = ({ control, form, setValue, isEdit = false }) => {
 
     return (
       !dayjs(value).isBefore(dayjs(previousEndAt), "day") ||
-      "Дата начала не может быть раньше окончания предыдущей точки"
+      t("lead_form.start_date_after_previous_point")
     );
   };
 
@@ -110,7 +113,7 @@ const RouteStep = ({ control, form, setValue, isEdit = false }) => {
 
     return (
       !dayjs(value).isBefore(dayjs(currentStartAt), "day") ||
-      "Дата окончания не может быть раньше даты начала"
+      t("lead_form.end_date_after_start")
     );
   };
 
@@ -163,7 +166,7 @@ const RouteStep = ({ control, form, setValue, isEdit = false }) => {
   const toScheduleIndex = fields.length + 1;
 
   return (
-    <StepSection title="Маршрут">
+    <StepSection title={t("ui.route")}>
       <Box
         sx={{
           display: "flex",
@@ -188,7 +191,7 @@ const RouteStep = ({ control, form, setValue, isEdit = false }) => {
               setActiveMapPoint("from");
               setCount(0);
             }}
-            text="Откуда"
+            text={t("ui.origin")}
           />
 
           {fields.map((field, index) => (
@@ -206,7 +209,7 @@ const RouteStep = ({ control, form, setValue, isEdit = false }) => {
               sx={{
                 py: 0,
               }}
-              text={`Точка # ${index + 1}`}
+              text={t("lead_form.route_point_number", { value1: index + 1 })}
             />
           ))}
 
@@ -218,7 +221,7 @@ const RouteStep = ({ control, form, setValue, isEdit = false }) => {
             sx={{
               py: 0,
             }}
-            text="Куда"
+            text={t("ui.destination")}
           />
         </Box>
 
@@ -234,7 +237,7 @@ const RouteStep = ({ control, form, setValue, isEdit = false }) => {
             variant="outlined"
             onClick={handleShowFiled}
             disabled={currentLead && !canEditStatus}
-            text="Добавить точку пересечения"
+            text={t("lead_form.add_crossing_point")}
           />
 
           <PrimaryButton
@@ -243,7 +246,7 @@ const RouteStep = ({ control, form, setValue, isEdit = false }) => {
             variant="outlined"
             onClick={handleClearRoute}
             disabled={isClearDisabled || (currentLead && !canEditStatus)}
-            text="Очистить маршрут"
+            text={t("lead_form.clear_route")}
             sx={{
               p: 0,
               px: 1,
@@ -292,9 +295,7 @@ const RouteStep = ({ control, form, setValue, isEdit = false }) => {
         >
           <LockOutlinedIcon color="error" fontSize="small" />
 
-          <Typography variant="body2" color="error">
-            При текущем статусе нельзя редактировать маршрут
-          </Typography>
+          <Typography variant="body2" color="error">{t("lead_form.route_edit_status_restriction")}</Typography>
         </Box>
       )}
 
@@ -318,14 +319,14 @@ const RouteStep = ({ control, form, setValue, isEdit = false }) => {
           <FormControllerInput
             name="from_location.address"
             control={control}
-            label="Откуда"
+            label={t("ui.origin")}
             fullWidth
             size="small"
             rules={{
-              required: "Укажите место отправления",
+              required: t("lead_form.enter_origin"),
               minLength: {
                 value: 3,
-                message: "Минимум 3 символа",
+                message: t("lead_form.minimum_three_characters"),
               },
             }}
             slotProps={{
@@ -335,7 +336,7 @@ const RouteStep = ({ control, form, setValue, isEdit = false }) => {
                   <InputAdornment position="end">
                     <IconButton
                       size="small"
-                      aria-label="Очистить адрес отправления"
+                      aria-label={t("lead_form.clear_origin")}
                       onClick={() => {
                         clearFromPoint();
                         setValue(
@@ -364,11 +365,11 @@ const RouteStep = ({ control, form, setValue, isEdit = false }) => {
             name="point_schedules[0].start_at"
             control={control}
             rules={{
-              required: "Дата начала обязательна",
+              required: t("lead_form.start_date_required"),
 
               validate: (value) => validateStartDate(value, 0),
             }}
-            label="Начало (Откуда)"
+            label={t("lead_form.origin_start")}
             type="date"
             fullWidth
             size="small"
@@ -386,11 +387,11 @@ const RouteStep = ({ control, form, setValue, isEdit = false }) => {
             name="point_schedules[0].end_at"
             control={control}
             rules={{
-              required: "Дата окончания обязательна",
+              required: t("lead_form.end_date_required"),
 
               validate: (value) => validateEndDate(value, 0),
             }}
-            label="Окончание (Откуда)"
+            label={t("lead_form.origin_end")}
             type="date"
             fullWidth
             size="small"
@@ -423,9 +424,7 @@ const RouteStep = ({ control, form, setValue, isEdit = false }) => {
                 fontWeight: 600,
                 color: "font_color.heading",
               }}
-            >
-              Промежуточные точки
-            </Typography>
+            >{t("lead_form.waypoints")}</Typography>
 
             {fields.map((crossField, index) => {
               const scheduleIndex = index + 1;
@@ -446,7 +445,7 @@ const RouteStep = ({ control, form, setValue, isEdit = false }) => {
                   <FormControllerInput
                     name={`waypoints[${index}].address`}
                     control={control}
-                    label={`Промежуточная точка #${index + 1}`}
+                    label={t("ui.waypoint_number", { value1: index + 1 })}
                     fullWidth
                     size="small"
                     slotProps={{
@@ -461,7 +460,7 @@ const RouteStep = ({ control, form, setValue, isEdit = false }) => {
                     control={control}
                     defaultValue="check_passes"
                     options={waypointTypes}
-                    label="Тип"
+                    label={t("ui.type")}
                     fullWidth
                     size="small"
                     disabled={currentLead && !canEditStatus}
@@ -471,12 +470,12 @@ const RouteStep = ({ control, form, setValue, isEdit = false }) => {
                     name={`point_schedules[${scheduleIndex}].start_at`}
                     control={control}
                     rules={{
-                      required: "Дата начала обязательна",
+                      required: t("lead_form.start_date_required"),
 
                       validate: (value) =>
                         validateStartDate(value, scheduleIndex),
                     }}
-                    label={`Начало (Точка ${index + 1})`}
+                    label={t("lead_form.waypoint_start", { value1: index + 1 })}
                     type="date"
                     fullWidth
                     size="small"
@@ -497,12 +496,12 @@ const RouteStep = ({ control, form, setValue, isEdit = false }) => {
                     name={`point_schedules[${scheduleIndex}].end_at`}
                     control={control}
                     rules={{
-                      required: "Дата окончания обязательна",
+                      required: t("lead_form.end_date_required"),
 
                       validate: (value) =>
                         validateEndDate(value, scheduleIndex),
                     }}
-                    label={`Окончание (Точка ${index + 1})`}
+                    label={t("lead_form.waypoint_end", { value1: index + 1 })}
                     type="date"
                     fullWidth
                     size="small"
@@ -524,7 +523,7 @@ const RouteStep = ({ control, form, setValue, isEdit = false }) => {
                     onClick={() => handleRemoveWaypoint(index)}
                     color="error"
                     variant="outlined"
-                    text="Убрать"
+                    text={t("lead_form.remove")}
                   />
                 </Box>
               );
@@ -545,14 +544,14 @@ const RouteStep = ({ control, form, setValue, isEdit = false }) => {
           <FormControllerInput
             name="to_location.address"
             control={control}
-            label="Куда"
+            label={t("ui.destination")}
             fullWidth
             size="small"
             rules={{
-              required: "Укажите место назначения",
+              required: t("lead_form.enter_destination"),
               minLength: {
                 value: 3,
-                message: "Минимум 3 символа",
+                message: t("lead_form.minimum_three_characters"),
               },
             }}
             slotProps={{
@@ -562,7 +561,7 @@ const RouteStep = ({ control, form, setValue, isEdit = false }) => {
                   <InputAdornment position="end">
                     <IconButton
                       size="small"
-                      aria-label="Очистить адрес назначения"
+                      aria-label={t("lead_form.clear_destination")}
                       onClick={() => {
                         clearToPoint();
                         setValue(
@@ -593,11 +592,11 @@ const RouteStep = ({ control, form, setValue, isEdit = false }) => {
             name={`point_schedules[${toScheduleIndex}].start_at`}
             control={control}
             rules={{
-              required: "Дата начала обязательна",
+              required: t("lead_form.start_date_required"),
 
               validate: (value) => validateStartDate(value, toScheduleIndex),
             }}
-            label="Начало (Куда)"
+            label={t("lead_form.destination_start")}
             type="date"
             fullWidth
             size="small"
@@ -620,11 +619,11 @@ const RouteStep = ({ control, form, setValue, isEdit = false }) => {
             name={`point_schedules[${toScheduleIndex}].end_at`}
             control={control}
             rules={{
-              required: "Дата окончания обязательна",
+              required: t("lead_form.end_date_required"),
 
               validate: (value) => validateEndDate(value, toScheduleIndex),
             }}
-            label="Окончание (Куда)"
+            label={t("lead_form.destination_end")}
             type="date"
             fullWidth
             size="small"
@@ -651,9 +650,7 @@ const RouteStep = ({ control, form, setValue, isEdit = false }) => {
           horizontal: "right",
         }}
       >
-        <Alert severity="error" variant="filled" sx={{ width: "100%" }}>
-          Неправильные параметры города. Попытайтесь выбрать другую точку
-        </Alert>
+        <Alert severity="error" variant="filled" sx={{ width: "100%" }}>{t("lead_form.invalid_city_parameters")}</Alert>
       </Snackbar>
 
       <Box
@@ -679,14 +676,11 @@ const RouteStep = ({ control, form, setValue, isEdit = false }) => {
                   inputRef={field.ref}
                 />
               }
-              label="Перевозка является международной"
+              label={t("lead_form.international_lead")}
             />
           )}
         />
-        <Typography variant="body2" color="text.secondary">
-          Определяется автоматически по странам точек маршрута. Для
-          международной перевозки обязательно нужно добавить код TNVED.
-        </Typography>
+        <Typography variant="body2" color="text.secondary">{t("lead_form.international_lead_hint")}</Typography>
       </Box>
       <Box
         sx={{
@@ -713,19 +707,13 @@ const RouteStep = ({ control, form, setValue, isEdit = false }) => {
                   disabled={isEdit}
                 />
               }
-              label="Пропуск подтверждения файлов погрузки/разгрузки"
+              label={t("ui.skip_loading_unloading_file_confirmation")}
             />
           )}
         />
-        <Typography variant="body2" color="text.secondary">
-          При включении подтверждение файлов погрузки и разгрузки экспедитором
-          не требуется. После создания перевозки изменить настройку нельзя.
-        </Typography>
+        <Typography variant="body2" color="text.secondary">{t("lead_form.skip_file_confirmation_hint")}</Typography>
         {form.pass_verify === true && !isEdit && (
-          <Alert severity="warning" sx={{ mt: 1.5, borderRadius: 2 }}>
-            После создания лида изменить эту настройку будет нельзя. Пропуск
-            подтверждения файлов погрузки/разгрузки останется включённым.
-          </Alert>
+          <Alert severity="warning" sx={{ mt: 1.5, borderRadius: 2 }}>{t("lead_form.skip_file_confirmation_locked_hint")}</Alert>
         )}
       </Box>
       <Controller
@@ -735,7 +723,7 @@ const RouteStep = ({ control, form, setValue, isEdit = false }) => {
         render={({ field }) => (
           <Stack spacing={1} sx={{ mt: 2 }}>
             <FormControlLabel
-              label="Автоматически привязать перевозку к водителю"
+              label={t("lead_form.automatically_assign_driver")}
               control={
                 <Checkbox
                   name={field.name}
@@ -751,10 +739,7 @@ const RouteStep = ({ control, form, setValue, isEdit = false }) => {
                 />
               }
             />
-            <Alert id="auto-start-warning" severity="warning">
-              После создания перевозки изменить настройку автоматической
-              привязки будет нельзя.
-            </Alert>
+            <Alert id="auto-start-warning" severity="warning">{t("lead_form.automatic_assignment_locked_hint")}</Alert>
           </Stack>
         )}
       />

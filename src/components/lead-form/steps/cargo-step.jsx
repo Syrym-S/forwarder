@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import CargoVolumeFields from "./cargo-volume-fields";
 import CargoTnvedField from "./cargo-tnved-field";
 import { Controller, useFieldArray, useWatch } from "react-hook-form";
@@ -19,6 +20,7 @@ import { hasCargoValue, isPositiveCargoNumber } from "../../../shared/lib/cargo-
 import { isInternationalRoute } from "../../../shared/lib/international-route";
 
 const CargoStep = ({ control, errors, leadStatus }) => {
+  const { t } = useTranslation();
   const form = useWatch({ control });
   const isInternational = isInternationalRoute(form);
   const tnvedOptions = useOptionsStore((state) => state.tnvedOptions);
@@ -50,7 +52,7 @@ const CargoStep = ({ control, errors, leadStatus }) => {
   const canAddCargo = lastCargo?.name?.trim();
 
   return (
-    <StepSection title="Груз и оплата">
+    <StepSection title={t("lead_form.cargo_and_payment")}>
       <Box
         sx={{
           display: "flex",
@@ -92,9 +94,7 @@ const CargoStep = ({ control, errors, leadStatus }) => {
                 sx={{
                   my: 2,
                 }}
-              >
-                Убрать груз
-              </Button>
+              >{t("lead_form.remove_cargo_item")}</Button>
             )}
           </Box>
         ))}
@@ -118,9 +118,7 @@ const CargoStep = ({ control, errors, leadStatus }) => {
           sx={{
             borderRadius: 2,
           }}
-        >
-          Добавить груз
-        </Button>
+        >{t("lead_form.add_cargo")}</Button>
       </Box>
     </StepSection>
   );
@@ -129,6 +127,7 @@ const CargoStep = ({ control, errors, leadStatus }) => {
 export default CargoStep;
 
 const CargoStepFieldsContent = ({ index, control, cargo, isInternational, tnvedSections, isTNVEDLoading, tnvedError, getLTNVEDOptions }) => {
+  const { t } = useTranslation();
   const searchCargoType = useOptionsStore((state) => state.searchCargoType);
   const cargoTypes = useOptionsStore((state) => state.cargoTypes);
   const getCargoTypes = useOptionsStore((state) => state.getCargoTypes);
@@ -174,11 +173,11 @@ const CargoStepFieldsContent = ({ index, control, cargo, isInternational, tnvedS
         name={`cargos.${index}.name`}
         control={control}
         rules={{
-          required: "Обязательно нужно указать название товара",
-          validate: (value) => !!value?.trim() || "Укажите название груза",
+          required: t("lead_form.product_name_required"),
+          validate: (value) => !!value?.trim() || t("lead_form.enter_cargo_name"),
         }}
         required
-        label="Название груза"
+        label={t("lead_form.cargo_name")}
         size="small"
         fullWidth
       />
@@ -192,7 +191,7 @@ const CargoStepFieldsContent = ({ index, control, cargo, isInternational, tnvedS
             inputValue={inputValue}
             options={cargoTypes}
             loading={isCargoTypesLoading}
-            loadingText="Загрузка..."
+            loadingText={t("lead_form.loading")}
             value={cargoTypes.find((item) => item.name === field.value) || null}
             onChange={(_, value, reason) => {
               field.onChange(value?.name || "");
@@ -210,7 +209,7 @@ const CargoStepFieldsContent = ({ index, control, cargo, isInternational, tnvedS
             renderInput={(params) => (
               <TextField
                 {...params}
-                label="Тип груза"
+                label={t("lead_form.cargo_type")}
                 size="small"
                 error={!!fieldState.error}
                 helperText={fieldState.error?.message}
@@ -232,7 +231,7 @@ const CargoStepFieldsContent = ({ index, control, cargo, isInternational, tnvedS
           validate: (value) =>
             !hasCargoValue(value) ||
             isPositiveCargoNumber(value) ||
-            "Вес должен быть больше 0",
+            t("lead_form.weight_must_be_positive"),
         }}
         render={({ field, fieldState }) => (
           <TextField
@@ -242,7 +241,7 @@ const CargoStepFieldsContent = ({ index, control, cargo, isInternational, tnvedS
             helperText={fieldState.error?.message}
             type="number"
             slotProps={{ htmlInput: { min: 0, step: "any" } }}
-            label="Вес, кг"
+            label={t("lead_form.weight_kg")}
             onChange={(e) => {
               const value = e.target.value;
 
@@ -277,11 +276,11 @@ const CargoStepFieldsContent = ({ index, control, cargo, isInternational, tnvedS
         rules={{
           validate: (value) =>
             !hasCargoValue(value) ||
-            Number(value) >= 0 || "Цена не может быть отрицательной",
+            Number(value) >= 0 || t("lead_form.price_cannot_be_negative"),
         }}
         type="number"
         slotProps={{ htmlInput: { min: 0, step: "any" } }}
-        label="Цена"
+        label={t("lead_form.price")}
         fullWidth
         size="small"
       />
@@ -304,7 +303,7 @@ const CargoStepFieldsContent = ({ index, control, cargo, isInternational, tnvedS
             renderInput={(params) => (
               <TextField
                 {...params}
-                label="Валюта"
+                label={t("ui.currency")}
                 size="small"
                 sx={{
                   "& .MuiOutlinedInput-root": {
@@ -328,7 +327,7 @@ const CargoStepFieldsContent = ({ index, control, cargo, isInternational, tnvedS
                 onChange={(event) => field.onChange(event.target.checked)}
               />
             }
-            label="С НДС"
+            label={t("lead_form.with_vat")}
           />
         )}
       />
@@ -339,7 +338,7 @@ const CargoStepFieldsContent = ({ index, control, cargo, isInternational, tnvedS
         render={({ field }) => (
           <TextField
             {...field}
-            label="Комментарий"
+            label={t("ui.comment")}
             fullWidth
             multiline
             minRows={3}

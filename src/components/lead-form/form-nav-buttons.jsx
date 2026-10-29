@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { Box, DialogActions } from "@mui/material";
 import PrimaryButton from "../../shared/ui/button/primary-button";
 
@@ -14,6 +15,7 @@ export function FormNavButtons({
   onSubmit,
   onSaveDraft,
 }) {
+  const { t } = useTranslation();
   return (
     <DialogActions
       sx={{
@@ -28,7 +30,7 @@ export function FormNavButtons({
         variant="outlined"
         onClick={onClose}
         disabled={isSubmitting}
-        text={"Отмена"}
+        text={t("ui.cancel")}
       />
 
       <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
@@ -37,7 +39,7 @@ export function FormNavButtons({
             variant="outlined"
             onClick={onSaveDraft}
             disabled={isSubmitting}
-            text="Сохранить как черновик"
+            text={t("lead_form.save_as_draft")}
           />
         )}
         {!isFirstStep && (
@@ -45,7 +47,7 @@ export function FormNavButtons({
             variant="outlined"
             onClick={onBack}
             disabled={isSubmitting}
-            text={"Назад"}
+            text={t("ui.back")}
           />
         )}
 
@@ -54,14 +56,14 @@ export function FormNavButtons({
             variant="contained"
             disabled={isSubmitting || hasCurrentStepErrors}
             onClick={onSubmit}
-            text={isDraft ? "Опубликовать" : isEdit ? "Сохранить" : "Создать маршрут"}
+            text={isDraft ? t("lead_form.publish") : isEdit ? t("ui.save") : t("lead_form.create_route")}
           />
         ) : (
           <PrimaryButton
             variant="contained"
             disabled={hasCurrentStepErrors || isSubmitting}
             onClick={onNext}
-            text={"Дальше"}
+            text={t("ui.next")}
           />
         )}
       </Box>

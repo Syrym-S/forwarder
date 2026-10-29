@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import PropTypes from "prop-types";
 import {
   Box,
@@ -22,6 +23,7 @@ const modalStyles = {
 };
 
 export function CreateLeadResultModal({ open, type, title, message, onClose }) {
+  const { t } = useTranslation();
   const styles = modalStyles[type] ?? modalStyles.success;
 
   return (
@@ -73,9 +75,7 @@ export function CreateLeadResultModal({ open, type, title, message, onClose }) {
           variant="contained"
           onClick={onClose}
           color={type === "error" ? "error" : "success"}
-        >
-          Понятно
-        </Button>
+        >{t("lead_form.understood")}</Button>
       </DialogActions>
     </Dialog>
   );

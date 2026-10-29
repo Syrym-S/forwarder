@@ -1,17 +1,20 @@
+import appI18n from "../../../i18n/index.js";
+import { useTranslation } from "react-i18next";
 import { useEffect, useMemo, useState } from "react";
 import { getTNVEDApi } from "../../../app/store/options/api";
 import { useController } from "react-hook-form";
 import { Alert, Autocomplete, Box, Button, TextField } from "@mui/material";
 
 const levels = [
-  { label: "Выберите раздел (римские цифры)", children: "groups" },
-  { label: "Выберите группу (2 цифры)", children: "positions" },
-  { label: "Выберите позицию (4 цифры)", children: "subpositions" },
-  { label: "Выберите субпозицию (6 цифр)", children: "codes" },
+  { get label() { return appI18n.t("lead_form.select_commodity_section"); }, children: "groups" },
+  { get label() { return appI18n.t("lead_form.select_commodity_chapter"); }, children: "positions" },
+  { get label() { return appI18n.t("lead_form.select_commodity_heading"); }, children: "subpositions" },
+  { get label() { return appI18n.t("lead_form.select_commodity_subheading"); }, children: "codes" },
 ];
 const optionLabel = (option) => option.back ? option.name : `${option.code} — ${option.name}`;
 
 export default function CargoTnvedField({ control, index, sections, loading, error, onRetry, disabled = false }) {
+  const { t } = useTranslation();
   const [chosenPath, setChosenPath] = useState(null);
   const [query, setQuery] = useState(null);
   const [open, setOpen] = useState(false);
@@ -33,7 +36,7 @@ export default function CargoTnvedField({ control, index, sections, loading, err
         const items = Array.isArray(data) ? data : data?.results ?? data?.items ?? data?.data ?? [];
         if (!cancelled) setSearchResult({ query: search, items });
       } catch (failure) {
-        if (!cancelled) setSearchError(failure.message || "Не удалось выполнить поиск ТН ВЭД");
+        if (!cancelled) setSearchError(failure.message || appI18n.t("lead_form.commodity_search_failed"));
       } finally {
         if (!cancelled) setSearchLoading(false);
       }
@@ -63,9 +66,9 @@ export default function CargoTnvedField({ control, index, sections, loading, err
       validate: (value) => {
         if (disabled) return true;
         if (!value) {
-          return (!query && !chosenPath?.length) || "Выберите полный код из последнего уровня справочника";
+          return (!query && !chosenPath?.length) || t("lead_form.select_complete_commodity_code");
         }
-        return selectedCode?.code === value || codes.some((item) => item.code === value) || "Выберите код из справочника";
+        return selectedCode?.code === value || codes.some((item) => item.code === value) || t("lead_form.select_code_from_directory");
       },
     },
   });
@@ -79,7 +82,7 @@ export default function CargoTnvedField({ control, index, sections, loading, err
     ? path[path.length - 1][levels[path.length - 1].children] ?? []
     : displayedSections;
   const options = isFullCode ? codes : childOptions;
-  const backOption = { back: true, code: "back", name: "← На уровень выше" };
+  const backOption = { back: true, code: "back", name: t("lead_form.up_one_level") };
 
   function clearSelection() {
     setChosenPath(null);
@@ -92,7 +95,7 @@ export default function CargoTnvedField({ control, index, sections, loading, err
   return (
     <Box sx={{ gridColumn: "1 / -1" }}>
       {(searchError || error) && !disabled && (
-        <Alert severity="error" sx={{ mb: 1 }} action={<Button onClick={() => { if (search !== null) setRetry((value) => value + 1); else onRetry(); }}>Повторить</Button>}>
+        <Alert severity="error" sx={{ mb: 1 }} action={<Button onClick={() => { if (search !== null) setRetry((value) => value + 1); else onRetry(); }}>{t("ui.retry")}</Button>}>
           {searchError || error}
         </Alert>
       )}
@@ -107,8 +110,8 @@ export default function CargoTnvedField({ control, index, sections, loading, err
         value={match ?? null}
         inputValue={inputValue}
         loading={loading || searchLoading}
-        loadingText="Загрузка справочника..."
-        noOptionsText="Код не найден"
+        loadingText={t("lead_form.loading_directory")}
+        noOptionsText={t("lead_form.code_not_found")}
         getOptionLabel={optionLabel}
         isOptionEqualToValue={(option, selected) => option.code === selected.code}
         filterOptions={(items) => items}
@@ -162,14 +165,14 @@ export default function CargoTnvedField({ control, index, sections, loading, err
             {...params}
             inputRef={field.ref}
             name={field.name}
-            label="Код ТН ВЭД"
-            placeholder={levels[path.length]?.label ?? "Выберите полный код (10 цифр)"}
+            label={t("lead_form.commodity_code")}
+            placeholder={levels[path.length]?.label ?? t("lead_form.select_full_ten_digit_code")}
             size="small"
             error={!disabled && !!fieldState.error}
-            helperText={disabled ? "ТН ВЭД доступен только для международной перевозки" : fieldState.error?.message ?? (
+            helperText={disabled ? t("lead_form.commodity_code_international_only") : fieldState.error?.message ?? (
               isFullCode && !match && !loading && !error
-                ? "Код не найден в справочнике"
-                : [path.map((item) => item.code).join(" → "), match?.name ?? "Выберите следующий уровень или введите полный код"].filter(Boolean).join(" · ")
+                ? t("lead_form.code_not_found_in_directory")
+                : [path.map((item) => item.code).join(" → "), match?.name ?? t("lead_form.select_next_level_or_full_code")].filter(Boolean).join(" · ")
             )}
           />
         )}

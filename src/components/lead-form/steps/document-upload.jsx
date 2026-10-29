@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import TooltipIconButton from "../../../shared/ui/tooltip-icon-button";
 import {
   Box,
@@ -16,6 +17,7 @@ import { useLeadsStore } from "../../../app/store/leads/leads-store";
 import FormInput from "../../../shared/ui/input/form-input";
 
 const DocumentUpload = ({ setValue, uploadedFiles, setUploadedFiles }) => {
+  const { t } = useTranslation();
   const { id } = useParams();
   const [fileName, setFileName] = useState(null);
   const [fileContext, setFileContext] = useState(null);
@@ -85,7 +87,7 @@ const DocumentUpload = ({ setValue, uploadedFiles, setUploadedFiles }) => {
           }}
         >
           <FormInput
-            label="Название документа"
+            label={t("ui.document_name")}
             size="small"
             onInput={handleFileName}
             fullWidth
@@ -93,7 +95,7 @@ const DocumentUpload = ({ setValue, uploadedFiles, setUploadedFiles }) => {
 
           <FormInput
             name="context"
-            label="Описание"
+            label={t("ui.description")}
             size="small"
             onInput={handleFileContext}
             fullWidth
@@ -101,8 +103,8 @@ const DocumentUpload = ({ setValue, uploadedFiles, setUploadedFiles }) => {
 
           <Box>
             <Button
-              title="Выбрать файл"
-              aria-label="Выбрать файл"
+              title={t("ui.choose_file")}
+              aria-label={t("ui.choose_file")}
               component="label"
               variant={"outlined"}
               startIcon={<UploadFileOutlinedIcon />}
@@ -140,10 +142,8 @@ const DocumentUpload = ({ setValue, uploadedFiles, setUploadedFiles }) => {
             textOverflow: "ellipsis",
             whiteSpace: "nowrap",
           }}
-          title={"Файл"}
-        >
-          Файлы
-        </Typography>
+          title={t("ui.file")}
+        >{t("lead_form.files")}</Typography>
 
         {isLoading ? (
           <CircularProgress />
@@ -191,7 +191,7 @@ const DocumentUpload = ({ setValue, uploadedFiles, setUploadedFiles }) => {
                     lineHeight: 1.35,
                   }}
                 >
-                  {file?.name || "Документ"}
+                  {file?.name || t("ui.document")}
                 </Typography>
 
                 <Typography
@@ -203,7 +203,7 @@ const DocumentUpload = ({ setValue, uploadedFiles, setUploadedFiles }) => {
                     lineHeight: 1.35,
                   }}
                 >
-                  {file?.context || "Описание не указано"}
+                  {file?.context || t("ui.description_not_specified")}
                 </Typography>
 
                 <Typography
@@ -216,13 +216,13 @@ const DocumentUpload = ({ setValue, uploadedFiles, setUploadedFiles }) => {
                     wordBreak: "break-word",
                   }}
                 >
-                  {file?.fileName || "Файл"}
+                  {file?.fileName || t("ui.file")}
                 </Typography>
               </Box>
               {file?.source === "forwarder" && (
                 <TooltipIconButton
-                  title="Удалить документ"
-                  aria-label="Удалить документ"
+                  title={t("ui.delete_document")}
+                  aria-label={t("ui.delete_document")}
                   size="small"
                   color="error"
                   onClick={() => handleDeleteFileFromDB(id, file.path)}
@@ -276,7 +276,7 @@ const DocumentUpload = ({ setValue, uploadedFiles, setUploadedFiles }) => {
                   lineHeight: 1.35,
                 }}
               >
-                {file?.name || "Документ"}
+                {file?.name || t("ui.document")}
               </Typography>
 
               <Typography
@@ -288,7 +288,7 @@ const DocumentUpload = ({ setValue, uploadedFiles, setUploadedFiles }) => {
                   lineHeight: 1.35,
                 }}
               >
-                {file?.context || "Описание не указано"}
+                {file?.context || t("ui.description_not_specified")}
               </Typography>
 
               <Typography
@@ -301,12 +301,12 @@ const DocumentUpload = ({ setValue, uploadedFiles, setUploadedFiles }) => {
                   wordBreak: "break-word",
                 }}
               >
-                {file?.fileName || "Файл"}
+                {file?.fileName || t("ui.file")}
               </Typography>
             </Box>
             <TooltipIconButton
-              title="Удалить документ"
-              aria-label="Удалить документ"
+              title={t("ui.delete_document")}
+              aria-label={t("ui.delete_document")}
               size="small"
               color="error"
               onClick={() => handleRemoveFile(file.id)}

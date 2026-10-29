@@ -1,3 +1,4 @@
+import appI18n from "../../i18n/index.js";
 import FormHeader from "../../components/lead-form/form-header";
 import DocumentUpload from "../../components/lead-form/steps/document-upload";
 import PriceStep from "../../components/lead-form/steps/price-step";
@@ -17,15 +18,16 @@ import { mapCreateLeadFormToApi } from "../../components/lead-form/model/createL
 import { publishLeadApi, uploadLeadFileApi } from "../../app/store/leads/api";
 import { useLeadsStore } from "../../app/store/leads/leads-store";
 import { isDraftLead } from "../../shared/lib/lead-draft";
+import { useTranslation } from "react-i18next";
 
 const steps = [
-  { id: 1, label: "Маршрут" },
-  { id: 2, label: "Груз" },
-  { id: 3, label: "Водитель" },
-  { id: 4, label: "Заказчик" },
-  { id: 5, label: "Цены" },
-  { id: 6, label: "Документы" },
-  { id: 7, label: "Проверка" },
+  { id: 1, get label() { return appI18n.t("ui.route"); } },
+  { id: 2, get label() { return appI18n.t("ui.cargo"); } },
+  { id: 3, get label() { return appI18n.t("ui.driver"); } },
+  { id: 4, get label() { return appI18n.t("ui.customer"); } },
+  { id: 5, get label() { return appI18n.t("lead_form.prices"); } },
+  { id: 6, get label() { return appI18n.t("ui.documents"); } },
+  { id: 7, get label() { return appI18n.t("lead_form.review"); } },
 ];
 
 const stepFields = [
@@ -44,6 +46,7 @@ const AddLeadForm = ({
   initialValues,
   onSaved,
 }) => {
+  const { t } = useTranslation();
   const currentLead = useLeadsStore((state) => state.currentLead);
   const createLead = useLeadsStore((state) => state.createLead);
   const updateLead = useLeadsStore((state) => state.updateLead);
@@ -165,38 +168,44 @@ const AddLeadForm = ({
         await getLeadItem(editingItemId);
       }
 
+      const successMessageKey = isDraft
+        ? "lead_form.draft_saved_success"
+        : isEditingDraft
+          ? "lead_form.lead_published_success"
+          : isEdit
+            ? "lead_form.lead_updated_success"
+            : "lead_form.lead_created_success";
+
       setResultModal({
         open: true,
         type: "success",
         isDraft,
         title: isDraft
-          ? "Черновик сохранён"
+          ? t("lead_form.draft_saved")
           : isEditingDraft
-            ? "Перевозка опубликована"
+            ? t("lead_form.lead_published")
             : isEdit
-              ? "Перевозка отредактирована"
-              : "Перевозка создана",
+              ? t("lead_form.lead_edited")
+              : t("lead_form.lead_created"),
         message: documentsUploadFailed
-          ? `${isDraft ? "Черновик сохранён" : "Перевозка сохранена"}, но часть документов не загрузилась`
-          : `${isDraft ? "Черновик успешно сохранён" : `Перевозка успешно ${isEditingDraft ? "опубликована" : isEdit ? "изменена" : "создана"}`}${
-              createdLeadId ? `: ${createdLeadId}` : ""
-            }`,
+          ? t(isDraft ? "lead_form.draft_documents_failed" : "lead_form.lead_documents_failed")
+          : `${t(successMessageKey)}${createdLeadId ? `: ${createdLeadId}` : ""}`,
       });
     } catch (error) {
       setResultModal({
         open: true,
         type: "error",
         title: isDraft
-          ? "Ошибка сохранения черновика"
+          ? t("lead_form.draft_save_error")
           : isEditingDraft
-            ? "Ошибка публикации"
-            : "Ошибка сохранения",
+            ? t("lead_form.publication_error")
+            : t("lead_form.save_error"),
         message:
           error.response?.data?.message ||
           error.message ||
           (isDraft
-            ? "Не удалось сохранить черновик"
-            : "Не удалось сохранить перевозку"),
+            ? t("lead_form.draft_save_failed")
+            : t("lead_form.lead_save_failed")),
       });
     } finally {
       setIsSubmitting(false);
@@ -320,10 +329,7 @@ const AddLeadForm = ({
         />
         <DialogContent sx={{ px: 3 }}>
           {isEditingDraft && (
-            <Alert severity="warning" sx={{ mb: 2 }}>
-              Черновик. Можно сохранить изменения и продолжить позже или
-              опубликовать перевозку на шаге «Проверка».
-            </Alert>
+            <Alert severity="warning" sx={{ mb: 2 }}>{t("lead_form.draft_description")}</Alert>
           )}
           <LeadFormTabs
             steps={steps}

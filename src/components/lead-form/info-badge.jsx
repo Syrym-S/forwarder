@@ -1,6 +1,8 @@
+import { useTranslation } from "react-i18next";
 import { Box, Typography } from "@mui/material";
 
 export function InfoBadge({ label, value, accent = false }) {
+  const { t } = useTranslation();
   return (
     <Box
       sx={{
@@ -32,7 +34,7 @@ export function InfoBadge({ label, value, accent = false }) {
           fontWeight: accent ? 600 : 500,
         }}
       >
-        {value || "Не указано"}
+        {value || t("ui.not_specified_2")}
       </Typography>
     </Box>
   );

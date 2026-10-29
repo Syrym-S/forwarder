@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { getCargoVolume } from "../../../shared/lib/cargo-volume";
 import { transportationParameters } from "../../../shared/const/leads/transportation-parameters";
 import { Box } from "@mui/material";
@@ -10,6 +11,7 @@ import InfoItem from "../../../shared/ui/info-item";
 import { isInternationalRoute } from "../../../shared/lib/international-route";
 
 export function LastStep({ form }) {
+  const { t } = useTranslation();
   const leadParams = useOptionsStore((state) => state.leadParams);
   const getLeadParams = useOptionsStore((state) => state.getLeadParams);
 
@@ -22,7 +24,7 @@ export function LastStep({ form }) {
 
   return (
     <Box sx={{ display: "grid", gap: 2 }}>
-      <StepSection title="Проверьте данные">
+      <StepSection title={t("lead_form.review_details")}>
         <Box
           sx={{
             display: "grid",
@@ -32,13 +34,13 @@ export function LastStep({ form }) {
           }}
         >
           <RoutePoint
-            label="Откуда"
-            address={form.from_location.address || "Битые данные"}
+            label={t("ui.origin")}
+            address={form.from_location.address || t("ui.invalid_data")}
             isFrom
             status={
               form.from_location?.is_passed
-                ? "Точка пройдена"
-                : "Точка не пройдена"
+                ? t("ui.point_passed")
+                : t("ui.point_not_passed")
             }
             date={pointSchedules[0]}
           />
@@ -47,10 +49,10 @@ export function LastStep({ form }) {
             <RoutePoint
               key={waypoint?.id || `${waypoint?.address}-${index}`}
               isPassed={waypoint?.is_passed}
-              label={`Промежуточная точка #${index + 1}`}
-              address={waypoint?.address || "Битые данные"}
+              label={t("ui.waypoint_number", { value1: index + 1 })}
+              address={waypoint?.address || t("ui.invalid_data")}
               status={
-                waypoint?.is_passed ? "Точка пройдена" : "Точка не пройдена"
+                waypoint?.is_passed ? t("ui.point_passed") : t("ui.point_not_passed")
               }
               type={waypoint.type}
               date={pointSchedules[index + 1]}
@@ -58,24 +60,24 @@ export function LastStep({ form }) {
           ))}
 
           <RoutePoint
-            label="Откуда"
-            address={form.to_location.address || "Битые данные"}
+            label={t("ui.origin")}
+            address={form.to_location.address || t("ui.invalid_data")}
             status={
               form.to_location?.is_passed
-                ? "Точка пройдена"
-                : "Точка не пройдена"
+                ? t("ui.point_passed")
+                : t("ui.point_not_passed")
             }
             date={pointSchedules[waypoints.length + 1]}
             isTo
           />
         </Box>
         <InfoBadge
-          label="Пропуск подтверждения файлов погрузки/разгрузки"
-          value={form.pass_verify === true ? "Включён" : "Выключен"}
+          label={t("ui.skip_loading_unloading_file_confirmation")}
+          value={form.pass_verify === true ? t("ui.enabled") : t("ui.disabled")}
         />
       </StepSection>
 
-      <StepSection title="Параметры перевозки">
+      <StepSection title={t("ui.lead_parameters")}>
         <Box
           sx={{
             display: "grid",
@@ -94,14 +96,14 @@ export function LastStep({ form }) {
                 )?.name ||
                 form[name]?.name ||
                 form[name] ||
-                "Не указан"
+                t("ui.not_specified")
               }
             />
           ))}
         </Box>
       </StepSection>
 
-      <StepSection title="Цены">
+      <StepSection title={t("lead_form.prices")}>
         <Box
           sx={{
             display: "flex",
@@ -109,16 +111,16 @@ export function LastStep({ form }) {
             gap: 2,
           }}
         >
-          <InfoBadge label="Цена заказчика" value={form.price} />
+          <InfoBadge label={t("ui.customer_price")} value={form.price} />
 
           <InfoBadge
-            label="Ваша цена за перевозку"
+            label={t("ui.your_lead_price")}
             value={form.transportation_price}
           />
         </Box>
       </StepSection>
 
-      <StepSection title="Данные о грузах">
+      <StepSection title={t("lead_form.cargo_details")}>
         <Box
           sx={{
             display: "grid",
@@ -131,7 +133,7 @@ export function LastStep({ form }) {
               cargo.height_cm || cargo.width_cm || cargo.length_cm;
 
             return (
-              <StepSection key={cargo.id ?? index} title={`Груз ${index + 1}`}>
+              <StepSection key={cargo.id ?? index} title={t("ui.cargo_number", { value1: index + 1 })}>
                 <Box
                   sx={{
                     display: "grid",
@@ -139,29 +141,29 @@ export function LastStep({ form }) {
                     gridTemplateColumns: "1fr",
                   }}
                 >
-                  <InfoBadge label="Тип груза" value={cargo.type} />
-                  {isInternationalRoute(form) && <InfoBadge label="Код ТН ВЭД" value={cargo.tnved_code || "Не указан"} />}
+                  <InfoBadge label={t("lead_form.cargo_type")} value={cargo.type} />
+                  {isInternationalRoute(form) && <InfoBadge label={t("lead_form.commodity_code")} value={cargo.tnved_code || t("ui.not_specified")} />}
 
                   <InfoBadge
-                    label="Вес"
+                    label={t("ui.weight")}
                     value={
-                      cargo.weight_kg ? `${cargo.weight_kg} кг` : "Не указан"
+                      cargo.weight_kg ? t("ui.weight_kilograms", { value1: cargo.weight_kg }) : t("ui.not_specified")
                     }
                   />
 
                   {getCargoVolume(cargo) != null && (
                     <InfoBadge
-                      label="Объём"
-                      value={`${getCargoVolume(cargo)} м³`}
+                      label={t("ui.volume")}
+                      value={t("ui.volume_cubic_meters", { value1: getCargoVolume(cargo) })}
                     />
                   )}
                   {hasMeasures && (
                     <InfoBadge
-                      label="Размеры"
+                      label={t("ui.dimensions")}
                       value={[
-                        cargo.length_cm && `Длина: ${cargo.length_cm} см`,
-                        cargo.width_cm && `Ширина: ${cargo.width_cm} см`,
-                        cargo.height_cm && `Высота: ${cargo.height_cm} см`,
+                        cargo.length_cm && t("ui.length_centimeters", { value1: cargo.length_cm }),
+                        cargo.width_cm && t("ui.width_centimeters", { value1: cargo.width_cm }),
+                        cargo.height_cm && t("ui.height_centimeters", { value1: cargo.height_cm }),
                       ]
                         .filter(Boolean)
                         .join(" × ")}
@@ -174,7 +176,7 @@ export function LastStep({ form }) {
         </Box>
       </StepSection>
 
-      <StepSection title="Водитель">
+      <StepSection title={t("ui.driver")}>
         <Box
           sx={{
             display: "grid",
@@ -186,17 +188,17 @@ export function LastStep({ form }) {
           }}
         >
           <InfoBadge
-            label="ФИО водителя"
-            value={form.driver?.fio || "Не выбран"}
+            label={t("lead_form.driver_full_name")}
+            value={form.driver?.fio || t("lead_form.not_selected")}
           />
           <InfoBadge
-            label="Номер телефона"
-            value={form.driver?.phone || "Не указан"}
+            label={t("ui.phone")}
+            value={form.driver?.phone || t("ui.not_specified")}
           />
         </Box>
       </StepSection>
 
-      <StepSection title="Заказчик">
+      <StepSection title={t("ui.customer")}>
         <Box
           sx={{
             display: "grid",
@@ -208,14 +210,14 @@ export function LastStep({ form }) {
           }}
         >
           <InfoBadge
-            label="ФИО заказчика"
-            value={form.customer?.name || "Не выбран"}
+            label={t("lead_form.customer_full_name")}
+            value={form.customer?.name || t("lead_form.not_selected")}
           />
-          <InfoBadge label="Тип" value={form.customer?.type || "Не выбран"} />
+          <InfoBadge label={t("ui.type")} value={form.customer?.type || t("lead_form.not_selected")} />
         </Box>
       </StepSection>
 
-      <StepSection title="Документы">
+      <StepSection title={t("ui.documents")}>
         {form.documents?.length ? (
           <Box
             sx={{
@@ -226,13 +228,13 @@ export function LastStep({ form }) {
             {form.documents.map((document) => (
               <InfoBadge
                 key={document.id}
-                label={document.name || "Документ"}
-                value={document.fileName || "Файл"}
+                label={document.name || t("ui.document")}
+                value={document.fileName || t("ui.file")}
               />
             ))}
           </Box>
         ) : (
-          <InfoBadge label="Документы" value="Не добавлены" />
+          <InfoBadge label={t("ui.documents")} value={t("lead_form.not_added")} />
         )}
       </StepSection>
     </Box>

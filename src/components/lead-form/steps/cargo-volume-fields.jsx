@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { Box, Typography } from "@mui/material";
 import { useWatch } from "react-hook-form";
 import FormControllerInput from "../../../shared/ui/input/form-controller-input";
@@ -8,9 +9,10 @@ import {
   isPositiveCargoNumber,
 } from "../../../shared/lib/cargo-volume";
 
-const labels = ["Длина, см", "Ширина, см", "Высота, см"];
+const labelKeys = ["lead_form.length_cm", "lead_form.width_cm", "lead_form.height_cm"];
 
 export default function CargoVolumeFields({ control, index }) {
+  const { t } = useTranslation();
   const prefix = `cargos.${index}`;
   const cargo = useWatch({ control, name: prefix }) || {};
   const calculatedVolume = calculateCargoVolume(cargo);
@@ -33,10 +35,10 @@ export default function CargoVolumeFields({ control, index }) {
               validate: (value) =>
                 !hasCargoValue(value) ||
                 isPositiveCargoNumber(value) ||
-                "Габарит должен быть больше 0",
+                t("lead_form.dimension_must_be_positive"),
             }}
             value={cargo[key] ?? ""}
-            label={labels[dimensionIndex]}
+            label={t(labelKeys[dimensionIndex])}
             type="number"
             size="small"
             fullWidth
@@ -52,24 +54,21 @@ export default function CargoVolumeFields({ control, index }) {
           validate: (value) =>
             !hasCargoValue(value) ||
             isPositiveCargoNumber(value) ||
-            "Объём должен быть больше 0",
+            t("lead_form.volume_must_be_positive"),
         }}
         value={
           hasCargoValue(cargo.cargo_demention)
             ? cargo.cargo_demention
             : (calculatedVolume ?? "")
         }
-        label="Объём груза, м³"
+        label={t("lead_form.cargo_volume_m3")}
         type="number"
         size="small"
         fullWidth
         slotProps={{ htmlInput: { min: 0, step: "any" } }}
       />
 
-      <Typography variant="body2" color="text.secondary">
-        Укажите известный объём или заполните габариты для автоматического
-        расчёта.
-      </Typography>
+      <Typography variant="body2" color="text.secondary">{t("lead_form.cargo_volume_hint")}</Typography>
 
       {/* <Typography variant="body2" color="text.secondary" aria-live="polite">
         {calculatedVolume !== null

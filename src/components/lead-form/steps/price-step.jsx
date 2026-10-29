@@ -1,10 +1,12 @@
+import { useTranslation } from "react-i18next";
 import FormControllerInput from "../../../shared/ui/input/form-controller-input";
 import { StepSection } from "../step-section";
 import { Box } from "@mui/material";
 
 const PriceStep = ({ control }) => {
+  const { t } = useTranslation();
   return (
-    <StepSection title="Укажите вашу маржу">
+    <StepSection title={t("lead_form.enter_your_margin")}>
       <Box
         sx={{
           display: "grid",
@@ -20,7 +22,7 @@ const PriceStep = ({ control }) => {
           type="number"
           slotProps={{ htmlInput: { min: 0, step: "any" } }}
           control={control}
-          label="Цена заказчика"
+          label={t("ui.customer_price")}
           size="small"
           fullWidth
         />
@@ -30,7 +32,7 @@ const PriceStep = ({ control }) => {
           type="number"
           slotProps={{ htmlInput: { min: 0, step: "any" } }}
           control={control}
-          label="Ваша цена за перевозку"
+          label={t("ui.your_lead_price")}
           size="small"
           fullWidth
         />

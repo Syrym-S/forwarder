@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { Fragment, useEffect } from "react";
 import {
   MapContainer,
@@ -22,6 +23,7 @@ export function CustomerMapView({
   onMapClick,
   onMarkerDragEnd,
 }) {
+  const { t } = useTranslation();
   const routesPointsCount = routes.reduce(
     (count, route) => count + (route.points?.length || 0),
     0,
@@ -72,14 +74,13 @@ export function CustomerMapView({
             >
               <Tooltip sticky>
                 <div>
-                  <b>Перевозка #{mapRoute.lead?.num ?? mapRoute.lead?.id}</b>
+                  <b>{t("ui.lead_number", { value1: mapRoute.lead?.num ?? mapRoute.lead?.id })}</b>
                   <br />
                   {mapRoute.lead?.from_location} → {mapRoute.lead?.to_location}
                   {mapRoute.route?.distanceMeters && (
                     <>
                       <br />
-                      {(mapRoute.route.distanceMeters / 1000).toFixed(1)} км
-                    </>
+                      {(mapRoute.route.distanceMeters / 1000).toFixed(1)}{t("dashboard.kilometers")}</>
                   )}
                 </div>
               </Tooltip>
@@ -87,21 +88,19 @@ export function CustomerMapView({
 
             <Marker position={startPoint}>
               <Popup>
-                <strong>Точка А</strong>
+                <strong>{t("lead_form.origin_point")}</strong>
+                <br />{t("lead_form.lead_prefix")}{mapRoute.lead?.num ?? mapRoute.lead?.id}
                 <br />
-                Перевозка #{mapRoute.lead?.num ?? mapRoute.lead?.id}
-                <br />
-                {mapRoute.lead?.from_location || "Откуда не указано"}
+                {mapRoute.lead?.from_location || t("lead_form.origin_not_specified")}
               </Popup>
             </Marker>
 
             <Marker position={endPoint}>
               <Popup>
-                <strong>Точка Б</strong>
+                <strong>{t("lead_form.destination_point")}</strong>
+                <br />{t("lead_form.lead_prefix")}{mapRoute.lead?.num ?? mapRoute.lead?.id}
                 <br />
-                Перевозка #{mapRoute.lead?.num ?? mapRoute.lead?.id}
-                <br />
-                {mapRoute.lead?.to_location || "Куда не указано"}
+                {mapRoute.lead?.to_location || t("lead_form.destination_not_specified")}
               </Popup>
             </Marker>
           </Fragment>
@@ -118,20 +117,18 @@ export function CustomerMapView({
         >
           <Tooltip sticky>
             <div>
-              <b>{route?.description || "Маршрут"}</b>
+              <b>{route?.description || t("ui.route")}</b>
 
               {route?.distanceMeters && (
                 <>
                   <br />
-                  {(route.distanceMeters / 1000).toFixed(1)} км
-                </>
+                  {(route.distanceMeters / 1000).toFixed(1)}{t("dashboard.kilometers")}</>
               )}
 
               {route?.duration && (
                 <>
                   <br />
-                  {Math.round(parseInt(route.duration, 10) / 60)} мин
-                </>
+                  {Math.round(parseInt(route.duration, 10) / 60)}{t("dashboard.minutes")}</>
               )}
             </div>
           </Tooltip>
@@ -168,6 +165,7 @@ export function CustomerMapView({
 }
 
 function MapResizeHandler({ center, zoom, markersCount, routePointsCount }) {
+  useTranslation();
   const map = useMap();
 
   useEffect(() => {
@@ -204,6 +202,7 @@ function MapResizeHandler({ center, zoom, markersCount, routePointsCount }) {
 }
 
 function FitRouteBounds({ routePoints, routes }) {
+  useTranslation();
   const map = useMap();
 
   useEffect(() => {
@@ -224,6 +223,7 @@ function FitRouteBounds({ routePoints, routes }) {
 }
 
 function MapClickHandler({ onMapClick }) {
+  useTranslation();
   useMapEvents({
     click(event) {
       if (!onMapClick) {

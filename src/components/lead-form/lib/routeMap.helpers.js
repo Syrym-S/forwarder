@@ -1,3 +1,4 @@
+import appI18n from "../../../i18n/index.js";
 export function hasPoint(lat, lng) {
   return (
     lat !== "" &&
@@ -24,8 +25,8 @@ export function getRouteMarkers(form) {
         Number(form.from_location.lat),
         Number(form.from_location.lon || form.from_location.lng),
       ],
-      title: "Точка A",
-      description: "Откуда",
+      title: appI18n.t("lead_form.origin_map_point"),
+      description: appI18n.t("ui.origin"),
       draggable: true,
     });
   }
@@ -35,8 +36,8 @@ export function getRouteMarkers(form) {
       markers.push({
         id: `cross.${index}`,
         position: [Number(waypoint.lat), Number(waypoint.lon || waypoint.lng)],
-        title: `Точка ${index + 1}`,
-        description: `Точка пересечения ${index + 1}`,
+        title: appI18n.t("lead_form.point_number", { value1: index + 1 }),
+        description: appI18n.t("lead_form.crossing_point_number", { value1: index + 1 }),
         draggable: true,
       });
     }
@@ -51,8 +52,8 @@ export function getRouteMarkers(form) {
         Number(form.to_location.lat),
         Number(form.to_location.lon || form.to_location.lng),
       ],
-      title: "Точка B",
-      description: "Куда",
+      title: appI18n.t("lead_form.destination_map_point"),
+      description: appI18n.t("ui.destination"),
       draggable: true,
     });
   }

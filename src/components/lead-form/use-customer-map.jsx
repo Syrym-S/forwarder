@@ -1,4 +1,6 @@
+import { useTranslation } from "react-i18next";
 export function useCustomerMap() {
+  const { t } = useTranslation();
   const center = [43.241141, 76.871399]; // Алматы, временно
   const zoom = 12;
 
@@ -6,8 +8,8 @@ export function useCustomerMap() {
     {
       id: 1,
       position: [43.241141, 76.871399],
-      title: "Точка клиента",
-      description: "Временный маркер для проверки карты",
+      title: t("lead_form.customer_map_point"),
+      description: t("lead_form.temporary_map_marker"),
     },
   ];
 

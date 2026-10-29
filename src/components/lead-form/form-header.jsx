@@ -1,7 +1,9 @@
+import { useTranslation } from "react-i18next";
 import { Box, Chip, DialogTitle, Typography } from "@mui/material";
 import React from "react";
 
 const FormHeader = ({ isEdit, activeStep, stepsCount }) => {
+  const { t } = useTranslation();
   return (
     <DialogTitle
       sx={{
@@ -30,16 +32,14 @@ const FormHeader = ({ isEdit, activeStep, stepsCount }) => {
               lineHeight: 1.3,
             }}
           >
-            {isEdit ? "Редактирование маршрута" : "Создание маршрута"}
+            {isEdit ? t("lead_form.edit_route") : t("lead_form.create_route_title")}
           </Typography>
 
-          <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
-            Заполните данные по заявке
-          </Typography>
+          <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>{t("lead_form.fill_request_details")}</Typography>
         </Box>
 
         <Chip
-          label={`Шаг ${activeStep} из ${stepsCount}`}
+          label={t("lead_form.step_progress", { value1: activeStep, value2: stepsCount })}
           color="primary"
           variant="outlined"
           size="small"

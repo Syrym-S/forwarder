@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { Alert, Box, Button } from "@mui/material";
 import { useEffect } from "react";
 import { Controller } from "react-hook-form";
@@ -7,6 +8,7 @@ import CustomSelect from "../../../shared/ui/input/custom-select";
 import { StepSection } from "../step-section";
 
 export default function TransportationParameters({ control }) {
+  const { t } = useTranslation();
   const getLeadParams = useOptionsStore((state) => state.getLeadParams);
   const leadParams = useOptionsStore((state) => state.leadParams);
   const isLoading = useOptionsStore((state) => state.isLeadParamsLoading);
@@ -17,15 +19,11 @@ export default function TransportationParameters({ control }) {
   }, [getLeadParams]);
 
   return (
-    <StepSection title="Параметры перевозки">
+    <StepSection title={t("ui.lead_parameters")}>
       {error && (
         <Alert severity="error" sx={{ mb: 2 }} action={
-          <Button color="inherit" size="small" onClick={getLeadParams} disabled={isLoading}>
-            Повторить
-          </Button>
-        }>
-          Не удалось загрузить параметры перевозки
-        </Alert>
+          <Button color="inherit" size="small" onClick={getLeadParams} disabled={isLoading}>{t("ui.retry")}</Button>
+        }>{t("ui.lead_parameters_load_failed")}</Alert>
       )}
       <Box
         sx={{
@@ -55,9 +53,9 @@ export default function TransportationParameters({ control }) {
                 label={label}
                 fullWidth
                 disabled={isLoading || !!error}
-                options={[{ value: "", label: "Не указан" }, ...options]}
+                options={[{ value: "", label: t("ui.not_specified") }, ...options]}
                 error={!!fieldState.error}
-                helperText={fieldState.error?.message || (isLoading ? "Загрузка…" : undefined)}
+                helperText={fieldState.error?.message || (isLoading ? t("ui.loading") : undefined)}
               />
               );
             }}
