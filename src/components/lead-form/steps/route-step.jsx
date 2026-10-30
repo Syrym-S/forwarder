@@ -25,7 +25,10 @@ import { STATUS } from "../../../shared/const/tenders";
 import { useLeadsStore } from "../../../app/store/leads/leads-store";
 import PrimaryButton from "../../../shared/ui/button/primary-button";
 import { isInternationalRoute } from "../../../shared/lib/international-route";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import CustomSelect from "../../../shared/ui/input/custom-select";
+import { KAZAKHSTAN_MAP_CITIES } from "../model/kazakhstan-map-cities";
+import MapAddressSearch from "../map-address-search";
 
 const waypointTypes = [
   { id: 1, value: "check_passes", get label() { return appI18n.t("lead_form.transit"); } },
@@ -34,7 +37,18 @@ const waypointTypes = [
 ];
 
 const RouteStep = ({ control, form, setValue, isEdit = false }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const [selectedMapCityId, setSelectedMapCityId] = useState("");
+  const [mapFocus, setMapFocus] = useState(null);
+  const selectedMapCity = KAZAKHSTAN_MAP_CITIES.find(
+    (city) => city.id === selectedMapCityId,
+  ) ?? null;
+  const mapCityOptions = KAZAKHSTAN_MAP_CITIES.map((city) => ({
+    value: city.id,
+    label: t(`lead_form.map_cities.${city.id}`),
+  })).sort((first, second) =>
+    first.label.localeCompare(second.label, i18n.resolvedLanguage),
+  );
   const currentLead = useLeadsStore((state) => state.currentLead);
   const isInternational = isInternationalRoute(form);
 
@@ -255,6 +269,35 @@ const RouteStep = ({ control, form, setValue, isEdit = false }) => {
         </Box>
       </Box>
 
+      <Box sx={{ display: "flex", flexWrap: "wrap", alignItems: "flex-start", gap: 2, mb: 2 }}>
+        <CustomSelect
+          id="lead-map-city"
+          label={t("lead_form.map_city")}
+          value={selectedMapCityId}
+          options={[
+            { value: "", label: t("lead_form.select_map_city") },
+            ...mapCityOptions,
+          ]}
+          onChange={(event) => {
+            const cityId = event.target.value;
+            setSelectedMapCityId(cityId);
+            setMapFocus(KAZAKHSTAN_MAP_CITIES.find((city) => city.id === cityId) ?? null);
+          }}
+          helperText={t("lead_form.map_city_hint")}
+          sx={{ width: { xs: "100%", sm: 280 }, flexShrink: 0 }}
+          slotProps={{
+            select: {
+              MenuProps: { slotProps: { paper: { sx: { maxHeight: 430 } } } },
+            },
+          }}
+        />
+        <MapAddressSearch
+          key={selectedMapCityId}
+          city={selectedMapCity}
+          onSelect={setMapFocus}
+        />
+      </Box>
+
       <Box
         sx={{
           height: {
@@ -271,6 +314,7 @@ const RouteStep = ({ control, form, setValue, isEdit = false }) => {
         <CustomerMapView
           center={map.center}
           zoom={map.zoom}
+          focusView={mapFocus}
           markers={routeMarkers}
           routePoints={routePoints}
           handleMarkerClick={map.handleMarkerClick}

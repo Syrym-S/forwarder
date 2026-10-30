@@ -1,9 +1,8 @@
-import {
-  formatCoordinatesLabel,
-  formatNominatimAddress,
-} from "../lib/geocoding.helpers";
+import { formatCoordinatesLabel } from "../lib/geocoding.helpers";
+import { waitForGeocodingSlot } from "./geocoding-rate-limit.js";
 
 export async function reverseGeocode(lat, lng, options = {}) {
+  const savedLanguage = localStorage.getItem("language");
   try {
     const url = new URL("https://nominatim.openstreetmap.org/reverse");
 
@@ -11,8 +10,10 @@ export async function reverseGeocode(lat, lng, options = {}) {
     url.searchParams.set("lat", lat);
     url.searchParams.set("lon", lng);
     url.searchParams.set("addressdetails", "1");
-    url.searchParams.set("accept-language", "ru");
+    url.searchParams.set("accept-language", savedLanguage);
 
+    await waitForGeocodingSlot(options.signal);
+    options.signal?.throwIfAborted();
     const response = await fetch(url.toString(), {
       signal: options.signal,
     });
@@ -23,7 +24,6 @@ export async function reverseGeocode(lat, lng, options = {}) {
 
     const data = await response.json();
 
-    //  return formatNominatimAddress(data);
     return data;
   } catch (error) {
     if (error.name === "AbortError") {

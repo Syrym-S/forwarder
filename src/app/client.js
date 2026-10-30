@@ -1,4 +1,5 @@
 import axios from "axios";
+import { languageParser } from "../shared/helpers/language-parser.js";
 
 export const isStaging = window?.APP_DATA?.mode === "staging";
 
@@ -13,4 +14,12 @@ export const api = axios.create({
   headers: {
     ...(nonce && { "X-WP-Nonce": nonce }),
   },
+});
+
+api.interceptors.request.use((config) => {
+  config.headers.set(
+    "Accept-Language",
+    languageParser(localStorage.getItem("language")),
+  );
+  return config;
 });

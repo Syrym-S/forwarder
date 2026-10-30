@@ -1,4 +1,198 @@
 {
+  "notifications": {
+    "lead.created_by_customer": {
+      "theme": "Жаңа тапсырыс жасалды",
+      "message": "Тапсырыс беруші тапсырыс жасап, сізді оған бекітті."
+    },
+    "lead.updated_by_customer": {
+      "theme": "Тапсырыс жаңартылды",
+      "message": "Тапсырыс беруші тапсырысқа өзгерістер енгізді."
+    },
+    "lead.rejected": {
+      "theme": "Рейс тоқтатылды",
+      "message": "Тапсырыс беруші рейсті тоқтатты."
+    },
+    "lead.forwarder_detached": {
+      "theme": "Сіз рейстен шығарылдыңыз",
+      "message": "Тапсырыс беруші сізді рейстен шығарды."
+    },
+    "lead.point_start_deadline": {
+      "theme": "Бағыт нүктесінің мерзімі келді",
+      "message": "Бағыт нүктесінде жұмысты бастаудың жоспарланған уақыты келді."
+    },
+    "lead.point_end_deadline": {
+      "theme": "Бағыт нүктесінің мерзімі келді",
+      "message": "Бағыт нүктесінде жұмысты аяқтаудың жоспарланған уақыты келді."
+    },
+    "shipping.loading_started": {
+      "theme": "Рейс басталды.",
+      "message": "Жүргізуші жүкті тиеуді бастады."
+    },
+    "shipping.unloading_started": {
+      "theme": "Жүк түсіру басталды",
+      "message": "Жүргізуші жүкті түсіруді бастады. Оны растаңыз."
+    },
+    "shipping.point_passed": {
+      "theme": "№{{num}} рейс: Жүргізуші бағыт нүктесінен өтті",
+      "message": "Жүргізуші бағыт нүктесінен өтті."
+    },
+    "shipping.loading_verified": {
+      "theme": "№{{num}} рейс: Жүргізуші жүк тиелгенін растады",
+      "message": "Жүргізуші жүк тиелгенін растады."
+    },
+    "shipping.unloading_verified": {
+      "theme": "№{{num}} рейс: Жүргізуші жүк түсірілгенін растады",
+      "message": "Жүргізуші жүк түсірілгенін растады."
+    },
+    "shipping.last_point_passed": {
+      "theme": "№{{num}} рейс: Жүргізуші соңғы бағыт нүктесіне келді",
+      "message": "Жүргізуші соңғы бағыт нүктесінде жүк түсірілгенін растады. Рейсті қолмен аяқтаңыз."
+    },
+    "shipping.emergency-situation": {
+      "theme": "Төтенше жағдай жарияланды.",
+      "message": "Жүргізуші төтенше жағдай туралы хабарлады."
+    },
+    "shipping.avr_signed": {
+      "theme": "Жүргізуші орындалған жұмыстар актісіне қол қойды",
+      "message": "Жүргізуші №{{num}} рейс бойынша орындалған жұмыстар актісіне қол қойды. Өз тарапыңыздан актіге қол қойыңыз."
+    },
+    "shipping.finished": {
+      "theme": "Рейс аяқталды",
+      "message": "№{{num}} рейс орындалған жұмыстар актілеріне қол қойылмай аяқталды."
+    },
+    "tender.created_by_customer": {
+      "theme": "Жаңа аукцион",
+      "message": "Тапсырыс берушінің жаңа аукционы қолжетімді."
+    },
+    "tender.add_participant_by_customer": {
+      "theme": "Сіз аукционға қосылдыңыз",
+      "message": "Тапсырыс беруші сізді аукцион қатысушысы ретінде қосты."
+    },
+    "tender.participant_removed": {
+      "theme": "Сіз аукционнан шығарылдыңыз",
+      "message": "Тапсырыс беруші сізді аукцион қатысушыларының қатарынан шығарды."
+    },
+    "tender.updated_by_customer": {
+      "theme": "Аукцион жаңартылды",
+      "message": "Тапсырыс беруші аукционға өзгерістер енгізді."
+    },
+    "tender.cancelled_by_customer": {
+      "theme": "Аукцион тоқтатылды",
+      "message": "Тапсырыс беруші аукционды тоқтатты."
+    },
+    "tender.bet_accepted": {
+      "theme": "Сіздің баға ұсынысыңыз жеңді",
+      "message": "Тапсырыс беруші аукциондағы баға ұсынысыңызды қабылдады."
+    },
+    "tender.bet_added_by_driver": {
+      "theme": "Аукционға жаңа баға ұсынысы түсті",
+      "message": "Жүргізуші аукционға баға ұсынысын берді."
+    },
+    "tender.bet_cancelled_by_driver": {
+      "theme": "Баға ұсынысы қайтарып алынды",
+      "message": "Жүргізуші аукциондағы баға ұсынысын қайтарып алды."
+    },
+    "factor.created_by_factor": {
+      "theme": "Факторинг жасалды",
+      "message": "Фактор факторинг жасады"
+    },
+    "factor.updated_by_factor": {
+      "theme": "Факторинг жаңартылды",
+      "message": "Фактор факторингті жаңартты"
+    },
+    "factor.verified_by_customer": {
+      "theme": "Факторинг расталды",
+      "message": "Тапсырыс беруші факторингті растады"
+    },
+    "factor.verified_by_factor": {
+      "theme": "Факторинг расталды",
+      "message": "Фактор факторингті растады"
+    },
+    "factor.signed_by_customer": {
+      "theme": "Факторинг шартына қол қойылды",
+      "message": "Тапсырыс беруші факторинг шартына қол қойды"
+    },
+    "factor.signed_by_factor": {
+      "theme": "Факторинг шартына қол қойылды",
+      "message": "Фактор факторинг шартына қол қойды"
+    },
+    "factor.cancelled_by_customer": {
+      "theme": "Факторинг тоқтатылды",
+      "message": "Тапсырыс беруші факторингті тоқтатты"
+    },
+    "factor.cancelled_by_factor": {
+      "theme": "Факторинг тоқтатылды",
+      "message": "Фактор факторингті тоқтатты"
+    },
+    "factor.finished_by_factor": {
+      "theme": "Факторинг аяқталды",
+      "message": "Фактор факторингті аяқтады"
+    },
+    "factor.line_approved": {
+      "theme": "Желі мақұлданды",
+      "message": "Факторинг желісі туралы шартқа екі тарап та қол қойды"
+    },
+    "factor.line_rejected": {
+      "theme": "Лимитке өтінім қабылданбады",
+      "message": "Фактор лимитке өтінімді қабылдамады"
+    },
+    "factor.line_closed": {
+      "theme": "Желі жабылды",
+      "message": "Фактор қаржыландыру желісін жапты"
+    },
+    "factor.line_updated": {
+      "theme": "Желі өзгертілді",
+      "message": "Фактор желі шарттарын өзгертті"
+    },
+    "factor.line_reset": {
+      "theme": "Лимит нөлге түсірілді",
+      "message": "Фактор желі лимитін нөлге түсірді"
+    },
+    "factor.created_by_forwarder": {
+      "theme": "Факторинг жасалды",
+      "message": "Экспедитор факторинг жасады"
+    },
+    "factor.verified_by_forwarder": {
+      "theme": "Факторинг расталды",
+      "message": "Экспедитор факторингті растады"
+    },
+    "factor.signed_by_forwarder": {
+      "theme": "Факторинг шартына қол қойылды",
+      "message": "Экспедитор факторинг шартына қол қойды"
+    },
+    "factor.cancelled_by_forwarder": {
+      "theme": "Факторинг тоқтатылды",
+      "message": "Экспедитор факторингті тоқтатты"
+    },
+    "factor.paid_by_factor": {
+      "theme": "Төлем расталды",
+      "message": "Экспедитор фактордан төлем алғанын растады"
+    },
+    "factor.line_created": {
+      "theme": "Лимитке өтінім",
+      "message": "Экспедитор лимитке өтінім жіберді"
+    },
+    "lead.manufacturer.request_by_customer": {
+      "theme": "Байланыс орнатуға жаңа өтінім",
+      "message": "{{name}} тапсырыс берушісі сізбен байланыс орнатқысы келеді"
+    },
+    "lead.manufacturer.approved_by_customer": {
+      "theme": "Өтінім мақұлданды",
+      "message": "{{name}} тапсырыс берушісі байланысты мақұлдады"
+    },
+    "lead.manufacturer.rejected_by_customer": {
+      "theme": "Өтінім қабылданбады",
+      "message": "{{name}} тапсырыс берушісі өтінімді қабылдамады"
+    },
+    "lead.manufacturer.detached_by_customer": {
+      "theme": "Байланыс жойылды",
+      "message": "{{name}} тапсырыс берушісі сізбен байланысын үзді"
+    },
+    "lead.manufacturer.cancelled_by_customer": {
+      "theme": "Өтінім қайтарып алынды",
+      "message": "{{name}} тапсырыс берушісі өтінімін қайтарып алды"
+    }
+  },
   "active_leads": {
     "title": "Белсенді тасымалдар",
     "drafts_title": "Тасымал щимайлары",
@@ -1047,6 +1241,45 @@
     "invalid_chat_list_response": "Чаттар тізімінің жауабы жарамсыз"
   },
   "lead_form": {
+    "map_city": "Қазақстан қаласы",
+    "map_address": "Көше және үй нөмірі",
+    "map_address_placeholder": "Көше атауы мен үй нөмірі",
+    "map_address_city_required": "Алдымен қаланы таңдаңыз",
+    "map_address_search_hint": "Мекенжайды енгізіп, «Табу» түймесін басыңыз",
+    "map_address_search_failed": "Мекенжайларды іздеу мүмкін болмады. Қайталап көріңіз.",
+    "map_address_results": "Табылған мекенжайлар",
+    "map_address_choose": "Мекенжайды таңдаңыз",
+    "map_address_not_found": "Мекенжайлар табылмады. Көше мен үй нөмірін нақтылаңыз.",
+    "map_address_hint": "Мекенжайды таңдау картаны жақындатады. Бағыт нүктесін картадан таңдаңыз.",
+    "select_map_city": "Қаланы таңдаңыз",
+    "map_city_hint": "Қаланы таңдау картаны жылжытады. Бағыт нүктесін картадан таңдаңыз.",
+    "map_cities": {
+      "astana": "Астана",
+      "almaty": "Алматы",
+      "shymkent": "Шымкент",
+      "aktau": "Ақтау",
+      "aktobe": "Ақтөбе",
+      "atyrau": "Атырау",
+      "karaganda": "Қарағанды",
+      "kokshetau": "Көкшетау",
+      "konayev": "Қонаев",
+      "kostanay": "Қостанай",
+      "kyzylorda": "Қызылорда",
+      "oskemen": "Өскемен",
+      "oral": "Орал",
+      "pavlodar": "Павлодар",
+      "petropavl": "Петропавл",
+      "semey": "Семей",
+      "taldykorgan": "Талдықорған",
+      "taraz": "Тараз",
+      "turkestan": "Түркістан",
+      "zhezkazgan": "Жезқазған",
+      "baikonur": "Байқоңыр",
+      "ekibastuz": "Екібастұз",
+      "ridder": "Риддер",
+      "temirtau": "Теміртау",
+      "zhanaozen": "Жаңаөзен"
+    },
     "draft_saved_success": "Щимай сәтті сақталды",
     "lead_published_success": "Тасымал сәтті жарияланды",
     "lead_updated_success": "Тасымал сәтті өзгертілді",

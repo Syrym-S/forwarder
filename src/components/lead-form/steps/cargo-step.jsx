@@ -19,6 +19,8 @@ import FormControllerInput from "../../../shared/ui/input/form-controller-input"
 import { hasCargoValue, isPositiveCargoNumber } from "../../../shared/lib/cargo-volume";
 import { isInternationalRoute } from "../../../shared/lib/international-route";
 
+const getCargoTypeLabel = (option) => option?.translation || option?.name || "";
+
 const CargoStep = ({ control, errors, leadStatus }) => {
   const { t } = useTranslation();
   const form = useWatch({ control });
@@ -127,7 +129,8 @@ const CargoStep = ({ control, errors, leadStatus }) => {
 export default CargoStep;
 
 const CargoStepFieldsContent = ({ index, control, cargo, isInternational, tnvedSections, isTNVEDLoading, tnvedError, getLTNVEDOptions }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const language = i18n.resolvedLanguage;
   const searchCargoType = useOptionsStore((state) => state.searchCargoType);
   const cargoTypes = useOptionsStore((state) => state.cargoTypes);
   const getCargoTypes = useOptionsStore((state) => state.getCargoTypes);
@@ -151,12 +154,15 @@ const CargoStepFieldsContent = ({ index, control, cargo, isInternational, tnvedS
     }, 1000);
 
     return () => clearTimeout(timer);
-  }, [inputValue]);
+  }, [inputValue, searchCargoType, language]);
 
   useEffect(() => {
     getCargoTypes();
+  }, [getCargoTypes, language]);
+
+  useEffect(() => {
     getCurrencies();
-  }, []);
+  }, [getCurrencies]);
 
   return (
     <Box
@@ -195,7 +201,7 @@ const CargoStepFieldsContent = ({ index, control, cargo, isInternational, tnvedS
             value={cargoTypes.find((item) => item.name === field.value) || null}
             onChange={(_, value, reason) => {
               field.onChange(value?.name || "");
-              setInputValue(value?.name || "");
+              setInputValue(getCargoTypeLabel(value));
 
               if (reason === "clear") {
                 getCargoTypes();
@@ -204,7 +210,7 @@ const CargoStepFieldsContent = ({ index, control, cargo, isInternational, tnvedS
             onInputChange={(_, value) => {
               setInputValue(value);
             }}
-            getOptionLabel={(option) => option.name}
+            getOptionLabel={getCargoTypeLabel}
             isOptionEqualToValue={(option, value) => option.id === value.id}
             renderInput={(params) => (
               <TextField

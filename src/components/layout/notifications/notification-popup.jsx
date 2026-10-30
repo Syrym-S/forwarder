@@ -22,12 +22,13 @@ import { parserNotificationType } from "../../../shared/helpers/notifications/pa
 import { NOTIFICATION_TYPE } from "../../../shared/const/notification-types";
 import { LeadDocumentCard } from "../../leads/documents/LeadDocumentCard";
 import NotificationLoader from "../../../shared/ui/loaders/notification-loader";
+import { getNotificationMessage, getNotificationTheme } from "../../../shared/helpers/notifications/get-notification-message";
 
 const NotificationPopup = ({
   selectedNotification,
   setSelectedNotification,
 }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const currentLead = useLeadsStore(
     (state) => state.notificationPopUpCurrentLead,
   );
@@ -45,6 +46,13 @@ const NotificationPopup = ({
   const { id, notification_type } = parserNotificationType(
     selectedNotification?.type || "",
   );
+  const notification = {
+    ...selectedNotification,
+    ...notificationDetails,
+    type: notificationDetails?.type || selectedNotification?.type,
+    message: notificationDetails?.message || selectedNotification?.message,
+  };
+  const message = getNotificationMessage(notification, i18n);
   const files =
     notification_type === NOTIFICATION_TYPE.shipping
       ? currentLead?.cargo_actions?.at(-1)?.files || []
@@ -98,7 +106,7 @@ const NotificationPopup = ({
           overflowWrap: "anywhere",
         }}
       >
-        {selectedNotification?.theme || t("ui.notification")}
+        {getNotificationTheme(notification, i18n)}
       </DialogTitle>
       <TooltipIconButton
         title={t("ui.close_notification")}
@@ -158,7 +166,7 @@ const NotificationPopup = ({
                 overflowWrap: "anywhere",
               }}
             >
-              {notificationDetails?.message || selectedNotification?.message}
+              {message}
             </Typography>
             {files.length > 0 && (
               <Box sx={{ mt: 3 }}>

@@ -9,6 +9,7 @@ import {
 } from "./api";
 
 let tnvedRequestId = 0;
+let cargoTypesRequestId = 0;
 
 export const useOptionsStore = create((set, get) => ({
   leadParams: {},
@@ -33,10 +34,12 @@ export const useOptionsStore = create((set, get) => ({
   error: null,
 
   getCargoTypes: async (params) => {
+    const requestId = ++cargoTypesRequestId;
     try {
       set({ isCargoTypesLoading: true, error: null });
 
       const response = await getCargoTypesApi(params);
+      if (requestId !== cargoTypesRequestId) return;
 
       set({
         cargoTypes: response.data.results,
@@ -45,6 +48,7 @@ export const useOptionsStore = create((set, get) => ({
         isCargoTypesLoading: false,
       });
     } catch (e) {
+      if (requestId !== cargoTypesRequestId) return;
       set({
         error: e.message,
         isCargoTypesLoading: false,
@@ -53,16 +57,19 @@ export const useOptionsStore = create((set, get) => ({
   },
 
   searchCargoType: async (params) => {
+    const requestId = ++cargoTypesRequestId;
     try {
       set({ isCargoTypesLoading: true, error: null });
 
       const response = await searchCargoTypeApi(params);
+      if (requestId !== cargoTypesRequestId) return;
 
       set({
         cargoTypes: response.data.results,
         isCargoTypesLoading: false,
       });
     } catch (e) {
+      if (requestId !== cargoTypesRequestId) return;
       set({
         error: e.message,
         isCargoTypesLoading: false,
@@ -122,7 +129,8 @@ export const useOptionsStore = create((set, get) => ({
     } catch (error) {
       if (requestId !== tnvedRequestId) return;
       set({
-        tnvedError: error.message || appI18n.t("ui.commodity_directory_load_failed"),
+        tnvedError:
+          error.message || appI18n.t("ui.commodity_directory_load_failed"),
         isTNVEDLoading: false,
       });
     }

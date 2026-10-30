@@ -8,9 +8,10 @@ import { Outlet, useMatches } from "react-router-dom";
 import { Box, Slide, Snackbar, Typography } from "@mui/material";
 import { useNotificationsStore } from "../store/notifications/noti-store";
 import { useLeadsStore } from "../store/leads/leads-store";
+import { getNotificationMessage, getNotificationTheme } from "../../shared/helpers/notifications/get-notification-message";
 
 const AppContentContainer = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [openMenu, setOpenMenu] = useState(false);
 
   const connectNotifications = useNotificationsStore(
@@ -127,7 +128,7 @@ const AppContentContainer = () => {
               <RenderNotificationIcon type={displayedNotification.type} />
             )}
 
-            {displayedNotification?.theme}
+            {getNotificationTheme(displayedNotification, i18n)}
           </Typography>
 
           <Typography
@@ -142,7 +143,7 @@ const AppContentContainer = () => {
               overflow: "hidden",
             }}
           >
-            {displayedNotification?.message}
+            {getNotificationMessage(displayedNotification, i18n)}
           </Typography>
         </Box>
       </Snackbar>

@@ -1,4 +1,198 @@
 {
+  "notifications": {
+    "lead.created_by_customer": {
+      "theme": "New order created",
+      "message": "The customer created an order and assigned you to it."
+    },
+    "lead.updated_by_customer": {
+      "theme": "Order updated",
+      "message": "The customer made changes to the order."
+    },
+    "lead.rejected": {
+      "theme": "Trip cancelled",
+      "message": "The customer cancelled the trip."
+    },
+    "lead.forwarder_detached": {
+      "theme": "You have been unassigned from the trip",
+      "message": "The customer unassigned you from the trip."
+    },
+    "lead.point_start_deadline": {
+      "theme": "Route stop time reached",
+      "message": "The scheduled start time for work at the route stop has been reached."
+    },
+    "lead.point_end_deadline": {
+      "theme": "Route stop time reached",
+      "message": "The scheduled end time for work at the route stop has been reached."
+    },
+    "shipping.loading_started": {
+      "theme": "Trip started.",
+      "message": "The driver started loading."
+    },
+    "shipping.unloading_started": {
+      "theme": "Unloading started",
+      "message": "The driver started unloading. Please confirm it."
+    },
+    "shipping.point_passed": {
+      "theme": "Trip No. {{num}}: Driver passed a stop",
+      "message": "The driver passed a stop."
+    },
+    "shipping.loading_verified": {
+      "theme": "Trip No. {{num}}: Driver confirmed loading",
+      "message": "The driver confirmed loading."
+    },
+    "shipping.unloading_verified": {
+      "theme": "Trip No. {{num}}: Driver confirmed unloading",
+      "message": "The driver confirmed unloading."
+    },
+    "shipping.last_point_passed": {
+      "theme": "Trip No. {{num}}: Driver arrived at the final stop",
+      "message": "The driver confirmed unloading at the final stop. Complete the trip manually."
+    },
+    "shipping.emergency-situation": {
+      "theme": "Emergency reported.",
+      "message": "The driver reported an emergency."
+    },
+    "shipping.avr_signed": {
+      "theme": "Completion certificate signed by the driver",
+      "message": "The driver signed the completion certificate for trip No. {{num}}. Please sign it on your side."
+    },
+    "shipping.finished": {
+      "theme": "Trip completed",
+      "message": "Trip No. {{num}} was completed without signing completion certificates."
+    },
+    "tender.created_by_customer": {
+      "theme": "New auction",
+      "message": "A new auction from the customer is available."
+    },
+    "tender.add_participant_by_customer": {
+      "theme": "You have been added to an auction",
+      "message": "The customer added you as an auction participant."
+    },
+    "tender.participant_removed": {
+      "theme": "You have been removed from the auction",
+      "message": "The customer removed you from the auction participants."
+    },
+    "tender.updated_by_customer": {
+      "theme": "Auction updated",
+      "message": "The customer made changes to the auction."
+    },
+    "tender.cancelled_by_customer": {
+      "theme": "Auction cancelled",
+      "message": "The customer cancelled the auction."
+    },
+    "tender.bet_accepted": {
+      "theme": "Your bid won",
+      "message": "The customer accepted your auction bid."
+    },
+    "tender.bet_added_by_driver": {
+      "theme": "New auction bid",
+      "message": "The driver placed an auction bid."
+    },
+    "tender.bet_cancelled_by_driver": {
+      "theme": "Bid cancelled",
+      "message": "The driver cancelled their auction bid."
+    },
+    "factor.created_by_factor": {
+      "theme": "Factoring created",
+      "message": "The factor created the factoring arrangement"
+    },
+    "factor.updated_by_factor": {
+      "theme": "Factoring updated",
+      "message": "The factor updated the factoring arrangement"
+    },
+    "factor.verified_by_customer": {
+      "theme": "Factoring confirmed",
+      "message": "The customer confirmed the factoring arrangement"
+    },
+    "factor.verified_by_factor": {
+      "theme": "Factoring confirmed",
+      "message": "The factor confirmed the factoring arrangement"
+    },
+    "factor.signed_by_customer": {
+      "theme": "Factoring agreement signed",
+      "message": "The customer signed the factoring agreement"
+    },
+    "factor.signed_by_factor": {
+      "theme": "Factoring agreement signed",
+      "message": "The factor signed the factoring agreement"
+    },
+    "factor.cancelled_by_customer": {
+      "theme": "Factoring cancelled",
+      "message": "The customer cancelled the factoring arrangement"
+    },
+    "factor.cancelled_by_factor": {
+      "theme": "Factoring cancelled",
+      "message": "The factor cancelled the factoring arrangement"
+    },
+    "factor.finished_by_factor": {
+      "theme": "Factoring completed",
+      "message": "The factor completed the factoring arrangement"
+    },
+    "factor.line_approved": {
+      "theme": "Line approved",
+      "message": "The factoring line agreement has been signed by both parties"
+    },
+    "factor.line_rejected": {
+      "theme": "Limit application rejected",
+      "message": "The factor rejected the limit application"
+    },
+    "factor.line_closed": {
+      "theme": "Line closed",
+      "message": "The factor closed the financing line"
+    },
+    "factor.line_updated": {
+      "theme": "Line updated",
+      "message": "The factor changed the line terms"
+    },
+    "factor.line_reset": {
+      "theme": "Limit reset to zero",
+      "message": "The factor reset the line limit to zero"
+    },
+    "factor.created_by_forwarder": {
+      "theme": "Factoring created",
+      "message": "The forwarder created the factoring arrangement"
+    },
+    "factor.verified_by_forwarder": {
+      "theme": "Factoring confirmed",
+      "message": "The forwarder confirmed the factoring arrangement"
+    },
+    "factor.signed_by_forwarder": {
+      "theme": "Factoring agreement signed",
+      "message": "The forwarder signed the factoring agreement"
+    },
+    "factor.cancelled_by_forwarder": {
+      "theme": "Factoring cancelled",
+      "message": "The forwarder cancelled the factoring arrangement"
+    },
+    "factor.paid_by_factor": {
+      "theme": "Payment confirmed",
+      "message": "The forwarder confirmed receipt of payment from the factor"
+    },
+    "factor.line_created": {
+      "theme": "Limit application",
+      "message": "The forwarder submitted a limit application"
+    },
+    "lead.manufacturer.request_by_customer": {
+      "theme": "New connection request",
+      "message": "Customer {{name}} wants to connect with you"
+    },
+    "lead.manufacturer.approved_by_customer": {
+      "theme": "Request approved",
+      "message": "Customer {{name}} approved the connection"
+    },
+    "lead.manufacturer.rejected_by_customer": {
+      "theme": "Request rejected",
+      "message": "Customer {{name}} rejected the request"
+    },
+    "lead.manufacturer.detached_by_customer": {
+      "theme": "Connection removed",
+      "message": "Customer {{name}} disconnected from you"
+    },
+    "lead.manufacturer.cancelled_by_customer": {
+      "theme": "Request withdrawn",
+      "message": "Customer {{name}} withdrew the request"
+    }
+  },
   "active_leads": {
     "title": "Active leads",
     "drafts_title": "Lead drafts",
@@ -1047,6 +1241,45 @@
     "invalid_chat_list_response": "Invalid chat list response"
   },
   "lead_form": {
+    "map_city": "City in Kazakhstan",
+    "map_address": "Street and building number",
+    "map_address_placeholder": "Street name and building number",
+    "map_address_city_required": "Select a city first",
+    "map_address_search_hint": "Enter an address and click Find",
+    "map_address_search_failed": "Could not search for addresses. Please try again.",
+    "map_address_results": "Matching addresses",
+    "map_address_choose": "Select an address",
+    "map_address_not_found": "No addresses found. Check the street and building number.",
+    "map_address_hint": "Selecting an address zooms in on the map. Choose the route point on the map.",
+    "select_map_city": "Select a city",
+    "map_city_hint": "Choose a city to move the map, then click the map to select a route point.",
+    "map_cities": {
+      "astana": "Astana",
+      "almaty": "Almaty",
+      "shymkent": "Shymkent",
+      "aktau": "Aktau",
+      "aktobe": "Aktobe",
+      "atyrau": "Atyrau",
+      "karaganda": "Karaganda",
+      "kokshetau": "Kokshetau",
+      "konayev": "Konayev",
+      "kostanay": "Kostanay",
+      "kyzylorda": "Kyzylorda",
+      "oskemen": "Oskemen",
+      "oral": "Oral",
+      "pavlodar": "Pavlodar",
+      "petropavl": "Petropavl",
+      "semey": "Semey",
+      "taldykorgan": "Taldykorgan",
+      "taraz": "Taraz",
+      "turkestan": "Turkestan",
+      "zhezkazgan": "Zhezkazgan",
+      "baikonur": "Baikonur",
+      "ekibastuz": "Ekibastuz",
+      "ridder": "Ridder",
+      "temirtau": "Temirtau",
+      "zhanaozen": "Zhanaozen"
+    },
     "draft_saved_success": "Draft saved successfully",
     "lead_published_success": "Lead published successfully",
     "lead_updated_success": "Lead updated successfully",

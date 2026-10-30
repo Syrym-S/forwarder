@@ -1,4 +1,199 @@
 {
+  "notifications": {
+    "lead.created_by_customer": {
+      "theme": "Создан новый заказ",
+      "message": "Заказчик создал заказ и привязал вас."
+    },
+    "lead.updated_by_customer": {
+      "theme": "Заказ обновлён",
+      "message": "Заказчик внёс изменения в заказ."
+    },
+    "lead.rejected": {
+      "theme": "Рейс отменён",
+      "message": "Заказчик отменил рейс."
+    },
+    "lead.forwarder_detached": {
+      "theme": "Вас отвязали от рейса",
+      "message": "Заказчик отвязал вас от рейса."
+    },
+    "lead.point_start_deadline": {
+      "theme": "Наступил срок точки маршрута",
+      "message": "Наступило плановое время начала работ на точке маршрута."
+    },
+    "lead.point_end_deadline": {
+      "theme": "Наступил срок точки маршрута",
+      "message": "Наступило плановое время окончания работ на точке маршрута."
+    },
+    "shipping.loading_started": {
+      "theme": "Поездка начата.",
+      "message": "Водитель начал погрузку."
+    },
+    "shipping.unloading_started": {
+      "theme": "Началась разгрузка",
+      "message": "Водитель начал разгрузку. Подтвердите её."
+    },
+    "shipping.point_passed": {
+      "theme": "Рейс №{{num}}: Водитель прошёл точку",
+      "message": "Водитель прошёл точку."
+    },
+    "shipping.loading_verified": {
+      "theme": "Рейс №{{num}}: Водитель подтвердил погрузку",
+      "message": "Водитель подтвердил погрузку."
+    },
+    "shipping.unloading_verified": {
+      "theme": "Рейс №{{num}}: Водитель подтвердил разгрузку",
+      "message": "Водитель подтвердил разгрузку."
+    },
+    "shipping.last_point_passed": {
+      "theme": "Рейс №{{num}}: Водитель прибыл на последнюю точку",
+      "message": "Водитель подтвердил разгрузку на последней точке. Завершите рейс вручную."
+    },
+    "shipping.emergency-situation": {
+      "theme": "Объявлен экстренный случай.",
+      "message": "Водитель объявил экстренный случай."
+    },
+    "shipping.avr_signed": {
+      "theme": "Акт подписан водителем",
+      "message": "Водитель подписал акт выполненных работ по рейсу №{{num}}. Подпишите акт со своей стороны."
+    },
+    "shipping.finished": {
+      "theme": "Рейс завершён",
+      "message": "Рейс №{{num}} завершён без подписания актов."
+    },
+    "tender.created_by_customer": {
+      "theme": "Новый аукцион",
+      "message": "Доступен новый аукцион от заказчика."
+    },
+    "tender.add_participant_by_customer": {
+      "theme": "Вас добавили в аукцион",
+      "message": "Заказчик добавил вас как участника аукциона."
+    },
+    "tender.participant_removed": {
+      "theme": "Вас удалили из аукциона",
+      "message": "Заказчик удалил вас из участников аукциона."
+    },
+    "tender.updated_by_customer": {
+      "theme": "Аукцион обновлён",
+      "message": "Заказчик внёс изменения в аукцион."
+    },
+    "tender.cancelled_by_customer": {
+      "theme": "Аукцион отменён",
+      "message": "Заказчик отменил аукцион."
+    },
+    "tender.bet_accepted": {
+      "theme": "Ваша ставка победила",
+      "message": "Заказчик принял вашу ставку на аукцион."
+    },
+    "tender.bet_added_by_driver": {
+      "theme": "Новая ставка на аукцион",
+      "message": "Водитель разместил ставку на аукцион."
+    },
+    "tender.bet_cancelled_by_driver": {
+      "theme": "Ставка отменена",
+      "message": "Водитель отменил ставку на аукцион."
+    },
+    "factor.created_by_factor": {
+      "theme": "Создан факторинг",
+      "message": "Фактор создал факторинг"
+    },
+    "factor.updated_by_factor": {
+      "theme": "Факторинг обновлен",
+      "message": "Фактор обновил факторинг"
+    },
+    "factor.verified_by_customer": {
+      "theme": "Факторинг подтверждён",
+      "message": "Заказчик подтвердил факторинг"
+    },
+    "factor.verified_by_factor": {
+      "theme": "Факторинг подтверждён",
+      "message": "Фактор подтвердил факторинг"
+    },
+    "factor.signed_by_customer": {
+      "theme": "Договор факторинга подписан",
+      "message": "Заказчик подписал договор факторинга"
+    },
+    "factor.signed_by_factor": {
+      "theme": "Договор факторинга подписан",
+      "message": "Фактор подписал договор факторинга"
+    },
+    "factor.cancelled_by_customer": {
+      "theme": "Факторинг отменен",
+      "message": "Заказчик отменил факторинг"
+    },
+    "factor.cancelled_by_factor": {
+      "theme": "Факторинг отменен",
+      "message": "Фактор отменил факторинг"
+    },
+    "factor.finished_by_factor": {
+      "theme": "Факторинг завершен",
+      "message": "Фактор завершил факторинг"
+    },
+    "factor.line_approved": {
+      "theme": "Линия одобрена",
+      "message": "Договор факторинговой линии подписан обеими сторонами"
+    },
+    "factor.line_rejected": {
+      "theme": "Заявка на лимит отклонена",
+      "message": "Фактор отклонил заявку на лимит"
+    },
+    "factor.line_closed": {
+      "theme": "Линия закрыта",
+      "message": "Фактор закрыл финансовую линию"
+    },
+    "factor.line_updated": {
+      "theme": "Линия изменена",
+      "message": "Фактор изменил условия линии"
+    },
+    "factor.line_reset": {
+      "theme": "Лимит обнулён",
+      "message": "Фактор обнулил лимит линии"
+    },
+    "factor.created_by_forwarder": {
+      "theme": "Создан факторинг",
+      "message": "Экспедитор создал факторинг"
+    },
+    "factor.verified_by_forwarder": {
+      "theme": "Факторинг подтверждён",
+      "message": "Экспедитор подтвердил факторинг"
+    },
+    "factor.signed_by_forwarder": {
+      "theme": "Договор факторинга подписан",
+      "message": "Экспедитор подписал договор факторинга"
+    },
+    "factor.cancelled_by_forwarder": {
+      "theme": "Факторинг отменен",
+      "message": "Экспедитор отменил факторинг"
+    },
+    "factor.paid_by_factor": {
+      "theme": "Оплата подтверждена",
+      "message": "Экспедитор подтвердил оплату от фактора"
+    },
+    "factor.line_created": {
+      "theme": "Заявка на лимит",
+      "message": "Экспедитор отправил заявку на лимит"
+    },
+    "lead.manufacturer.request_by_customer": {
+      "theme": "Новая заявка на связь",
+      "message": "Заказчик {{name}} хочет привязаться к вам"
+    },
+    "lead.manufacturer.approved_by_customer": {
+      "theme": "Заявка одобрена",
+      "message": "Заказчик {{name}} одобрил связь"
+    },
+    "lead.manufacturer.rejected_by_customer": {
+      "theme": "Заявка отклонена",
+      "message": "Заказчик {{name}} отклонил заявку"
+    },
+    "lead.manufacturer.detached_by_customer": {
+      "theme": "Связь удалена",
+      "message": "Заказчик {{name}} отвязался от вас"
+    },
+    "lead.manufacturer.cancelled_by_customer": {
+      "theme": "Заявка отозвана",
+      "message": "Заказчик {{name}} отозвал заявку"
+    }
+  },
+
   "active_leads": {
     "title": "Активные перевозки",
     "drafts_title": "Черновики перевозок",
@@ -1047,6 +1242,45 @@
     "invalid_chat_list_response": "Некорректный ответ списка чатов"
   },
   "lead_form": {
+    "map_city": "Город Казахстана",
+    "map_address": "Улица и дом",
+    "map_address_placeholder": "Название улицы и номер дома",
+    "map_address_city_required": "Сначала выберите город",
+    "map_address_search_hint": "Введите адрес и нажмите «Найти»",
+    "map_address_search_failed": "Не удалось найти адреса. Попробуйте ещё раз.",
+    "map_address_results": "Найденные адреса",
+    "map_address_choose": "Выберите адрес",
+    "map_address_not_found": "Адреса не найдены. Уточните улицу и номер дома.",
+    "map_address_hint": "Выбор адреса приближает карту. Точку маршрута выберите на карте.",
+    "select_map_city": "Выберите город",
+    "map_city_hint": "Выбор города перемещает карту. Точку маршрута выберите на карте.",
+    "map_cities": {
+      "astana": "Астана",
+      "almaty": "Алматы",
+      "shymkent": "Шымкент",
+      "aktau": "Актау",
+      "aktobe": "Актобе",
+      "atyrau": "Атырау",
+      "karaganda": "Караганда",
+      "kokshetau": "Кокшетау",
+      "konayev": "Конаев",
+      "kostanay": "Костанай",
+      "kyzylorda": "Кызылорда",
+      "oskemen": "Усть-Каменогорск",
+      "oral": "Уральск",
+      "pavlodar": "Павлодар",
+      "petropavl": "Петропавловск",
+      "semey": "Семей",
+      "taldykorgan": "Талдыкорган",
+      "taraz": "Тараз",
+      "turkestan": "Туркестан",
+      "zhezkazgan": "Жезказган",
+      "baikonur": "Байконур",
+      "ekibastuz": "Экибастуз",
+      "ridder": "Риддер",
+      "temirtau": "Темиртау",
+      "zhanaozen": "Жанаозен"
+    },
     "draft_saved_success": "Черновик успешно сохранён",
     "lead_published_success": "Перевозка успешно опубликована",
     "lead_updated_success": "Перевозка успешно изменена",

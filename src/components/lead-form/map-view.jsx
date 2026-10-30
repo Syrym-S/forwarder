@@ -22,6 +22,7 @@ export function CustomerMapView({
   handleMarkerClick,
   onMapClick,
   onMarkerDragEnd,
+  focusView = null,
 }) {
   const { t } = useTranslation();
   const routesPointsCount = routes.reduce(
@@ -47,6 +48,7 @@ export function CustomerMapView({
       />
 
       <FitRouteBounds routePoints={routePoints} routes={routes} />
+      <FocusMapView view={focusView} />
 
       <MapClickHandler onMapClick={onMapClick} />
 
@@ -204,11 +206,13 @@ function MapResizeHandler({ center, zoom, markersCount, routePointsCount }) {
 function FitRouteBounds({ routePoints, routes }) {
   useTranslation();
   const map = useMap();
+  const routesPoints = routes.flatMap((route) => route.points || []);
+  const boundsKey = JSON.stringify(
+    routesPoints.length >= 2 ? routesPoints : routePoints,
+  );
 
   useEffect(() => {
-    const routesPoints = routes.flatMap((route) => route.points || []);
-
-    const points = routesPoints.length >= 2 ? routesPoints : routePoints;
+    const points = JSON.parse(boundsKey);
 
     if (!points || points.length < 2) {
       return;
@@ -217,7 +221,18 @@ function FitRouteBounds({ routePoints, routes }) {
     map.fitBounds(points, {
       padding: [32, 32],
     });
-  }, [map, routePoints, routes]);
+  }, [map, boundsKey]);
+
+  return null;
+}
+
+function FocusMapView({ view }) {
+  const map = useMap();
+
+  useEffect(() => {
+    if (!view) return;
+    map.flyTo(view.center, view.zoom, { duration: 0.8 });
+  }, [map, view]);
 
   return null;
 }
@@ -247,6 +262,10 @@ CustomerMapView.propTypes = {
   handleMarkerClick: PropTypes.func.isRequired,
   onMapClick: PropTypes.func,
   onMarkerDragEnd: PropTypes.func,
+  focusView: PropTypes.shape({
+    center: PropTypes.arrayOf(PropTypes.number).isRequired,
+    zoom: PropTypes.number.isRequired,
+  }),
 };
 
 MapResizeHandler.propTypes = {
