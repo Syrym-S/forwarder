@@ -3,6 +3,7 @@ import { create } from "zustand";
 import {
   getCargoTypesApi,
   getCurrenciesApi,
+  getLanguagesApi,
   getLeadParamsApi,
   getTNVEDApi,
   searchCargoTypeApi,
@@ -18,6 +19,7 @@ export const useOptionsStore = create((set, get) => ({
 
   cargoTypes: [],
   currencies: [],
+  languages: [],
   tnvedOptions: [],
   isTNVEDLoading: false,
   tnvedError: null,
@@ -32,6 +34,21 @@ export const useOptionsStore = create((set, get) => ({
   perPage: 1,
 
   error: null,
+
+  getLanguages: async () => {
+    try {
+      set({ isLanguagesLoading: true, error: null });
+
+      const response = await getLanguagesApi();
+
+      set({
+        languages: response.data.results,
+        isLanguagesLoading: false,
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  },
 
   getCargoTypes: async (params) => {
     const requestId = ++cargoTypesRequestId;

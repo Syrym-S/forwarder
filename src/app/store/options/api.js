@@ -41,3 +41,9 @@ export const getTNVEDApi = async (params = {}) => {
 
   return data;
 };
+
+export const getLanguagesApi = async () => {
+  const data = await api.get(`/forwarder/v1/languages`);
+
+  return data;
+};

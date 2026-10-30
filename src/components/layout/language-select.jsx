@@ -3,18 +3,19 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { editProfileApi } from "../../app/store/profile/api";
 
-const languages = [
-  { code: "en", label: "English" },
-  { code: "ru", label: "Русский" },
-  { code: "kk", label: "Қазақша" },
-];
-
-const LanguageSelect = () => {
+const LanguageSelect = ({ languages = [] }) => {
   const { t, i18n } = useTranslation();
   const [isSaving, setIsSaving] = useState(false);
+  const [currentLanguage, setCurrentLanguage] = useState(
+    () => localStorage.getItem("language") || i18n.language || "ru",
+  );
+  const selectedLanguage = languages.some(({ code }) => code === currentLanguage)
+    ? currentLanguage
+    : "";
 
   const handleLanguageChange = async (event) => {
     const language = event.target.value;
+    setCurrentLanguage(language);
     i18n.changeLanguage(language);
     localStorage.setItem("language", language);
 
@@ -30,10 +31,11 @@ const LanguageSelect = () => {
 
   return (
     <Select
-      value={i18n.resolvedLanguage || "ru"}
+      value={selectedLanguage}
       onChange={handleLanguageChange}
-      disabled={isSaving}
-      renderValue={(code) => (code === "kk" ? "KZ" : code.toUpperCase())}
+      disabled={isSaving || languages.length === 0}
+      displayEmpty
+      renderValue={(code) => (code || currentLanguage).toUpperCase()}
       size="small"
       inputProps={{ "aria-label": t("ui.select_language") }}
       MenuProps={{
@@ -82,13 +84,13 @@ const LanguageSelect = () => {
         },
       }}
     >
-      {languages.map(({ code, label }) => (
+      {languages.map(({ code, label, name }) => (
         <MenuItem
           key={code}
           value={code}
           sx={{ fontSize: 13, fontWeight: 600 }}
         >
-          {label}
+          {label || name || code}
         </MenuItem>
       ))}
     </Select>

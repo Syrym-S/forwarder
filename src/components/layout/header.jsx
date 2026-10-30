@@ -21,6 +21,7 @@ import logo from "../../../assets/logo.png";
 import ChatsContainer from "../chat/chats-container";
 import LanguageSelect from "./language-select";
 import { useTranslation } from "react-i18next";
+import { useOptionsStore } from "../../app/store/options";
 
 const Header = ({ openMenu, setOpenMenu }) => {
   const { t } = useTranslation();
@@ -31,6 +32,8 @@ const Header = ({ openMenu, setOpenMenu }) => {
   const getNotifications = useNotificationsStore(
     (state) => state.getNotifications,
   );
+  const languages = useOptionsStore((state) => state.languages);
+  const getLanguages = useOptionsStore((state) => state.getLanguages);
 
   const [profileAnchorEl, setProfileAnchorEl] = useState(null);
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
@@ -67,7 +70,8 @@ const Header = ({ openMenu, setOpenMenu }) => {
   useEffect(() => {
     getNotifications();
     getProfileData();
-  }, []);
+    getLanguages();
+  }, [getNotifications, getProfileData, getLanguages]);
 
   return (
     <AppBar
@@ -138,7 +142,7 @@ const Header = ({ openMenu, setOpenMenu }) => {
           gap: 1,
         }}
       >
-        <LanguageSelect />
+        <LanguageSelect languages={languages} />
 
         <NotificationsBlock />
 
