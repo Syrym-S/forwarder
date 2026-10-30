@@ -1,19 +1,39 @@
 import { MenuItem, Select } from "@mui/material";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { editProfileApi } from "../../app/store/profile/api";
+
+const languages = [
+  { code: "en", label: "English" },
+  { code: "ru", label: "Русский" },
+  { code: "kk", label: "Қазақша" },
+];
 
 const LanguageSelect = () => {
   const { t, i18n } = useTranslation();
+  const [isSaving, setIsSaving] = useState(false);
 
-  const handleLanguageChange = (event) => {
+  const handleLanguageChange = async (event) => {
     const language = event.target.value;
     i18n.changeLanguage(language);
     localStorage.setItem("language", language);
+
+    setIsSaving(true);
+    try {
+      await editProfileApi({ language });
+    } catch (error) {
+      console.error("Failed to save profile language", error);
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   return (
     <Select
       value={i18n.resolvedLanguage || "ru"}
       onChange={handleLanguageChange}
+      disabled={isSaving}
+      renderValue={(code) => (code === "kk" ? "KZ" : code.toUpperCase())}
       size="small"
       inputProps={{ "aria-label": t("ui.select_language") }}
       MenuProps={{
@@ -62,13 +82,13 @@ const LanguageSelect = () => {
         },
       }}
     >
-      {["en", "ru", "kk"].map((code) => (
+      {languages.map(({ code, label }) => (
         <MenuItem
           key={code}
           value={code}
           sx={{ fontSize: 13, fontWeight: 600 }}
         >
-          {code === "kk" ? "KZ" : code.toUpperCase()}
+          {label}
         </MenuItem>
       ))}
     </Select>
