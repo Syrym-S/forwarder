@@ -16,7 +16,10 @@ import { useOptionsStore } from "../../../app/store/options";
 import { StepSection } from "../step-section";
 import { STATUS } from "../../../shared/const/tenders";
 import FormControllerInput from "../../../shared/ui/input/form-controller-input";
-import { hasCargoValue, isPositiveCargoNumber } from "../../../shared/lib/cargo-volume";
+import {
+  hasCargoValue,
+  isPositiveCargoNumber,
+} from "../../../shared/lib/cargo-volume";
 import { isInternationalRoute } from "../../../shared/lib/international-route";
 
 const getCargoTypeLabel = (option) => option?.translation || option?.name || "";
@@ -31,7 +34,10 @@ const CargoStep = ({ control, errors, leadStatus }) => {
   const tnvedError = useOptionsStore((state) => state.tnvedError);
   const sections = Array.isArray(tnvedOptions)
     ? tnvedOptions
-    : tnvedOptions?.results ?? tnvedOptions?.items ?? tnvedOptions?.data ?? [];
+    : (tnvedOptions?.results ??
+      tnvedOptions?.items ??
+      tnvedOptions?.data ??
+      []);
 
   useEffect(() => {
     const state = useOptionsStore.getState();
@@ -96,7 +102,9 @@ const CargoStep = ({ control, errors, leadStatus }) => {
                 sx={{
                   my: 2,
                 }}
-              >{t("lead_form.remove_cargo_item")}</Button>
+              >
+                {t("lead_form.remove_cargo_item")}
+              </Button>
             )}
           </Box>
         ))}
@@ -120,7 +128,9 @@ const CargoStep = ({ control, errors, leadStatus }) => {
           sx={{
             borderRadius: 2,
           }}
-        >{t("lead_form.add_cargo")}</Button>
+        >
+          {t("lead_form.add_cargo")}
+        </Button>
       </Box>
     </StepSection>
   );
@@ -128,7 +138,16 @@ const CargoStep = ({ control, errors, leadStatus }) => {
 
 export default CargoStep;
 
-const CargoStepFieldsContent = ({ index, control, cargo, isInternational, tnvedSections, isTNVEDLoading, tnvedError, getLTNVEDOptions }) => {
+const CargoStepFieldsContent = ({
+  index,
+  control,
+  cargo,
+  isInternational,
+  tnvedSections,
+  isTNVEDLoading,
+  tnvedError,
+  getLTNVEDOptions,
+}) => {
   const { t, i18n } = useTranslation();
   const language = i18n.resolvedLanguage;
   const searchCargoType = useOptionsStore((state) => state.searchCargoType);
@@ -180,7 +199,8 @@ const CargoStepFieldsContent = ({ index, control, cargo, isInternational, tnvedS
         control={control}
         rules={{
           required: t("lead_form.product_name_required"),
-          validate: (value) => !!value?.trim() || t("lead_form.enter_cargo_name"),
+          validate: (value) =>
+            !!value?.trim() || t("lead_form.enter_cargo_name"),
         }}
         required
         label={t("lead_form.cargo_name")}
@@ -282,7 +302,8 @@ const CargoStepFieldsContent = ({ index, control, cargo, isInternational, tnvedS
         rules={{
           validate: (value) =>
             !hasCargoValue(value) ||
-            Number(value) >= 0 || t("lead_form.price_cannot_be_negative"),
+            Number(value) >= 0 ||
+            t("lead_form.price_cannot_be_negative"),
         }}
         type="number"
         slotProps={{ htmlInput: { min: 0, step: "any" } }}
@@ -304,7 +325,7 @@ const CargoStepFieldsContent = ({ index, control, cargo, isInternational, tnvedS
             onChange={(_, newValue) => {
               field.onChange(newValue?.code ?? "");
             }}
-            getOptionLabel={(option) => `${option.code} - ${option.fullname}`}
+            getOptionLabel={(option) => `${option.code}`}
             isOptionEqualToValue={(option, value) => option.code === value.code}
             renderInput={(params) => (
               <TextField

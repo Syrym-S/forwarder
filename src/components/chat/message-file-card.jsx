@@ -50,8 +50,6 @@ const MessageFileCard = ({ file, messageType, isForwarderSend }) => {
       link.remove();
 
       window.URL.revokeObjectURL(url);
-
-      console.log(file.id);
     } catch (error) {
       console.error("Ошибка скачивания файла:", error);
     }
@@ -82,7 +80,9 @@ const MessageFileCard = ({ file, messageType, isForwarderSend }) => {
         gap: 1.5,
         p: 1.5,
         borderRadius: 2,
-        backgroundColor: isForwarderSend ? "rgba(255,255,255,0.1)" : "background.default",
+        backgroundColor: isForwarderSend
+          ? "rgba(255,255,255,0.1)"
+          : "background.default",
         maxWidth: 300,
         minWidth: 0,
         border: "1px solid",
@@ -112,13 +112,24 @@ const MessageFileCard = ({ file, messageType, isForwarderSend }) => {
       </Box>
 
       {isDownloadLoading && downloadingFileId === file.id ? (
-        <CircularProgress size={20}
+        <CircularProgress
+          size={20}
           sx={{
             color: "inherit",
           }}
         />
       ) : (
-        <TooltipIconButton title={t("ui.download_named_file", { value1: file?.file_name || t("ui.file_lowercase") })} aria-label={t("ui.download_named_file", { value1: file?.file_name || t("ui.file_lowercase") })} onClick={handleDownload} size="small" sx={{ color: "inherit" }}>
+        <TooltipIconButton
+          title={t("ui.download_named_file", {
+            value1: file?.file_name || t("ui.file_lowercase"),
+          })}
+          aria-label={t("ui.download_named_file", {
+            value1: file?.file_name || t("ui.file_lowercase"),
+          })}
+          onClick={handleDownload}
+          size="small"
+          sx={{ color: "inherit" }}
+        >
           <DownloadOutlinedIcon />
         </TooltipIconButton>
       )}

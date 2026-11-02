@@ -21,13 +21,48 @@ import { isDraftLead } from "../../shared/lib/lead-draft";
 import { useTranslation } from "react-i18next";
 
 const steps = [
-  { id: 1, get label() { return appI18n.t("ui.route"); } },
-  { id: 2, get label() { return appI18n.t("ui.cargo"); } },
-  { id: 3, get label() { return appI18n.t("ui.driver"); } },
-  { id: 4, get label() { return appI18n.t("ui.customer"); } },
-  { id: 5, get label() { return appI18n.t("lead_form.prices"); } },
-  { id: 6, get label() { return appI18n.t("ui.documents"); } },
-  { id: 7, get label() { return appI18n.t("lead_form.review"); } },
+  {
+    id: 1,
+    get label() {
+      return appI18n.t("ui.route");
+    },
+  },
+  {
+    id: 2,
+    get label() {
+      return appI18n.t("ui.cargo");
+    },
+  },
+  {
+    id: 3,
+    get label() {
+      return appI18n.t("ui.driver");
+    },
+  },
+  {
+    id: 4,
+    get label() {
+      return appI18n.t("ui.customer");
+    },
+  },
+  {
+    id: 5,
+    get label() {
+      return appI18n.t("lead_form.prices");
+    },
+  },
+  {
+    id: 6,
+    get label() {
+      return appI18n.t("ui.documents");
+    },
+  },
+  {
+    id: 7,
+    get label() {
+      return appI18n.t("lead_form.review");
+    },
+  },
 ];
 
 const stepFields = [
@@ -188,7 +223,11 @@ const AddLeadForm = ({
               ? t("lead_form.lead_edited")
               : t("lead_form.lead_created"),
         message: documentsUploadFailed
-          ? t(isDraft ? "lead_form.draft_documents_failed" : "lead_form.lead_documents_failed")
+          ? t(
+              isDraft
+                ? "lead_form.draft_documents_failed"
+                : "lead_form.lead_documents_failed",
+            )
           : `${t(successMessageKey)}${createdLeadId ? `: ${createdLeadId}` : ""}`,
       });
     } catch (error) {
@@ -312,8 +351,6 @@ const AddLeadForm = ({
     setActiveStep((prevStep) => prevStep + 1);
   }
 
-  console.log("formValues", formValues);
-
   return (
     <>
       <Dialog
@@ -329,7 +366,9 @@ const AddLeadForm = ({
         />
         <DialogContent sx={{ px: 3 }}>
           {isEditingDraft && (
-            <Alert severity="warning" sx={{ mb: 2 }}>{t("lead_form.draft_description")}</Alert>
+            <Alert severity="warning" sx={{ mb: 2 }}>
+              {t("lead_form.draft_description")}
+            </Alert>
           )}
           <LeadFormTabs
             steps={steps}

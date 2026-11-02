@@ -4,6 +4,28 @@ const messageVariants = {
   "factor.line_approved": ["limit_approved"],
 };
 
+// Keep recognising notifications received before the wording was corrected.
+const legacyTemplates = {
+  "shipping.loading_started": {
+    theme: ["Поездка начата.", "Trip started.", "Рейс басталды."],
+  },
+  "lead.manufacturer.request_by_customer": {
+    message: ["{{name}} тапсырыс берушісі сізбен байланыс орнатқысы келеді"],
+  },
+  "lead.manufacturer.approved_by_customer": {
+    message: ["{{name}} тапсырыс берушісі байланысты мақұлдады"],
+  },
+  "lead.manufacturer.rejected_by_customer": {
+    message: ["{{name}} тапсырыс берушісі өтінімді қабылдамады"],
+  },
+  "lead.manufacturer.detached_by_customer": {
+    message: ["{{name}} тапсырыс берушісі сізбен байланысын үзді"],
+  },
+  "lead.manufacturer.cancelled_by_customer": {
+    message: ["{{name}} тапсырыс берушісі өтінімін қайтарып алды"],
+  },
+};
+
 function matchMessage(template, message) {
   const names = [];
   const pattern = template.split(/(\{\{\w+\}\})/).map((part) => {
@@ -41,11 +63,13 @@ function getNotificationText(notification, i18n, field) {
     const messages = i18n.getResource(language, "translation", "notifications") || {};
     baseTemplate ??= messages[type]?.[field];
     for (const messageKey of messageKeys) {
-      const template = messages[messageKey]?.[field];
-      if (typeof template !== "string") continue;
-      const values = matchMessage(template, message);
-      if (values) {
-        return i18n.t(`notifications.${messageKey}.${field}`, { ...values, defaultValue: message });
+      const templates = [messages[messageKey]?.[field], ...(legacyTemplates[messageKey]?.[field] || [])];
+      for (const template of templates) {
+        if (typeof template !== "string") continue;
+        const values = matchMessage(template, message);
+        if (values) {
+          return i18n.t(`notifications.${messageKey}.${field}`, { ...values, defaultValue: message });
+        }
       }
     }
   }

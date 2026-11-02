@@ -3,6 +3,7 @@ import { waitForGeocodingSlot } from "./geocoding-rate-limit.js";
 
 export async function reverseGeocode(lat, lng, options = {}) {
   const savedLanguage = localStorage.getItem("language");
+
   try {
     const url = new URL("https://nominatim.openstreetmap.org/reverse");
 

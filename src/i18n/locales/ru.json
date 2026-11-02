@@ -25,7 +25,7 @@
       "message": "Наступило плановое время окончания работ на точке маршрута."
     },
     "shipping.loading_started": {
-      "theme": "Поездка начата.",
+      "theme": "Началась погрузка",
       "message": "Водитель начал погрузку."
     },
     "shipping.unloading_started": {

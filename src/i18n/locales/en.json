@@ -25,7 +25,7 @@
       "message": "The scheduled end time for work at the route stop has been reached."
     },
     "shipping.loading_started": {
-      "theme": "Trip started.",
+      "theme": "Loading started",
       "message": "The driver started loading."
     },
     "shipping.unloading_started": {
