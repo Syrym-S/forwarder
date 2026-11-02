@@ -15,11 +15,13 @@
     "deploy:shared": "npm run build:shared && node deploy.shared.js"
   },
   "dependencies": {
+    "@emotion/cache": "^11.14.0",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
     "@mapbox/polyline": "^1.2.1",
     "@mui/icons-material": "^9.0.1",
     "@mui/material": "^9.0.1",
+    "@mui/stylis-plugin-rtl": "^9.5.0",
     "@mui/x-data-grid": "^9.3.0",
     "axios": "^1.16.1",
     "basic-ftp": "^6.2.1",
@@ -39,6 +41,7 @@
     "react-imask": "^7.6.1",
     "react-leaflet": "^5.0.0",
     "react-router-dom": "^7.16.0",
+    "stylis": "^4.4.0",
     "zustand": "^5.0.14"
   },
   "devDependencies": {
