@@ -35,6 +35,8 @@ export default function AppBreadcrumbs() {
                 xs: 13,
                 sm: 16,
               },
+              transform: (theme) =>
+                theme.direction === "rtl" ? "rotate(180deg)" : "none",
             }}
           />
           {t("common.back")}
