@@ -30,6 +30,9 @@ import CustomSelect from "../../../shared/ui/input/custom-select";
 import { KAZAKHSTAN_MAP_CITIES } from "../model/kazakhstan-map-cities";
 import MapAddressSearch from "../map-address-search";
 
+// Temporarily hide the city selector and address search above the map.
+const SHOW_MAP_ADDRESS_SEARCH = false;
+
 const waypointTypes = [
   { id: 1, value: "check_passes", get label() { return appI18n.t("lead_form.transit"); } },
   { id: 2, value: "loading", get label() { return appI18n.t("ui.loading_operation"); } },
@@ -269,34 +272,36 @@ const RouteStep = ({ control, form, setValue, isEdit = false }) => {
         </Box>
       </Box>
 
-      <Box sx={{ display: "flex", flexWrap: "wrap", alignItems: "flex-start", gap: 2, mb: 2 }}>
-        <CustomSelect
-          id="lead-map-city"
-          label={t("lead_form.map_city")}
-          value={selectedMapCityId}
-          options={[
-            { value: "", label: t("lead_form.select_map_city") },
-            ...mapCityOptions,
-          ]}
-          onChange={(event) => {
-            const cityId = event.target.value;
-            setSelectedMapCityId(cityId);
-            setMapFocus(KAZAKHSTAN_MAP_CITIES.find((city) => city.id === cityId) ?? null);
-          }}
-          helperText={t("lead_form.map_city_hint")}
-          sx={{ width: { xs: "100%", sm: 280 }, flexShrink: 0 }}
-          slotProps={{
-            select: {
-              MenuProps: { slotProps: { paper: { sx: { maxHeight: 430 } } } },
-            },
-          }}
-        />
-        <MapAddressSearch
-          key={selectedMapCityId}
-          city={selectedMapCity}
-          onSelect={setMapFocus}
-        />
-      </Box>
+      {SHOW_MAP_ADDRESS_SEARCH && (
+        <Box sx={{ display: "flex", flexWrap: "wrap", alignItems: "flex-start", gap: 2, mb: 2 }}>
+          <CustomSelect
+            id="lead-map-city"
+            label={t("lead_form.map_city")}
+            value={selectedMapCityId}
+            options={[
+              { value: "", label: t("lead_form.select_map_city") },
+              ...mapCityOptions,
+            ]}
+            onChange={(event) => {
+              const cityId = event.target.value;
+              setSelectedMapCityId(cityId);
+              setMapFocus(KAZAKHSTAN_MAP_CITIES.find((city) => city.id === cityId) ?? null);
+            }}
+            helperText={t("lead_form.map_city_hint")}
+            sx={{ width: { xs: "100%", sm: 280 }, flexShrink: 0 }}
+            slotProps={{
+              select: {
+                MenuProps: { slotProps: { paper: { sx: { maxHeight: 430 } } } },
+              },
+            }}
+          />
+          <MapAddressSearch
+            key={selectedMapCityId}
+            city={selectedMapCity}
+            onSelect={setMapFocus}
+          />
+        </Box>
+      )}
 
       <Box
         sx={{
