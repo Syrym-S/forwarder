@@ -25,3 +25,7 @@ dist-ssr
 
 # deploy 
 .env.ftp
+.env
+.env.*
+.env.example
+.env.ftp.example

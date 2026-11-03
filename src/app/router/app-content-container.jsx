@@ -9,10 +9,28 @@ import { Box, Slide, Snackbar, Typography } from "@mui/material";
 import { useNotificationsStore } from "../store/notifications/noti-store";
 import { useLeadsStore } from "../store/leads/leads-store";
 import { getNotificationMessage, getNotificationTheme } from "../../shared/helpers/notifications/get-notification-message";
+import { useWebPushStore } from "../store/notifications/web-push-store";
+import { listenWebPush } from "../../services/firebase";
+import { waitForPageConfig } from "../../services/web-push-api";
 
 const AppContentContainer = () => {
   const { t, i18n } = useTranslation();
   const [openMenu, setOpenMenu] = useState(false);
+
+  useEffect(() => {
+    useWebPushStore.getState().initialize();
+    let disposed = false;
+    let unsubscribe;
+    // WebSocket already displays foreground messages; consume FCM without another popup.
+    waitForPageConfig().then(() => listenWebPush()).then((stop) => {
+      if (disposed) stop();
+      else unsubscribe = stop;
+    }).catch((error) => useWebPushStore.setState({ error: error.message }));
+    return () => {
+      disposed = true;
+      unsubscribe?.();
+    };
+  }, []);
 
   const connectNotifications = useNotificationsStore(
     (state) => state.connectNotifications,

@@ -1,4 +1,24 @@
 {
+  "webPush": {
+    "label": "Browser push notifications",
+    "description": "Receive notifications while the site tab is inactive. Disabling applies to all your devices.",
+    "saving": "Saving notification settings",
+    "blocked": "Notifications are blocked. Allow them in your browser's site settings.",
+    "failed": "Could not save notification settings. Please try again.",
+    "retry": "Check again",
+    "logoutFailed": "Could not finish signing out and disable notifications for this browser. Please try again.",
+    "errors": {
+      "web_push_registration_failed": "The notification service could not save this browser's subscription. Try again or contact support.",
+      "web_push_profile_failed": "Could not save or load your notification preference. Please try again.",
+      "web_push_not_configured": "Push notifications have not been configured yet. Contact support.",
+      "web_push_unsupported": "Push notifications are unavailable in this browser. On iPhone, add the site to your Home Screen.",
+      "web_push_worker_failed": "Could not connect background notifications. Try again or contact support.",
+      "web_push_token_failed": "Could not connect notifications for this browser. Please try again.",
+      "web_push_endpoint_missing": "The notification service has not been configured yet. Contact support.",
+      "web_push_auth_failed": "Could not authenticate with the notification service. Reload the page.",
+      "web_push_permission_required": "Allow notifications in your browser to enable them."
+    }
+  },
   "notifications": {
     "lead.created_by_customer": {
       "theme": "New order created",

@@ -1,4 +1,24 @@
 {
+  "webPush": {
+    "label": "Push-Benachrichtigungen im Browser",
+    "description": "Benachrichtigungen erhalten, wenn der Website-Tab inaktiv ist. Das Deaktivieren gilt für alle Ihre Geräte.",
+    "saving": "Benachrichtigungseinstellungen werden gespeichert",
+    "blocked": "Benachrichtigungen sind blockiert. Erlauben Sie sie in den Website-Einstellungen Ihres Browsers.",
+    "failed": "Die Benachrichtigungseinstellungen konnten nicht gespeichert werden. Bitte versuchen Sie es erneut.",
+    "retry": "Erneut prüfen",
+    "logoutFailed": "Die Abmeldung und das Deaktivieren der Benachrichtigungen für diesen Browser konnten nicht abgeschlossen werden. Bitte versuchen Sie es erneut.",
+    "errors": {
+      "web_push_registration_failed": "Der Benachrichtigungsdienst konnte das Abonnement dieses Browsers nicht speichern. Versuchen Sie es erneut oder wenden Sie sich an den Support.",
+      "web_push_profile_failed": "Ihre Benachrichtigungseinstellung konnte nicht gespeichert oder geladen werden. Bitte versuchen Sie es erneut.",
+      "web_push_not_configured": "Push-Benachrichtigungen sind noch nicht eingerichtet. Wenden Sie sich an den Support.",
+      "web_push_unsupported": "Push-Benachrichtigungen sind in diesem Browser nicht verfügbar. Fügen Sie die Website auf dem iPhone zum Home-Bildschirm hinzu.",
+      "web_push_worker_failed": "Hintergrundbenachrichtigungen konnten nicht verbunden werden. Versuchen Sie es erneut oder wenden Sie sich an den Support.",
+      "web_push_token_failed": "Benachrichtigungen für diesen Browser konnten nicht verbunden werden. Bitte versuchen Sie es erneut.",
+      "web_push_endpoint_missing": "Der Benachrichtigungsdienst ist noch nicht eingerichtet. Wenden Sie sich an den Support.",
+      "web_push_auth_failed": "Die Anmeldung beim Benachrichtigungsdienst ist fehlgeschlagen. Laden Sie die Seite neu.",
+      "web_push_permission_required": "Erlauben Sie Benachrichtigungen im Browser, um sie zu aktivieren."
+    }
+  },
   "notifications": {
     "lead.created_by_customer": {
       "theme": "Neue Bestellung erstellt",

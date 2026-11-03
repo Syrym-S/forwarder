@@ -6,6 +6,7 @@ import PageLoader from "../../shared/ui/loaders/page-loader";
 import { useEffect } from "react";
 import { Box, Container, Paper, Stack, Typography } from "@mui/material";
 import { useProfileStore } from "../../app/store/profile/profile-store";
+import WebPushSettings from "../../components/profile/web-push-settings";
 
 const Profile = () => {
   const { t } = useTranslation();
@@ -17,7 +18,7 @@ const Profile = () => {
   useEffect(() => {
     getProfileData();
     getLegalDocuments();
-  }, []);
+  }, [getProfileData, getLegalDocuments]);
 
   if (!profileData)
     return (
@@ -54,6 +55,7 @@ const Profile = () => {
               profileData={profileData}
               legalDocuments={legalDocuments}
             />
+            <WebPushSettings />
           </Stack>
         </Paper>
         <DeleteAccountBlock />

@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import UploadAvatar from "../../components/profile/upload-avatar";
 import EditCompanyFileds from "../../components/profile/edit-company-fileds";
@@ -37,13 +37,18 @@ const EditProfileForm = ({ profileData, legalDocuments }) => {
   const [isAvatarRemoved, setIsAvatarRemoved] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  // Push is saved separately; changing it must not reset unsaved profile fields.
+  const profileFormValues = useMemo(() => Object.fromEntries(
+    Object.entries(profileData || {}).filter(([key]) => key !== "pushEnabled"),
+  ), [profileData]);
+
   const {
     control,
     handleSubmit,
     setValue,
     formState: { isDirty },
   } = useForm({
-    values: profileData,
+    values: profileFormValues,
   });
 
   const formValues = useWatch({ control });

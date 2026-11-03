@@ -14,7 +14,10 @@ export async function getProfileDataApi() {
 }
 
 export async function editProfileApi(payload) {
-  const response = await api.post(`forwarder/profile/v1/update`, payload);
+  const response = await api.post(`forwarder/profile/v1/update`, payload, {
+    headers: { "X-WP-Nonce": window.APP_DATA?.nonce || "" },
+    withCredentials: true,
+  });
 
   return response.data;
 }
