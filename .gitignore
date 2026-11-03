@@ -27,5 +27,5 @@ dist-ssr
 .env.ftp
 .env
 .env.*
-.env.example
+!.env.example
 .env.ftp.example
