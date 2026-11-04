@@ -1,4 +1,23 @@
 {
+  "routeMap": {
+    "title": "Route auf der Karte",
+    "selectedHint": "Alle ausgewählten Punkte werden zusammen angezeigt.",
+    "emptyHint": "Wählen Sie unten eine Adresse oder einen Punkt auf der Karte.",
+    "points": "Punkte: {{count}}",
+    "fit": "Gesamte Route",
+    "zoomIn": "Vergrößern",
+    "zoomOut": "Verkleinern",
+    "waypoints": "Zwischenstopps",
+    "dragHint": "Ziehen Sie die Markierungen, um die Adresse anzupassen."
+  },
+  "addressAutocomplete": {
+    "placeholder": "Stadt, Straße, Hausnummer",
+    "hint": "Geben Sie mindestens 3 Zeichen ein und wählen Sie eine Adresse, um sie auf der Karte anzuzeigen.",
+    "loading": "Adressen werden gesucht…",
+    "empty": "Keine Adressen gefunden. Präzisieren Sie Stadt und Straße oder wählen Sie einen Punkt auf der Karte.",
+    "failed": "Adressvorschläge sind vorübergehend nicht verfügbar. Versuchen Sie es erneut oder wählen Sie einen Punkt auf der Karte.",
+    "clear": "Adresse löschen"
+  },
   "webPush": {
     "label": "Push-Benachrichtigungen im Browser",
     "description": "Benachrichtigungen erhalten, wenn der Website-Tab inaktiv ist. Das Deaktivieren gilt für alle Ihre Geräte.",
@@ -473,6 +492,10 @@
     "logout": "Abmelden"
   },
   "ui": {
+    "lead_number_column": "Transportnummer",
+    "auction_name_not_set": "Name nicht angegeben",
+    "auction_name": "Auktionsname",
+    "enter_auction_name": "Geben Sie den Auktionsnamen ein",
     "home_page": "Startseite",
     "complaints": "Beschwerden",
     "active_leads": "Aktive Sendungen",

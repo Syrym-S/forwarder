@@ -83,6 +83,18 @@ const ChooseLeadStep = ({ control, setValue, isEdit }) => {
 
   return (
     <>
+      <FormControllerInput
+        name="name"
+        control={control}
+        label={t("ui.auction_name")}
+        placeholder={t("ui.enter_auction_name")}
+        rules={{
+          validate: (value) => !!value?.trim() || t("ui.enter_auction_name"),
+        }}
+        required
+        fullWidth
+      />
+
       <Controller
         name="lead"
         control={control}

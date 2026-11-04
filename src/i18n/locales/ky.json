@@ -453,6 +453,10 @@
     "logout": "Чыгуу"
   },
   "ui": {
+    "lead_number_column": "Ташуунун номери",
+    "auction_name_not_set": "Аталышы коюлган эмес",
+    "auction_name": "Аукциондун аталышы",
+    "enter_auction_name": "Аукциондун аталышын киргизиңиз",
     "home_page": "Башкы бет",
     "complaints": "Арыздар",
     "active_leads": "Жигердүү жөнөтүүлөр",

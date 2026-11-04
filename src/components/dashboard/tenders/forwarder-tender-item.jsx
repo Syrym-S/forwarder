@@ -51,13 +51,14 @@ const ForwarderTenderItem = ({ tender }) => {
           }}
         >
           <Chip
-            label={t("dashboard.auction_number", { number: tender.id || "—" })}
+            label={tender?.name?.trim() || t("ui.auction_name_not_set")}
             variant={"outlined"}
             size="small"
             sx={{
               fontWeight: 600,
               borderRadius: 2,
               color: "primary.main",
+              maxWidth: "100%",
               borderColor: "primary.main",
             }}
           />

@@ -1,4 +1,23 @@
 {
+  "routeMap": {
+    "title": "Route map",
+    "selectedHint": "All selected stops are shown together.",
+    "emptyHint": "Choose an address below or select a point on the map.",
+    "points": "Stops: {{count}}",
+    "fit": "Show full route",
+    "zoomIn": "Zoom in",
+    "zoomOut": "Zoom out",
+    "waypoints": "Waypoints",
+    "dragHint": "Drag markers to adjust the address."
+  },
+  "addressAutocomplete": {
+    "placeholder": "City, street, house number",
+    "hint": "Enter at least 3 characters and select an address to show it on the map.",
+    "loading": "Searching addresses…",
+    "empty": "No addresses found. Refine the city and street or select a point on the map.",
+    "failed": "Address suggestions are temporarily unavailable. Try again or select a point on the map.",
+    "clear": "Clear address"
+  },
   "webPush": {
     "label": "Browser push notifications",
     "description": "Receive notifications while the site tab is inactive. Disabling applies to all your devices.",
@@ -473,6 +492,10 @@
     "logout": "Sign out"
   },
   "ui": {
+    "lead_number_column": "Shipment number",
+    "auction_name_not_set": "Name not set",
+    "auction_name": "Auction name",
+    "enter_auction_name": "Enter the auction name",
     "home_page": "Home",
     "complaints": "Complaints",
     "active_leads": "Active leads",

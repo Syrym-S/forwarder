@@ -453,6 +453,10 @@
     "logout": "سائن آؤٹ کریں۔"
   },
   "ui": {
+    "lead_number_column": "ترسیل کا نمبر",
+    "auction_name_not_set": "نام مقرر نہیں کیا گیا",
+    "auction_name": "نیلامی کا نام",
+    "enter_auction_name": "نیلامی کا نام درج کریں",
     "home_page": "ہوم پیج",
     "complaints": "شکایات",
     "active_leads": "فعال ترسیل",

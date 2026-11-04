@@ -453,6 +453,10 @@
     "logout": "Cerrar sesión"
   },
   "ui": {
+    "lead_number_column": "Número de envío",
+    "auction_name_not_set": "Nombre no especificado",
+    "auction_name": "Nombre de la subasta",
+    "enter_auction_name": "Introduce el nombre de la subasta",
     "home_page": "página de inicio",
     "complaints": "Quejas",
     "active_leads": "Envíos activos",

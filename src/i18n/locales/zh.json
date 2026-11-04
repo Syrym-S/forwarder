@@ -453,6 +453,10 @@
     "logout": "退出"
   },
   "ui": {
+    "lead_number_column": "运输编号",
+    "auction_name_not_set": "未设置名称",
+    "auction_name": "拍卖名称",
+    "enter_auction_name": "请输入拍卖名称",
     "home_page": "主页",
     "complaints": "投诉",
     "active_leads": "活跃出货量",

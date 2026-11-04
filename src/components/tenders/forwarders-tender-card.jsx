@@ -55,13 +55,14 @@ const ForwardersTenderCard = ({ tender }) => {
             <Typography
               sx={{
                 lineHeight: 1.3,
+                overflowWrap: "anywhere",
                 fontSize: {
                   xs: "16px",
                   sm: "18px",
                 },
                 fontWeight: 500,
               }}
-            >{t("ui.auction_number", { value1: tender.id || "—" })}</Typography>
+            >{tender?.name?.trim() || t("ui.auction_name_not_set")}</Typography>
           </Box>
 
           <Stack

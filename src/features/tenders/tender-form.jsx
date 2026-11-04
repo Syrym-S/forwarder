@@ -25,11 +25,12 @@ const steps = [
 ];
 
 const stepFields = {
-  1: ["lead", "public_date_time", "end_date_time", "participants"],
+  1: ["name", "lead", "public_date_time", "end_date_time", "participants"],
 };
 
 const prepareTenderData = (form, selectedDrivers) => {
   return {
+    name: form?.name?.trim() || "",
     lead_id: form?.lead.id || "",
     public_date_time:
       dayjs(form?.public_date_time).format("YYYY-MM-DD HH:mm:ss") || "",
@@ -55,7 +56,7 @@ const TenderForm = ({
 
   const { id } = useParams();
   const { control, setValue, trigger, getValues } = useForm({
-    defaultValues,
+    defaultValues: { name: "", ...defaultValues },
     mode: "onChange",
     reValidateMode: "onChange",
   });

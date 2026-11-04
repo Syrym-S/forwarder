@@ -453,6 +453,10 @@
     "logout": "Sair"
   },
   "ui": {
+    "lead_number_column": "Número do transporte",
+    "auction_name_not_set": "Nome não definido",
+    "auction_name": "Nome do leilão",
+    "enter_auction_name": "Insira o nome do leilão",
     "home_page": "Página inicial",
     "complaints": "Reclamações",
     "active_leads": "Remessas ativas",

@@ -172,6 +172,7 @@ const menuItems = [
   {
     id: 3,
     label: "menu.finances",
+    feature: "factoring",
     sub_items: [
       // {
       //   id: 1,
@@ -295,6 +296,10 @@ const menuItems = [
 
 const SideBar = ({ openMenu, setOpenMenu }) => {
   const { t } = useTranslation();
+  const features = window.APP_DATA?.features || {};
+  const visibleMenuItems = menuItems.filter(
+    (item) => !item.feature || features[item.feature] !== false,
+  );
 
   return (
     <Box
@@ -323,7 +328,7 @@ const SideBar = ({ openMenu, setOpenMenu }) => {
       }}
     >
       <Box>
-        {menuItems.map((item) => (
+        {visibleMenuItems.map((item) => (
           <Box key={item.id} onClick={() => setOpenMenu(false)}>
             {item.label && (
               <Typography

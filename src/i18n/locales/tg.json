@@ -453,6 +453,10 @@
     "logout": "Хуруҷ"
   },
   "ui": {
+    "lead_number_column": "Рақами боркашонӣ",
+    "auction_name_not_set": "Ном муайян нашудааст",
+    "auction_name": "Номи музояда",
+    "enter_auction_name": "Номи музоядаро ворид кунед",
     "home_page": "Саҳифаи асосӣ",
     "complaints": "Шикоятҳо",
     "active_leads": "Интиқоли фаъол",

@@ -7,17 +7,18 @@ const useAppTenederColumns = () => {
   const { t } = useTranslation();
   const columns = [
     {
-      field: "id",
-      headerName: "ID",
+      field: "name",
+      headerName: t("ui.auction_name"),
+      valueGetter: (_, row) => row?.name?.trim() || t("ui.auction_name_not_set"),
       width: 200,
-      renderCell: ({ row }) => (
+      renderCell: ({ row, value }) => (
         <NavLink
           to={`/tenders/${row.id}`}
           style={{
             textDecoration: "none",
           }}
         >
-          {row.id}
+          {value}
         </NavLink>
       ),
     },
@@ -38,20 +39,18 @@ const useAppTenederColumns = () => {
       ),
     },
     {
-      field: "lead",
-      type: "number",
-      valueGetter: (_, row) =>
-        row?.lead?.id == null ? null : Number(row.lead.id),
-      headerName: t("ui.lead_id"),
+      field: "lead_num",
+      valueGetter: (_, row) => row?.lead?.num ?? t("ui.not_specified_2"),
+      headerName: t("ui.lead_number_column"),
       width: 200,
-      renderCell: ({ row }) => (
+      renderCell: ({ row, value }) => (
         <NavLink
           to={`/leads/${row?.lead?.id}`}
           style={{
             textDecoration: "none",
           }}
         >
-          {row?.lead?.id}
+          {value}
         </NavLink>
       ),
     },

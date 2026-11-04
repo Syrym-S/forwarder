@@ -453,6 +453,10 @@
     "logout": "Chiqish"
   },
   "ui": {
+    "lead_number_column": "Tashish raqami",
+    "auction_name_not_set": "Nomi belgilanmagan",
+    "auction_name": "Auksion nomi",
+    "enter_auction_name": "Auksion nomini kiriting",
     "home_page": "Bosh sahifa",
     "complaints": "Shikoyatlar",
     "active_leads": "Faol yuklar",

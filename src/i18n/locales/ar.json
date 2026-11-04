@@ -459,6 +459,10 @@
     "logout": "تسجيل الخروج"
   },
   "ui": {
+    "lead_number_column": "رقم الشحنة",
+    "auction_name_not_set": "لم يتم تحديد الاسم",
+    "auction_name": "اسم المزاد",
+    "enter_auction_name": "أدخل اسم المزاد",
     "home_page": "الصفحة الرئيسية",
     "complaints": "الشكاوى",
     "active_leads": "الشحنات النشطة",

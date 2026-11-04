@@ -23,6 +23,7 @@ const STATUS_LABEL_KEYS = {
   verification_loading: "dashboard.loading_confirmed",
   start_unloading: "dashboard.unloading_operation",
   verification_unloading: "dashboard.unloading_confirmed",
+  sign_avr: "dashboard.awaiting_signatures",
   emergency_situation: "dashboard.emergency",
 };
 const DRAFT_OPTION = { value: "draft", label: "active_leads.draft" };

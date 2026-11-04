@@ -453,6 +453,10 @@
     "logout": "Გასვლა"
   },
   "ui": {
+    "lead_number_column": "გადაზიდვის ნომერი",
+    "auction_name_not_set": "სახელი მითითებული არ არის",
+    "auction_name": "აუქციონის სახელი",
+    "enter_auction_name": "შეიყვანეთ აუქციონის სახელი",
     "home_page": "მთავარი გვერდი",
     "complaints": "ჩივილები",
     "active_leads": "აქტიური გადაზიდვები",

@@ -453,6 +453,10 @@
     "logout": "Oturumu kapat"
   },
   "ui": {
+    "lead_number_column": "Taşıma numarası",
+    "auction_name_not_set": "Ad belirtilmedi",
+    "auction_name": "Açık artırma adı",
+    "enter_auction_name": "Açık artırma adını girin",
     "home_page": "Ana sayfa",
     "complaints": "Şikayetler",
     "active_leads": "Aktif gönderiler",

@@ -64,6 +64,7 @@ export const ACTIVE_LEAD_STATUS_OPTIONS = [
   { get label() { return appI18n.t("ui.loading_confirmed"); }, value: "verification_loading" },
   { get label() { return appI18n.t("ui.unloading_operation"); }, value: "start_unloading" },
   { get label() { return appI18n.t("ui.unloading_confirmed"); }, value: "verification_unloading" },
+  { get label() { return appI18n.t("dashboard.awaiting_signatures"); }, value: "sign_avr" },
   { get label() { return appI18n.t("ui.emergency"); }, value: "emergency_situation" },
 ];
 

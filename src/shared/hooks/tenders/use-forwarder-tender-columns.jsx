@@ -7,17 +7,18 @@ const useForwarderTenderColumns = () => {
   const { t } = useTranslation();
   const columns = [
     {
-      field: "id",
-      headerName: "ID",
+      field: "name",
+      headerName: t("ui.auction_name"),
+      valueGetter: (_, row) => row?.name?.trim() || t("ui.auction_name_not_set"),
       width: 200,
-      renderCell: ({ row }) => (
+      renderCell: ({ row, value }) => (
         <NavLink
           to={`/tenders-driver/${row.id}`}
           style={{
             textDecoration: "none",
           }}
         >
-          {row.id}
+          {value}
         </NavLink>
       ),
     },
@@ -38,17 +39,18 @@ const useForwarderTenderColumns = () => {
       ),
     },
     {
-      field: "lead_id",
-      headerName: t("ui.lead_id"),
+      field: "lead_num",
+      headerName: t("ui.lead_number_column"),
+      valueGetter: (_, row) => row?.lead?.num ?? t("ui.not_specified_2"),
       width: 200,
-      renderCell: ({ row }) => (
+      renderCell: ({ row, value }) => (
         <NavLink
-          to={`/leads/${row.lead_id}`}
+          to={`/leads/${row.lead_id ?? row.lead?.id}`}
           style={{
             textDecoration: "none",
           }}
         >
-          {row.lead_id}
+          {value}
         </NavLink>
       ),
     },

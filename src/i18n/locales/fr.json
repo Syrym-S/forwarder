@@ -453,6 +453,10 @@
     "logout": "Déconnexion"
   },
   "ui": {
+    "lead_number_column": "Numéro de transport",
+    "auction_name_not_set": "Nom non renseigné",
+    "auction_name": "Nom de l’enchère",
+    "enter_auction_name": "Saisissez le nom de l’enchère",
     "home_page": "Page d'accueil",
     "complaints": "Plaintes",
     "active_leads": "Expéditions actives",
