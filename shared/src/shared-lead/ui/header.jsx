@@ -2,7 +2,9 @@ import Box from "@mui/material/Box";
 import { AppBar, Button, Tooltip } from "@mui/material";
 import MarkunreadOutlinedIcon from "@mui/icons-material/MarkunreadOutlined";
 import PhoneOutlinedIcon from "@mui/icons-material/PhoneOutlined";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useOptionsStore } from "../../../../src/app/store/options";
+import LanguageSelect from "../../../../src/components/layout/language-select";
 
 export function SupportContacts() {
   const supportEmail = window?.APP_DATA?.support?.email;
@@ -85,6 +87,13 @@ export function SupportContacts() {
 }
 
 const Header = () => {
+  const languages = useOptionsStore((state) => state.languages);
+  const getLanguages = useOptionsStore((state) => state.getLanguages);
+
+  useEffect(() => {
+    getLanguages();
+  }, []);
+
   return (
     <AppBar
       position="sticky"
@@ -124,8 +133,15 @@ const Header = () => {
           }}
         />
       </Box>
-
-      <SupportContacts />
+      <Box
+        sx={{
+          display: "flex",
+          gap: 1,
+        }}
+      >
+        <LanguageSelect languages={languages} />
+        <SupportContacts />
+      </Box>
     </AppBar>
   );
 };

@@ -52,7 +52,6 @@ export default function LeadMap({ from, waypoints = [], to, id, leadData }) {
   const [routeData, setRouteData] = useState(null);
   const route = routeData?.coordinates === coordinates ? routeData.points : [];
 
-
   useEffect(() => {
     let cancelled = false;
     const load = async () => {
@@ -98,6 +97,8 @@ export default function LeadMap({ from, waypoints = [], to, id, leadData }) {
           if (!r.ok) throw new Error("Не удалось получить токен геотрекинга");
           return r.json();
         });
+
+        console.log(addRes);
 
         if (!isActive) return;
         if (!addRes.token || !addRes.url) {
@@ -152,8 +153,11 @@ export default function LeadMap({ from, waypoints = [], to, id, leadData }) {
           throw new Error("Сервис не вернул настройки подписки геотрекинга");
         }
 
-        const wsAddress = window.GeoWS_Config?.ws ||
-          (isStaging ? "geo.staging.360logistics.kz" : "geo.v2.360logistics.kz");
+        const wsAddress =
+          window.GeoWS_Config?.ws ||
+          (isStaging
+            ? "geo.staging.360logistics.kz"
+            : "geo.v2.360logistics.kz");
         const wsUrl = new URL(
           wsAddress.includes("://") ? wsAddress : `wss://${wsAddress}`,
         );
@@ -258,7 +262,10 @@ export default function LeadMap({ from, waypoints = [], to, id, leadData }) {
           ]}
           icon={driverIcon}
         >
-          <DriverPositionPopup leadData={leadData} point={selectedTracking.point} />
+          <DriverPositionPopup
+            leadData={leadData}
+            point={selectedTracking.point}
+          />
         </Marker>
       )}
     </MapContainer>
