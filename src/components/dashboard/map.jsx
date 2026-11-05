@@ -18,16 +18,18 @@ import polyline from "@mapbox/polyline";
 import { api, isStaging } from "../../app/client";
 import { fetchCachedRouteDetails } from "../../shared/helpers/route-cache";
 import "./marker.style.css";
-import { driverIcon } from "../../shared/ui/driver-marker-icon";
+import { createDriverIcon } from "../../shared/ui/driver-marker-icon";
 import DriverPositionPopup from "../../shared/ui/driver-position-popup";
+import { getLeadMapStatusColor } from "../../shared/const/lead-map-statuses";
+import RenderStatus from "../../shared/ui/render-status";
 
 window.Pusher = Pusher;
 
-const createMarkerIcon = (label, subLabel) => {
+const createMarkerIcon = (label, subLabel, color) => {
   return L.divIcon({
     className: "custom-marker-wrapper",
     html: `
-      <div class="map-marker">
+      <div class="map-marker" style="--map-marker-color: ${color}">
         <div class="map-marker__circle">
           <div class="map-marker__content">
             ${label}
@@ -112,6 +114,7 @@ const formatDuration = (duration, t) => {
 
 const MapTooltip = ({ route, open, setOpen }) => {
   const { t } = useTranslation();
+
   return (
     <Tooltip
       sticky
@@ -121,6 +124,7 @@ const MapTooltip = ({ route, open, setOpen }) => {
       disableFocusListener
       disableTouchListener
     >
+      <RenderStatus status={route.lead.status} />
       <Box sx={{ maxWidth: 350, width: 200 }}>
         <Box
           sx={{ mb: 0.75, display: "flex", flexDirection: "column", gap: 1 }}
@@ -193,12 +197,14 @@ const FitSelectedRouteBounds = ({ route }) => {
 
 const Map = ({
   leads: leadsProp,
+  isLoading: isLoadingProp,
   selectedLeadId,
   highlightedLeadId,
   onSelectLead,
 }) => {
   const { t } = useTranslation();
-  const isLoading = useLeadsStore((state) => state.isLoading);
+  const storeIsLoading = useLeadsStore((state) => state.isLoading);
+  const isLoading = isLoadingProp ?? storeIsLoading;
   const storeLeads = useLeadsStore((state) => state.leads);
 
   const leads = leadsProp || storeLeads;
@@ -213,6 +219,10 @@ const Map = ({
   const trackedLead = leads.find(
     (lead) => String(lead.id) === String(selectedLeadId),
   );
+  const driverMarkerIcon = useMemo(
+    () => createDriverIcon(getLeadMapStatusColor(trackedLead?.status)),
+    [trackedLead?.status],
+  );
 
   useEffect(() => {
     let isMounted = true;
@@ -220,7 +230,7 @@ const Map = ({
     const loadRoutes = async () => {
       const result = await Promise.all(
         leads.filter(hasRouteLocations).map(async (lead) => {
-          const cross = lead.waypoints.map((waypoint) =>
+          const cross = (lead.waypoints || []).map((waypoint) =>
             getLocationPoint(waypoint),
           );
 
@@ -487,6 +497,7 @@ const Map = ({
         <FitSelectedRouteBounds route={selectedRoute} />
 
         {routes.map((route) => {
+          const routeColor = getLeadMapStatusColor(route.lead.status);
           const isHighlighted = String(route.id) === String(highlightedLeadId);
           const isDimmed = hasHighlightedRoute && !isHighlighted;
 
@@ -495,19 +506,21 @@ const Map = ({
               <Marker
                 key={`from-${route.id}`}
                 position={route.start}
-                icon={createMarkerIcon("A", `#${route.lead.num}`)}
+                icon={createMarkerIcon("A", `#${route.lead.num}`, routeColor)}
                 opacity={isDimmed ? 0.3 : 1}
                 eventHandlers={{
                   click: () => onSelectLead?.(route.id),
                 }}
               />
-              {route.lead.waypoints.map((waypoint, index) => {
+              {(route.lead.waypoints || []).map((waypoint, index) => {
                 return (
                   <Marker
-                    position={[waypoint.lat, waypoint.lon]}
+                    key={index}
+                    position={getLocationPoint(waypoint)}
                     icon={createMarkerIcon(
                       `P#${index + 1}`,
                       `#${route.lead.num}`,
+                      routeColor,
                     )}
                   />
                 );
@@ -518,12 +531,12 @@ const Map = ({
                 eventHandlers={{
                   click: () => onSelectLead?.(route.id),
                 }}
-                icon={createMarkerIcon("B", `#${route.lead.num}`)}
+                icon={createMarkerIcon("B", `#${route.lead.num}`, routeColor)}
               />
               <Polyline
                 positions={route.coordinates}
                 pathOptions={{
-                  color: "blue",
+                  color: routeColor,
                   weight: isHighlighted ? 7 : 4,
                   opacity: isDimmed ? 0.15 : 0.95,
                 }}
@@ -539,7 +552,11 @@ const Map = ({
         {selectedTracking?.coordinates.length > 0 && (
           <Polyline
             positions={selectedTracking.coordinates}
-            pathOptions={{ color: "#1976d2", weight: 5, dashArray: "10 10" }}
+            pathOptions={{
+              color: getLeadMapStatusColor(trackedLead?.status),
+              weight: 5,
+              dashArray: "10 10",
+            }}
           />
         )}
         {selectedTracking?.point && (
@@ -548,7 +565,7 @@ const Map = ({
               selectedTracking.point.latitude,
               selectedTracking.point.longitude,
             ]}
-            icon={driverIcon}
+            icon={driverMarkerIcon}
           >
             <DriverPositionPopup
               leadData={trackedLead}

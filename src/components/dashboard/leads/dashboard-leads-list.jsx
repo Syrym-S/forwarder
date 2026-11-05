@@ -17,6 +17,7 @@ const DASHBOARD_LEADS_PER_PAGE = 5;
 const DashboardLeadsList = ({
   leads = [],
   isLoading = false,
+  emptyMessage,
   selectedLeadId,
   hoveredLeadId,
   onSelectLead,
@@ -45,7 +46,7 @@ const DashboardLeadsList = ({
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setPage(1);
-  }, [leads.length]);
+  }, [leads]);
 
   return (
     <Paper
@@ -53,7 +54,7 @@ const DashboardLeadsList = ({
       sx={{
         height: {
           xs: "auto",
-          lg: 580,
+          lg: 730,
         },
         borderRadius: 3,
         p: 2,
@@ -112,7 +113,9 @@ const DashboardLeadsList = ({
         )}
 
         {!isLoading && !leads.length && (
-          <Alert severity="info">{t("dashboard.no_active_leads_yet")}</Alert>
+          <Alert severity="info">
+            {emptyMessage || t("dashboard.no_active_leads_yet")}
+          </Alert>
         )}
 
         {!isLoading && Boolean(leads.length) && (

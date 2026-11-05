@@ -43,7 +43,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #1e293b;
+  background: var(--driver-marker-color, #1e293b);
   color: #ffffff;
   border: 2px solid #ffffff;
   border-radius: 50%;
@@ -62,10 +62,12 @@
 
 @keyframes driver-marker-pulse {
   0% {
-    box-shadow: 0 0 0 0 rgba(30, 41, 59, 0.45);
+    box-shadow: 0 0 0 0 var(--driver-marker-color, #1e293b);
+    opacity: 0.45;
   }
   100% {
-    box-shadow: 0 0 0 12px rgba(30, 41, 59, 0);
+    box-shadow: 0 0 0 12px var(--driver-marker-color, #1e293b);
+    opacity: 0;
   }
 }
 

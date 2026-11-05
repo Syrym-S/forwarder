@@ -16,7 +16,7 @@
   justify-content: center;
 }
 
-/* синий хвост */
+/* хвост маркера */
 .map-marker::before {
   content: "";
 
@@ -27,7 +27,7 @@
   width: 12px;
   height: 23px;
 
-  background: #1976d2;
+  background: var(--map-marker-color, #1976d2);
 
   transform: translateX(-50%);
   clip-path: polygon(0 0, 100% 0, 50% 100%);
@@ -64,7 +64,7 @@
 
   box-sizing: border-box;
 
-  background: #1976d2;
+  background: var(--map-marker-color, #1976d2);
   border: 3px solid white;
   border-radius: 50%;
 

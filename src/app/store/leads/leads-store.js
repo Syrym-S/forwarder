@@ -18,7 +18,6 @@ import {
   uploadLeadFileApi,
   verifyCargoApi,
   verifyCargoUnloadApi,
-  getAcceptedLeadsApi,
   deleteCargoApi,
   shareLeadApi,
   sendMessageApi,
@@ -39,11 +38,11 @@ import {
 export const useLeadsStore = create((set, get) => ({
   leads: [],
   leadsParams: {},
+  leadsFetchOptions: {},
   searchedLeads: [],
   historyLeads: [],
   files: [],
   uploadedFiles: [],
-  acceptedLeads: [],
   leadMessages: [],
 
   currentLead: null,
@@ -62,7 +61,6 @@ export const useLeadsStore = create((set, get) => ({
   isLoadLoading: false,
   isUnloadLoading: false,
   isConfirmLoading: false,
-  isAcceptedLeadsLoading: false,
   isCargoDeleteLoading: false,
   isSendingLoading: false,
   isMessagesLoading: false,
@@ -88,50 +86,57 @@ export const useLeadsStore = create((set, get) => ({
     set({ notificationPopUpCurrentLead: null, error: null });
   },
 
-  fetchLeads: async (params = {}) => {
-    const requestParams = { ...params };
+  fetchLeads: async (params = {}, { allPages = false } = {}) => {
+    const requestParams = { ...params, ...(allPages ? { page: 1 } : {}) };
     try {
-      set({ isLoading: true, error: null, leadsParams: requestParams });
+      set({
+        isLoading: true,
+        error: null,
+        leadsParams: requestParams,
+        leadsFetchOptions: { allPages },
+        ...(allPages ? { leads: [] } : {}),
+      });
 
-      const response = await (requestParams.q
-        ? searchLeadsApi(requestParams)
-        : getLeads(requestParams));
+      if (Array.isArray(requestParams.status) && !requestParams.status.length) {
+        set({ leads: [], count: 0, perPage: 1, isLoading: false });
+        return;
+      }
+
+      const requestLeads = requestParams.q ? searchLeadsApi : getLeads;
+      const response = await requestLeads(requestParams);
       if (get().leadsParams !== requestParams) return;
 
+      const leads = [...(response.data.results || [])];
+      if (allPages) {
+        const perPage = Number(response.data.per_page) || leads.length;
+        const total = Number(response.data.count ?? response.data.total) || 0;
+        const pageCount = Number(response.data.last_page ?? response.data.total_pages)
+          || (perPage > 0 ? Math.ceil(total / perPage) : 1);
+
+        for (let page = 2; page <= pageCount; page += 1) {
+          const nextResponse = await requestLeads({ ...requestParams, page });
+          if (get().leadsParams !== requestParams) return;
+          const nextLeads = nextResponse.data.results || [];
+          if (!nextLeads.length) break;
+          leads.push(...nextLeads);
+        }
+      }
+
       set({
-        leads: (response.data.results || []).map((lead) => ({
+        leads: leads.map((lead) => ({
           ...lead,
           is_draft: isDraftLead(requestParams) || isDraftLead(lead),
         })),
-        count: response.data.count ?? response.data.total ?? 0,
+        count: response.data.count ?? response.data.total ?? (allPages ? leads.length : 0),
         perPage: response.data.per_page,
         isLoading: false,
       });
     } catch (e) {
       if (get().leadsParams !== requestParams) return;
       set({
+        ...(allPages ? { leads: [] } : {}),
         error: e.message,
         isLoading: false,
-      });
-    }
-  },
-
-  fetchAcceptedLeads: async () => {
-    try {
-      set({ isAcceptedLeadsLoading: true, error: null });
-
-      const response = await getAcceptedLeadsApi();
-
-      set({
-        acceptedLeads:
-          response.data?.results || response.data?.data || response.data || [],
-        isAcceptedLeadsLoading: false,
-      });
-    } catch (e) {
-      set({
-        acceptedLeads: [],
-        error: e.message,
-        isAcceptedLeadsLoading: false,
       });
     }
   },
@@ -241,7 +246,7 @@ export const useLeadsStore = create((set, get) => ({
 
       const response = await createLeadApi(payload);
 
-      await get().fetchLeads(get().leadsParams);
+      await get().fetchLeads(get().leadsParams, get().leadsFetchOptions);
 
       return response.data;
     } catch (e) {

@@ -68,39 +68,73 @@ const RenderStatus = ({ status }) => {
 
     case STATUS.add_driver:
       return (
-        <RenderStatusContent label={t("dashboard.driver_added")} variant="outlined" />
+        <RenderStatusContent
+          label={t("dashboard.driver_added")}
+          variant="outlined"
+          color="#6366f1"
+        />
       );
 
     case STATUS.start_driver:
       return (
-        <RenderStatusContent label={t("dashboard.trip_started")} variant="contained" />
+        <RenderStatusContent
+          label={t("dashboard.trip_started")}
+          variant="contained"
+          color="#2563eb"
+        />
       );
 
     case STATUS.loading:
-      return <RenderStatusContent label={t("dashboard.loading_operation")} variant="contaned" />;
+      return (
+        <RenderStatusContent
+          label={t("dashboard.loading_operation")}
+          variant="contaned"
+          color="#d97706"
+        />
+      );
 
     case STATUS.start_loading:
-      return <RenderStatusContent label={t("dashboard.loading_operation")} variant="outlined" />;
+      return (
+        <RenderStatusContent
+          label={t("notifications.shipping.loading_started.theme")}
+          variant="outlined"
+          color="#ea580c"
+        />
+      );
 
     case STATUS.verification_loading:
       return (
         <RenderStatusContent
           label={t("dashboard.loading_confirmed")}
           variant="contained"
+          color="#65a30d"
         />
       );
 
     case STATUS.start_unloading:
-      return <RenderStatusContent label={t("dashboard.unloading_operation")} variant="outlined" />;
+      return (
+        <RenderStatusContent
+          label={t("notifications.shipping.unloading_started.theme")}
+          variant="outlined"
+          color="#7c3aed"
+        />
+      );
 
     case STATUS.unloading:
-      return <RenderStatusContent label={t("dashboard.unloading_operation")} variant="contaned" />;
+      return (
+        <RenderStatusContent
+          label={t("dashboard.unloading_operation")}
+          variant="contaned"
+          color="#0891b2"
+        />
+      );
 
     case STATUS.verification_unloading:
       return (
         <RenderStatusContent
           label={t("dashboard.unloading_confirmed")}
           variant="outlined"
+          color="#0f766e"
         />
       );
 
@@ -141,20 +175,33 @@ const RenderStatus = ({ status }) => {
       );
 
     case STATUS.winning:
-      return <RenderStatusContent label={t("dashboard.won")} variant="outlined" />;
+      return (
+        <RenderStatusContent label={t("dashboard.won")} variant="outlined" />
+      );
 
     case STATUS.await_paid:
       return (
-        <RenderStatusContent label={t("dashboard.awaiting_payment")} variant="outlined" />
+        <RenderStatusContent
+          label={t("dashboard.awaiting_payment")}
+          variant="outlined"
+        />
       );
 
     case STATUS.verified_participant:
       return (
-        <RenderStatusContent label={t("dashboard.awaiting_confirmation")} variant="outlined" />
+        <RenderStatusContent
+          label={t("dashboard.awaiting_confirmation")}
+          variant="outlined"
+        />
       );
 
     case STATUS.approved:
-      return <RenderStatusContent label={t("dashboard.confirmed")} variant="outlined" />;
+      return (
+        <RenderStatusContent
+          label={t("dashboard.confirmed")}
+          variant="outlined"
+        />
+      );
 
     case STATUS.emergency_situation:
       return (
