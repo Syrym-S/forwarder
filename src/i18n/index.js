@@ -16,8 +16,9 @@ import fr from "./locales/fr.json";
 import de from "./locales/de.json";
 import tg from "./locales/tg.json";
 import ur from "./locales/ur.json";
+import uk from "./locales/uk.json";
 
-const translations = { ru, en, kk: kz, es, pt, tr, ar, zh, uz, ky, ka, fr, de, tg, ur };
+const translations = { ru, en, kk: kz, es, pt, tr, ar, zh, uz, ky, ka, fr, de, tg, ur, uk };
 const supportedLngs = Object.keys(translations);
 
 const savedLanguage = localStorage.getItem("language");
