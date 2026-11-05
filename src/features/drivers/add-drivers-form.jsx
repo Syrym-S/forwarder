@@ -40,6 +40,7 @@ const defaultValues = {
   email: "",
   is_foreigner: false,
   company_name: "",
+  director_fio: "",
   company_bin: "",
   legal_address: "",
   bik: "",
@@ -325,6 +326,21 @@ const AddDriverForm = ({ open, onClose, setSavedData }) => {
                     {...field}
                     label={t("ui.entrepreneur_name")}
                     slotProps={{ inputLabel: { required: true } }}
+                    fullWidth
+                    size="small"
+                  />
+                )}
+              />
+            </Grid>
+
+            <Grid size={{ xs: 12, sm: 6 }}>
+              <Controller
+                name="director_fio"
+                control={control}
+                render={({ field }) => (
+                  <TextField
+                    {...field}
+                    label={t("ui.director_fio")}
                     fullWidth
                     size="small"
                   />

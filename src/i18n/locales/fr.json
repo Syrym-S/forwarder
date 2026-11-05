@@ -544,6 +544,7 @@
     "customer_addresses": "Adresses des clients",
     "contact_person_not_specified": "Personne de contact non précisée",
     "company_name": "Nom de l'entreprise",
+    "director_fio": "Nom complet du dirigeant de l’entreprise individuelle",
     "bin": "BIN",
     "organization_type": "Type d'organisation",
     "registered_address": "Adresse enregistrée",

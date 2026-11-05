@@ -583,6 +583,7 @@
     "customer_addresses": "Kundenadressen",
     "contact_person_not_specified": "Ansprechpartner nicht angegeben",
     "company_name": "Firmenname",
+    "director_fio": "Vollständiger Name der Leitung des Einzelunternehmens",
     "bin": "BIN",
     "organization_type": "Organisationstyp",
     "registered_address": "Registrierte Adresse",

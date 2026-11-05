@@ -544,6 +544,7 @@
     "customer_addresses": "Endereços de clientes",
     "contact_person_not_specified": "Pessoa de contato não especificada",
     "company_name": "Nome da empresa",
+    "director_fio": "Nome completo do diretor da empresa individual",
     "bin": "BIN",
     "organization_type": "Tipo de organização",
     "registered_address": "Endereço registrado",

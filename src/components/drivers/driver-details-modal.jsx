@@ -126,6 +126,12 @@ const DriverDetailsModal = ({ selectedDriver, handleClear }) => {
               label={t("ui.company_name")}
               value={driverDetails.company_name || null}
             />
+            <InfoItem
+              label={t("ui.director_fio")}
+              value={
+                (driverDetails.director_fio ?? selectedDriver?.director_fio) || null
+              }
+            />
             <InfoItem label={t("ui.bin")} value={driverDetails.company_bin || null} />
             <InfoItem
               label={t("ui.individual_entrepreneur")}

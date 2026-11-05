@@ -544,6 +544,7 @@
     "customer_addresses": "Кардарлардын даректери",
     "contact_person_not_specified": "Байланышчу адам көрсөтүлгөн эмес",
     "company_name": "Компаниянын аталышы",
+    "director_fio": "ЖИ директорунун аты-жөнү",
     "bin": "BIN",
     "organization_type": "Уюм түрү",
     "registered_address": "Катталган дарек",

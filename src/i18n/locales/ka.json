@@ -544,6 +544,7 @@
     "customer_addresses": "მომხმარებელთა მისამართები",
     "contact_person_not_specified": "საკონტაქტო პირი არ არის მითითებული",
     "company_name": "კომპანიის სახელი",
+    "director_fio": "ინდივიდუალური მეწარმის დირექტორის სრული სახელი",
     "bin": "BIN",
     "organization_type": "ორგანიზაციის ტიპი",
     "registered_address": "რეგისტრირებული მისამართი",

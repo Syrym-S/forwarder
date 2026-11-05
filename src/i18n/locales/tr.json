@@ -544,6 +544,7 @@
     "customer_addresses": "Müşteri adresleri",
     "contact_person_not_specified": "İrtibat kurulacak kişi belirtilmedi",
     "company_name": "Şirket adı",
+    "director_fio": "Şahıs işletmesi müdürünün adı soyadı",
     "bin": "BIN",
     "organization_type": "Organizasyon tipi",
     "registered_address": "Kayıtlı adres",

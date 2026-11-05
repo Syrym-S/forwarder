@@ -550,6 +550,7 @@
     "customer_addresses": "عناوين العملاء",
     "contact_person_not_specified": "لم يتم تحديد جهة الاتصال",
     "company_name": "اسم الشركة",
+    "director_fio": "الاسم الكامل لمدير المؤسسة الفردية",
     "bin": "BIN",
     "organization_type": "نوع المنظمة",
     "registered_address": "العنوان المسجل",

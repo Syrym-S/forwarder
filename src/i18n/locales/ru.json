@@ -584,6 +584,7 @@
     "customer_addresses": "Адрес заказчиков",
     "contact_person_not_specified": "Контактное лицо не указано",
     "company_name": "Название компании",
+    "director_fio": "ФИО Директора ИП",
     "bin": "БИН",
     "organization_type": "Тип организации",
     "registered_address": "Юридический адрес",

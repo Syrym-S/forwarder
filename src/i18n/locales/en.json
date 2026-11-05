@@ -583,6 +583,7 @@
     "customer_addresses": "Customer addresses",
     "contact_person_not_specified": "Contact person not specified",
     "company_name": "Company name",
+    "director_fio": "Individual entrepreneur director’s full name",
     "bin": "BIN",
     "organization_type": "Organization type",
     "registered_address": "Registered address",
