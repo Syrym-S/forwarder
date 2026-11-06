@@ -44,23 +44,31 @@ const Dashboard = () => {
       factoring.status === "verified_participant",
   );
 
-  const [selectedStatuses, setSelectedStatuses] = useState(
-    () => [...DEFAULT_LEAD_MAP_STATUSES],
-  );
+  const [selectedStatuses, setSelectedStatuses] = useState(() => [
+    ...DEFAULT_LEAD_MAP_STATUSES,
+  ]);
   const [selectedLeadId, setSelectedLeadId] = useState(null);
   const [hoveredLeadId, setHoveredLeadId] = useState(null);
   const visibleSelectedLeadId = leads.some(
     (lead) => String(lead.id) === String(selectedLeadId),
-  ) ? selectedLeadId : null;
+  )
+    ? selectedLeadId
+    : null;
   const visibleHoveredLeadId = leads.some(
     (lead) => String(lead.id) === String(hoveredLeadId),
-  ) ? hoveredLeadId : null;
+  )
+    ? hoveredLeadId
+    : null;
   const highlightedLeadId = visibleHoveredLeadId || visibleSelectedLeadId;
+
+  const showFactoringTable = window.APP_DATA.features.factoring;
 
   const handleStatusChange = (event) => {
     const { value, checked } = event.target;
     setSelectedStatuses((statuses) =>
-      checked ? [...statuses, value] : statuses.filter((status) => status !== value),
+      checked
+        ? [...statuses, value]
+        : statuses.filter((status) => status !== value),
     );
     setSelectedLeadId(null);
     setHoveredLeadId(null);
@@ -83,7 +91,9 @@ const Dashboard = () => {
   }, [fetchLeads, selectedStatuses]);
 
   useEffect(() => {
-    getFactorings();
+    if (showFactoringTable) {
+      getFactorings();
+    }
   }, [getFactorings]);
 
   return (
@@ -121,9 +131,24 @@ const Dashboard = () => {
               minWidth: 0,
             }}
           >
-            <Box sx={{ p: 2, borderBottom: "1px solid", borderColor: "divider" }}>
-              <Typography component="h2" sx={{ fontSize: 16, fontWeight: 600, color: "font_color.heading" }}>{t("dashboard.lead_map")}</Typography>
-              <Typography sx={{ mt: 0.5, fontSize: 13, color: "text.secondary" }}>{t("dashboard.active_lead_routes")}</Typography>
+            <Box
+              sx={{ p: 2, borderBottom: "1px solid", borderColor: "divider" }}
+            >
+              <Typography
+                component="h2"
+                sx={{
+                  fontSize: 16,
+                  fontWeight: 600,
+                  color: "font_color.heading",
+                }}
+              >
+                {t("dashboard.lead_map")}
+              </Typography>
+              <Typography
+                sx={{ mt: 0.5, fontSize: 13, color: "text.secondary" }}
+              >
+                {t("dashboard.active_lead_routes")}
+              </Typography>
               <FormControl
                 component="fieldset"
                 sx={{ m: 0, mt: 1.5, p: 0, minWidth: 0, border: 0 }}
@@ -177,13 +202,39 @@ const Dashboard = () => {
 
         <TendersMainContainer />
 
-        <FactoringProgressBarContainer />
+        {showFactoringTable && <FactoringProgressBarContainer />}
 
-        <Box sx={{ minWidth: 0, p: 2, bgcolor: "background.paper", border: "1px solid", borderColor: "divider", borderRadius: 3, "& > .MuiPaper-root": { boxShadow: "none", my: 0, height: 420 }, "& .MuiDataGrid-root": { border: 0, fontSize: 13 }, "& .MuiDataGrid-columnHeader": { bgcolor: "background.default" } }}>
-          <Typography component="h2" sx={{ fontSize: 16, fontWeight: 600, color: "font_color.heading", mb: 0.5 }}>{t("dashboard.pending_factoring")}</Typography>
-          <Typography sx={{ fontSize: 13, color: "text.secondary", mb: 2 }}>{t("dashboard.pending_requests_description")}</Typography>
-          <FactoringTable factorings={awaitingApproveFactorings} />
-        </Box>
+        {showFactoringTable && (
+          <Box
+            sx={{
+              minWidth: 0,
+              p: 2,
+              bgcolor: "background.paper",
+              border: "1px solid",
+              borderColor: "divider",
+              borderRadius: 3,
+              "& > .MuiPaper-root": { boxShadow: "none", my: 0, height: 420 },
+              "& .MuiDataGrid-root": { border: 0, fontSize: 13 },
+              "& .MuiDataGrid-columnHeader": { bgcolor: "background.default" },
+            }}
+          >
+            <Typography
+              component="h2"
+              sx={{
+                fontSize: 16,
+                fontWeight: 600,
+                color: "font_color.heading",
+                mb: 0.5,
+              }}
+            >
+              {t("dashboard.pending_factoring")}
+            </Typography>
+            <Typography sx={{ fontSize: 13, color: "text.secondary", mb: 2 }}>
+              {t("dashboard.pending_requests_description")}
+            </Typography>
+            <FactoringTable factorings={awaitingApproveFactorings} />
+          </Box>
+        )}
       </Container>
     </RootLayout>
   );
