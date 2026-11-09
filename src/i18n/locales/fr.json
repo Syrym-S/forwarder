@@ -1378,7 +1378,7 @@
     "route_edit_status_restriction": "L'itinéraire ne peut pas être modifié dans l'état actuel",
     "waypoints": "Points de cheminement",
     "invalid_city_parameters": "Paramètres de ville invalides. Essayez de sélectionner un autre point",
-    "international_lead_hint": "Déterminé automatiquement à partir des pays des points de route. Un code de marchandise est requis pour les expéditions internationales.",
+    "international_lead_hint": "Déterminé à partir des pays de l’itinéraire et modifiable manuellement. Un code de marchandise est requis pour les expéditions internationales.",
     "skip_file_confirmation_hint": "Lorsqu'il est activé, le chargement et le déchargement de fichiers ne nécessitent pas de confirmation du transitaire. Ce paramètre ne peut pas être modifié une fois l'envoi créé.",
     "skip_file_confirmation_locked_hint": "Ce paramètre ne peut pas être modifié une fois l'envoi créé. Ignorer la confirmation de chargement/déchargement du fichier restera activé.",
     "automatic_assignment_locked_hint": "Le paramètre d'affectation automatique ne peut pas être modifié une fois l'envoi créé.",

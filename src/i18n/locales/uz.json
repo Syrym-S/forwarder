@@ -1378,7 +1378,7 @@
     "route_edit_status_restriction": "Joriy holatda marshrutni tahrirlab bo‘lmaydi",
     "waypoints": "Yo'nalish nuqtalari",
     "invalid_city_parameters": "Yaroqsiz shahar parametrlari. Boshqa nuqtani tanlashga harakat qiling",
-    "international_lead_hint": "Marshrut punktlari mamlakatlari tomonidan avtomatik ravishda aniqlanadi. Xalqaro yuk tashish uchun tovar kodi talab qilinadi.",
+    "international_lead_hint": "Marshrut nuqtalarining mamlakatlari asosida aniqlanadi va qo‘lda o‘zgartirilishi mumkin. Xalqaro yuk tashish uchun tovar kodi talab qilinadi.",
     "skip_file_confirmation_hint": "yoqilganda, fayllarni yuklash va tushirish ekspeditorning tasdiqlanishini talab qilmaydi. Bu sozlamani joʻnatish yaratilgandan keyin oʻzgartirib boʻlmaydi.",
     "skip_file_confirmation_locked_hint": "Bu sozlamani joʻnatish yaratilgandan keyin oʻzgartirib boʻlmaydi. Faylni yuklash/tushirishni oʻtkazib yuborishni tasdiqlash yoqilgan boʻlib qoladi.",
     "automatic_assignment_locked_hint": "Avtomatik belgilash sozlamasini joʻnatish yaratilgandan keyin oʻzgartirib boʻlmaydi.",

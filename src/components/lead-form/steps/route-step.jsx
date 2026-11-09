@@ -24,8 +24,8 @@ import { useRouteMapPicker } from "../use-route-map-picker";
 import { STATUS } from "../../../shared/const/tenders";
 import { useLeadsStore } from "../../../app/store/leads/leads-store";
 import PrimaryButton from "../../../shared/ui/button/primary-button";
-import { isInternationalRoute } from "../../../shared/lib/international-route";
-import { useEffect, useState } from "react";
+import { isInternationalLead } from "../../../shared/lib/international-route";
+import { useState } from "react";
 import CustomSelect from "../../../shared/ui/input/custom-select";
 import { KAZAKHSTAN_MAP_CITIES } from "../model/kazakhstan-map-cities";
 import MapAddressSearch from "../map-address-search";
@@ -53,13 +53,7 @@ const RouteStep = ({ control, form, setValue, isEdit = false }) => {
     first.label.localeCompare(second.label, i18n.resolvedLanguage),
   );
   const currentLead = useLeadsStore((state) => state.currentLead);
-  const isInternational = isInternationalRoute(form);
-
-  useEffect(() => {
-    if (form.is_international !== isInternational) {
-      setValue("is_international", isInternational, { shouldValidate: true });
-    }
-  }, [form.is_international, isInternational, setValue]);
+  const isInternational = isInternationalLead(form);
 
   const { fields, append, remove } = useFieldArray({
     control,
@@ -714,13 +708,14 @@ const RouteStep = ({ control, form, setValue, isEdit = false }) => {
         <Controller
           name="is_international"
           control={control}
-          defaultValue={false}
+          defaultValue={null}
           render={({ field }) => (
             <FormControlLabel
               control={
                 <Checkbox
                   name={field.name}
-                  checked={isInternational}
+                  checked={field.value ?? isInternational}
+                  onChange={(_, checked) => field.onChange(checked)}
                   onBlur={field.onBlur}
                   inputRef={field.ref}
                 />

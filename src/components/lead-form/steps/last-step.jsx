@@ -8,7 +8,7 @@ import RoutePoint from "../../leads/lead-item/route-point";
 import { useOptionsStore } from "../../../app/store/options";
 import { useEffect } from "react";
 import InfoItem from "../../../shared/ui/info-item";
-import { isInternationalRoute } from "../../../shared/lib/international-route";
+import { isInternationalLead } from "../../../shared/lib/international-route";
 
 export function LastStep({ form }) {
   const { t } = useTranslation();
@@ -142,7 +142,7 @@ export function LastStep({ form }) {
                   }}
                 >
                   <InfoBadge label={t("lead_form.cargo_type")} value={cargo.type} />
-                  {isInternationalRoute(form) && <InfoBadge label={t("lead_form.commodity_code")} value={cargo.tnved_code || t("ui.not_specified")} />}
+                  {isInternationalLead(form) && <InfoBadge label={t("lead_form.commodity_code")} value={cargo.tnved_code || t("ui.not_specified")} />}
 
                   <InfoBadge
                     label={t("ui.weight")}

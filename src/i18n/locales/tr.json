@@ -1378,7 +1378,7 @@
     "route_edit_status_restriction": "Rota mevcut durumda düzenlenemez",
     "waypoints": "Yol Noktaları",
     "invalid_city_parameters": "Geçersiz şehir parametreleri. Başka bir nokta seçmeyi deneyin",
-    "international_lead_hint": "Rota noktalarının bulunduğu ülkelerden otomatik olarak belirlenir. Uluslararası gönderiler için bir ürün kodu gereklidir.",
+    "international_lead_hint": "Rota noktalarının bulunduğu ülkelere göre belirlenir ve elle değiştirilebilir. Uluslararası gönderiler için bir ürün kodu gereklidir.",
     "skip_file_confirmation_hint": "Etkinleştirildiğinde, dosyaların yüklenmesi ve boşaltılması iletici onayı gerektirmez. Bu ayar gönderi oluşturulduktan sonra değiştirilemez.",
     "skip_file_confirmation_locked_hint": "Gönderi oluşturulduktan sonra bu ayar değiştirilemez. Dosya yükleme/boşaltma onayının atlanması etkin durumda kalacaktır.",
     "automatic_assignment_locked_hint": "Sevkiyat oluşturulduktan sonra otomatik atama ayarı değiştirilemez.",

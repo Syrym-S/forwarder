@@ -1417,7 +1417,7 @@
     "route_edit_status_restriction": "Die Route kann im aktuellen Status nicht bearbeitet werden",
     "waypoints": "Wegpunkte",
     "invalid_city_parameters": "Ungültige Stadtparameter. Versuchen Sie, einen anderen Punkt auszuwählen",
-    "international_lead_hint": "Wird automatisch aus den Ländern der Routenpunkte ermittelt. Für internationale Sendungen ist eine Warennummer erforderlich.",
+    "international_lead_hint": "Wird anhand der Länder der Routenpunkte ermittelt und kann manuell geändert werden. Für internationale Sendungen ist eine Warennummer erforderlich.",
     "skip_file_confirmation_hint": "Wenn diese Option aktiviert ist, ist für das Laden und Entladen von Dateien keine Weiterleitungsbestätigung erforderlich. Diese Einstellung kann nicht mehr geändert werden, nachdem die Sendung erstellt wurde.",
     "skip_file_confirmation_locked_hint": "Diese Einstellung kann nicht mehr geändert werden, nachdem die Sendung erstellt wurde. Das Überspringen der Bestätigung zum Laden/Entladen von Dateien bleibt aktiviert.",
     "automatic_assignment_locked_hint": "Die Einstellung für die automatische Zuweisung kann nach der Erstellung der Sendung nicht mehr geändert werden.",

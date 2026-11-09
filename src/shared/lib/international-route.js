@@ -36,3 +36,9 @@ export function isInternationalRoute(form = {}) {
     return country !== "" && !kazakhstanNames.has(country);
   });
 }
+
+export function isInternationalLead(form = {}) {
+  return typeof form.is_international === "boolean"
+    ? form.is_international
+    : isInternationalRoute(form);
+}

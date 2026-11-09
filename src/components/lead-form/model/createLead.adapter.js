@@ -1,5 +1,5 @@
 import { transportationParameters } from "../../../shared/const/leads/transportation-parameters";
-import { getRoutePointCountry, isInternationalRoute } from "../../../shared/lib/international-route";
+import { getRoutePointCountry, isInternationalLead } from "../../../shared/lib/international-route";
 
 function hasValue(value) {
   return value !== null && value !== undefined && value !== "";
@@ -48,7 +48,7 @@ function normalizeText(value) {
 }
 
 export function mapCreateLeadFormToApi(form, { isDraft = false } = {}) {
-  const isInternational = isInternationalRoute(form);
+  const isInternational = isInternationalLead(form);
   const cargos = (form.cargos || []).map((cargo) => {
     if (isInternational) return cargo;
     const domesticCargo = { ...cargo };

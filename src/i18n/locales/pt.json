@@ -1378,7 +1378,7 @@
     "route_edit_status_restriction": "A rota não pode ser editada no status atual",
     "waypoints": "Pontos de passagem",
     "invalid_city_parameters": "Parâmetros de cidade inválidos. Tente selecionar outro ponto",
-    "international_lead_hint": "Determinado automaticamente a partir dos países dos pontos da rota. Um código de mercadoria é necessário para remessas internacionais.",
+    "international_lead_hint": "Determinado pelos países da rota e pode ser alterado manualmente. Um código de mercadoria é necessário para remessas internacionais.",
     "skip_file_confirmation_hint": "Quando habilitado, carregar e descarregar arquivos não requer confirmação do encaminhador. Esta configuração não pode ser alterada após a criação da remessa.",
     "skip_file_confirmation_locked_hint": "Esta configuração não pode ser alterada após a criação da remessa. Ignorar a confirmação de carregamento/descarregamento do arquivo permanecerá ativado.",
     "automatic_assignment_locked_hint": "A configuração de atribuição automática não pode ser alterada após a criação da remessa.",

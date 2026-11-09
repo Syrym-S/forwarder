@@ -1378,7 +1378,7 @@
     "route_edit_status_restriction": "La ruta no se puede editar en el estado actual",
     "waypoints": "Puntos de ruta",
     "invalid_city_parameters": "Parámetros de ciudad no válidos. Intenta seleccionar otro punto",
-    "international_lead_hint": "Determinado automáticamente a partir de los países de los puntos de ruta. Se requiere un código de producto para envíos internacionales.",
+    "international_lead_hint": "Se determina según los países de la ruta y se puede cambiar manualmente. Se requiere un código de producto para envíos internacionales.",
     "skip_file_confirmation_hint": "Cuando está habilitado, la carga y descarga de archivos no requiere confirmación del reenviador. Esta configuración no se puede cambiar una vez creado el envío.",
     "skip_file_confirmation_locked_hint": "Esta configuración no se puede cambiar después de crear el envío. Omitir la confirmación de carga/descarga de archivos permanecerá habilitado.",
     "automatic_assignment_locked_hint": "La configuración de asignación automática no se puede cambiar después de crear el envío.",

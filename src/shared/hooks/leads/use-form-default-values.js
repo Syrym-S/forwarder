@@ -6,6 +6,7 @@ export const useFormDefaultValues = (lead = null, files = []) => {
     ...Object.fromEntries(transportationParameters.map(({ name }) => [name, lead?.[name]?.name ?? lead?.[name] ?? ""])),
     auto_start: lead?.auto_start === true,
     pass_verify: lead?.pass_verify === true,
+    is_international: lead?.is_international ?? null,
     loading_date: lead?.created_at?.date || null,
     driver: lead?.driver,
     summ: lead?.summ || null,

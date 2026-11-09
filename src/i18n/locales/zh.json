@@ -1378,7 +1378,7 @@
     "route_edit_status_restriction": "当前状态下无法编辑航线\n0033期：欲擒故纵",
     "waypoints": "航点",
     "invalid_city_parameters": "城市参数无效。尝试选择另一个点",
-    "international_lead_hint": "根据航点所在国家/地区自动确定。国际运输需要商品代码。",
+    "international_lead_hint": "根据航点所在国家/地区确定，可手动更改。国际运输需要商品代码。",
     "skip_file_confirmation_hint": "启用后，加载和卸载文件不需要转发器确认。创建货件后无法更改此设置。",
     "skip_file_confirmation_locked_hint": "该设置在货件创建后无法更改。跳过加载/卸载文件确认将保持启用状态。",
     "automatic_assignment_locked_hint": "货件创建后，自动分配设置无法更改。",

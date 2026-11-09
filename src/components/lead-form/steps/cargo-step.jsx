@@ -20,14 +20,14 @@ import {
   hasCargoValue,
   isPositiveCargoNumber,
 } from "../../../shared/lib/cargo-volume";
-import { isInternationalRoute } from "../../../shared/lib/international-route";
+import { isInternationalLead } from "../../../shared/lib/international-route";
 
 const getCargoTypeLabel = (option) => option?.translation || option?.name || "";
 
 const CargoStep = ({ control, errors, leadStatus }) => {
   const { t } = useTranslation();
   const form = useWatch({ control });
-  const isInternational = isInternationalRoute(form);
+  const isInternational = isInternationalLead(form);
   const tnvedOptions = useOptionsStore((state) => state.tnvedOptions);
   const getLTNVEDOptions = useOptionsStore((state) => state.getLTNVEDOptions);
   const isTNVEDLoading = useOptionsStore((state) => state.isTNVEDLoading);

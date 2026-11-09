@@ -1417,7 +1417,7 @@
     "route_edit_status_restriction": "The route cannot be edited in the current status",
     "waypoints": "Waypoints",
     "invalid_city_parameters": "Invalid city parameters. Try selecting another point",
-    "international_lead_hint": "Determined automatically from the countries of the route points. A commodity code is required for international leads.",
+    "international_lead_hint": "Determined from the route countries and can be changed manually. A commodity code is required for international leads.",
     "skip_file_confirmation_hint": "When enabled, loading and unloading files do not require forwarder confirmation. This setting cannot be changed after the lead is created.",
     "skip_file_confirmation_locked_hint": "This setting cannot be changed after the lead is created. Skipping loading/unloading file confirmation will remain enabled.",
     "automatic_assignment_locked_hint": "The automatic assignment setting cannot be changed after the lead is created.",
