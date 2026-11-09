@@ -443,7 +443,7 @@
     "catalog": "Catalogue",
     "customers": "Clients",
     "drivers": "Chauffeurs",
-    "commodity_directory": "Répertoire des codes de marchandises",
+    "commodity_directory": "Nomenclature des marchandises (UEEA)",
     "auctions": "Enchères",
     "auction_requests": "Demandes d'enchères",
     "carrier_auctions": "Enchères de transporteurs",
