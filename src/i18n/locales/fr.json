@@ -1,4 +1,9 @@
 {
+  "settings": {
+    "language_title": "Langue de l’interface",
+    "language_description": "Choisissez la langue de l’interface et des notifications.",
+    "language_save_failed": "La langue est enregistrée sur cet appareil, mais n’a pas pu être enregistrée dans votre profil. Réessayez."
+  },
   "notifications": {
     "today": "Aujourd’hui",
     "yesterday": "Hier",

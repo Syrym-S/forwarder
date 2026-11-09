@@ -13,6 +13,7 @@ import RouteOutlined from "@mui/icons-material/RouteOutlined";
 import PhoneOutlinedIcon from "@mui/icons-material/PhoneOutlined";
 import MarkunreadOutlinedIcon from "@mui/icons-material/MarkunreadOutlined";
 import LibraryBooksOutlinedIcon from "@mui/icons-material/LibraryBooksOutlined";
+import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import "./style.css";
 import { useTranslation } from "react-i18next";
 
@@ -290,6 +291,19 @@ const menuItems = [
           />
         ),
         tooltip_text: "ui.your_auctions_tooltip",
+      },
+    ],
+  },
+  {
+    id: 6,
+    label: null,
+    sub_items: [
+      {
+        id: 1,
+        path: "/settings",
+        lable: "menu.settings",
+        icon: <SettingsOutlinedIcon sx={{ fontSize: "1.1rem" }} />,
+        tooltip_text: "menu.settings",
       },
     ],
   },

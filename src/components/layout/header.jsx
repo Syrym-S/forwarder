@@ -32,7 +32,6 @@ const Header = ({ openMenu, setOpenMenu }) => {
   const getNotifications = useNotificationsStore(
     (state) => state.getNotifications,
   );
-  const languages = useOptionsStore((state) => state.languages);
   const getLanguages = useOptionsStore((state) => state.getLanguages);
 
   const [profileAnchorEl, setProfileAnchorEl] = useState(null);
@@ -143,7 +142,7 @@ const Header = ({ openMenu, setOpenMenu }) => {
           gap: 1,
         }}
       >
-        <LanguageSelect languages={languages} />
+        <LanguageSelect />
 
         <NotificationsBlock />
 
@@ -256,7 +255,14 @@ const Header = ({ openMenu, setOpenMenu }) => {
             {t("menu.profile")}
           </MenuItem>
 
-          <MenuItem disabled>{t("menu.settings")}</MenuItem>
+          <MenuItem
+            onClick={() => {
+              handleCloseProfileMenu();
+              navigate("/settings");
+            }}
+          >
+            {t("menu.settings")}
+          </MenuItem>
 
           <MenuItem
             onClick={() => {

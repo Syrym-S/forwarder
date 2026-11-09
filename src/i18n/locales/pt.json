@@ -1,4 +1,9 @@
 {
+  "settings": {
+    "language_title": "Idioma da interface",
+    "language_description": "Escolha o idioma da interface e das notificações.",
+    "language_save_failed": "O idioma foi salvo neste dispositivo, mas não foi possível salvá-lo no seu perfil. Tente novamente."
+  },
   "notifications": {
     "today": "Hoje",
     "yesterday": "Ontem",

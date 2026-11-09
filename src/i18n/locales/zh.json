@@ -1,4 +1,9 @@
 {
+  "settings": {
+    "language_title": "界面语言",
+    "language_description": "选择界面和通知的显示语言。",
+    "language_save_failed": "语言已保存在此设备上，但无法保存到您的个人资料。请重试。"
+  },
   "notifications": {
     "today": "今天",
     "yesterday": "昨天",

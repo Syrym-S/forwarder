@@ -1,4 +1,9 @@
 {
+  "settings": {
+    "language_title": "Interfeys tili",
+    "language_description": "Interfeys va bildirishnomalar uchun tilni tanlang.",
+    "language_save_failed": "Til ushbu qurilmada saqlandi, ammo profilingizda saqlanmadi. Qayta urinib ko‘ring."
+  },
   "notifications": {
     "today": "Bugun",
     "yesterday": "Kecha",

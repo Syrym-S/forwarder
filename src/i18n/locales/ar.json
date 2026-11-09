@@ -1,4 +1,9 @@
 {
+  "settings": {
+    "language_title": "لغة الواجهة",
+    "language_description": "اختر اللغة التي ستُعرض بها الواجهة والإشعارات.",
+    "language_save_failed": "تم حفظ اللغة على هذا الجهاز، لكن تعذر حفظها في ملفك الشخصي. يُرجى المحاولة مرة أخرى."
+  },
   "notifications": {
     "today": "اليوم",
     "yesterday": "أمس",

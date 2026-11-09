@@ -1,38 +1,18 @@
 import { MenuItem, Select } from "@mui/material";
-import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { editProfileApi } from "../../app/store/profile/api";
+import { useLanguagePreference } from "../../shared/hooks/use-language-preference";
 
-const LanguageSelect = ({ languages = [] }) => {
-  const { t, i18n } = useTranslation();
-  const [isSaving, setIsSaving] = useState(false);
-  const [currentLanguage, setCurrentLanguage] = useState(
-    () => localStorage.getItem("language") || i18n.language || "ru",
-  );
+const LanguageSelect = () => {
+  const { t } = useTranslation();
+  const { languages, currentLanguage, isSaving, changeLanguage } = useLanguagePreference();
   const selectedLanguage = languages.some(({ code }) => code === currentLanguage)
     ? currentLanguage
     : "";
 
-  const handleLanguageChange = async (event) => {
-    const language = event.target.value;
-    setCurrentLanguage(language);
-    i18n.changeLanguage(language);
-    localStorage.setItem("language", language);
-
-    setIsSaving(true);
-    try {
-      await editProfileApi({ language });
-    } catch (error) {
-      console.error("Failed to save profile language", error);
-    } finally {
-      setIsSaving(false);
-    }
-  };
-
   return (
     <Select
       value={selectedLanguage}
-      onChange={handleLanguageChange}
+      onChange={(event) => changeLanguage(event.target.value)}
       disabled={isSaving || languages.length === 0}
       displayEmpty
       renderValue={(code) => (code || currentLanguage).toUpperCase()}

@@ -1,4 +1,9 @@
 {
+  "settings": {
+    "language_title": "انٹرفیس کی زبان",
+    "language_description": "انٹرفیس اور اطلاعات کے لیے زبان منتخب کریں۔",
+    "language_save_failed": "زبان اس ڈیوائس پر محفوظ ہے، لیکن آپ کی پروفائل میں محفوظ نہیں ہو سکی۔ دوبارہ کوشش کریں۔"
+  },
   "notifications": {
     "today": "آج",
     "yesterday": "گزشتہ روز",

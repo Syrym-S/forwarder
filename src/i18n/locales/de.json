@@ -1,4 +1,9 @@
 {
+  "settings": {
+    "language_title": "Sprache der Benutzeroberfläche",
+    "language_description": "Wählen Sie die Sprache für die Benutzeroberfläche und Benachrichtigungen.",
+    "language_save_failed": "Die Sprache wurde auf diesem Gerät gespeichert, konnte aber nicht in Ihrem Profil gespeichert werden. Bitte versuchen Sie es erneut."
+  },
   "routeMap": {
     "title": "Route auf der Karte",
     "selectedHint": "Alle ausgewählten Punkte werden zusammen angezeigt.",

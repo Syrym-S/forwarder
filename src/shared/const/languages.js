@@ -1,0 +1,18 @@
+export const INTERFACE_LANGUAGES = [
+  { code: "kk", label: "Қазақша" },
+  { code: "ru", label: "Русский" },
+  { code: "en", label: "English" },
+  { code: "es", label: "Español" },
+  { code: "pt", label: "Português" },
+  { code: "tr", label: "Türkçe" },
+  { code: "ar", label: "العربية" },
+  { code: "zh", label: "中文" },
+  { code: "uz", label: "O‘zbekcha" },
+  { code: "ky", label: "Кыргызча" },
+  { code: "ka", label: "ქართული" },
+  { code: "fr", label: "Français" },
+  { code: "de", label: "Deutsch" },
+  { code: "tg", label: "Тоҷикӣ" },
+  { code: "ur", label: "اردو" },
+  { code: "uk", label: "Українська" },
+];

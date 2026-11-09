@@ -1,4 +1,9 @@
 {
+  "settings": {
+    "language_title": "Arayüz dili",
+    "language_description": "Arayüz ve bildirimler için bir dil seçin.",
+    "language_save_failed": "Dil bu cihazda kaydedildi ancak profilinize kaydedilemedi. Lütfen tekrar deneyin."
+  },
   "notifications": {
     "today": "Bugün",
     "yesterday": "Dün",

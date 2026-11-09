@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import appI18n from "../../../i18n/index.js";
 import {
   deleteAvatarApi,
   editProfileApi,
@@ -8,13 +9,33 @@ import {
   uploadLegalDocumentsApi,
 } from "./api";
 
-export const useProfileStore = create((set) => ({
+export const useProfileStore = create((set, get) => ({
   profileData: null,
   legalDocuments: null,
   uploadAvatarError: null,
   isProfileLoading: false,
   isAvatarLoading: false,
   isLegalDocumentsLoading: false,
+  isLanguageSaving: false,
+  languageSaveError: false,
+
+  changeLanguage: async (value) => {
+    if (get().isLanguageSaving) return;
+    const language = value === "kz" ? "kk" : value;
+    set({ isLanguageSaving: true, languageSaveError: false });
+    try {
+      await appI18n.changeLanguage(language);
+      localStorage.setItem("language", language);
+      await editProfileApi({ language });
+      set((state) => ({
+        profileData: state.profileData ? { ...state.profileData, language } : null,
+      }));
+    } catch {
+      set({ languageSaveError: true });
+    } finally {
+      set({ isLanguageSaving: false });
+    }
+  },
 
   getProfileData: async () => {
     try {

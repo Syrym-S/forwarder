@@ -22,6 +22,7 @@ import { createBrowserRouter } from "react-router-dom";
 import { isStaging } from "../client";
 import Handbook from "../../pages/handbook";
 import Complaints from "../../pages/complaints";
+import Settings from "../../pages/settings";
 
 export const router = createBrowserRouter(
   [
@@ -34,6 +35,14 @@ export const router = createBrowserRouter(
         breadcrumbKey: "menu.home_page",
       },
       children: [
+        {
+          path: "/settings",
+          element: <Settings />,
+          handle: {
+            get breadcrumb() { return appI18n.t("menu.settings"); },
+            breadcrumbKey: "menu.settings",
+          },
+        },
         {
           path: "/complaints",
           element: <Complaints />,
