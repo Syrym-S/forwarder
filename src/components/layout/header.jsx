@@ -226,6 +226,7 @@ const Header = ({ openMenu, setOpenMenu }) => {
           </MenuItem>
 
           <MenuItem
+            disabled
             sx={{
               py: 0.9,
               fontSize: "1.rem",
