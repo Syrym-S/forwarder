@@ -39,6 +39,8 @@
     }
   },
   "notifications": {
+    "today": "Heute",
+    "yesterday": "Gestern",
     "lead.created_by_customer": {
       "theme": "Neue Bestellung erstellt",
       "message": "Der Kunde hat eine Bestellung erstellt und Ihnen diese zugewiesen."

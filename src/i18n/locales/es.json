@@ -1,5 +1,7 @@
 {
   "notifications": {
+    "today": "Hoy",
+    "yesterday": "Ayer",
     "lead.created_by_customer": {
       "theme": "Nueva orden creada",
       "message": "El cliente creó un pedido y le asignó."

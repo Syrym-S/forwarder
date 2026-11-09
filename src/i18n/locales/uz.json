@@ -1,5 +1,7 @@
 {
   "notifications": {
+    "today": "Bugun",
+    "yesterday": "Kecha",
     "lead.created_by_customer": {
       "theme": "Yangi buyurtma yaratildi",
       "message": "Buyurtmachi buyurtma yaratdi va sizni unga tayinladi."

@@ -1,5 +1,7 @@
 {
   "notifications": {
+    "today": "Бүгүн",
+    "yesterday": "Кечээ",
     "lead.created_by_customer": {
       "theme": "Жаңы буйрутма түзүлдү",
       "message": "Кардар буйрутма түзүп, сизди ага дайындады."

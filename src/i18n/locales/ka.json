@@ -1,5 +1,7 @@
 {
   "notifications": {
+    "today": "დღეს",
+    "yesterday": "გუშინ",
     "lead.created_by_customer": {
       "theme": "შეიქმნა ახალი შეკვეთა",
       "message": "მომხმარებელმა შექმნა შეკვეთა და დაავალა თქვენ მას."

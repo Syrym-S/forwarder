@@ -1,5 +1,7 @@
 {
   "notifications": {
+    "today": "Имрӯз",
+    "yesterday": "Дирӯз",
     "lead.created_by_customer": {
       "theme": "Фармоиши нав эҷод шуд",
       "message": "Фармоишгар фармоиш эҷод кард ва шуморо ба он таъин кард."

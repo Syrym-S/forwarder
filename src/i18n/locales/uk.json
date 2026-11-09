@@ -39,6 +39,8 @@
     }
   },
   "notifications": {
+    "today": "Сьогодні",
+    "yesterday": "Учора",
     "lead.created_by_customer": {
       "theme": "Створено нове замовлення",
       "message": "Замовник створив замовлення та призначив вас."

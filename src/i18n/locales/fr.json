@@ -1,5 +1,7 @@
 {
   "notifications": {
+    "today": "Aujourd’hui",
+    "yesterday": "Hier",
     "lead.created_by_customer": {
       "theme": "Nouvelle commande créée",
       "message": "Le client a créé une commande et vous y a affecté."

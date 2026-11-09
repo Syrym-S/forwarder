@@ -39,6 +39,8 @@
     }
   },
   "notifications": {
+    "today": "Сегодня",
+    "yesterday": "Вчера",
     "lead.created_by_customer": {
       "theme": "Создан новый заказ",
       "message": "Заказчик создал заказ и привязал вас."

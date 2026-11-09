@@ -1,5 +1,7 @@
 {
   "notifications": {
+    "today": "Bugün",
+    "yesterday": "Dün",
     "lead.created_by_customer": {
       "theme": "Yeni sipariş oluşturuldu",
       "message": "Müşteri bir sipariş oluşturdu ve sizi bu siparişe atadı."

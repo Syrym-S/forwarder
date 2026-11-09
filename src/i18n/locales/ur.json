@@ -1,5 +1,7 @@
 {
   "notifications": {
+    "today": "آج",
+    "yesterday": "گزشتہ روز",
     "lead.created_by_customer": {
       "theme": "نیا آرڈر بنایا گیا۔",
       "message": "کسٹمر نے ایک آرڈر بنایا اور آپ کو اس کے لیے تفویض کیا۔"

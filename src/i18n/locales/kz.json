@@ -19,6 +19,8 @@
     "clear": "Мекенжайды тазалау"
   },
   "notifications": {
+    "today": "Бүгін",
+    "yesterday": "Кеше",
     "lead.created_by_customer": {
       "theme": "Жаңа тапсырыс жасалды",
       "message": "Тапсырыс беруші тапсырыс жасап, сізді оған бекітті."

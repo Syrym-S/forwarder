@@ -1,5 +1,7 @@
 {
   "notifications": {
+    "today": "اليوم",
+    "yesterday": "أمس",
     "lead.created_by_customer": {
       "theme": "تم إنشاء أمر جديد",
       "message": "قام العميل بإنشاء أمر وقام بتعيينك له."

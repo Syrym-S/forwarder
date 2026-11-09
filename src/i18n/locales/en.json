@@ -39,6 +39,8 @@
     }
   },
   "notifications": {
+    "today": "Today",
+    "yesterday": "Yesterday",
     "lead.created_by_customer": {
       "theme": "New order created",
       "message": "The customer created an order and assigned you to it."

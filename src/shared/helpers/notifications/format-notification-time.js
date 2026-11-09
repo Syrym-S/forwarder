@@ -7,35 +7,27 @@ export function formatNotificationTime(createdAt, language, now = Date.now()) {
   const date = dayjs(value);
   if (!date.isValid()) return null;
 
-  const locale = language || "ru";
-  const elapsedSeconds = Math.max(0, Math.floor((now - date.valueOf()) / 1000));
-  const relative = new Intl.RelativeTimeFormat(locale, {
-    numeric: elapsedSeconds < 60 ? "auto" : "always",
-  });
-  let label;
-
-  if (elapsedSeconds < 60) {
-    label = relative.format(0, "second");
-  } else if (elapsedSeconds < 3600) {
-    label = relative.format(-Math.floor(elapsedSeconds / 60), "minute");
-  } else if (elapsedSeconds < 86400) {
-    label = relative.format(-Math.floor(elapsedSeconds / 3600), "hour");
-  } else if (elapsedSeconds < 604800) {
-    label = relative.format(-Math.floor(elapsedSeconds / 86400), "day");
-  } else {
-    label = new Intl.DateTimeFormat(locale, {
-      day: "numeric",
-      month: "short",
-      ...(date.year() !== dayjs(now).year() ? { year: "numeric" } : {}),
-    }).format(date.toDate());
-  }
+  const locale = language === "kz" ? "kk" : language || "ru";
+  const today = dayjs(now).startOf("day");
+  const dayKey = date.isSame(today, "day")
+    ? "notifications.today"
+    : date.isSame(today.subtract(1, "day"), "day")
+      ? "notifications.yesterday"
+      : null;
 
   return {
-    label,
+    dayKey,
+    dateLabel: date.format(date.year() !== today.year() ? "DD.MM.YYYY" : "DD.MM"),
+    timeLabel: new Intl.DateTimeFormat(locale, {
+      hour: "2-digit",
+      minute: "2-digit",
+      hourCycle: "h23",
+    }).format(date.toDate()),
     dateTime: date.toISOString(),
     title: new Intl.DateTimeFormat(locale, {
       dateStyle: "long",
       timeStyle: "short",
+      hourCycle: "h23",
     }).format(date.toDate()),
   };
 }
