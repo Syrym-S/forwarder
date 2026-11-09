@@ -14,7 +14,7 @@ import { useEffect, useRef, useState } from "react";
 import { uploadLeadFileApi } from "../../../app/store/leads/api";
 import { useLeadsStore } from "../../../app/store/leads/leads-store";
 import { LeadDocumentsSection } from "../documents/LeadDocumentsSection";
-import { STATUS } from "../../../shared/const/tenders";
+import { IN_PROGRESS_STATUSES, STATUS } from "../../../shared/const/tenders";
 import { useParams } from "react-router-dom";
 import { Alert, Box, Button, Snackbar } from "@mui/material";
 import RateDriverModal from "../../drivers/rate-driver-modal";
@@ -24,6 +24,8 @@ import { useNotificationsStore } from "../../../app/store/notifications/noti-sto
 import { parserNotificationType } from "../../../shared/helpers/notifications/parse-notification-type";
 import { NOTIFICATION_TYPE } from "../../../shared/const/notification-types";
 import { isDraftLead } from "../../../shared/lib/lead-draft";
+import { useProfileStore } from "../../../app/store/profile/profile-store";
+import ConfirmModal from "../../../shared/ui/confirm-modal";
 
 const LeadItemMainContainer = ({
   leadData,
@@ -37,6 +39,8 @@ const LeadItemMainContainer = ({
   const isMustSignDocument =
     features.sign_provider_aitu || features.sign_provider_ncanode;
 
+  const profileData = useProfileStore((state) => state.profileData);
+  const getProfileData = useProfileStore((state) => state.getProfileData);
   const files = useLeadsStore((state) => state.files);
   const driverAvrDocument = useLeadsStore((state) => state.driverAvrDocument);
   const customerAvrDocument = useLeadsStore(
@@ -79,6 +83,7 @@ const LeadItemMainContainer = ({
   const [ratingLead, setRatingLead] = useState(null);
   const previousLead = useRef({ id: leadData?.id, status: leadData?.status });
   const [deliveryError, setDeliveryError] = useState(null);
+  const [isEarlyFinishModalOpen, setIsEarlyFinishModalOpen] = useState(false);
   const [ratingNotice, setRatingNotice] = useState(null);
   const [isDocumentUploading, setIsDocumentUploading] = useState(false);
   // eslint-disable-next-line no-unused-vars
@@ -92,6 +97,11 @@ const LeadItemMainContainer = ({
 
   const cargosCount = leadData?.cargos?.length;
   const isAllPassed = leadPoints.every((item) => item?.is_passed);
+  const canCompleteTrip =
+    isAllPassed && leadData?.status === STATUS.verification_unloading;
+  const canFinishEarly =
+    profileData?.canFinishedEarly === true &&
+    IN_PROGRESS_STATUSES.includes(leadData?.status);
 
   const from = {
     lat: leadData?.from_location?.lat,
@@ -158,7 +168,14 @@ const LeadItemMainContainer = ({
       setDeliveryError(
         e.response?.data?.message || t("ui.complete_trip_failed"),
       );
+    } finally {
+      setIsEarlyFinishModalOpen(false);
     }
+  };
+
+  const handleConfirmEarlyFinish = () => {
+    if (!canFinishEarly) return;
+    return handleConfirmDelivery();
   };
 
   const handleCloseRating = () => {
@@ -261,8 +278,22 @@ const LeadItemMainContainer = ({
     }
   }, [newNotification]);
 
+  useEffect(() => {
+    getProfileData();
+  }, [getProfileData]);
+
   return (
     <>
+      <ConfirmModal
+        open={isEarlyFinishModalOpen && canFinishEarly}
+        title={t("ui.complete_trip_early")}
+        description={t("ui.complete_trip_early_confirmation")}
+        onConfirm={handleConfirmEarlyFinish}
+        onCancel={() => {
+          if (!isConfirmLoading) setIsEarlyFinishModalOpen(false);
+        }}
+        isLoading={isConfirmLoading}
+      />
       {ratingLead?.id === id && (
         <RateDriverModal
           driver={ratingLead.driver}
@@ -319,19 +350,38 @@ const LeadItemMainContainer = ({
         />
       )}
 
-      {isAllPassed && leadData.status === STATUS.verification_unloading && (
+      {(canCompleteTrip || canFinishEarly) && (
         <Section
           title={t("ui.complete_trip")}
           icon={<DescriptionOutlinedIcon color="primary" />}
         >
-          <Button
-            color="error"
-            variant="outlined"
-            disabled={isConfirmLoading}
-            onClick={handleConfirmDelivery}
-          >
-            {isConfirmLoading ? t("ui.completing_trip") : t("ui.complete_trip")}
-          </Button>
+          <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
+            {canCompleteTrip && (
+              <Button
+                color="error"
+                variant="outlined"
+                disabled={isConfirmLoading}
+                onClick={handleConfirmDelivery}
+              >
+                {isConfirmLoading
+                  ? t("ui.completing_trip")
+                  : t("ui.complete_trip")}
+              </Button>
+            )}
+            {canFinishEarly && (
+              <Button
+                color="error"
+                variant="outlined"
+                disabled={isConfirmLoading}
+                onClick={() => {
+                  setDeliveryError(null);
+                  setIsEarlyFinishModalOpen(true);
+                }}
+              >
+                {t("ui.complete_trip_early")}
+              </Button>
+            )}
+          </Box>
         </Section>
       )}
 

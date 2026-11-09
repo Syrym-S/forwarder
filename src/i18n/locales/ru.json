@@ -1159,6 +1159,8 @@
     "complete_trip_failed": "Не удалось завершить рейс",
     "rating_saved": "Оценка сохранена",
     "complete_trip": "Завершить рейс",
+    "complete_trip_early": "Завершить досрочно",
+    "complete_trip_early_confirmation": "Вы действительно хотите завершить рейс досрочно?",
     "completing_trip": "...Завершение рейса",
     "cargo": "Груз",
     "route": "Маршрут",

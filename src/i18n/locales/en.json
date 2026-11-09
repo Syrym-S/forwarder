@@ -1158,6 +1158,8 @@
     "complete_trip_failed": "Could not complete the trip",
     "rating_saved": "Rating saved",
     "complete_trip": "Complete trip",
+    "complete_trip_early": "Finish early",
+    "complete_trip_early_confirmation": "Are you sure you want to finish the trip early?",
     "completing_trip": "Completing trip",
     "cargo": "Cargo",
     "route": "Route",

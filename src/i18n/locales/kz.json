@@ -1138,6 +1138,8 @@
     "complete_trip_failed": "Рейсті аяқтау мүмкін болмады",
     "rating_saved": "Баға сақталды",
     "complete_trip": "Рейсті аяқтау",
+    "complete_trip_early": "Мерзімінен бұрын аяқтау",
+    "complete_trip_early_confirmation": "Рейсті мерзімінен бұрын аяқтағыңыз келетініне сенімдісіз бе?",
     "completing_trip": "Рейс аяқталуда",
     "cargo": "Жүк",
     "route": "Бағыт",
