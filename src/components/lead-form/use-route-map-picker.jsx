@@ -8,6 +8,7 @@ import {
 import { reverseGeocode } from "./api/geocoding.api";
 import { useLeadsStore } from "../../app/store/leads/leads-store";
 import { STATUS } from "../../shared/const/tenders";
+import { getRouteAddressFields } from "./lib/route-address-fields";
 
 const setValueOptions = {
   shouldDirty: true,
@@ -140,6 +141,21 @@ export function useRouteMapPicker({ form, fields, setValue }) {
       reverseGeocodeControllersRef.current[point].abort();
       reverseGeocodeControllersRef.current[point] = null;
     }
+  }
+
+  function setRouteAddress(point, location) {
+    if (currentLead && !canEditStatus) return;
+
+    abortReverseGeocode(point);
+    setPointLoading(point, false);
+
+    for (const [name, value] of getRouteAddressFields(point, location)) {
+      setValue(name, value, setValueOptions);
+    }
+
+    if (point === "from") setHasFromCityError(false);
+    else if (point === "to") setHasToCityError(false);
+    else setHasCrossPointCityError(false);
   }
 
   async function getAddressForPoint(point, lat, lng) {
@@ -309,6 +325,7 @@ export function useRouteMapPicker({ form, fields, setValue }) {
     handleRouteMapClick,
     handleRouteMarkerDragEnd,
     handleClearRoute,
+    setRouteAddress,
     clearFromPoint,
     clearToPoint,
     hasFromCityError,

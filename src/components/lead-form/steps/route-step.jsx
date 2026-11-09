@@ -3,7 +3,6 @@ import { useTranslation } from "react-i18next";
 import FormControllerSelect from "../../../shared/ui/input/form-controller-select";
 import dayjs from "dayjs";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
 import FormControllerInput from "../../../shared/ui/input/form-controller-input";
 import {
   Alert,
@@ -13,8 +12,6 @@ import {
   Snackbar,
   Stack,
   Typography,
-  IconButton,
-  InputAdornment,
 } from "@mui/material";
 import { StepSection } from "../step-section";
 import { useCustomerMap } from "../use-customer-map";
@@ -29,23 +26,41 @@ import { useState } from "react";
 import CustomSelect from "../../../shared/ui/input/custom-select";
 import { KAZAKHSTAN_MAP_CITIES } from "../model/kazakhstan-map-cities";
 import MapAddressSearch from "../map-address-search";
+import RouteAddressInput from "../route-address-input";
 
 // Temporarily hide the city selector and address search above the map.
 const SHOW_MAP_ADDRESS_SEARCH = false;
 
 const waypointTypes = [
-  { id: 1, value: "check_passes", get label() { return appI18n.t("lead_form.transit"); } },
-  { id: 2, value: "loading", get label() { return appI18n.t("ui.loading_operation"); } },
-  { id: 3, value: "unloading", get label() { return appI18n.t("ui.unloading_operation"); } },
+  {
+    id: 1,
+    value: "check_passes",
+    get label() {
+      return appI18n.t("lead_form.transit");
+    },
+  },
+  {
+    id: 2,
+    value: "loading",
+    get label() {
+      return appI18n.t("ui.loading_operation");
+    },
+  },
+  {
+    id: 3,
+    value: "unloading",
+    get label() {
+      return appI18n.t("ui.unloading_operation");
+    },
+  },
 ];
 
 const RouteStep = ({ control, form, setValue, isEdit = false }) => {
   const { t, i18n } = useTranslation();
   const [selectedMapCityId, setSelectedMapCityId] = useState("");
   const [mapFocus, setMapFocus] = useState(null);
-  const selectedMapCity = KAZAKHSTAN_MAP_CITIES.find(
-    (city) => city.id === selectedMapCityId,
-  ) ?? null;
+  const selectedMapCity =
+    KAZAKHSTAN_MAP_CITIES.find((city) => city.id === selectedMapCityId) ?? null;
   const mapCityOptions = KAZAKHSTAN_MAP_CITIES.map((city) => ({
     value: city.id,
     label: t(`lead_form.map_cities.${city.id}`),
@@ -162,8 +177,7 @@ const RouteStep = ({ control, form, setValue, isEdit = false }) => {
     handleRouteMapClick,
     handleRouteMarkerDragEnd,
     handleClearRoute,
-    clearFromPoint,
-    clearToPoint,
+    setRouteAddress,
     setCount,
     hasFromCityError,
     hasCrossPointCityError,
@@ -173,6 +187,18 @@ const RouteStep = ({ control, form, setValue, isEdit = false }) => {
     fields,
     setValue,
   });
+
+  const handleAddressFocus = (point) => {
+    setActiveMapPoint(point);
+    if (point.startsWith("cross.")) {
+      setCount(Number(point.split(".")[1]));
+    }
+  };
+
+  const handleAddressSelect = (point, address) => {
+    setRouteAddress(point, address.location);
+    setMapFocus(address);
+  };
 
   const toScheduleIndex = fields.length + 1;
 
@@ -267,7 +293,15 @@ const RouteStep = ({ control, form, setValue, isEdit = false }) => {
       </Box>
 
       {SHOW_MAP_ADDRESS_SEARCH && (
-        <Box sx={{ display: "flex", flexWrap: "wrap", alignItems: "flex-start", gap: 2, mb: 2 }}>
+        <Box
+          sx={{
+            display: "flex",
+            flexWrap: "wrap",
+            alignItems: "flex-start",
+            gap: 2,
+            mb: 2,
+          }}
+        >
           <CustomSelect
             id="lead-map-city"
             label={t("lead_form.map_city")}
@@ -279,7 +313,10 @@ const RouteStep = ({ control, form, setValue, isEdit = false }) => {
             onChange={(event) => {
               const cityId = event.target.value;
               setSelectedMapCityId(cityId);
-              setMapFocus(KAZAKHSTAN_MAP_CITIES.find((city) => city.id === cityId) ?? null);
+              setMapFocus(
+                KAZAKHSTAN_MAP_CITIES.find((city) => city.id === cityId) ??
+                  null,
+              );
             }}
             helperText={t("lead_form.map_city_hint")}
             sx={{ width: { xs: "100%", sm: 280 }, flexShrink: 0 }}
@@ -338,7 +375,9 @@ const RouteStep = ({ control, form, setValue, isEdit = false }) => {
         >
           <LockOutlinedIcon color="error" fontSize="small" />
 
-          <Typography variant="body2" color="error">{t("lead_form.route_edit_status_restriction")}</Typography>
+          <Typography variant="body2" color="error">
+            {t("lead_form.route_edit_status_restriction")}
+          </Typography>
         </Box>
       )}
 
@@ -359,47 +398,20 @@ const RouteStep = ({ control, form, setValue, isEdit = false }) => {
             gap: 1,
           }}
         >
-          <FormControllerInput
+          <RouteAddressInput
             name="from_location.address"
             control={control}
             label={t("ui.origin")}
-            fullWidth
-            size="small"
+            disabled={Boolean(currentLead && !canEditStatus)}
+            center={mapFocus?.center ?? map.center}
+            onFocus={() => handleAddressFocus("from")}
+            onEdit={() => setRouteAddress("from")}
+            onSelect={(address) => handleAddressSelect("from", address)}
             rules={{
               required: t("lead_form.enter_origin"),
               minLength: {
                 value: 3,
                 message: t("lead_form.minimum_three_characters"),
-              },
-            }}
-            slotProps={{
-              input: {
-                readOnly: false,
-                endAdornment: form.from_location?.address ? (
-                  <InputAdornment position="end">
-                    <IconButton
-                      size="small"
-                      aria-label={t("lead_form.clear_origin")}
-                      onClick={() => {
-                        clearFromPoint();
-                        setValue(
-                          "from_location",
-                          {
-                            address: "",
-                            city: "",
-                            country: "",
-                            region: "",
-                            lat: "",
-                            lng: "",
-                          },
-                          { shouldDirty: true, shouldValidate: true },
-                        );
-                      }}
-                    >
-                      <CloseOutlinedIcon fontSize="small" />
-                    </IconButton>
-                  </InputAdornment>
-                ) : null,
               },
             }}
           />
@@ -467,7 +479,9 @@ const RouteStep = ({ control, form, setValue, isEdit = false }) => {
                 fontWeight: 600,
                 color: "font_color.heading",
               }}
-            >{t("lead_form.waypoints")}</Typography>
+            >
+              {t("lead_form.waypoints")}
+            </Typography>
 
             {fields.map((crossField, index) => {
               const scheduleIndex = index + 1;
@@ -485,17 +499,15 @@ const RouteStep = ({ control, form, setValue, isEdit = false }) => {
                     alignItems: "flex-start",
                   }}
                 >
-                  <FormControllerInput
+                  <RouteAddressInput
                     name={`waypoints[${index}].address`}
                     control={control}
                     label={t("ui.waypoint_number", { value1: index + 1 })}
-                    fullWidth
-                    size="small"
-                    slotProps={{
-                      input: {
-                        readOnly: false,
-                      },
-                    }}
+                    disabled={Boolean(currentLead && !canEditStatus)}
+                    center={mapFocus?.center ?? map.center}
+                    onFocus={() => handleAddressFocus(`cross.${index}`)}
+                    onEdit={() => setRouteAddress(`cross.${index}`)}
+                    onSelect={(address) => handleAddressSelect(`cross.${index}`, address)}
                   />
 
                   <FormControllerSelect
@@ -584,47 +596,20 @@ const RouteStep = ({ control, form, setValue, isEdit = false }) => {
             gap: 1,
           }}
         >
-          <FormControllerInput
+          <RouteAddressInput
             name="to_location.address"
             control={control}
             label={t("ui.destination")}
-            fullWidth
-            size="small"
+            disabled={Boolean(currentLead && !canEditStatus)}
+            center={mapFocus?.center ?? map.center}
+            onFocus={() => handleAddressFocus("to")}
+            onEdit={() => setRouteAddress("to")}
+            onSelect={(address) => handleAddressSelect("to", address)}
             rules={{
               required: t("lead_form.enter_destination"),
               minLength: {
                 value: 3,
                 message: t("lead_form.minimum_three_characters"),
-              },
-            }}
-            slotProps={{
-              input: {
-                readOnly: false,
-                endAdornment: form.to_location?.address ? (
-                  <InputAdornment position="end">
-                    <IconButton
-                      size="small"
-                      aria-label={t("lead_form.clear_destination")}
-                      onClick={() => {
-                        clearToPoint();
-                        setValue(
-                          "to_location",
-                          {
-                            address: "",
-                            city: "",
-                            country: "",
-                            region: "",
-                            lat: "",
-                            lng: "",
-                          },
-                          { shouldDirty: true, shouldValidate: true },
-                        );
-                      }}
-                    >
-                      <CloseOutlinedIcon fontSize="small" />
-                    </IconButton>
-                  </InputAdornment>
-                ) : null,
               },
             }}
           />
@@ -693,7 +678,9 @@ const RouteStep = ({ control, form, setValue, isEdit = false }) => {
           horizontal: "right",
         }}
       >
-        <Alert severity="error" variant="filled" sx={{ width: "100%" }}>{t("lead_form.invalid_city_parameters")}</Alert>
+        <Alert severity="error" variant="filled" sx={{ width: "100%" }}>
+          {t("lead_form.invalid_city_parameters")}
+        </Alert>
       </Snackbar>
 
       <Box
@@ -724,7 +711,9 @@ const RouteStep = ({ control, form, setValue, isEdit = false }) => {
             />
           )}
         />
-        <Typography variant="body2" color="text.secondary">{t("lead_form.international_lead_hint")}</Typography>
+        <Typography variant="body2" color="text.secondary">
+          {t("lead_form.international_lead_hint")}
+        </Typography>
       </Box>
       <Box
         sx={{
@@ -755,9 +744,13 @@ const RouteStep = ({ control, form, setValue, isEdit = false }) => {
             />
           )}
         />
-        <Typography variant="body2" color="text.secondary">{t("lead_form.skip_file_confirmation_hint")}</Typography>
+        <Typography variant="body2" color="text.secondary">
+          {t("lead_form.skip_file_confirmation_hint")}
+        </Typography>
         {form.pass_verify === true && !isEdit && (
-          <Alert severity="warning" sx={{ mt: 1.5, borderRadius: 2 }}>{t("lead_form.skip_file_confirmation_locked_hint")}</Alert>
+          <Alert severity="warning" sx={{ mt: 1.5, borderRadius: 2 }}>
+            {t("lead_form.skip_file_confirmation_locked_hint")}
+          </Alert>
         )}
       </Box>
       <Controller
@@ -783,7 +776,9 @@ const RouteStep = ({ control, form, setValue, isEdit = false }) => {
                 />
               }
             />
-            <Alert id="auto-start-warning" severity="warning">{t("lead_form.automatic_assignment_locked_hint")}</Alert>
+            <Alert id="auto-start-warning" severity="warning">
+              {t("lead_form.automatic_assignment_locked_hint")}
+            </Alert>
           </Stack>
         )}
       />

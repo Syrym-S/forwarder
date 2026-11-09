@@ -1,0 +1,75 @@
+.route-map.leaflet-container {
+  background: #eaf0f5;
+  font-family: inherit;
+  isolation: isolate;
+  z-index: 0;
+}
+
+.route-map__controls {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  z-index: 800;
+}
+
+.route-map__controls button {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 40px;
+  padding: 9px 13px;
+  border: 1px solid #dce4ef;
+  border-radius: 12px;
+  background: #fff;
+  color: #243b53;
+  box-shadow: 0 3px 14px #243b531a;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.route-map__controls button:hover { background: #f0f6ff; }
+.route-map__controls button:disabled { color: #8a99ad; cursor: default; }
+.route-map__controls button:focus-visible { outline: 3px solid #93c5fd; outline-offset: 2px; }
+
+.route-map .leaflet-control-zoom {
+  overflow: hidden;
+  border: 1px solid #dce4ef;
+  border-radius: 12px;
+  box-shadow: 0 3px 14px #243b531a;
+}
+
+.route-map .leaflet-control-zoom a { width: 36px; height: 36px; line-height: 36px; color: #243b53; }
+.route-map .leaflet-control-zoom a:hover { background: #f0f6ff; }
+.route-map .leaflet-control-attribution { border-radius: 7px 0 0; background: #ffffffdb; font-size: 9px; }
+.route-map .leaflet-control-scale-line { border-color: #64748b; border-radius: 3px; background: #ffffffe6; }
+.route-map .leaflet-popup-content-wrapper { border-radius: 14px; box-shadow: 0 8px 28px #243b5326; }
+.route-map .leaflet-popup-content { margin: 14px 18px; line-height: 1.6; }
+
+.route-stop { --route-marker-color: #2563eb; background: none; border: none; }
+.route-stop--from { --route-marker-color: #16a34a; }
+.route-stop--to { --route-marker-color: #e64b5d; }
+.route-stop__pin {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  margin: 1px 3px;
+  box-sizing: border-box;
+  border: 3px solid #fff;
+  border-radius: 50% 50% 50% 8px;
+  background: var(--route-marker-color);
+  color: #fff;
+  box-shadow: 0 3px 10px #17334d40;
+  transform: rotate(-45deg);
+  transition: box-shadow 160ms;
+}
+.route-stop__pin span { transform: rotate(45deg); font-size: 14px; font-weight: 700; line-height: 1; }
+.route-stop--active .route-stop__pin { box-shadow: 0 0 0 5px #ffffffb3, 0 0 0 7px #2563eb40, 0 4px 12px #17334d40; }
+.route-stop:focus-visible { outline: none; }
+.route-stop:focus-visible .route-stop__pin { box-shadow: 0 0 0 5px #93c5fd; }
+
+@media (prefers-reduced-motion: reduce) {
+  .route-stop__pin { transition: none; }
+}
