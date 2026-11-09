@@ -429,6 +429,7 @@ const StatCard = ({
 
 const DashboardStats = ({ data }) => {
   const { t } = useTranslation();
+  const showTenders = window.APP_DATA?.features?.tender !== false;
   const [filters, setFilters] = useState(() => {
     const initial = {
       period: "month",
@@ -505,7 +506,7 @@ const DashboardStats = ({ data }) => {
       currencies: data.factorings_active?.currencies,
       valueKey: "sum",
     },
-  ];
+  ].filter((card) => card.id !== "auctions" || showTenders);
 
   return (
     <Box>
@@ -571,7 +572,7 @@ const DashboardStats = ({ data }) => {
             gridTemplateColumns: {
               xs: "1fr",
               sm: "repeat(2, minmax(0, 1fr))",
-              md: "repeat(3, minmax(0, 1fr))",
+              md: `repeat(${activeCards.length}, minmax(0, 1fr))`,
             },
             gap: 2,
           }}

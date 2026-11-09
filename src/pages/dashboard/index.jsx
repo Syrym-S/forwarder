@@ -62,6 +62,7 @@ const Dashboard = () => {
   const highlightedLeadId = visibleHoveredLeadId || visibleSelectedLeadId;
 
   const showFactoringTable = window.APP_DATA.features.factoring;
+  const showTenders = window.APP_DATA?.features?.tender !== false;
 
   const handleStatusChange = (event) => {
     const { value, checked } = event.target;
@@ -200,7 +201,7 @@ const Dashboard = () => {
           />
         </Box>
 
-        <TendersMainContainer />
+        {showTenders && <TendersMainContainer />}
 
         {showFactoringTable && <FactoringProgressBarContainer />}
 

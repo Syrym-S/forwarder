@@ -41,6 +41,7 @@ export const useLeadsStore = create((set, get) => ({
   leadsFetchOptions: {},
   searchedLeads: [],
   historyLeads: [],
+  historyLeadsParams: {},
   files: [],
   uploadedFiles: [],
   leadMessages: [],
@@ -159,11 +160,17 @@ export const useLeadsStore = create((set, get) => ({
     }
   },
 
-  getHistoryLeads: async (params) => {
+  getHistoryLeads: async (params = {}) => {
+    const requestParams = { ...params };
     try {
-      set({ isLoading: true, error: null });
+      set({ isLoading: true, error: null, historyLeadsParams: requestParams });
 
-      const response = await getHistoryLeads(params);
+      const requestHistory = requestParams.q || requestParams.num
+        || requestParams.date_from || requestParams.date_to
+        ? searchLeadsHistoryApi
+        : getHistoryLeads;
+      const response = await requestHistory(requestParams);
+      if (get().historyLeadsParams !== requestParams) return;
 
       set({
         historyLeads: response.data.results,
@@ -173,6 +180,7 @@ export const useLeadsStore = create((set, get) => ({
         isLoading: false,
       });
     } catch (e) {
+      if (get().historyLeadsParams !== requestParams) return;
       set({
         error: e.message,
         isLoading: false,

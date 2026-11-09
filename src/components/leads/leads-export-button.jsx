@@ -13,6 +13,7 @@ import FileDownloadOutlinedIcon from "@mui/icons-material/FileDownloadOutlined";
 import { api } from "../../app/client";
 import PrimaryButton from "../../shared/ui/button/primary-button";
 import FormInput from "../../shared/ui/input/form-input";
+import ActionTooltip from "../../shared/ui/action-tooltip";
 
 const getToday = () =>
   new Intl.DateTimeFormat("en-CA", {
@@ -95,18 +96,16 @@ const LeadsExportButton = () => {
 
   return (
     <>
-      <PrimaryButton
-        variant="outlined"
-        text={t("ui.data_export")}
-        sx={{
-          width: 300,
-        }}
-        startIcon={<FileDownloadOutlinedIcon />}
-        onClick={() => {
-          setError("");
-          setOpen(true);
-        }}
-      />
+      <ActionTooltip title={t("ui.data_export")}>
+        <PrimaryButton
+          variant="outlined"
+          startIcon={<FileDownloadOutlinedIcon />}
+          onClick={() => {
+            setError("");
+            setOpen(true);
+          }}
+        />
+      </ActionTooltip>
       <Dialog
         open={open}
         onClose={() => {
@@ -114,11 +113,33 @@ const LeadsExportButton = () => {
         }}
         fullWidth
         maxWidth="xs"
-        slotProps={{ paper: { sx: { borderRadius: "16px", border: "2px solid #1f1f1f", boxShadow: "0 4px 20px rgba(0, 0, 0, 0.15)", overflow: "hidden" } } }}
+        slotProps={{
+          paper: {
+            sx: {
+              borderRadius: "16px",
+              border: "2px solid #1f1f1f",
+              boxShadow: "0 4px 20px rgba(0, 0, 0, 0.15)",
+              overflow: "hidden",
+            },
+          },
+        }}
       >
-        <DialogTitle sx={{ px: 3, pt: 2.5, pb: 1, fontSize: "1.3rem", fontWeight: 700, color: "#263244" }}>{t("ui.lead_history_export")}</DialogTitle>
+        <DialogTitle
+          sx={{
+            px: 3,
+            pt: 2.5,
+            pb: 1,
+            fontSize: "1.3rem",
+            fontWeight: 700,
+            color: "#263244",
+          }}
+        >
+          {t("ui.lead_history_export")}
+        </DialogTitle>
         <DialogContent sx={{ px: 3, pt: "6px !important", pb: 1 }}>
-          <Typography sx={{ fontSize: 14, color: "text.secondary", mb: 2 }}>{t("ui.select_export_period")}</Typography>
+          <Typography sx={{ fontSize: 14, color: "text.secondary", mb: 2 }}>
+            {t("ui.select_export_period")}
+          </Typography>
           <Box
             sx={{
               display: "flex",
@@ -147,7 +168,9 @@ const LeadsExportButton = () => {
             />
           </Box>
           {dateFrom && dateTo && dateFrom > dateTo && (
-            <Alert severity="warning" sx={{ mt: 2 }}>{t("ui.export_date_range_invalid")}</Alert>
+            <Alert severity="warning" sx={{ mt: 2 }}>
+              {t("ui.export_date_range_invalid")}
+            </Alert>
           )}
           {error && (
             <Alert severity="error" sx={{ mt: 2 }}>
@@ -156,7 +179,12 @@ const LeadsExportButton = () => {
           )}
         </DialogContent>
         <DialogActions sx={{ px: 3, pt: 2, pb: 2.5, gap: 1 }}>
-          <PrimaryButton variant="outlined" disabled={loading} onClick={() => setOpen(false)} text={t("ui.cancel")} />
+          <PrimaryButton
+            variant="outlined"
+            disabled={loading}
+            onClick={() => setOpen(false)}
+            text={t("ui.cancel")}
+          />
           <PrimaryButton
             isLoading={loading}
             disabled={!valid}

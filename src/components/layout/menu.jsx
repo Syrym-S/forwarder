@@ -263,6 +263,7 @@ const menuItems = [
   {
     id: 5,
     label: "menu.auctions",
+    feature: "tender",
     sub_items: [
       {
         id: 1,
