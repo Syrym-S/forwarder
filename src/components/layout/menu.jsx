@@ -349,13 +349,34 @@ const SideBar = ({ openMenu, setOpenMenu }) => {
               <Tooltip
                 key={sub_item.id}
                 title={t(sub_item.tooltip_text)}
+                placement="right"
+                arrow
+                slotProps={{
+                  tooltip: {
+                    sx: {
+                      bgcolor: "#162D50",
+                      color: "#fff",
+                      borderRadius: "8px",
+                      px: 1.25,
+                      py: 0.75,
+                      fontSize: 12,
+                      fontWeight: 600,
+                      lineHeight: "16px",
+                      maxWidth: 320,
+                      boxShadow: "0 6px 18px rgba(22, 45, 80, 0.16)",
+                    },
+                  },
+                  arrow: {
+                    sx: { color: "#162D50" },
+                  },
+                }}
                 disableInteractive
               >
                 <NavLink
                   className={"link"}
                   to={sub_item.path}
                   style={({ isActive }) => ({
-                    color: isActive && "primary.main",
+                    color: isActive && "rgb(24, 87, 196)",
                     backgroundColor: isActive && "rgba(24, 87, 196, 0.08)",
                     borderRadius: isActive && "5px",
                     display: "flex",
