@@ -139,6 +139,7 @@ const Header = ({ openMenu, setOpenMenu }) => {
       <Box
         sx={{
           display: "flex",
+          alignItems: "center",
           gap: 1,
         }}
       >
@@ -148,43 +149,53 @@ const Header = ({ openMenu, setOpenMenu }) => {
 
         <ChatsContainer />
 
-        <ActionTooltip title={t("ui.open_profile_menu")}>
+        <ActionTooltip title={isProfileMenuOpen ? "" : t("ui.open_profile_menu")}>
           <Button
+            id="header-profile-button"
             variant="outlined"
             onClick={handleOpenProfileMenu}
             aria-label={t("ui.open_profile_menu")}
+            aria-controls={isProfileMenuOpen ? "header-profile-menu" : undefined}
+            aria-haspopup="menu"
+            aria-expanded={isProfileMenuOpen}
             sx={{
-              borderColor: "primary.main",
+              borderColor: "#B7CBF2",
+              color: "primary.main",
+              bgcolor: "background.default",
               display: "flex",
               gap: 1,
-              width: "fit-content",
+              height: 40,
+              minWidth: 40,
+              maxWidth: { xs: 40, sm: 240, md: 320 },
               textTransform: "none",
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-              whiteSpace: "nowrap",
-              borderRadius: 2,
-              px: {
-                xs: 0,
-                sm: 1,
+              borderRadius: "10px",
+              px: { xs: 0.75, sm: 1 },
+              py: 0.75,
+              "&:hover": {
+                borderColor: "primary.main",
+                bgcolor: "#EDF4FF",
+              },
+              "&.Mui-focusVisible": {
+                outline: "2px solid",
+                outlineColor: "primary.main",
+                outlineOffset: 2,
               },
             }}
           >
             <Avatar
               src={profileData?.avatar || undefined}
               sx={{
-                width: {
-                  xs: 24,
-                  sm: 28,
-                },
-                height: {
-                  xs: 24,
-                  sm: 28,
-                },
-
-                fontSize: 13,
+                width: 28,
+                height: 28,
+                bgcolor: "#E2EEFF",
+                color: "primary.main",
+                fontSize: 16,
+                fontWeight: 500,
                 flexShrink: 0,
               }}
-            />
+            >
+              {userEmail.trim().charAt(0).toLocaleUpperCase()}
+            </Avatar>
             <Typography
               sx={{
                 display: {
@@ -192,6 +203,11 @@ const Header = ({ openMenu, setOpenMenu }) => {
                   sm: "inline",
                 },
                 color: "primary.main",
+                fontSize: 13,
+                minWidth: 0,
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                whiteSpace: "nowrap",
               }}
             >
               {userEmail}
@@ -200,44 +216,47 @@ const Header = ({ openMenu, setOpenMenu }) => {
         </ActionTooltip>
 
         <Menu
+          id="header-profile-menu"
           anchorEl={profileAnchorEl}
           open={isProfileMenuOpen}
           onClose={handleCloseProfileMenu}
+          anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
+          transformOrigin={{ vertical: "top", horizontal: "left" }}
           slotProps={{
             paper: {
               sx: {
-                width: profileAnchorEl?.offsetWidth,
+                minWidth: 124,
+                borderRadius: "16px",
+                border: "1px solid #D8E0ED",
+                bgcolor: "background.paper",
+                boxShadow: "0 12px 32px rgba(22, 45, 80, 0.12)",
+              },
+            },
+            list: {
+              "aria-labelledby": "header-profile-button",
+              sx: {
+                py: 1,
+                "& .MuiMenuItem-root": {
+                  minHeight: 40,
+                  px: 2.5,
+                  py: 1,
+                  fontSize: 14,
+                  lineHeight: "20px",
+                  color: "#172B4D",
+                  fontWeight: 400,
+                  "&:hover, &.Mui-focusVisible": {
+                    bgcolor: "#EDF4FF",
+                  },
+                },
               },
             },
           }}
         >
-          <MenuItem
-            onClick={handleNavigateProfile}
-            sx={{
-              py: 0.9,
-              fontSize: "1.rem",
-              color: "#172B4D",
-              fontWeight: 500,
-              textTransform: "none",
-              textAlign: "center",
-            }}
-          >
+          <MenuItem onClick={handleNavigateProfile}>
             {t("menu.profile")}
           </MenuItem>
 
-          <MenuItem
-            disabled
-            sx={{
-              py: 0.9,
-              fontSize: "1.rem",
-              color: "#172B4D",
-              fontWeight: 500,
-              textTransform: "none",
-              textAlign: "center",
-            }}
-          >
-            {t("menu.settings")}
-          </MenuItem>
+          <MenuItem disabled>{t("menu.settings")}</MenuItem>
 
           <MenuItem
             onClick={() => {
@@ -248,17 +267,7 @@ const Header = ({ openMenu, setOpenMenu }) => {
             {t("menu.complaints")}
           </MenuItem>
 
-          <MenuItem
-            onClick={handleOpenLogoutModal}
-            sx={{
-              py: 0.9,
-              fontSize: "1.rem",
-              color: "#172B4D",
-              fontWeight: 500,
-              textTransform: "none",
-              textAlign: "center",
-            }}
-          >
+          <MenuItem onClick={handleOpenLogoutModal}>
             {t("menu.logout")}
           </MenuItem>
         </Menu>

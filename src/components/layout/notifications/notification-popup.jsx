@@ -23,6 +23,7 @@ import { NOTIFICATION_TYPE } from "../../../shared/const/notification-types";
 import { LeadDocumentCard } from "../../leads/documents/LeadDocumentCard";
 import NotificationLoader from "../../../shared/ui/loaders/notification-loader";
 import { getNotificationMessage, getNotificationTheme } from "../../../shared/helpers/notifications/get-notification-message";
+import NotificationTime from "./notification-time";
 
 const NotificationPopup = ({
   selectedNotification,
@@ -152,6 +153,7 @@ const NotificationPopup = ({
                 <RenderNotificationType
                   type={selectedNotification?.type || ""}
                 />
+                <NotificationTime createdAt={notification.created_at} />
               </Box>
             </Box>
             <Typography

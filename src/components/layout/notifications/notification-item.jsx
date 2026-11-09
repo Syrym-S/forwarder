@@ -3,6 +3,7 @@ import { Box, ButtonBase, Typography } from "@mui/material";
 import ChevronRightRoundedIcon from "@mui/icons-material/ChevronRightRounded";
 import RenderNotificationIcon from "../../../shared/ui/render-notification-icon";
 import { getNotificationMessage, getNotificationTheme } from "../../../shared/helpers/notifications/get-notification-message";
+import NotificationTime from "./notification-time";
 
 const NotificationItem = ({
   notification,
@@ -81,6 +82,7 @@ const NotificationItem = ({
         >
           {getNotificationMessage(notification, i18n)}
         </Typography>
+        <NotificationTime createdAt={notification?.created_at} />
         {unread && (
           <Typography
             component="span"
