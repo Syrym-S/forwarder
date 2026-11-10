@@ -1,7 +1,7 @@
 import { useTranslation } from "react-i18next";
 import TooltipIconButton from "../../shared/ui/tooltip-icon-button";
 import { Controller, useForm, useWatch } from "react-hook-form";
-import { IMaskInput } from "react-imask";
+import PhoneMaskInput from "../../shared/ui/input/phone-mask-input";
 import {
   Alert,
   Box,
@@ -273,11 +273,7 @@ const AddDriverForm = ({ open, onClose, setSavedData }) => {
                     size="small"
                     slotProps={{
                       input: {
-                        inputComponent: IMaskInput,
-                        inputProps: {
-                          mask: "+{7} (000) 000-00-00",
-                          unmask: false,
-                        },
+                        inputComponent: PhoneMaskInput,
                       },
                     }}
                   />

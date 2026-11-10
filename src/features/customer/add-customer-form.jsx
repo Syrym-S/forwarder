@@ -14,7 +14,7 @@ import {
 } from "@mui/material";
 import { Controller, useForm } from "react-hook-form";
 import { useCustomerStore } from "../../app/store/customers/customers-store";
-import { IMaskInput } from "react-imask";
+import PhoneMaskInput from "../../shared/ui/input/phone-mask-input";
 import PrimaryButton from "../../shared/ui/button/primary-button";
 import TooltipIconButton from "../../shared/ui/tooltip-icon-button";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
@@ -274,14 +274,7 @@ const AddCustomerForm = ({ open, handleClose }) => {
                       helperText={fieldState.error?.message}
                       slotProps={{
                         input: {
-                          inputComponent: IMaskInput,
-                          inputProps: {
-                            mask: "+{7} (000) 000-00-00",
-                            unmask: false,
-                            onAccept: (value, mask) => {
-                              field.onChange(mask.unmaskedValue);
-                            },
-                          },
+                          inputComponent: PhoneMaskInput,
                         },
                       }}
                     />

@@ -2,6 +2,7 @@ import { useTranslation } from "react-i18next";
 import { Stack, TextField, Typography } from "@mui/material";
 import React from "react";
 import { Controller } from "react-hook-form";
+import { handlePhonePaste } from "../../shared/helpers/handle-phone-paste";
 
 const EditContactPerson = ({ control }) => {
   const { t } = useTranslation();
@@ -37,6 +38,7 @@ const EditContactPerson = ({ control }) => {
           <TextField
             {...field}
             label={t("ui.phone_2")}
+            onPaste={(event) => handlePhonePaste(event, field.onChange)}
             // value={form.companyName}.
             // onChange={handleChange}
             // error={Boolean(errors.companyName)}
