@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { MapContainer, TileLayer, Marker, Polyline } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Polyline, useMap } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import Echo from "laravel-echo";
@@ -10,6 +10,7 @@ import { fetchCachedRoute } from "../../shared/helpers/route-cache";
 import "./hide.css";
 import { driverIcon } from "../../shared/ui/driver-marker-icon";
 import DriverPositionPopup from "../../shared/ui/driver-position-popup";
+import { loadLeadTracking } from "../../shared/lib/lead-tracking";
 
 window.Pusher = Pusher;
 
@@ -36,23 +37,51 @@ const createMarkerIcon = (label, subLabel) => {
   });
 };
 
-export default function LeadMap({ from, waypoints = [], to, id, leadData }) {
-  const start = !from?.lat ? [43.241141, 76.871399] : [from?.lat, from?.lon];
-  const cross = waypoints.map((waypoint) => [waypoint.lat, waypoint.lon]);
-  const end = !to?.lat ? [43.241141, 76.871399] : [to?.lat, to?.lon];
+const getLocationPoint = (location) => {
+  const lat = location?.lat ?? location?.latitude;
+  const lon = location?.lon ?? location?.lng ?? location?.longitude;
+  if ([lat, lon].some((value) => value == null || (typeof value !== "number" && typeof value !== "string") || String(value).trim() === "")) return null;
+  const point = [Number(lat), Number(lon)];
+  return point.every(Number.isFinite) && Math.abs(point[0]) <= 90 && Math.abs(point[1]) <= 180 ? point : null;
+};
 
-  const routePoints = [start, ...cross, end];
+const FitLeadMapBounds = ({ points }) => {
+  const map = useMap();
+  const boundsKey = JSON.stringify(points);
+  useEffect(() => {
+    const locations = JSON.parse(boundsKey);
+    if (locations.length > 1) map.fitBounds(locations, { padding: [24, 24], maxZoom: 13 });
+    else if (locations.length === 1) map.setView(locations[0], 13);
+  }, [map, boundsKey]);
+  return null;
+};
+
+export default function LeadMap({ from, waypoints, to, id, leadData }) {
+  const leadId = id ?? leadData?.id;
+  const trackingToken = leadData?.tracking?.token;
+  const trackingUrl = leadData?.tracking?.url;
+  const start = getLocationPoint(from) || getLocationPoint(leadData?.from_location)
+    || getLocationPoint({ lat: leadData?.from_lat, lon: leadData?.from_lon });
+  const end = getLocationPoint(to) || getLocationPoint(leadData?.to_location)
+    || getLocationPoint({ lat: leadData?.to_lat, lon: leadData?.to_lon });
+  const routeWaypoints = (waypoints ?? leadData?.waypoints ?? [])
+    .map((waypoint, index) => ({ point: getLocationPoint(waypoint), index }))
+    .filter(({ point }) => point);
+  const cross = routeWaypoints.map(({ point }) => point);
+
+  const routePoints = [start, ...cross, end].filter(Boolean);
   const coordinates = routePoints
     .map(([lat, lon]) => `${lon},${lat}`)
     .join(";");
 
   const [tracking, setTracking] = useState(null);
   const selectedTracking =
-    tracking && String(tracking.leadId) === String(id) ? tracking : null;
+    tracking && String(tracking.leadId) === String(leadId) ? tracking : null;
   const [routeData, setRouteData] = useState(null);
-  const route = routeData?.coordinates === coordinates ? routeData.points : [];
+  const route = routeData?.coordinates === coordinates ? routeData.points : routePoints;
 
   useEffect(() => {
+    if (routePoints.length < 2) return;
     let cancelled = false;
     const load = async () => {
       try {
@@ -67,10 +96,10 @@ export default function LeadMap({ from, waypoints = [], to, id, leadData }) {
     return () => {
       cancelled = true;
     };
-  }, [coordinates]);
+  }, [coordinates, routePoints.length]);
 
   useEffect(() => {
-    if (!id) return;
+    if (!leadId && !(trackingToken && trackingUrl)) return;
 
     const controller = new AbortController();
     let isActive = true;
@@ -82,35 +111,36 @@ export default function LeadMap({ from, waypoints = [], to, id, leadData }) {
           ? "/staging/wp-json/geows/v1/token"
           : "/wp-json/geows/v1/token";
 
-        const addRes = await fetch(BASE_URL, {
-          method: "POST",
+        const { access: addRes, response } = await loadLeadTracking({
+          tracking: { token: trackingToken, url: trackingUrl },
           signal: controller.signal,
-          headers: {
-            "Content-Type": "application/json",
-            "X-WP-Nonce": window.GeoWS_Config?.nonce,
+          requestToken: async () => {
+            if (!leadId) throw new Error("Не указан ID лида для геотрекинга");
+            const result = await fetch(BASE_URL, {
+              method: "POST",
+              signal: controller.signal,
+              headers: {
+                "Content-Type": "application/json",
+                "X-WP-Nonce": window.GeoWS_Config?.nonce,
+              },
+              body: JSON.stringify({ lead_id: leadId, type: "read" }),
+            });
+            if (!result.ok) throw new Error("Не удалось получить токен геотрекинга");
+            return result.json();
           },
-          body: JSON.stringify({
-            lead_id: id,
-            type: "read",
-          }),
-        }).then((r) => {
-          if (!r.ok) throw new Error("Не удалось получить токен геотрекинга");
-          return r.json();
-        });
-
-        console.log(addRes);
-
-        if (!isActive) return;
-        if (!addRes.token || !addRes.url) {
-          throw new Error("Сервис не вернул токен или URL геотрекинга");
-        }
-
-        const response = await api.get(`${addRes.url}`, {
-          signal: controller.signal,
-          headers: {
-            Authorization: `Bearer ${addRes.token}`,
-            key: window.GeoWS_Config?.key,
-            ws: window.GeoWS_Config?.ws,
+          requestTracking: async (access) => {
+            const result = await api.get(access.url, {
+              signal: controller.signal,
+              headers: {
+                Authorization: `Bearer ${access.token}`,
+                key: window.GeoWS_Config?.key,
+                ws: window.GeoWS_Config?.ws,
+              },
+            });
+            if (!result.data?.data || typeof result.data.data !== "object") {
+              throw new Error("Сервис не вернул данные геотрекинга");
+            }
+            return result;
           },
         });
 
@@ -127,9 +157,12 @@ export default function LeadMap({ from, waypoints = [], to, id, leadData }) {
         const coordinates = encodedPolyline
           ? polyline.decode(encodedPolyline)
           : [];
+        if (coordinates.some(([latitude, longitude]) => !getLocationPoint({ latitude, longitude }))) {
+          throw new Error("Сервис вернул неверные координаты геотрекинга");
+        }
         const lastPoint = coordinates.at(-1);
         setTracking({
-          leadId: id,
+          leadId,
           coordinates,
           point: lastPoint
             ? { latitude: lastPoint[0], longitude: lastPoint[1] }
@@ -195,7 +228,7 @@ export default function LeadMap({ from, waypoints = [], to, id, leadData }) {
               const duplicate =
                 last?.[0] === latitude && last?.[1] === longitude;
               return {
-                leadId: id,
+                leadId,
                 coordinates: duplicate
                   ? history
                   : [...history, [latitude, longitude]],
@@ -204,11 +237,17 @@ export default function LeadMap({ from, waypoints = [], to, id, leadData }) {
             });
           })
           .error((error) => {
-            if (isActive)
-              console.error("Не удалось подписаться на геотрекинг", error);
+            if (isActive) {
+              setTracking(null);
+              console.error("Не удалось подписаться на геотрекинг", error?.message);
+            }
           });
       } catch (error) {
-        if (isActive) console.error("Не удалось подключить геотрекинг", error);
+        if (isActive) {
+          setTracking(null);
+          echo?.disconnect();
+          console.error("Не удалось подключить геотрекинг", error.message);
+        }
       }
     }
 
@@ -219,11 +258,11 @@ export default function LeadMap({ from, waypoints = [], to, id, leadData }) {
       controller.abort();
       echo?.disconnect();
     };
-  }, [id]);
+  }, [leadId, trackingToken, trackingUrl]);
 
   return (
     <MapContainer
-      center={start}
+      center={routePoints[0] || [43.241141, 76.871399]}
       zoom={13}
       style={{ height: "300px", width: "100%", zIndex: 0 }}
     >
@@ -231,17 +270,19 @@ export default function LeadMap({ from, waypoints = [], to, id, leadData }) {
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
         url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png?key=cb1_33bl_1_e67a46f1e67e6cbad8143c4e"
       />
+      <FitLeadMapBounds points={[...route, ...(selectedTracking?.coordinates || [])]} />
 
-      <Marker position={start} icon={createMarkerIcon("A")} />
+      {start && <Marker position={start} icon={createMarkerIcon("A")} />}
 
-      {waypoints.map((waypoint, index) => (
+      {routeWaypoints.map(({ point, index }) => (
         <Marker
-          position={[waypoint.lat, waypoint.lon]}
+          key={index}
+          position={point}
           icon={createMarkerIcon(`P#${index + 1}`)}
         />
       ))}
 
-      <Marker position={end} icon={createMarkerIcon("B")} />
+      {end && <Marker position={end} icon={createMarkerIcon("B")} />}
 
       {route.length > 0 && (
         <Polyline positions={route} color="blue" weight={4} />
