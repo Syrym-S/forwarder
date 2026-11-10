@@ -72,7 +72,6 @@ const CustomerCard = ({ customer, setSelectedCustomer }) => {
           my: 2,
         }}
       >
-        <InfoItem label={t("ui.bank")} value={customer?.bank_name} />
         <InfoItem label="BIN" value={customer?.bin} />
         <InfoItem label={t("ui.customer_addresses")} value={customer?.legal_address} />
       </Box>

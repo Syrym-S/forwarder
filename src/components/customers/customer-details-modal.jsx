@@ -26,7 +26,6 @@ const companyFields = () => [
   ["legal_address", appI18n.t("ui.registered_address")],
   ["bik", appI18n.t("ui.bic")],
   ["account_number", appI18n.t("ui.current_account")],
-  ["bank_name", appI18n.t("ui.bank")],
 ];
 
 const personFields = () => [

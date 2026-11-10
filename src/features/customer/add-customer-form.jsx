@@ -32,7 +32,6 @@ const defaultValues = {
   bik: "",
   legal_address: "",
   account_number: "",
-  bank_name: "",
   person_fio: "",
   person_phone: "",
   person_iin: "",
@@ -223,20 +222,6 @@ const AddCustomerForm = ({ open, handleClose }) => {
               )}
             />
 
-            <Controller
-              name="bank_name"
-              control={control}
-              render={({ field, fieldState }) => (
-                <TextField
-                  size="small"
-                  {...field}
-                  fullWidth
-                  label={t("ui.bank")}
-                  error={!!fieldState.error}
-                  helperText={fieldState.error?.message}
-                />
-              )}
-            />
           </Box>
 
           <Box sx={sectionSx}>
