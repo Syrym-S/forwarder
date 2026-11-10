@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import UploadAvatar from "../../components/profile/upload-avatar";
 import EditCompanyFileds from "../../components/profile/edit-company-fileds";
@@ -53,14 +53,14 @@ const EditProfileForm = ({ profileData, legalDocuments }) => {
 
   const formValues = useWatch({ control });
 
-  const handleFileChange = (event) => {
-    const file = event.target.files[0];
+  useEffect(() => () => {
+    if (preview) URL.revokeObjectURL(preview);
+  }, [preview]);
 
-    if (file) {
-      setSelectedImg(file);
-      setPreview(URL.createObjectURL(file));
-      setIsAvatarRemoved(false);
-    }
+  const handleAvatarChange = (file) => {
+    setSelectedImg(file);
+    setPreview(URL.createObjectURL(file));
+    setIsAvatarRemoved(false);
   };
 
   const handleClearAvatar = () => {
@@ -121,8 +121,9 @@ const EditProfileForm = ({ profileData, legalDocuments }) => {
         selectedImg={selectedImg}
         preview={preview}
         isAvatarRemoved={isAvatarRemoved}
-        handleFileChange={handleFileChange}
+        onAvatarChange={handleAvatarChange}
         handleClearAvatar={handleClearAvatar}
+        disabled={isSubmitting}
       />
 
       {uploadAvatarError && <RenderErrorContext error={uploadAvatarError} />}

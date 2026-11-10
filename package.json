@@ -37,6 +37,7 @@
     "pusher-js": "^8.6.0",
     "react": "^19.0.0-rc.1",
     "react-dom": "^19.0.0-rc.1",
+    "react-easy-crop": "^6.2.5",
     "react-hook-form": "^7.77.0",
     "react-i18next": "^17.1.9",
     "react-imask": "^7.6.1",
