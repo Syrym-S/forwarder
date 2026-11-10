@@ -1272,6 +1272,8 @@
     "open_profile_menu": "Profilmenü öffnen",
     "support_request_subject": "Supportanfrage",
     "support_request_body": "Hallo! Ich habe eine Frage",
+    "view_cargo": "Fracht ansehen",
+    "copy_failed": "Kopieren fehlgeschlagen",
     "copy_number": "Nummer kopieren",
     "map_routes_tooltip": "Alle Routen auf der Karte anzeigen",
     "active_leads_tooltip": "Aktive Sendungen, die von Ihnen und Kunden erstellt wurden. Erstellen Sie eine Sendung",

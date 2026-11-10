@@ -1233,6 +1233,8 @@
     "open_profile_menu": "打开个人资料菜单",
     "support_request_subject": "支持请求",
     "support_request_body": "你好！我有一个问题",
+    "view_cargo": "查看货物",
+    "copy_failed": "无法复制",
     "copy_number": "副本编号",
     "map_routes_tooltip": "在地图上显示所有路线",
     "active_leads_tooltip": "由您和客户创建的有效发货。创建货件",

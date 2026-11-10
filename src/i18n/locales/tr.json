@@ -1233,6 +1233,8 @@
     "open_profile_menu": "Profil menüsünü aç",
     "support_request_subject": "Destek talebi",
     "support_request_body": "Merhaba! bir sorum var",
+    "view_cargo": "Yükü görüntüle",
+    "copy_failed": "Kopyalanamadı",
     "copy_number": "Kopya numarası",
     "map_routes_tooltip": "Haritadaki tüm rotaları görüntüle",
     "active_leads_tooltip": "Sizin ve müşterileriniz tarafından oluşturulan aktif gönderiler. Gönderi oluştur",

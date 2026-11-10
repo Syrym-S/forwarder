@@ -1233,6 +1233,8 @@
     "open_profile_menu": "Abrir menú de perfil",
     "support_request_subject": "Solicitud de soporte",
     "support_request_body": "¡Hola! tengo una pregunta",
+    "view_cargo": "Ver carga",
+    "copy_failed": "No se pudo copiar",
     "copy_number": "número de copia",
     "map_routes_tooltip": "Mostrar todas las rutas en el mapa.",
     "active_leads_tooltip": "Envíos activos creados por usted y sus clientes. Crear un envío",

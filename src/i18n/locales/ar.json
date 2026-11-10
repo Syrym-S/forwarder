@@ -1239,6 +1239,8 @@
     "open_profile_menu": "فتح قائمة الملف الشخصي",
     "support_request_subject": "طلب الدعم",
     "support_request_body": "مرحبا! لدي سؤال",
+    "view_cargo": "عرض الشحنة",
+    "copy_failed": "تعذر النسخ",
     "copy_number": "نسخ الرقم",
     "map_routes_tooltip": "عرض جميع الطرق على الخريطة",
     "active_leads_tooltip": "الشحنات النشطة التي أنشأتها أنت والعملاء. إنشاء شحنة",

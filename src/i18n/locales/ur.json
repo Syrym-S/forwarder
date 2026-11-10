@@ -1233,6 +1233,8 @@
     "open_profile_menu": "پروفائل مینو کھولیں۔",
     "support_request_subject": "سپورٹ کی درخواست",
     "support_request_body": "ہیلو! میرا ایک سوال ہے۔",
+    "view_cargo": "سامان دیکھیں",
+    "copy_failed": "کاپی نہیں ہو سکی",
     "copy_number": "نمبر کاپی کریں۔",
     "map_routes_tooltip": "نقشے پر تمام راستے دکھائیں۔",
     "active_leads_tooltip": "آپ اور صارفین کے ذریعہ تیار کردہ فعال ترسیل۔ ایک کھیپ بنائیں",

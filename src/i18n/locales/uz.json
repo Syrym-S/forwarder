@@ -1233,6 +1233,8 @@
     "open_profile_menu": "Profil menyusini oching",
     "support_request_subject": "Qo'llab-quvvatlash so'rovi",
     "support_request_body": "Salom! Menda savol bor",
+    "view_cargo": "Yukni ko‘rish",
+    "copy_failed": "Nusxalab bo‘lmadi",
     "copy_number": "Raqamni nusxalash",
     "map_routes_tooltip": "Xaritadagi barcha marshrutlarni ko'rsatish",
     "active_leads_tooltip": "Siz va mijozlar tomonidan yaratilgan faol yuklar. Yetkazib berishni yarating",

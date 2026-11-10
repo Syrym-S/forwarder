@@ -1233,6 +1233,8 @@
     "open_profile_menu": "Ouvrir le menu du profil",
     "support_request_subject": "demande d'assistance",
     "support_request_body": "Bonjour ! j'ai une question",
+    "view_cargo": "Voir les marchandises",
+    "copy_failed": "Impossible de copier",
     "copy_number": "numéro de copie",
     "map_routes_tooltip": "Afficher tous les itinéraires sur la carte",
     "active_leads_tooltip": "expéditions actives créées par vous et vos clients. Créer un envoi",

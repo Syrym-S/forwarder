@@ -1274,6 +1274,8 @@
     "open_profile_menu": "Open profile menu",
     "support_request_subject": "Support request",
     "support_request_body": "Hello! I have a question",
+    "view_cargo": "View cargo",
+    "copy_failed": "Could not copy",
     "copy_number": "Copy number",
     "map_routes_tooltip": "Display all routes on the map",
     "active_leads_tooltip": "Active leads created by you and customers. Create a lead",
