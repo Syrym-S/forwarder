@@ -9,10 +9,9 @@ import CustomersTable from "./customer-table";
 import CustomerCard from "./customer-card";
 import CustomerDetailsModal from "./customer-details-modal";
 
-const CustomerListContainer = ({ view }) => {
+const CustomerListContainer = ({ view, page, onPageChange }) => {
   const { t } = useTranslation();
   const [selectedCustomer, setSelectedCustomer] = useState(null);
-  const [page, setPage] = useState(1);
   const [_, setSearchParams] = useSearchParams();
 
   const customers = useCustomerStore((state) => state.customers);
@@ -20,7 +19,6 @@ const CustomerListContainer = ({ view }) => {
     (state) => state.getCustomerDetails,
   );
   const isLoading = useCustomerStore((state) => state.isLoading);
-  const getCustomers = useCustomerStore((state) => state.getCustomers);
   const count = useCustomerStore((state) => state.count);
   const perPage = useCustomerStore((state) => state.perPage);
   const clearCustomerDetails = useCustomerStore(
@@ -38,10 +36,6 @@ const CustomerListContainer = ({ view }) => {
     clearCustomerDetails();
   };
 
-  const handlePageChange = (_, value) => {
-    setPage(value);
-  };
-
   useEffect(() => {
     if (selectedCustomer) {
       setSearchParams({
@@ -51,12 +45,6 @@ const CustomerListContainer = ({ view }) => {
       getCustomerDetails(selectedCustomer?.id);
     }
   }, [selectedCustomer]);
-
-  useEffect(() => {
-    getCustomers({
-      page: page,
-    });
-  }, [page]);
 
   if (isLoading) return <PageLoader />;
 
@@ -91,7 +79,9 @@ const CustomerListContainer = ({ view }) => {
                 },
                 my: 1,
               }}
-            >{t("ui.customer_list_empty")}</Alert>
+            >
+              {t("ui.customer_list_empty")}
+            </Alert>
           ) : (
             customers.map((customer) => (
               <>
@@ -120,7 +110,7 @@ const CustomerListContainer = ({ view }) => {
             shape="rounded"
             page={page}
             count={PAGE_COUNT}
-            onChange={handlePageChange}
+            onChange={onPageChange}
           />
         )}
       </Box>

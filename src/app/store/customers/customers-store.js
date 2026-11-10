@@ -69,6 +69,8 @@ export const useCustomerStore = create((set) => ({
 
       set({
         customers: response.data.results,
+        count: response.data.count ?? response.data.results.length,
+        perPage: response.data.per_page ?? (response.data.results.length || 1),
         isLoading: false,
       });
     } catch (e) {

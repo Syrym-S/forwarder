@@ -6,7 +6,7 @@ import InviteLinkModal from "../../components/customers/invite-link-modal";
 import CustomerListContainer from "../../components/customers/customer-list-container";
 import { Box, Typography } from "@mui/material";
 import FormInput from "../../shared/ui/input/form-input";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useCustomerStore } from "../../app/store/customers/customers-store";
 import { VIEWS } from "../../shared/const/leads";
 
@@ -14,9 +14,9 @@ const Customers = () => {
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   const [view, setView] = useState(VIEWS.table);
-  //Позже венру если нужно будет , показывает по какому слово пошел запрос поиска
-  const [__, setSearchRequest] = useState("");
   const [inputValue, setInputValue] = useState("");
+  const [query, setQuery] = useState("");
+  const [page, setPage] = useState(1);
 
   const getCustomers = useCustomerStore((state) => state.getCustomers);
 
@@ -25,6 +25,14 @@ const Customers = () => {
   const clearInviteLink = useCustomerStore((state) => state.clearInviteLink);
 
   const isCardsView = view === VIEWS.cards;
+  const searchValue = inputValue.trim();
+  const loadCustomers = useCallback(
+    (value, currentPage) =>
+      value
+        ? searchCustomers({ q: value, page: currentPage })
+        : getCustomers({ page: currentPage }),
+    [getCustomers, searchCustomers],
+  );
 
   const handleOpenForm = () => {
     setOpen(true);
@@ -34,25 +42,22 @@ const Customers = () => {
     setOpen(false);
   };
 
+  const handlePageChange = (_, value) => {
+    setPage(value);
+    loadCustomers(query, value);
+  };
+
   useEffect(() => {
-    const value = inputValue?.trim();
+    if (searchValue.length === 1) return;
 
     const timer = setTimeout(() => {
-      if (!value) {
-        getCustomers();
-        setSearchRequest("");
-
-        return;
-      }
-
-      if (value.length >= 2) {
-        searchCustomers({ q: value });
-        setSearchRequest(value);
-      }
-    }, 1000);
+      setQuery(searchValue);
+      setPage(1);
+      loadCustomers(searchValue, 1);
+    }, searchValue ? 1000 : 0);
 
     return () => clearTimeout(timer);
-  }, [inputValue]);
+  }, [searchValue, loadCustomers]);
 
   return (
     <RootLayout withoutDataCheck>
@@ -121,7 +126,11 @@ const Customers = () => {
         />
       </Box>
 
-      <CustomerListContainer view={view} />
+      <CustomerListContainer
+        view={view}
+        page={page}
+        onPageChange={handlePageChange}
+      />
     </RootLayout>
   );
 };
