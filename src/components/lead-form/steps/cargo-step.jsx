@@ -348,6 +348,7 @@ const CargoStepFieldsContent = ({
         control={control}
         render={({ field }) => (
           <FormControlLabel
+            disabled={isInternational}
             control={
               <Switch
                 checked={field.value}
