@@ -294,19 +294,19 @@ const menuItems = [
       },
     ],
   },
-  {
-    id: 6,
-    label: null,
-    sub_items: [
-      {
-        id: 1,
-        path: "/settings",
-        lable: "menu.settings",
-        icon: <SettingsOutlinedIcon sx={{ fontSize: "1.1rem" }} />,
-        tooltip_text: "menu.settings",
-      },
-    ],
-  },
+  // {
+  //   id: 6,
+  //   label: null,
+  //   sub_items: [
+  //     {
+  //       id: 1,
+  //       path: "/settings",
+  //       lable: "menu.settings",
+  //       icon: <SettingsOutlinedIcon sx={{ fontSize: "1.1rem" }} />,
+  //       tooltip_text: "menu.settings",
+  //     },
+  //   ],
+  // },
 ];
 
 const SideBar = ({ openMenu, setOpenMenu }) => {

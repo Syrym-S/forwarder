@@ -5,7 +5,6 @@ import AddDriverForm from "../../features/drivers/add-drivers-form";
 import DriverListContainer from "../../components/drivers/driver-list-container";
 import SavedDataModal from "../../components/drivers/saved-data-modal";
 import { useEffect, useState } from "react";
-import { useDriverStore } from "../../app/store/drivers/driver-store";
 import { Box, Typography } from "@mui/material";
 import FormInput from "../../shared/ui/input/form-input";
 import { VIEWS } from "../../shared/const/leads";
@@ -14,15 +13,9 @@ const Drivers = () => {
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   const [view, setView] = useState(VIEWS.table);
-  //Позже венру если нужно будет , показывает по какому слово пошел запрос поиска
-  const [__, setSearchRequest] = useState("");
   const [inputValue, setInputValue] = useState("");
+  const [query, setQuery] = useState("");
   const [savedData, setSavedData] = useState(null);
-
-  const getDrivers = useDriverStore((state) => state.getDrivers);
-  const searchDriver = useDriverStore((state) => state.searchDriver);
-  // const inviteLink = useDriverStore((state) => state.inviteLink);
-  // const clearInviteLink = useDriverStore((state) => state.clearInviteLink);
 
   const isCardsView = view === VIEWS.cards;
 
@@ -35,22 +28,8 @@ const Drivers = () => {
   };
 
   useEffect(() => {
-    getDrivers();
-  }, []);
-
-  useEffect(() => {
-    const value = inputValue?.trim();
-
     const timer = setTimeout(() => {
-      if (!value) {
-        setSearchRequest("");
-        getDrivers();
-
-        return;
-      }
-
-      searchDriver({ q: value });
-      setSearchRequest(value);
+      setQuery(inputValue.trim());
     }, 1000);
 
     return () => clearTimeout(timer);
@@ -65,9 +44,13 @@ const Drivers = () => {
             fontSize: "1.5rem",
             сolor: "font_color.heading",
           }}
-        >{t("ui.drivers")}</Typography>
+        >
+          {t("ui.drivers")}
+        </Typography>
 
-        <Typography color="text.secondary" fontSize={14}>{t("ui.driver_list")}</Typography>
+        <Typography color="text.secondary" fontSize={14}>
+          {t("ui.driver_list")}
+        </Typography>
       </Box>
 
       <Box
@@ -94,7 +77,13 @@ const Drivers = () => {
           setView={setView}
           handleOpenForm={handleOpenForm}
           buttonText={t("ui.invite_driver")}
-          sx={{ width: { xs: "100%", sm: "auto" }, flex: { sm: 1 }, minWidth: 0, mx: 0, gap: 2 }}
+          sx={{
+            width: { xs: "100%", sm: "auto" },
+            flex: { sm: 1 },
+            minWidth: 0,
+            mx: 0,
+            gap: 2,
+          }}
         />
 
         <FormInput
@@ -115,7 +104,7 @@ const Drivers = () => {
         />
       </Box>
 
-      <DriverListContainer view={view} />
+      <DriverListContainer key={query} view={view} query={query} />
 
       {open && (
         <AddDriverForm

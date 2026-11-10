@@ -13,6 +13,7 @@ const useDriversColumns = (
   regeneratingDriverId,
 ) => {
   const { t } = useTranslation();
+
   const columns = [
     {
       field: "id",
@@ -33,6 +34,13 @@ const useDriversColumns = (
       field: "fio",
       headerName: t("ui.full_name"),
       width: 200,
+    },
+    {
+      field: "is_ip",
+      headerName: t("ui.person_type"),
+      width: 200,
+      valueGetter: (value) =>
+        t(value === true ? "ui.individual_entrepreneur_2" : "ui.individual_person"),
     },
     {
       field: "in_black_list",
@@ -63,13 +71,17 @@ const useDriversColumns = (
       field: "company_name",
       headerName: t("ui.company"),
       width: 200,
-      renderCell: ({ row }) => <>{row?.company_name || t("ui.not_specified")}</>,
+      renderCell: ({ row }) => (
+        <>{row?.company_name || t("ui.not_specified")}</>
+      ),
     },
     {
       field: "legal_address",
       headerName: t("ui.address"),
       width: 200,
-      renderCell: ({ row }) => <>{row?.legal_address || t("ui.not_specified")}</>,
+      renderCell: ({ row }) => (
+        <>{row?.legal_address || t("ui.not_specified")}</>
+      ),
     },
     {
       field: "invite_link",

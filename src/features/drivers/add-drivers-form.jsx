@@ -12,6 +12,10 @@ import {
   DialogContent,
   DialogTitle,
   FormControlLabel,
+  FormControl,
+  FormLabel,
+  Radio,
+  RadioGroup,
   Grid,
   Stack,
   TextField,
@@ -34,6 +38,7 @@ import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 
 const defaultValues = {
+  is_ip: true,
   fio: "",
   iin: "",
   phone: "",
@@ -60,7 +65,9 @@ const AddDriverForm = ({ open, onClose, setSavedData }) => {
   const error = useDriverStore((state) => state.error);
 
   const hasToAddRegistrationDocuments =
-    window.APP_DATA.features.registration_documents;
+    window.APP_DATA?.features?.registration_documents;
+  const canRegisterIndividual =
+    window.APP_DATA?.features?.driver_individual_registration === true;
 
   const today = new Date();
   const maxIssueDate = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, "0")}-${String(today.getDate()).padStart(2, "0")}`;
@@ -83,10 +90,12 @@ const AddDriverForm = ({ open, onClose, setSavedData }) => {
 
   const formValues = useWatch({ control });
   const isForeigner = formValues.is_foreigner;
+  const isIp = !canRegisterIndividual || formValues.is_ip !== false;
 
   const submitDriverCreate = async (data) => {
     const preparedData = prepareDriverData({
       ...data,
+      is_ip: !canRegisterIndividual || data.is_ip !== false,
       registration_document_name: t("ui.state_registration_certificate"),
       employer_document_name: t("ui.appointment_order"),
     });
@@ -97,14 +106,14 @@ const AddDriverForm = ({ open, onClose, setSavedData }) => {
       formData.append(key, value);
     });
 
-    if (registrationDocumentsToUpload) {
+    if (preparedData.is_ip && registrationDocumentsToUpload?.[0]) {
       formData.append(
         "registration_document",
         registrationDocumentsToUpload[0],
       );
     }
 
-    if (employerDocumentToUpload) {
+    if (preparedData.is_ip && employerDocumentToUpload?.[0]) {
       formData.append("employer_document", employerDocumentToUpload[0]);
     }
 
@@ -175,8 +184,12 @@ const AddDriverForm = ({ open, onClose, setSavedData }) => {
             id="driver-form-title"
             component="h2"
             sx={{ fontSize: 20, fontWeight: 600, color: "font_color.heading" }}
-          >{t("ui.adding_driver")}</Typography>
-          <Typography sx={{ mt: 0.5, fontSize: 13, color: "text.secondary" }}>{t("ui.fill_driver_details")}</Typography>
+          >
+            {t("ui.adding_driver")}
+          </Typography>
+          <Typography sx={{ mt: 0.5, fontSize: 13, color: "text.secondary" }}>
+            {t("ui.fill_driver_details")}
+          </Typography>
         </Box>
         <TooltipIconButton
           title={t("ui.close_form")}
@@ -217,6 +230,42 @@ const AddDriverForm = ({ open, onClose, setSavedData }) => {
             </Alert>
           )}
           <Grid container spacing={2}>
+            {canRegisterIndividual && (
+              <Grid size={12}>
+                <FormControl component="fieldset" disabled={isSubmitting}>
+                  <FormLabel id="driver-registration-type-label">
+                    {t("ui.driver_registration_type")}
+                  </FormLabel>
+                  <Controller
+                    name="is_ip"
+                    control={control}
+                    render={({ field }) => (
+                      <RadioGroup
+                        row
+                        aria-labelledby="driver-registration-type-label"
+                        name={field.name}
+                        value={field.value ? "entrepreneur" : "individual"}
+                        onChange={(_, value) =>
+                          field.onChange(value === "entrepreneur")
+                        }
+                        onBlur={field.onBlur}
+                      >
+                        <FormControlLabel
+                          value="entrepreneur"
+                          control={<Radio inputRef={field.ref} />}
+                          label={t("ui.individual_entrepreneur_2")}
+                        />
+                        <FormControlLabel
+                          value="individual"
+                          control={<Radio />}
+                          label={t("ui.individual_person")}
+                        />
+                      </RadioGroup>
+                    )}
+                  />
+                </FormControl>
+              </Grid>
+            )}
             <Grid
               size={12}
               sx={{
@@ -233,10 +282,14 @@ const AddDriverForm = ({ open, onClose, setSavedData }) => {
                   fontWeight: 600,
                   color: "font_color.heading",
                 }}
-              >{t("ui.personal_details")}</Typography>
+              >
+                {t("ui.personal_details")}
+              </Typography>
               <Typography
                 sx={{ mt: 0.5, fontSize: 12, color: "text.secondary" }}
-              >{t("ui.driver_contact_information")}</Typography>
+              >
+                {t("ui.driver_contact_information")}
+              </Typography>
             </Grid>
 
             <Grid size={{ xs: 12, sm: 6 }}>
@@ -244,7 +297,12 @@ const AddDriverForm = ({ open, onClose, setSavedData }) => {
                 name="fio"
                 control={control}
                 render={({ field }) => (
-                  <TextField {...field} label={t("ui.full_name")} fullWidth size="small" />
+                  <TextField
+                    {...field}
+                    label={t("ui.full_name")}
+                    fullWidth
+                    size="small"
+                  />
                 )}
               />
             </Grid>
@@ -255,7 +313,12 @@ const AddDriverForm = ({ open, onClose, setSavedData }) => {
                   name="iin"
                   control={control}
                   render={({ field }) => (
-                    <TextField {...field} label={t("ui.iin")} fullWidth size="small" />
+                    <TextField
+                      {...field}
+                      label={t("ui.iin")}
+                      fullWidth
+                      size="small"
+                    />
                   )}
                 />
               </Grid>
@@ -307,79 +370,96 @@ const AddDriverForm = ({ open, onClose, setSavedData }) => {
                   fontWeight: 600,
                   color: "font_color.heading",
                 }}
-              >{t("ui.entrepreneur_and_bank_details")}</Typography>
-              <Typography
-                sx={{ mt: 0.5, fontSize: 12, color: "text.secondary" }}
-              >{t("ui.entrepreneur_registration_required")}</Typography>
+              >
+                {t(
+                  isIp ? "ui.entrepreneur_and_bank_details" : "ui.bank_details",
+                )}
+              </Typography>
+              {!canRegisterIndividual && (
+                <Typography
+                  sx={{ mt: 0.5, fontSize: 12, color: "text.secondary" }}
+                >
+                  {t("ui.entrepreneur_registration_required")}
+                </Typography>
+              )}
             </Grid>
 
-            <Grid size={{ xs: 12, sm: 6 }}>
-              <Controller
-                name="company_name"
-                control={control}
-                render={({ field }) => (
-                  <TextField
-                    {...field}
-                    label={t("ui.entrepreneur_name")}
-                    slotProps={{ inputLabel: { required: true } }}
-                    fullWidth
-                    size="small"
+            {isIp && (
+              <>
+                <Grid size={{ xs: 12, sm: 6 }}>
+                  <Controller
+                    name="company_name"
+                    control={control}
+                    render={({ field }) => (
+                      <TextField
+                        {...field}
+                        label={t("ui.entrepreneur_name")}
+                        slotProps={{ inputLabel: { required: true } }}
+                        fullWidth
+                        size="small"
+                      />
+                    )}
                   />
-                )}
-              />
-            </Grid>
+                </Grid>
 
-            <Grid size={{ xs: 12, sm: 6 }}>
-              <Controller
-                name="director_fio"
-                control={control}
-                render={({ field }) => (
-                  <TextField
-                    {...field}
-                    label={t("ui.director_fio")}
-                    fullWidth
-                    size="small"
+                <Grid size={{ xs: 12, sm: 6 }}>
+                  <Controller
+                    name="director_fio"
+                    control={control}
+                    render={({ field }) => (
+                      <TextField
+                        {...field}
+                        label={t("ui.director_fio")}
+                        fullWidth
+                        size="small"
+                      />
+                    )}
                   />
-                )}
-              />
-            </Grid>
+                </Grid>
 
-            <Grid size={{ xs: 12, sm: 6 }}>
-              <Controller
-                name="company_bin"
-                control={control}
-                render={({ field }) => (
-                  <TextField
-                    {...field}
-                    label={t("ui.company_bin")}
-                    fullWidth
-                    size="small"
+                <Grid size={{ xs: 12, sm: 6 }}>
+                  <Controller
+                    name="company_bin"
+                    control={control}
+                    render={({ field }) => (
+                      <TextField
+                        {...field}
+                        label={t("ui.company_bin")}
+                        fullWidth
+                        size="small"
+                      />
+                    )}
                   />
-                )}
-              />
-            </Grid>
+                </Grid>
 
-            <Grid size={{ xs: 12, sm: 6 }}>
-              <Controller
-                name="legal_address"
-                control={control}
-                render={({ field }) => (
-                  <TextField
-                    {...field}
-                    label={t("ui.registered_address")}
-                    fullWidth
-                    size="small"
+                <Grid size={{ xs: 12, sm: 6 }}>
+                  <Controller
+                    name="legal_address"
+                    control={control}
+                    render={({ field }) => (
+                      <TextField
+                        {...field}
+                        label={t("ui.registered_address")}
+                        fullWidth
+                        size="small"
+                      />
+                    )}
                   />
-                )}
-              />
-            </Grid>
+                </Grid>
+              </>
+            )}
 
             <Grid size={{ xs: 12, sm: 6 }}>
               <Controller
                 name="bik"
                 control={control}
                 render={({ field }) => (
-                  <TextField {...field} label={t("ui.bic")} fullWidth size="small" />
+                  <TextField
+                    {...field}
+                    label={t("ui.bic")}
+                    fullWidth
+                    size="small"
+                  />
                 )}
               />
             </Grid>
@@ -389,7 +469,12 @@ const AddDriverForm = ({ open, onClose, setSavedData }) => {
                 name="iik"
                 control={control}
                 render={({ field }) => (
-                  <TextField {...field} label={t("ui.iban")} fullWidth size="small" />
+                  <TextField
+                    {...field}
+                    label={t("ui.iban")}
+                    fullWidth
+                    size="small"
+                  />
                 )}
               />
             </Grid>
@@ -410,10 +495,14 @@ const AddDriverForm = ({ open, onClose, setSavedData }) => {
                   fontWeight: 600,
                   color: "font_color.heading",
                 }}
-              >{t("ui.identity_document")}</Typography>
+              >
+                {t("ui.identity_document")}
+              </Typography>
               <Typography
                 sx={{ mt: 0.5, fontSize: 12, color: "text.secondary" }}
-              >{t("ui.identity_document_details_hint")}</Typography>
+              >
+                {t("ui.identity_document_details_hint")}
+              </Typography>
             </Grid>
 
             <Grid size={12}>
@@ -517,11 +606,16 @@ const AddDriverForm = ({ open, onClose, setSavedData }) => {
                         slotProps={{ inputLabel: { required: true } }}
                         error={Boolean(fieldState.error)}
                         helperText={
-                          fieldState.error?.message || t("ui.select_issuing_authority")
+                          fieldState.error?.message ||
+                          t("ui.select_issuing_authority")
                         }
                       >
-                        <MenuItem value="МЮ РК">{t("ui.kazakhstan_ministry_of_justice")}</MenuItem>
-                        <MenuItem value="МВД РК">{t("ui.kazakhstan_ministry_of_internal_affairs")}</MenuItem>
+                        <MenuItem value="МЮ РК">
+                          {t("ui.kazakhstan_ministry_of_justice")}
+                        </MenuItem>
+                        <MenuItem value="МВД РК">
+                          {t("ui.kazakhstan_ministry_of_internal_affairs")}
+                        </MenuItem>
                       </TextField>
                     )}
                   />
@@ -545,10 +639,14 @@ const AddDriverForm = ({ open, onClose, setSavedData }) => {
                   fontWeight: 600,
                   color: "font_color.heading",
                 }}
-              >{t("ui.account_access")}</Typography>
+              >
+                {t("ui.account_access")}
+              </Typography>
               <Typography
                 sx={{ mt: 0.5, fontSize: 12, color: "text.secondary" }}
-              >{t("ui.password_requirements_hint")}</Typography>
+              >
+                {t("ui.password_requirements_hint")}
+              </Typography>
             </Grid>
 
             <Grid
@@ -609,8 +707,16 @@ const AddDriverForm = ({ open, onClose, setSavedData }) => {
                           endAdornment: (
                             <InputAdornment position="end">
                               <TooltipIconButton
-                                title={showPassword ? t("ui.hide_password") : t("ui.show_password")}
-                                aria-label={showPassword ? t("ui.hide_password") : t("ui.show_password")}
+                                title={
+                                  showPassword
+                                    ? t("ui.hide_password")
+                                    : t("ui.show_password")
+                                }
+                                aria-label={
+                                  showPassword
+                                    ? t("ui.hide_password")
+                                    : t("ui.show_password")
+                                }
                                 onClick={() => setShowPassword((prev) => !prev)}
                                 edge="end"
                               >
@@ -636,7 +742,8 @@ const AddDriverForm = ({ open, onClose, setSavedData }) => {
                   rules={{
                     required: t("ui.confirm_password_prompt"),
                     validate: (value) =>
-                      value === formValues.password || t("ui.passwords_do_not_match"),
+                      value === formValues.password ||
+                      t("ui.passwords_do_not_match"),
                   }}
                   render={({ field, fieldState: { error } }) => (
                     <TextField
@@ -652,8 +759,16 @@ const AddDriverForm = ({ open, onClose, setSavedData }) => {
                           endAdornment: (
                             <InputAdornment position="end">
                               <TooltipIconButton
-                                title={showConfirmPassword ? t("ui.hide_password_confirmation") : t("ui.show_password_confirmation")}
-                                aria-label={showConfirmPassword ? t("ui.hide_password_confirmation") : t("ui.show_password_confirmation")}
+                                title={
+                                  showConfirmPassword
+                                    ? t("ui.hide_password_confirmation")
+                                    : t("ui.show_password_confirmation")
+                                }
+                                aria-label={
+                                  showConfirmPassword
+                                    ? t("ui.hide_password_confirmation")
+                                    : t("ui.show_password_confirmation")
+                                }
                                 onClick={() =>
                                   setShowConfirmPassword((prev) => !prev)
                                 }
@@ -675,7 +790,7 @@ const AddDriverForm = ({ open, onClose, setSavedData }) => {
               </Grid>
             </Grid>
 
-            {hasToAddRegistrationDocuments && (
+            {hasToAddRegistrationDocuments && isIp && (
               <>
                 <Grid
                   size={12}
@@ -693,10 +808,14 @@ const AddDriverForm = ({ open, onClose, setSavedData }) => {
                       fontWeight: 600,
                       color: "font_color.heading",
                     }}
-                  >{t("ui.documents")}</Typography>
+                  >
+                    {t("ui.documents")}
+                  </Typography>
                   <Typography
                     sx={{ mt: 0.5, fontSize: 12, color: "text.secondary" }}
-                  >{t("ui.required_document_upload")}</Typography>
+                  >
+                    {t("ui.required_document_upload")}
+                  </Typography>
                 </Grid>
                 <Box
                   sx={{
@@ -739,7 +858,9 @@ const AddDriverForm = ({ open, onClose, setSavedData }) => {
                             letterSpacing: "0.00938em",
                             fontWeight: 500,
                           }}
-                        >{t("ui.legal_entity_registration_document_required")}</Typography>
+                        >
+                          {t("ui.legal_entity_registration_document_required")}
+                        </Typography>
 
                         <Button
                           component="label"
@@ -881,7 +1002,9 @@ const AddDriverForm = ({ open, onClose, setSavedData }) => {
                             letterSpacing: "0.00938em",
                             fontWeight: 500,
                           }}
-                        >{t("ui.employee_employment_document_required")}</Typography>
+                        >
+                          {t("ui.employee_employment_document_required")}
+                        </Typography>
 
                         <Button
                           component="label"

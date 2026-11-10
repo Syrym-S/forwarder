@@ -4,12 +4,12 @@ import DriverCard from "./driver-card";
 import PageLoader from "../../shared/ui/loaders/page-loader";
 import DriverDetailsModal from "./driver-details-modal";
 import { Alert, Box, Pagination } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useDriverStore } from "../../app/store/drivers/driver-store";
 import { VIEWS } from "../../shared/const/leads";
 import { useSearchParams } from "react-router-dom";
 
-const DriverListContainer = ({ view }) => {
+const DriverListContainer = ({ view, query = "" }) => {
   const { t } = useTranslation();
   const [_, setSearchParams] = useSearchParams();
   const [selectedDriver, setSelectedDriver] = useState(null);
@@ -24,11 +24,16 @@ const DriverListContainer = ({ view }) => {
     (state) => state.clearDriverDetails,
   );
   const getDrivers = useDriverStore((state) => state.getDrivers);
+  const searchDriver = useDriverStore((state) => state.searchDriver);
   const banDriver = useDriverStore((state) => state.banDriver);
 
   const isCardsView = view === VIEWS.cards;
   const isEmpty = drivers?.length === 0;
   const PAGE_COUNT = Math.ceil(count / perPage);
+  const loadDrivers = useCallback(
+    () => (query ? searchDriver({ q: query, page }) : getDrivers({ page })),
+    [query, page, getDrivers, searchDriver],
+  );
 
   const handleClear = () => {
     setSelectedDriver(null);
@@ -42,7 +47,7 @@ const DriverListContainer = ({ view }) => {
 
   const handleBanDriver = async (id, comment) => {
     await banDriver({ comment }, id);
-    await getDrivers({ page });
+    await loadDrivers();
   };
 
   useEffect(() => {
@@ -56,10 +61,8 @@ const DriverListContainer = ({ view }) => {
   }, [selectedDriver]);
 
   useEffect(() => {
-    getDrivers({
-      page: page,
-    });
-  }, [page]);
+    loadDrivers();
+  }, [loadDrivers]);
 
   if (isLoading) return <PageLoader />;
 
@@ -95,7 +98,9 @@ const DriverListContainer = ({ view }) => {
                 },
                 my: 1,
               }}
-            >{t("ui.customer_list_empty")}</Alert>
+            >
+              {t("ui.customer_list_empty")}
+            </Alert>
           ) : (
             drivers.map((driver) => (
               <DriverCard

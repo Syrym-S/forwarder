@@ -148,13 +148,17 @@ const Header = ({ openMenu, setOpenMenu }) => {
 
         <ChatsContainer />
 
-        <ActionTooltip title={isProfileMenuOpen ? "" : t("ui.open_profile_menu")}>
+        <ActionTooltip
+          title={isProfileMenuOpen ? "" : t("ui.open_profile_menu")}
+        >
           <Button
             id="header-profile-button"
             variant="outlined"
             onClick={handleOpenProfileMenu}
             aria-label={t("ui.open_profile_menu")}
-            aria-controls={isProfileMenuOpen ? "header-profile-menu" : undefined}
+            aria-controls={
+              isProfileMenuOpen ? "header-profile-menu" : undefined
+            }
             aria-haspopup="menu"
             aria-expanded={isProfileMenuOpen}
             sx={{
@@ -224,7 +228,7 @@ const Header = ({ openMenu, setOpenMenu }) => {
           slotProps={{
             paper: {
               sx: {
-                minWidth: 124,
+                width: 190,
                 borderRadius: "16px",
                 border: "1px solid #D8E0ED",
                 bgcolor: "background.paper",
