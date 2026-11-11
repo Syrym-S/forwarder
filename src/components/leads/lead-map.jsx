@@ -17,8 +17,19 @@ import "./hide.css";
 import { driverIcon } from "../../shared/ui/driver-marker-icon";
 import DriverPositionPopup from "../../shared/ui/driver-position-popup";
 import { loadLeadTracking } from "../../shared/lib/lead-tracking";
+import { Tab, Tabs } from "@mui/material";
+import AltRouteIcon from "@mui/icons-material/AltRoute";
+import RouteIcon from "@mui/icons-material/Route";
+import TimelineIcon from "@mui/icons-material/Timeline";
+import ActionTooltip from "../../shared/ui/action-tooltip";
 
 window.Pusher = Pusher;
+
+const MapViewOptions = {
+  both: "both",
+  full_route: "full_route",
+  passed_way: "passed_way",
+};
 
 const createMarkerIcon = (label, subLabel) => {
   return L.divIcon({
@@ -75,8 +86,15 @@ const FitLeadMapBounds = ({ points }) => {
   return null;
 };
 
-export default function LeadMap({ from, waypoints, to, id, leadData }) {
+export default function LeadMap({
+  from,
+  waypoints,
+  to,
+  id,
+  leadData,
+}) {
   const leadId = id ?? leadData?.id;
+  const [activeMapTab, setActiveMapTab] = useState(MapViewOptions.both);
   const trackingToken = leadData?.tracking?.token;
   const trackingUrl = leadData?.tracking?.url;
   const start =
@@ -105,6 +123,16 @@ export default function LeadMap({ from, waypoints, to, id, leadData }) {
     routeData?.coordinates === coordinates && routeData?.leadId === leadId
       ? routeData.points
       : [];
+  const showFullRoute =
+    activeMapTab === MapViewOptions.both ||
+    activeMapTab === MapViewOptions.full_route;
+  const showPassedRoute =
+    activeMapTab === MapViewOptions.both ||
+    activeMapTab === MapViewOptions.passed_way;
+
+  const handleRouteViewChange = (_, value) => {
+    setActiveMapTab(value);
+  };
 
   useEffect(() => {
     if (!leadId) return;
@@ -301,43 +329,91 @@ export default function LeadMap({ from, waypoints, to, id, leadData }) {
     <MapContainer
       center={routePoints[0] || [43.241141, 76.871399]}
       zoom={13}
-      style={{ height: "300px", width: "100%", zIndex: 0 }}
+      style={{ height: "400px", width: "100%", zIndex: 0 }}
     >
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
         url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png?key=cb1_33bl_1_e67a46f1e67e6cbad8143c4e"
       />
+
+      <Tabs
+        value={activeMapTab}
+        onChange={handleRouteViewChange}
+        sx={{
+          position: "absolute",
+          top: 12,
+          right: 12,
+          zIndex: 1000,
+          minHeight: 36,
+          bgcolor: "background.paper",
+          borderRadius: 10,
+          boxShadow: 2,
+          "& .MuiTab-root": { minWidth: 44, minHeight: 36, p: 1 },
+          "& .MuiTab-root.Mui-selected": {
+            color: "primary.main",
+            bgcolor: "background.main",
+          },
+        }}
+      >
+        <Tab
+          value={MapViewOptions.both}
+          aria-label="Весь и пройденный путь"
+          icon={
+            <ActionTooltip title="Весь и пройденный путь">
+              <AltRouteIcon />
+            </ActionTooltip>
+          }
+        />
+        <Tab
+          value={MapViewOptions.full_route}
+          aria-label="Весь путь"
+          icon={
+            <ActionTooltip title="Весь путь">
+              <TimelineIcon />
+            </ActionTooltip>
+          }
+        />
+        <Tab
+          value={MapViewOptions.passed_way}
+          aria-label="Пройденный путь"
+          icon={
+            <ActionTooltip title="Пройденный путь">
+              <RouteIcon />
+            </ActionTooltip>
+          }
+        />
+      </Tabs>
+
       <FitLeadMapBounds
         points={[
-          ...(route.length > 0 ? route : routePoints),
-          ...(selectedTracking?.coordinates || []),
+          ...(showFullRoute ? (route.length > 0 ? route : routePoints) : []),
+          ...(showPassedRoute ? selectedTracking?.coordinates || [] : []),
         ]}
       />
-
-      {start && <Marker position={start} icon={createMarkerIcon("A")} />}
-
-      {routeWaypoints.map(({ point, index }) => (
-        <Marker
-          key={index}
-          position={point}
-          icon={createMarkerIcon(`P#${index + 1}`)}
-        />
-      ))}
-
-      {end && <Marker position={end} icon={createMarkerIcon("B")} />}
-
-      {route.length >= 2 && (
+      {showFullRoute && start && (
+        <Marker position={start} icon={createMarkerIcon("A")} />
+      )}
+      {showFullRoute &&
+        routeWaypoints.map(({ point, index }) => (
+          <Marker
+            key={index}
+            position={point}
+            icon={createMarkerIcon(`P#${index + 1}`)}
+          />
+        ))}
+      {showFullRoute && end && (
+        <Marker position={end} icon={createMarkerIcon("B")} />
+      )}
+      {showFullRoute && route.length >= 2 && (
         <Polyline positions={route} color="blue" weight={4} />
       )}
-
-      {selectedTracking?.coordinates.length > 0 && (
+      {showPassedRoute && selectedTracking?.coordinates.length > 0 && (
         <Polyline
           positions={selectedTracking.coordinates}
           pathOptions={{ color: "#1976d2", weight: 5, dashArray: "10 10" }}
         />
       )}
-
-      {selectedTracking?.point && (
+      {showPassedRoute && selectedTracking?.point && (
         <Marker
           position={[
             selectedTracking.point.latitude,

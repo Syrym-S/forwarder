@@ -8,6 +8,7 @@ import LeadTransportationInfo from "./lead-transportation-info";
 import Section from "./lead-detail-section";
 import LocalShippingOutlinedIcon from "@mui/icons-material/LocalShippingOutlined";
 import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
+import RouteOutlinedIcon from "@mui/icons-material/RouteOutlined";
 import LeadCargoFilesContainer from "../lead-cargo-files-container";
 import LeadDriverInfo from "./lead-driver-info";
 import { useEffect, useRef, useState } from "react";
@@ -18,7 +19,6 @@ import { IN_PROGRESS_STATUSES, STATUS } from "../../../shared/const/tenders";
 import { useParams } from "react-router-dom";
 import { Alert, Box, Button, Snackbar } from "@mui/material";
 import RateDriverModal from "../../drivers/rate-driver-modal";
-import StraightOutlinedIcon from "@mui/icons-material/StraightOutlined";
 import { rateDriverApi } from "../../../app/store/drivers/api";
 import { useNotificationsStore } from "../../../app/store/notifications/noti-store";
 import { parserNotificationType } from "../../../shared/helpers/notifications/parse-notification-type";
@@ -301,6 +301,7 @@ const LeadItemMainContainer = ({
           onConfirm={handleRateDriver}
         />
       )}
+
       <Snackbar
         open={!!ratingNotice}
         autoHideDuration={4000}
@@ -310,7 +311,9 @@ const LeadItemMainContainer = ({
           {ratingNotice}
         </Alert>
       </Snackbar>
+
       {deliveryError && <Alert severity="error">{deliveryError}</Alert>}
+
       {!isDraftLead(leadData) && (
         <Box
           sx={{

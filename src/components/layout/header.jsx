@@ -35,6 +35,7 @@ const Header = ({ openMenu, setOpenMenu }) => {
   const getLanguages = useOptionsStore((state) => state.getLanguages);
 
   const [profileAnchorEl, setProfileAnchorEl] = useState(null);
+  const [profileMenuWidth, setProfileMenuWidth] = useState(null);
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
 
   const isProfileMenuOpen = Boolean(profileAnchorEl);
@@ -45,6 +46,7 @@ const Header = ({ openMenu, setOpenMenu }) => {
   };
 
   const handleOpenProfileMenu = (event) => {
+    setProfileMenuWidth(event.currentTarget.getBoundingClientRect().width);
     setProfileAnchorEl(event.currentTarget);
   };
 
@@ -71,6 +73,17 @@ const Header = ({ openMenu, setOpenMenu }) => {
     getProfileData();
     getLanguages();
   }, [getNotifications, getProfileData, getLanguages]);
+
+  useEffect(() => {
+    if (!profileAnchorEl) return;
+
+    const observer = new ResizeObserver(() => {
+      setProfileMenuWidth(profileAnchorEl.getBoundingClientRect().width);
+    });
+    observer.observe(profileAnchorEl);
+
+    return () => observer.disconnect();
+  }, [profileAnchorEl]);
 
   return (
     <AppBar
@@ -228,7 +241,8 @@ const Header = ({ openMenu, setOpenMenu }) => {
           slotProps={{
             paper: {
               sx: {
-                width: 190,
+                width: profileMenuWidth,
+                boxSizing: "border-box",
                 borderRadius: "16px",
                 border: "1px solid #D8E0ED",
                 bgcolor: "background.paper",
