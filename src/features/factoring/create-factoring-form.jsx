@@ -1,10 +1,10 @@
+import Dialog from "../../shared/ui/creation-dialog";
 import { useTranslation } from "react-i18next";
 import {
   Alert,
   Box,
   Button,
   CircularProgress,
-  Dialog,
   DialogContent,
   DialogTitle,
   Typography,

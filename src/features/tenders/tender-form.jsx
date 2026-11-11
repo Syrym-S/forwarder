@@ -1,10 +1,10 @@
+import Dialog from "../../shared/ui/creation-dialog";
 import appI18n from "../../i18n/index.js";
 import { useTranslation } from "react-i18next";
 import {
   Box,
   Button,
   CircularProgress,
-  Dialog,
   DialogContent,
   DialogTitle,
 } from "@mui/material";

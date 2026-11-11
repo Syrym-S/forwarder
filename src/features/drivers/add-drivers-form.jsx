@@ -1,3 +1,4 @@
+import Dialog from "../../shared/ui/creation-dialog";
 import { useTranslation } from "react-i18next";
 import TooltipIconButton from "../../shared/ui/tooltip-icon-button";
 import { Controller, useForm, useWatch } from "react-hook-form";
@@ -7,7 +8,6 @@ import {
   Box,
   Button,
   Checkbox,
-  Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
@@ -140,6 +140,7 @@ const AddDriverForm = ({ open, onClose, setSavedData }) => {
   return (
     <Dialog
       open={open}
+      onClose={isSubmitting ? undefined : onClose}
       maxWidth="md"
       fullWidth
       aria-labelledby="driver-form-title"

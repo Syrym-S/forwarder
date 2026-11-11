@@ -1,10 +1,12 @@
+import Dialog from "../../shared/ui/creation-dialog";
+import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
+import TooltipIconButton from "../../shared/ui/tooltip-icon-button";
 import { useTranslation } from "react-i18next";
 import {
   Autocomplete,
   Box,
   Button,
   CircularProgress,
-  Dialog,
   DialogContent,
   DialogTitle,
   TextField,
@@ -104,7 +106,15 @@ const FactorLineForm = ({ open, setOpenForm, setSuccessModal }) => {
       fullWidth
       maxWidth="sm"
     >
-      <DialogTitle>{t("ui.create_request")}</DialogTitle>
+      <DialogTitle sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+        {t("ui.create_request")}
+        <TooltipIconButton
+          title={t("ui.close_form")}
+          onClick={() => setOpenForm(false)}
+        >
+          <CloseRoundedIcon />
+        </TooltipIconButton>
+      </DialogTitle>
       <DialogContent>
         <Controller
           name="factor_id"

@@ -1,5 +1,11 @@
 import { useEffect, useState } from "react";
-import { MapContainer, TileLayer, Marker, Polyline, useMap } from "react-leaflet";
+import {
+  MapContainer,
+  TileLayer,
+  Marker,
+  Polyline,
+  useMap,
+} from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import Echo from "laravel-echo";
@@ -40,9 +46,21 @@ const createMarkerIcon = (label, subLabel) => {
 const getLocationPoint = (location) => {
   const lat = location?.lat ?? location?.latitude;
   const lon = location?.lon ?? location?.lng ?? location?.longitude;
-  if ([lat, lon].some((value) => value == null || (typeof value !== "number" && typeof value !== "string") || String(value).trim() === "")) return null;
+  if (
+    [lat, lon].some(
+      (value) =>
+        value == null ||
+        (typeof value !== "number" && typeof value !== "string") ||
+        String(value).trim() === "",
+    )
+  )
+    return null;
   const point = [Number(lat), Number(lon)];
-  return point.every(Number.isFinite) && Math.abs(point[0]) <= 90 && Math.abs(point[1]) <= 180 ? point : null;
+  return point.every(Number.isFinite) &&
+    Math.abs(point[0]) <= 90 &&
+    Math.abs(point[1]) <= 180
+    ? point
+    : null;
 };
 
 const FitLeadMapBounds = ({ points }) => {
@@ -50,7 +68,8 @@ const FitLeadMapBounds = ({ points }) => {
   const boundsKey = JSON.stringify(points);
   useEffect(() => {
     const locations = JSON.parse(boundsKey);
-    if (locations.length > 1) map.fitBounds(locations, { padding: [24, 24], maxZoom: 13 });
+    if (locations.length > 1)
+      map.fitBounds(locations, { padding: [24, 24], maxZoom: 13 });
     else if (locations.length === 1) map.setView(locations[0], 13);
   }, [map, boundsKey]);
   return null;
@@ -60,10 +79,14 @@ export default function LeadMap({ from, waypoints, to, id, leadData }) {
   const leadId = id ?? leadData?.id;
   const trackingToken = leadData?.tracking?.token;
   const trackingUrl = leadData?.tracking?.url;
-  const start = getLocationPoint(from) || getLocationPoint(leadData?.from_location)
-    || getLocationPoint({ lat: leadData?.from_lat, lon: leadData?.from_lon });
-  const end = getLocationPoint(to) || getLocationPoint(leadData?.to_location)
-    || getLocationPoint({ lat: leadData?.to_lat, lon: leadData?.to_lon });
+  const start =
+    getLocationPoint(from) ||
+    getLocationPoint(leadData?.from_location) ||
+    getLocationPoint({ lat: leadData?.from_lat, lon: leadData?.from_lon });
+  const end =
+    getLocationPoint(to) ||
+    getLocationPoint(leadData?.to_location) ||
+    getLocationPoint({ lat: leadData?.to_lat, lon: leadData?.to_lon });
   const routeWaypoints = (waypoints ?? leadData?.waypoints ?? [])
     .map((waypoint, index) => ({ point: getLocationPoint(waypoint), index }))
     .filter(({ point }) => point);
@@ -78,7 +101,8 @@ export default function LeadMap({ from, waypoints, to, id, leadData }) {
   const selectedTracking =
     tracking && String(tracking.leadId) === String(leadId) ? tracking : null;
   const [routeData, setRouteData] = useState(null);
-  const route = routeData?.coordinates === coordinates ? routeData.points : routePoints;
+  const route =
+    routeData?.coordinates === coordinates ? routeData.points : routePoints;
 
   useEffect(() => {
     if (routePoints.length < 2) return;
@@ -125,7 +149,8 @@ export default function LeadMap({ from, waypoints, to, id, leadData }) {
               },
               body: JSON.stringify({ lead_id: leadId, type: "read" }),
             });
-            if (!result.ok) throw new Error("Не удалось получить токен геотрекинга");
+            if (!result.ok)
+              throw new Error("Не удалось получить токен геотрекинга");
             return result.json();
           },
           requestTracking: async (access) => {
@@ -157,7 +182,12 @@ export default function LeadMap({ from, waypoints, to, id, leadData }) {
         const coordinates = encodedPolyline
           ? polyline.decode(encodedPolyline)
           : [];
-        if (coordinates.some(([latitude, longitude]) => !getLocationPoint({ latitude, longitude }))) {
+        if (
+          coordinates.some(
+            ([latitude, longitude]) =>
+              !getLocationPoint({ latitude, longitude }),
+          )
+        ) {
           throw new Error("Сервис вернул неверные координаты геотрекинга");
         }
         const lastPoint = coordinates.at(-1);
@@ -239,7 +269,10 @@ export default function LeadMap({ from, waypoints, to, id, leadData }) {
           .error((error) => {
             if (isActive) {
               setTracking(null);
-              console.error("Не удалось подписаться на геотрекинг", error?.message);
+              console.error(
+                "Не удалось подписаться на геотрекинг",
+                error?.message,
+              );
             }
           });
       } catch (error) {
@@ -270,7 +303,9 @@ export default function LeadMap({ from, waypoints, to, id, leadData }) {
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
         url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png?key=cb1_33bl_1_e67a46f1e67e6cbad8143c4e"
       />
-      <FitLeadMapBounds points={[...route, ...(selectedTracking?.coordinates || [])]} />
+      <FitLeadMapBounds
+        points={[...route, ...(selectedTracking?.coordinates || [])]}
+      />
 
       {start && <Marker position={start} icon={createMarkerIcon("A")} />}
 

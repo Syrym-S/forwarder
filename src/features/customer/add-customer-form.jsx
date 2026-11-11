@@ -1,9 +1,9 @@
+import Dialog from "../../shared/ui/creation-dialog";
 import appI18n from "../../i18n/index.js";
 import { useTranslation } from "react-i18next";
 import {
   Autocomplete,
   Box,
-  Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,

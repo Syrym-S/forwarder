@@ -1,3 +1,4 @@
+import Dialog from "../../shared/ui/creation-dialog";
 import appI18n from "../../i18n/index.js";
 import FormHeader from "../../components/lead-form/form-header";
 import DocumentUpload from "../../components/lead-form/steps/document-upload";
@@ -8,7 +9,7 @@ import TransportationParameters from "../../components/lead-form/steps/transport
 import DriverStep from "../../components/lead-form/steps/driver-step";
 import RouteStep from "../../components/lead-form/steps/route-step";
 import CustomerStep from "../../components/lead-form/steps/customer-step";
-import { Alert, Box, Dialog, DialogContent } from "@mui/material";
+import { Alert, Box, DialogContent } from "@mui/material";
 import { useState } from "react";
 import { FormNavButtons } from "../../components/lead-form/form-nav-buttons";
 import { useForm, useWatch } from "react-hook-form";
