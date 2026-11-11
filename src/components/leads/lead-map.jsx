@@ -12,7 +12,7 @@ import Echo from "laravel-echo";
 import Pusher from "pusher-js";
 import polyline from "@mapbox/polyline";
 import { api, isStaging } from "../../app/client";
-import { fetchCachedRoute } from "../../shared/helpers/route-cache";
+import { generateLeadRoute } from "../../shared/api/routing";
 import "./hide.css";
 import { driverIcon } from "../../shared/ui/driver-marker-icon";
 import DriverPositionPopup from "../../shared/ui/driver-position-popup";
@@ -102,15 +102,19 @@ export default function LeadMap({ from, waypoints, to, id, leadData }) {
     tracking && String(tracking.leadId) === String(leadId) ? tracking : null;
   const [routeData, setRouteData] = useState(null);
   const route =
-    routeData?.coordinates === coordinates ? routeData.points : routePoints;
+    routeData?.coordinates === coordinates && routeData?.leadId === leadId
+      ? routeData.points
+      : [];
 
   useEffect(() => {
-    if (routePoints.length < 2) return;
+    if (!leadId) return;
     let cancelled = false;
     const load = async () => {
       try {
-        const result = await fetchCachedRoute(coordinates);
-        if (!cancelled) setRouteData({ coordinates, points: result });
+        const result = await generateLeadRoute(leadId);
+        if (!cancelled) {
+          setRouteData({ leadId, coordinates, points: result.coordinates });
+        }
       } catch (error) {
         if (!cancelled) console.error("Ошибка загрузки маршрута:", error);
       }
@@ -120,7 +124,7 @@ export default function LeadMap({ from, waypoints, to, id, leadData }) {
     return () => {
       cancelled = true;
     };
-  }, [coordinates, routePoints.length]);
+  }, [coordinates, leadId]);
 
   useEffect(() => {
     if (!leadId && !(trackingToken && trackingUrl)) return;
@@ -304,7 +308,10 @@ export default function LeadMap({ from, waypoints, to, id, leadData }) {
         url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png?key=cb1_33bl_1_e67a46f1e67e6cbad8143c4e"
       />
       <FitLeadMapBounds
-        points={[...route, ...(selectedTracking?.coordinates || [])]}
+        points={[
+          ...(route.length > 0 ? route : routePoints),
+          ...(selectedTracking?.coordinates || []),
+        ]}
       />
 
       {start && <Marker position={start} icon={createMarkerIcon("A")} />}
@@ -319,7 +326,7 @@ export default function LeadMap({ from, waypoints, to, id, leadData }) {
 
       {end && <Marker position={end} icon={createMarkerIcon("B")} />}
 
-      {route.length > 0 && (
+      {route.length >= 2 && (
         <Polyline positions={route} color="blue" weight={4} />
       )}
 

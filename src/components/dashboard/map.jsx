@@ -16,7 +16,7 @@ import Echo from "laravel-echo";
 import Pusher from "pusher-js";
 import polyline from "@mapbox/polyline";
 import { api, isStaging } from "../../app/client";
-import { fetchCachedRouteDetails } from "../../shared/helpers/route-cache";
+import { generateLeadRoute } from "../../shared/api/routing";
 import "./marker.style.css";
 import { createDriverIcon } from "../../shared/ui/driver-marker-icon";
 import DriverPositionPopup from "../../shared/ui/driver-position-popup";
@@ -56,40 +56,26 @@ const getLocationLongitude = (location) => {
   return location?.lon ?? location?.lng ?? location?.longitude;
 };
 
-const isValidCoordinate = (value) => {
-  return Number.isFinite(Number(value));
-};
-
-const hasRouteLocations = (lead) => {
-  const fromLat = getLocationLatitude(lead?.from_location);
-  const fromLng = getLocationLongitude(lead?.from_location);
-  const toLat = getLocationLatitude(lead?.to_location);
-  const toLng = getLocationLongitude(lead?.to_location);
-
-  return (
-    isValidCoordinate(fromLat) &&
-    isValidCoordinate(fromLng) &&
-    isValidCoordinate(toLat) &&
-    isValidCoordinate(toLng)
-  );
-};
-
 const getLocationPoint = (location) => {
-  return [
-    Number(getLocationLatitude(location)),
-    Number(getLocationLongitude(location)),
-  ];
+  const lat = getLocationLatitude(location);
+  const lng = getLocationLongitude(location);
+  if ([lat, lng].some((value) => value == null || String(value).trim() === "")) {
+    return null;
+  }
+  const point = [Number(lat), Number(lng)];
+  return point.every(Number.isFinite) &&
+    Math.abs(point[0]) <= 90 && Math.abs(point[1]) <= 180
+    ? point
+    : null;
 };
 
 const getLocationAddress = (location) => {
   return location?.address || "";
 };
 
-const getRoute = async (points) => {
+const getRoute = async (leadId) => {
   try {
-    const coordinates = points.map(([lat, lon]) => `${lon},${lat}`).join(";");
-
-    return await fetchCachedRouteDetails(coordinates);
+    return await generateLeadRoute(leadId);
   } catch (error) {
     console.error("Failed to load route", error);
     return null;
@@ -229,16 +215,8 @@ const Map = ({
 
     const loadRoutes = async () => {
       const result = await Promise.all(
-        leads.filter(hasRouteLocations).map(async (lead) => {
-          const cross = (lead.waypoints || []).map((waypoint) =>
-            getLocationPoint(waypoint),
-          );
-
-          const route = await getRoute([
-            getLocationPoint(lead.from_location),
-            ...cross,
-            getLocationPoint(lead.to_location),
-          ]);
+        leads.filter((lead) => lead.id != null).map(async (lead) => {
+          const route = await getRoute(lead.id);
 
           if (!route) {
             return null;
@@ -513,10 +491,12 @@ const Map = ({
                 }}
               />
               {(route.lead.waypoints || []).map((waypoint, index) => {
+                const position = getLocationPoint(waypoint);
+                if (!position) return null;
                 return (
                   <Marker
                     key={index}
-                    position={getLocationPoint(waypoint)}
+                    position={position}
                     icon={createMarkerIcon(
                       `P#${index + 1}`,
                       `#${route.lead.num}`,
