@@ -507,7 +507,9 @@ const RouteStep = ({ control, form, setValue, isEdit = false }) => {
                     center={mapFocus?.center ?? map.center}
                     onFocus={() => handleAddressFocus(`cross.${index}`)}
                     onEdit={() => setRouteAddress(`cross.${index}`)}
-                    onSelect={(address) => handleAddressSelect(`cross.${index}`, address)}
+                    onSelect={(address) =>
+                      handleAddressSelect(`cross.${index}`, address)
+                    }
                   />
 
                   <FormControllerSelect

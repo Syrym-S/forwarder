@@ -92,7 +92,10 @@ const StatCard = ({
           " — " +
           dayjs(filter.to).format("DD.MM.YYYY")
         : t("dashboard.enter_valid_period")
-      : t(PERIOD_OPTIONS.find((option) => option.value === filter?.period)?.label || "");
+      : t(
+          PERIOD_OPTIONS.find((option) => option.value === filter?.period)
+            ?.label || "",
+        );
 
   return (
     <Box
@@ -230,7 +233,10 @@ const StatCard = ({
               {t("dashboard.period_selection")}
             </Typography>
             <CustomSelect
-              options={PERIOD_OPTIONS.map(option => ({ ...option, label: t(option.label) }))}
+              options={PERIOD_OPTIONS.map((option) => ({
+                ...option,
+                label: t(option.label),
+              }))}
               value={period}
               label={t("dashboard.period")}
               onChange={handlePeriodChange}
@@ -303,7 +309,11 @@ const StatCard = ({
       {canBeFiltered && filterKey === "leads" && (
         <PrimaryButton
           size="small"
-          text={isComparing ? t("dashboard.back_to_statistics") : t("dashboard.compare")}
+          text={
+            isComparing
+              ? t("dashboard.back_to_statistics")
+              : t("dashboard.compare")
+          }
           startIcon={<BarChartOutlined />}
           variant={isComparing ? "contained" : "outlined"}
           disableElevation
@@ -429,6 +439,7 @@ const StatCard = ({
 
 const DashboardStats = ({ data }) => {
   const { t } = useTranslation();
+  const showFactorings = window.APP_DATA?.features?.factoring !== false;
   const showTenders = window.APP_DATA?.features?.tender !== false;
   const [filters, setFilters] = useState(() => {
     const initial = {
@@ -445,6 +456,7 @@ const DashboardStats = ({ data }) => {
   useEffect(() => {
     const params = {};
     for (const [key, filter] of Object.entries(filters)) {
+      if (key === "factorings" && !showFactorings) continue;
       if (filter.period === "custom") {
         if (!filter.from || !filter.to || filter.from > filter.to) return;
         params[key + "_period_from"] = filter.from;
@@ -454,7 +466,7 @@ const DashboardStats = ({ data }) => {
       }
     }
     getStats(params).catch(() => {});
-  }, [filters, getStats]);
+  }, [filters, getStats, showFactorings]);
 
   if (!data) return null;
 
@@ -477,7 +489,7 @@ const DashboardStats = ({ data }) => {
       currencies: data.factorings_period?.currencies,
       valueKey: "sum",
     },
-  ];
+  ].filter((card) => card.filterKey !== "factorings" || showFactorings);
 
   // Не зависят от периода
   const activeCards = [
@@ -506,12 +518,20 @@ const DashboardStats = ({ data }) => {
       currencies: data.factorings_active?.currencies,
       valueKey: "sum",
     },
-  ].filter((card) => card.id !== "auctions" || showTenders);
+  ].filter(
+    (card) =>
+      (card.id !== "auctions" || showTenders) &&
+      (card.id !== "factorings" || showFactorings),
+  );
 
   return (
     <Box>
       <StatsHeader />
-      {error && <Typography color="error">{t("dashboard.loading_error")}: {error}</Typography>}
+      {error && (
+        <Typography color="error">
+          {t("dashboard.loading_error")}: {error}
+        </Typography>
+      )}
 
       {/* За выбранный период */}
       <Box sx={{ mt: 2.5 }}>
@@ -531,7 +551,7 @@ const DashboardStats = ({ data }) => {
             display: "grid",
             gridTemplateColumns: {
               xs: "1fr",
-              sm: "repeat(2, minmax(0, 1fr))",
+              sm: `repeat(${periodCards.length}, minmax(0, 1fr))`,
             },
             gap: 2,
           }}
@@ -571,7 +591,7 @@ const DashboardStats = ({ data }) => {
             display: "grid",
             gridTemplateColumns: {
               xs: "1fr",
-              sm: "repeat(2, minmax(0, 1fr))",
+              sm: `repeat(${Math.min(2, activeCards.length)}, minmax(0, 1fr))`,
               md: `repeat(${activeCards.length}, minmax(0, 1fr))`,
             },
             gap: 2,

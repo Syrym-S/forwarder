@@ -5,9 +5,24 @@ import { useTranslation } from "react-i18next";
 import FormInput from "../../shared/ui/input/form-input";
 import { searchRouteAddresses } from "./api/route-address-search.api";
 
-const emptySuggestions = { query: "", options: [], loading: false, error: false, searched: false };
+const emptySuggestions = {
+  query: "",
+  options: [],
+  loading: false,
+  error: false,
+  searched: false,
+};
 
-function AddressInput({ field, fieldState, label, disabled, center, onSelect, onEdit, onFocus }) {
+function AddressInput({
+  field,
+  fieldState,
+  label,
+  disabled,
+  center,
+  onSelect,
+  onEdit,
+  onFocus,
+}) {
   const { t, i18n } = useTranslation();
   const value = field.value || "";
   const [request, setRequest] = useState(null);
@@ -20,15 +35,29 @@ function AddressInput({ field, fieldState, label, disabled, center, onSelect, on
     if (!request || request.query !== value || disabled) return;
     const controller = new AbortController();
     const timer = setTimeout(() => {
-      searchRouteAddresses(request.query, { center: [lat, lon], language, signal: controller.signal })
+      searchRouteAddresses(request.query, {
+        center: [lat, lon],
+        language,
+        signal: controller.signal,
+      })
         .then((options) => {
           if (!controller.signal.aborted) {
-            setSuggestions({ query: request.query, options, loading: false, error: false, searched: true });
+            setSuggestions({
+              query: request.query,
+              options,
+              loading: false,
+              error: false,
+              searched: true,
+            });
           }
         })
         .catch(() => {
           if (!controller.signal.aborted) {
-            setSuggestions({ ...emptySuggestions, query: request.query, error: true });
+            setSuggestions({
+              ...emptySuggestions,
+              query: request.query,
+              error: true,
+            });
           }
         });
     }, 500);
@@ -39,11 +68,15 @@ function AddressInput({ field, fieldState, label, disabled, center, onSelect, on
   }, [request, value, lat, lon, language, disabled]);
 
   const current = suggestions.query === value ? suggestions : emptySuggestions;
-  const helperText = fieldState.error?.message || t(current.error
-    ? "addressAutocomplete.failed"
-    : current.searched && !current.options.length
-      ? "addressAutocomplete.empty"
-      : "addressAutocomplete.hint");
+  const helperText =
+    fieldState.error?.message ||
+    t(
+      current.error
+        ? "addressAutocomplete.failed"
+        : current.searched && !current.options.length
+          ? "addressAutocomplete.empty"
+          : "addressAutocomplete.hint",
+    );
 
   return (
     <Autocomplete
@@ -56,14 +89,19 @@ function AddressInput({ field, fieldState, label, disabled, center, onSelect, on
       inputValue={value}
       options={current.options}
       filterOptions={(options) => options}
-      getOptionLabel={(option) => typeof option === "string" ? option : option.label}
-      getOptionKey={(option) => typeof option === "string" ? option : option.id}
+      getOptionLabel={(option) =>
+        typeof option === "string" ? option : option.label
+      }
+      getOptionKey={(option) =>
+        typeof option === "string" ? option : option.id
+      }
       loading={current.loading}
       loadingText={t("addressAutocomplete.loading")}
       clearText={t("addressAutocomplete.clear")}
       onFocus={onFocus}
       onKeyDown={(event) => {
-        if (event.key === "Enter" && !event.nativeEvent.isComposing) event.preventDefault();
+        if (event.key === "Enter" && !event.nativeEvent.isComposing)
+          event.preventDefault();
       }}
       onInputChange={(_, text, reason) => {
         if (reason !== "input" && reason !== "clear") return;
@@ -71,7 +109,11 @@ function AddressInput({ field, fieldState, label, disabled, center, onSelect, on
         onEdit();
         const shouldSearch = text.trim().length >= 3;
         setRequest(shouldSearch ? { query: text } : null);
-        setSuggestions({ ...emptySuggestions, query: text, loading: shouldSearch });
+        setSuggestions({
+          ...emptySuggestions,
+          query: text,
+          loading: shouldSearch,
+        });
       }}
       onChange={(_, address) => {
         if (!address || typeof address === "string") return;
@@ -95,7 +137,12 @@ function AddressInput({ field, fieldState, label, disabled, center, onSelect, on
             ...params.slotProps,
             input: {
               ...params.slotProps.input,
-              endAdornment: <>{current.loading && <CircularProgress size={16} />}{params.slotProps.input.endAdornment}</>,
+              endAdornment: (
+                <>
+                  {current.loading && <CircularProgress size={16} />}
+                  {params.slotProps.input.endAdornment}
+                </>
+              ),
             },
             htmlInput: { ...params.slotProps.htmlInput, autoComplete: "off" },
           }}
@@ -112,7 +159,9 @@ export default function RouteAddressInput({ name, control, rules, ...props }) {
       name={name}
       control={control}
       rules={rules}
-      render={({ field, fieldState }) => <AddressInput field={field} fieldState={fieldState} {...props} />}
+      render={({ field, fieldState }) => (
+        <AddressInput field={field} fieldState={fieldState} {...props} />
+      )}
     />
   );
 }

@@ -24,7 +24,8 @@ const useLeadsColumns = () => {
     },
     {
       field: "status",
-      valueGetter: (_, row) => (isDraftLead(row) ? t("active_leads.draft") : row.status),
+      valueGetter: (_, row) =>
+        isDraftLead(row) ? t("active_leads.draft") : row.status,
       headerName: t("active_leads.status"),
       width: 200,
       renderCell: ({ row }) => (
@@ -59,21 +60,31 @@ const useLeadsColumns = () => {
       },
     },
     {
-      field: "to_location",
-      headerName: t("active_leads.destination"),
-      width: 200,
-      valueGetter: (_, row) => row?.to_location?.address || row?.to || "",
-      renderCell: ({ row }) => (
-        <Box>{row?.to_location?.address || row?.to || t("active_leads.not_specified")}</Box>
-      ),
-    },
-    {
       field: "from_location",
       headerName: t("active_leads.origin"),
       width: 200,
       valueGetter: (_, row) => row?.from_location?.address || row?.from || "",
       renderCell: ({ row }) => (
-        <Box>{row?.from_location?.address || row?.from || t("active_leads.not_specified")}</Box>
+        <Box>
+          {row?.from_location?.address ||
+            row?.from ||
+            row?.from_location?.city ||
+            t("active_leads.not_specified")}
+        </Box>
+      ),
+    },
+    {
+      field: "to_location",
+      headerName: t("active_leads.destination"),
+      width: 200,
+      valueGetter: (_, row) => row?.to_location?.address || row?.to || "",
+      renderCell: ({ row }) => (
+        <Box>
+          {row?.to_location?.address ||
+            row?.to ||
+            row?.to_location?.city ||
+            t("active_leads.not_specified")}
+        </Box>
       ),
     },
   ];

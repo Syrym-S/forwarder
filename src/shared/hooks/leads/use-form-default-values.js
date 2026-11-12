@@ -13,7 +13,7 @@ export const useFormDefaultValues = (lead = null, files = []) => {
     currency: lead?.currency || null,
     vat: lead?.vat,
     to_location: {
-      address: lead?.to_location?.address || null,
+      address: lead?.to_location?.address || lead?.to_location?.city || null,
       city: lead?.to_location?.city || null,
       country: lead?.to_location?.country || null,
       lat: lead?.to_location?.lat || null,
@@ -22,7 +22,7 @@ export const useFormDefaultValues = (lead = null, files = []) => {
     },
     waypoints:
       lead?.waypoints?.map((waypoint) => ({
-        address: waypoint.address || null,
+        address: waypoint.address || waypoint.city || null,
         city: waypoint.city || "",
         type: waypoint.type || "check_passes",
         country: waypoint.country || "",
@@ -31,7 +31,7 @@ export const useFormDefaultValues = (lead = null, files = []) => {
         region: waypoint.region || null,
       })) || [],
     from_location: {
-      address: lead?.from_location?.address || null,
+      address: lead?.from_location?.address || lead?.from_location?.city || null,
       city: lead?.from_location?.city || null,
       country: lead?.from_location?.country || null,
       lat: lead?.from_location?.lat || null,

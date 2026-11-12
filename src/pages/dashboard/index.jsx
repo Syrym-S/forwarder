@@ -98,7 +98,9 @@ const Dashboard = () => {
         }}
       >
         <DashboardStats data={stats} />
+
         {error && <Alert severity="error">{error}</Alert>}
+
         <Box
           sx={{
             display: "grid",
