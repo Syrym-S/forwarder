@@ -1,20 +1,11 @@
 import { useTranslation } from "react-i18next";
 import { useState, useEffect } from "react";
-import {
-  Alert,
-  Box,
-  Checkbox,
-  Container,
-  FormControl,
-  FormControlLabel,
-  FormGroup,
-  FormLabel,
-  Typography,
-} from "@mui/material";
+import { Alert, Box, Container, Typography } from "@mui/material";
 
 import RootLayout from "../../components/layout/root-layout";
 import Map from "../../components/dashboard/map";
 import DashboardLeadsList from "../../components/dashboard/leads/dashboard-leads-list";
+import LeadMapStatusFilter from "../../components/dashboard/lead-map-status-filter";
 
 import { useLeadsStore } from "../../app/store/leads/leads-store";
 import TendersMainContainer from "../../components/dashboard/tenders/tenders-main-container";
@@ -23,10 +14,7 @@ import FactoringTable from "../../components/factoring/factoring-table";
 import { useFactoringStore } from "../../app/store/factoring/factoring-store";
 import DashboardStats from "../../components/dashboard/statistics-cards/stats-cards-container";
 import { useStatsStore } from "../../app/store/stats/use-stats-store";
-import {
-  DEFAULT_LEAD_MAP_STATUSES,
-  LEAD_MAP_STATUS_OPTIONS,
-} from "../../shared/const/lead-map-statuses";
+import { DEFAULT_LEAD_MAP_STATUSES } from "../../shared/const/lead-map-statuses";
 
 const Dashboard = () => {
   const { t } = useTranslation();
@@ -150,35 +138,10 @@ const Dashboard = () => {
               >
                 {t("dashboard.active_lead_routes")}
               </Typography>
-              <FormControl
-                component="fieldset"
-                sx={{ m: 0, mt: 1.5, p: 0, minWidth: 0, border: 0 }}
-              >
-                <FormLabel
-                  component="legend"
-                  sx={{ fontSize: 13, fontWeight: 600 }}
-                >
-                  {t("dashboard.status")}
-                </FormLabel>
-                <FormGroup row sx={{ columnGap: 1.5, rowGap: 0.5 }}>
-                  {LEAD_MAP_STATUS_OPTIONS.map(({ value, label, color }) => (
-                    <FormControlLabel
-                      key={value}
-                      control={
-                        <Checkbox
-                          size="small"
-                          value={value}
-                          checked={selectedStatuses.includes(value)}
-                          onChange={handleStatusChange}
-                          sx={{ color, "&.Mui-checked": { color } }}
-                        />
-                      }
-                      label={t(label)}
-                      sx={{ "& .MuiFormControlLabel-label": { fontSize: 13 } }}
-                    />
-                  ))}
-                </FormGroup>
-              </FormControl>
+              <LeadMapStatusFilter
+                selectedStatuses={selectedStatuses}
+                onChange={handleStatusChange}
+              />
             </Box>
             <Map
               leads={leads}
