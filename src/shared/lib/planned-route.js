@@ -12,7 +12,12 @@ export function normalizePlannedRoute(response) {
   const route = data?.routes?.[0] ?? data?.route ?? data;
   let coordinates;
 
-  if (typeof route?.polyline?.encodedPolyline === "string") {
+  if (typeof route?.polyline === "string") {
+    if (route.encoding && route.encoding !== "google") {
+      throw new Error("Routing service returned an unsupported polyline encoding");
+    }
+    coordinates = polyline.decode(route.polyline);
+  } else if (typeof route?.polyline?.encodedPolyline === "string") {
     coordinates = polyline.decode(route.polyline.encodedPolyline);
   } else if (route?.geometry?.type === "LineString") {
     coordinates = route.geometry.coordinates?.map(([lng, lat]) => [lat, lng]);

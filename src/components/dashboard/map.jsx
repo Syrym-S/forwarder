@@ -16,7 +16,7 @@ import Echo from "laravel-echo";
 import Pusher from "pusher-js";
 import polyline from "@mapbox/polyline";
 import { api, isStaging } from "../../app/client";
-import { generateLeadRoute } from "../../shared/api/routing";
+import { getLeadPolylines } from "../../shared/api/routing";
 import "./marker.style.css";
 import { createDriverIcon } from "../../shared/ui/driver-marker-icon";
 import DriverPositionPopup from "../../shared/ui/driver-position-popup";
@@ -71,15 +71,6 @@ const getLocationPoint = (location) => {
 
 const getLocationAddress = (location) => {
   return location?.address || "";
-};
-
-const getRoute = async (leadId) => {
-  try {
-    return await generateLeadRoute(leadId);
-  } catch (error) {
-    console.error("Failed to load route", error);
-    return null;
-  }
 };
 
 const formatDistance = (distance, t) => {
@@ -212,32 +203,41 @@ const Map = ({
 
   useEffect(() => {
     let isMounted = true;
+    const controller = new AbortController();
 
     const loadRoutes = async () => {
-      const result = await Promise.all(
-        leads.filter((lead) => lead.id != null).map(async (lead) => {
-          const route = await getRoute(lead.id);
+      try {
+        const routeLeads = leads.filter((lead) => lead.id != null);
+        const polylines = await getLeadPolylines(
+          routeLeads.map((lead) => lead.id),
+          { signal: controller.signal },
+        );
+        if (!isMounted) return;
 
-          if (!route) {
-            return null;
-          }
+        const result = routeLeads.flatMap((lead) => {
+          const route = polylines.get(String(lead.id));
+          if (!route) return [];
 
-          return {
-            id: lead.id,
-            lead,
-            start: route.coordinates[0],
-            end: route.coordinates[route.coordinates.length - 1],
-            coordinates: route.coordinates,
-            distance: route.distance,
-            duration: route.duration,
-            from: getLocationAddress(lead.from_location),
-            to: getLocationAddress(lead.to_location),
-          };
-        }),
-      );
-
-      if (isMounted) {
-        setRoutes(result.filter(Boolean));
+          return [
+            {
+              id: lead.id,
+              lead,
+              start: route.coordinates[0],
+              end: route.coordinates[route.coordinates.length - 1],
+              coordinates: route.coordinates,
+              distance: route.distance,
+              duration: route.duration,
+              from: getLocationAddress(lead.from_location),
+              to: getLocationAddress(lead.to_location),
+            },
+          ];
+        });
+        setRoutes(result);
+      } catch (error) {
+        if (isMounted) {
+          setRoutes([]);
+          console.error("Failed to load route polylines", error);
+        }
       }
     };
 
@@ -245,6 +245,7 @@ const Map = ({
 
     return () => {
       isMounted = false;
+      controller.abort();
     };
   }, [leads]);
 
