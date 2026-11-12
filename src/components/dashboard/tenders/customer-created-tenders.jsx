@@ -2,7 +2,6 @@ import { useTranslation } from "react-i18next";
 import {
   Alert,
   Box,
-  CircularProgress,
   FormControlLabel,
   Paper,
   Switch,
@@ -11,6 +10,7 @@ import {
 import { useTendersStore } from "../../../app/store/tenders/tender-store";
 import { useEffect, useState } from "react";
 import CustomerTenderItem from "./customer-tender-item";
+import DashboardTendersSkeleton from "./dashboard-tenders-skeleton";
 
 const CustomerCreatedTenders = () => {
   const { t } = useTranslation();
@@ -39,24 +39,6 @@ const CustomerCreatedTenders = () => {
   useEffect(() => {
     getCustomerTenders();
   }, []);
-
-  if (isLoading)
-    return (
-      <Paper
-        elevation={0}
-        variant="outlined"
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          borderRadius: 3,
-          minWidth: 0,
-          minHeight: 220,
-        }}
-      >
-        <CircularProgress />
-      </Paper>
-    );
 
   return (
     <Paper
@@ -126,7 +108,9 @@ const CustomerCreatedTenders = () => {
         />
       </Box>
 
-      {isPublicTendersEmpty && checked && (
+      {isLoading && <DashboardTendersSkeleton />}
+
+      {!isLoading && isPublicTendersEmpty && checked && (
         <Box
           sx={{
             display: "grid",
@@ -149,7 +133,7 @@ const CustomerCreatedTenders = () => {
         </Box>
       )}
 
-      {isPrivateTendersEmpty && !checked && (
+      {!isLoading && isPrivateTendersEmpty && !checked && (
         <Box
           sx={{
             display: "grid",
@@ -172,7 +156,7 @@ const CustomerCreatedTenders = () => {
         </Box>
       )}
 
-      {!isEmpty && (
+      {!isLoading && !isEmpty && (
         <Box sx={{ display: "grid", gridTemplateColumns: "1fr", gap: 2 }}>
           {checked
             ? publicTenders.map((tender) => (

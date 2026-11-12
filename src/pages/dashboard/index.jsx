@@ -11,6 +11,7 @@ import { useLeadsStore } from "../../app/store/leads/leads-store";
 import TendersMainContainer from "../../components/dashboard/tenders/tenders-main-container";
 import FactoringProgressBarContainer from "../../components/dashboard/factoring-line/factoring-progress-bar-container";
 import FactoringTable from "../../components/factoring/factoring-table";
+import FactoringTableSkeleton from "../../components/dashboard/factoring-table-skeleton";
 import { useFactoringStore } from "../../app/store/factoring/factoring-store";
 import DashboardStats from "../../components/dashboard/statistics-cards/stats-cards-container";
 import { useStatsStore } from "../../app/store/stats/use-stats-store";
@@ -22,6 +23,7 @@ const Dashboard = () => {
   const leads = useLeadsStore((state) => state.leads);
   const factorings = useFactoringStore((state) => state.factorings);
   const getFactorings = useFactoringStore((state) => state.getFactorings);
+  const isFactoringsLoading = useFactoringStore((state) => state.isLoading);
   const fetchLeads = useLeadsStore((state) => state.fetchLeads);
   const isLoading = useLeadsStore((state) => state.isLoading);
   const error = useLeadsStore((state) => state.error);
@@ -198,7 +200,11 @@ const Dashboard = () => {
             <Typography sx={{ fontSize: 13, color: "text.secondary", mb: 2 }}>
               {t("dashboard.pending_requests_description")}
             </Typography>
-            <FactoringTable factorings={awaitingApproveFactorings} />
+            {isFactoringsLoading ? (
+              <FactoringTableSkeleton />
+            ) : (
+              <FactoringTable factorings={awaitingApproveFactorings} />
+            )}
           </Box>
         )}
       </Container>

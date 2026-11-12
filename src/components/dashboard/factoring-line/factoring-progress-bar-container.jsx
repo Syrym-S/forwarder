@@ -1,8 +1,9 @@
 import { useTranslation } from "react-i18next";
-import { Alert, Box, CircularProgress, Paper, Typography } from "@mui/material";
+import { Alert, Box, Paper, Typography } from "@mui/material";
 import { useEffect } from "react";
 import { useFactorStore } from "../../../app/store/factor/factor-store";
 import FactoringLineRingProgress from "./factoring-line-ring-progress";
+import FactoringLineSkeleton from "./factoring-line-skeleton";
 import { STATUS } from "../../../shared/const/tenders";
 
 const FactoringProgressBarContainer = () => {
@@ -56,35 +57,29 @@ const FactoringProgressBarContainer = () => {
           {t("dashboard.confirmed_factoring_lines")}
         </Typography>
       </Box>
-      {isLoading ? (
-        <Box
-          sx={{
-            height: 300,
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            gap: 2,
-          }}
-        >
-          <CircularProgress />
-        </Box>
-      ) : (
-        <Box
-          sx={{
-            display: "grid",
-            gridTemplateColumns: { xs: "1fr", xl: "repeat(2, minmax(0, 1fr))" },
-            overflow: "hidden",
-            overflowY: "auto",
-            gap: 2,
-          }}
-        >
-          {isEmpty && <Alert severity="info">{t("dashboard.list_empty")}</Alert>}
-
-          {approvedLines.map((line) => (
-            <FactoringLineRingProgress key={line.id} line={line} />
-          ))}
-        </Box>
-      )}
+      <Box
+        role={isLoading ? "status" : undefined}
+        aria-label={isLoading ? t("ui.loading") : undefined}
+        aria-busy={isLoading}
+        sx={{
+          display: "grid",
+          gridTemplateColumns: { xs: "1fr", xl: "repeat(2, minmax(0, 1fr))" },
+          overflow: "hidden",
+          overflowY: "auto",
+          gap: 2,
+        }}
+      >
+        {isLoading ? (
+          <FactoringLineSkeleton />
+        ) : (
+          <>
+            {isEmpty && <Alert severity="info">{t("dashboard.list_empty")}</Alert>}
+            {approvedLines.map((line) => (
+              <FactoringLineRingProgress key={line.id} line={line} />
+            ))}
+          </>
+        )}
+      </Box>
     </Paper>
   );
 };

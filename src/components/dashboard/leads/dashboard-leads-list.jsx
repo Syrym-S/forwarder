@@ -3,7 +3,6 @@ import { useEffect, useMemo, useState } from "react";
 import {
   Alert,
   Box,
-  CircularProgress,
   Divider,
   Pagination,
   Paper,
@@ -11,6 +10,7 @@ import {
   Typography,
 } from "@mui/material";
 import DashboardLeadItem from "./dashboard-lead-item";
+import DashboardLeadItemSkeleton from "./dashboard-lead-item-skeleton";
 
 const DASHBOARD_LEADS_PER_PAGE = 5;
 
@@ -98,18 +98,16 @@ const DashboardLeadsList = ({
         }}
       >
         {isLoading && (
-          <Box
-            color="text.secondary"
-            sx={{
-              py: 2,
-              height: "100%",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
+          <Stack
+            spacing={1.25}
+            role="status"
+            aria-label={t("ui.loading")}
+            aria-busy="true"
           >
-            <CircularProgress />
-          </Box>
+            {Array.from({ length: 3 }, (_, index) => (
+              <DashboardLeadItemSkeleton key={index} />
+            ))}
+          </Stack>
         )}
 
         {!isLoading && !leads.length && (

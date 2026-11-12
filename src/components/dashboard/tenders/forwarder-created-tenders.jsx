@@ -2,7 +2,6 @@ import { useTranslation } from "react-i18next";
 import {
   Alert,
   Box,
-  CircularProgress,
   FormControlLabel,
   Paper,
   Switch,
@@ -11,6 +10,7 @@ import {
 import { useEffect, useState } from "react";
 import { useTendersStore } from "../../../app/store/tenders/tender-store";
 import ForwarderTenderItem from "./forwarder-tender-item";
+import DashboardTendersSkeleton from "./dashboard-tenders-skeleton";
 
 const ForwarderCreatedTenders = () => {
   const { t } = useTranslation();
@@ -38,24 +38,6 @@ const ForwarderCreatedTenders = () => {
   useEffect(() => {
     getTenders();
   }, []);
-
-  if (isLoading)
-    return (
-      <Paper
-        elevation={0}
-        variant="outlined"
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          borderRadius: 3,
-          minWidth: 0,
-          minHeight: 220,
-        }}
-      >
-        <CircularProgress />
-      </Paper>
-    );
 
   return (
     <Paper
@@ -118,7 +100,9 @@ const ForwarderCreatedTenders = () => {
         />
       </Box>
 
-      {isPrivateTendersEmpty && !checked && (
+      {isLoading && <DashboardTendersSkeleton />}
+
+      {!isLoading && isPrivateTendersEmpty && !checked && (
         <Box
           sx={{
             display: "grid",
@@ -139,7 +123,7 @@ const ForwarderCreatedTenders = () => {
         </Box>
       )}
 
-      {isPublicTendersEmpty && checked && (
+      {!isLoading && isPublicTendersEmpty && checked && (
         <Box
           sx={{
             display: "grid",
@@ -160,15 +144,17 @@ const ForwarderCreatedTenders = () => {
         </Box>
       )}
 
-      <Box sx={{ display: "grid", gridTemplateColumns: "1fr", gap: 2 }}>
-        {checked
-          ? publicTenders.map((tender) => (
-              <ForwarderTenderItem key={tender.id} tender={tender} />
-            ))
-          : privateTenders.map((tender) => (
-              <ForwarderTenderItem key={tender.id} tender={tender} />
-            ))}
-      </Box>
+      {!isLoading && (
+        <Box sx={{ display: "grid", gridTemplateColumns: "1fr", gap: 2 }}>
+          {checked
+            ? publicTenders.map((tender) => (
+                <ForwarderTenderItem key={tender.id} tender={tender} />
+              ))
+            : privateTenders.map((tender) => (
+                <ForwarderTenderItem key={tender.id} tender={tender} />
+              ))}
+        </Box>
+      )}
     </Paper>
   );
 };
