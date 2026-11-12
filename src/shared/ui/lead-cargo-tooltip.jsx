@@ -2,9 +2,9 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Box, Button, ClickAwayListener, Typography } from "@mui/material";
 import Inventory2OutlinedIcon from "@mui/icons-material/Inventory2Outlined";
-import ActionTooltip from "../../shared/ui/action-tooltip";
+import ActionTooltip from "./action-tooltip";
 
-const CustomerCargoTooltip = ({ lead }) => {
+const LeadCargoTooltip = ({ lead }) => {
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   const cargos =
@@ -82,4 +82,4 @@ const CustomerCargoTooltip = ({ lead }) => {
   );
 };
 
-export default CustomerCargoTooltip;
+export default LeadCargoTooltip;

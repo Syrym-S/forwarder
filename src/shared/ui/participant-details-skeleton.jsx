@@ -1,6 +1,6 @@
 import { Box, Paper, Skeleton } from "@mui/material";
 
-const CustomerDetailsSkeleton = () => (
+const ParticipantDetailsSkeleton = ({ sectionFieldCounts = [6, 8] }) => (
   <>
     <Box
       aria-hidden="true"
@@ -37,8 +37,8 @@ const CustomerDetailsSkeleton = () => (
           <Skeleton animation="wave" width="75%" height={20} />
         </Box>
       </Box>
-      {[6, 8].map((count) => (
-        <Paper key={count} variant="outlined" sx={{ p: 2, borderRadius: 3 }}>
+      {sectionFieldCounts.map((count, sectionIndex) => (
+        <Paper key={sectionIndex} variant="outlined" sx={{ p: 2, borderRadius: 3 }}>
           <Skeleton animation="wave" width="75%" height={24} sx={{ mb: 1.5 }} />
           <Box
             sx={{
@@ -153,4 +153,4 @@ const CustomerDetailsSkeleton = () => (
   </>
 );
 
-export default CustomerDetailsSkeleton;
+export default ParticipantDetailsSkeleton;

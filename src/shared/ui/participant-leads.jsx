@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useId, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link as RouterLink } from "react-router-dom";
 import {
@@ -12,8 +12,8 @@ import {
 } from "@mui/material";
 import ArrowForwardRoundedIcon from "@mui/icons-material/ArrowForwardRounded";
 import dayjs from "dayjs";
-import LeadStatus from "../../shared/ui/lead-status";
-import CustomerCargoTooltip from "./customer-cargo-tooltip";
+import LeadStatus from "./lead-status";
+import LeadCargoTooltip from "./lead-cargo-tooltip";
 
 const LEADS_PER_PAGE = 3;
 
@@ -22,18 +22,20 @@ function formatDate(value) {
   return date && dayjs(date).isValid() ? dayjs(date).format("DD.MM.YYYY") : "—";
 }
 
-const CustomerLeadCard = ({ lead }) => {
+const ParticipantLeadCard = ({ lead }) => {
   const { t } = useTranslation();
   const schedules = Array.isArray(lead.point_schedules)
     ? lead.point_schedules
     : [];
   const from =
     lead.from_location?.address ||
+    lead.from_location?.city ||
     lead.from ||
     lead.from_city ||
     t("ui.not_specified");
   const to =
     lead.to_location?.address ||
+    lead.to_location?.city ||
     lead.to ||
     lead.to_city ||
     t("ui.not_specified");
@@ -114,7 +116,7 @@ const CustomerLeadCard = ({ lead }) => {
           </Box>
         ))}
       </Box>
-      <CustomerCargoTooltip lead={lead} />
+      <LeadCargoTooltip lead={lead} />
       <Box
         sx={{
           display: "flex",
@@ -132,8 +134,9 @@ const CustomerLeadCard = ({ lead }) => {
   );
 };
 
-const CustomerLeads = ({ leads }) => {
+const ParticipantLeads = ({ leads }) => {
   const { t } = useTranslation();
+  const titleId = useId();
   const [page, setPage] = useState(1);
   const listRef = useRef(null);
   const pageCount = Math.ceil(leads.length / LEADS_PER_PAGE);
@@ -146,7 +149,7 @@ const CustomerLeads = ({ leads }) => {
   return (
     <Box
       component="section"
-      aria-labelledby="customer-leads-title"
+      aria-labelledby={titleId}
       sx={{
         display: "flex",
         flexDirection: "column",
@@ -166,7 +169,7 @@ const CustomerLeads = ({ leads }) => {
         }}
       >
         <Typography
-          id="customer-leads-title"
+          id={titleId}
           component="h3"
           sx={{ fontSize: 18, fontWeight: 600 }}
         >
@@ -185,7 +188,7 @@ const CustomerLeads = ({ leads }) => {
         {leads.length ? (
           <Box sx={{ display: "grid", gap: 2 }}>
             {visibleLeads.map((lead, index) => (
-              <CustomerLeadCard key={lead.id ?? index} lead={lead} />
+              <ParticipantLeadCard key={lead.id ?? index} lead={lead} />
             ))}
           </Box>
         ) : (
@@ -211,4 +214,4 @@ const CustomerLeads = ({ leads }) => {
   );
 };
 
-export default CustomerLeads;
+export default ParticipantLeads;

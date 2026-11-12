@@ -3,9 +3,9 @@ import { useTranslation } from "react-i18next";
 import { Box, Link, Typography } from "@mui/material";
 import ContentCopyRoundedIcon from "@mui/icons-material/ContentCopyRounded";
 import CheckRoundedIcon from "@mui/icons-material/CheckRounded";
-import TooltipIconButton from "../../shared/ui/tooltip-icon-button";
+import TooltipIconButton from "./tooltip-icon-button";
 
-const CustomerContactValue = ({ value, type }) => {
+const ContactValue = ({ value, type }) => {
   const { t } = useTranslation();
   const [copyState, setCopyState] = useState("idle");
   const text = String(value).trim();
@@ -83,4 +83,4 @@ const CustomerContactValue = ({ value, type }) => {
   );
 };
 
-export default CustomerContactValue;
+export default ContactValue;

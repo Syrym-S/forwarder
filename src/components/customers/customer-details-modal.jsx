@@ -15,9 +15,9 @@ import dayjs from "dayjs";
 import { useCustomerStore } from "../../app/store/customers/customers-store";
 import InfoItem from "../../shared/ui/info-item";
 import TooltipIconButton from "../../shared/ui/tooltip-icon-button";
-import CustomerLeads from "./customer-leads";
-import CustomerContactValue from "./customer-contact-value";
-import CustomerDetailsSkeleton from "./customer-details-skeleton";
+import ParticipantLeads from "../../shared/ui/participant-leads";
+import ContactValue from "../../shared/ui/contact-value";
+import ParticipantDetailsSkeleton from "../../shared/ui/participant-details-skeleton";
 
 const companyFields = [
   ["name", "ui.company_name"],
@@ -126,7 +126,7 @@ const CustomerDetailsModal = ({ selectedCustomer, handleClear }) => {
           }}
         >
           {isLoading ? (
-            <CustomerDetailsSkeleton />
+            <ParticipantDetailsSkeleton />
           ) : (
             <>
               <Box
@@ -232,7 +232,7 @@ const CustomerDetailsModal = ({ selectedCustomer, handleClear }) => {
                               value={
                                 (key === "phone" || key === "email") &&
                                 value ? (
-                                  <CustomerContactValue
+                                  <ContactValue
                                     value={value}
                                     type={key}
                                   />
@@ -258,7 +258,7 @@ const CustomerDetailsModal = ({ selectedCustomer, handleClear }) => {
                 )}
               </Box>
 
-              <CustomerLeads key={selectedCustomer?.id} leads={leads} />
+              <ParticipantLeads key={selectedCustomer?.id} leads={leads} />
             </>
           )}
         </DialogContent>
