@@ -4,7 +4,7 @@ import Tooltip from "../../shared/ui/action-tooltip";
 import RootLayout from "../../components/layout/root-layout";
 import AddLeadForm from "../../features/leads/add-lead-form";
 import LeadHeading from "../../components/leads/lead-item/lead-heading";
-import PageLoader from "../../shared/ui/loaders/page-loader";
+import LeadDetailsSkeleton from "../../components/leads/skeleton/lead-details-skeleton";
 import ShareModal from "../../components/leads/lead-item/share-modal";
 import LeadItemMainContainer from "../../components/leads/lead-item/lead-item-main-container";
 import ChatFirstVertion from "../../components/chat/chat-first-vertion";
@@ -142,7 +142,7 @@ const LeadItem = () => {
   if (!leadData)
     return (
       <RootLayout withoutDataCheck>
-        <PageLoader />
+        <LeadDetailsSkeleton />
       </RootLayout>
     );
 
