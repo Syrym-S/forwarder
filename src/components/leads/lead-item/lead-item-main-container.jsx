@@ -8,7 +8,6 @@ import LeadTransportationInfo from "./lead-transportation-info";
 import Section from "./lead-detail-section";
 import LocalShippingOutlinedIcon from "@mui/icons-material/LocalShippingOutlined";
 import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
-import RouteOutlinedIcon from "@mui/icons-material/RouteOutlined";
 import LeadCargoFilesContainer from "../lead-cargo-files-container";
 import LeadDriverInfo from "./lead-driver-info";
 import { useEffect, useRef, useState } from "react";
@@ -23,7 +22,6 @@ import { rateDriverApi } from "../../../app/store/drivers/api";
 import { useNotificationsStore } from "../../../app/store/notifications/noti-store";
 import { parserNotificationType } from "../../../shared/helpers/notifications/parse-notification-type";
 import { NOTIFICATION_TYPE } from "../../../shared/const/notification-types";
-import { isDraftLead } from "../../../shared/lib/lead-draft";
 import { useProfileStore } from "../../../app/store/profile/profile-store";
 import ConfirmModal from "../../../shared/ui/confirm-modal";
 
@@ -294,6 +292,7 @@ const LeadItemMainContainer = ({
         }}
         isLoading={isConfirmLoading}
       />
+
       {ratingLead?.id === id && (
         <RateDriverModal
           driver={ratingLead.driver}
@@ -314,25 +313,23 @@ const LeadItemMainContainer = ({
 
       {deliveryError && <Alert severity="error">{deliveryError}</Alert>}
 
-      {!isDraftLead(leadData) && (
-        <Box
-          sx={{
-            border: "1px solid",
-            borderColor: "divider",
-            borderRadius: 3,
-            overflow: "hidden",
-            my: 2,
-          }}
-        >
-          <LeadMap
-            waypoints={waypoints}
-            from={from}
-            to={to}
-            id={id}
-            leadData={leadData}
-          />
-        </Box>
-      )}
+      <Box
+        sx={{
+          border: "1px solid",
+          borderColor: "divider",
+          borderRadius: 3,
+          overflow: "hidden",
+          my: 2,
+        }}
+      >
+        <LeadMap
+          waypoints={waypoints}
+          from={from}
+          to={to}
+          id={id}
+          leadData={leadData}
+        />
+      </Box>
 
       {((leadData.status === STATUS.sign_avr && isMustSignDocument) ||
         (leadData.status === STATUS.finished && isMustSignDocument)) && (

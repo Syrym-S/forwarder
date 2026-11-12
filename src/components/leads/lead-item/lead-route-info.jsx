@@ -36,7 +36,11 @@ const LeadRouteInfo = ({ leadData }) => {
         <RoutePoint
           label={t("ui.origin")}
           isFrom
-          address={leadData?.from_location?.address || t("ui.not_specified")}
+          address={
+            leadData?.from_location?.address ||
+            leadData?.from_location?.city ||
+            t("ui.not_specified")
+          }
           isPassed={leadData?.from_location?.is_passed}
           status={
             leadData?.from_location?.is_passed
@@ -52,8 +56,10 @@ const LeadRouteInfo = ({ leadData }) => {
             isPassed={point?.is_passed}
             isWaypoint
             label={t("ui.waypoint_number", { value1: index + 1 })}
-            address={point?.address || t("ui.not_specified")}
-            status={point?.is_passed ? t("ui.point_passed") : t("ui.point_not_passed")}
+            address={point?.address || point?.city || t("ui.not_specified")}
+            status={
+              point?.is_passed ? t("ui.point_passed") : t("ui.point_not_passed")
+            }
             date={pointSchedules[index + 1]}
             type={point.type}
           />
@@ -61,7 +67,11 @@ const LeadRouteInfo = ({ leadData }) => {
 
         <RoutePoint
           label={t("ui.destination")}
-          address={leadData?.to_location?.address || t("ui.not_specified")}
+          address={
+            leadData?.to_location?.address ||
+            leadData?.to_location?.city ||
+            t("ui.not_specified")
+          }
           isTo
           status={
             leadData?.to_location?.is_passed
@@ -73,7 +83,9 @@ const LeadRouteInfo = ({ leadData }) => {
         />
         <InfoItem
           label={t("ui.skip_loading_unloading_file_confirmation")}
-          value={leadData?.pass_verify === true ? t("ui.enabled") : t("ui.disabled")}
+          value={
+            leadData?.pass_verify === true ? t("ui.enabled") : t("ui.disabled")
+          }
         />
       </Box>
     </Section>
