@@ -16,6 +16,7 @@ import MessageList from "./message-list";
 import useChatEcho from "../../shared/hooks/chat/use-chat-echo";
 import ForumOutlinedIcon from "@mui/icons-material/ForumOutlined";
 import ParticipantData from "./participants/participant-data";
+import ChatSkeleton from "./chat-skeleton";
 
 const ChatFirstVertion = ({ messageType }) => {
   const { t } = useTranslation();
@@ -24,6 +25,7 @@ const ChatFirstVertion = ({ messageType }) => {
   const participantData = useLeadsStore((state) => state.participantData);
 
   const isMessagesLoading = useLeadsStore((state) => state.isMessagesLoading);
+  const isParticipantLoading = useLeadsStore((state) => state.isParticipantLoading);
   const leadMessages = useLeadsStore((state) => state.leadMessages);
   const getLeadMessages = useLeadsStore((state) => state.getLeadMessages);
   const getMessageParticipantInfo = useLeadsStore(
@@ -32,17 +34,34 @@ const ChatFirstVertion = ({ messageType }) => {
 
   const isEmpty = leadMessages?.length === 0;
   const isFactoringChat = messageType === "factoring";
+  const chatKey = `${id}:${messageType}`;
+  const [loadedChatKey, setLoadedChatKey] = useState(null);
 
   useEffect(() => {
-    getLeadMessages(id, {
-      chat_type: messageType,
+    let isCancelled = false;
+
+    Promise.allSettled([
+      getLeadMessages(id, { chat_type: messageType }),
+      getMessageParticipantInfo(id, messageType),
+    ]).then(() => {
+      if (!isCancelled) setLoadedChatKey(chatKey);
     });
-    getMessageParticipantInfo(id, messageType);
-  }, []);
+
+    return () => {
+      isCancelled = true;
+    };
+  }, [id, messageType, chatKey, getLeadMessages, getMessageParticipantInfo]);
 
   useChatEcho(id, messageType);
 
-  if (!participantData) return <CircularProgress />;
+  if (
+    loadedChatKey !== chatKey ||
+    !participantData ||
+    isParticipantLoading ||
+    isMessagesLoading
+  ) {
+    return <ChatSkeleton isFactoringChat={isFactoringChat} />;
+  }
 
   return (
     <Paper elevation={0}

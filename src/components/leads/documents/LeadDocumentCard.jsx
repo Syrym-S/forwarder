@@ -23,6 +23,8 @@ export function LeadDocumentCard({
     <Box
       component="button"
       type="button"
+      disabled={isDeleting}
+      aria-busy={isDeleting}
       onClick={() => onOpen(document)}
       sx={{
         p: 1.5,
@@ -37,7 +39,9 @@ export function LeadDocumentCard({
         backgroundColor: "grey.50",
         textAlign: "left",
         color: "inherit",
-        cursor: "pointer",
+        cursor: isDeleting ? "default" : "pointer",
+        opacity: isDeleting ? 0.45 : 1,
+        pointerEvents: isDeleting ? "none" : "auto",
         transition: "0.2s ease",
         font: "inherit",
         "&:hover": {
@@ -135,7 +139,7 @@ export function LeadDocumentCard({
                 height: "fit-content",
               }}
               disabled={isDeleting}
-              onClick={() => onDelete(id, document.path)}
+              onClick={() => onDelete(id, document.path, document.id)}
             >
               <DeleteOutlineOutlinedIcon fontSize="small" />
             </TooltipIconButton>

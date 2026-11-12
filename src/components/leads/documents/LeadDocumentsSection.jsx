@@ -5,11 +5,11 @@ import {
   Box,
   Button,
   Stack,
-  TextField,
   Typography,
 } from "@mui/material";
 import UploadFileOutlinedIcon from "@mui/icons-material/UploadFileOutlined";
 import { LeadDocumentCard } from "./LeadDocumentCard";
+import LeadDocumentCardSkeleton from "../skeleton/lead-document-card-skeleton";
 import { useLeadsStore } from "../../../app/store/leads/leads-store";
 import FileModal from "../../tenders/file-modal";
 import { STATUS } from "../../../shared/const/tenders";
@@ -31,6 +31,7 @@ export function LeadDocumentsSection({
     leadStatus === STATUS.finished || leadStatus === STATUS.deleted;
 
   const isLoading = useLeadsStore((state) => state.isLoading);
+  const showSkeleton = isUploading || (isLoading && deletingDocumentIds.length === 0);
 
   const [selectedDocument, setSelectedDocument] = useState(null);
   const [selectedFileName, setSelectedFileName] = useState("");
@@ -84,14 +85,16 @@ export function LeadDocumentsSection({
               label={t("ui.document_name")}
               size="small"
               fullWidth
+              disabled={isUploading}
             />
 
-            <FormInput name="context" label={t("ui.description")} size="small" fullWidth />
+            <FormInput name="context" label={t("ui.description")} size="small" fullWidth disabled={isUploading} />
 
             <Box>
               <Button
                 component="label"
                 variant={selectedFileName ? "contained" : "outlined"}
+                disabled={isUploading}
                 startIcon={<UploadFileOutlinedIcon />}
                 sx={{
                   minHeight: 40,
@@ -107,6 +110,7 @@ export function LeadDocumentsSection({
                   name="file"
                   type="file"
                   hidden
+                  disabled={isUploading}
                   accept=".pdf,.xls,.xlsx,.jpg,.jpeg,.png,.mp4,.mpeg,.mov,.avi,.mkv,application/pdf,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,image/jpeg,image/png,video/mp4,video/mpeg,video/quicktime,video/x-msvideo,video/x-matroska"
                   onChange={handleFileChange}
                 />
@@ -137,7 +141,7 @@ export function LeadDocumentsSection({
             <PrimaryButton
               type="submit"
               variant="contained"
-              isLoading={isUploading}
+              disabled={isUploading}
               sx={{
                 gridColumn: {
                   xs: "1",
@@ -152,10 +156,8 @@ export function LeadDocumentsSection({
 
         {uploadError && <Alert severity="error">{uploadError}</Alert>}
 
-        {isFilesEmpty ? (
+        {isFilesEmpty && !showSkeleton ? (
           <Alert severity="info">{t("ui.uploaded_file_list_empty")}</Alert>
-        ) : isLoading ? (
-          <>{t("ui.loading_4")}{" "}</>
         ) : (
           <Stack
             spacing={1}
@@ -170,6 +172,7 @@ export function LeadDocumentsSection({
               gap: 2,
             }}
           >
+            {showSkeleton && <LeadDocumentCardSkeleton />}
             {documents.map((document) => (
               <LeadDocumentCard
                 key={document.id}

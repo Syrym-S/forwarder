@@ -1,10 +1,11 @@
 import { useTranslation } from "react-i18next";
 import BusinessOutlinedIcon from "@mui/icons-material/BusinessOutlined";
 import Section from "./lead-detail-section";
-import { Box, CircularProgress } from "@mui/material";
+import { Box } from "@mui/material";
+import { useState } from "react";
 import { useLeadsStore } from "../../../app/store/leads/leads-store";
 import { STATUS } from "../../../shared/const/tenders";
-import { InfoBadge } from "../../lead-form/info-badge";
+import LeadParticipantSkeleton from "../skeleton/lead-participant-skeleton";
 import InfoItem from "../../../shared/ui/info-item";
 import PrimaryButton from "../../../shared/ui/button/primary-button";
 import EmptyInfo from "../../../shared/ui/empty/empty-info";
@@ -23,27 +24,25 @@ const LeadCustomerInfo = ({ leadData, canDetach = false }) => {
     (state) => state.isCustomerDetachLoading,
   );
   const getLeadItem = useLeadsStore((state) => state.getLeadItem);
+  const [isDetaching, setIsDetaching] = useState(false);
 
   const handleDetachCustomer = async () => {
-    await detachCustomer(leadData?.id);
-    await getLeadItem(leadData?.id);
+    setIsDetaching(true);
+    try {
+      await detachCustomer(leadData?.id);
+      await getLeadItem(leadData?.id);
+    } finally {
+      setIsDetaching(false);
+    }
   };
 
-  if (isCustomerDetachLoading)
+  if (isCustomerDetachLoading || isDetaching)
     return (
       <Section
         title={t("ui.customer_details_2")}
         icon={<BusinessOutlinedIcon color="primary" />}
       >
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <CircularProgress size={30} />
-        </Box>
+        <LeadParticipantSkeleton />
       </Section>
     );
 

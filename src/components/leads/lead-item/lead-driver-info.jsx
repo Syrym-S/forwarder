@@ -5,7 +5,6 @@ import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 import {
   Box,
   Button,
-  CircularProgress,
   Rating,
   Typography,
 } from "@mui/material";
@@ -15,6 +14,8 @@ import InfoItem from "../../../shared/ui/info-item";
 import PrimaryButton from "../../../shared/ui/button/primary-button";
 import StarBorderRoundedIcon from "@mui/icons-material/StarBorderRounded";
 import EmptyInfo from "../../../shared/ui/empty/empty-info";
+import { useState } from "react";
+import LeadParticipantSkeleton from "../skeleton/lead-participant-skeleton";
 
 const LeadDriverInfo = ({
   leadData,
@@ -36,28 +37,26 @@ const LeadDriverInfo = ({
     (state) => state.isDriverDetachLoading,
   );
   const getLeadItem = useLeadsStore((state) => state.getLeadItem);
+  const [isDetaching, setIsDetaching] = useState(false);
 
   const handleDetachDriver = async () => {
-    await detachDriver(leadData?.id);
-    await getLeadItem(leadData?.id);
+    setIsDetaching(true);
+    try {
+      await detachDriver(leadData?.id);
+      await getLeadItem(leadData?.id);
+    } finally {
+      setIsDetaching(false);
+    }
   };
 
   const handleOpenRateModal = () => {
     setRatingLead({ id: leadData.id, driver: leadData.driver });
   };
 
-  if (isDriverDetachLoading)
+  if (isDriverDetachLoading || isDetaching)
     return (
       <Section title={t("ui.driver")} icon={<PersonOutlinedIcon color="primary" />}>
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <CircularProgress size={30} />
-        </Box>
+        <LeadParticipantSkeleton />
       </Section>
     );
 

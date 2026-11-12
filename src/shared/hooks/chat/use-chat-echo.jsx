@@ -83,7 +83,7 @@ const useChatEcho = (leadId, messageType) => {
         echo.disconnect();
       }
     };
-  }, [leadId, getNewMessage]);
+  }, [leadId, messageType, getNewMessage, updateMessage, deleteMessageFromSocket, readMessages]);
 };
 
 export default useChatEcho;

@@ -84,7 +84,6 @@ const LeadItemMainContainer = ({
   const [isEarlyFinishModalOpen, setIsEarlyFinishModalOpen] = useState(false);
   const [ratingNotice, setRatingNotice] = useState(null);
   const [isDocumentUploading, setIsDocumentUploading] = useState(false);
-  // eslint-disable-next-line no-unused-vars
   const [deletingDocumentIds, setDeletingDocumentIds] = useState([]);
 
   const leadPoints = [
@@ -149,9 +148,16 @@ const LeadItemMainContainer = ({
     }
   }
 
-  const handleDeleteFileFromDB = async (lead_id, file_path) => {
-    await deleteLeadFile(lead_id, file_path);
-    await getLeadFiles(lead_id);
+  const handleDeleteFileFromDB = async (lead_id, file_path, documentId) => {
+    if (deletingDocumentIds.includes(documentId)) return;
+
+    setDeletingDocumentIds((ids) => [...ids, documentId]);
+    try {
+      await deleteLeadFile(lead_id, file_path);
+      await getLeadFiles(lead_id);
+    } finally {
+      setDeletingDocumentIds((ids) => ids.filter((id) => id !== documentId));
+    }
   };
 
   const { notification_type } = parserNotificationType(newNotification?.type);
@@ -445,7 +451,7 @@ const LeadItemMainContainer = ({
       >
         <LeadDocumentsSection
           leadStatus={leadData?.status}
-          documents={files.reverse()}
+          documents={[...files].reverse()}
           onAddDocument={handleAddDocument}
           onDeleteDocument={handleDeleteFileFromDB}
           isUploading={isDocumentUploading}

@@ -1,13 +1,13 @@
 import { Box, Skeleton } from "@mui/material";
 
-const MessageItemSkeleton = () => {
+const MessageItemSkeleton = ({ isOutgoing = true }) => {
   return (
     <Box
       sx={{
         display: "flex",
         flexDirection: "column",
         gap: 1,
-        alignItems: "flex-end",
+        alignItems: isOutgoing ? "flex-end" : "flex-start",
       }}
     >
       <Box
@@ -16,8 +16,8 @@ const MessageItemSkeleton = () => {
           maxWidth: "70%",
           px: 2,
           py: 1.5,
-          borderRadius: "16px 0px 16px 16px",
-          bgcolor: "grey.100",
+          borderRadius: isOutgoing ? "16px 0px 16px 16px" : "0px 16px 16px 16px",
+          bgcolor: "background.paper",
         }}
       >
         <Skeleton variant="text" width="100%" height={24} animation="wave" />
