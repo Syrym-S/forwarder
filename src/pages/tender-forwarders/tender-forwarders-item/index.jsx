@@ -134,6 +134,7 @@ const TenderForwardersItem = () => {
             waypoints={waypoints}
             to={to}
             id={currentTender?.lead?.id}
+            fallbackRoutes={currentTender?.lead?.routes}
           />
         </Box>
 

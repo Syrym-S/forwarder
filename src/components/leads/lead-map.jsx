@@ -94,6 +94,7 @@ export default function LeadMap({
   id,
   leadData,
   routeCoordinates,
+  fallbackRoutes,
 }) {
   const leadId = id ?? leadData?.id;
   const [activeMapTab, setActiveMapTab] = useState(MapViewOptions.both);
@@ -152,7 +153,7 @@ export default function LeadMap({
     let cancelled = false;
     const load = async () => {
       try {
-        const result = await generateLeadRoute(leadId);
+        const result = await generateLeadRoute(leadId, { fallbackRoutes });
         if (!cancelled) {
           setRouteData({ leadId, coordinates, points: result.coordinates });
         }
@@ -165,7 +166,7 @@ export default function LeadMap({
     return () => {
       cancelled = true;
     };
-  }, [coordinates, leadId, hasProvidedRoute]);
+  }, [coordinates, leadId, hasProvidedRoute, fallbackRoutes]);
 
   useEffect(() => {
     if (!leadId && !(trackingToken && trackingUrl)) return;

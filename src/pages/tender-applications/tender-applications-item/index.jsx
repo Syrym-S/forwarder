@@ -101,6 +101,7 @@ const TenderApplicationsItem = () => {
             waypoints={waypoints}
             to={to}
             id={customerCurrentTender?.lead?.id}
+            fallbackRoutes={customerCurrentTender?.lead?.routes}
           />
         </Box>
 

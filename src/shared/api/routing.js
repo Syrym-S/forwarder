@@ -20,15 +20,26 @@ export async function getLeadPolylines(leadIds, { signal } = {}) {
   return normalizeLeadPolylines(response.data);
 }
 
-export async function generateLeadRoute(leadId) {
+export async function generateLeadRoute(leadId, { fallbackRoutes } = {}) {
   if (leadId == null || String(leadId).trim() === "") {
     throw new Error("A lead ID is required to generate a route");
   }
 
-  const response = await api.post(
-    "/routing/v4/generate",
-    { id: leadId },
-    { timeout: 15000 },
-  );
-  return normalizePlannedRoute(response.data);
+  try {
+    const response = await api.post(
+      "/routing/v4/generate",
+      { id: leadId },
+      { timeout: 15000 },
+    );
+    return normalizePlannedRoute(response.data);
+  } catch (error) {
+    if (
+      error.response?.status === 403 &&
+      Array.isArray(fallbackRoutes) &&
+      fallbackRoutes.length > 0
+    ) {
+      return normalizePlannedRoute({ routes: fallbackRoutes });
+    }
+    throw error;
+  }
 }
