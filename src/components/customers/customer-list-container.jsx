@@ -4,7 +4,7 @@ import { useCustomerStore } from "../../app/store/customers/customers-store";
 import { VIEWS } from "../../shared/const/leads";
 import { useSearchParams } from "react-router-dom";
 import { Alert, Box, Pagination } from "@mui/material";
-import PageLoader from "../../shared/ui/loaders/page-loader";
+import CardListSkeleton from "../../shared/ui/card-list-skeleton";
 import TableSkeleton from "../../shared/ui/table-skeleton";
 import CustomersTable from "./customer-table";
 import CustomerCard from "./customer-card";
@@ -47,7 +47,7 @@ const CustomerListContainer = ({ view, page, onPageChange }) => {
     }
   }, [selectedCustomer]);
 
-  if (isLoading) return isCardsView ? <PageLoader /> : <TableSkeleton />;
+  if (isLoading) return isCardsView ? <CardListSkeleton /> : <TableSkeleton />;
 
   return (
     <Box>

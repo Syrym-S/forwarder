@@ -4,7 +4,7 @@ import LeadCard from "./lead-card";
 import LeadsTable from "./leads-table";
 import LeadKanbanTable from "./lead-kanban-table";
 import TableSkeleton from "../../shared/ui/table-skeleton";
-import { LeadCardSkeleton } from "../../shared/ui/lead-card-skeleton";
+import CardListSkeleton from "../../shared/ui/card-list-skeleton";
 import { useTranslation } from "react-i18next";
 
 const LeadListContainer = ({
@@ -25,6 +25,7 @@ const LeadListContainer = ({
   const isKanbanView = view === VIEWS.kanban;
 
   if (isLoading && isTableView) return <TableSkeleton />;
+  if (isLoading && isCardsView) return <CardListSkeleton />;
 
   return (
     <>
@@ -44,9 +45,6 @@ const LeadListContainer = ({
       )}
       {isCardsView && (
         <Box
-          role={isLoading ? "status" : undefined}
-          aria-label={isLoading ? t("ui.loading") : undefined}
-          aria-busy={isLoading}
           sx={{
             width: {
               xs: "100%",
@@ -61,11 +59,7 @@ const LeadListContainer = ({
             },
           }}
         >
-          {isLoading ? (
-            Array.from({ length: 3 }, (_, index) => (
-              <LeadCardSkeleton key={index} />
-            ))
-          ) : isLeadsEmpty ? (
+          {isLeadsEmpty ? (
             <Alert
               severity="info"
               sx={{

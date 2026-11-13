@@ -16,6 +16,7 @@ import { useNavigate } from "react-router-dom";
 import ContentPasteOutlinedIcon from "@mui/icons-material/ContentPasteOutlined";
 import DataContainer from "../../shared/ui/data-container";
 import TableSkeleton from "../../shared/ui/table-skeleton";
+import CardListSkeleton from "../../shared/ui/card-list-skeleton";
 
 const TenderHistory = () => {
   const { t } = useTranslation();
@@ -160,7 +161,7 @@ const TenderHistory = () => {
 
       <DataContainer
         isLoading={isLoading}
-        loadingFallback={isCardsView ? undefined : <TableSkeleton />}
+        loadingFallback={isCardsView ? <CardListSkeleton /> : <TableSkeleton />}
       >
         {isTenderEmplty && (
           <Alert

@@ -1,7 +1,7 @@
 import { useTranslation } from "react-i18next";
 import DriversTable from "./driver-table";
 import DriverCard from "./driver-card";
-import PageLoader from "../../shared/ui/loaders/page-loader";
+import CardListSkeleton from "../../shared/ui/card-list-skeleton";
 import TableSkeleton from "../../shared/ui/table-skeleton";
 import DriverDetailsModal from "./driver-details-modal";
 import { Alert, Box, Pagination } from "@mui/material";
@@ -65,7 +65,7 @@ const DriverListContainer = ({ view, query = "" }) => {
     loadDrivers();
   }, [loadDrivers]);
 
-  if (isLoading) return isCardsView ? <PageLoader /> : <TableSkeleton />;
+  if (isLoading) return isCardsView ? <CardListSkeleton /> : <TableSkeleton />;
 
   return (
     <Box>

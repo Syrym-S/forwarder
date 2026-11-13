@@ -8,6 +8,7 @@ import FactorLineForm from "../../features/factor-line/factor-line-form";
 import SuccessModal from "../../components/factoring/factoring-form/success-modal";
 import DataContainer from "../../shared/ui/data-container";
 import TableSkeleton from "../../shared/ui/table-skeleton";
+import CardListSkeleton from "../../shared/ui/card-list-skeleton";
 import { Box, Pagination, Typography } from "@mui/material";
 import { useNotificationsStore } from "../../app/store/notifications/noti-store";
 import { parserNotificationType } from "../../shared/helpers/notifications/parse-notification-type";
@@ -97,7 +98,7 @@ const Factoring = () => {
       />
       <DataContainer
         isLoading={isLoading}
-        loadingFallback={isCradsView ? undefined : <TableSkeleton />}
+        loadingFallback={isCradsView ? <CardListSkeleton /> : <TableSkeleton />}
         isEmpty={isFactoringsEmpty}
         emptyText={t("ui.no_factoring_available")}
       >
