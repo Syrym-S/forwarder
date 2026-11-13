@@ -3,7 +3,7 @@ import { Alert, Box, Pagination } from "@mui/material";
 import LeadCard from "./lead-card";
 import LeadsTable from "./leads-table";
 import LeadKanbanTable from "./lead-kanban-table";
-import LeadsTableSkeleton from "./skeleton/leads-table-skeleton";
+import TableSkeleton from "../../shared/ui/table-skeleton";
 import { LeadCardSkeleton } from "../../shared/ui/lead-card-skeleton";
 import { useTranslation } from "react-i18next";
 
@@ -24,7 +24,7 @@ const LeadListContainer = ({
   const isTableView = view === VIEWS.table;
   const isKanbanView = view === VIEWS.kanban;
 
-  if (isLoading && isTableView) return <LeadsTableSkeleton />;
+  if (isLoading && isTableView) return <TableSkeleton />;
 
   return (
     <>

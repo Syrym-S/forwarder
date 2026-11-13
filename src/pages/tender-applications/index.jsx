@@ -7,6 +7,7 @@ import ViewTabs from "../../shared/ui/view-tabs";
 import ApplicationsTenderTable from "../../components/tenders/applications-tender-table";
 import HistoryOutlined from "@mui/icons-material/HistoryOutlined";
 import DataContainer from "../../shared/ui/data-container";
+import TableSkeleton from "../../shared/ui/table-skeleton";
 import { useEffect, useState } from "react";
 import { Alert, Box, Pagination, Typography } from "@mui/material";
 import { useTendersStore } from "../../app/store/tenders/tender-store";
@@ -156,7 +157,10 @@ const TenderApplications = () => {
 
       </Box>
 
-      <DataContainer isLoading={isLoading}>
+      <DataContainer
+        isLoading={isLoading}
+        loadingFallback={isCardsView ? undefined : <TableSkeleton />}
+      >
         {isTenderEmpty && (
           <Alert
             severity="info"

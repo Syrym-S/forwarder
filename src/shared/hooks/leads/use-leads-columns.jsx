@@ -8,17 +8,21 @@ const useLeadsColumns = () => {
   const { t } = useTranslation();
   const columns = [
     {
-      field: "id",
-      headerName: "ID",
+      field: "num",
+      headerName: t("active_leads.number"),
       width: 200,
       renderCell: ({ row }) => (
         <NavLink
           to={`/leads/${row.id}`}
           style={{
             textDecoration: "none",
+            "&:hover": {
+              textDecoration: "underline",
+              color: "primary.main",
+            },
           }}
         >
-          {row.id}
+          {row.num}
         </NavLink>
       ),
     },
@@ -40,7 +44,6 @@ const useLeadsColumns = () => {
         </Box>
       ),
     },
-    { field: "num", headerName: t("active_leads.number"), width: 200 },
     {
       field: "driver",
       headerName: t("active_leads.driver"),

@@ -11,7 +11,7 @@ import { useLeadsStore } from "../../app/store/leads/leads-store";
 import TendersMainContainer from "../../components/dashboard/tenders/tenders-main-container";
 import FactoringProgressBarContainer from "../../components/dashboard/factoring-line/factoring-progress-bar-container";
 import FactoringTable from "../../components/factoring/factoring-table";
-import FactoringTableSkeleton from "../../components/dashboard/factoring-table-skeleton";
+import TableSkeleton from "../../shared/ui/table-skeleton";
 import { useFactoringStore } from "../../app/store/factoring/factoring-store";
 import DashboardStats from "../../components/dashboard/statistics-cards/stats-cards-container";
 import { useStatsStore } from "../../app/store/stats/use-stats-store";
@@ -201,7 +201,7 @@ const Dashboard = () => {
               {t("dashboard.pending_requests_description")}
             </Typography>
             {isFactoringsLoading ? (
-              <FactoringTableSkeleton />
+              <TableSkeleton />
             ) : (
               <FactoringTable factorings={awaitingApproveFactorings} />
             )}

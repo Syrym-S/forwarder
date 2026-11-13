@@ -1,6 +1,8 @@
 import { Box, Checkbox, Skeleton } from "@mui/material";
+import { useTranslation } from "react-i18next";
 
-const LeadsTableSkeleton = ({ rows = 10 }) => {
+const TableSkeleton = ({ rows = 10 }) => {
+  const { t } = useTranslation();
   const columns = [
     { width: "18%" }, // ID
     { width: "17%" }, // Статус
@@ -12,6 +14,9 @@ const LeadsTableSkeleton = ({ rows = 10 }) => {
 
   return (
     <Box
+      role="status"
+      aria-label={t("ui.loading")}
+      aria-busy="true"
       sx={{
         my: 1,
         width: "100%",
@@ -188,4 +193,4 @@ const LeadsTableSkeleton = ({ rows = 10 }) => {
   );
 };
 
-export default LeadsTableSkeleton;
+export default TableSkeleton;

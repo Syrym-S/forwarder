@@ -3,7 +3,6 @@ import { useEffect, useMemo, useState } from "react";
 import {
   Alert,
   Box,
-  LinearProgress,
   Paper,
   Pagination,
   Table,
@@ -18,6 +17,7 @@ import { useOptionsStore } from "../../app/store/options";
 import RootLayout from "../../components/layout/root-layout";
 import FormInput from "../../shared/ui/input/form-input";
 import PrimaryButton from "../../shared/ui/button/primary-button";
+import TableSkeleton from "../../shared/ui/table-skeleton";
 
 const Handbook = () => {
   const { t } = useTranslation();
@@ -121,92 +121,95 @@ const Handbook = () => {
         </Alert>
       )}
 
-      <TableContainer
-        component={Paper}
-        aria-busy={isLoading}
-        sx={{ my: "10px" }}
-      >
-        {isLoading && <LinearProgress />}
-        <Table
-          aria-label={t("ui.commodity_directory_2")}
-          sx={{
-            "& .MuiTableCell-root": {
-              color: "text.primary",
-              borderColor: "divider",
-              fontSize: "0.875rem",
-              px: 1.25,
-              py: 1.5,
-            },
-            "& .MuiTableCell-head": {
-              bgcolor: "background.paper",
-              fontWeight: 500,
-              height: 56,
-              py: 0,
-            },
-            "& .MuiTableBody-root .MuiTableRow-root:nth-of-type(even)": {
-              backgroundColor: "#f5f7fa",
-            },
-            "& .MuiTableBody-root .MuiTableRow-root:nth-of-type(odd)": {
-              backgroundColor: "#ffffff",
-            },
-            "& .MuiTableBody-root .MuiTableRow-root:hover": {
-              backgroundColor: "action.hover",
-            },
-            "& .MuiTableRow-root:last-child .MuiTableCell-body": {
-              borderBottom: 0,
-            },
-          }}
+      {isLoading ? (
+        <TableSkeleton />
+      ) : (
+        <TableContainer
+          component={Paper}
+          aria-busy={isLoading}
+          sx={{ my: "10px" }}
         >
-          <TableHead>
-            <TableRow>
-              <TableCell sx={{ width: { xs: 150, md: 300 } }}>{t("ui.code")}</TableCell>
-              <TableCell>{t("ui.item_name")}</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {!isLoading && !error && rows.length === 0 && (
+          <Table
+            aria-label={t("ui.commodity_directory_2")}
+            sx={{
+              "& .MuiTableCell-root": {
+                color: "text.primary",
+                borderColor: "divider",
+                fontSize: "0.875rem",
+                px: 1.25,
+                py: 1.5,
+              },
+              "& .MuiTableCell-head": {
+                bgcolor: "background.paper",
+                fontWeight: 500,
+                height: 56,
+                py: 0,
+              },
+              "& .MuiTableBody-root .MuiTableRow-root:nth-of-type(even)": {
+                backgroundColor: "#f5f7fa",
+              },
+              "& .MuiTableBody-root .MuiTableRow-root:nth-of-type(odd)": {
+                backgroundColor: "#ffffff",
+              },
+              "& .MuiTableBody-root .MuiTableRow-root:hover": {
+                backgroundColor: "action.hover",
+              },
+              "& .MuiTableRow-root:last-child .MuiTableCell-body": {
+                borderBottom: 0,
+              },
+            }}
+          >
+            <TableHead>
               <TableRow>
-                <TableCell colSpan={2} align="center">
-                  {query ? t("ui.nothing_found") : t("ui.directory_empty")}
-                </TableCell>
+                <TableCell sx={{ width: { xs: 150, md: 300 } }}>{t("ui.code")}</TableCell>
+                <TableCell>{t("ui.item_name")}</TableCell>
               </TableRow>
-            )}
-            {!error &&
-              rows.map((row) => (
-                <TableRow
-                  key={row.key}
-                  hover
-                >
-                  <TableCell
-                    sx={{ whiteSpace: "nowrap", verticalAlign: "top" }}
+            </TableHead>
+            <TableBody>
+              {!isLoading && !error && rows.length === 0 && (
+                <TableRow>
+                  <TableCell colSpan={2} align="center">
+                    {query ? t("ui.nothing_found") : t("ui.directory_empty")}
+                  </TableCell>
+                </TableRow>
+              )}
+              {!error &&
+                rows.map((row) => (
+                  <TableRow
+                    key={row.key}
+                    hover
                   >
-                    <Box
-                      component="span"
+                    <TableCell
+                      sx={{ whiteSpace: "nowrap", verticalAlign: "top" }}
+                    >
+                      <Box
+                        component="span"
+                        sx={{
+                          display: "inline-block",
+                          ml: row.depth * 3.75,
+                          pl: row.depth ? 1.25 : 0,
+                          borderLeft: row.depth ? "2px solid" : "none",
+                          borderColor: "divider",
+                          fontWeight: row.isParent ? 600 : 400,
+                        }}
+                      >
+                        {row.code ?? "—"}
+                      </Box>
+                    </TableCell>
+                    <TableCell
                       sx={{
-                        display: "inline-block",
-                        ml: row.depth * 3.75,
-                        pl: row.depth ? 1.25 : 0,
-                        borderLeft: row.depth ? "2px solid" : "none",
-                        borderColor: "divider",
                         fontWeight: row.isParent ? 600 : 400,
                       }}
                     >
-                      {row.code ?? "—"}
-                    </Box>
-                  </TableCell>
-                  <TableCell
-                    sx={{
-                      fontWeight: row.isParent ? 600 : 400,
-                    }}
-                  >
-                    {row.name}
-                  </TableCell>
-                </TableRow>
-              ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-      {!error && tnvedCount > 0 && (
+                      {row.name}
+                    </TableCell>
+                  </TableRow>
+                ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      )}
+      {!isLoading && !error && tnvedCount > 0 && (
         <Pagination
           shape="rounded"
           page={currentPage}

@@ -7,6 +7,7 @@ import ViewTabs from "../../shared/ui/view-tabs";
 import FactorLineForm from "../../features/factor-line/factor-line-form";
 import SuccessModal from "../../components/factoring/factoring-form/success-modal";
 import DataContainer from "../../shared/ui/data-container";
+import TableSkeleton from "../../shared/ui/table-skeleton";
 import { Box, Pagination, Typography } from "@mui/material";
 import { useNotificationsStore } from "../../app/store/notifications/noti-store";
 import { parserNotificationType } from "../../shared/helpers/notifications/parse-notification-type";
@@ -96,6 +97,7 @@ const Factoring = () => {
       />
       <DataContainer
         isLoading={isLoading}
+        loadingFallback={isCradsView ? undefined : <TableSkeleton />}
         isEmpty={isFactoringsEmpty}
         emptyText={t("ui.no_factoring_available")}
       >
@@ -124,17 +126,19 @@ const Factoring = () => {
 
         {!isCradsView && <FactoringTable factorings={factorings} />}
       </DataContainer>
-      <Pagination
-        sx={{
-          mx: "auto",
-          width: "fit-content",
-        }}
-        color="primary"
-        shape="rounded"
-        page={page}
-        count={PAGE_COUNT}
-        onChange={handlePageChange}
-      />
+      {!isLoading && !isFactoringsEmpty && (
+        <Pagination
+          sx={{
+            mx: "auto",
+            width: "fit-content",
+          }}
+          color="primary"
+          shape="rounded"
+          page={page}
+          count={PAGE_COUNT}
+          onChange={handlePageChange}
+        />
+      )}
       {openFormModal && (
         <CreateFactoringForm
           openFormModal={openFormModal}

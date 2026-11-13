@@ -6,10 +6,11 @@ const DataContainer = ({
   isLoading,
   isEmpty,
   emptyText,
+  loadingFallback = <PageLoader />,
   children,
 }) => {
   const { t } = useTranslation();
-  if (isLoading) return <PageLoader />;
+  if (isLoading) return loadingFallback;
   return (
     <>
       {isEmpty ? (

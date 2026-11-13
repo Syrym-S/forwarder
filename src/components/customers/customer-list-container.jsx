@@ -5,6 +5,7 @@ import { VIEWS } from "../../shared/const/leads";
 import { useSearchParams } from "react-router-dom";
 import { Alert, Box, Pagination } from "@mui/material";
 import PageLoader from "../../shared/ui/loaders/page-loader";
+import TableSkeleton from "../../shared/ui/table-skeleton";
 import CustomersTable from "./customer-table";
 import CustomerCard from "./customer-card";
 import CustomerDetailsModal from "./customer-details-modal";
@@ -46,7 +47,7 @@ const CustomerListContainer = ({ view, page, onPageChange }) => {
     }
   }, [selectedCustomer]);
 
-  if (isLoading) return <PageLoader />;
+  if (isLoading) return isCardsView ? <PageLoader /> : <TableSkeleton />;
 
   return (
     <Box>

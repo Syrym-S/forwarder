@@ -15,6 +15,7 @@ import ApplicationsTenderTable from "../../components/tenders/applications-tende
 import { useNavigate } from "react-router-dom";
 import ContentPasteOutlinedIcon from "@mui/icons-material/ContentPasteOutlined";
 import DataContainer from "../../shared/ui/data-container";
+import TableSkeleton from "../../shared/ui/table-skeleton";
 
 const TenderHistory = () => {
   const { t } = useTranslation();
@@ -157,7 +158,10 @@ const TenderHistory = () => {
         />
       </Box>
 
-      <DataContainer isLoading={isLoading}>
+      <DataContainer
+        isLoading={isLoading}
+        loadingFallback={isCardsView ? undefined : <TableSkeleton />}
+      >
         {isTenderEmplty && (
           <Alert
             severity="info"
@@ -198,18 +202,20 @@ const TenderHistory = () => {
           <ApplicationsTenderTable tenders={tendersHistory} />
         )}
       </DataContainer>
-      <Pagination
-        page={page}
-        count={PAGE_COUNT}
-        color="primary"
-        shape="rounded"
-        sx={{
-          mt: 6,
-          mx: "auto",
-          width: "fit-content",
-        }}
-        onChange={handlePageChange}
-      />
+      {!isLoading && !isTenderEmplty && (
+        <Pagination
+          page={page}
+          count={PAGE_COUNT}
+          color="primary"
+          shape="rounded"
+          sx={{
+            mt: 6,
+            mx: "auto",
+            width: "fit-content",
+          }}
+          onChange={handlePageChange}
+        />
+      )}
     </RootLayout>
   );
 };

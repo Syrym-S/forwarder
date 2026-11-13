@@ -6,6 +6,7 @@ import ViewTabs from "../../shared/ui/view-tabs";
 import ForwardersTenderTable from "../../components/tenders/forwarders-tender-table";
 import EmptyListUi from "../../shared/ui/common/empty-list-ui";
 import DataContainer from "../../shared/ui/data-container";
+import TableSkeleton from "../../shared/ui/table-skeleton";
 import { useEffect, useState } from "react";
 import { Box, Pagination, Typography } from "@mui/material";
 import FormInput from "../../shared/ui/input/form-input";
@@ -131,7 +132,10 @@ const TenderForwarders = () => {
           />
         )}
 
-        <DataContainer isLoading={isLoading}>
+        <DataContainer
+          isLoading={isLoading}
+          loadingFallback={isCardsView ? undefined : <TableSkeleton />}
+        >
           {isCardsView && (
             <Box
               sx={{

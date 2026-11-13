@@ -5,6 +5,7 @@ import FactorLineTable from "./factor-line-table";
 import FactoringLineCard from "./factor-line-card";
 import { useFactorStore } from "../../app/store/factor/factor-store";
 import DataContainer from "../../shared/ui/data-container";
+import TableSkeleton from "../../shared/ui/table-skeleton";
 
 const FactorLineContainer = ({ view }) => {
   const { t } = useTranslation();
@@ -25,6 +26,7 @@ const FactorLineContainer = ({ view }) => {
     >
       <DataContainer
         isLoading={isLoading}
+        loadingFallback={isTableView ? <TableSkeleton /> : undefined}
         isEmpty={isFactoringsLineEmpty}
         emptyText={t("ui.factoring_line_list_empty")}
       >
