@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   MapContainer,
   TileLayer,
@@ -14,9 +14,10 @@ import polyline from "@mapbox/polyline";
 import { api, isStaging } from "../../app/client";
 import { generateLeadRoute } from "../../shared/api/routing";
 import "./hide.css";
-import { driverIcon } from "../../shared/ui/driver-marker-icon";
+import { createDriverIcon } from "../../shared/ui/driver-marker-icon";
 import DriverPositionPopup from "../../shared/ui/driver-position-popup";
 import { loadLeadTracking } from "../../shared/lib/lead-tracking";
+import { getDriverMarkerDirection, getNextLeadRoutePoint } from "../../shared/lib/lead-driver-direction";
 import { Tab, Tabs } from "@mui/material";
 import AltRouteIcon from "@mui/icons-material/AltRoute";
 import RouteIcon from "@mui/icons-material/Route";
@@ -92,6 +93,7 @@ export default function LeadMap({
   to,
   id,
   leadData,
+  routeCoordinates,
 }) {
   const leadId = id ?? leadData?.id;
   const [activeMapTab, setActiveMapTab] = useState(MapViewOptions.both);
@@ -118,11 +120,22 @@ export default function LeadMap({
   const [tracking, setTracking] = useState(null);
   const selectedTracking =
     tracking && String(tracking.leadId) === String(leadId) ? tracking : null;
+  const driverDirection = getDriverMarkerDirection(
+    getLocationPoint(selectedTracking?.point),
+    getLocationPoint(getNextLeadRoutePoint(leadData)),
+  );
+  const driverIcon = useMemo(
+    () => createDriverIcon(undefined, driverDirection),
+    [driverDirection],
+  );
   const [routeData, setRouteData] = useState(null);
+  const hasProvidedRoute = routeCoordinates !== undefined;
   const route =
-    routeData?.coordinates === coordinates && routeData?.leadId === leadId
-      ? routeData.points
-      : [];
+    hasProvidedRoute
+      ? routeCoordinates ?? []
+      : routeData?.coordinates === coordinates && routeData?.leadId === leadId
+        ? routeData.points
+        : [];
   const showFullRoute =
     activeMapTab === MapViewOptions.both ||
     activeMapTab === MapViewOptions.full_route;
@@ -135,7 +148,7 @@ export default function LeadMap({
   };
 
   useEffect(() => {
-    if (!leadId) return;
+    if (hasProvidedRoute || !leadId) return;
     let cancelled = false;
     const load = async () => {
       try {
@@ -152,7 +165,7 @@ export default function LeadMap({
     return () => {
       cancelled = true;
     };
-  }, [coordinates, leadId]);
+  }, [coordinates, leadId, hasProvidedRoute]);
 
   useEffect(() => {
     if (!leadId && !(trackingToken && trackingUrl)) return;

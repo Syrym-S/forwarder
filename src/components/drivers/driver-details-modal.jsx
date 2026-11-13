@@ -47,7 +47,9 @@ const DriverDetailsModal = ({ selectedDriver, handleClear }) => {
   const error = useDriverStore((state) => state.error);
   const isLoading = isDetailsLoading || (!driverDetails && !error);
   const name =
-    driverDetails?.fio || selectedDriver?.fio || t("ui.full_name_not_specified");
+    driverDetails?.fio ||
+    selectedDriver?.fio ||
+    t("ui.full_name_not_specified");
   const leads = Array.isArray(driverDetails?.leads) ? driverDetails.leads : [];
 
   return (
@@ -136,7 +138,11 @@ const DriverDetailsModal = ({ selectedDriver, handleClear }) => {
                       height: 72,
                       minWidth: 72,
                       minHeight: 72,
-                      bgcolor: "primary.main",
+                      border: "2px solid",
+                      borderColor: "primary.main",
+                      backgroundColor: "#022cff0e",
+                      fontWeight: "700",
+                      color: "primary.main",
                       flexShrink: 0,
                       borderRadius: "50%",
                       overflow: "hidden",
@@ -164,8 +170,14 @@ const DriverDetailsModal = ({ selectedDriver, handleClear }) => {
                   title={t("ui.driver_personal_details")}
                 >
                   <Box sx={infoGridSx}>
-                    <InfoItem label={t("ui.full_name")} value={driverDetails.fio || null} />
-                    <InfoItem label={t("ui.iin")} value={driverDetails.iin || null} />
+                    <InfoItem
+                      label={t("ui.full_name")}
+                      value={driverDetails.fio || null}
+                    />
+                    <InfoItem
+                      label={t("ui.iin")}
+                      value={driverDetails.iin || null}
+                    />
                     <InfoItem
                       label={t("ui.residency_status")}
                       value={booleanLabel(
@@ -174,7 +186,10 @@ const DriverDetailsModal = ({ selectedDriver, handleClear }) => {
                         t("ui.citizen"),
                       )}
                     />
-                    <InfoItem label={t("ui.rating")} value={driverDetails.rating ?? null} />
+                    <InfoItem
+                      label={t("ui.rating")}
+                      value={driverDetails.rating ?? null}
+                    />
                   </Box>
                 </DriverInfoSection>
 
@@ -185,15 +200,25 @@ const DriverDetailsModal = ({ selectedDriver, handleClear }) => {
                   <Box sx={infoGridSx}>
                     <InfoItem
                       label={t("ui.phone")}
-                      value={driverDetails.phone ? (
-                        <ContactValue value={driverDetails.phone} type="phone" />
-                      ) : null}
+                      value={
+                        driverDetails.phone ? (
+                          <ContactValue
+                            value={driverDetails.phone}
+                            type="phone"
+                          />
+                        ) : null
+                      }
                     />
                     <InfoItem
                       label="Email"
-                      value={driverDetails.email ? (
-                        <ContactValue value={driverDetails.email} type="email" />
-                      ) : null}
+                      value={
+                        driverDetails.email ? (
+                          <ContactValue
+                            value={driverDetails.email}
+                            type="email"
+                          />
+                        ) : null
+                      }
                     />
                   </Box>
                 </DriverInfoSection>
@@ -210,13 +235,22 @@ const DriverDetailsModal = ({ selectedDriver, handleClear }) => {
                     <InfoItem
                       label={t("ui.director_fio")}
                       value={
-                        (driverDetails.director_fio ?? selectedDriver?.director_fio) || null
+                        (driverDetails.director_fio ??
+                          selectedDriver?.director_fio) ||
+                        null
                       }
                     />
-                    <InfoItem label={t("ui.bin")} value={driverDetails.company_bin || null} />
+                    <InfoItem
+                      label={t("ui.bin")}
+                      value={driverDetails.company_bin || null}
+                    />
                     <InfoItem
                       label={t("ui.individual_entrepreneur")}
-                      value={booleanLabel(driverDetails.is_ip, t("ui.yes"), t("ui.no"))}
+                      value={booleanLabel(
+                        driverDetails.is_ip,
+                        t("ui.yes"),
+                        t("ui.no"),
+                      )}
                     />
                   </Box>
                 </DriverInfoSection>

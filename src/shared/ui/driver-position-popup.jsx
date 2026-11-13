@@ -1,6 +1,7 @@
 import { useTranslation } from "react-i18next";
 import { Popup } from "react-leaflet";
 import "./driver-position-popup.css";
+import { getNextLeadRoutePoint } from "../lib/lead-driver-direction";
 
 export default function DriverPositionPopup({ leadData, point }) {
   const { t, i18n } = useTranslation();
@@ -26,15 +27,7 @@ export default function DriverPositionPopup({ leadData, point }) {
           hour12: false,
         }).format(updateDate)
       : t("dashboard.not_specified");
-  const routePoints = [
-    leadData?.from_location && { ...leadData.from_location, label: "A" },
-    ...(leadData?.waypoints || []).map((point, index) => ({
-      ...point,
-      label: `P#${index + 1}`,
-    })),
-    leadData?.to_location && { ...leadData.to_location, label: "B" },
-  ].filter(Boolean);
-  const nextPoint = routePoints.find((point) => !point.is_passed);
+  const nextPoint = getNextLeadRoutePoint(leadData);
   const describePoint = (point) =>
     `${point.label}: ${point.address || t("dashboard.address_not_specified")}`;
 

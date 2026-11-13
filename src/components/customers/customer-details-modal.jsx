@@ -160,7 +160,11 @@ const CustomerDetailsModal = ({ selectedCustomer, handleClear }) => {
                       height: 72,
                       minWidth: 72,
                       minHeight: 72,
-                      bgcolor: "primary.main",
+                      border: "2px solid",
+                      borderColor: "primary.main",
+                      backgroundColor: "#022cff0e",
+                      fontWeight: "700",
+                      color: "primary.main",
                       flexShrink: 0,
                       borderRadius: "50%",
                       overflow: "hidden",
@@ -232,10 +236,7 @@ const CustomerDetailsModal = ({ selectedCustomer, handleClear }) => {
                               value={
                                 (key === "phone" || key === "email") &&
                                 value ? (
-                                  <ContactValue
-                                    value={value}
-                                    type={key}
-                                  />
+                                  <ContactValue value={value} type={key} />
                                 ) : (
                                   displayValue || null
                                 )

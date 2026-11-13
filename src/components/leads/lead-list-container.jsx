@@ -4,7 +4,7 @@ import LeadCard from "./lead-card";
 import LeadsTable from "./leads-table";
 import LeadKanbanTable from "./lead-kanban-table";
 import LeadsTableSkeleton from "./skeleton/leads-table-skeleton";
-import PageLoader from "../../shared/ui/loaders/page-loader";
+import { LeadCardSkeleton } from "../../shared/ui/lead-card-skeleton";
 import { useTranslation } from "react-i18next";
 
 const LeadListContainer = ({
@@ -26,11 +26,9 @@ const LeadListContainer = ({
 
   if (isLoading && isTableView) return <LeadsTableSkeleton />;
 
-  if (isLoading && isCardsView) return <PageLoader />;
-
   return (
     <>
-      {isLeadsEmpty && filterStatus && (
+      {!isLoading && isLeadsEmpty && filterStatus && (
         <Alert
           severity="info"
           sx={{
@@ -46,6 +44,9 @@ const LeadListContainer = ({
       )}
       {isCardsView && (
         <Box
+          role={isLoading ? "status" : undefined}
+          aria-label={isLoading ? t("ui.loading") : undefined}
+          aria-busy={isLoading}
           sx={{
             width: {
               xs: "100%",
@@ -60,7 +61,11 @@ const LeadListContainer = ({
             },
           }}
         >
-          {isLeadsEmpty ? (
+          {isLoading ? (
+            Array.from({ length: 3 }, (_, index) => (
+              <LeadCardSkeleton key={index} />
+            ))
+          ) : isLeadsEmpty ? (
             <Alert
               severity="info"
               sx={{
@@ -80,7 +85,7 @@ const LeadListContainer = ({
       )}
       {isTableView && <LeadsTable leads={leads} />}
       {isKanbanView && <LeadKanbanTable leads={leads} />}
-      {!isLeadsEmpty && (
+      {!isLoading && !isLeadsEmpty && (
         <Pagination
           aria-label={t("active_leads.pagination.label")}
           getItemAriaLabel={(type, pageNumber, selected) => {

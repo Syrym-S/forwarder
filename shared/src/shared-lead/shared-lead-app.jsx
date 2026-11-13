@@ -1,4 +1,5 @@
 import { Box } from "@mui/material";
+import { useMemo } from "react";
 import { useLoaderData, useParams } from "react-router-dom";
 import LeadCustomerInfo from "../../../src/components/leads/lead-item/lead-customer-info";
 import LeadRouteInfo from "../../../src/components/leads/lead-item/lead-route-info";
@@ -9,10 +10,16 @@ import LocalShippingOutlinedIcon from "@mui/icons-material/LocalShippingOutlined
 import Section from "../../../src/shared/ui/section";
 import LeadDriverInfo from "../../../src/components/leads/lead-item/lead-driver-info";
 import LeadTransportationInfo from "../../../src/components/leads/lead-item/lead-transportation-info";
+import { getSharedLeadRouteCoordinates } from "./lib/shared-lead-route";
 
 const SharedLeadApp = () => {
   const leadData = useLoaderData();
   const { leadId } = useParams();
+  const routes = leadData?.routes;
+  const routeCoordinates = useMemo(
+    () => getSharedLeadRouteCoordinates(routes),
+    [routes],
+  );
 
   const cargosCount = leadData?.cargos?.length;
 
@@ -57,7 +64,14 @@ const SharedLeadApp = () => {
             my: 3,
           }}
         >
-          <LeadMap waypoints={waypoints} from={from} to={to} id={leadId} leadData={leadData} />
+          <LeadMap
+            waypoints={waypoints}
+            from={from}
+            to={to}
+            id={leadId}
+            leadData={leadData}
+            routeCoordinates={routeCoordinates}
+          />
         </Box>
 
         <LeadRouteInfo leadData={leadData} />
