@@ -54,6 +54,13 @@ const useLeadsColumns = () => {
       },
     },
     {
+      field: "vehicle_number",
+      headerName: t("ui.vehicle_number"),
+      width: 180,
+      valueGetter: (_, row) => row?.driver?.vehicle_number || "",
+      renderCell: ({ value }) => value || t("ui.not_specified"),
+    },
+    {
       field: "customer",
       headerName: t("active_leads.customer"),
       width: 200,

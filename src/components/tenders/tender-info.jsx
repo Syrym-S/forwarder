@@ -37,6 +37,10 @@ const TenderInfo = ({ tender }) => {
           value={tender?.max_participants_count}
         />
         <InfoItem label={t("ui.participants")} value={tender?.participants_count} />
+        <InfoItem
+          label={t("ui.vehicle_number")}
+          value={tender?.lead?.driver_vehicle_number || null}
+        />
       </Box>
     </Section>
   );

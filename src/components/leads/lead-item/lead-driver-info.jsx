@@ -122,6 +122,10 @@ const LeadDriverInfo = ({
         <InfoItem label={t("ui.driver_id")} value={driver.id} />
         <InfoItem label={t("ui.full_name")} value={driver.fio} />
         <InfoItem
+          label={t("ui.vehicle_number")}
+          value={driver.vehicle_number || null}
+        />
+        <InfoItem
           label={t("ui.your_rating")}
           value={
             hasDriverRate ? (

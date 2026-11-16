@@ -147,6 +147,11 @@ const LeadCard = ({ lead }) => {
         </Box>
 
         <InfoItem
+          label={t("ui.vehicle_number")}
+          value={lead?.driver?.vehicle_number || null}
+        />
+
+        <InfoItem
           label={t("active_leads.customer_price")}
           value={`${moneySpacingFormat(lead?.price)} ${lead?.currency}`}
         />

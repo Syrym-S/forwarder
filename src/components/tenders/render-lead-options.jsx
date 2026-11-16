@@ -47,6 +47,12 @@ const RenderLeadOptions = ({ option, ...props }) => {
           </Box>
         ))}
       </Box>
+
+      {option.driver?.vehicle_number && (
+        <Typography sx={{ fontSize: 12, color: "text.secondary", overflowWrap: "anywhere" }}>
+          {t("ui.vehicle_number")}: {option.driver.vehicle_number}
+        </Typography>
+      )}
     </Box>
   );
 };

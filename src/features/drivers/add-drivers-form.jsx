@@ -25,6 +25,10 @@ import {
 } from "@mui/material";
 import { useDriverStore } from "../../app/store/drivers/driver-store";
 import { prepareDriverData } from "../../shared/helpers/prepare-driver-data";
+import {
+  CAR_NUMBER_REGEX,
+  normalizeCarNumber,
+} from "../../shared/helpers/car-number";
 import { useState } from "react";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
 import InsertDriveFileOutlinedIcon from "@mui/icons-material/InsertDriveFileOutlined";
@@ -43,6 +47,7 @@ const defaultValues = {
   iin: "",
   phone: "",
   email: "",
+  vehicle_number: "",
   is_foreigner: false,
   company_name: "",
   director_fio: "",
@@ -95,6 +100,7 @@ const AddDriverForm = ({ open, onClose, setSavedData }) => {
   const submitDriverCreate = async (data) => {
     const preparedData = prepareDriverData({
       ...data,
+      vehicle_number: normalizeCarNumber(data.vehicle_number),
       is_ip: !canRegisterIndividual || data.is_ip !== false,
       registration_document_name: t("ui.state_registration_certificate"),
       employer_document_name: t("ui.appointment_order"),
@@ -351,6 +357,35 @@ const AddDriverForm = ({ open, onClose, setSavedData }) => {
                 control={control}
                 render={({ field }) => (
                   <TextField {...field} label="Email" fullWidth size="small" />
+                )}
+              />
+            </Grid>
+
+            <Grid size={{ xs: 12, sm: 6 }}>
+              <Controller
+                name="vehicle_number"
+                control={control}
+                rules={{
+                  required: t("ui.vehicle_number_required"),
+                  validate: (value) =>
+                    CAR_NUMBER_REGEX.test(normalizeCarNumber(value)) ||
+                    t("ui.vehicle_number_invalid"),
+                }}
+                render={({ field, fieldState: { error } }) => (
+                  <TextField
+                    {...field}
+                    onBlur={() => {
+                      field.onChange(normalizeCarNumber(field.value));
+                      field.onBlur();
+                    }}
+                    label={t("ui.vehicle_number")}
+                    required
+                    fullWidth
+                    size="small"
+                    disabled={isSubmitting}
+                    error={!!error}
+                    helperText={error?.message || t("ui.vehicle_number_hint")}
+                  />
                 )}
               />
             </Grid>

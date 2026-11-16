@@ -127,7 +127,10 @@ const DriverStep = ({ control, errors, setValue }) => {
                   gap: 1.5,
                 }}
               >
-                <InfoBadge label={t("lead_form.driver_full_name")} value={selectedDriver.fio} />
+                <InfoBadge
+                  label={t("lead_form.driver_full_name")}
+                  value={selectedDriver.fio}
+                />
 
                 <InfoBadge
                   label={t("ui.phone_2")}
@@ -141,6 +144,10 @@ const DriverStep = ({ control, errors, setValue }) => {
                 <InfoBadge
                   label={t("ui.iin")}
                   value={selectedDriver.iin || t("ui.not_specified")}
+                />
+                <InfoBadge
+                  label={t("ui.vehicle_number")}
+                  value={selectedDriver.vehicle_number || t("ui.not_specified")}
                 />
               </Box>
             )}

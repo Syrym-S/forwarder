@@ -160,6 +160,10 @@ const ForwardersTenderCard = ({ tender }) => {
           <InfoItem label={t("ui.publication_date")} value={tender?.public_date_time} />
           <InfoItem label={t("ui.closing_date")} value={tender?.end_date_time} />
           <InfoItem label={t("ui.participant_count")} value={tender?.bets_count} />
+          <InfoItem
+            label={t("ui.vehicle_number")}
+            value={tender?.lead?.driver_vehicle_number || null}
+          />
         </Box>
       </Stack>
     </Box>

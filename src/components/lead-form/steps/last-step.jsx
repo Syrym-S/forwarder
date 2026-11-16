@@ -195,6 +195,10 @@ export function LastStep({ form }) {
             label={t("ui.phone")}
             value={form.driver?.phone || t("ui.not_specified")}
           />
+          <InfoBadge
+            label={t("ui.vehicle_number")}
+            value={form.driver?.vehicle_number || t("ui.not_specified")}
+          />
         </Box>
       </StepSection>
 

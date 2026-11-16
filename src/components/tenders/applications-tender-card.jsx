@@ -227,6 +227,12 @@ const ApplicationsTenderCard = ({ tender }) => {
             muted={isCancelled}
           />
 
+          <InfoBadge
+            label={t("ui.vehicle_number")}
+            value={tender?.lead?.driver_vehicle_number}
+            muted={isCancelled}
+          />
+
           {/* <InfoBadge
                   label='Цена'
                   value={

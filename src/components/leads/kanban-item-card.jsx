@@ -58,6 +58,11 @@ function KanbanCard({ item }) {
           </Box>
         </Stack>
 
+        <InfoBadge
+          label={t("ui.vehicle_number")}
+          value={item.driver?.vehicle_number}
+        />
+
         <Box
           sx={{
             pt: 1,

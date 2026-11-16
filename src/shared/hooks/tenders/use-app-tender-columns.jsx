@@ -55,6 +55,13 @@ const useAppTenederColumns = () => {
       ),
     },
     {
+      field: "driver_vehicle_number",
+      headerName: t("ui.vehicle_number"),
+      width: 180,
+      valueGetter: (_, row) => row?.lead?.driver_vehicle_number || "",
+      renderCell: ({ value }) => value || t("ui.not_specified"),
+    },
+    {
       field: "to_location",
       valueGetter: (_, row) => row?.lead?.to_location?.address || "",
       headerName: t("ui.destination"),
