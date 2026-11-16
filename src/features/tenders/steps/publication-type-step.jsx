@@ -8,24 +8,24 @@ import {
   Checkbox,
   FormControlLabel,
   Stack,
-  TextField,
   Typography,
 } from "@mui/material";
-import React, { useState } from "react";
+import { useState } from "react";
 import { Controller } from "react-hook-form";
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
-import { useTendersStore } from "../../../app/store/tenders/tender-store";
 import { useDriverStore } from "../../../app/store/drivers/driver-store";
 import RenderErrorContext from "../../../shared/ui/errors/render-error-context";
 import FormInput from "../../../shared/ui/input/form-input";
 import FormControllerInput from "../../../shared/ui/input/form-controller-input";
 
 const PublicationTypeStep = ({
+  publicationTypeDisabled = false,
   error,
   setError,
   control,
   formValues,
   selectedDrivers,
+  existingParticipants,
   setSelectedDrivers,
   setValue,
 }) => {
@@ -34,10 +34,9 @@ const PublicationTypeStep = ({
 
   const drivers = useDriverStore((state) => state.drivers);
   const isLoading = useDriverStore((state) => state.isLoading);
-  const currentTender = useTendersStore((state) => state.currentTender);
 
   const isPublic = formValues?.publication_type;
-  const isSelectedDriversExists = selectedDrivers?.length !== 0;
+  const isSelectedDriversExists = selectedDrivers.length + existingParticipants.length > 0;
 
   const onDriverChange = (_, value) => {
     if (value?.in_black_list === true) return;
@@ -71,10 +70,12 @@ const PublicationTypeStep = ({
         control={control}
         render={({ field }) => (
           <FormControlLabel
+            disabled={publicationTypeDisabled}
             label={t("ui.public_auction")}
             control={
               <Checkbox
-                checked={field.value}
+                disabled={publicationTypeDisabled}
+                checked={Boolean(field.value)}
                 onChange={(e) => field.onChange(e.target.checked)}
               />
             }
@@ -142,6 +143,7 @@ const PublicationTypeStep = ({
         >
           {selectedDrivers?.map((participant) => (
             <Box
+              key={participant.id}
               sx={{
                 display: "flex",
                 justifyContent: "space-between",
@@ -166,8 +168,9 @@ const PublicationTypeStep = ({
               </TooltipIconButton>
             </Box>
           ))}
-          {currentTender?.participants?.map((participant) => (
+          {existingParticipants.map((participant) => (
             <Box
+              key={participant.participant_id}
               sx={{
                 display: "flex",
                 justifyContent: "space-between",
@@ -185,15 +188,7 @@ const PublicationTypeStep = ({
                   fontWeight: 500,
                   color: "color.slate_2",
                 }}
-              >{t("ui.participant_number", { value1: participant?.participant_id })}</Typography>
-
-              <TooltipIconButton
-                title={t("ui.remove_participant")}
-                aria-label={t("ui.remove_participant")}
-              // onClick={() => handleRemoveDriver(participant?.participant_id)}
-              >
-                <HighlightOffIcon color="error" />
-              </TooltipIconButton>
+              >{t("ui.participant_number", { value1: participant.fio || participant.participant_id })}</Typography>
             </Box>
           ))}
         </Box>

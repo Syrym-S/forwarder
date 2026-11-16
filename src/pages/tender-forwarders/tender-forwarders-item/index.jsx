@@ -141,6 +141,7 @@ const TenderForwardersItem = () => {
         {openForm && (
           <TenderForm
             isEdit
+            publicationTypeDisabled={currentTender.status === STATUS.active}
             openForm={openForm}
             handleCloseForm={handleCloseForm}
             defaultValues={defaultValues}

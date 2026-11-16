@@ -21,7 +21,6 @@ const ChooseLeadStep = ({ control, setValue, isEdit }) => {
   );
 
   const [inputValue, setInputValue] = useState("");
-  const [selectedLead, setSelectedLead] = useState();
 
   // Дата и время публикации
   const publicDate = useWatch({
@@ -46,7 +45,7 @@ const ChooseLeadStep = ({ control, setValue, isEdit }) => {
   });
 
   useEffect(() => {
-    if (!inputValue) return;
+    if (isEdit || !inputValue.trim()) return;
 
     const timer = setTimeout(async () => {
       await searchLeadsWithoutDriver({
@@ -55,7 +54,7 @@ const ChooseLeadStep = ({ control, setValue, isEdit }) => {
     }, 1000);
 
     return () => clearTimeout(timer);
-  }, [inputValue, searchLeadsWithoutDriver]);
+  }, [inputValue, searchLeadsWithoutDriver, isEdit]);
 
   useEffect(() => {
     if (!publicDate || !publicTime) {
@@ -102,7 +101,7 @@ const ChooseLeadStep = ({ control, setValue, isEdit }) => {
           required: t("ui.lead_selection_required"),
           validate: (value) => {
             if (isDraftLead(value)) return t("ui.draft_auction_not_allowed");
-            return value?.status === STATUS.new ||
+            return isEdit || value?.status === STATUS.new ||
               t("ui.select_lead_without_driver");
           },
         }}
@@ -119,8 +118,8 @@ const ChooseLeadStep = ({ control, setValue, isEdit }) => {
               },
               listbox: { sx: { p: 0, maxHeight: 400 } },
             }}
-            value={selectedLead}
-            inputValue={inputValue}
+            value={field.value ?? null}
+            isOptionEqualToValue={(option, value) => option.id === value.id}
             loading={isSearchLoading}
             disabled={isEdit}
             options={isSearchLoading ? [] : leadsWithoutDriver.filter((lead) => !isDraftLead(lead))}
@@ -137,18 +136,13 @@ const ChooseLeadStep = ({ control, setValue, isEdit }) => {
             filterOptions={(items) => items}
             onChange={(_, value) => {
               field.onChange(value);
-
-              setInputValue(value?.from ? `${value.from} - ${value.to}` : "");
-
-              setValue("lead", value, {
-                shouldDirty: true,
-                shouldTouch: true,
-                shouldValidate: true,
-              });
-
-              setSelectedLead(value);
+              setInputValue("");
             }}
-            getOptionLabel={(option) => `${option?.from} - ${option?.to}`}
+            getOptionLabel={(option) => {
+              const from = option?.from_location?.address || option?.from || t("ui.address_not_specified");
+              const to = option?.to_location?.address || option?.to || t("ui.address_not_specified");
+              return `${from} - ${to}`;
+            }}
             renderInput={(params) => (
               <FormInput
                 {...params}

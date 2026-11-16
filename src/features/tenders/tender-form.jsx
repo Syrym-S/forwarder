@@ -28,10 +28,10 @@ const stepFields = {
   1: ["name", "lead", "public_date_time", "end_date_time", "participants"],
 };
 
-const prepareTenderData = (form, selectedDrivers) => {
+const prepareTenderData = (form, selectedDrivers, existingParticipants) => {
   return {
     name: form?.name?.trim() || "",
-    lead_id: form?.lead.id || "",
+    lead_id: form?.lead?.id || "",
     public_date_time:
       dayjs(form?.public_date_time).format("YYYY-MM-DD HH:mm:ss") || "",
     end_date_time:
@@ -39,12 +39,16 @@ const prepareTenderData = (form, selectedDrivers) => {
     type: "shipper",
     publication_type: form?.publication_type ? "public" : "private",
     max_participants: form?.max_participants || 0,
-    participants: selectedDrivers.map((user) => user.id),
+    participants: [...new Set([
+      ...existingParticipants.map((participant) => participant.participant_id),
+      ...selectedDrivers.map((user) => user.id),
+    ])],
   };
 };
 
 const TenderForm = ({
   isEdit = false,
+  publicationTypeDisabled = false,
   openForm,
   handleCloseForm,
   defaultValues = {},
@@ -55,7 +59,7 @@ const TenderForm = ({
   const [isSubmitLoading, setIsSubmitLoading] = useState(false);
 
   const { id } = useParams();
-  const { control, setValue, trigger, getValues } = useForm({
+  const { control, setValue, trigger } = useForm({
     defaultValues: { name: "", ...defaultValues },
     mode: "onChange",
     reValidateMode: "onChange",
@@ -72,8 +76,9 @@ const TenderForm = ({
   const addParticipant = useTendersStore((state) => state.addParticipant);
 
   const [selectedDrivers, setSelectedDrivers] = useState([]);
+  const existingParticipants = isEdit ? defaultValues.participants ?? [] : [];
 
-  const isSelectedDriversExists = selectedDrivers?.length !== 0;
+  const isSelectedDriversExists = selectedDrivers.length + existingParticipants.length > 0;
 
   const renderContent = (step) => {
     switch (step) {
@@ -83,17 +88,18 @@ const TenderForm = ({
             control={control}
             isEdit={isEdit}
             setValue={setValue}
-            getValues={getValues}
           />
         );
       case 2:
         return (
           <PublicationTypeStep
+            publicationTypeDisabled={publicationTypeDisabled}
             error={error}
             setError={setError}
             control={control}
             formValues={formValues}
             selectedDrivers={selectedDrivers}
+            existingParticipants={existingParticipants}
             setSelectedDrivers={setSelectedDrivers}
             setValue={setValue}
           />
@@ -117,8 +123,7 @@ const TenderForm = ({
   };
 
   const onSubmit = async () => {
-    setIsSubmitLoading(true);
-    const payload = prepareTenderData(formValues, selectedDrivers);
+    const payload = prepareTenderData(formValues, selectedDrivers, existingParticipants);
 
     if (!isSelectedDriversExists && !formValues?.publication_type) {
       setError(t("ui.add_at_least_one_driver"));
@@ -126,6 +131,7 @@ const TenderForm = ({
       return;
     }
 
+    setIsSubmitLoading(true);
     try {
       if (isEdit) {
         await updateTender(id, payload);
@@ -162,7 +168,7 @@ const TenderForm = ({
 
   useEffect(() => {
     getDrivers();
-  }, []);
+  }, [getDrivers]);
 
   if (isLoading) return <Loader />;
 
