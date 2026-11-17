@@ -7,8 +7,11 @@ import {
   regenerateFactoringLineApi,
 } from "./api";
 
+let latestLinesRequest = 0;
+
 export const useFactorStore = create((set) => ({
   factoringsLine: [],
+  linesError: null,
   factoringLineDetails: null,
 
   isLoading: false,
@@ -17,15 +20,22 @@ export const useFactorStore = create((set) => ({
   regenerateError: null,
 
   getFactoringsLine: async () => {
+    const request = ++latestLinesRequest;
     try {
-      set({ isLoading: true });
+      set({ isLoading: true, linesError: null });
 
       const response = await getFactorsLineApi();
 
+      if (request !== latestLinesRequest) return false;
+      if (!Array.isArray(response.data?.data)) throw new Error(appI18n.t("dashboard.loading_error"));
+
       set({ factoringsLine: response.data.data, isLoading: false });
+      return true;
     } catch (e) {
-      console.log(e);
-      set({ isLoading: false });
+      if (request !== latestLinesRequest) return false;
+      const message = e.response?.data?.message || e.message;
+      set({ isLoading: false, linesError: typeof message === "string" ? message : true });
+      return false;
     }
   },
 

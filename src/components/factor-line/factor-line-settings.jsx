@@ -68,12 +68,16 @@ const FactorLineSettings = () => {
       }}
     >
       <CardContent>
-        <Typography variant="h6" fontWeight={600} mb={2}>{t("ui.factoring_line_parameters")}</Typography>
+        <Typography variant="h6" sx={{ fontSize: { xs: 16, sm: 20 }, fontWeight: 600, mb: 2 }}>{t("ui.factoring_line_parameters")}</Typography>
 
         <Box
           sx={{
             display: "grid",
-            gridTemplateColumns: error ? "1fr" : "1fr 1fr",
+            gridTemplateColumns: error ? "minmax(0, 1fr)" : {
+              xs: "minmax(0, 1fr)",
+              sm: "repeat(2, minmax(0, 1fr))",
+            },
+            gap: 1,
           }}
         >
           {error ? (
@@ -86,12 +90,14 @@ const FactorLineSettings = () => {
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "space-between",
+                  minWidth: 0,
+                  gap: 1,
                   p: 1.5,
                   borderRadius: 1.5,
                   bgcolor: "grey.50",
                 }}
               >
-                <Typography variant="body2">{item.label}</Typography>
+                <Typography variant="body2" sx={{ minWidth: 0, overflowWrap: "anywhere" }}>{item.label}</Typography>
 
                 <Chip
                   size="small"
@@ -105,6 +111,7 @@ const FactorLineSettings = () => {
                   label={item.value ? t("ui.yes") : t("ui.no")}
                   color={item.value ? "success" : "default"}
                   variant="outlined"
+                  sx={{ flexShrink: 0 }}
                 />
               </Box>
             ))

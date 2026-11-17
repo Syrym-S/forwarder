@@ -3,6 +3,7 @@ import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import TooltipIconButton from "../../shared/ui/tooltip-icon-button";
 import { useTranslation } from "react-i18next";
 import {
+  Alert,
   Autocomplete,
   Box,
   Button,
@@ -16,6 +17,13 @@ import { useFactoringStore } from "../../app/store/factoring/factoring-store";
 import { Controller, useForm } from "react-hook-form";
 import RenderFactorOptions from "../../components/tenders/render-factor-options";
 import FactorLineSettings from "../../components/factor-line/factor-line-settings";
+
+const defaultValues = {
+  factor_id: "",
+  summ_max: "",
+  period_days: "",
+  currency: "",
+};
 
 const prepareData = (data, factorDetails) => {
   const result = {
@@ -38,12 +46,13 @@ const prepareData = (data, factorDetails) => {
 const FactorLineForm = ({ open, setOpenForm, setSuccessModal }) => {
   const { t } = useTranslation();
   const [inputValueFactor, setInputValueFactor] = useState("");
-  const [selectedFactor, setSelectedFactor] = useState();
+  const [selectedFactor, setSelectedFactor] = useState(null);
 
   const factors = useFactoringStore((state) => state.factors);
   const factorDetails = useFactoringStore((state) => state.factorDetails);
   const getFactorDetails = useFactoringStore((state) => state.getFactorDetails);
   const isFactorsLoading = useFactoringStore((state) => state.isFactorsLoading);
+  const isFactorDetailsLoading = useFactoringStore((state) => state.isFactorDetailsLoading);
   const getFactors = useFactoringStore((state) => state.getFactors);
   const error = useFactoringStore((state) => state.error);
   const createFactoringLine = useFactoringStore(
@@ -51,35 +60,39 @@ const FactorLineForm = ({ open, setOpenForm, setSuccessModal }) => {
   );
   const isCreateLoading = useFactoringStore((state) => state.isCreateLoading);
 
-  const { control, reset, setValue, handleSubmit } = useForm({
+  const { control, reset, handleSubmit } = useForm({
     mode: "onChange",
     reValidateMode: "onChange",
-    defaultValues: {
-      factor_id: "",
-      summ_max: "",
-      period_days: "",
-      currency: "",
-    },
+    defaultValues,
   });
 
   const onSubmit = async (data) => {
-    const preparedData = prepareData(data, factorDetails);
+    if (!selectedFactor || !factorDetails || isFactorDetailsLoading || isCreateLoading) return;
+    try {
+      const preparedData = prepareData(data, factorDetails);
 
-    const response = await createFactoringLine(preparedData);
+      const response = await createFactoringLine(preparedData);
 
-    window.open(response.sign_url, "_blank");
+      window.open(response.sign_url, "_blank");
 
-    reset({
-      factor_id: selectedFactor?.id ?? "",
-      summ_max: factorDetails.sum_default ?? "",
-      period_days: factorDetails.period_days ?? "",
-      currency: factorDetails.currency ?? "",
-    });
-    setSuccessModal(true);
+      reset({
+        factor_id: selectedFactor?.id ?? "",
+        summ_max: factorDetails.sum_default ?? "",
+        period_days: factorDetails.period_days ?? "",
+        currency: factorDetails.currency ?? "",
+      });
+      setSuccessModal?.(true);
+    } catch {
+      // The store exposes the request error below the factor selector.
+    }
+  };
+
+  const handleClose = () => {
+    if (!isCreateLoading) setOpenForm(false);
   };
 
   useEffect(() => {
-    if (!factorDetails) return;
+    if (!selectedFactor || !factorDetails) return;
 
     reset({
       factor_id: selectedFactor?.id ?? "",
@@ -91,18 +104,18 @@ const FactorLineForm = ({ open, setOpenForm, setSuccessModal }) => {
 
   useEffect(() => {
     if (selectedFactor) {
-      getFactorDetails(selectedFactor.id);
+      getFactorDetails(selectedFactor.id).catch(() => {});
     }
-  }, [selectedFactor]);
+  }, [selectedFactor, getFactorDetails]);
 
   useEffect(() => {
-    getFactors();
-  }, []);
+    getFactors().catch(() => {});
+  }, [getFactors]);
 
   return (
     <Dialog
       open={open}
-      onClose={() => setOpenForm(false)}
+      onClose={handleClose}
       fullWidth
       maxWidth="sm"
     >
@@ -110,7 +123,8 @@ const FactorLineForm = ({ open, setOpenForm, setSuccessModal }) => {
         {t("ui.create_request")}
         <TooltipIconButton
           title={t("ui.close_form")}
-          onClick={() => setOpenForm(false)}
+          onClick={handleClose}
+          disabled={isCreateLoading}
         >
           <CloseRoundedIcon />
         </TooltipIconButton>
@@ -122,6 +136,7 @@ const FactorLineForm = ({ open, setOpenForm, setSuccessModal }) => {
           render={({ field }) => (
             <Autocomplete
               value={selectedFactor}
+              disabled={isCreateLoading}
               inputValue={inputValueFactor}
               loading={isFactorsLoading}
               options={factors || []}
@@ -131,14 +146,9 @@ const FactorLineForm = ({ open, setOpenForm, setSuccessModal }) => {
               }}
               filterOptions={(items) => items}
               onChange={(_, value) => {
-                field.onChange(value);
-
-                setValue("factor_id", value.id, {
-                  shouldDirty: true,
-                  shouldTouch: true,
-                });
-
+                field.onChange(value?.id ?? "");
                 setSelectedFactor(value);
+                if (!value) reset(defaultValues);
               }}
               getOptionLabel={(option) =>
                 t("ui.person_company_option", { value1: option?.fio, value2: option?.company_name })
@@ -151,11 +161,11 @@ const FactorLineForm = ({ open, setOpenForm, setSuccessModal }) => {
                   helperText={t("ui.bin_iin_search_hint")}
                 />
               )}
-              renderOption={(props, option) => {
+              renderOption={({ key, ...props }, option) => {
                 return (
                   <RenderFactorOptions
                     option={option}
-                    key={option.id}
+                    key={key}
                     {...props}
                   />
                 );
@@ -163,6 +173,8 @@ const FactorLineForm = ({ open, setOpenForm, setSuccessModal }) => {
             />
           )}
         />
+
+        {error && <Alert severity="error" sx={{ my: 2 }}>{typeof error === "string" ? error : t("dashboard.loading_error")}</Alert>}
 
         {selectedFactor && <FactorLineSettings />}
 
@@ -180,7 +192,7 @@ const FactorLineForm = ({ open, setOpenForm, setSuccessModal }) => {
             render={({ field, fieldState }) => (
               <TextField
                 {...field}
-                disabled={!factorDetails || !factorDetails.is_sum_changeable}
+                disabled={!selectedFactor || isFactorDetailsLoading || isCreateLoading || !factorDetails?.is_sum_changeable}
                 label={t("ui.maximum_amount")}
                 type="number"
                 fullWidth
@@ -201,7 +213,7 @@ const FactorLineForm = ({ open, setOpenForm, setSuccessModal }) => {
             render={({ field, fieldState }) => (
               <TextField
                 {...field}
-                disabled={!factorDetails || !factorDetails.is_period_changeable}
+                disabled={!selectedFactor || isFactorDetailsLoading || isCreateLoading || !factorDetails?.is_period_changeable}
                 label={t("ui.period")}
                 type="number"
                 fullWidth
@@ -223,7 +235,7 @@ const FactorLineForm = ({ open, setOpenForm, setSuccessModal }) => {
               <TextField
                 {...field}
                 disabled={
-                  !factorDetails || !factorDetails.is_currency_changeable
+                  !selectedFactor || isFactorDetailsLoading || isCreateLoading || !factorDetails?.is_currency_changeable
                 }
                 label={t("ui.currency")}
                 fullWidth
@@ -234,7 +246,7 @@ const FactorLineForm = ({ open, setOpenForm, setSuccessModal }) => {
           />
         </Box>
         <Button
-          disabled={error}
+          disabled={!selectedFactor || !factorDetails || isFactorDetailsLoading || isCreateLoading}
           variant="outlined"
           color="primary"
           onClick={handleSubmit(onSubmit)}
