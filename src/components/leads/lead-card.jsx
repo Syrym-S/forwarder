@@ -22,7 +22,8 @@ const LeadCard = ({ lead }) => {
       onClick={navigateToLeadItem}
       tabIndex={0}
       sx={{
-        p: 3,
+        p: { xs: 2, sm: 3 },
+        minWidth: 0,
         maxWidth: "100%",
         border: "2px solid",
         borderColor: isDraftLead(lead) ? "warning.main" : "divider",
@@ -31,6 +32,7 @@ const LeadCard = ({ lead }) => {
         boxShadow: "0 2px 8px rgba(0, 0, 0, 0.06)",
         transition: "0.2s ease",
         cursor: "pointer",
+        "& .MuiTypography-root": { overflowWrap: "anywhere" },
         "&:hover": {
           borderColor: "primary.main",
           boxShadow: "0 8px 24px rgba(33, 150, 243, 0.12)",
@@ -42,11 +44,16 @@ const LeadCard = ({ lead }) => {
           sx={{
             display: "flex",
             justifyContent: "space-between",
+            alignItems: "flex-start",
+            flexWrap: "wrap",
+            gap: 1.5,
           }}
         >
           <Typography
             sx={{
-              fontSize: 20,
+              fontSize: { xs: 16, sm: 20 },
+              flex: "1 1 180px",
+              minWidth: 0,
             }}
           >
             {t("active_leads.customer")}: {lead?.customer?.name || t("active_leads.not_specified")}
@@ -66,11 +73,12 @@ const LeadCard = ({ lead }) => {
                 sm: "flex-end",
               },
               gap: 2,
+              maxWidth: "100%",
             }}
           >
             <Typography
               sx={{
-                fontSize: 20,
+                fontSize: { xs: 16, sm: 20 },
               }}
             >
               #{lead.num || "—"}
@@ -82,9 +90,14 @@ const LeadCard = ({ lead }) => {
 
         <Box
           sx={{
-            display: "flex",
+            display: "grid",
+            gridTemplateColumns: {
+              xs: "minmax(0, 1fr)",
+              sm: "minmax(0, 1fr) auto minmax(0, 1fr)",
+            },
             alignItems: "center",
-            gap: 2,
+            gap: 1.5,
+            "& > .MuiBox-root": { minWidth: 0 },
           }}
         >
           <Box>
@@ -114,6 +127,7 @@ const LeadCard = ({ lead }) => {
             sx={{
               color: "text.secondary",
               fontSize: 17,
+              justifySelf: { xs: "start", sm: "center" },
               transform: {
                 xs: "none",
                 sm: "rotate(-90deg)",
@@ -141,7 +155,7 @@ const LeadCard = ({ lead }) => {
                 lineHeight: 1.35,
               }}
             >
-              {lead?.to_location?.address || lead?.from || t("active_leads.not_specified")}
+              {lead?.to_location?.address || lead?.to || t("active_leads.not_specified")}
             </Typography>
           </Box>
         </Box>

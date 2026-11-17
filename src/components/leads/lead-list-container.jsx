@@ -1,5 +1,5 @@
 import { VIEWS } from "../../shared/const/leads";
-import { Alert, Box, Pagination } from "@mui/material";
+import { Alert, Box, Pagination, useMediaQuery } from "@mui/material";
 import LeadCard from "./lead-card";
 import LeadsTable from "./leads-table";
 import LeadKanbanTable from "./lead-kanban-table";
@@ -17,15 +17,24 @@ const LeadListContainer = ({
   perPage,
   isLoading,
   handlePageChange,
+  responsive = false,
 }) => {
   const { t } = useTranslation();
+  const isSmallScreen = useMediaQuery((theme) => theme.breakpoints.down("sm"));
   const PAGE_COUNT = Math.ceil(count / perPage);
   const isCardsView = view === VIEWS.cards;
   const isTableView = view === VIEWS.table;
   const isKanbanView = view === VIEWS.kanban;
+  const cardsLayout = {
+    width: { xs: "100%", sm: "60%" },
+    mx: "auto",
+    display: "grid",
+    my: "10px",
+    gridTemplateColumns: "1fr",
+  };
 
   if (isLoading && isTableView) return <TableSkeleton />;
-  if (isLoading && isCardsView) return <CardListSkeleton />;
+  if (isLoading && isCardsView) return <CardListSkeleton sx={cardsLayout} />;
 
   return (
     <>
@@ -33,10 +42,12 @@ const LeadListContainer = ({
         <Alert
           severity="info"
           sx={{
-            width: {
-              xs: "100%",
-              sm: "60%",
-            },
+            width: responsive
+              ? "100%"
+              : {
+                  xs: "100%",
+                  sm: "60%",
+                },
             my: 1,
           }}
         >
@@ -44,29 +55,17 @@ const LeadListContainer = ({
         </Alert>
       )}
       {isCardsView && (
-        <Box
-          sx={{
-            width: {
-              xs: "100%",
-              sm: "60%",
-            },
-            mx: "auto",
-            display: "grid",
-            gap: 5,
-            my: "10px",
-            gridTemplateColumns: {
-              xs: "1fr",
-            },
-          }}
-        >
+        <Box sx={cardsLayout}>
           {isLeadsEmpty ? (
             <Alert
               severity="info"
               sx={{
-                width: {
-                  xs: "100%",
-                  sm: "60%",
-                },
+                width: responsive
+                  ? "100%"
+                  : {
+                      xs: "100%",
+                      sm: "60%",
+                    },
                 my: 1,
               }}
             >
@@ -77,10 +76,12 @@ const LeadListContainer = ({
           )}
         </Box>
       )}
-      {isTableView && <LeadsTable leads={leads} />}
+      {isTableView && <LeadsTable leads={leads} responsive={responsive} />}
       {isKanbanView && <LeadKanbanTable leads={leads} />}
       {!isLoading && !isLeadsEmpty && (
         <Pagination
+          size={responsive && isSmallScreen ? "small" : "medium"}
+          siblingCount={responsive && isSmallScreen ? 0 : 1}
           aria-label={t("active_leads.pagination.label")}
           getItemAriaLabel={(type, pageNumber, selected) => {
             if (type.endsWith("ellipsis")) return undefined;
@@ -95,6 +96,8 @@ const LeadListContainer = ({
           onChange={handlePageChange}
           sx={{
             width: "fit-content",
+            maxWidth: "100%",
+            ...(responsive ? { my: 3 } : {}),
             mx: "auto",
 
             "& .MuiPaginationItem-root": {
