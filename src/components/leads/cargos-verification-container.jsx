@@ -27,7 +27,7 @@ const renderTitleText = (stage, isVerified) => {
   return title;
 };
 
-const CargosVerificationContainer = ({ cargoAction, pass_verify = false }) => {
+const CargosVerificationContainer = ({ cargoAction, pass_verify = false, readOnly = false }) => {
   const { t } = useTranslation();
   const { id } = useParams();
   const [currentFile, setCurrentFile] = useState(null);
@@ -68,7 +68,7 @@ const CargosVerificationContainer = ({ cargoAction, pass_verify = false }) => {
   };
 
   const handleVerify = () => {
-    if (pass_verify) return;
+    if (pass_verify || readOnly) return;
     if (cargoAction.stage === WAYPOINT_TYPES.loading) {
       handleVerifyCargoLoad();
     } else {
@@ -77,7 +77,7 @@ const CargosVerificationContainer = ({ cargoAction, pass_verify = false }) => {
   };
 
   const handleReject = () => {
-    if (pass_verify) return;
+    if (pass_verify || readOnly) return;
     if (cargoAction.stage === WAYPOINT_TYPES.loading) {
       handleRejectCargoLoad();
     } else {
@@ -106,13 +106,13 @@ const CargosVerificationContainer = ({ cargoAction, pass_verify = false }) => {
           gap: 2,
         }}
       >
-        {cargoAction?.files?.map((file) => (
-          <LeadDocumentCard document={file} onOpen={setCurrentFile} />
+        {cargoAction?.files?.map((file, index) => (
+          <LeadDocumentCard key={file.id ?? index} document={file} onOpen={setCurrentFile} isFileReadOnly={readOnly} />
         ))}
 
         <FileModal currentFile={currentFile} setCurrentFile={setCurrentFile} />
       </Box>
-      {!isVerified && !pass_verify && (
+      {!isVerified && !pass_verify && !readOnly && (
         <Box
           sx={{
             my: 1,

@@ -14,6 +14,7 @@ const RoutePoint = ({
   isTo,
   isWaypoint,
   date,
+  showTime = false,
   isPassed,
   type,
 }) => {
@@ -147,7 +148,7 @@ const RoutePoint = ({
                   fontWeight: 500,
                 }}
               >
-                {dayjs(date.start_at).format("DD.MM.YYYY")}
+                {dayjs(date.start_at).format(showTime ? "DD.MM.YYYY HH:mm" : "DD.MM.YYYY")}
               </Box>
             </Typography>
           )}
@@ -167,7 +168,7 @@ const RoutePoint = ({
                   fontWeight: 500,
                 }}
               >
-                {dayjs(date.end_at).format("DD.MM.YYYY, HH:mm")}
+                {dayjs(date.end_at).format(showTime ? "DD.MM.YYYY HH:mm" : "DD.MM.YYYY, HH:mm")}
               </Box>
             </Typography>
           )}

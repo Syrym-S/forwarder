@@ -77,12 +77,16 @@ const stepFields = [
 const AddLeadForm = ({
   editingItemId = null,
   isEdit = false,
+  withoutDriver = false,
   openForm,
   setOpenForm,
   initialValues,
   onSaved,
 }) => {
   const { t } = useTranslation();
+  const visibleSteps = steps
+    .filter((step) => !withoutDriver || step.id !== 3)
+    .map((step, index) => ({ ...step, id: index + 1, contentId: step.id }));
   const currentLead = useLeadsStore((state) => state.currentLead);
   const createLead = useLeadsStore((state) => state.createLead);
   const updateLead = useLeadsStore((state) => state.updateLead);
@@ -106,6 +110,7 @@ const AddLeadForm = ({
     pass_verify: false,
     is_international: null,
     ...initialValues,
+    ...(withoutDriver ? { driver: null } : {}),
     cargos: initialValues?.cargos?.length
       ? initialValues.cargos
       : [{ name: "" }],
@@ -127,7 +132,8 @@ const AddLeadForm = ({
 
   const formValues = useWatch({ control });
 
-  const isLastStep = activeStep === steps.length;
+  const currentStepId = visibleSteps[activeStep - 1]?.contentId;
+  const isLastStep = activeStep === visibleSteps.length;
 
   function getCreatedLeadId(response) {
     return (
@@ -159,6 +165,9 @@ const AddLeadForm = ({
       setIsSubmitting(true);
 
       const payload = mapCreateLeadFormToApi(data, { isDraft });
+      if (withoutDriver) {
+        delete payload.driver;
+      }
       if (isDraft || !isEdit) {
         payload.is_draft = isDraft;
       }
@@ -217,6 +226,7 @@ const AddLeadForm = ({
         open: true,
         type: "success",
         isDraft,
+        lead_id: createdLeadId,
         title: isDraft
           ? t("lead_form.draft_saved")
           : isEditingDraft
@@ -309,7 +319,7 @@ const AddLeadForm = ({
         );
 
       case 7:
-        return <LastStep form={formValues} isEdit={isEdit} />;
+        return <LastStep form={formValues} isEdit={isEdit} withoutDriver={withoutDriver} />;
     }
   };
 
@@ -327,7 +337,7 @@ const AddLeadForm = ({
   }
 
   async function handleNext() {
-    let fields = stepFields[activeStep - 1] || [];
+    let fields = stepFields[currentStepId - 1] || [];
 
     const isStepValid = await trigger(fields);
 
@@ -335,7 +345,7 @@ const AddLeadForm = ({
       return;
     }
 
-    if (activeStep === 1) {
+    if (currentStepId === 1) {
       fields = [
         "from_location.address",
         "to_location.address",
@@ -344,7 +354,7 @@ const AddLeadForm = ({
     }
 
     if (
-      activeStep === 2 &&
+      currentStepId === 2 &&
       (!formValues.cargos || formValues.cargos.length === 0)
     ) {
       return;
@@ -364,7 +374,7 @@ const AddLeadForm = ({
         <FormHeader
           isEdit={isEdit}
           activeStep={activeStep}
-          stepsCount={steps.length}
+          stepsCount={visibleSteps.length}
         />
         <DialogContent sx={{ px: 3 }}>
           {isEditingDraft && (
@@ -373,19 +383,19 @@ const AddLeadForm = ({
             </Alert>
           )}
           <LeadFormTabs
-            steps={steps}
+            steps={visibleSteps}
             activeStep={activeStep}
             setActiveStep={setActiveStep}
             isEdit={isEdit}
           />
 
-          {renderContent(activeStep)}
+          {renderContent(currentStepId)}
 
           <FormNavButtons
             isEdit={isEdit}
             isDraft={isEditingDraft}
             isFirstStep={activeStep === 1}
-            isLastStep={activeStep === steps.length}
+            isLastStep={isLastStep}
             hasCurrentStepErrors={hasStepError}
             isSubmitting={isSubmitting}
             onClose={handleClose}
@@ -404,7 +414,10 @@ const AddLeadForm = ({
         message={resultModal.message}
         onClose={() => {
           if (resultModal.type === "success") {
-            onSaved?.({ isDraft: resultModal.isDraft });
+            onSaved?.({
+              isDraft: resultModal.isDraft,
+              lead_id: resultModal.lead_id,
+            });
             handleClose();
           }
           setResultModal({

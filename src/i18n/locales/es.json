@@ -1,4 +1,24 @@
 {
+  "advertisements": {
+    "heading": "Anuncios",
+    "description": "Encuentre cargas de clientes y publique anuncios para conductores",
+    "create": "Crear anuncio",
+    "select_existing_lead": "Seleccionar un transporte existente",
+    "create_new_lead": "Crear un nuevo transporte con un anuncio",
+    "search_lead_hint": "Buscar por número de transporte o ruta",
+    "no_leads_found": "No se encontraron transportes disponibles",
+    "created_success": "Anuncio creado",
+    "create_error": "No se pudo crear el anuncio. Inténtelo de nuevo",
+    "lead_id_missing": "El transporte se creó, pero no se pudo vincular al anuncio. Selecciónelo mediante la búsqueda",
+    "my_tab": "Mis anuncios para conductores",
+    "customer_tab": "Anuncios de clientes",
+    "expires_at": "Válido hasta",
+    "empty_list": "Aún no hay anuncios",
+    "vat": "IVA",
+    "fuel": "Combustible",
+    "source_forwarder": "Transitario",
+    "information": "Datos del anuncio"
+  },
   "settings": {
     "language_title": "Idioma de la interfaz",
     "language_description": "Elige el idioma de la interfaz y las notificaciones.",

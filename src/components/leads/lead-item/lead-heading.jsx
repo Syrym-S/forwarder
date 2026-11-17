@@ -15,9 +15,9 @@ import { useLeadsStore } from "../../../app/store/leads/leads-store";
 import { parserNotificationType } from "../../../shared/helpers/notifications/parse-notification-type";
 import { NOTIFICATION_TYPE } from "../../../shared/const/notification-types";
 
-const LeadHeading = ({ leadData, openEditForm }) => {
+const LeadHeading = ({ leadData, openEditForm, readOnly = false }) => {
   const { t } = useTranslation();
-  const canBeEdited = !FINISHED_LEAD_STATUSES.includes(leadData.status);
+  const canBeEdited = !readOnly && !FINISHED_LEAD_STATUSES.includes(leadData.status);
 
   const newNotification = useNotificationsStore(
     (state) => state.newNotification,

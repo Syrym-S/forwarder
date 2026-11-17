@@ -10,7 +10,7 @@ import { useEffect } from "react";
 import InfoItem from "../../../shared/ui/info-item";
 import { isInternationalLead } from "../../../shared/lib/international-route";
 
-export function LastStep({ form }) {
+export function LastStep({ form, withoutDriver = false }) {
   const { t } = useTranslation();
   const leadParams = useOptionsStore((state) => state.leadParams);
   const getLeadParams = useOptionsStore((state) => state.getLeadParams);
@@ -176,31 +176,33 @@ export function LastStep({ form }) {
         </Box>
       </StepSection>
 
-      <StepSection title={t("ui.driver")}>
-        <Box
-          sx={{
-            display: "grid",
-            gridTemplateColumns: {
-              xs: "1fr",
-              sm: "repeat(2, 1fr)",
-            },
-            gap: 1.5,
-          }}
-        >
-          <InfoBadge
-            label={t("lead_form.driver_full_name")}
-            value={form.driver?.fio || t("lead_form.not_selected")}
-          />
-          <InfoBadge
-            label={t("ui.phone")}
-            value={form.driver?.phone || t("ui.not_specified")}
-          />
-          <InfoBadge
-            label={t("ui.vehicle_number")}
-            value={form.driver?.vehicle_number || t("ui.not_specified")}
-          />
-        </Box>
-      </StepSection>
+      {!withoutDriver && (
+        <StepSection title={t("ui.driver")}>
+          <Box
+            sx={{
+              display: "grid",
+              gridTemplateColumns: {
+                xs: "1fr",
+                sm: "repeat(2, 1fr)",
+              },
+              gap: 1.5,
+            }}
+          >
+            <InfoBadge
+              label={t("lead_form.driver_full_name")}
+              value={form.driver?.fio || t("lead_form.not_selected")}
+            />
+            <InfoBadge
+              label={t("ui.phone")}
+              value={form.driver?.phone || t("ui.not_specified")}
+            />
+            <InfoBadge
+              label={t("ui.vehicle_number")}
+              value={form.driver?.vehicle_number || t("ui.not_specified")}
+            />
+          </Box>
+        </StepSection>
+      )}
 
       <StepSection title={t("ui.customer")}>
         <Box

@@ -1,4 +1,24 @@
 {
+  "advertisements": {
+    "heading": "Eʼlonlar",
+    "description": "Buyurtmachilarning tashish buyurtmalarini toping va haydovchilar uchun eʼlonlar joylashtiring",
+    "create": "Eʼlon yaratish",
+    "select_existing_lead": "Mavjud tashish buyurtmasini tanlash",
+    "create_new_lead": "Eʼlon bilan yangi tashish buyurtmasini yaratish",
+    "search_lead_hint": "Tashish buyurtmasi raqami yoki yoʻnalish boʻyicha qidirish",
+    "no_leads_found": "Mos tashish buyurtmalari topilmadi",
+    "created_success": "Eʼlon yaratildi",
+    "create_error": "Eʼlon yaratib boʻlmadi. Qayta urinib koʻring",
+    "lead_id_missing": "Tashish buyurtmasi yaratildi, lekin uni eʼlonga bogʻlab boʻlmadi. Uni qidiruv orqali tanlang",
+    "my_tab": "Haydovchilar uchun eʼlonlarim",
+    "customer_tab": "Buyurtmachilarning eʼlonlari",
+    "expires_at": "Amal qilish muddati",
+    "empty_list": "Hozircha eʼlonlar yoʻq",
+    "vat": "QQS",
+    "fuel": "Yoqilgʻi",
+    "source_forwarder": "Ekspeditor",
+    "information": "Eʼlon maʼlumotlari"
+  },
   "settings": {
     "language_title": "Interfeys tili",
     "language_description": "Interfeys va bildirishnomalar uchun tilni tanlang.",

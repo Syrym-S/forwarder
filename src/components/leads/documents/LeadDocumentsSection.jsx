@@ -24,11 +24,12 @@ export function LeadDocumentsSection({
   isUploading = false,
   uploadError = "",
   deletingDocumentIds = [],
+  readOnly = false,
 }) {
   const { t } = useTranslation();
   const isFilesEmpty = documents.length === 0;
   const isFinishedOrDelted =
-    leadStatus === STATUS.finished || leadStatus === STATUS.deleted;
+    readOnly || leadStatus === STATUS.finished || leadStatus === STATUS.deleted;
 
   const isLoading = useLeadsStore((state) => state.isLoading);
   const showSkeleton = isUploading || (isLoading && deletingDocumentIds.length === 0);
@@ -66,7 +67,7 @@ export function LeadDocumentsSection({
   return (
     <>
       <Stack spacing={2}>
-        {leadStatus !== STATUS.finished && leadStatus !== STATUS.deleted && (
+        {!readOnly && leadStatus !== STATUS.finished && leadStatus !== STATUS.deleted && (
           <Box
             component="form"
             onSubmit={handleSubmit}

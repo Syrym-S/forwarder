@@ -1,4 +1,28 @@
 {
+  "advertisements": {
+    "heading": "Listings",
+    "description": "Find shipments from customers and post listings for drivers",
+    "create": "Create listing",
+    "close": "Close listing",
+    "delete": "Delete listing",
+    "close_confirmation": "Are you sure you want to close this listing?",
+    "delete_confirmation": "Are you sure you want to delete this listing?",
+    "select_existing_lead": "Select an existing shipment",
+    "create_new_lead": "Create a new shipment with a listing",
+    "search_lead_hint": "Search by shipment number or route",
+    "no_leads_found": "No eligible shipments found",
+    "created_success": "Listing created",
+    "create_error": "Could not create the listing. Please try again",
+    "lead_id_missing": "The shipment was created, but could not be linked to the listing. Select it using search",
+    "my_tab": "My listings for drivers",
+    "customer_tab": "Listings from customers",
+    "expires_at": "Valid until",
+    "empty_list": "No listings yet",
+    "vat": "VAT",
+    "fuel": "Fuel",
+    "source_forwarder": "Freight forwarder",
+    "information": "Listing information"
+  },
   "settings": {
     "language_title": "Interface language",
     "language_description": "Choose the language for the interface and notifications.",

@@ -1,4 +1,24 @@
 {
+  "advertisements": {
+    "heading": "İlanlar",
+    "description": "Müşterilerin taşıma taleplerini bulun ve sürücüler için ilan yayınlayın",
+    "create": "İlan oluştur",
+    "select_existing_lead": "Mevcut bir taşımayı seç",
+    "create_new_lead": "İlanla birlikte yeni bir taşıma oluştur",
+    "search_lead_hint": "Taşıma numarası veya güzergâha göre arayın",
+    "no_leads_found": "Uygun taşıma bulunamadı",
+    "created_success": "İlan oluşturuldu",
+    "create_error": "İlan oluşturulamadı. Lütfen tekrar deneyin",
+    "lead_id_missing": "Taşıma oluşturuldu ancak ilana bağlanamadı. Arama yaparak seçin",
+    "my_tab": "Sürücüler için ilanlarım",
+    "customer_tab": "Müşterilerden gelen ilanlar",
+    "expires_at": "Geçerlilik tarihi",
+    "empty_list": "Henüz ilan yok",
+    "vat": "KDV",
+    "fuel": "Yakıt",
+    "source_forwarder": "Nakliye organizatörü",
+    "information": "İlan bilgileri"
+  },
   "settings": {
     "language_title": "Arayüz dili",
     "language_description": "Arayüz ve bildirimler için bir dil seçin.",

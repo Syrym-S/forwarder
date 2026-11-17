@@ -5,7 +5,7 @@ import RoutePoint from "./route-point";
 import { Box } from "@mui/material";
 import InfoItem from "../../../shared/ui/info-item";
 
-const LeadRouteInfo = ({ leadData }) => {
+const LeadRouteInfo = ({ leadData, showTime = false }) => {
   const { t } = useTranslation();
   const waypoints = leadData?.waypoints || [];
   const pointSchedules = leadData?.point_schedules || [];
@@ -48,6 +48,7 @@ const LeadRouteInfo = ({ leadData }) => {
               : t("ui.point_not_passed")
           }
           date={pointSchedules[0]}
+          showTime={showTime}
         />
 
         {waypoints.map((point, index) => (
@@ -61,6 +62,7 @@ const LeadRouteInfo = ({ leadData }) => {
               point?.is_passed ? t("ui.point_passed") : t("ui.point_not_passed")
             }
             date={pointSchedules[index + 1]}
+            showTime={showTime}
             type={point.type}
           />
         ))}
@@ -80,6 +82,7 @@ const LeadRouteInfo = ({ leadData }) => {
           }
           isPassed={leadData?.to_location?.is_passed}
           date={pointSchedules[waypoints.length + 1]}
+          showTime={showTime}
         />
         <InfoItem
           label={t("ui.skip_loading_unloading_file_confirmation")}

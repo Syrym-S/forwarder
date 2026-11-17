@@ -17,12 +17,16 @@ import "./hide.css";
 import { createDriverIcon } from "../../shared/ui/driver-marker-icon";
 import DriverPositionPopup from "../../shared/ui/driver-position-popup";
 import { loadLeadTracking } from "../../shared/lib/lead-tracking";
-import { getDriverMarkerDirection, getNextLeadRoutePoint } from "../../shared/lib/lead-driver-direction";
-import { Tab, Tabs } from "@mui/material";
+import {
+  getDriverMarkerDirection,
+  getNextLeadRoutePoint,
+} from "../../shared/lib/lead-driver-direction";
+import { Box, CircularProgress, Tab, Tabs, Typography } from "@mui/material";
 import AltRouteIcon from "@mui/icons-material/AltRoute";
 import RouteIcon from "@mui/icons-material/Route";
 import TimelineIcon from "@mui/icons-material/Timeline";
 import ActionTooltip from "../../shared/ui/action-tooltip";
+import { useTranslation } from "react-i18next";
 
 window.Pusher = Pusher;
 
@@ -96,6 +100,8 @@ export default function LeadMap({
   routeCoordinates,
   fallbackRoutes,
 }) {
+  const { t } = useTranslation();
+
   const leadId = id ?? leadData?.id;
   const [activeMapTab, setActiveMapTab] = useState(MapViewOptions.both);
   const trackingToken = leadData?.tracking?.token;
@@ -130,13 +136,13 @@ export default function LeadMap({
     [driverDirection],
   );
   const [routeData, setRouteData] = useState(null);
+  const [isRouteLoading, setIsRouteLoading] = useState(false);
   const hasProvidedRoute = routeCoordinates !== undefined;
-  const route =
-    hasProvidedRoute
-      ? routeCoordinates ?? []
-      : routeData?.coordinates === coordinates && routeData?.leadId === leadId
-        ? routeData.points
-        : [];
+  const route = hasProvidedRoute
+    ? (routeCoordinates ?? [])
+    : routeData?.coordinates === coordinates && routeData?.leadId === leadId
+      ? routeData.points
+      : [];
   const showFullRoute =
     activeMapTab === MapViewOptions.both ||
     activeMapTab === MapViewOptions.full_route;
@@ -153,12 +159,18 @@ export default function LeadMap({
     let cancelled = false;
     const load = async () => {
       try {
+        setIsRouteLoading(true);
+
         const result = await generateLeadRoute(leadId, { fallbackRoutes });
         if (!cancelled) {
           setRouteData({ leadId, coordinates, points: result.coordinates });
         }
+
+        setIsRouteLoading(false);
       } catch (error) {
         if (!cancelled) console.error("Ошибка загрузки маршрута:", error);
+
+        setIsRouteLoading(false);
       }
     };
 
@@ -345,6 +357,43 @@ export default function LeadMap({
       zoom={13}
       style={{ height: "400px", width: "100%", zIndex: 0 }}
     >
+      {isRouteLoading && (
+        <Box
+          sx={{
+            position: "absolute",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            zIndex: 1,
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+            background: "rgba(255, 255, 255, 0.5)",
+          }}
+        >
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+              gap: 1,
+            }}
+          >
+            <CircularProgress />
+            <Typography
+              sx={{
+                fontWeight: 200,
+                fontSize: "0.7rem",
+              }}
+            >
+              {t("dashboard.loading_map")}
+            </Typography>
+          </Box>
+        </Box>
+      )}
+
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
         url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png?key=cb1_33bl_1_e67a46f1e67e6cbad8143c4e"

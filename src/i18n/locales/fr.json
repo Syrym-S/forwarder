@@ -1,4 +1,24 @@
 {
+  "advertisements": {
+    "heading": "Annonces",
+    "description": "Trouvez des demandes de transport de clients et publiez des annonces pour les chauffeurs",
+    "create": "Créer une annonce",
+    "select_existing_lead": "Sélectionner un transport existant",
+    "create_new_lead": "Créer un nouveau transport avec une annonce",
+    "search_lead_hint": "Rechercher par numéro de transport ou par trajet",
+    "no_leads_found": "Aucun transport éligible trouvé",
+    "created_success": "Annonce créée",
+    "create_error": "Impossible de créer l’annonce. Veuillez réessayer",
+    "lead_id_missing": "Le transport a été créé, mais n’a pas pu être lié à l’annonce. Sélectionnez-le à l’aide de la recherche",
+    "my_tab": "Mes annonces pour les chauffeurs",
+    "customer_tab": "Annonces des clients",
+    "expires_at": "Valable jusqu’au",
+    "empty_list": "Aucune annonce pour le moment",
+    "vat": "TVA",
+    "fuel": "Carburant",
+    "source_forwarder": "Transitaire",
+    "information": "Informations sur l’annonce"
+  },
   "settings": {
     "language_title": "Langue de l’interface",
     "language_description": "Choisissez la langue de l’interface et des notifications.",

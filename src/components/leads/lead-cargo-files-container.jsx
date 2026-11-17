@@ -9,6 +9,7 @@ import { Alert } from "@mui/material";
 const LeadCargoFilesContainer = ({
   cargoActions = [],
   pass_verify = false,
+  readOnly = false,
 }) => {
   const { t } = useTranslation();
   const isFilesEmpty = cargoActions.length === 0;
@@ -24,11 +25,13 @@ const LeadCargoFilesContainer = ({
       {isFilesEmpty && !pass_verify && (
         <Alert severity="info">{t("ui.uploaded_file_list_empty")}</Alert>
       )}
-      {cargoActions.map((cargoAction) => {
+      {cargoActions.map((cargoAction, index) => {
         return (
           <CargosVerificationContainer
+            key={cargoAction.id ?? index}
             cargoAction={cargoAction}
             pass_verify={pass_verify}
+            readOnly={readOnly}
           />
         );
       })}
