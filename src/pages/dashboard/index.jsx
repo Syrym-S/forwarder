@@ -1,44 +1,47 @@
-import { useTranslation } from "react-i18next";
-import { useState, useEffect } from "react";
-import { Alert, Box, Container, Typography } from "@mui/material";
-
 import RootLayout from "../../components/layout/root-layout";
 import Map from "../../components/dashboard/map";
 import DashboardLeadsList from "../../components/dashboard/leads/dashboard-leads-list";
 import LeadMapStatusFilter from "../../components/dashboard/lead-map-status-filter";
-
-import { useLeadsStore } from "../../app/store/leads/leads-store";
 import TendersMainContainer from "../../components/dashboard/tenders/tenders-main-container";
 import FactoringProgressBarContainer from "../../components/dashboard/factoring-line/factoring-progress-bar-container";
 import FactoringTable from "../../components/factoring/factoring-table";
 import TableSkeleton from "../../shared/ui/table-skeleton";
-import { useFactoringStore } from "../../app/store/factoring/factoring-store";
 import DashboardStats from "../../components/dashboard/statistics-cards/stats-cards-container";
+
+import { useTranslation } from "react-i18next";
+import { useState, useEffect } from "react";
+import { Alert, Box, Container, Typography } from "@mui/material";
+import { useLeadsStore } from "../../app/store/leads/leads-store";
+import { useFactoringStore } from "../../app/store/factoring/factoring-store";
 import { useStatsStore } from "../../app/store/stats/use-stats-store";
 import { DEFAULT_LEAD_MAP_STATUSES } from "../../shared/const/lead-map-statuses";
+import { STATUS } from "../../shared/const/tenders";
 
 const Dashboard = () => {
   const { t } = useTranslation();
+
   const stats = useStatsStore((state) => state.stats);
   const leads = useLeadsStore((state) => state.leads);
-  const factorings = useFactoringStore((state) => state.factorings);
-  const getFactorings = useFactoringStore((state) => state.getFactorings);
-  const isFactoringsLoading = useFactoringStore((state) => state.isLoading);
   const fetchLeads = useLeadsStore((state) => state.fetchLeads);
   const isLoading = useLeadsStore((state) => state.isLoading);
   const error = useLeadsStore((state) => state.error);
 
+  const factorings = useFactoringStore((state) => state.factorings);
+  const getFactorings = useFactoringStore((state) => state.getFactorings);
+  const isFactoringsLoading = useFactoringStore((state) => state.isLoading);
+
   const awaitingApproveFactorings = factorings?.filter(
     (factoring) =>
-      factoring.status === "await_paid" ||
-      factoring.status === "verified_participant",
+      factoring.status === STATUS.await_paid ||
+      factoring.status === STATUS.verified_participant,
   );
 
-  const [selectedStatuses, setSelectedStatuses] = useState(() => [
-    ...DEFAULT_LEAD_MAP_STATUSES,
-  ]);
   const [selectedLeadId, setSelectedLeadId] = useState(null);
   const [hoveredLeadId, setHoveredLeadId] = useState(null);
+  const [selectedStatuses, setSelectedStatuses] = useState(
+    DEFAULT_LEAD_MAP_STATUSES,
+  );
+
   const visibleSelectedLeadId = leads.some(
     (lead) => String(lead.id) === String(selectedLeadId),
   )
@@ -49,13 +52,14 @@ const Dashboard = () => {
   )
     ? hoveredLeadId
     : null;
-  const highlightedLeadId = visibleHoveredLeadId || visibleSelectedLeadId;
 
+  const highlightedLeadId = visibleHoveredLeadId || visibleSelectedLeadId;
   const showFactoringTable = window.APP_DATA.features.factoring;
   const showTenders = window.APP_DATA?.features?.tender !== false;
 
   const handleStatusChange = (event) => {
     const { value, checked } = event.target;
+
     setSelectedStatuses((statuses) =>
       checked
         ? [...statuses, value]
@@ -115,6 +119,7 @@ const Dashboard = () => {
           }}
         >
           <Box
+            className="glass-panel"
             sx={{
               border: "1px solid",
               borderColor: "divider",
@@ -174,6 +179,7 @@ const Dashboard = () => {
 
         {showFactoringTable && (
           <Box
+            className="glass-panel"
             sx={{
               minWidth: 0,
               p: 2,

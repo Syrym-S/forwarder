@@ -99,6 +99,7 @@ const StatCard = ({
 
   return (
     <Box
+      className="glass-panel"
       aria-busy={!isComparing && isLoading}
       sx={{
         minWidth: 0,

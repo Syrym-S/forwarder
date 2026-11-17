@@ -18,11 +18,11 @@ const ApplicationsTenderTable = (tenders) => {
           boxShadow: 0,
           minHeight: "80vh",
           "& .MuiDataGrid-row:nth-of-type(even)": {
-            backgroundColor: "#f5f7fa",
+            backgroundColor: "background.slate",
           },
 
           "& .MuiDataGrid-row:nth-of-type(odd)": {
-            backgroundColor: "#ffffff",
+            backgroundColor: "transparent",
           },
         }}
       />

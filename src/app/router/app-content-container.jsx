@@ -1,6 +1,7 @@
 import { useTranslation } from "react-i18next";
 import Header from "../../components/layout/header";
 import SideBar from "../../components/layout/menu";
+import TruckBackground from "../../components/layout/truck-background";
 import NotificationPopup from "../../components/layout/notifications/notification-popup";
 import RenderNotificationIcon from "../../shared/ui/render-notification-icon";
 import { useEffect, useState } from "react";
@@ -86,6 +87,7 @@ const AppContentContainer = () => {
 
   return (
     <>
+      <TruckBackground />
       <Header openMenu={openMenu} setOpenMenu={setOpenMenu} />
 
       <Box style={{ display: "flex", width: "100%" }}>

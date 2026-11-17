@@ -24,6 +24,7 @@ const ApplicationsTenderCard = ({ tender }) => {
 
   return (
     <Box
+      className="glass-panel"
       onClick={navigateToDetailPage}
       tabIndex={0}
       sx={{

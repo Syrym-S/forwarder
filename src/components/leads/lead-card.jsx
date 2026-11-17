@@ -19,6 +19,7 @@ const LeadCard = ({ lead }) => {
 
   return (
     <Box
+      className="glass-panel"
       onClick={navigateToLeadItem}
       tabIndex={0}
       sx={{

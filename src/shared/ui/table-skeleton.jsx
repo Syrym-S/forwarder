@@ -14,6 +14,7 @@ const TableSkeleton = ({ rows = 10 }) => {
 
   return (
     <Box
+      className="glass-panel"
       role="status"
       aria-label={t("ui.loading")}
       aria-busy="true"

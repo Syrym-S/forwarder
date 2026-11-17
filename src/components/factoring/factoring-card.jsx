@@ -17,6 +17,7 @@ const FactoringCard = ({ factoring }) => {
 
   return (
     <Box
+      className="glass-panel"
       onClick={handleNavigateToDetailsPage}
       tabIndex={0}
       sx={{

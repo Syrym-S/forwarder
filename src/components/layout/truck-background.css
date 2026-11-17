@@ -1,0 +1,69 @@
+.truck-background {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+  user-select: none;
+  color: #6f94c4;
+}
+
+.truck-background::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse at center,
+    transparent 45%,
+    rgba(71, 85, 105, 0.025) 72%,
+    rgba(71, 85, 105, 0.09) 100%
+  );
+  box-shadow: inset 0 0 clamp(48px, 7vw, 120px) rgba(71, 85, 105, 0.04);
+}
+
+.truck-background__truck {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: block;
+  width: var(--truck-size);
+  height: var(--truck-size);
+  font-size: var(--truck-size);
+  line-height: 1;
+  opacity: var(--truck-opacity);
+  transform: translate3d(var(--x0), var(--y0), 0) rotate(var(--r0));
+  animation: truck-background-drift var(--truck-duration) ease-in-out var(--truck-delay) infinite;
+}
+
+.truck-background__truck > svg {
+  display: block;
+  transform: scaleX(var(--truck-facing));
+}
+
+@keyframes truck-background-drift {
+  0%, 100% {
+    transform: translate3d(var(--x0), var(--y0), 0) rotate(var(--r0));
+  }
+  25% {
+    transform: translate3d(var(--x1), var(--y1), 0) rotate(var(--r1));
+  }
+  50% {
+    transform: translate3d(var(--x2), var(--y2), 0) rotate(var(--r2));
+  }
+  75% {
+    transform: translate3d(var(--x3), var(--y3), 0) rotate(var(--r3));
+  }
+}
+
+@media (max-width: 599px) {
+  .truck-background__truck:nth-child(even) {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .truck-background__truck {
+    animation: none;
+  }
+}

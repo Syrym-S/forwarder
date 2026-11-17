@@ -3,6 +3,7 @@ import { Box, Skeleton, Stack } from "@mui/material";
 export const LeadCardSkeleton = () => {
   return (
     <Box
+      className="glass-panel"
       aria-hidden="true"
       sx={{
         p: 3,

@@ -24,14 +24,14 @@ const LeadsTable = ({ leads }) => {
           boxShadow: 0,
           minHeight: "80vh",
           "& .MuiDataGrid-row:nth-of-type(even)": {
-            backgroundColor: "#f5f7fa",
+            backgroundColor: "background.slate",
           },
 
           "& .MuiDataGrid-row:nth-of-type(odd)": {
-            backgroundColor: "#ffffff",
+            backgroundColor: "transparent",
           },
           "& .MuiDataGrid-row.lead-draft": {
-            backgroundColor: "#fff8e1",
+            backgroundColor: "rgba(255, 248, 225, 0.72)",
             borderLeft: "3px solid",
             borderLeftColor: "warning.main",
           },

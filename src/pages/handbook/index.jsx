@@ -146,10 +146,10 @@ const Handbook = () => {
                 py: 0,
               },
               "& .MuiTableBody-root .MuiTableRow-root:nth-of-type(even)": {
-                backgroundColor: "#f5f7fa",
+                backgroundColor: "background.slate",
               },
               "& .MuiTableBody-root .MuiTableRow-root:nth-of-type(odd)": {
-                backgroundColor: "#ffffff",
+                backgroundColor: "transparent",
               },
               "& .MuiTableBody-root .MuiTableRow-root:hover": {
                 backgroundColor: "action.hover",

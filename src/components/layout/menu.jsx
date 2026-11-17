@@ -319,10 +319,13 @@ const SideBar = ({ openMenu, setOpenMenu }) => {
   return (
     <Box
       sx={{
-        backgroundColor: "rgb(245, 247, 250)",
-        height: "100vh",
+        backgroundColor: "rgba(245, 247, 250, 0.58)",
+        backdropFilter: "blur(20px) saturate(120%)",
+        WebkitBackdropFilter: "blur(20px) saturate(120%)",
+        boxShadow: "4px 0 24px rgba(22, 36, 62, 0.04)",
+        height: "100dvh",
         pt: 8,
-        transition: "0.2s",
+        transition: "width 0.2s ease",
         overflowY: "auto",
         width: {
           xs: openMenu ? "100%" : "0",
@@ -339,7 +342,7 @@ const SideBar = ({ openMenu, setOpenMenu }) => {
         justifyContent: "space-between",
         zIndex: 2,
         borderRight: "1px solid",
-        borderColor: "divider",
+        borderColor: "rgba(255, 255, 255, 0.7)",
       }}
     >
       <Box>
@@ -413,8 +416,8 @@ const SideBar = ({ openMenu, setOpenMenu }) => {
         sx={{
           m: 2,
           padding: "20px",
-          background: "rgba(226, 230, 238, 0.4)",
-          border: "1px solid rgb(226, 230, 238)",
+          background: "rgba(255, 255, 255, 0.58)",
+          border: "1px solid rgba(255, 255, 255, 0.7)",
           borderRadius: 3,
         }}
       >
