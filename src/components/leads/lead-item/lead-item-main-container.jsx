@@ -98,7 +98,8 @@ const LeadItemMainContainer = ({
     isAllPassed && leadData?.status === STATUS.verification_unloading;
   const canFinishEarly =
     profileData?.canFinishedEarly === true &&
-    IN_PROGRESS_STATUSES.includes(leadData?.status);
+    IN_PROGRESS_STATUSES.includes(leadData?.status) &&
+    !isAllPassed;
 
   const from = {
     lat: leadData?.from_location?.lat,
