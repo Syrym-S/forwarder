@@ -14,6 +14,7 @@ import PhoneOutlinedIcon from "@mui/icons-material/PhoneOutlined";
 import MarkunreadOutlinedIcon from "@mui/icons-material/MarkunreadOutlined";
 import LibraryBooksOutlinedIcon from "@mui/icons-material/LibraryBooksOutlined";
 import CampaignOutlinedIcon from "@mui/icons-material/CampaignOutlined";
+import { getAdvertisementAccess } from "../../shared/lib/advertisement-features";
 import "./style.css";
 import { useTranslation } from "react-i18next";
 
@@ -297,6 +298,7 @@ const menuItems = [
   {
     id: 6,
     label: null,
+    isVisible: (features) => getAdvertisementAccess(features).enabled,
     sub_items: [
       {
         id: 1,
@@ -313,7 +315,8 @@ const SideBar = ({ openMenu, setOpenMenu }) => {
   const { t } = useTranslation();
   const features = window.APP_DATA?.features || {};
   const visibleMenuItems = menuItems.filter(
-    (item) => !item.feature || features[item.feature] !== false,
+    (item) => (!item.feature || features[item.feature] !== false)
+      && (!item.isVisible || item.isVisible(features)),
   );
 
   return (

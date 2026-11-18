@@ -15,6 +15,7 @@ import {
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { VIEWS } from "../../shared/const/leads";
+import { getAdvertisementAccess, getAvailableAdvertisementType } from "../../shared/lib/advertisement-features";
 import { useAdvertisementsStore } from "../../app/store/advertisements/advertisements-store";
 import AdvertisementCard from "./advertisement-card";
 import AdvertisementsTable from "./advertisements-table";
@@ -24,61 +25,78 @@ const MainContainer = () => {
 
   const [view, setView] = useState(VIEWS.table);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
-  const type = useAdvertisementsStore((state) => state.type);
+  const selectedType = useAdvertisementsStore((state) => state.type);
   const page = useAdvertisementsStore((state) => state.page);
   const perPage = useAdvertisementsStore((state) => state.perPage);
   const totalPages = useAdvertisementsStore((state) => state.totalPages);
   const advertisements = useAdvertisementsStore(
     (state) => state.advertisements,
   );
-  const isLoading = useAdvertisementsStore((state) => state.isLoading);
+  const isListLoading = useAdvertisementsStore((state) => state.isLoading);
   const error = useAdvertisementsStore((state) => state.error);
   const setType = useAdvertisementsStore((state) => state.setType);
   const setPage = useAdvertisementsStore((state) => state.setPage);
   const getAdvertisements = useAdvertisementsStore(
     (state) => state.getAdvertisements,
   );
+
+  const access = getAdvertisementAccess(window.APP_DATA?.features);
+  const type = getAvailableAdvertisementType(selectedType, access);
   const isMyAdvertisements = type === "my";
+  const isLoading = isListLoading || selectedType !== type;
+  const hideTabs = !access.my || !access.customer;
 
   useEffect(() => {
-    getAdvertisements();
-  }, [getAdvertisements]);
+    const currentType = useAdvertisementsStore.getState().type;
+    const availableType = getAvailableAdvertisementType(currentType, {
+      my: access.my,
+      customer: access.customer,
+    });
+    if (!availableType) return;
+    if (currentType !== availableType) setType(availableType);
+    else getAdvertisements();
+  }, [access.my, access.customer, getAdvertisements, setType]);
+
+  if (!type) return null;
 
   return (
     <Box sx={{ mt: 3 }}>
-      <Tabs
-        value={type}
-        onChange={(_, value) => {
-          setType(value);
-          setIsCreateModalOpen(false);
-        }}
-        variant="scrollable"
-        scrollButtons="auto"
-        aria-label={t("advertisements.heading")}
-        sx={{ borderBottom: 1, borderColor: "divider" }}
-      >
-        <Tab
-          value="my"
-          label={t("advertisements.my_tab")}
-          id="advertisements-tab-my"
-          aria-controls="advertisements-panel-my"
-          wrapped
-          sx={{ textTransform: "none", fontWeight: 600 }}
-        />
-        <Tab
-          value="customer"
-          label={t("advertisements.customer_tab")}
-          id="advertisements-tab-customer"
-          aria-controls="advertisements-panel-customer"
-          wrapped
-          sx={{ textTransform: "none", fontWeight: 600 }}
-        />
-      </Tabs>
+      {!hideTabs && (
+        <Tabs
+          value={type}
+          onChange={(_, value) => {
+            setType(value);
+            setIsCreateModalOpen(false);
+          }}
+          variant="scrollable"
+          scrollButtons="auto"
+          aria-label={t("advertisements.heading")}
+          sx={{ borderBottom: 1, borderColor: "divider" }}
+        >
+          <Tab
+            value="my"
+            label={t("advertisements.my_tab")}
+            id="advertisements-tab-my"
+            aria-controls="advertisements-panel-my"
+            wrapped
+            sx={{ textTransform: "none", fontWeight: 600 }}
+          />
+          <Tab
+            value="customer"
+            label={t("advertisements.customer_tab")}
+            id="advertisements-tab-customer"
+            aria-controls="advertisements-panel-customer"
+            wrapped
+            sx={{ textTransform: "none", fontWeight: 600 }}
+          />
+        </Tabs>
+      )}
 
       <Box
-        role="tabpanel"
+        role={hideTabs ? "region" : "tabpanel"}
         id={`advertisements-panel-${type}`}
-        aria-labelledby={`advertisements-tab-${type}`}
+        aria-labelledby={hideTabs ? undefined : `advertisements-tab-${type}`}
+        aria-label={hideTabs ? t(isMyAdvertisements ? "advertisements.my_tab" : "advertisements.customer_tab") : undefined}
         sx={{ mt: 2 }}
       >
         <ViewTabs
