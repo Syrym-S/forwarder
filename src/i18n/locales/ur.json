@@ -27,6 +27,9 @@
     "information": "اشتہار کی تفصیلات"
   },
   "settings": {
+    "advertisement_push_label": "اشتہارات کی اطلاعات",
+    "advertisement_push_description": "اشتہارات کے بارے میں اطلاعات وصول کریں۔",
+    "advertisement_push_save_failed": "اشتہارات کی اطلاعات کی ترتیب محفوظ نہیں ہو سکی۔ دوبارہ کوشش کریں۔",
     "language_title": "انٹرفیس کی زبان",
     "language_description": "انٹرفیس اور اطلاعات کے لیے زبان منتخب کریں۔",
     "language_save_failed": "زبان اس ڈیوائس پر محفوظ ہے، لیکن آپ کی پروفائل میں محفوظ نہیں ہو سکی۔ دوبارہ کوشش کریں۔"

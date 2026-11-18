@@ -27,6 +27,9 @@
     "information": "Eʼlon maʼlumotlari"
   },
   "settings": {
+    "advertisement_push_label": "Eʼlonlar haqida bildirishnomalar",
+    "advertisement_push_description": "Eʼlonlar haqida bildirishnomalar olish.",
+    "advertisement_push_save_failed": "Eʼlonlar haqidagi bildirishnomalar sozlamasini saqlab boʻlmadi. Qayta urinib koʻring.",
     "language_title": "Interfeys tili",
     "language_description": "Interfeys va bildirishnomalar uchun tilni tanlang.",
     "language_save_failed": "Til ushbu qurilmada saqlandi, ammo profilingizda saqlanmadi. Qayta urinib ko‘ring."

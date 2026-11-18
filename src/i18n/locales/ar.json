@@ -27,6 +27,9 @@
     "information": "بيانات الإعلان"
   },
   "settings": {
+    "advertisement_push_label": "إشعارات الإعلانات",
+    "advertisement_push_description": "تلقي إشعارات حول الإعلانات.",
+    "advertisement_push_save_failed": "تعذر حفظ إعداد إشعارات الإعلانات. يُرجى المحاولة مرة أخرى.",
     "language_title": "لغة الواجهة",
     "language_description": "اختر اللغة التي ستُعرض بها الواجهة والإشعارات.",
     "language_save_failed": "تم حفظ اللغة على هذا الجهاز، لكن تعذر حفظها في ملفك الشخصي. يُرجى المحاولة مرة أخرى."

@@ -27,6 +27,9 @@
     "information": "İlan bilgileri"
   },
   "settings": {
+    "advertisement_push_label": "İlan bildirimleri",
+    "advertisement_push_description": "İlanlarla ilgili bildirimler alın.",
+    "advertisement_push_save_failed": "İlan bildirimi ayarı kaydedilemedi. Lütfen tekrar deneyin.",
     "language_title": "Arayüz dili",
     "language_description": "Arayüz ve bildirimler için bir dil seçin.",
     "language_save_failed": "Dil bu cihazda kaydedildi ancak profilinize kaydedilemedi. Lütfen tekrar deneyin."

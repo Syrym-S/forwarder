@@ -27,6 +27,9 @@
     "information": "Listing information"
   },
   "settings": {
+    "advertisement_push_label": "Notifications for listings",
+    "advertisement_push_description": "Receive notifications about listings.",
+    "advertisement_push_save_failed": "Could not save the listing notification setting. Please try again.",
     "language_title": "Interface language",
     "language_description": "Choose the language for the interface and notifications.",
     "language_save_failed": "The language is saved on this device, but could not be saved to your profile. Please try again."

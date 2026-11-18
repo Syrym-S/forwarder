@@ -27,6 +27,9 @@
     "information": "货运信息详情"
   },
   "settings": {
+    "advertisement_push_label": "货运信息通知",
+    "advertisement_push_description": "接收有关货运信息的通知。",
+    "advertisement_push_save_failed": "无法保存货运信息通知设置，请重试。",
     "language_title": "界面语言",
     "language_description": "选择界面和通知的显示语言。",
     "language_save_failed": "语言已保存在此设备上，但无法保存到您的个人资料。请重试。"

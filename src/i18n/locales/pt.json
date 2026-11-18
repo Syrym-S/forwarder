@@ -27,6 +27,9 @@
     "information": "Dados do anúncio"
   },
   "settings": {
+    "advertisement_push_label": "Notificações de anúncios",
+    "advertisement_push_description": "Receber notificações sobre anúncios.",
+    "advertisement_push_save_failed": "Não foi possível salvar a configuração de notificações de anúncios. Tente novamente.",
     "language_title": "Idioma da interface",
     "language_description": "Escolha o idioma da interface e das notificações.",
     "language_save_failed": "O idioma foi salvo neste dispositivo, mas não foi possível salvá-lo no seu perfil. Tente novamente."

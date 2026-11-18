@@ -18,6 +18,28 @@ export const useProfileStore = create((set, get) => ({
   isLegalDocumentsLoading: false,
   isLanguageSaving: false,
   languageSaveError: false,
+  isAdvertisementPushSaving: false,
+  advertisementPushSaveError: false,
+
+  setAdvertisementPushEnabled: async (enabled) => {
+    if (!get().profileData || get().isAdvertisementPushSaving) return false;
+    set({ isAdvertisementPushSaving: true, advertisementPushSaveError: false });
+    try {
+      await editProfileApi({ advertisementPushEnabled: enabled });
+      set((state) => ({
+        profileData: {
+          ...state.profileData,
+          advertisementPushEnabled: enabled,
+        },
+      }));
+      return true;
+    } catch {
+      set({ advertisementPushSaveError: true });
+      return false;
+    } finally {
+      set({ isAdvertisementPushSaving: false });
+    }
+  },
 
   changeLanguage: async (value) => {
     if (get().isLanguageSaving) return;
