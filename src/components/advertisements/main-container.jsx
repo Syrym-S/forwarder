@@ -15,7 +15,10 @@ import {
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { VIEWS } from "../../shared/const/leads";
-import { getAdvertisementAccess, getAvailableAdvertisementType } from "../../shared/lib/advertisement-features";
+import {
+  getAdvertisementAccess,
+  getAvailableAdvertisementType,
+} from "../../shared/lib/advertisement-features";
 import { useAdvertisementsStore } from "../../app/store/advertisements/advertisements-store";
 import AdvertisementCard from "./advertisement-card";
 import AdvertisementsTable from "./advertisements-table";
@@ -23,7 +26,7 @@ import AdvertisementsTable from "./advertisements-table";
 const MainContainer = () => {
   const { t } = useTranslation();
 
-  const [view, setView] = useState(VIEWS.table);
+  const [view, setView] = useState(VIEWS.cards);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const selectedType = useAdvertisementsStore((state) => state.type);
   const page = useAdvertisementsStore((state) => state.page);
@@ -96,7 +99,15 @@ const MainContainer = () => {
         role={hideTabs ? "region" : "tabpanel"}
         id={`advertisements-panel-${type}`}
         aria-labelledby={hideTabs ? undefined : `advertisements-tab-${type}`}
-        aria-label={hideTabs ? t(isMyAdvertisements ? "advertisements.my_tab" : "advertisements.customer_tab") : undefined}
+        aria-label={
+          hideTabs
+            ? t(
+                isMyAdvertisements
+                  ? "advertisements.my_tab"
+                  : "advertisements.customer_tab",
+              )
+            : undefined
+        }
         sx={{ mt: 2 }}
       >
         <ViewTabs

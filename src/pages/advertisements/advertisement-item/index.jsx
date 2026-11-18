@@ -119,29 +119,27 @@ const AdvertisementItem = ({ source = "my" }) => {
                         gap: 1,
                       }}
                     >
-                      {advertisement.closed_at ? (
-                        <RenderStatusContent
-                          label={t("dashboard.closed")}
+                      <RenderStatusContent
+                        label={
+                          advertisement.closed_at
+                            ? t("dashboard.closed")
+                            : t("dashboard.new")
+                        }
+                        variant="outlined"
+                        color={advertisement.closed_at ? "#c60606" : "#49b439"}
+                      />
+
+                      {!advertisement.closed_at && source === "my" && (
+                        <PrimaryButton
+                          text={t("ui.edit")}
                           variant="outlined"
-                          color="#c60606"
-                        />
-                      ) : (
-                        <RenderStatusContent
-                          label={t("dashboard.closed")}
-                          variant="outlined"
-                          color="#51d861"
+                          size="small"
+                          startIcon={<EditOutlinedIcon />}
+                          disabled={isLoading}
+                          sx={{ p: 1 }}
+                          onClick={() => setIsEditOpen(true)}
                         />
                       )}
-
-                      <PrimaryButton
-                        text={t("ui.edit")}
-                        variant="outlined"
-                        size="small"
-                        startIcon={<EditOutlinedIcon />}
-                        disabled={isLoading}
-                        sx={{ p: 1 }}
-                        onClick={() => setIsEditOpen(true)}
-                      />
                     </Box>
                   </Box>
 
