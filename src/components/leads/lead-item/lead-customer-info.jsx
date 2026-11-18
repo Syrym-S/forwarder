@@ -1,30 +1,31 @@
-import { useTranslation } from "react-i18next";
 import BusinessOutlinedIcon from "@mui/icons-material/BusinessOutlined";
 import Section from "./lead-detail-section";
-import { Box } from "@mui/material";
-import { useState } from "react";
-import { useLeadsStore } from "../../../app/store/leads/leads-store";
-import { STATUS } from "../../../shared/const/tenders";
 import LeadParticipantSkeleton from "../skeleton/lead-participant-skeleton";
 import InfoItem from "../../../shared/ui/info-item";
 import PrimaryButton from "../../../shared/ui/button/primary-button";
 import EmptyInfo from "../../../shared/ui/empty/empty-info";
 
+import { useTranslation } from "react-i18next";
+import { Box } from "@mui/material";
+import { useState } from "react";
+import { useLeadsStore } from "../../../app/store/leads/leads-store";
+import { STATUS } from "../../../shared/const/tenders";
+
 const LeadCustomerInfo = ({ leadData, canDetach = false }) => {
   const { t } = useTranslation();
-  const customer = leadData?.customer;
 
-  const createdByCustomer = leadData?.created_by === "customer";
-
-  const isNewStatus = leadData?.status === STATUS.new;
-  const isAddDriverStatus = leadData?.status === STATUS.add_driver;
+  const [isDetaching, setIsDetaching] = useState(false);
 
   const detachCustomer = useLeadsStore((state) => state.detachCustomer);
   const isCustomerDetachLoading = useLeadsStore(
     (state) => state.isCustomerDetachLoading,
   );
   const getLeadItem = useLeadsStore((state) => state.getLeadItem);
-  const [isDetaching, setIsDetaching] = useState(false);
+
+  const customer = leadData?.customer;
+  const createdByCustomer = leadData?.created_by === "customer";
+  const isNewStatus = leadData?.status === STATUS.new;
+  const isAddDriverStatus = leadData?.status === STATUS.add_driver;
 
   const handleDetachCustomer = async () => {
     setIsDetaching(true);

@@ -1,16 +1,13 @@
-import { useTranslation } from "react-i18next";
-import { Box, Card, CardContent, Chip, Stack, Typography } from "@mui/material";
-import RouteOutlinedIcon from "@mui/icons-material/RouteOutlined";
-import ScaleOutlinedIcon from "@mui/icons-material/ScaleOutlined";
-import AttachMoneyOutlinedIcon from "@mui/icons-material/AttachMoneyOutlined";
-import Inventory2OutlinedIcon from "@mui/icons-material/Inventory2Outlined";
-import { InfoBadge } from "../lead-form/info-badge";
-import InfoField from "../../shared/ui/info-field";
 import ArrowDownwardRoundedIcon from "@mui/icons-material/ArrowDownwardRounded";
+
+import { useTranslation } from "react-i18next";
+import { Box, CardContent, Chip, Stack, Typography } from "@mui/material";
+import { InfoBadge } from "../lead-form/info-badge";
 import { useNavigate } from "react-router-dom";
 
 function KanbanCard({ item }) {
   const { t } = useTranslation();
+
   const navigate = useNavigate();
 
   const navigateToLeadItem = () => {
@@ -35,7 +32,9 @@ function KanbanCard({ item }) {
       }}
     >
       <CardContent>
-        <Typography variant="subtitle1" fontWeight={700} mb={2}>{t("ui.lead_number_uppercase", { value1: item.id })}</Typography>
+        <Typography variant="subtitle1" fontWeight={700} mb={2}>
+          {t("ui.lead_number_uppercase", { value1: item.id })}
+        </Typography>
 
         <Stack direction="row" spacing={1} alignItems="flex-start" mb={2}>
           <Box
@@ -45,7 +44,10 @@ function KanbanCard({ item }) {
               alignItems: "center",
             }}
           >
-            <InfoBadge label={t("ui.origin")} value={item.from_location?.address} />
+            <InfoBadge
+              label={t("ui.origin")}
+              value={item.from_location?.address}
+            />
 
             <ArrowDownwardRoundedIcon
               color="primary"
@@ -54,7 +56,10 @@ function KanbanCard({ item }) {
               }}
             />
 
-            <InfoBadge label={t("ui.destination")} value={item.to_location?.address} />
+            <InfoBadge
+              label={t("ui.destination")}
+              value={item.to_location?.address}
+            />
           </Box>
         </Stack>
 
@@ -85,7 +90,9 @@ function KanbanCard({ item }) {
 
           {item.cargo?.weight_kg && (
             <Chip
-              label={t("ui.weight_kilograms", { value1: item.cargo?.weight_kg })}
+              label={t("ui.weight_kilograms", {
+                value1: item.cargo?.weight_kg,
+              })}
               size="small"
               variant="outlined"
               color="primary"

@@ -1,13 +1,16 @@
-import { DataGrid } from "@mui/x-data-grid";
 import Paper from "@mui/material/Paper";
 import useLeadsColumns from "../../shared/hooks/leads/use-leads-columns";
+
+import { DataGrid } from "@mui/x-data-grid";
 import { isDraftLead } from "../../shared/lib/lead-draft";
 import { useTranslation } from "react-i18next";
 import { enUS, ruRU } from "@mui/x-data-grid/locales";
 
 const LeadsTable = ({ leads, responsive = false }) => {
   const { t, i18n } = useTranslation();
+
   const columns = useLeadsColumns();
+
   const baseLocale = i18n.resolvedLanguage === "ru" ? ruRU : enUS;
 
   return (

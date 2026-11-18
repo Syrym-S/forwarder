@@ -4,41 +4,21 @@ import RootLayout from "../../components/layout/root-layout";
 import AddLeadForm from "../../features/leads/add-lead-form";
 import ViewTabs from "../../shared/ui/view-tabs";
 import LeadListContainer from "../../components/leads/lead-list-container";
+import PageHeading from "../../shared/ui/page-heading";
+import RenderErrorContext from "../../shared/ui/errors/render-error-context";
+
 import { useEffect, useState } from "react";
-import { Alert, Box, Typography } from "@mui/material";
-import { VIEWS } from "../../shared/const/leads";
+import { Alert, Box } from "@mui/material";
+import { DRAFT_OPTION, STATUS_OPTIONS, VIEWS } from "../../shared/const/leads";
 import { useFormDefaultValues } from "../../shared/hooks/leads/use-form-default-values";
 import { useLeadsStore } from "../../app/store/leads/leads-store";
 import { useNotificationsStore } from "../../app/store/notifications/noti-store";
 import { NOTIFICATION_TYPE } from "../../shared/const/notification-types";
 import { parserNotificationType } from "../../shared/helpers/notifications/parse-notification-type";
-import { ACTIVE_LEAD_STATUS_OPTIONS } from "../../shared/const/tenders";
 import { useTranslation } from "react-i18next";
 
-const STATUS_LABEL_KEYS = {
-  new: "dashboard.new",
-  add_driver: "dashboard.driver_added",
-  start_driver: "dashboard.trip_started",
-  start_loading: "dashboard.loading_operation",
-  verification_loading: "dashboard.loading_confirmed",
-  start_unloading: "dashboard.unloading_operation",
-  verification_unloading: "dashboard.unloading_confirmed",
-  sign_avr: "dashboard.awaiting_signatures",
-  emergency_situation: "dashboard.emergency",
-};
-const DRAFT_OPTION = { value: "draft", label: "active_leads.draft" };
-const STATUS_OPTIONS = [
-  ...ACTIVE_LEAD_STATUS_OPTIONS.map((option) => ({
-    ...option,
-    label: STATUS_LABEL_KEYS[option.value],
-  })),
-  DRAFT_OPTION,
-];
-
 const ActiveLeads = () => {
-  const { t } = useTranslation();
   const [filterStatus, setFilterStatus] = useState(null);
-  const showDrafts = filterStatus?.value === DRAFT_OPTION.value;
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const [openForm, setOpenForm] = useState(false);
@@ -54,15 +34,18 @@ const ActiveLeads = () => {
   const perPage = useLeadsStore((state) => state.perPage);
   const isLoading = useLeadsStore((state) => state.isLoading);
   const error = useLeadsStore((state) => state.error);
+  const leadParams = useLeadsStore((state) => state.leadParams);
 
-  const isCardsView = view === VIEWS.cards;
-
-  const isLeadsEmpty = leads?.length === 0;
-
+  const { t } = useTranslation();
   const { notification_type } = parserNotificationType(
     newNotification?.type || "",
   );
+
   const deafultValues = useFormDefaultValues();
+
+  const isCardsView = view === VIEWS.cards;
+  const showDrafts = filterStatus?.value === DRAFT_OPTION.value;
+  const isLeadsEmpty = leads?.length === 0;
 
   const handleOpenForm = () => {
     setOpenForm(true);
@@ -78,9 +61,9 @@ const ActiveLeads = () => {
 
   useEffect(() => {
     if (notification_type === NOTIFICATION_TYPE.lead) {
-      fetchLeads(useLeadsStore.getState().leadsParams);
+      fetchLeads(leadParams);
     }
-  }, [newNotification, notification_type, fetchLeads]);
+  }, [newNotification, notification_type, fetchLeads, leadParams]);
 
   useEffect(() => {
     const timer = setTimeout(
@@ -93,33 +76,27 @@ const ActiveLeads = () => {
       },
       search.trim() ? 300 : 0,
     );
+
     return () => clearTimeout(timer);
   }, [page, filterStatus, showDrafts, search, fetchLeads]);
 
   return (
     <RootLayout withoutDataCheck>
-      <Box>
-        <Typography
-          sx={{
-            fontWeight: 600,
-            fontSize: "1.5rem",
-            сolor: "font_color.heading",
-          }}
-        >
-          {t(showDrafts ? "active_leads.drafts_title" : "active_leads.title")}
-        </Typography>
+      <PageHeading
+        title={t(
+          showDrafts ? "active_leads.drafts_title" : "active_leads.title",
+        )}
+        description={t("active_leads.description")}
+      />
 
-        <Typography color="text.secondary" fontSize={14}>
-          {t("active_leads.description")}
-        </Typography>
-      </Box>
       {showDrafts && (
         <Alert severity="warning" sx={{ my: 1 }}>
           {t("active_leads.drafts_description")}
         </Alert>
       )}
 
-      {error && <Alert severity="error">{error}</Alert>}
+      {error && <RenderErrorContext error={error} />}
+
       <Box
         sx={{
           display: "flex",
@@ -149,7 +126,10 @@ const ActiveLeads = () => {
           label={t("active_leads.status")}
           options={[
             { value: "", label: t("active_leads.all_statuses") },
-            ...STATUS_OPTIONS.map((option) => ({ ...option, label: t(option.label) })),
+            ...STATUS_OPTIONS.map((option) => ({
+              ...option,
+              label: t(option.label),
+            })),
           ]}
           value={filterStatus?.value ?? ""}
           onChange={(event) => {
@@ -170,7 +150,11 @@ const ActiveLeads = () => {
         />
 
         <FormInput
-          label={t(showDrafts ? "active_leads.search_drafts" : "active_leads.search_leads")}
+          label={t(
+            showDrafts
+              ? "active_leads.search_drafts"
+              : "active_leads.search_leads",
+          )}
           value={search}
           onChange={(event) => {
             setSearch(event.target.value);

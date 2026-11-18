@@ -1,3 +1,8 @@
+import FileDownloadOutlinedIcon from "@mui/icons-material/FileDownloadOutlined";
+import PrimaryButton from "../../shared/ui/button/primary-button";
+import FormInput from "../../shared/ui/input/form-input";
+import ActionTooltip from "../../shared/ui/action-tooltip";
+
 import { useTranslation } from "react-i18next";
 import { useState } from "react";
 import {
@@ -9,11 +14,7 @@ import {
   DialogTitle,
   Typography,
 } from "@mui/material";
-import FileDownloadOutlinedIcon from "@mui/icons-material/FileDownloadOutlined";
 import { api } from "../../app/client";
-import PrimaryButton from "../../shared/ui/button/primary-button";
-import FormInput from "../../shared/ui/input/form-input";
-import ActionTooltip from "../../shared/ui/action-tooltip";
 
 const getToday = () =>
   new Intl.DateTimeFormat("en-CA", {
@@ -25,6 +26,7 @@ const getToday = () =>
 
 const LeadsExportButton = () => {
   const { t } = useTranslation();
+
   const [open, setOpen] = useState(false);
   const [dateTo, setDateTo] = useState(getToday);
   const [dateFrom, setDateFrom] = useState(
@@ -32,6 +34,7 @@ const LeadsExportButton = () => {
   );
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+
   const valid = Boolean(dateFrom && dateTo && dateFrom <= dateTo);
 
   const download = async () => {

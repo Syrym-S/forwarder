@@ -1,7 +1,13 @@
 import appI18n from "../../../i18n/index.js";
-import { useTranslation } from "react-i18next";
 import Section from "./lead-detail-section";
 import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
+import InfoItem from "../../../shared/ui/info-item";
+import PrimaryButton from "../../../shared/ui/button/primary-button";
+import StarBorderRoundedIcon from "@mui/icons-material/StarBorderRounded";
+import EmptyInfo from "../../../shared/ui/empty/empty-info";
+import LeadParticipantSkeleton from "../skeleton/lead-participant-skeleton";
+
+import { useTranslation } from "react-i18next";
 import {
   Box,
   Button,
@@ -10,12 +16,7 @@ import {
 } from "@mui/material";
 import { useLeadsStore } from "../../../app/store/leads/leads-store";
 import { STATUS } from "../../../shared/const/tenders";
-import InfoItem from "../../../shared/ui/info-item";
-import PrimaryButton from "../../../shared/ui/button/primary-button";
-import StarBorderRoundedIcon from "@mui/icons-material/StarBorderRounded";
-import EmptyInfo from "../../../shared/ui/empty/empty-info";
 import { useState } from "react";
-import LeadParticipantSkeleton from "../skeleton/lead-participant-skeleton";
 
 const LeadDriverInfo = ({
   leadData,
@@ -24,6 +25,15 @@ const LeadDriverInfo = ({
   hideRatingAction = false,
 }) => {
   const { t } = useTranslation();
+
+  const [isDetaching, setIsDetaching] = useState(false);
+
+  const detachDriver = useLeadsStore((state) => state.detachDriver);
+  const isDriverDetachLoading = useLeadsStore(
+    (state) => state.isDriverDetachLoading,
+  );
+  const getLeadItem = useLeadsStore((state) => state.getLeadItem);
+
   const driver = leadData?.driver;
   const isDriverRated = !!leadData?.driver_rate;
   const driverRate = Number(leadData?.driver_rate);
@@ -31,13 +41,6 @@ const LeadDriverInfo = ({
     Number.isFinite(driverRate) && driverRate >= 1 && driverRate <= 5;
   const isAddDriverStatus = leadData?.status === STATUS.add_driver;
   const isFinished = leadData?.status === STATUS.finished;
-
-  const detachDriver = useLeadsStore((state) => state.detachDriver);
-  const isDriverDetachLoading = useLeadsStore(
-    (state) => state.isDriverDetachLoading,
-  );
-  const getLeadItem = useLeadsStore((state) => state.getLeadItem);
-  const [isDetaching, setIsDetaching] = useState(false);
 
   const handleDetachDriver = async () => {
     setIsDetaching(true);

@@ -1,11 +1,12 @@
-import { VIEWS } from "../../shared/const/leads";
-import { Alert, Box, Pagination, useMediaQuery } from "@mui/material";
 import LeadCard from "./lead-card";
 import LeadsTable from "./leads-table";
 import LeadKanbanTable from "./lead-kanban-table";
 import TableSkeleton from "../../shared/ui/table-skeleton";
 import CardListSkeleton from "../../shared/ui/card-list-skeleton";
+
 import { useTranslation } from "react-i18next";
+import { VIEWS } from "../../shared/const/leads";
+import { Alert, Box, Pagination, useMediaQuery } from "@mui/material";
 
 const LeadListContainer = ({
   leads,
@@ -20,7 +21,9 @@ const LeadListContainer = ({
   responsive = false,
 }) => {
   const { t } = useTranslation();
+
   const isSmallScreen = useMediaQuery((theme) => theme.breakpoints.down("sm"));
+
   const PAGE_COUNT = Math.ceil(count / perPage);
   const isCardsView = view === VIEWS.cards;
   const isTableView = view === VIEWS.table;
@@ -34,6 +37,7 @@ const LeadListContainer = ({
   };
 
   if (isLoading && isTableView) return <TableSkeleton />;
+
   if (isLoading && isCardsView) return <CardListSkeleton sx={cardsLayout} />;
 
   return (
@@ -54,6 +58,7 @@ const LeadListContainer = ({
           {t("active_leads.empty_status", { status: t(filterStatus.label) })}
         </Alert>
       )}
+
       {isCardsView && (
         <Box sx={cardsLayout}>
           {isLeadsEmpty ? (
@@ -76,8 +81,11 @@ const LeadListContainer = ({
           )}
         </Box>
       )}
+
       {isTableView && <LeadsTable leads={leads} responsive={responsive} />}
+
       {isKanbanView && <LeadKanbanTable leads={leads} />}
+
       {!isLoading && !isLeadsEmpty && (
         <Pagination
           size={responsive && isSmallScreen ? "small" : "medium"}

@@ -1,15 +1,16 @@
 import appI18n from "../../i18n/index.js";
-import { useTranslation } from "react-i18next";
-import React, { useState } from "react";
 import Section from "./lead-item/lead-detail-section";
 import NewReleasesIcon from "@mui/icons-material/NewReleases";
 import TaskAltOutlinedIcon from "@mui/icons-material/TaskAltOutlined";
-import { STATUS, WAYPOINT_TYPES } from "../../shared/const/tenders";
-import { LeadDocumentCard } from "./documents/LeadDocumentCard";
 import FileModal from "../tenders/file-modal";
+
+import { useTranslation } from "react-i18next";
+import { WAYPOINT_TYPES } from "../../shared/const/tenders";
+import { LeadDocumentCard } from "./documents/LeadDocumentCard";
 import { Box, Button } from "@mui/material";
 import { useParams } from "react-router-dom";
 import { useLeadsStore } from "../../app/store/leads/leads-store";
+import { useState } from "react";
 
 const renderTitleText = (stage, isVerified) => {
   let title = "";
@@ -27,9 +28,14 @@ const renderTitleText = (stage, isVerified) => {
   return title;
 };
 
-const CargosVerificationContainer = ({ cargoAction, pass_verify = false, readOnly = false }) => {
+const CargosVerificationContainer = ({
+  cargoAction,
+  pass_verify = false,
+  readOnly = false,
+}) => {
   const { t } = useTranslation();
   const { id } = useParams();
+
   const [currentFile, setCurrentFile] = useState(null);
 
   const getLeadItem = useLeadsStore((state) => state.getLeadItem);
@@ -107,7 +113,12 @@ const CargosVerificationContainer = ({ cargoAction, pass_verify = false, readOnl
         }}
       >
         {cargoAction?.files?.map((file, index) => (
-          <LeadDocumentCard key={file.id ?? index} document={file} onOpen={setCurrentFile} isFileReadOnly={readOnly} />
+          <LeadDocumentCard
+            key={file.id ?? index}
+            document={file}
+            onOpen={setCurrentFile}
+            isFileReadOnly={readOnly}
+          />
         ))}
 
         <FileModal currentFile={currentFile} setCurrentFile={setCurrentFile} />
@@ -135,7 +146,9 @@ const CargosVerificationContainer = ({ cargoAction, pass_verify = false, readOnl
             color="error"
             variant="outlined"
             onClick={handleReject}
-          >{t("ui.reject")}</Button>
+          >
+            {t("ui.reject")}
+          </Button>
         </Box>
       )}
     </Section>

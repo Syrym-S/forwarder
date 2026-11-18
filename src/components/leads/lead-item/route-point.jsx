@@ -1,10 +1,11 @@
-import { useTranslation } from "react-i18next";
-import { Box, Chip, Typography } from "@mui/material";
 import TripOriginIcon from "@mui/icons-material/TripOrigin";
 import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
 import dayjs from "dayjs";
 import RenderType from "../../../shared/ui/render-type";
 import StraightOutlinedIcon from "@mui/icons-material/StraightOutlined";
+
+import { useTranslation } from "react-i18next";
+import { Box, Chip, Typography } from "@mui/material";
 
 const RoutePoint = ({
   label,
@@ -19,6 +20,7 @@ const RoutePoint = ({
   type,
 }) => {
   const { t } = useTranslation();
+
   return (
     <Box
       sx={{

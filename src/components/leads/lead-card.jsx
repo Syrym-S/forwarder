@@ -1,16 +1,18 @@
-import { moneySpacingFormat } from "../../shared/helpers/money-spacing";
-import { Typography, Box, Stack } from "@mui/material";
 import TripOriginIcon from "@mui/icons-material/TripOrigin";
 import ArrowDownwardRoundedIcon from "@mui/icons-material/ArrowDownwardRounded";
 import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
-import { useNavigate } from "react-router-dom";
 import LeadStatus from "../../shared/ui/lead-status";
-import { isDraftLead } from "../../shared/lib/lead-draft";
 import InfoItem from "../../shared/ui/info-item";
+
+import { moneySpacingFormat } from "../../shared/helpers/money-spacing";
+import { Typography, Box, Stack } from "@mui/material";
+import { useNavigate } from "react-router-dom";
+import { isDraftLead } from "../../shared/lib/lead-draft";
 import { useTranslation } from "react-i18next";
 
 const LeadCard = ({ lead }) => {
   const { t } = useTranslation();
+
   const navigate = useNavigate();
 
   const navigateToLeadItem = () => {
@@ -56,7 +58,8 @@ const LeadCard = ({ lead }) => {
               minWidth: 0,
             }}
           >
-            {t("active_leads.customer")}: {lead?.customer?.name || t("active_leads.not_specified")}
+            {t("active_leads.customer")}:{" "}
+            {lead?.customer?.name || t("active_leads.not_specified")}
           </Typography>
 
           <Stack
@@ -119,7 +122,9 @@ const LeadCard = ({ lead }) => {
                 lineHeight: 1.35,
               }}
             >
-              {lead?.from_location?.address || lead?.from || t("active_leads.not_specified")}
+              {lead?.from_location?.address ||
+                lead?.from ||
+                t("active_leads.not_specified")}
             </Typography>
           </Box>
 
@@ -155,7 +160,9 @@ const LeadCard = ({ lead }) => {
                 lineHeight: 1.35,
               }}
             >
-              {lead?.to_location?.address || lead?.to || t("active_leads.not_specified")}
+              {lead?.to_location?.address ||
+                lead?.to ||
+                t("active_leads.not_specified")}
             </Typography>
           </Box>
         </Box>

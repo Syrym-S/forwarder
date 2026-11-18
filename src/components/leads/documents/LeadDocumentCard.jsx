@@ -1,8 +1,9 @@
-import { useTranslation } from "react-i18next";
 import TooltipIconButton from "../../../shared/ui/tooltip-icon-button";
-import { Box, Typography } from "@mui/material";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import InsertDriveFileOutlinedIcon from "@mui/icons-material/InsertDriveFileOutlined";
+
+import { useTranslation } from "react-i18next";
+import { Box, Typography } from "@mui/material";
 import { useParams } from "react-router-dom";
 import { getFileType } from "../../../shared/helpers/file/get-file-type";
 import { ROLES } from "../../../shared/const/roles";
@@ -16,6 +17,7 @@ export function LeadDocumentCard({
 }) {
   const { t } = useTranslation();
   const { id } = useParams();
+
   const fileType = getFileType(document);
   const isForwarderFile = document?.source === ROLES.forwarder;
 

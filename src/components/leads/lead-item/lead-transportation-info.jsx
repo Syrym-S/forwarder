@@ -1,12 +1,13 @@
 import appI18n from "../../../i18n/index.js";
+import PaymentsOutlinedIcon from "@mui/icons-material/PaymentsOutlined";
+import InfoItem from "../../../shared/ui/info-item";
+import Section from "./lead-detail-section";
+
 import { useTranslation } from "react-i18next";
 import { Box, Typography } from "@mui/material";
 import { alpha } from "@mui/material/styles";
-import PaymentsOutlinedIcon from "@mui/icons-material/PaymentsOutlined";
 import { transportationParameters } from "../../../shared/const/leads/transportation-parameters";
 import { moneySpacingFormat } from "../../../shared/helpers/money-spacing";
-import InfoItem from "../../../shared/ui/info-item";
-import Section from "./lead-detail-section";
 
 const prices = [
   { name: "price", get label() { return appI18n.t("ui.customer_price"); }, color: "primary" },
@@ -15,6 +16,7 @@ const prices = [
 
 export default function LeadTransportationInfo({ leadData, hidePrices = false }) {
   const { t } = useTranslation();
+
   return (
     <Section
       title={hidePrices ? t("ui.lead_parameters") : t("ui.lead_cost_and_parameters")}

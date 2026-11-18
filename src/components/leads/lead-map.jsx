@@ -1,3 +1,15 @@
+import "leaflet/dist/leaflet.css";
+import L from "leaflet";
+import Echo from "laravel-echo";
+import Pusher from "pusher-js";
+import polyline from "@mapbox/polyline";
+import "./hide.css";
+import DriverPositionPopup from "../../shared/ui/driver-position-popup";
+import AltRouteIcon from "@mui/icons-material/AltRoute";
+import RouteIcon from "@mui/icons-material/Route";
+import TimelineIcon from "@mui/icons-material/Timeline";
+import ActionTooltip from "../../shared/ui/action-tooltip";
+
 import { useEffect, useMemo, useState } from "react";
 import {
   MapContainer,
@@ -6,26 +18,15 @@ import {
   Polyline,
   useMap,
 } from "react-leaflet";
-import "leaflet/dist/leaflet.css";
-import L from "leaflet";
-import Echo from "laravel-echo";
-import Pusher from "pusher-js";
-import polyline from "@mapbox/polyline";
 import { api, isStaging } from "../../app/client";
 import { generateLeadRoute } from "../../shared/api/routing";
-import "./hide.css";
 import { createDriverIcon } from "../../shared/ui/driver-marker-icon";
-import DriverPositionPopup from "../../shared/ui/driver-position-popup";
 import { loadLeadTracking } from "../../shared/lib/lead-tracking";
 import {
   getDriverMarkerDirection,
   getNextLeadRoutePoint,
 } from "../../shared/lib/lead-driver-direction";
 import { Box, CircularProgress, Tab, Tabs, Typography } from "@mui/material";
-import AltRouteIcon from "@mui/icons-material/AltRoute";
-import RouteIcon from "@mui/icons-material/Route";
-import TimelineIcon from "@mui/icons-material/Timeline";
-import ActionTooltip from "../../shared/ui/action-tooltip";
 import { useTranslation } from "react-i18next";
 
 window.Pusher = Pusher;
@@ -81,13 +82,16 @@ const getLocationPoint = (location) => {
 
 const FitLeadMapBounds = ({ points }) => {
   const map = useMap();
+
   const boundsKey = JSON.stringify(points);
+
   useEffect(() => {
     const locations = JSON.parse(boundsKey);
     if (locations.length > 1)
       map.fitBounds(locations, { padding: [24, 24], maxZoom: 13 });
     else if (locations.length === 1) map.setView(locations[0], 13);
   }, [map, boundsKey]);
+
   return null;
 };
 
@@ -102,8 +106,12 @@ export default function LeadMap({
 }) {
   const { t } = useTranslation();
 
-  const leadId = id ?? leadData?.id;
   const [activeMapTab, setActiveMapTab] = useState(MapViewOptions.both);
+  const [tracking, setTracking] = useState(null);
+  const [routeData, setRouteData] = useState(null);
+  const [isRouteLoading, setIsRouteLoading] = useState(false);
+
+  const leadId = id ?? leadData?.id;
   const trackingToken = leadData?.tracking?.token;
   const trackingUrl = leadData?.tracking?.url;
   const start =
@@ -118,25 +126,16 @@ export default function LeadMap({
     .map((waypoint, index) => ({ point: getLocationPoint(waypoint), index }))
     .filter(({ point }) => point);
   const cross = routeWaypoints.map(({ point }) => point);
-
   const routePoints = [start, ...cross, end].filter(Boolean);
   const coordinates = routePoints
     .map(([lat, lon]) => `${lon},${lat}`)
     .join(";");
-
-  const [tracking, setTracking] = useState(null);
   const selectedTracking =
     tracking && String(tracking.leadId) === String(leadId) ? tracking : null;
   const driverDirection = getDriverMarkerDirection(
     getLocationPoint(selectedTracking?.point),
     getLocationPoint(getNextLeadRoutePoint(leadData)),
   );
-  const driverIcon = useMemo(
-    () => createDriverIcon(undefined, driverDirection),
-    [driverDirection],
-  );
-  const [routeData, setRouteData] = useState(null);
-  const [isRouteLoading, setIsRouteLoading] = useState(false);
   const hasProvidedRoute = routeCoordinates !== undefined;
   const route = hasProvidedRoute
     ? (routeCoordinates ?? [])
@@ -149,6 +148,11 @@ export default function LeadMap({
   const showPassedRoute =
     activeMapTab === MapViewOptions.both ||
     activeMapTab === MapViewOptions.passed_way;
+
+  const driverIcon = useMemo(
+    () => createDriverIcon(undefined, driverDirection),
+    [driverDirection],
+  );
 
   const handleRouteViewChange = (_, value) => {
     setActiveMapTab(value);

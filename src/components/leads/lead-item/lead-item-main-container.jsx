@@ -1,4 +1,3 @@
-import { useTranslation } from "react-i18next";
 import LeadAvrSection from "../documents/lead-avr-section";
 import CargoCard from "./lead-cargo-info";
 import LeadMap from "../lead-map";
@@ -10,6 +9,10 @@ import LocalShippingOutlinedIcon from "@mui/icons-material/LocalShippingOutlined
 import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
 import LeadCargoFilesContainer from "../lead-cargo-files-container";
 import LeadDriverInfo from "./lead-driver-info";
+import RateDriverModal from "../../drivers/rate-driver-modal";
+import ConfirmModal from "../../../shared/ui/confirm-modal";
+
+import { useTranslation } from "react-i18next";
 import { useEffect, useRef, useState } from "react";
 import { uploadLeadFileApi } from "../../../app/store/leads/api";
 import { useLeadsStore } from "../../../app/store/leads/leads-store";
@@ -17,13 +20,11 @@ import { LeadDocumentsSection } from "../documents/LeadDocumentsSection";
 import { IN_PROGRESS_STATUSES, STATUS } from "../../../shared/const/tenders";
 import { useParams } from "react-router-dom";
 import { Alert, Box, Button, Snackbar } from "@mui/material";
-import RateDriverModal from "../../drivers/rate-driver-modal";
 import { rateDriverApi } from "../../../app/store/drivers/api";
 import { useNotificationsStore } from "../../../app/store/notifications/noti-store";
 import { parserNotificationType } from "../../../shared/helpers/notifications/parse-notification-type";
 import { NOTIFICATION_TYPE } from "../../../shared/const/notification-types";
 import { useProfileStore } from "../../../app/store/profile/profile-store";
-import ConfirmModal from "../../../shared/ui/confirm-modal";
 
 const LeadItemMainContainer = ({
   leadData,
@@ -33,19 +34,21 @@ const LeadItemMainContainer = ({
   const { t } = useTranslation();
   const { id } = useParams();
 
-  const features = window.APP_DATA?.features || {};
-  const isMustSignDocument =
-    features.sign_provider_aitu || features.sign_provider_ncanode;
+  const [isRefreshingAvr, setIsRefreshingAvr] = useState(false);
+  const [ratingLead, setRatingLead] = useState(null);
+  const [deliveryError, setDeliveryError] = useState(null);
+  const [isEarlyFinishModalOpen, setIsEarlyFinishModalOpen] = useState(false);
+  const [ratingNotice, setRatingNotice] = useState(null);
+  const [isDocumentUploading, setIsDocumentUploading] = useState(false);
+  const [deletingDocumentIds, setDeletingDocumentIds] = useState([]);
 
   const profileData = useProfileStore((state) => state.profileData);
   const getProfileData = useProfileStore((state) => state.getProfileData);
+
   const files = useLeadsStore((state) => state.files);
   const driverAvrDocument = useLeadsStore((state) => state.driverAvrDocument);
   const customerAvrDocument = useLeadsStore(
     (state) => state.customerAvrDocument,
-  );
-  const newNotification = useNotificationsStore(
-    (state) => state.newNotification,
   );
   const getLeadFiles = useLeadsStore((state) => state.getLeadFiles);
   const getLeadItem = useLeadsStore((state) => state.getLeadItem);
@@ -68,7 +71,6 @@ const LeadItemMainContainer = ({
   const getDriverAvrDocument = useLeadsStore(
     (state) => state.getDriverAvrDocument,
   );
-
   const signCustomerAvrDocument = useLeadsStore(
     (state) => state.signCustomerAvrDocument,
   );
@@ -77,21 +79,22 @@ const LeadItemMainContainer = ({
   );
   const error = useLeadsStore((state) => state.error);
 
-  const [isRefreshingAvr, setIsRefreshingAvr] = useState(false);
-  const [ratingLead, setRatingLead] = useState(null);
-  const previousLead = useRef({ id: leadData?.id, status: leadData?.status });
-  const [deliveryError, setDeliveryError] = useState(null);
-  const [isEarlyFinishModalOpen, setIsEarlyFinishModalOpen] = useState(false);
-  const [ratingNotice, setRatingNotice] = useState(null);
-  const [isDocumentUploading, setIsDocumentUploading] = useState(false);
-  const [deletingDocumentIds, setDeletingDocumentIds] = useState([]);
+  const newNotification = useNotificationsStore(
+    (state) => state.newNotification,
+  );
 
+  const { notification_type } = parserNotificationType(newNotification?.type);
+
+  const previousLead = useRef({ id: leadData?.id, status: leadData?.status });
+
+  const features = window.APP_DATA?.features || {};
+  const isMustSignDocument =
+    features.sign_provider_aitu || features.sign_provider_ncanode;
   const leadPoints = [
     leadData?.from_location,
     ...(leadData?.waypoints || []),
     leadData?.to_location,
   ];
-
   const cargosCount = leadData?.cargos?.length;
   const isAllPassed = leadPoints.every((item) => item?.is_passed);
   const canCompleteTrip =
@@ -99,7 +102,6 @@ const LeadItemMainContainer = ({
   const canFinishEarly =
     profileData?.canFinishedEarly === true &&
     IN_PROGRESS_STATUSES.includes(leadData?.status);
-
   const from = {
     lat: leadData?.from_location?.lat,
     lon: leadData?.from_location?.lon,
@@ -108,14 +110,12 @@ const LeadItemMainContainer = ({
     lat: leadData?.to_location?.lat,
     lon: leadData?.to_location?.lon,
   };
-
   const waypoints = leadData?.waypoints?.map((waypoint) => {
     return {
       lat: waypoint.lat,
       lon: waypoint.lon,
     };
   });
-
   const leadAvrDF = leadData?.avr_df;
   const leadAvrFC = leadData?.avr_fc;
 
@@ -159,8 +159,6 @@ const LeadItemMainContainer = ({
       setDeletingDocumentIds((ids) => ids.filter((id) => id !== documentId));
     }
   };
-
-  const { notification_type } = parserNotificationType(newNotification?.type);
 
   const handleConfirmDelivery = async () => {
     if (isConfirmLoading) return;
@@ -325,7 +323,7 @@ const LeadItemMainContainer = ({
           borderColor: "divider",
           borderRadius: 3,
           overflow: "hidden",
-          my: 2,
+          my: 1,
         }}
       >
         <LeadMap

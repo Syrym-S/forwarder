@@ -1,12 +1,14 @@
-import { useTranslation } from "react-i18next";
 import Section from "./lead-detail-section";
 import RouteOutlinedIcon from "@mui/icons-material/RouteOutlined";
 import RoutePoint from "./route-point";
-import { Box } from "@mui/material";
 import InfoItem from "../../../shared/ui/info-item";
+
+import { useTranslation } from "react-i18next";
+import { Box } from "@mui/material";
 
 const LeadRouteInfo = ({ leadData, showTime = false }) => {
   const { t } = useTranslation();
+
   const waypoints = leadData?.waypoints || [];
   const pointSchedules = leadData?.point_schedules || [];
 

@@ -1,9 +1,8 @@
-import { useTranslation } from "react-i18next";
-import React from "react";
 import Section from "./lead-item/lead-detail-section";
 import Inventory2SharpIcon from "@mui/icons-material/Inventory2Sharp";
 import CargosVerificationContainer from "./cargos-verification-container";
-import EmptyListUI from "../../shared/ui/empty-list-ui";
+
+import { useTranslation } from "react-i18next";
 import { Alert } from "@mui/material";
 
 const LeadCargoFilesContainer = ({
@@ -12,6 +11,7 @@ const LeadCargoFilesContainer = ({
   readOnly = false,
 }) => {
   const { t } = useTranslation();
+
   const isFilesEmpty = cargoActions.length === 0;
 
   return (

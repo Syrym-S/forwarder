@@ -16,6 +16,7 @@ const WarningModal = ({
   setComment,
 }) => {
   const { t } = useTranslation();
+
   const handleShareLead = async () => {
     setConfirm(true);
   };

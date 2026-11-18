@@ -44,6 +44,7 @@ function hasPreviewUrl(document) {
 
 export function DocumentPreview({ document }) {
   const { t } = useTranslation();
+
   if (!document) {
     return null;
   }
@@ -146,6 +147,7 @@ export function DocumentPreview({ document }) {
 
 function PreviewFallback({ text }) {
   useTranslation();
+
   return (
     <Box
       sx={{
