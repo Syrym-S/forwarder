@@ -1,3 +1,8 @@
+import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
+import RefreshRoundedIcon from "@mui/icons-material/RefreshRounded";
+import DownloadRoundedIcon from "@mui/icons-material/DownloadRounded";
+import CheckCircleOutlineRoundedIcon from "@mui/icons-material/CheckCircleOutlineRounded";
+
 import { useTranslation } from "react-i18next";
 import { useState } from "react";
 import {
@@ -10,10 +15,6 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
-import RefreshRoundedIcon from "@mui/icons-material/RefreshRounded";
-import DownloadRoundedIcon from "@mui/icons-material/DownloadRounded";
-import CheckCircleOutlineRoundedIcon from "@mui/icons-material/CheckCircleOutlineRounded";
 
 const LeadAvrSection = ({
   driverDocument,
@@ -31,8 +32,31 @@ const LeadAvrSection = ({
   onSignCustomer,
 }) => {
   const { t } = useTranslation();
+
   const [downloadingKey, setDownloadingKey] = useState(null);
   const [downloadError, setDownloadError] = useState("");
+
+  const busy = isLoading || isGenerating || isSigning;
+  const documents = [
+    {
+      key: "driver",
+      title: t("ui.driver_completion_certificate"),
+      parties: t("ui.forwarder_and_driver"),
+      document: driverDocument?.document,
+      signed: driverSigned,
+      available: true,
+      onSign: onSignDriver,
+    },
+    {
+      key: "customer",
+      title: t("ui.customer_completion_certificate"),
+      parties: t("ui.forwarder_and_customer"),
+      document: customerDocument?.document,
+      signed: customerSigned,
+      available: Boolean(driverSigned),
+      onSign: onSignCustomer,
+    },
+  ];
 
   const handleDownload = async (document, key) => {
     setDownloadingKey(key);
@@ -58,27 +82,6 @@ const LeadAvrSection = ({
       setDownloadingKey(null);
     }
   };
-  const busy = isLoading || isGenerating || isSigning;
-  const documents = [
-    {
-      key: "driver",
-      title: t("ui.driver_completion_certificate"),
-      parties: t("ui.forwarder_and_driver"),
-      document: driverDocument?.document,
-      signed: driverSigned,
-      available: true,
-      onSign: onSignDriver,
-    },
-    {
-      key: "customer",
-      title: t("ui.customer_completion_certificate"),
-      parties: t("ui.forwarder_and_customer"),
-      document: customerDocument?.document,
-      signed: customerSigned,
-      available: Boolean(driverSigned),
-      onSign: onSignCustomer,
-    },
-  ];
 
   return (
     <Paper

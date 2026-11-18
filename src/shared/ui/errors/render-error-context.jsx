@@ -1,7 +1,6 @@
 import appI18n from "../../../i18n/index.js";
-import { useTranslation } from "react-i18next";
+
 import { Alert } from "@mui/material";
-import React from "react";
 
 const returnText = (error) => {
   switch (error) {
@@ -17,8 +16,8 @@ const returnText = (error) => {
       return error;
   }
 };
+
 const RenderErrorContext = ({ error }) => {
-  useTranslation();
   return <Alert severity="error">{returnText(error)}</Alert>;
 };
 

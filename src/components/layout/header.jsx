@@ -232,7 +232,6 @@ const Header = ({ openMenu, setOpenMenu }) => {
         </ActionTooltip>
 
         <Menu
-          id="header-profile-menu"
           anchorEl={profileAnchorEl}
           open={isProfileMenuOpen}
           onClose={handleCloseProfileMenu}
@@ -241,7 +240,10 @@ const Header = ({ openMenu, setOpenMenu }) => {
           slotProps={{
             paper: {
               sx: {
-                width: profileMenuWidth,
+                width: {
+                  sx: 300,
+                  md: profileMenuWidth,
+                },
                 boxSizing: "border-box",
                 borderRadius: "16px",
                 border: "1px solid #D8E0ED",

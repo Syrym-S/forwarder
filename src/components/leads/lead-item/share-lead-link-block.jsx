@@ -11,6 +11,7 @@ import { useState } from "react";
 
 const ShareLeadLinkModal = ({ open, link, expiresAt, onClose, onNavigate }) => {
   const { t } = useTranslation();
+
   const [isCopied, setIsCopied] = useState(false);
 
   const handleCopy = async () => {

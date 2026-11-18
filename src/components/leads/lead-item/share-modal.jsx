@@ -16,6 +16,7 @@ const ShareModal = ({
   setShareUrl,
 }) => {
   const { t } = useTranslation();
+
   const shareLead = useLeadsStore((state) => state.shareLead);
 
   const handleShareLead = async () => {

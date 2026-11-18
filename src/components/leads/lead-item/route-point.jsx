@@ -1,10 +1,11 @@
-import { useTranslation } from "react-i18next";
-import { Box, Chip, Typography } from "@mui/material";
 import TripOriginIcon from "@mui/icons-material/TripOrigin";
 import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
 import dayjs from "dayjs";
 import RenderType from "../../../shared/ui/render-type";
 import StraightOutlinedIcon from "@mui/icons-material/StraightOutlined";
+
+import { useTranslation } from "react-i18next";
+import { Box, Chip, Typography } from "@mui/material";
 
 const RoutePoint = ({
   label,
@@ -14,10 +15,12 @@ const RoutePoint = ({
   isTo,
   isWaypoint,
   date,
+  showTime = false,
   isPassed,
   type,
 }) => {
   const { t } = useTranslation();
+
   return (
     <Box
       sx={{
@@ -147,7 +150,7 @@ const RoutePoint = ({
                   fontWeight: 500,
                 }}
               >
-                {dayjs(date.start_at).format("DD.MM.YYYY")}
+                {dayjs(date.start_at).format(showTime ? "DD.MM.YYYY HH:mm" : "DD.MM.YYYY")}
               </Box>
             </Typography>
           )}
@@ -167,7 +170,7 @@ const RoutePoint = ({
                   fontWeight: 500,
                 }}
               >
-                {dayjs(date.end_at).format("DD.MM.YYYY, HH:mm")}
+                {dayjs(date.end_at).format(showTime ? "DD.MM.YYYY HH:mm" : "DD.MM.YYYY, HH:mm")}
               </Box>
             </Typography>
           )}

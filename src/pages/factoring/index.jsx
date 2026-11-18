@@ -1,4 +1,3 @@
-import { useTranslation } from "react-i18next";
 import RootLayout from "../../components/layout/root-layout";
 import CreateFactoringForm from "../../features/factoring/create-factoring-form";
 import FactoringCard from "../../components/factoring/factoring-card";
@@ -9,7 +8,9 @@ import SuccessModal from "../../components/factoring/factoring-form/success-moda
 import DataContainer from "../../shared/ui/data-container";
 import TableSkeleton from "../../shared/ui/table-skeleton";
 import CardListSkeleton from "../../shared/ui/card-list-skeleton";
+
 import { Box, Pagination, Typography } from "@mui/material";
+import { useTranslation } from "react-i18next";
 import { useNotificationsStore } from "../../app/store/notifications/noti-store";
 import { parserNotificationType } from "../../shared/helpers/notifications/parse-notification-type";
 import { NOTIFICATION_TYPE } from "../../shared/const/notification-types";
@@ -20,6 +21,7 @@ import { useLeadsStore } from "../../app/store/leads/leads-store";
 
 const Factoring = () => {
   const { t } = useTranslation();
+
   const factorings = useFactoringStore((state) => state.factorings);
   const isLoading = useFactoringStore((state) => state.isLoading);
   const getFactorings = useFactoringStore((state) => state.getFactorings);
@@ -86,9 +88,13 @@ const Factoring = () => {
             fontSize: "1.5rem",
             сolor: "font_color.heading",
           }}
-        >{t("ui.factorings")}</Typography>
+        >
+          {t("ui.factorings")}
+        </Typography>
 
-        <Typography color="text.secondary" fontSize={14}>{t("ui.completed_lead_factoring")}</Typography>
+        <Typography color="text.secondary" fontSize={14}>
+          {t("ui.completed_lead_factoring")}
+        </Typography>
       </Box>
       <ViewTabs
         view={view}

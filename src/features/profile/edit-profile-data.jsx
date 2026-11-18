@@ -38,9 +38,16 @@ const EditProfileForm = ({ profileData, legalDocuments }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Push is saved separately; changing it must not reset unsaved profile fields.
-  const profileFormValues = useMemo(() => Object.fromEntries(
-    Object.entries(profileData || {}).filter(([key]) => key !== "pushEnabled"),
-  ), [profileData]);
+  const profileFormValues = useMemo(
+    () =>
+      Object.fromEntries(
+        Object.entries(profileData || {}).filter(
+          ([key]) =>
+            key !== "pushEnabled" && key !== "advertisementPushEnabled",
+        ),
+      ),
+    [profileData],
+  );
 
   const {
     control,
@@ -53,9 +60,12 @@ const EditProfileForm = ({ profileData, legalDocuments }) => {
 
   const formValues = useWatch({ control });
 
-  useEffect(() => () => {
-    if (preview) URL.revokeObjectURL(preview);
-  }, [preview]);
+  useEffect(
+    () => () => {
+      if (preview) URL.revokeObjectURL(preview);
+    },
+    [preview],
+  );
 
   const handleAvatarChange = (file) => {
     setSelectedImg(file);

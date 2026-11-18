@@ -5,17 +5,15 @@ import ViewTabs from "../../shared/ui/view-tabs";
 import LeadListContainer from "../../components/leads/lead-list-container";
 import LeadsExportButton from "../../components/leads/leads-export-button";
 import { useEffect, useState } from "react";
-import { Typography } from "@mui/material";
-import { Box } from "@mui/material";
+import { Box, Paper, Typography, useMediaQuery } from "@mui/material";
 import { VIEWS } from "../../shared/const/leads";
 import { useLeadsStore } from "../../app/store/leads/leads-store";
 import { HISTORY_LEAD_STATUS_OPTIONS } from "../../shared/const/tenders";
-import { Controller, useForm } from "react-hook-form";
 import FormInput from "../../shared/ui/input/form-input";
 
-const dateInputStyles = (hasValue) => ({
-  width: hasValue ? 164 : 56,
-  flexShrink: 0,
+const filterInputStyles = {
+  width: "100%",
+  minWidth: 0,
   "& .MuiOutlinedInput-root": {
     height: 42,
     borderRadius: 2.5,
@@ -35,30 +33,10 @@ const dateInputStyles = (hasValue) => ({
     boxSizing: "border-box",
     height: "100%",
     minWidth: 0,
-    padding: hasValue ? "0 38px 0 12px" : 0,
-    color: hasValue ? "text.primary" : "transparent",
-    cursor: "pointer",
+    padding: "10px 12px",
+    fontSize: 14,
   },
-  "& input::-webkit-datetime-edit": {
-    display: hasValue ? "block" : "none",
-  },
-  "& input::-webkit-calendar-picker-indicator": {
-    position: "absolute",
-    inset: hasValue ? "0 12px 0 auto" : 0,
-    width: hasValue ? 18 : "100%",
-    height: hasValue ? 18 : "100%",
-    padding: 0,
-    margin: hasValue ? "auto 0" : 0,
-    backgroundPosition: "center",
-    backgroundSize: "18px 18px",
-    cursor: "pointer",
-    opacity: 0.7,
-  },
-  "&:hover input::-webkit-calendar-picker-indicator, & .Mui-focused input::-webkit-calendar-picker-indicator":
-    {
-      opacity: 1,
-    },
-});
+};
 
 const HistoryLeads = () => {
   const { t } = useTranslation();
@@ -67,10 +45,10 @@ const HistoryLeads = () => {
   const [dateTo, setDateTo] = useState("");
   const [search, setSearch] = useState("");
 
-  const { control } = useForm();
-
   const [page, setPage] = useState(1);
-  const [view, setView] = useState(VIEWS.table);
+  const [selectedView, setSelectedView] = useState(null);
+  const isCompactScreen = useMediaQuery((theme) => theme.breakpoints.down("md"));
+  const view = selectedView ?? (isCompactScreen ? VIEWS.cards : VIEWS.table);
 
   const clearCurrentLead = useLeadsStore((state) => state.clearCurrentLead);
   const historyLeads = useLeadsStore((state) => state.historyLeads);
@@ -80,7 +58,6 @@ const HistoryLeads = () => {
   const isLoading = useLeadsStore((state) => state.isLoading);
 
   const isLeadsEmpty = historyLeads?.length === 0;
-  const isCardsView = view === VIEWS.cards;
 
   const handlePageChange = (_, value) => {
     setPage(value);
@@ -107,13 +84,22 @@ const HistoryLeads = () => {
   }, [clearCurrentLead]);
 
   return (
-    <RootLayout withoutDataCheck>
-      <Box>
+    <RootLayout
+      withoutDataCheck
+      sx={{
+        width: "100%",
+        minWidth: 0,
+        p: { xs: 2, sm: 3 },
+        pl: { sm: "calc(20vw + 24px)" },
+      }}
+    >
+      <Box sx={{ mb: 3, minWidth: 0 }}>
         <Typography
+          component="h1"
           sx={{
             fontWeight: 600,
-            fontSize: "1.5rem",
-            сolor: "font_color.heading",
+            fontSize: { xs: 22, sm: 24 },
+            color: "font_color.heading",
           }}
         >
           {t("ui.lead_history")}
@@ -124,104 +110,116 @@ const HistoryLeads = () => {
         </Typography>
       </Box>
 
-      <Box
+      <Paper
+        variant="outlined"
         sx={{
-          display: "flex",
-          alignItems: "center",
-          flexDirection: {
-            xs: "column",
-            sm: "row",
-          },
-          gap: 1,
-          mx: "auto",
-          width: {
-            xs: "100%",
-            sm: isCardsView ? "60%" : "100%",
-          },
+          p: { xs: 2, sm: 2.5 },
+          borderRadius: 3,
+          minWidth: 0,
+          mb: 2,
         }}
       >
-        <ViewTabs view={view} setView={setView} withoutDataAdd withoutKanban />
-
-        <LeadsExportButton />
-
-        <Controller
-          name="status"
-          control={control}
-          defaultValue=""
-          render={({ field: { ref, ...field } }) => (
-            <CustomSelect
-              {...field}
-              inputRef={ref}
-              label={t("ui.status")}
-              options={[
-                { value: "", label: t("ui.all_statuses") },
-                ...HISTORY_LEAD_STATUS_OPTIONS,
-              ]}
-              value={field.value ?? ""}
-              onChange={(event) => {
-                const value = event.target.value;
-
-                field.onChange(value);
-
-                const selected =
-                  HISTORY_LEAD_STATUS_OPTIONS.find(
-                    (option) => option.value === value,
-                  ) ?? null;
-
-                setFilterStatus(selected);
-                setPage(1);
-              }}
-              sx={{ width: { xs: "100%", sm: 300 } }}
-              slotProps={{
-                select: {
-                  MenuProps: {
-                    slotProps: { paper: { sx: { maxHeight: 430 } } },
-                  },
-                },
-              }}
-            />
-          )}
-        />
-
-        <FormInput
-          size="small"
-          label={t("dashboard.from")}
-          type="date"
-          value={dateFrom}
-          onChange={(event) => {
-            setDateFrom(event.target.value);
-            setPage(1);
-          }}
-          sx={dateInputStyles(Boolean(dateFrom))}
-        />
-
-        <FormInput
-          size="small"
-          label={t("dashboard.to")}
-          type="date"
-          value={dateTo}
-          onChange={(event) => {
-            setDateTo(event.target.value);
-            setPage(1);
-          }}
-          sx={dateInputStyles(Boolean(dateTo))}
-        />
-
-        <FormInput
-          size="small"
-          label={t("active_leads.table.columnsManagementSearchTitle")}
-          value={search}
-          onChange={(event) => {
-            setSearch(event.target.value);
-            setPage(1);
-          }}
+        <Box
           sx={{
-            width: 500,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            gap: 1.5,
+            flexWrap: "wrap",
+            mb: 2.5,
           }}
-        />
-      </Box>
+        >
+          <ViewTabs
+            view={view}
+            setView={setSelectedView}
+            withoutDataAdd
+            withoutKanban
+            sx={{ width: "auto", mx: 0 }}
+          />
+          <LeadsExportButton />
+        </Box>
+
+        <Box
+          sx={{
+            display: "grid",
+            gridTemplateColumns: {
+              xs: "minmax(0, 1fr)",
+              sm: "repeat(2, minmax(0, 1fr))",
+              lg: "minmax(0, 1.2fr) repeat(2, minmax(0, 1fr)) minmax(0, 1.4fr)",
+            },
+            gap: 2,
+          }}
+        >
+          <CustomSelect
+            id="history-leads-status"
+            label={t("ui.status")}
+            options={[
+              { value: "", label: t("ui.all_statuses") },
+              ...HISTORY_LEAD_STATUS_OPTIONS,
+            ]}
+            value={filterStatus?.value ?? ""}
+            onChange={(event) => {
+              const value = event.target.value;
+              const selected = HISTORY_LEAD_STATUS_OPTIONS.find(
+                (option) => option.value === value,
+              ) ?? null;
+
+              setFilterStatus(selected);
+              setPage(1);
+            }}
+            sx={{ width: "100%", minWidth: 0 }}
+            slotProps={{
+              select: {
+                MenuProps: {
+                  slotProps: { paper: { sx: { maxHeight: 430 } } },
+                },
+              },
+            }}
+          />
+
+          <FormInput
+            size="small"
+            id="history-leads-date-from"
+            label={t("ui.date_from")}
+            type="date"
+            value={dateFrom}
+            onChange={(event) => {
+              setDateFrom(event.target.value);
+              setPage(1);
+            }}
+            sx={filterInputStyles}
+          />
+
+          <FormInput
+            size="small"
+            id="history-leads-date-to"
+            label={t("ui.date_to")}
+            type="date"
+            value={dateTo}
+            onChange={(event) => {
+              setDateTo(event.target.value);
+              setPage(1);
+            }}
+            sx={filterInputStyles}
+          />
+
+          <FormInput
+            size="small"
+            id="history-leads-search"
+            label={t("active_leads.search_leads")}
+            type="search"
+            value={search}
+            onChange={(event) => {
+              setSearch(event.target.value);
+              setPage(1);
+            }}
+            sx={filterInputStyles}
+          />
+        </Box>
+      </Paper>
 
       <LeadListContainer
+        responsive
         leads={historyLeads}
         view={view}
         isLeadsEmpty={isLeadsEmpty}

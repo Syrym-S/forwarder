@@ -1,32 +1,62 @@
 import appI18n from "../../i18n/index.js";
+import KanbanCard from "./kanban-item-card";
+
 import { useTranslation } from "react-i18next";
-import React from "react";
-import RootLayout from "../layout/root-layout";
 import {
-  Avatar,
   Box,
-  Card,
-  CardContent,
   Chip,
   Stack,
   Typography,
 } from "@mui/material";
-import KanbanCard from "./kanban-item-card";
 
 const STATUS_COLUMNS = [
-  { id: "new", get title() { return appI18n.t("ui.new"); }, color: "#1976d2" },
-  { id: "add_driver", get title() { return appI18n.t("ui.driver_added"); }, color: "#1976d2" },
-  { id: "start_driver", get title() { return appI18n.t("ui.trip_started"); }, color: "#1976d2" },
-  { id: "start_loading", get title() { return appI18n.t("ui.loading_operation"); }, color: "#1976d2" },
   {
-    id: "verification_loading",
-    get title() { return appI18n.t("ui.loading_confirmed"); },
+    id: "new",
+    get title() {
+      return appI18n.t("ui.new");
+    },
     color: "#1976d2",
   },
-  { id: "start_unloading", get title() { return appI18n.t("ui.unloading_operation"); }, color: "#1976d2" },
+  {
+    id: "add_driver",
+    get title() {
+      return appI18n.t("ui.driver_added");
+    },
+    color: "#1976d2",
+  },
+  {
+    id: "start_driver",
+    get title() {
+      return appI18n.t("ui.trip_started");
+    },
+    color: "#1976d2",
+  },
+  {
+    id: "start_loading",
+    get title() {
+      return appI18n.t("ui.loading_operation");
+    },
+    color: "#1976d2",
+  },
+  {
+    id: "verification_loading",
+    get title() {
+      return appI18n.t("ui.loading_confirmed");
+    },
+    color: "#1976d2",
+  },
+  {
+    id: "start_unloading",
+    get title() {
+      return appI18n.t("ui.unloading_operation");
+    },
+    color: "#1976d2",
+  },
   {
     id: "verification_unloading",
-    get title() { return appI18n.t("ui.unloading_confirmed"); },
+    get title() {
+      return appI18n.t("ui.unloading_confirmed");
+    },
     color: "#1976d2",
   },
 ];
@@ -42,6 +72,7 @@ const parseLeadToColumns = (leads) => {
 
 const LeadKanbanTable = ({ leads }) => {
   useTranslation();
+
   const columns = parseLeadToColumns(leads);
 
   return (

@@ -1,6 +1,7 @@
+import Section from "../lead-item/lead-detail-section";
+
 import { Box, Skeleton, Stack } from "@mui/material";
 import { useTranslation } from "react-i18next";
-import Section from "../lead-item/lead-detail-section";
 
 const SkeletonFields = ({ count, columns = { xs: "1fr", sm: "1fr 1fr" } }) => (
   <Box sx={{ display: "grid", gridTemplateColumns: columns, gap: 1.5 }}>

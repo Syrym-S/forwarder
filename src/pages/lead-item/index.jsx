@@ -171,7 +171,6 @@ const LeadItem = () => {
         <Box
           sx={{
             p: 1,
-            my: 2,
             gap: 1.5,
             borderBottom: isDraft ? "none" : "1px solid",
             borderColor: "divider",
@@ -366,9 +365,7 @@ const LeadItem = () => {
             warning
             open={confirm}
             title={t("ui.attention")}
-            description={
-              t("ui.report_emergency_confirmation")
-            }
+            description={t("ui.report_emergency_confirmation")}
             onCancel={() => setConfirm(false)}
             onConfirm={handleSendEmergencySituation}
             isLoading={isSentEmergencyLoading}
@@ -379,9 +376,7 @@ const LeadItem = () => {
           <ConfirmModal
             open={openFinishEmergency}
             title={t("ui.attention")}
-            description={
-              t("ui.close_emergency_confirmation")
-            }
+            description={t("ui.close_emergency_confirmation")}
             onCancel={handleCloseFinishEmergencyModal}
             onConfirm={handleFinishEmergencySituation}
             isLoading={isFinishEmergencyLoading}

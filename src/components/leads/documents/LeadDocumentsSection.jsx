@@ -1,3 +1,9 @@
+import UploadFileOutlinedIcon from "@mui/icons-material/UploadFileOutlined";
+import LeadDocumentCardSkeleton from "../skeleton/lead-document-card-skeleton";
+import FileModal from "../../tenders/file-modal";
+import PrimaryButton from "../../../shared/ui/button/primary-button";
+import FormInput from "../../../shared/ui/input/form-input";
+
 import { useTranslation } from "react-i18next";
 import { useState } from "react";
 import {
@@ -7,14 +13,9 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import UploadFileOutlinedIcon from "@mui/icons-material/UploadFileOutlined";
 import { LeadDocumentCard } from "./LeadDocumentCard";
-import LeadDocumentCardSkeleton from "../skeleton/lead-document-card-skeleton";
 import { useLeadsStore } from "../../../app/store/leads/leads-store";
-import FileModal from "../../tenders/file-modal";
 import { STATUS } from "../../../shared/const/tenders";
-import PrimaryButton from "../../../shared/ui/button/primary-button";
-import FormInput from "../../../shared/ui/input/form-input";
 
 export function LeadDocumentsSection({
   leadStatus,
@@ -24,17 +25,19 @@ export function LeadDocumentsSection({
   isUploading = false,
   uploadError = "",
   deletingDocumentIds = [],
+  readOnly = false,
 }) {
   const { t } = useTranslation();
-  const isFilesEmpty = documents.length === 0;
-  const isFinishedOrDelted =
-    leadStatus === STATUS.finished || leadStatus === STATUS.deleted;
-
-  const isLoading = useLeadsStore((state) => state.isLoading);
-  const showSkeleton = isUploading || (isLoading && deletingDocumentIds.length === 0);
 
   const [selectedDocument, setSelectedDocument] = useState(null);
   const [selectedFileName, setSelectedFileName] = useState("");
+
+  const isLoading = useLeadsStore((state) => state.isLoading);
+
+  const isFilesEmpty = documents.length === 0;
+  const isFinishedOrDelted =
+    readOnly || leadStatus === STATUS.finished || leadStatus === STATUS.deleted;
+  const showSkeleton = isUploading || (isLoading && deletingDocumentIds.length === 0);
 
   function handleFileChange(event) {
     const file = event.target.files?.[0];
@@ -66,7 +69,7 @@ export function LeadDocumentsSection({
   return (
     <>
       <Stack spacing={2}>
-        {leadStatus !== STATUS.finished && leadStatus !== STATUS.deleted && (
+        {!readOnly && leadStatus !== STATUS.finished && leadStatus !== STATUS.deleted && (
           <Box
             component="form"
             onSubmit={handleSubmit}

@@ -1,6 +1,7 @@
-import { useTranslation } from "react-i18next";
 import EditNoteRoundedIcon from "@mui/icons-material/EditNoteRounded";
 import LeadStatus from "../../../shared/ui/lead-status";
+
+import { useTranslation } from "react-i18next";
 import {
   Box,
   Button,
@@ -15,17 +16,18 @@ import { useLeadsStore } from "../../../app/store/leads/leads-store";
 import { parserNotificationType } from "../../../shared/helpers/notifications/parse-notification-type";
 import { NOTIFICATION_TYPE } from "../../../shared/const/notification-types";
 
-const LeadHeading = ({ leadData, openEditForm }) => {
+const LeadHeading = ({ leadData, openEditForm, readOnly = false }) => {
   const { t } = useTranslation();
-  const canBeEdited = !FINISHED_LEAD_STATUSES.includes(leadData.status);
+  const { notification_type } = parserNotificationType;
 
   const newNotification = useNotificationsStore(
     (state) => state.newNotification,
   );
 
-  const { notification_type } = parserNotificationType;
   const getLeadItem = useLeadsStore((state) => state.getLeadItem);
   const isLoading = useLeadsStore((state) => state.isLoading);
+
+  const canBeEdited = !readOnly && !FINISHED_LEAD_STATUSES.includes(leadData.status);
 
   useEffect(() => {
     if (notification_type === NOTIFICATION_TYPE.shipping) {

@@ -1,16 +1,18 @@
-import { moneySpacingFormat } from "../../shared/helpers/money-spacing";
-import { Typography, Box, Stack } from "@mui/material";
 import TripOriginIcon from "@mui/icons-material/TripOrigin";
 import ArrowDownwardRoundedIcon from "@mui/icons-material/ArrowDownwardRounded";
 import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
-import { useNavigate } from "react-router-dom";
 import LeadStatus from "../../shared/ui/lead-status";
-import { isDraftLead } from "../../shared/lib/lead-draft";
 import InfoItem from "../../shared/ui/info-item";
+
+import { moneySpacingFormat } from "../../shared/helpers/money-spacing";
+import { Typography, Box, Stack } from "@mui/material";
+import { useNavigate } from "react-router-dom";
+import { isDraftLead } from "../../shared/lib/lead-draft";
 import { useTranslation } from "react-i18next";
 
 const LeadCard = ({ lead }) => {
   const { t } = useTranslation();
+
   const navigate = useNavigate();
 
   const navigateToLeadItem = () => {
@@ -22,7 +24,8 @@ const LeadCard = ({ lead }) => {
       onClick={navigateToLeadItem}
       tabIndex={0}
       sx={{
-        p: 3,
+        p: { xs: 2, sm: 3 },
+        minWidth: 0,
         maxWidth: "100%",
         border: "2px solid",
         borderColor: isDraftLead(lead) ? "warning.main" : "divider",
@@ -31,6 +34,7 @@ const LeadCard = ({ lead }) => {
         boxShadow: "0 2px 8px rgba(0, 0, 0, 0.06)",
         transition: "0.2s ease",
         cursor: "pointer",
+        "& .MuiTypography-root": { overflowWrap: "anywhere" },
         "&:hover": {
           borderColor: "primary.main",
           boxShadow: "0 8px 24px rgba(33, 150, 243, 0.12)",
@@ -42,14 +46,20 @@ const LeadCard = ({ lead }) => {
           sx={{
             display: "flex",
             justifyContent: "space-between",
+            alignItems: "flex-start",
+            flexWrap: "wrap",
+            gap: 1.5,
           }}
         >
           <Typography
             sx={{
-              fontSize: 20,
+              fontSize: { xs: 16, sm: 20 },
+              flex: "1 1 180px",
+              minWidth: 0,
             }}
           >
-            {t("active_leads.customer")}: {lead?.customer?.name || t("active_leads.not_specified")}
+            {t("active_leads.customer")}:{" "}
+            {lead?.customer?.name || t("active_leads.not_specified")}
           </Typography>
 
           <Stack
@@ -66,11 +76,12 @@ const LeadCard = ({ lead }) => {
                 sm: "flex-end",
               },
               gap: 2,
+              maxWidth: "100%",
             }}
           >
             <Typography
               sx={{
-                fontSize: 20,
+                fontSize: { xs: 16, sm: 20 },
               }}
             >
               #{lead.num || "—"}
@@ -82,9 +93,14 @@ const LeadCard = ({ lead }) => {
 
         <Box
           sx={{
-            display: "flex",
+            display: "grid",
+            gridTemplateColumns: {
+              xs: "minmax(0, 1fr)",
+              sm: "minmax(0, 1fr) auto minmax(0, 1fr)",
+            },
             alignItems: "center",
-            gap: 2,
+            gap: 1.5,
+            "& > .MuiBox-root": { minWidth: 0 },
           }}
         >
           <Box>
@@ -106,7 +122,9 @@ const LeadCard = ({ lead }) => {
                 lineHeight: 1.35,
               }}
             >
-              {lead?.from_location?.address || lead?.from || t("active_leads.not_specified")}
+              {lead?.from_location?.address ||
+                lead?.from ||
+                t("active_leads.not_specified")}
             </Typography>
           </Box>
 
@@ -114,6 +132,7 @@ const LeadCard = ({ lead }) => {
             sx={{
               color: "text.secondary",
               fontSize: 17,
+              justifySelf: { xs: "start", sm: "center" },
               transform: {
                 xs: "none",
                 sm: "rotate(-90deg)",
@@ -141,7 +160,9 @@ const LeadCard = ({ lead }) => {
                 lineHeight: 1.35,
               }}
             >
-              {lead?.to_location?.address || lead?.from || t("active_leads.not_specified")}
+              {lead?.to_location?.address ||
+                lead?.to ||
+                t("active_leads.not_specified")}
             </Typography>
           </Box>
         </Box>

@@ -1,57 +1,55 @@
+import { Alert, Box, Button } from "@mui/material";
 import { useTranslation } from "react-i18next";
-import { Box } from "@mui/material";
 import { VIEWS } from "../../shared/const/leads";
-import FactorLineTable from "./factor-line-table";
-import FactoringLineCard from "./factor-line-card";
-import { useFactorStore } from "../../app/store/factor/factor-store";
 import DataContainer from "../../shared/ui/data-container";
 import TableSkeleton from "../../shared/ui/table-skeleton";
 import CardListSkeleton from "../../shared/ui/card-list-skeleton";
+import FactorLineTable from "./factor-line-table";
+import FactoringLineCard from "./factor-line-card";
 
-const FactorLineContainer = ({ view }) => {
+const cardsLayout = {
+  width: "100%",
+  minWidth: 0,
+  display: "grid",
+  gridTemplateColumns: {
+    xs: "minmax(0, 1fr)",
+    xl: "repeat(2, minmax(0, 1fr))",
+  },
+  gap: 2,
+  my: 0,
+  mx: 0,
+};
+
+const FactorLineContainer = ({ view, lines, isLoading, error, onRetry }) => {
   const { t } = useTranslation();
-  const factoringsLine = useFactorStore((state) => state.factoringsLine);
-  const isLoading = useFactorStore((state) => state.isLoading);
+  const isCardsView = view === VIEWS.cards;
 
-  const isFactoringsLineEmpty = factoringsLine.length === 0;
-
-  const isCardView = view === VIEWS.cards;
-  const isTableView = view === VIEWS.table;
+  if (!isLoading && error) {
+    return (
+      <Alert
+        severity="error"
+        action={<Button color="inherit" onClick={onRetry}>{t("ui.retry")}</Button>}
+      >
+        {typeof error === "string" ? error : t("dashboard.loading_error")}
+      </Alert>
+    );
+  }
 
   return (
-    <Box
-      sx={{
-        width: isCardView ? "60%" : "100%",
-        mx: "auto",
-      }}
-    >
+    <Box sx={{ width: "100%", minWidth: 0 }}>
       <DataContainer
         isLoading={isLoading}
-        loadingFallback={
-          isTableView ? (
-            <TableSkeleton />
-          ) : (
-            <CardListSkeleton sx={{ width: "100%", gap: 1, my: 0 }} />
-          )
-        }
-        isEmpty={isFactoringsLineEmpty}
+        loadingFallback={isCardsView ? <CardListSkeleton sx={cardsLayout} /> : <TableSkeleton />}
+        isEmpty={lines.length === 0}
         emptyText={t("ui.factoring_line_list_empty")}
       >
-        {isCardView && (
-          <Box
-            sx={{
-              display: "grid",
-              gridTemplateColumns: "1fr",
-              gap: 1,
-              mx: "auto",
-            }}
-          >
-            {factoringsLine.map((item) => (
-              <FactoringLineCard line={item} />
-            ))}
+        {isCardsView ? (
+          <Box sx={cardsLayout}>
+            {lines.map((line) => <FactoringLineCard key={line.id} line={line} />)}
           </Box>
+        ) : (
+          <FactorLineTable lines={lines} />
         )}
-        {isTableView && <FactorLineTable factorLine={factoringsLine} />}
       </DataContainer>
     </Box>
   );

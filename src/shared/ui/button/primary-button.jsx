@@ -14,18 +14,6 @@ const PrimaryButton = ({
 }) => {
   const color = error ? "error" : warning ? "warning" : "primary";
 
-  const getBoxShadow = () => {
-    if (error) {
-      return "0 4px 10px rgba(211, 47, 47, 0.25)";
-    }
-
-    if (warning) {
-      return "0 4px 10px rgba(237, 108, 2, 0.25)";
-    }
-
-    return "0 4px 10px rgba(175, 198, 230, 0.25)";
-  };
-
   return (
     <Button
       size={size}

@@ -1,3 +1,7 @@
+import RootLayout from "../../components/layout/root-layout";
+import WebPushSettings from "../../components/profile/web-push-settings";
+import AdvertisementPushSettings from "../../components/profile/advertisement-push-settings";
+
 import { useTranslation } from "react-i18next";
 import {
   Alert,
@@ -10,8 +14,6 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import RootLayout from "../../components/layout/root-layout";
-import WebPushSettings from "../../components/profile/web-push-settings";
 import { useLanguagePreference } from "../../shared/hooks/use-language-preference";
 
 export default function Settings() {
@@ -142,6 +144,12 @@ export default function Settings() {
           sx={{ p: { xs: 2, sm: 3 }, borderRadius: 3, boxShadow: "none" }}
         >
           <WebPushSettings />
+        </Paper>
+        <Paper
+          variant="outlined"
+          sx={{ p: { xs: 2, sm: 3 }, borderRadius: 3, boxShadow: "none" }}
+        >
+          <AdvertisementPushSettings />
         </Paper>
       </Stack>
     </RootLayout>

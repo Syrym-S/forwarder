@@ -1,16 +1,17 @@
-import { useTranslation } from "react-i18next";
-import React from "react";
 import Section from "./lead-item/lead-detail-section";
 import Inventory2SharpIcon from "@mui/icons-material/Inventory2Sharp";
 import CargosVerificationContainer from "./cargos-verification-container";
-import EmptyListUI from "../../shared/ui/empty-list-ui";
+
+import { useTranslation } from "react-i18next";
 import { Alert } from "@mui/material";
 
 const LeadCargoFilesContainer = ({
   cargoActions = [],
   pass_verify = false,
+  readOnly = false,
 }) => {
   const { t } = useTranslation();
+
   const isFilesEmpty = cargoActions.length === 0;
 
   return (
@@ -24,11 +25,13 @@ const LeadCargoFilesContainer = ({
       {isFilesEmpty && !pass_verify && (
         <Alert severity="info">{t("ui.uploaded_file_list_empty")}</Alert>
       )}
-      {cargoActions.map((cargoAction) => {
+      {cargoActions.map((cargoAction, index) => {
         return (
           <CargosVerificationContainer
+            key={cargoAction.id ?? index}
             cargoAction={cargoAction}
             pass_verify={pass_verify}
+            readOnly={readOnly}
           />
         );
       })}

@@ -1,15 +1,16 @@
 import appI18n from "../../i18n/index.js";
-import { useTranslation } from "react-i18next";
-import React, { useState } from "react";
 import Section from "./lead-item/lead-detail-section";
 import NewReleasesIcon from "@mui/icons-material/NewReleases";
 import TaskAltOutlinedIcon from "@mui/icons-material/TaskAltOutlined";
-import { STATUS, WAYPOINT_TYPES } from "../../shared/const/tenders";
-import { LeadDocumentCard } from "./documents/LeadDocumentCard";
 import FileModal from "../tenders/file-modal";
+
+import { useTranslation } from "react-i18next";
+import { WAYPOINT_TYPES } from "../../shared/const/tenders";
+import { LeadDocumentCard } from "./documents/LeadDocumentCard";
 import { Box, Button } from "@mui/material";
 import { useParams } from "react-router-dom";
 import { useLeadsStore } from "../../app/store/leads/leads-store";
+import { useState } from "react";
 
 const renderTitleText = (stage, isVerified) => {
   let title = "";
@@ -27,9 +28,14 @@ const renderTitleText = (stage, isVerified) => {
   return title;
 };
 
-const CargosVerificationContainer = ({ cargoAction, pass_verify = false }) => {
+const CargosVerificationContainer = ({
+  cargoAction,
+  pass_verify = false,
+  readOnly = false,
+}) => {
   const { t } = useTranslation();
   const { id } = useParams();
+
   const [currentFile, setCurrentFile] = useState(null);
 
   const getLeadItem = useLeadsStore((state) => state.getLeadItem);
@@ -68,7 +74,7 @@ const CargosVerificationContainer = ({ cargoAction, pass_verify = false }) => {
   };
 
   const handleVerify = () => {
-    if (pass_verify) return;
+    if (pass_verify || readOnly) return;
     if (cargoAction.stage === WAYPOINT_TYPES.loading) {
       handleVerifyCargoLoad();
     } else {
@@ -77,7 +83,7 @@ const CargosVerificationContainer = ({ cargoAction, pass_verify = false }) => {
   };
 
   const handleReject = () => {
-    if (pass_verify) return;
+    if (pass_verify || readOnly) return;
     if (cargoAction.stage === WAYPOINT_TYPES.loading) {
       handleRejectCargoLoad();
     } else {
@@ -106,13 +112,18 @@ const CargosVerificationContainer = ({ cargoAction, pass_verify = false }) => {
           gap: 2,
         }}
       >
-        {cargoAction?.files?.map((file) => (
-          <LeadDocumentCard document={file} onOpen={setCurrentFile} />
+        {cargoAction?.files?.map((file, index) => (
+          <LeadDocumentCard
+            key={file.id ?? index}
+            document={file}
+            onOpen={setCurrentFile}
+            isFileReadOnly={readOnly}
+          />
         ))}
 
         <FileModal currentFile={currentFile} setCurrentFile={setCurrentFile} />
       </Box>
-      {!isVerified && !pass_verify && (
+      {!isVerified && !pass_verify && !readOnly && (
         <Box
           sx={{
             my: 1,
@@ -135,7 +146,9 @@ const CargosVerificationContainer = ({ cargoAction, pass_verify = false }) => {
             color="error"
             variant="outlined"
             onClick={handleReject}
-          >{t("ui.reject")}</Button>
+          >
+            {t("ui.reject")}
+          </Button>
         </Box>
       )}
     </Section>

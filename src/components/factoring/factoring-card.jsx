@@ -6,10 +6,12 @@ import RenderStatus, {
 import { useNavigate } from "react-router-dom";
 import { moneySpacingFormat } from "../../shared/helpers/money-spacing";
 import InfoItem from "../../shared/ui/info-item";
+import ActionTooltip from "../../shared/ui/action-tooltip";
 
 const FactoringCard = ({ factoring }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const factoringId = String(factoring?.id ?? "");
 
   const handleNavigateToDetailsPage = () => {
     navigate(`/factoring/${factoring?.id}`);
@@ -20,7 +22,9 @@ const FactoringCard = ({ factoring }) => {
       onClick={handleNavigateToDetailsPage}
       tabIndex={0}
       sx={{
-        p: 3,
+        p: { xs: 2, sm: 3 },
+        minWidth: 0,
+        maxWidth: "100%",
         border: "2px solid",
         borderColor: "divider",
         borderRadius: 4,
@@ -49,7 +53,9 @@ const FactoringCard = ({ factoring }) => {
               variant="body2"
               color="text.secondary"
               sx={{ mb: 0.75 }}
-            >{t("ui.factoring")}</Typography>
+            >
+              {t("ui.factoring")}
+            </Typography>
 
             <Typography
               sx={{
@@ -75,16 +81,19 @@ const FactoringCard = ({ factoring }) => {
               },
             }}
           >
-            <Chip
-              label={`Index# ${factoring?.id}`}
-              color="primary"
-              variant="outlined"
-              sx={{
-                borderRadius: 999,
-                fontWeight: 600,
-                backgroundColor: "rgba(33, 150, 243, 0.04)",
-              }}
-            />
+            <ActionTooltip title={factoringId} describeChild>
+              <Chip
+                label={`Index# ${factoringId.slice(0, 6) || "-"}`}
+                tabIndex={0}
+                color="primary"
+                variant="outlined"
+                sx={{
+                  borderRadius: 999,
+                  fontWeight: 600,
+                  backgroundColor: "rgba(33, 150, 243, 0.04)",
+                }}
+              />
+            </ActionTooltip>
             <RenderStatus status={factoring?.status} />
           </Stack>
         </Box>
@@ -103,7 +112,10 @@ const FactoringCard = ({ factoring }) => {
             label={t("ui.factor_details_heading")}
             value={factoring?.factor?.company_name || "-"}
           />
-          <InfoItem label={t("ui.factor_full_name")} value={factoring?.factor?.fio} />
+          <InfoItem
+            label={t("ui.factor_full_name")}
+            value={factoring?.factor?.fio}
+          />
           <InfoItem label={t("ui.factor_bin")} value={factoring?.factor?.bin} />
         </Box>
         <Box
@@ -148,15 +160,27 @@ const FactoringCard = ({ factoring }) => {
 
       <Box sx={{ py: 1, display: "flex", gap: 4 }}>
         <RenderStatusContent
-          label={t("ui.your_confirmation", { value1: factoring?.verified_forwarder ? t("ui.confirmed_2") : t("ui.not_confirmed") })}
+          label={t("ui.your_confirmation", {
+            value1: factoring?.verified_forwarder
+              ? t("ui.confirmed_2")
+              : t("ui.not_confirmed"),
+          })}
           color={factoring?.verified_customer ? "#51d861" : "#e9821b"}
         />
         <RenderStatusContent
-          label={t("ui.factor_confirmation", { value1: factoring?.verified_factor ? t("ui.confirmed_2") : t("ui.not_confirmed") })}
+          label={t("ui.factor_confirmation", {
+            value1: factoring?.verified_factor
+              ? t("ui.confirmed_2")
+              : t("ui.not_confirmed"),
+          })}
           color={factoring?.verified_customer ? "#51d861" : "#e9821b"}
         />
         <RenderStatusContent
-          label={t("ui.customer_confirmation", { value1: factoring?.verified_customer ? t("ui.confirmed_2") : t("ui.not_confirmed") })}
+          label={t("ui.customer_confirmation", {
+            value1: factoring?.verified_customer
+              ? t("ui.confirmed_2")
+              : t("ui.not_confirmed"),
+          })}
           color={factoring?.verified_customer ? "#51d861" : "#e9821b"}
         />
       </Box>

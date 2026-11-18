@@ -3,26 +3,41 @@ import RootLayout from "../../components/layout/root-layout";
 import FactorLineForm from "../../features/factor-line/factor-line-form";
 import ViewTabs from "../../shared/ui/view-tabs";
 import FactorLineContainer from "../../components/factor-line/factor-line-container";
+import SuccessModal from "../../components/factoring/factoring-form/success-modal";
 import { useEffect, useState } from "react";
-import { Box, Typography } from "@mui/material";
+import { Box, Typography, useMediaQuery } from "@mui/material";
 import { VIEWS } from "../../shared/const/leads";
 import { useFactorStore } from "../../app/store/factor/factor-store";
 import { useNotificationsStore } from "../../app/store/notifications/noti-store";
 import { parserNotificationType } from "../../shared/helpers/notifications/parse-notification-type";
 import { NOTIFICATION_TYPE } from "../../shared/const/notification-types";
 
-const Factor = () => {
+const FactoringLines = () => {
   const { t } = useTranslation();
   const newNotification = useNotificationsStore(
     (state) => state.newNotification,
   );
   const getFactoringsLine = useFactorStore((state) => state.getFactoringsLine);
+  const lines = useFactorStore((state) => state.factoringsLine);
+  const isLoading = useFactorStore((state) => state.isLoading);
+  const error = useFactorStore((state) => state.linesError);
 
-  const [view, setView] = useState(VIEWS.table);
+  const [selectedView, setView] = useState(null);
+  const isCompactScreen = useMediaQuery((theme) => theme.breakpoints.down("md"));
+  const view = selectedView ?? (isCompactScreen ? VIEWS.cards : VIEWS.table);
   const [openForm, setOpenForm] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
 
   const handleOpenForm = () => {
     setOpenForm(true);
+  };
+
+  const handleSuccess = (success) => {
+    setShowSuccess(success);
+    if (success) {
+      setOpenForm(false);
+      getFactoringsLine();
+    }
   };
 
   const { notification_type } = parserNotificationType(
@@ -31,7 +46,7 @@ const Factor = () => {
 
   useEffect(() => {
     getFactoringsLine();
-  }, []);
+  }, [getFactoringsLine]);
 
   useEffect(() => {
     if (notification_type === NOTIFICATION_TYPE.factor) {
@@ -40,13 +55,17 @@ const Factor = () => {
   }, [newNotification, notification_type, getFactoringsLine]);
 
   return (
-    <RootLayout withoutDataCheck>
-      <Box>
+    <RootLayout
+      withoutDataCheck
+      sx={{ width: "100%", minWidth: 0, p: { xs: 2, sm: 3 }, pl: { sm: "calc(20vw + 24px)" } }}
+    >
+      <Box sx={{ mb: 3 }}>
         <Typography
+          component="h1"
           sx={{
             fontWeight: 600,
-            fontSize: "1.5rem",
-            сolor: "font_color.heading",
+            fontSize: { xs: 22, sm: 24 },
+            color: "font_color.heading",
           }}
         >{t("ui.factoring_lines")}</Typography>
 
@@ -54,7 +73,7 @@ const Factor = () => {
       </Box>
       <Box
         sx={{
-          py: 1,
+          mb: 2,
         }}
       >
         <ViewTabs
@@ -62,16 +81,19 @@ const Factor = () => {
           setView={setView}
           handleOpenForm={handleOpenForm}
           withoutKanban
+          buttonText={t("ui.create_request_2")}
+          sx={{ width: "100%", gap: 2, flexWrap: "wrap" }}
         />
 
         {openForm && (
-          <FactorLineForm open={openForm} setOpenForm={setOpenForm} />
+          <FactorLineForm open={openForm} setOpenForm={setOpenForm} setSuccessModal={handleSuccess} />
         )}
       </Box>
 
-      <FactorLineContainer view={view} />
+      <FactorLineContainer view={view} lines={lines} isLoading={isLoading} error={error} onRetry={getFactoringsLine} />
+      {showSuccess && <SuccessModal open={showSuccess} setOpen={setShowSuccess} />}
     </RootLayout>
   );
 };
 
-export default Factor;
+export default FactoringLines;
