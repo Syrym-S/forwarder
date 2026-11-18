@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { Box, Chip } from "@mui/material";
+import { Box } from "@mui/material";
+import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import DeleteOutlineRoundedIcon from "@mui/icons-material/DeleteOutlineRounded";
 import BlockRoundedIcon from "@mui/icons-material/BlockRounded";
 import { useAdvertisementsStore } from "../../app/store/advertisements/advertisements-store";
@@ -12,6 +13,7 @@ const AdvertisementActions = ({ advertisement }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [action, setAction] = useState(null);
+  const isUpdating = useAdvertisementsStore((state) => state.isUpdating);
   const isClosing = useAdvertisementsStore((state) => state.isClosing);
   const isDeleting = useAdvertisementsStore((state) => state.isDeleting);
   const error = useAdvertisementsStore((state) =>
@@ -28,7 +30,7 @@ const AdvertisementActions = ({ advertisement }) => {
   const clearActionError = useAdvertisementsStore(
     (state) => state.clearActionError,
   );
-  const isLoading = isClosing || isDeleting;
+  const isLoading = isClosing || isDeleting || isUpdating;
   const isClosed =
     Boolean(advertisement.closed_at) || advertisement.status === "closed";
 

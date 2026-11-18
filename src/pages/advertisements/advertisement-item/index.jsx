@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Alert, Box, Button } from "@mui/material";
@@ -17,10 +17,16 @@ import AdvertisementActions from "../../../components/advertisements/advertiseme
 import { useAdvertisementsStore } from "../../../app/store/advertisements/advertisements-store";
 import PageHeading from "../../../shared/ui/page-heading";
 import { RenderStatusContent } from "../../../shared/ui/render-status";
+import PrimaryButton from "../../../shared/ui/button/primary-button";
+import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
+import UpdateAdvertisement from "../../../features/advertisements/update-advertisement";
 
 const AdvertisementItem = ({ source = "my" }) => {
   const { id } = useParams();
   const { t } = useTranslation();
+
+  const [isEditOpen, setIsEditOpen] = useState(false);
+
   const currentAdvertisement = useAdvertisementsStore(
     (state) => state.currentAdvertisement,
   );
@@ -96,6 +102,7 @@ const AdvertisementItem = ({ source = "my" }) => {
                     sx={{
                       display: "flex",
                       justifyContent: "space-between",
+                      alignItems: "center",
                     }}
                   >
                     <PageHeading
@@ -105,20 +112,44 @@ const AdvertisementItem = ({ source = "my" }) => {
                     `}
                     />
 
-                    {advertisement.closed_at ? (
-                      <RenderStatusContent
-                        label={t("dashboard.closed")}
+                    <Box
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 1,
+                      }}
+                    >
+                      {advertisement.closed_at ? (
+                        <RenderStatusContent
+                          label={t("dashboard.closed")}
+                          variant="outlined"
+                          color="#c60606"
+                        />
+                      ) : (
+                        <RenderStatusContent
+                          label={t("dashboard.closed")}
+                          variant="outlined"
+                          color="#51d861"
+                        />
+                      )}
+
+                      <PrimaryButton
+                        text={t("ui.edit")}
                         variant="outlined"
-                        color="#c60606"
+                        size="small"
+                        startIcon={<EditOutlinedIcon />}
+                        disabled={isLoading}
+                        sx={{ p: 1 }}
+                        onClick={() => setIsEditOpen(true)}
                       />
-                    ) : (
-                      <RenderStatusContent
-                        label={t("dashboard.closed")}
-                        variant="outlined"
-                        color="#51d861"
-                      />
-                    )}
+                    </Box>
                   </Box>
+
+                  <UpdateAdvertisement
+                    advertisement={advertisement}
+                    open={isEditOpen}
+                    onClose={() => setIsEditOpen(false)}
+                  />
 
                   <Box
                     sx={{
