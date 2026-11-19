@@ -1,5 +1,7 @@
 # React + Vite
 
+Android / Capacitor: [открытие в Android Studio, запуск и сборка APK](docs/android.md).
+
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
 Currently, two official plugins are available:

@@ -23,6 +23,7 @@ import Complaints from "../../pages/complaints";
 import Settings from "../../pages/settings";
 import Advertisements from "../../pages/advertisements";
 import AdvertisementItem from "../../pages/advertisements/advertisement-item";
+
 import { createBrowserRouter } from "react-router-dom";
 import { isStaging } from "../client";
 
@@ -53,7 +54,9 @@ export const router = createBrowserRouter(
               path: "my/:id",
               element: <AdvertisementItem source="my" />,
               handle: {
-                get breadcrumb() { return appI18n.t("advertisements.information"); },
+                get breadcrumb() {
+                  return appI18n.t("advertisements.information");
+                },
                 breadcrumbKey: "advertisements.information",
               },
             },
@@ -61,7 +64,9 @@ export const router = createBrowserRouter(
               path: "customer/:id",
               element: <AdvertisementItem source="customer" />,
               handle: {
-                get breadcrumb() { return appI18n.t("advertisements.information"); },
+                get breadcrumb() {
+                  return appI18n.t("advertisements.information");
+                },
                 breadcrumbKey: "advertisements.information",
               },
             },

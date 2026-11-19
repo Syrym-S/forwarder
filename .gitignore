@@ -10,6 +10,10 @@ lerna-debug.log*
 node_modules
 dist
 dist-ssr
+dist-android
+.npm-cache/
+.android-tools/
+.gradle-cache/
 *.local
 
 # Editor directories and files

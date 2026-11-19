@@ -1,0 +1,13 @@
+{
+  "appId": "kz.logistics360.forwarder",
+  "appName": "Forwarder",
+  "webDir": "dist-android",
+  "plugins": {
+    "CapacitorHttp": {
+      "enabled": true
+    },
+    "SystemBars": {
+      "insetsHandling": "native"
+    }
+  }
+}

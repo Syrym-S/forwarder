@@ -2,10 +2,23 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
 import { CssBaseline } from "@mui/material";
+import { createAuthSession, isAuthPath } from "./services/auth-session.js";
 
 async function mountApp() {
+  const isAuthPage = isAuthPath(window.location.pathname);
+
+  if (!isAuthPage) {
+    const { api } = await import("./app/client.js");
+    const session = createAuthSession({
+      api,
+      location: window.location,
+      getMode: () => window.APP_DATA?.mode,
+    });
+
+    if (!(await session.checkBeforeMount())) return;
+  }
+
   const root = createRoot(document.getElementById("root"));
-  const isAuthPage = /^\/(?:staging\/)?auth(?:\/|$)/.test(window.location.pathname);
 
   if (isAuthPage) {
     const { default: AuthApp } = await import("./auth/Forwarder");
