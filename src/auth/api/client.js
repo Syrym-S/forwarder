@@ -2,7 +2,7 @@ import axios from "axios";
 
 export const isStaging = window?.APP_DATA?.mode === "staging";
 
-const baseURL = window?.APP_DATA?.rest_url || "/wp-json";
+const baseURL = import.meta.env.VITE_API_URL;
 const nonce = window?.APP_DATA?.nonce;
 
 export const api = axios.create({

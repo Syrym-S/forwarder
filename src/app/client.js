@@ -3,9 +3,7 @@ import { languageParser } from "../shared/helpers/language-parser.js";
 
 export const isStaging = window?.APP_DATA?.mode === "staging";
 
-const baseURL = isStaging
-  ? window?.APP_DATA?.rest_url
-  : "https://forwarder.360logistics.kz/wp-json";
+const baseURL = import.meta.env.VITE_API_URL;
 
 const nonce = window?.APP_DATA?.nonce || "";
 

@@ -11,7 +11,9 @@
     "build:shared": "vite build --config vite.shared-lead.config.js",
     "lint": "eslint .",
     "preview": "vite preview",
-    "deploy": "vite build && node deploy.js",
+    "deploy": "npm run deploy:staging",
+    "deploy:prod": "npm run build -- --mode prod && node deploy.js",
+    "deploy:staging": "npm run build -- --mode dev && node deploy.js",
     "deploy:shared": "npm run build:shared && node deploy.shared.js"
   },
   "dependencies": {
