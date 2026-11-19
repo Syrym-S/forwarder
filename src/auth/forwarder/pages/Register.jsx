@@ -1,0 +1,878 @@
+import AuthHeader from "../../shared/AuthHeader";
+import { useAuthTranslation } from "../../i18n/useAuthTranslation";
+import FormButton from "../../shared/FormButton";
+import RegistrationLanguageSelect from "../../shared/RegistrationLanguageSelect";
+import i18n from "../../i18n";
+import {
+  Box,
+  Typography,
+  Divider,
+  Alert,
+  CircularProgress,
+  FormHelperText,
+  IconButton,
+} from "@mui/material";
+import UploadFileIcon from "@mui/icons-material/UploadFile";
+import InsertDriveFileOutlinedIcon from "@mui/icons-material/InsertDriveFileOutlined";
+import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
+import { Link } from "react-router-dom";
+import AuthLayout from "../components/AuthLayout";
+import { useForm, Controller } from "react-hook-form";
+import { useState, useEffect } from "react";
+import { registerRequest, getClaimInfoApi } from "../../api/auth";
+import { isStaging } from "../../api/client";
+import { normalizeBackendParams } from "../../shared/backend-validation-error.helpers";
+import { formatPhoneInput } from "../../shared/phone-format.helpers";
+import { passwordPatternRule } from "../../shared/password-validation.helpers";
+import FormInput from "../../shared/FormInput";
+import { NotRegisteredModal } from "../../shared/NotRegisteredModal";
+import {
+  getVerifyRegistered,
+  getSupportContacts,
+  getRegistrationNotVerifiedError,
+} from "../../shared/verify-registered.helpers";
+
+const isRegistrationDocumentsEnabled =
+  window?.APP_DATA?.features?.registration_documents;
+
+function getClaimFromUrl() {
+  const searchParams = new URLSearchParams(window.location.search);
+
+  return searchParams.get("claim") || "";
+}
+
+function getClaimData(response) {
+  return response?.data?.data || response?.data || response || {};
+}
+
+function mapClaimInfoToForm(claimInfo) {
+  const person = claimInfo.person || {};
+
+  return {
+    bin: claimInfo.company_bin || claimInfo.bin || "",
+    companyName: claimInfo.company_name || claimInfo.companyName || "",
+    companyAddress: claimInfo.company_address || claimInfo.companyAddress || "",
+    companyAccount: claimInfo.company_account || claimInfo.companyAccount || "",
+    companyBik: claimInfo.company_bik || claimInfo.companyBik || "",
+
+    managerName:
+      person.fio ||
+      claimInfo.fio ||
+      claimInfo.fullName ||
+      claimInfo.full_name ||
+      claimInfo.name ||
+      "",
+
+    phone: person.phone || claimInfo.phone || "",
+
+    email: person.email || claimInfo.email || "",
+
+    iin: person.iin || claimInfo.iin || "",
+
+    documentNumber:
+      person.document_number ||
+      claimInfo.document_number ||
+      claimInfo.documentNumber ||
+      "",
+
+    issueCountry:
+      person.issue_country ||
+      claimInfo.issue_country ||
+      claimInfo.issueCountry ||
+      "",
+
+    password: "",
+    confirmPassword: "",
+    language: i18n.language,
+  };
+}
+
+export default function Register() {
+  const { t } = useAuthTranslation();
+  const [error, setErrorMessage] = useState("");
+  const [isClaimLoading, setIsClaimLoading] = useState(false);
+  const [isNotRegisteredOpen, setIsNotRegisteredOpen] = useState(false);
+  const [support, setSupport] = useState(null);
+  const claim = getClaimFromUrl();
+
+  const {
+    register,
+    handleSubmit,
+    watch,
+    reset,
+    setValue,
+    setError,
+    control,
+    formState: { errors, isSubmitting },
+  } = useForm({
+    defaultValues: {
+      bin: "",
+      companyName: "",
+      companyAddress: "",
+      companyAccount: "",
+      companyBik: "",
+      managerName: "",
+      phone: "",
+      iin: "",
+      documentNumber: "",
+      issueCountry: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+      language: i18n.language,
+      registration_document: null,
+      employer_document: null,
+    },
+  });
+
+  const BACKEND_FIELD_MAP = {
+    bin: { field: "bin", message: "БИН указан некорректно" },
+    company_name: {
+      field: "companyName",
+      message: "Проверьте название компании",
+    },
+    company_address: {
+      field: "companyAddress",
+      message: "Проверьте адрес компании",
+    },
+    company_account: {
+      field: "companyAccount",
+      message: "Проверьте расчётный счёт",
+    },
+    company_bik: {
+      field: "companyBik",
+      message: "Проверьте БИК",
+    },
+    fio: {
+      field: "managerName",
+      message: "Проверьте корректность ФИО",
+    },
+    phone: { field: "phone", message: "Проверьте номер телефона" },
+    iin: { field: "iin", message: "ИИН указан некорректно" },
+    document_number: {
+      field: "documentNumber",
+      message: "Проверьте номер документа",
+    },
+    issue_country: {
+      field: "issueCountry",
+      message: "Укажите страну выдачи документа",
+    },
+    email: { field: "email", message: "Проверьте правильность email" },
+    password: { field: "password", message: "Проверьте пароль" },
+    password_confirm: {
+      field: "confirmPassword",
+      message: "Проверьте подтверждение пароля",
+    },
+    registration_document: {
+      field: "registration_document",
+      message: "Проверьте загруженный документ о регистрации",
+    },
+    employer_document: {
+      field: "employer_document",
+      message: "Проверьте загруженный документ о праве подписи",
+    },
+  };
+
+  const password = watch("password");
+  const registration_document = watch("registration_document");
+  const employer_document = watch("employer_document");
+
+  useEffect(() => {
+    if (!claim) {
+      return;
+    }
+
+    let isCancelled = false;
+
+    async function loadClaimInfo() {
+      try {
+        setIsClaimLoading(true);
+        setErrorMessage("");
+
+        const response = await getClaimInfoApi(claim);
+        const claimInfo = getClaimData(response);
+
+        console.log("FORWARDER CLAIM INFO:", claimInfo);
+
+        if (!isCancelled) {
+          reset(mapClaimInfoToForm(claimInfo));
+        }
+      } catch (requestError) {
+        if (!isCancelled) {
+          setErrorMessage(
+            requestError.response?.data?.message ||
+              requestError.response?.data?.error ||
+              requestError.message ||
+              "Не удалось загрузить данные приглашения",
+          );
+        }
+      } finally {
+        if (!isCancelled) {
+          setIsClaimLoading(false);
+        }
+      }
+    }
+
+    loadClaimInfo();
+
+    return () => {
+      isCancelled = true;
+    };
+  }, [claim, reset]);
+
+  const onSubmit = async (data) => {
+    setErrorMessage("");
+
+    console.log(data);
+
+    try {
+      const payload = new FormData();
+
+      payload.append("bin", data.bin);
+      payload.append("company_name", data.companyName);
+      payload.append("company_address", data.companyAddress);
+      payload.append("company_account", data.companyAccount);
+      payload.append("company_bik", data.companyBik);
+      payload.append("fio", data.managerName);
+      payload.append("phone", data.phone);
+      payload.append("iin", data.iin);
+      payload.append("document_number", data.documentNumber);
+      payload.append("issue_country", data.issueCountry);
+      payload.append("email", data.email);
+      payload.append("language", data.language);
+      payload.append("password", data.password);
+      payload.append("password_confirm", data.confirmPassword);
+
+      if (claim) {
+        payload.append("invite", claim);
+      }
+
+      if (isRegistrationDocumentsEnabled) {
+        payload.append("registration_document", data.registration_document[0]);
+
+        payload.append(
+          "registration_document_name",
+          "Документ о регистрации юридического лица",
+        );
+
+        payload.append("employer_document", data.employer_document[0]);
+
+        payload.append(
+          "employer_document_name",
+          "Документ о трудоустройстве сотрудника",
+        );
+      }
+
+      const res = await registerRequest(payload, window?.APP_DATA?.nonce);
+
+      if (!getVerifyRegistered(res)) {
+        setSupport(getSupportContacts(res));
+        setIsNotRegisteredOpen(true);
+        return;
+      }
+
+      const redirectUrl = res?.redirect_url || res?.data?.redirect_url;
+
+      if (redirectUrl) {
+        window.location.href = redirectUrl;
+        return;
+      }
+
+      window.location.href = isStaging ? "/staging/auth/login" : "/auth/login";
+    } catch (e) {
+      const notVerifiedSupport = getRegistrationNotVerifiedError(e);
+
+      if (notVerifiedSupport) {
+        setSupport(notVerifiedSupport);
+        setIsNotRegisteredOpen(true);
+        return;
+      }
+
+      const ulStatus = e?.response?.data?.ul_status;
+
+      if (ulStatus) {
+        if (ulStatus === "pending") {
+          setErrorMessage(
+            "Не удалось найти организацию по указанному БИН. Проверьте правильность БИН и повторите попытку.",
+          );
+        } else if (ulStatus === "unknown") {
+          setErrorMessage(
+            "Сервис проверки документов временно недоступен. Попробуйте позже.",
+          );
+        } else {
+          setErrorMessage(
+            "Не удалось проверить организацию. Попробуйте позже.",
+          );
+        }
+        return;
+      }
+
+      if (e?.response?.data?.error === "Company exists") {
+        setError("bin", {
+          type: "server",
+          message: "Компания с таким БИН уже зарегистрирована",
+        });
+        setErrorMessage("Проверьте БИН — компания уже зарегистрирована");
+        return;
+      }
+
+      if (e?.response?.data?.error === "User exists") {
+        setErrorMessage("Пользователь с таким email уже зарегистрирован");
+        return;
+      }
+
+      if (
+        e?.response?.data?.error ===
+        "Registration document (file + name) is required"
+      ) {
+        setError(BACKEND_FIELD_MAP.registration_document.field, {
+          type: "server",
+          message: "Загрузите документ",
+        });
+        setError(BACKEND_FIELD_MAP.employer_document.field, {
+          type: "server",
+          message: "Загрузите документ",
+        });
+        setErrorMessage("Необходимо загрузить документ о регистрации");
+        return;
+      }
+
+      const params = e?.response?.data?.data?.params;
+      const paramEntries = normalizeBackendParams(params);
+
+      const unmatchedMessages = [];
+      let matchedAny = false;
+
+      paramEntries.forEach(({ fieldName, backendMessage }) => {
+        const mapping = BACKEND_FIELD_MAP[fieldName];
+        if (mapping) {
+          matchedAny = true;
+          setError(mapping.field, {
+            type: "server",
+            message: mapping.message,
+          });
+        } else {
+          unmatchedMessages.push(backendMessage || fieldName);
+        }
+      });
+
+      if (matchedAny && unmatchedMessages.length === 0) {
+        setErrorMessage("Проверьте выделенные поля");
+      } else if (matchedAny) {
+        setErrorMessage({
+          key: "Проверьте выделенные поля. Также: {{messages}}",
+          values: { messages: unmatchedMessages },
+        });
+      } else if (unmatchedMessages.length > 0) {
+        setErrorMessage(unmatchedMessages.join(", "));
+      } else {
+        setErrorMessage(
+          e.response?.data?.message || e?.message || "Ошибка регистрации",
+        );
+      }
+    }
+  };
+
+  return (
+    <AuthLayout>
+      <NotRegisteredModal open={isNotRegisteredOpen} support={support} />
+
+      <AuthHeader
+        languageSelect={<RegistrationLanguageSelect control={control} />}
+      >
+        {t("Регистрация")}
+      </AuthHeader>
+
+      {error && <Alert severity="error">{t(error)}</Alert>}
+
+      {isClaimLoading && (
+        <Box
+          sx={{
+            py: 4,
+            display: "flex",
+            justifyContent: "center",
+          }}
+        >
+          <CircularProgress />
+        </Box>
+      )}
+
+      {!isClaimLoading && (
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <FormInput
+            fullWidth
+            label={t("БИН")}
+            placeholder="210540012345"
+            margin="normal"
+            error={!!errors.bin}
+            helperText={t(errors.bin?.message)}
+            {...register("bin", {
+              required: t("Введите БИН"),
+              minLength: {
+                value: 12,
+                message: t("БИН должен содержать минимум 12 символов"),
+              },
+            })}
+          />
+
+          <FormInput
+            fullWidth
+            label={t("Название компании")}
+            placeholder={t("ТОО «Алтын Жол Логистик»")}
+            margin="normal"
+            error={!!errors.companyName}
+            helperText={t(errors.companyName?.message)}
+            {...register("companyName", {
+              required: t("Введите название компании"),
+            })}
+          />
+
+          <FormInput
+            fullWidth
+            label={t("Юридический адрес")}
+            placeholder={t("г. Алматы, ул. Абая, д. 10, оф. 5")}
+            margin="normal"
+            error={!!errors.companyAddress}
+            helperText={t(errors.companyAddress?.message)}
+            {...register("companyAddress", {
+              required: t("Введите адрес компании"),
+            })}
+          />
+
+          <FormInput
+            fullWidth
+            label={t("БИК")}
+            placeholder="BANKKZKX"
+            margin="normal"
+            error={!!errors.companyBik}
+            helperText={t(errors.companyBik?.message)}
+            {...register("companyBik")}
+          />
+
+          <FormInput
+            fullWidth
+            label={t("ИИК (расчётный счёт)")}
+            placeholder="KZ123456789012345678"
+            margin="normal"
+            error={!!errors.companyAccount}
+            helperText={t(errors.companyAccount?.message)}
+            {...register("companyAccount")}
+          />
+
+          <FormInput
+            fullWidth
+            label={t("ФИО главного экспедитора")}
+            placeholder={t("Нурланов Ерлан Серикович")}
+            margin="normal"
+            error={!!errors.managerName}
+            helperText={t(errors.managerName?.message)}
+            {...register("managerName", {
+              required: t("Введите ФИО"),
+            })}
+          />
+
+          <FormInput
+            fullWidth
+            label={t("ИИН")}
+            placeholder="900115300123"
+            margin="normal"
+            error={!!errors.iin}
+            helperText={t(errors.iin?.message)}
+            {...register("iin", {
+              required: t("Введите ИИН"),
+              minLength: {
+                value: 12,
+                message: t("ИИН должен содержать 12 цифр"),
+              },
+              maxLength: {
+                value: 12,
+                message: t("ИИН должен содержать 12 цифр"),
+              },
+            })}
+          />
+
+          <FormInput
+            fullWidth
+            label={t("Номер документа")}
+            placeholder="012345678"
+            margin="normal"
+            error={!!errors.documentNumber}
+            helperText={t(errors.documentNumber?.message)}
+            {...register("documentNumber", {
+              required: t("Введите номер документа"),
+            })}
+          />
+
+          <FormInput
+            fullWidth
+            label={t("Страна документа")}
+            placeholder="KZ"
+            margin="normal"
+            error={!!errors.issueCountry}
+            helperText={t(errors.issueCountry?.message)}
+            {...register("issueCountry", {
+              required: t("Введите страну документа"),
+            })}
+          />
+
+          {isRegistrationDocumentsEnabled && (
+            <>
+              <Box
+                sx={{
+                  border: "1px solid",
+                  my: 1,
+                  borderColor: errors.registration_document
+                    ? "error.main"
+                    : "divider",
+                  borderRadius: 2,
+                  p: 2,
+                  transition: "0.2s",
+                  "&:hover": {
+                    borderColor: "primary.main",
+                    backgroundColor: "action.hover",
+                  },
+                }}
+              >
+                <Typography
+                  sx={{
+                    color: "rgba(0, 0, 0, 0.6)",
+                    fontSize: "1rem",
+                    lineHeight: 1.4375,
+                    letterSpacing: "0.00938em",
+                    fontWeight: 400,
+                  }}
+                >
+                  {t("Документ о регистрации юридического лица")}
+                </Typography>
+
+                <FormButton
+                  component="label"
+                  variant="outlined"
+                  startIcon={<UploadFileIcon />}
+                >
+                  {t("Выбрать файл")}
+                  <input
+                    hidden
+                    type="file"
+                    accept=".pdf,.jpg,.jpeg,.png"
+                    {...register("registration_document", {
+                      required: t(
+                        "Документ о регистрации юридического лица обязателен",
+                      ),
+                    })}
+                  />
+                </FormButton>
+
+                {registration_document?.[0] && (
+                  <Box
+                    sx={{
+                      mt: 2,
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 1.5,
+                      p: 1.5,
+                      border: "1px solid",
+                      borderColor: "divider",
+                      borderRadius: 2,
+                      backgroundColor: "background.paper",
+                    }}
+                  >
+                    {registration_document[0].type.startsWith("image/") ? (
+                      <Box
+                        component="img"
+                        src={URL.createObjectURL(registration_document[0])}
+                        alt={registration_document[0].name}
+                        sx={{
+                          width: 56,
+                          height: 56,
+                          borderRadius: 1,
+                          objectFit: "cover",
+                        }}
+                      />
+                    ) : (
+                      <Box
+                        sx={{
+                          width: 56,
+                          height: 56,
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          borderRadius: 1,
+                          backgroundColor: "action.hover",
+                        }}
+                      >
+                        <InsertDriveFileOutlinedIcon
+                          color="primary"
+                          fontSize="large"
+                        />
+                      </Box>
+                    )}
+
+                    <Box
+                      sx={{
+                        minWidth: 0,
+                        flex: 1,
+                      }}
+                    >
+                      <Typography
+                        variant="body2"
+                        fontWeight={500}
+                        noWrap
+                        title={registration_document[0].name}
+                      >
+                        {registration_document[0].name}
+                      </Typography>
+
+                      <Typography variant="caption" color="text.secondary">
+                        {(registration_document[0].size / 1024 / 1024).toFixed(
+                          2,
+                        )}{" "}
+                        MB
+                      </Typography>
+                    </Box>
+
+                    <IconButton
+                      color="error"
+                      onClick={() => setValue("registration_document", null)}
+                    >
+                      <DeleteOutlineOutlinedIcon />
+                    </IconButton>
+                  </Box>
+                )}
+
+                {errors.registration_document && (
+                  <FormHelperText error>
+                    {t(errors.registration_document.message)}
+                  </FormHelperText>
+                )}
+              </Box>
+
+              <Box
+                sx={{
+                  border: "1px solid",
+                  my: 1,
+                  borderColor: errors.employer_document
+                    ? "error.main"
+                    : "divider",
+                  borderRadius: 2,
+                  p: 2,
+                  transition: "0.2s",
+                  "&:hover": {
+                    borderColor: "primary.main",
+                    backgroundColor: "action.hover",
+                  },
+                }}
+              >
+                <Typography
+                  sx={{
+                    color: "rgba(0, 0, 0, 0.6)",
+                    fontSize: "1rem",
+                    lineHeight: 1.4375,
+                    letterSpacing: "0.00938em",
+                    fontWeight: 400,
+                  }}
+                >
+                  {t("Документ о трудоустройстве сотрудника")}
+                </Typography>
+
+                <FormButton
+                  component="label"
+                  variant="outlined"
+                  startIcon={<UploadFileIcon />}
+                >
+                  {t("Выбрать файл")}
+                  <input
+                    hidden
+                    type="file"
+                    accept=".pdf,.jpg,.jpeg,.png"
+                    {...register("employer_document", {
+                      required: t(
+                        "Документ о трудоустройстве сотрудника обязателен",
+                      ),
+                    })}
+                  />
+                </FormButton>
+
+                {employer_document?.[0] && (
+                  <Box
+                    sx={{
+                      mt: 2,
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 1.5,
+                      p: 1.5,
+                      border: "1px solid",
+                      borderColor: "divider",
+                      borderRadius: 2,
+                      backgroundColor: "background.paper",
+                    }}
+                  >
+                    {employer_document[0].type.startsWith("image/") ? (
+                      <Box
+                        component="img"
+                        src={URL.createObjectURL(employer_document[0])}
+                        alt={employer_document[0].name}
+                        sx={{
+                          width: 56,
+                          height: 56,
+                          borderRadius: 1,
+                          objectFit: "cover",
+                        }}
+                      />
+                    ) : (
+                      <Box
+                        sx={{
+                          width: 56,
+                          height: 56,
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          borderRadius: 1,
+                          backgroundColor: "action.hover",
+                        }}
+                      >
+                        <InsertDriveFileOutlinedIcon
+                          color="primary"
+                          fontSize="large"
+                        />
+                      </Box>
+                    )}
+
+                    <Box
+                      sx={{
+                        minWidth: 0,
+                        flex: 1,
+                      }}
+                    >
+                      <Typography
+                        variant="body2"
+                        fontWeight={500}
+                        noWrap
+                        title={employer_document[0].name}
+                      >
+                        {employer_document[0].name}
+                      </Typography>
+
+                      <Typography variant="caption" color="text.secondary">
+                        {(employer_document[0].size / 1024 / 1024).toFixed(2)}{" "}
+                        MB
+                      </Typography>
+                    </Box>
+
+                    <IconButton
+                      color="error"
+                      onClick={() => setValue("employer_document", null)}
+                    >
+                      <DeleteOutlineOutlinedIcon />
+                    </IconButton>
+                  </Box>
+                )}
+
+                {errors.employer_document && (
+                  <FormHelperText error>
+                    {t(errors.employer_document.message)}
+                  </FormHelperText>
+                )}
+              </Box>
+            </>
+          )}
+
+          <Controller
+            name="phone"
+            control={control}
+            rules={{
+              required: "Введите телефон",
+              pattern: {
+                value: /^\+?[0-9]{10,15}$/,
+                message: "Некорректный номер телефона",
+              },
+            }}
+            render={({ field }) => (
+              <FormInput
+                fullWidth
+                label={t("Телефон")}
+                placeholder="+7 (700) 123-45-67"
+                margin="normal"
+                error={!!errors.phone}
+                helperText={t(errors.phone?.message)}
+                inputRef={field.ref}
+                name={field.name}
+                onBlur={field.onBlur}
+                value={formatPhoneInput(field.value).display}
+                onChange={(e) => {
+                  field.onChange(
+                    formatPhoneInput(e.target.value, field.value).value,
+                  );
+                }}
+              />
+            )}
+          />
+
+          <FormInput
+            fullWidth
+            label={t("Email")}
+            placeholder="nurlanov.erlan@gmail.com"
+            margin="normal"
+            error={!!errors.email}
+            helperText={t(errors.email?.message)}
+            {...register("email", {
+              required: t("Введите email"),
+              pattern: {
+                value: /^\S+@\S+\.\S+$/,
+                message: t("Некорректный email"),
+              },
+            })}
+          />
+
+          <FormInput
+            type="password"
+            fullWidth
+            label={t("Пароль")}
+            margin="normal"
+            error={!!errors.password}
+            helperText={t(errors.password?.message)}
+            {...register("password", {
+              required: t("Введите пароль"),
+              minLength: {
+                value: 6,
+                message: t("Минимум 6 символов"),
+              },
+              pattern: passwordPatternRule,
+            })}
+          />
+
+          <FormInput
+            type="password"
+            fullWidth
+            label={t("Повторите пароль")}
+            margin="normal"
+            error={!!errors.confirmPassword}
+            helperText={t(errors.confirmPassword?.message)}
+            {...register("confirmPassword", {
+              required: t("Повторите пароль"),
+              validate: (value) =>
+                value === password || t("Пароли не совпадают"),
+            })}
+          />
+
+          <FormButton
+            fullWidth
+            variant="contained"
+            sx={{ mt: 2 }}
+            type="submit"
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? t("Регистрация...") : t("Регистрация")}
+          </FormButton>
+        </form>
+      )}
+
+      <Box mt={3}>
+        <Divider sx={{ mb: 2 }} />
+        <FormButton component={Link} to="/login" fullWidth variant="outlined">
+          {t("Войти")}
+        </FormButton>
+      </Box>
+    </AuthLayout>
+  );
+}

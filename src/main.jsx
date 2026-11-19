@@ -1,16 +1,37 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import App from "./App";
 import "./index.css";
 import { CssBaseline } from "@mui/material";
-import LocalizedThemeProvider from "./app/theme/localized-theme-provider";
-import "./leaflet-icon";
 
-createRoot(document.getElementById("root")).render(
-  <StrictMode>
-    <LocalizedThemeProvider>
-      <CssBaseline />
-      <App />
-    </LocalizedThemeProvider>
-  </StrictMode>,
-);
+async function mountApp() {
+  const root = createRoot(document.getElementById("root"));
+  const isAuthPage = /^\/(?:staging\/)?auth(?:\/|$)/.test(window.location.pathname);
+
+  if (isAuthPage) {
+    const { default: AuthApp } = await import("./auth/Forwarder");
+
+    root.render(
+      <StrictMode>
+        <AuthApp />
+      </StrictMode>,
+    );
+    return;
+  }
+
+  const [{ default: App }, { default: LocalizedThemeProvider }] = await Promise.all([
+    import("./App"),
+    import("./app/theme/localized-theme-provider"),
+    import("./leaflet-icon"),
+  ]);
+
+  root.render(
+    <StrictMode>
+      <LocalizedThemeProvider>
+        <CssBaseline />
+        <App />
+      </LocalizedThemeProvider>
+    </StrictMode>,
+  );
+}
+
+mountApp();

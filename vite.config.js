@@ -3,9 +3,9 @@ import react from "@vitejs/plugin-react";
 import { firebaseWorkerPlugin } from "./tooling/firebase-worker-plugin.js";
 
 // https://vite.dev/config/
-export default defineConfig({
+export default defineConfig(({ command }) => ({
   plugins: [react(), firebaseWorkerPlugin()],
-  base: "/forwarder",
+  base: command === "serve" ? "/" : "/forwarder",
   define: {
     "process.env.NODE_ENV": JSON.stringify("production"),
   },
@@ -29,4 +29,4 @@ export default defineConfig({
       cssFileName: "index",
     },
   },
-});
+}));
