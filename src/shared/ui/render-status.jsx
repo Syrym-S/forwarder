@@ -1,6 +1,7 @@
 import { useTranslation } from "react-i18next";
 import { STATUS } from "../const/tenders";
 import { Box, Typography } from "@mui/material";
+import { WAITING_FOR_TRIP_START } from "../lib/lead-trip-status.js";
 
 export const RenderStatusContent = ({ label, color = "#518ded" }) => {
   return (
@@ -39,6 +40,14 @@ export const RenderStatusContent = ({ label, color = "#518ded" }) => {
 const RenderStatus = ({ status }) => {
   const { t } = useTranslation();
   switch (status) {
+    case WAITING_FOR_TRIP_START:
+      return (
+        <RenderStatusContent
+          label={t("dashboard.awaiting_trip_start")}
+          color="#d97706"
+        />
+      );
+
     case STATUS.new:
       return (
         <RenderStatusContent

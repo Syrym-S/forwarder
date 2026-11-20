@@ -485,6 +485,7 @@
     "cancelled": "Cancelled",
     "driver_added": "Driver added",
     "trip_started": "Trip started",
+    "awaiting_trip_start": "Waiting for trip to start",
     "loading_operation": "Loading",
     "loading_confirmed": "Loading confirmed",
     "unloading_operation": "Unloading",

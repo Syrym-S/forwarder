@@ -485,6 +485,7 @@
     "cancelled": "Скасовано",
     "driver_added": "Водія додано",
     "trip_started": "Рейс розпочато",
+    "awaiting_trip_start": "Очікування початку поїздки",
     "loading_operation": "Завантаження",
     "loading_confirmed": "Завантаження підтверджено",
     "unloading_operation": "Розвантаження",

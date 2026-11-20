@@ -1,7 +1,7 @@
 import appI18n from "../../i18n/index.js";
 import { useTranslation } from "react-i18next";
 import { Box, Typography } from "@mui/material";
-import RenderStatus from "../../shared/ui/render-status";
+import LeadStatus from "../../shared/ui/lead-status";
 
 const RenderLeadOptions = ({ option, ...props }) => {
   const { t } = useTranslation();
@@ -31,7 +31,7 @@ const RenderLeadOptions = ({ option, ...props }) => {
           {title && <Box component="span" sx={{ fontWeight: 400, color: "text.secondary" }}> · {title}</Box>}
         </Typography>
         <Box sx={{ display: "flex", alignItems: "center", flexWrap: "wrap", gap: 1.25 }}>
-          {option.status && <RenderStatus status={option.status} />}
+          {option.status && <LeadStatus lead={option} />}
           {hasPrice && <Typography sx={{ fontSize: 13, fontWeight: 600, color: "font_color.heading" }}>{Number(option.price).toLocaleString(appI18n.resolvedLanguage)} {option.currency || "KZT"}</Typography>}
         </Box>
       </Box>

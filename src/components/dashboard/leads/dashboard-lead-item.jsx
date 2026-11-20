@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
-import RenderStatus from "../../../shared/ui/render-status";
+import LeadStatus from "../../../shared/ui/lead-status";
 
 function formatLocation(location, t) {
   return location?.address || t("dashboard.address_not_specified");
@@ -104,7 +104,7 @@ const DashboardLeadItem = ({
             }}
           />
 
-          {lead?.status && <RenderStatus status={lead.status} />}
+          {lead?.status && <LeadStatus lead={lead} />}
         </Box>
 
         <Box>

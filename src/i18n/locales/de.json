@@ -485,6 +485,7 @@
     "cancelled": "Abgesagt",
     "driver_added": "LKW-Fahrer hinzugefügt",
     "trip_started": "Versand gestartet",
+    "awaiting_trip_start": "Warten auf Fahrtbeginn",
     "loading_operation": "Laden",
     "loading_confirmed": "Laden bestätigt",
     "unloading_operation": "Entladen",

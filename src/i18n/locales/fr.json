@@ -446,6 +446,7 @@
     "cancelled": "Annulé",
     "driver_added": "Chauffeur de camion ajouté",
     "trip_started": "expédition commencée",
+    "awaiting_trip_start": "En attente du début du trajet",
     "loading_operation": "Chargement",
     "loading_confirmed": "Chargement confirmé",
     "unloading_operation": "Déchargement",

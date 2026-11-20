@@ -18,10 +18,10 @@ import {
   Polyline,
   useMap,
 } from "react-leaflet";
-import { api, isStaging } from "../../app/client";
+import { isStaging } from "../../app/client";
 import { generateLeadRoute } from "../../shared/api/routing";
 import { createDriverIcon } from "../../shared/ui/driver-marker-icon";
-import { loadLeadTracking } from "../../shared/lib/lead-tracking";
+import { leadTrackingStore } from "../../app/store/leads/lead-tracking-store.js";
 import {
   getDriverMarkerDirection,
   getNextLeadRoutePoint,
@@ -193,43 +193,10 @@ export default function LeadMap({
 
     async function connect() {
       try {
-        const BASE_URL = isStaging
-          ? "/staging/wp-json/geows/v1/token"
-          : "/wp-json/geows/v1/token";
-
-        const { access: addRes, response } = await loadLeadTracking({
+        const { access: addRes, response } = await leadTrackingStore.getState().load({
+          id: leadId,
           tracking: { token: trackingToken, url: trackingUrl },
-          signal: controller.signal,
-          requestToken: async () => {
-            if (!leadId) throw new Error("Не указан ID лида для геотрекинга");
-            const result = await fetch(BASE_URL, {
-              method: "POST",
-              signal: controller.signal,
-              headers: {
-                "Content-Type": "application/json",
-                "X-WP-Nonce": window.GeoWS_Config?.nonce,
-              },
-              body: JSON.stringify({ lead_id: leadId, type: "read" }),
-            });
-            if (!result.ok)
-              throw new Error("Не удалось получить токен геотрекинга");
-            return result.json();
-          },
-          requestTracking: async (access) => {
-            const result = await api.get(access.url, {
-              signal: controller.signal,
-              headers: {
-                Authorization: `Bearer ${access.token}`,
-                key: window.GeoWS_Config?.key,
-                ws: window.GeoWS_Config?.ws,
-              },
-            });
-            if (!result.data?.data || typeof result.data.data !== "object") {
-              throw new Error("Сервис не вернул данные геотрекинга");
-            }
-            return result;
-          },
-        });
+        }, { signal: controller.signal });
 
         if (!isActive) return;
 
@@ -314,6 +281,7 @@ export default function LeadMap({
             )
               return;
 
+            leadTrackingStore.getState().record(leadId, true);
             setTracking((prev) => {
               const history = prev?.coordinates || [];
               const last = history.at(-1);

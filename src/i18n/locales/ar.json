@@ -446,6 +446,7 @@
     "cancelled": "تم الإلغاء",
     "driver_added": "تمت إضافة سائق الشاحنة",
     "trip_started": "بدأ الشحن",
+    "awaiting_trip_start": "في انتظار بدء الرحلة",
     "loading_operation": "جاري التحميل",
     "loading_confirmed": "تم تأكيد التحميل",
     "unloading_operation": "التفريغ",

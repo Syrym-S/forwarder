@@ -446,6 +446,7 @@
     "cancelled": "жокко чыгарылды",
     "driver_added": "Жүк ташуучу унаанын айдоочусу кошулду",
     "trip_started": "жөнөтүү башталды",
+    "awaiting_trip_start": "Сапардын башталышын күтүү",
     "loading_operation": "Жүктөө",
     "loading_confirmed": "Жүктөө ырасталды",
     "unloading_operation": "Жүк түшүрүү",

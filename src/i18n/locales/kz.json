@@ -465,6 +465,7 @@
     "cancelled": "Бас тартылған",
     "driver_added": "Жүргізуші қосылды",
     "trip_started": "Сапар басталды",
+    "awaiting_trip_start": "Сапардың басталуын күту",
     "loading_operation": "Тиеу",
     "loading_confirmed": "Тиеу расталды",
     "unloading_operation": "Түсіру",

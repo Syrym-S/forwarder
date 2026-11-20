@@ -446,6 +446,7 @@
     "cancelled": "İptal edildi",
     "driver_added": "Kamyon sürücüsü eklendi",
     "trip_started": "Sevkiyat başladı",
+    "awaiting_trip_start": "Yolculuğun başlaması bekleniyor",
     "loading_operation": "Yükleniyor",
     "loading_confirmed": "Yükleme onaylandı",
     "unloading_operation": "Boşaltma",

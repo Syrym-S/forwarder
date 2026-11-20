@@ -15,13 +15,15 @@ import L from "leaflet";
 import Echo from "laravel-echo";
 import Pusher from "pusher-js";
 import polyline from "@mapbox/polyline";
-import { api, isStaging } from "../../app/client";
+import { isStaging } from "../../app/client";
 import { getLeadPolylines } from "../../shared/api/routing";
 import "./marker.style.css";
 import { createDriverIcon } from "../../shared/ui/driver-marker-icon";
 import DriverPositionPopup from "../../shared/ui/driver-position-popup";
 import { getLeadMapStatusColor } from "../../shared/const/lead-map-statuses";
 import RenderStatus from "../../shared/ui/render-status";
+import { leadTrackingStore, useLeadTrackingStore } from "../../app/store/leads/lead-tracking-store.js";
+import { getLeadDisplayStatus } from "../../shared/lib/lead-trip-status.js";
 
 window.Pusher = Pusher;
 
@@ -89,7 +91,7 @@ const formatDuration = (duration, t) => {
   return `${Math.round(Number(duration) / 60)} ${t("dashboard.minutes")}`;
 };
 
-const MapTooltip = ({ route, open, setOpen }) => {
+const MapTooltip = ({ route, status, open, setOpen }) => {
   const { t } = useTranslation();
 
   return (
@@ -101,7 +103,7 @@ const MapTooltip = ({ route, open, setOpen }) => {
       disableFocusListener
       disableTouchListener
     >
-      <RenderStatus status={route.lead.status} />
+      <RenderStatus status={status} />
       <Box sx={{ maxWidth: 350, width: 200 }}>
         <Box
           sx={{ mb: 0.75, display: "flex", flexDirection: "column", gap: 1 }}
@@ -196,9 +198,13 @@ const Map = ({
   const trackedLead = leads.find(
     (lead) => String(lead.id) === String(selectedLeadId),
   );
+  const tripStates = useLeadTrackingStore((state) => state.byLead);
+  const trackedLeadStatus = getLeadDisplayStatus(trackedLead, tripStates[String(selectedLeadId)]);
+  const trackingToken = trackedLead?.tracking?.token;
+  const trackingUrl = trackedLead?.tracking?.url;
   const driverMarkerIcon = useMemo(
-    () => createDriverIcon(getLeadMapStatusColor(trackedLead?.status)),
-    [trackedLead?.status],
+    () => createDriverIcon(getLeadMapStatusColor(trackedLeadStatus)),
+    [trackedLeadStatus],
   );
 
   useEffect(() => {
@@ -258,39 +264,10 @@ const Map = ({
 
     async function connect() {
       try {
-        const BASE_URL = isStaging
-          ? "/staging/wp-json/geows/v1/token"
-          : "/wp-json/geows/v1/token";
-
-        const addRes = await fetch(BASE_URL, {
-          method: "POST",
-          signal: controller.signal,
-          headers: {
-            "Content-Type": "application/json",
-            "X-WP-Nonce": window.GeoWS_Config?.nonce,
-          },
-          body: JSON.stringify({
-            lead_id: selectedLeadId,
-            type: "read",
-          }),
-        }).then((r) => {
-          if (!r.ok) throw new Error("Не удалось получить токен геотрекинга");
-          return r.json();
-        });
-
-        if (!isActive) return;
-        if (!addRes.token || !addRes.url) {
-          throw new Error("Сервис не вернул токен или URL геотрекинга");
-        }
-
-        const response = await api.get(`${addRes.url}`, {
-          signal: controller.signal,
-          headers: {
-            Authorization: `Bearer ${addRes.token}`,
-            key: window.GeoWS_Config?.key,
-            wsHost: window.GeoWS_Config?.ws,
-          },
-        });
+        const { access: addRes, response } = await leadTrackingStore.getState().load({
+          id: selectedLeadId,
+          tracking: { token: trackingToken, url: trackingUrl },
+        }, { signal: controller.signal });
 
         if (!isActive) return;
 
@@ -367,6 +344,7 @@ const Map = ({
             )
               return;
 
+            leadTrackingStore.getState().record(selectedLeadId, true);
             setTracking((prev) => {
               const history = prev?.coordinates || [];
               const last = history.at(-1);
@@ -397,7 +375,7 @@ const Map = ({
       controller.abort();
       echo?.disconnect();
     };
-  }, [selectedLeadId]);
+  }, [selectedLeadId, trackingToken, trackingUrl]);
 
   const selectedRoute = useMemo(() => {
     if (!selectedLeadId) {
@@ -476,7 +454,8 @@ const Map = ({
         <FitSelectedRouteBounds route={selectedRoute} />
 
         {routes.map((route) => {
-          const routeColor = getLeadMapStatusColor(route.lead.status);
+          const status = getLeadDisplayStatus(route.lead, tripStates[String(route.id)]);
+          const routeColor = getLeadMapStatusColor(status);
           const isHighlighted = String(route.id) === String(highlightedLeadId);
           const isDimmed = hasHighlightedRoute && !isHighlighted;
 
@@ -525,7 +504,7 @@ const Map = ({
                   click: () => onSelectLead?.(route.id),
                 }}
               >
-                <MapTooltip route={route} open={open} setOpen={setOpen} />
+                <MapTooltip route={route} status={status} open={open} setOpen={setOpen} />
               </Polyline>
             </Fragment>
           );
@@ -534,7 +513,7 @@ const Map = ({
           <Polyline
             positions={selectedTracking.coordinates}
             pathOptions={{
-              color: getLeadMapStatusColor(trackedLead?.status),
+              color: getLeadMapStatusColor(trackedLeadStatus),
               weight: 5,
               dashArray: "10 10",
             }}

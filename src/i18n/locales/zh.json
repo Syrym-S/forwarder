@@ -446,6 +446,7 @@
     "cancelled": "取消",
     "driver_added": "添加卡车司机",
     "trip_started": "发货开始",
+    "awaiting_trip_start": "等待行程开始",
     "loading_operation": "正在加载",
     "loading_confirmed": "已确认加载\n0076期：欲罢不能",
     "unloading_operation": "卸货",

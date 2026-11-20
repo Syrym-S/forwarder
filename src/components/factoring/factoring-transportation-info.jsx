@@ -5,7 +5,7 @@ import { Box } from "@mui/material";
 import InfoField from "../../shared/ui/info-field";
 import LocalShippingOutlinedIcon from "@mui/icons-material/LocalShippingOutlined";
 import ArrowRightAltRoundedIcon from "@mui/icons-material/ArrowRightAltRounded";
-import RenderStatus from "../../shared/ui/render-status";
+import LeadStatus from "../../shared/ui/lead-status";
 import { moneySpacingFormat } from "../../shared/helpers/money-spacing";
 
 const FactoringTransportationInfo = ({ lead }) => {
@@ -76,7 +76,7 @@ const FactoringTransportationInfo = ({ lead }) => {
 
           <InfoField
             label={t("ui.status")}
-            value={<RenderStatus status={lead?.status} />}
+            value={<LeadStatus lead={lead} />}
           />
 
           <InfoField

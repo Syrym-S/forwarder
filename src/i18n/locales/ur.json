@@ -446,6 +446,7 @@
     "cancelled": "منسوخ",
     "driver_added": "ٹرک ڈرائیور شامل کیا گیا۔",
     "trip_started": "کھیپ شروع ہوئی۔",
+    "awaiting_trip_start": "سفر شروع ہونے کا انتظار",
     "loading_operation": "لوڈ ہو رہا ہے۔",
     "loading_confirmed": "لوڈنگ کی تصدیق ہوگئی",
     "unloading_operation": "اتارنا",

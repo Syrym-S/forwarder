@@ -1,4 +1,5 @@
 import { STATUS } from "./tenders";
+import { WAITING_FOR_TRIP_START } from "../lib/lead-trip-status.js";
 
 export const LEAD_MAP_STATUS_OPTIONS = [
   // { value: STATUS.new, label: "dashboard.new", color: "#51d861" },
@@ -69,9 +70,10 @@ export const DEFAULT_LEAD_MAP_STATUSES = [
   STATUS.sign_avr,
 ];
 
-const statusColors = Object.fromEntries(
-  LEAD_MAP_STATUS_OPTIONS.map(({ value, color }) => [value, color]),
-);
+const statusColors = {
+  ...Object.fromEntries(LEAD_MAP_STATUS_OPTIONS.map(({ value, color }) => [value, color])),
+  [WAITING_FOR_TRIP_START]: "#d97706",
+};
 
 export const getLeadMapStatusColor = (status) =>
   statusColors[status] || "#64748b";

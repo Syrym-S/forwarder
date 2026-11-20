@@ -485,6 +485,7 @@
     "cancelled": "Адменена",
     "driver_added": "Вадзіцель дададзены",
     "trip_started": "Паездка пачата",
+    "awaiting_trip_start": "Чаканне пачатку паездкі",
     "loading_operation": "Пагрузка",
     "loading_confirmed": "Пагрузка пацверджана",
     "unloading_operation": "Разгрузка",

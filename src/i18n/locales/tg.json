@@ -446,6 +446,7 @@
     "cancelled": "Бекор карда шуд",
     "driver_added": "Ронандаи мошини боркаш илова карда шуд",
     "trip_started": "Интиқол оғоз ёфт",
+    "awaiting_trip_start": "Интизории оғози сафар",
     "loading_operation": "Бор карда мешавад",
     "loading_confirmed": "Боркунӣ тасдиқ карда шуд",
     "unloading_operation": "Борфарорӣ",

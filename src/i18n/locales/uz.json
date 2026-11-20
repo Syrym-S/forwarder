@@ -446,6 +446,7 @@
     "cancelled": "Bekor qilingan",
     "driver_added": "yuk mashinasi haydovchisi qo'shildi",
     "trip_started": "Yuk tashish boshlandi",
+    "awaiting_trip_start": "Safar boshlanishini kutish",
     "loading_operation": "Yuklanmoqda",
     "loading_confirmed": "Yuklash tasdiqlandi",
     "unloading_operation": "Yuk tushirish",
