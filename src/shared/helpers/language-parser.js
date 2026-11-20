@@ -7,6 +7,9 @@ export const languageParser = (lang) => {
       return "ru_RU";
     case "en":
       return "en_EN";
+    case "by":
+    case "be":
+      return "be_BY";
     default:
       return "ru_RU";
   }
