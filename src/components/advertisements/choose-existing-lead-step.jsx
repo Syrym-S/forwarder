@@ -53,6 +53,7 @@ const ChooseExistingLeadStep = ({ lead, onChange, disabled = false }) => {
     <Stack spacing={2.5}>
       <Autocomplete
         value={lead}
+        clearOnBlur={false}
         disabled={disabled}
         options={shouldSearch && searchQuery === query ? leads : []}
         loading={isLoading}
@@ -67,9 +68,10 @@ const ChooseExistingLeadStep = ({ lead, onChange, disabled = false }) => {
             ? t("advertisements.no_leads_found")
             : t("ui.enter_two_characters")
         }
-        onInputChange={(_, value, reason) =>
-          setQuery(reason === "input" ? value.trim() : "")
-        }
+        onInputChange={(_, value, reason) => {
+          if (reason === "blur") return;
+          setQuery(reason === "input" ? value.trim() : "");
+        }}
         onChange={(_, value) => onChange(value)}
         slotProps={{
           paper: {

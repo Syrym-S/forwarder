@@ -2,13 +2,13 @@ import { useLayoutEffect, useMemo } from "react";
 import createCache from "@emotion/cache";
 import { CacheProvider } from "@emotion/react";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
-import { arSA, enUS, kkKZ, ruRU, urPK } from "@mui/material/locale";
+import { arSA, beBY, enUS, kkKZ, ruRU, urPK } from "@mui/material/locale";
 import rtlPlugin from "@mui/stylis-plugin-rtl";
 import { useTranslation } from "react-i18next";
 import { prefixer } from "stylis";
 import { theme } from "./theme";
 
-const locales = { ar: arSA, en: enUS, ru: ruRU, kk: kkKZ, ur: urPK };
+const locales = { ar: arSA, be: beBY, en: enUS, ru: ruRU, kk: kkKZ, ur: urPK };
 const ltrCache = createCache({ key: "muiltr" });
 const rtlCache = createCache({
   key: "muirtl",

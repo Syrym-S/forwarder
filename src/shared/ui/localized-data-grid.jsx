@@ -1,10 +1,10 @@
 import { DataGrid } from "@mui/x-data-grid";
-import { enUS, ruRU } from "@mui/x-data-grid/locales";
+import { beBY, enUS, ruRU } from "@mui/x-data-grid/locales";
 import { useTranslation } from "react-i18next";
 
 export default function LocalizedDataGrid({ localeText, ...props }) {
   const { t, i18n } = useTranslation();
-  const baseLocale = i18n.resolvedLanguage === "ru" ? ruRU : enUS;
+  const baseLocale = { be: beBY, ru: ruRU }[i18n.resolvedLanguage] || enUS;
 
   return (
     <DataGrid

@@ -689,7 +689,7 @@
     "login_credentials": "Логин: {{value1}}\nПароль: {{value2}}\nСсылка: {{value3}}",
     "login": "Логин",
     "password": "Пароль",
-    "login_link": "Ссылка входа",
+    "login_link": "Ссылка на вход",
     "factoring_line": "Факторинговая линия",
     "limit": "Лимит",
     "used": "Использовано",

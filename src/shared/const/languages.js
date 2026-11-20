@@ -15,4 +15,5 @@ export const INTERFACE_LANGUAGES = [
   { code: "tg", label: "Тоҷикӣ" },
   { code: "ur", label: "اردو" },
   { code: "uk", label: "Українська" },
+  { code: "be", label: "Беларуская" },
 ];

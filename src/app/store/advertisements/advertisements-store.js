@@ -271,7 +271,7 @@ export const useAdvertisementsStore = create((set, get) => ({
     });
     try {
       const response = await searchAdvertisementLeadsApi({
-        q: query,
+        ...(/^\d+$/.test(query) ? { num: query } : { q: query }),
         status: STATUS.new,
       });
       if (get().searchRequest !== request) return;

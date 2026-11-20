@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import appI18n from "../../../i18n/index.js";
+import { normalizeLanguageCode } from "../../../shared/helpers/normalize-language-code.js";
 import {
   deleteAvatarApi,
   editProfileApi,
@@ -43,12 +44,12 @@ export const useProfileStore = create((set, get) => ({
 
   changeLanguage: async (value) => {
     if (get().isLanguageSaving) return;
-    const language = value === "kz" ? "kk" : value;
+    const language = normalizeLanguageCode(value);
     set({ isLanguageSaving: true, languageSaveError: false });
     try {
       await appI18n.changeLanguage(language);
       localStorage.setItem("language", language);
-      await editProfileApi({ language });
+      await editProfileApi({ language: value });
       set((state) => ({
         profileData: state.profileData ? { ...state.profileData, language } : null,
       }));

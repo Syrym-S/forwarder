@@ -60,7 +60,9 @@ const DriversTable = ({ drivers, setSelectedDriver, handleBanDriver }) => {
     setRegeneratingDriverId(driverId);
     try {
       const response = await regenerateDriverLink(null, driverId);
-      const data = response.data;
+      const data = response.data?.credentials
+        ? { ...response.data, ...response.data.credentials }
+        : response.data;
       const link =
         typeof data === "string"
           ? data
@@ -76,8 +78,16 @@ const DriversTable = ({ drivers, setSelectedDriver, handleBanDriver }) => {
         throw new Error("Сервер не вернул ссылку для копирования");
       }
 
+      const login = data?.login ?? data?.email;
+      const password = data?.password;
+      const text = [
+        `${t("ui.login_link")}: ${link}`,
+        ...(login != null ? [`${t("ui.login")}: ${login}`] : []),
+        ...(password != null ? [`${t("ui.password")}: ${password}`] : []),
+      ].join("\n");
+
       try {
-        await navigator.clipboard.writeText(link);
+        await navigator.clipboard.writeText(text);
       } catch {
         throw new Error("Ссылка перегенерирована, но не удалось её скопировать");
       }

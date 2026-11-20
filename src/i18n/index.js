@@ -1,5 +1,6 @@
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
+import { normalizeLanguageCode } from "../shared/helpers/normalize-language-code.js";
 
 import ru from "./locales/ru.json";
 import en from "./locales/en.json";
@@ -17,12 +18,13 @@ import de from "./locales/de.json";
 import tg from "./locales/tg.json";
 import ur from "./locales/ur.json";
 import uk from "./locales/uk.json";
+import be from "./locales/be.json";
 
-const translations = { ru, en, kk: kz, es, pt, tr, ar, zh, uz, ky, ka, fr, de, tg, ur, uk };
+const translations = { ru, en, kk: kz, es, pt, tr, ar, zh, uz, ky, ka, fr, de, tg, ur, uk, be };
 const supportedLngs = Object.keys(translations);
 
 const savedLanguage = localStorage.getItem("language");
-const language = savedLanguage === "kz" ? "kk" : savedLanguage;
+const language = normalizeLanguageCode(savedLanguage);
 
 i18n.use(initReactI18next).init({
   resources: Object.fromEntries(

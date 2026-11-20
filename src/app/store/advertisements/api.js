@@ -9,6 +9,9 @@ export const createAdvertisementApi = (lead_id) => {
   return data;
 };
 
+export const searchAdvertisementLeadsApi = (params) =>
+  api.get(`${LIST_BASE_URL}/leads/search`, { params });
+
 export const updateAdvertisementApi = (advertisement_id, lead_id) =>
   api.post(`${BASE_URL}/my/${encodeURIComponent(advertisement_id)}/update`, {
     lead_id,
@@ -31,6 +34,3 @@ export const closeAdvertisementApi = (id) =>
 
 export const deleteAdvertisementApi = (id) =>
   api.post(`${BASE_URL}/my/${encodeURIComponent(id)}/delete`, null);
-
-export const searchAdvertisementLeadsApi = (params) =>
-  api.get("/forwarder/v1/tenders/leads/search", { params });
