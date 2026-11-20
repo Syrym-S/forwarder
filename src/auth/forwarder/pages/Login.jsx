@@ -9,6 +9,7 @@ import { useState } from "react";
 import { loginRequest } from "../../api/auth";
 import { isStaging } from "../../api/client";
 import { getLoginErrorMessage } from "../../shared/login-error.helpers";
+import { getPostAuthRedirect } from "../../shared/post-auth-redirect.js";
 import FormInput from "../../shared/FormInput";
 import { NotRegisteredModal } from "../../shared/NotRegisteredModal";
 import { EcpLoginButton } from "../../shared/EcpLoginButton";
@@ -59,12 +60,10 @@ export default function Login() {
 
       const redirectUrl = res?.redirect_url || res?.data?.redirect_url;
 
-      if (redirectUrl) {
-        window.location.assign(redirectUrl);
-        return;
-      } else {
-        window.location.assign(isStaging ? "/staging/forwarder" : "/forwarder");
-      }
+      window.location.assign(getPostAuthRedirect(
+        redirectUrl,
+        isStaging ? "/staging/forwarder" : "/forwarder",
+      ));
     } catch (e) {
       const notVerifiedSupport = getRegistrationNotVerifiedError(e);
 
@@ -82,13 +81,9 @@ export default function Login() {
     <AuthLayout>
       <NotRegisteredModal open={isNotRegisteredOpen} support={support} />
 
-      <AuthHeader>
-        {t("Вход")}
-      </AuthHeader>
+      <AuthHeader>{t("Вход")}</AuthHeader>
 
-      {error && <Alert severity="error">
-        {t(error)}
-      </Alert>}
+      {error && <Alert severity="error">{t(error)}</Alert>}
 
       <form onSubmit={handleSubmit(onSubmit)}>
         <FormInput

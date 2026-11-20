@@ -1,5 +1,6 @@
 export function getLoginErrorMessage(error) {
-  const backendError = error?.response?.data?.error;
+  const data = error?.response?.data;
+  const backendError = data?.error || data?.message || data?.data?.message;
 
   if (
     typeof backendError === "string" &&

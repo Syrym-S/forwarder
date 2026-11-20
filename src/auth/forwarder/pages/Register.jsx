@@ -21,6 +21,7 @@ import { useForm, Controller } from "react-hook-form";
 import { useState, useEffect } from "react";
 import { registerRequest, getClaimInfoApi } from "../../api/auth";
 import { isStaging } from "../../api/client";
+import { getPostAuthRedirect } from "../../shared/post-auth-redirect.js";
 import { normalizeBackendParams } from "../../shared/backend-validation-error.helpers";
 import { formatPhoneInput } from "../../shared/phone-format.helpers";
 import { passwordPatternRule } from "../../shared/password-validation.helpers";
@@ -273,12 +274,10 @@ export default function Register() {
 
       const redirectUrl = res?.redirect_url || res?.data?.redirect_url;
 
-      if (redirectUrl) {
-        window.location.href = redirectUrl;
-        return;
-      }
-
-      window.location.href = isStaging ? "/staging/auth/login" : "/auth/login";
+      window.location.href = getPostAuthRedirect(
+        redirectUrl,
+        isStaging ? "/staging/auth/login" : "/auth/login",
+      );
     } catch (e) {
       const notVerifiedSupport = getRegistrationNotVerifiedError(e);
 

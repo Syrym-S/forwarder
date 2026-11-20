@@ -18,10 +18,12 @@ const LogoutModal = ({ open, handleOpenModal, handleCloseProfile }) => {
     setError(false);
     try {
       await unregisterPushBeforeLogout();
-      await api.post("/auth/v1/logout", null, {
+      await api.post("/auth/v2/logout", null, {
         headers: { "X-WP-Nonce": window.APP_DATA?.nonce || "" },
       });
-      window.location.replace(isStaging ? "/staging/auth/login" : "/auth/login");
+      window.location.replace(
+        isStaging ? "/staging/auth/login" : "/auth/login",
+      );
     } catch {
       setError(true);
       setIsLoggingOut(false);
@@ -50,14 +52,19 @@ const LogoutModal = ({ open, handleOpenModal, handleCloseProfile }) => {
           {t("ui.logout")}
         </Button>
         <Button
-          onClick={() => { handleOpenModal(); handleCloseProfile(); }}
+          onClick={() => {
+            handleOpenModal();
+            handleCloseProfile();
+          }}
           sx={{
             fontSize: "1rem",
           }}
           color="error"
           variant="outlined"
           disabled={isLoggingOut}
-        >{t("ui.cancel")}</Button>
+        >
+          {t("ui.cancel")}
+        </Button>
       </DialogActions>
     </Dialog>
   );
