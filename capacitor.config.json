@@ -2,6 +2,10 @@
   "appId": "kz.logistics360.forwarder",
   "appName": "Forwarder",
   "webDir": "dist-android",
+  "loggingBehavior": "none",
+  "android": {
+    "webContentsDebuggingEnabled": false
+  },
   "plugins": {
     "CapacitorHttp": {
       "enabled": true

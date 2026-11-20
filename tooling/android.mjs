@@ -8,12 +8,18 @@ const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const android = join(root, "android");
 const tools = join(root, ".android-tools");
 const command = process.argv[2];
+const releaseApk = command === "apk" && process.argv.includes("--release");
 if (!["open", "run", "apk"].includes(command)) {
   throw new Error("Usage: node tooling/android.mjs open|run|apk");
 }
 
+const gradleJavaConfig = join(android, ".gradle", "config.properties");
+const configuredJavaHome = existsSync(gradleJavaConfig)
+  ? /^java\.home=(.+)$/m.exec(readFileSync(gradleJavaConfig, "utf8"))?.[1]?.trim()
+  : undefined;
 const candidates = [
   process.env.JAVA_HOME,
+  configuredJavaHome,
   ...(existsSync(tools) ? readdirSync(tools).map((entry) => join(tools, entry)) : []),
 ];
 const javaHome = candidates.find((candidate) => {
@@ -31,6 +37,7 @@ const sdk = process.env.ANDROID_HOME || process.env.ANDROID_SDK_ROOT ||
 if (!existsSync(sdk)) throw new Error("Android SDK not found. Set ANDROID_HOME to its directory.");
 
 const propertiesPath = (value) => value.replaceAll("\\", "/");
+const gradleCache = process.env.GRADLE_USER_HOME || join(homedir(), ".gradle");
 if (!existsSync(join(android, "local.properties"))) {
   writeFileSync(join(android, "local.properties"), `sdk.dir=${propertiesPath(sdk)}\n`);
 }
@@ -43,7 +50,7 @@ const ideGradle = join(android, ".idea", "gradle.xml");
 if (!existsSync(ideGradle)) {
   writeFileSync(ideGradle, `<project version="4">
   <component name="GradleSettings">
-    <option name="serviceDirectoryPath" value="$PROJECT_DIR$/../.gradle-cache" />
+    <option name="serviceDirectoryPath" value="${propertiesPath(gradleCache)}" />
     <option name="linkedExternalProjectsSettings">
       <GradleProjectSettings>
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -60,12 +67,13 @@ const env = {
   JAVA_HOME: javaHome,
   ANDROID_HOME: sdk,
   ANDROID_SDK_ROOT: sdk,
-  GRADLE_USER_HOME: process.env.GRADLE_USER_HOME || join(root, ".gradle-cache"),
+  GRADLE_USER_HOME: gradleCache,
 };
 console.log(`JDK 21: ${javaHome}\nAndroid SDK: ${sdk}`);
+const apkTask = releaseApk ? "assembleRelease" : "assembleDebug";
 const result = command === "apk"
   ? spawnSync(process.platform === "win32" ? "cmd.exe" : "./gradlew",
-    process.platform === "win32" ? ["/d", "/s", "/c", "gradlew.bat assembleDebug"] : ["assembleDebug"],
+    process.platform === "win32" ? ["/d", "/s", "/c", `gradlew.bat ${apkTask}`] : [apkTask],
     { cwd: android, env, stdio: "inherit" })
   : spawnSync(process.execPath, [join(root, "node_modules", "@capacitor", "cli", "bin", "capacitor"),
     command, "android", ...(command === "run" ? ["--no-sync"] : []), ...process.argv.slice(3)],

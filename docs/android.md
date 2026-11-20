@@ -56,7 +56,8 @@ npm run android:run -- --target emulator-5554
 SDK-компоненты устанавливаются через **Tools → SDK Manager**.
 Если Studio предлагает Java 25, выберите **Settings → Build, Execution,
 Deployment → Build Tools → Gradle → Gradle JDK → GRADLE_LOCAL_JAVA_HOME**
-или укажите JDK 21. Локальный Gradle-кэш команд находится в `.gradle-cache/`.
+или укажите JDK 21. По умолчанию команды используют общий Gradle-кэш
+в `~/.gradle/`. Можно переопределить его через `GRADLE_USER_HOME`.
 
 ## Сборка и окружение
 
@@ -72,6 +73,22 @@ npm run android:sync:prod
 npx cap open android
 ```
 
+Для открытия Android Studio сразу с production-сборкой:
+
+```powershell
+npm run android:open:prod
+```
+
+Для сборки, установки и запуска production-интерфейса на эмуляторе:
+
+```powershell
+npm run android:run:prod -- --target emulator-5554
+```
+
+`android:sync:prod` обновляет файлы Android-проекта. Чтобы обновить уже
+установленное приложение, нужен Run в Android Studio или `android:run:prod`.
+Команды `android:open` и `android:run` используют staging.
+
 Можно переопределить API через `VITE_API_URL` в `.env.dev.local` или
 `.env.prod.local`. Адрес должен быть HTTPS и включать путь API (`/wp-json`).
 Адрес API входит в клиентскую сборку; серверные секреты в Vite-переменные
@@ -85,6 +102,20 @@ npm run android:apk
 
 Результат: `android/app/build/outputs/apk/debug/app-debug.apk`.
 Релизная подпись для публикации в Google Play не настроена.
+
+Для production release APK:
+
+```powershell
+npm run android:apk:prod
+```
+
+Команда использует `VITE_API_URL_PROD`, удаляет вызовы `console`, `debugger`
+и комментарии из собранных JS/CSS, отключает source maps и собирает
+Android-вариант `release` без отладки. Логи Capacitor и отладка WebView отключены
+в `capacitor.config.json`.
+
+Результат: `android/app/build/outputs/apk/release/app-release-unsigned.apk`.
+Для установки и публикации этот APK нужно подписать релизным ключом.
 
 ## Данные и авторизация
 

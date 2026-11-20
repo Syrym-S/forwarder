@@ -2,6 +2,12 @@
 import { defineConfig, loadEnv } from "vite";
 import react from "@vitejs/plugin-react";
 
+const productionConsole = `({${[
+  "assert", "clear", "count", "countReset", "debug", "dir", "dirxml", "error",
+  "group", "groupCollapsed", "groupEnd", "info", "log", "profile", "profileEnd",
+  "table", "time", "timeEnd", "timeLog", "timeStamp", "trace", "warn",
+].map((method) => `${method}(){}`).join(",")}})`;
+
 // The website is built as an embedded library; Capacitor needs a complete SPA.
 export default defineConfig(({ mode }) => {
   const env = {
@@ -10,6 +16,7 @@ export default defineConfig(({ mode }) => {
     ...process.env,
   };
   const isStaging = mode === "dev";
+  const isProduction = mode === "prod";
   const apiUrl = env.VITE_API_URL ||
     (isStaging ? env.VITE_API_URL_DEV : env.VITE_API_URL_PROD);
 
@@ -31,6 +38,21 @@ export default defineConfig(({ mode }) => {
     plugins: [
       react(),
       {
+        name: "remove-production-native-console-handler",
+        transform(code, id) {
+          if (!isProduction || !id.replaceAll("\\", "/").endsWith("/@capacitor/core/dist/index.js")) {
+            return null;
+          }
+          return {
+            code: code.replace(
+              "const handleError = (err) => win.console.error(err);",
+              "const handleError = () => {};",
+            ),
+            map: null,
+          };
+        },
+      },
+      {
         name: "android-app-bootstrap",
         transformIndexHtml: {
           order: "pre",
@@ -50,9 +72,34 @@ if (window.location.pathname === "/" || window.location.pathname === "/index.htm
     define: {
       "import.meta.env.VITE_API_URL": JSON.stringify(apiUrl),
     },
+    css: isProduction ? {
+      postcss: {
+        plugins: [{
+          postcssPlugin: "remove-production-css-comments",
+          Comment(comment) {
+            comment.remove();
+          },
+        }],
+      },
+    } : undefined,
     build: {
       outDir: "dist-android",
       emptyOutDir: true,
+      sourcemap: false,
+      minify: isProduction ? "terser" : "oxc",
+      terserOptions: isProduction ? {
+        compress: {
+          drop_console: true,
+          drop_debugger: true,
+          global_defs: Object.fromEntries(
+            ["console", "window.console", "globalThis.console", "self.console"]
+              .map((name) => [`@${name}`, productionConsole]),
+          ),
+        },
+        format: {
+          comments: false,
+        },
+      } : undefined,
       // Retain existing imports of project images and document templates.
       assetsInlineLimit: 0,
     },
