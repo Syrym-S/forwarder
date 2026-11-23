@@ -56,6 +56,7 @@ const DriverStep = ({ control, errors, setValue }) => {
             <Autocomplete
               inputValue={inputValue}
               options={drivers}
+              getOptionLabel={(option) => option?.fio || t("ui.unnamed")}
               getOptionDisabled={(option) => option.in_black_list === true}
               filterOptions={(options) => options}
               value={field.value ?? null}
@@ -67,9 +68,11 @@ const DriverStep = ({ control, errors, setValue }) => {
                 return (
                   selectedDriver?.fio && (
                     <Chip
-                      variant="contained"
+                      variant="filled"
                       color={value.in_black_list === true ? "error" : "primary"}
                       label={value.fio}
+                      title={value.fio}
+                      sx={{ "& .MuiChip-label": { display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden", py: 0.5 } }}
                     />
                   )
                 );
@@ -100,7 +103,7 @@ const DriverStep = ({ control, errors, setValue }) => {
               renderInput={(params) => (
                 <TextField
                   {...params}
-                  placeholder={t("ui.select_driver")}
+                  placeholder={field.value ? undefined : t("ui.select_driver")}
                   error={Boolean(errors.driver)}
                   helperText={errors.driver?.message}
                   sx={{

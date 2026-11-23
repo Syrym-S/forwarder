@@ -30,7 +30,7 @@ const DocumentUpload = ({ setValue, uploadedFiles, setUploadedFiles }) => {
   const handleFileName = (event) => {
     setFileName(event.target.value);
   };
-  const handleFileContext = () => {
+  const handleFileContext = (event) => {
     setFileContext(event.target.value);
   };
 
@@ -41,10 +41,12 @@ const DocumentUpload = ({ setValue, uploadedFiles, setUploadedFiles }) => {
 
   const handleFileChange = (event) => {
     const file = event.target.files?.[0];
+    if (!file) return;
 
     const parseFile = {
       id: crypto.randomUUID(),
       name: fileName || file.name,
+      fileName: file.name,
       context: fileContext || "",
       lastModified: file.lastModified,
       lastModifiedDate: file.lastModifiedDate,
@@ -57,6 +59,7 @@ const DocumentUpload = ({ setValue, uploadedFiles, setUploadedFiles }) => {
     setUploadedFiles((prev) => [...prev, parseFile]);
     setFileName(null);
     setFileContext(null);
+    event.target.value = "";
   };
 
   const handleRemoveFile = (id) => {
@@ -69,18 +72,17 @@ const DocumentUpload = ({ setValue, uploadedFiles, setUploadedFiles }) => {
     setValue("documents", uploadedFiles, {
       shouldDirty: true,
     });
-  }, [uploadedFiles]);
+  }, [uploadedFiles, setValue]);
 
   return (
     <Box sx={{ display: "grid", gap: 2 }}>
       <Stack spacing={2}>
         <Box
-          component="form"
           sx={{
             display: "grid",
             gridTemplateColumns: {
-              xs: "1fr",
-              md: "1fr 1fr auto",
+              xs: "minmax(0, 1fr)",
+              md: "minmax(0, 1fr) minmax(0, 1fr) auto",
             },
             gap: 1,
             alignItems: "flex-start",
@@ -88,16 +90,18 @@ const DocumentUpload = ({ setValue, uploadedFiles, setUploadedFiles }) => {
         >
           <FormInput
             label={t("ui.document_name")}
+            value={fileName ?? ""}
             size="small"
-            onInput={handleFileName}
+            onChange={handleFileName}
             fullWidth
           />
 
           <FormInput
             name="context"
             label={t("ui.description")}
+            value={fileContext ?? ""}
             size="small"
-            onInput={handleFileContext}
+            onChange={handleFileContext}
             fullWidth
           />
 
@@ -115,8 +119,10 @@ const DocumentUpload = ({ setValue, uploadedFiles, setUploadedFiles }) => {
                   md: "auto",
                 },
                 borderRadius: 2,
+                textTransform: "none",
               }}
             >
+              {t("ui.choose_file")}
               <input
                 name="file"
                 type="file"

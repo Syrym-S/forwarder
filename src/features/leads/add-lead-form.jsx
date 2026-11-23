@@ -9,8 +9,8 @@ import TransportationParameters from "../../components/lead-form/steps/transport
 import DriverStep from "../../components/lead-form/steps/driver-step";
 import RouteStep from "../../components/lead-form/steps/route-step";
 import CustomerStep from "../../components/lead-form/steps/customer-step";
-import { Alert, Box, DialogContent } from "@mui/material";
-import { useState } from "react";
+import { Alert, Box, DialogContent, useMediaQuery } from "@mui/material";
+import { useEffect, useId, useRef, useState } from "react";
 import { FormNavButtons } from "../../components/lead-form/form-nav-buttons";
 import { useForm, useWatch } from "react-hook-form";
 import { LastStep } from "../../components/lead-form/steps/last-step";
@@ -84,6 +84,12 @@ const AddLeadForm = ({
   onSaved,
 }) => {
   const { t } = useTranslation();
+  const isCompactScreen = useMediaQuery(
+    (theme) => `${theme.breakpoints.down("sm")}, (max-height: 500px) and (pointer: coarse)`,
+  );
+  const titleId = useId();
+  const panelId = useId();
+  const contentRef = useRef(null);
   const visibleSteps = steps
     .filter((step) => !withoutDriver || step.id !== 3)
     .map((step, index) => ({ ...step, id: index + 1, contentId: step.id }));
@@ -134,6 +140,10 @@ const AddLeadForm = ({
 
   const currentStepId = visibleSteps[activeStep - 1]?.contentId;
   const isLastStep = activeStep === visibleSteps.length;
+
+  useEffect(() => {
+    contentRef.current?.scrollTo({ top: 0, left: 0 });
+  }, [activeStep]);
 
   function getCreatedLeadId(response) {
     return (
@@ -370,13 +380,52 @@ const AddLeadForm = ({
         onClose={isSubmitting ? undefined : handleClose}
         maxWidth="md"
         fullWidth
+        fullScreen={isCompactScreen}
+        aria-labelledby={titleId}
+        slotProps={{
+          paper: {
+            sx: {
+              m: isCompactScreen ? 0 : 3,
+              borderRadius: isCompactScreen ? 0 : 3,
+              maxHeight: isCompactScreen ? "100dvh" : "calc(100dvh - 48px)",
+              height: isCompactScreen ? "100dvh" : undefined,
+              overflow: "hidden",
+              ...(isCompactScreen && {
+                pt: "env(safe-area-inset-top, 0px)",
+                pb: "env(safe-area-inset-bottom, 0px)",
+                pl: "env(safe-area-inset-left, 0px)",
+                pr: "env(safe-area-inset-right, 0px)",
+              }),
+            },
+          },
+        }}
       >
         <FormHeader
+          titleId={titleId}
           isEdit={isEdit}
           activeStep={activeStep}
           stepsCount={visibleSteps.length}
+          onClose={handleClose}
+          disabled={isSubmitting}
         />
-        <DialogContent sx={{ px: 3 }}>
+        <DialogContent
+          ref={contentRef}
+          id={panelId}
+          sx={{
+            p: { xs: 1.5, sm: 3 },
+            minWidth: 0,
+            minHeight: 0,
+            bgcolor: "background.default",
+            overscrollBehavior: "contain",
+            "& .MuiBox-root, & .MuiFormControl-root, & .MuiAutocomplete-root": { minWidth: 0 },
+            "& .MuiFormControl-root, & .MuiAutocomplete-root": { maxWidth: "100%" },
+            "& .MuiInputBase-input": { minWidth: 0, fontSize: { xs: 16, sm: 14 } },
+            "& input[type=date]": { boxSizing: "border-box", width: "100%", height: "auto", minHeight: 40 },
+            "& .MuiTypography-root, & .MuiFormHelperText-root": { overflowWrap: "anywhere" },
+            "& .MuiAutocomplete-root .MuiChip-root": { maxWidth: "100%", height: "auto", minHeight: 28 },
+            "& .MuiAutocomplete-root .MuiChip-label": { whiteSpace: "normal", overflowWrap: "anywhere" },
+          }}
+        >
           {isEditingDraft && (
             <Alert severity="warning" sx={{ mb: 2 }}>
               {t("lead_form.draft_description")}
@@ -388,23 +437,21 @@ const AddLeadForm = ({
             setActiveStep={setActiveStep}
             isEdit={isEdit}
           />
-
           {renderContent(currentStepId)}
-
-          <FormNavButtons
-            isEdit={isEdit}
-            isDraft={isEditingDraft}
-            isFirstStep={activeStep === 1}
-            isLastStep={isLastStep}
-            hasCurrentStepErrors={hasStepError}
-            isSubmitting={isSubmitting}
-            onClose={handleClose}
-            onBack={handleBack}
-            onNext={handleNext}
-            onSubmit={handleSubmitClick}
-            onSaveDraft={handleSaveDraft}
-          />
         </DialogContent>
+        <FormNavButtons
+          isEdit={isEdit}
+          isDraft={isEditingDraft}
+          isFirstStep={activeStep === 1}
+          isLastStep={isLastStep}
+          hasCurrentStepErrors={hasStepError}
+          isSubmitting={isSubmitting}
+          onClose={handleClose}
+          onBack={handleBack}
+          onNext={handleNext}
+          onSubmit={handleSubmitClick}
+          onSaveDraft={handleSaveDraft}
+        />
       </Dialog>
 
       <CreateLeadResultModal

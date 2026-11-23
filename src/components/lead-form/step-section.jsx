@@ -4,7 +4,8 @@ export function StepSection({ title, children }) {
   return (
     <Box
       sx={{
-        p: 2,
+        p: { xs: 1.5, sm: 2 },
+        minWidth: 0,
         border: "1px solid",
         borderColor: "divider",
         borderRadius: 3,

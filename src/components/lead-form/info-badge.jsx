@@ -32,6 +32,7 @@ export function InfoBadge({ label, value, accent = false }) {
           lineHeight: 1.35,
           color: accent ? "primary.main" : "text.primary",
           fontWeight: accent ? 600 : 500,
+          overflowWrap: "anywhere",
         }}
       >
         {value || t("ui.not_specified_2")}

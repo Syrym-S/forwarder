@@ -65,15 +65,15 @@ const CargoStep = ({ control, errors, leadStatus }) => {
         sx={{
           display: "flex",
           flexDirection: "column",
-          gap: 3,
+          gap: 1.5,
         }}
       >
         {fields.map((field, index) => (
           <Box
             key={field.id}
             sx={{
-              mb: 3,
-              p: 2,
+              p: { xs: 1.25, sm: 2 },
+              minWidth: 0,
               border: "1px solid",
               borderColor: "divider",
               borderRadius: 2,
@@ -188,8 +188,8 @@ const CargoStepFieldsContent = ({
       sx={{
         display: "grid",
         gridTemplateColumns: {
-          xs: "1fr",
-          sm: "1fr 1fr",
+          xs: "minmax(0, 1fr)",
+          sm: "repeat(2, minmax(0, 1fr))",
         },
         gap: 2,
       }}

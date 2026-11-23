@@ -212,6 +212,7 @@ const RouteStep = ({ control, form, setValue, isEdit = false }) => {
           gap: 1,
           mb: 2,
           flexWrap: "wrap",
+          "& .MuiButton-root": { minHeight: 36, fontSize: 12, whiteSpace: "normal" },
         }}
       >
         <Box
@@ -266,6 +267,8 @@ const RouteStep = ({ control, form, setValue, isEdit = false }) => {
           sx={{
             display: "flex",
             gap: 1,
+            flexWrap: "wrap",
+            width: { xs: "100%", sm: "auto" },
           }}
         >
           <PrimaryButton
@@ -337,7 +340,7 @@ const RouteStep = ({ control, form, setValue, isEdit = false }) => {
       <Box
         sx={{
           height: {
-            xs: 220,
+            xs: 200,
             sm: 280,
           },
           border: "1px solid",
@@ -392,9 +395,11 @@ const RouteStep = ({ control, form, setValue, isEdit = false }) => {
           sx={{
             display: "grid",
             gridTemplateColumns: {
-              xs: "1fr",
-              sm: "2fr 1fr 1fr",
+              xs: "minmax(0, 1fr)",
+              sm: "repeat(2, minmax(0, 1fr))",
+              md: "minmax(0, 2fr) repeat(2, minmax(0, 1fr))",
             },
+            "& > .MuiAutocomplete-root": { gridColumn: { sm: "1 / -1", md: "auto" } },
             gap: 1,
           }}
         >
@@ -467,7 +472,7 @@ const RouteStep = ({ control, form, setValue, isEdit = false }) => {
               border: "1px solid",
               borderColor: "divider",
               borderRadius: 3,
-              p: 2,
+              p: { xs: 1.25, sm: 2 },
               display: "flex",
               flexDirection: "column",
               gap: 2,
@@ -494,9 +499,11 @@ const RouteStep = ({ control, form, setValue, isEdit = false }) => {
                 <Box
                   key={crossField.id}
                   sx={{
-                    display: "flex",
-                    gap: 1,
+                    display: "grid",
+                    gridTemplateColumns: { xs: "minmax(0, 1fr)", sm: "repeat(2, minmax(0, 1fr))" },
+                    gap: 1.5,
                     alignItems: "flex-start",
+                    "& > .MuiAutocomplete-root": { gridColumn: "1 / -1" },
                   }}
                 >
                   <RouteAddressInput
@@ -518,6 +525,7 @@ const RouteStep = ({ control, form, setValue, isEdit = false }) => {
                     defaultValue="check_passes"
                     options={waypointTypes}
                     label={t("ui.type")}
+                    sx={{ gridColumn: "1 / -1" }}
                     fullWidth
                     size="small"
                     disabled={currentLead && !canEditStatus}
@@ -576,6 +584,8 @@ const RouteStep = ({ control, form, setValue, isEdit = false }) => {
                   />
 
                   <PrimaryButton
+                    size="small"
+                    sx={{ gridColumn: "1 / -1", justifySelf: "end", minHeight: 36 }}
                     disabled={currentLead && !canEditStatus}
                     onClick={() => handleRemoveWaypoint(index)}
                     color="error"
@@ -592,9 +602,11 @@ const RouteStep = ({ control, form, setValue, isEdit = false }) => {
           sx={{
             display: "grid",
             gridTemplateColumns: {
-              xs: "1fr",
-              sm: "2fr 1fr 1fr",
+              xs: "minmax(0, 1fr)",
+              sm: "repeat(2, minmax(0, 1fr))",
+              md: "minmax(0, 2fr) repeat(2, minmax(0, 1fr))",
             },
+            "& > .MuiAutocomplete-root": { gridColumn: { sm: "1 / -1", md: "auto" } },
             gap: 1,
           }}
         >
