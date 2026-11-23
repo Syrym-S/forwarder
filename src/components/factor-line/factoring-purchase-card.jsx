@@ -46,14 +46,18 @@ const FactoringPurchaseCard = ({ data }) => {
       <CardContent>
         <Box
           sx={{
-            display: "grid",
-            gridTemplateColumns: "3fr 1fr",
+            display: "flex",
+            flexWrap: "wrap",
+            justifyContent: "space-between",
+            alignItems: "flex-start",
+            gap: 1,
           }}
         >
-          <Stack spacing={1}>
+          <Stack spacing={1} sx={{ minWidth: 0, flex: "1 1 180px" }}>
             <Box
               sx={{
                 display: "flex",
+                flexWrap: "wrap",
                 gap: 1,
               }}
             >
@@ -74,6 +78,7 @@ const FactoringPurchaseCard = ({ data }) => {
             <Box
               sx={{
                 display: "flex",
+                flexWrap: "wrap",
                 gap: 1,
               }}
             >
@@ -99,6 +104,7 @@ const FactoringPurchaseCard = ({ data }) => {
             <Box
               sx={{
                 display: "flex",
+                flexWrap: "wrap",
                 gap: 1,
               }}
             >

@@ -5,7 +5,7 @@ import ViewTabs from "../../shared/ui/view-tabs";
 import FactorLineContainer from "../../components/factor-line/factor-line-container";
 import SuccessModal from "../../components/factoring/factoring-form/success-modal";
 import { useEffect, useState } from "react";
-import { Box, Typography, useMediaQuery } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { VIEWS } from "../../shared/const/leads";
 import { useFactorStore } from "../../app/store/factor/factor-store";
 import { useNotificationsStore } from "../../app/store/notifications/noti-store";
@@ -22,9 +22,7 @@ const FactoringLines = () => {
   const isLoading = useFactorStore((state) => state.isLoading);
   const error = useFactorStore((state) => state.linesError);
 
-  const [selectedView, setView] = useState(null);
-  const isCompactScreen = useMediaQuery((theme) => theme.breakpoints.down("md"));
-  const view = selectedView ?? (isCompactScreen ? VIEWS.cards : VIEWS.table);
+  const [view, setView] = useState(VIEWS.table);
   const [openForm, setOpenForm] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
 

@@ -48,9 +48,14 @@ const useFactoringColumns = () => {
             sx={{
               display: "flex",
               flexDirection: "column",
+              minWidth: 0,
+              maxWidth: "100%",
+              "& .MuiTypography-root": { lineHeight: 1.2 },
             }}
           >
             <Typography
+              noWrap
+              title={row.factor.company_name}
               sx={{
                 fontSize: "0.9rem",
               }}
@@ -58,27 +63,32 @@ const useFactoringColumns = () => {
               {row.factor.company_name}
             </Typography>
             <Typography
+              noWrap
               sx={{
                 fontSize: "0.7em",
-                сolor: "divider",
+                color: "text.secondary",
                 fontWeight: 300,
               }}
             >
               {t("dashboard.bin")}: {row.factor.bin}
             </Typography>
             <Typography
+              noWrap
+              title={row.factor.fio}
               sx={{
                 fontSize: "0.7rem",
-                сolor: "divider",
+                color: "text.secondary",
                 fontWeight: 300,
               }}
             >
               {row.factor.fio}
             </Typography>
             <Typography
+              noWrap
+              title={row.factor.phone}
               sx={{
                 fontSize: "0.7rem",
-                сolor: "divider",
+                color: "text.secondary",
                 fontWeight: 300,
               }}
             >

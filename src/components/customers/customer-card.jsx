@@ -1,8 +1,5 @@
 import { useTranslation } from "react-i18next";
 import { Box, Chip, Stack, Typography } from "@mui/material";
-import React from "react";
-import InfoField from "../../shared/ui/info-field";
-import PersonPinOutlinedIcon from "@mui/icons-material/PersonPinOutlined";
 import InfoItem from "../../shared/ui/info-item";
 
 const CustomerCard = ({ customer, setSelectedCustomer }) => {
@@ -16,7 +13,8 @@ const CustomerCard = ({ customer, setSelectedCustomer }) => {
       tabIndex={0}
       onClick={handleSetCustomerDetails}
       sx={{
-        p: 3,
+        p: { xs: 2, sm: 3 },
+        minWidth: 0,
         border: "2px solid",
         borderColor: "divider",
         borderRadius: 4,
@@ -24,6 +22,7 @@ const CustomerCard = ({ customer, setSelectedCustomer }) => {
         boxShadow: "0 2px 8px rgba(0, 0, 0, 0.06)",
         transition: "0.2s ease",
         cursor: "pointer",
+        "& .MuiTypography-root": { overflowWrap: "anywhere" },
         "&:hover": {
           borderColor: "primary.light",
           boxShadow: "0 8px 24px rgba(33, 150, 243, 0.12)",
@@ -34,9 +33,11 @@ const CustomerCard = ({ customer, setSelectedCustomer }) => {
         sx={{
           display: "flex",
           justifyContent: "space-between",
+          alignItems: "flex-start",
+          gap: 1.5,
         }}
       >
-        <Stack>
+        <Stack sx={{ minWidth: 0, flex: 1 }}>
           <Typography
             variant="body2"
             color="text.secondary"
@@ -61,6 +62,7 @@ const CustomerCard = ({ customer, setSelectedCustomer }) => {
           label={`ID# ${customer?.id}`}
           color="primary"
           variant="outlined"
+          sx={{ flexShrink: 0 }}
         />
       </Box>
 

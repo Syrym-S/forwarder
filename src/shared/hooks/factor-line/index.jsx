@@ -67,7 +67,7 @@ const useFactoringLineColumns = () => {
       flex: 1.5,
       valueGetter: (_, row) => row.factor?.company_name || "",
       renderCell: ({ row }) => (
-        <Box sx={{ width: "100%", minWidth: 0, lineHeight: 1.4, "& .MuiTypography-root": { overflowWrap: "anywhere" } }}>
+        <Box sx={{ width: "100%", minWidth: 0, lineHeight: 1.2, "& .MuiTypography-root": { overflowWrap: "anywhere", lineHeight: 1.2 } }}>
           <Typography sx={{ fontSize: 14, fontWeight: 500 }}>
             {row.factor?.company_name || t("ui.not_specified_2")}
           </Typography>

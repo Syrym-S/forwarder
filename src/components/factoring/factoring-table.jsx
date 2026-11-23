@@ -17,12 +17,22 @@ const FactoringTable = ({ factorings }) => {
         rows={factorings}
         getRowId={(row) => row.id}
         columns={columns}
-        checkboxSelection
-        rowHeight={70}
+        rowHeight={64}
+        columnHeaderHeight={44}
         localeText={{
           noRowsLabel: isLoading ? <CircularProgress /> : t("dashboard.list_empty"),
         }}
         sx={{
+          "& .MuiDataGrid-cell": {
+            display: "flex",
+            alignItems: "center",
+            px: 1,
+            py: 0,
+            lineHeight: 1.3,
+          },
+          "& .MuiDataGrid-cell--textRight": { justifyContent: "flex-end" },
+          "& .MuiDataGrid-cell--textCenter": { justifyContent: "center" },
+          "& .MuiDataGrid-columnHeader": { px: 1 },
           "& .MuiDataGrid-row:nth-of-type(even)": {
             backgroundColor: "#f5f7fa",
           },

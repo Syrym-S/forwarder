@@ -103,6 +103,8 @@ const AdvertisementItem = ({ source = "my" }) => {
                       display: "flex",
                       justifyContent: "space-between",
                       alignItems: "center",
+                      flexWrap: "wrap",
+                      gap: 1.5,
                     }}
                   >
                     <PageHeading
@@ -116,6 +118,7 @@ const AdvertisementItem = ({ source = "my" }) => {
                       sx={{
                         display: "flex",
                         alignItems: "center",
+                        flexWrap: "wrap",
                         gap: 1,
                       }}
                     >

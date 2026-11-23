@@ -1,7 +1,5 @@
 import { useTranslation } from "react-i18next";
 import { Box, Tooltip, Typography } from "@mui/material";
-import { NavLink } from "react-router-dom";
-import RenderStatus from "../../ui/render-status";
 
 const useCustomersColumns = (setSelectedCustomer) => {
   const { t } = useTranslation();
@@ -9,7 +7,7 @@ const useCustomersColumns = (setSelectedCustomer) => {
     {
       field: "id",
       headerName: "ID",
-      width: 200,
+      width: 80,
       renderCell: (row) => (
         <Box
           sx={{
@@ -24,23 +22,25 @@ const useCustomersColumns = (setSelectedCustomer) => {
     {
       field: "name",
       headerName: t("ui.name_2"),
-      width: 200,
+      minWidth: 200,
+      flex: 1,
     },
-    { field: "bin", headerName: t("ui.bin"), width: 200 },
+    { field: "bin", headerName: t("ui.bin"), width: 150 },
     {
       field: "type",
       headerName: t("ui.company_type"),
-      width: 200,
+      width: 170,
     },
     {
       field: "legal_address",
       headerName: t("ui.address"),
-      width: 200,
+      minWidth: 240,
+      flex: 1.2,
     },
     {
       field: "invite_link",
       headerName: t("ui.invitation_link_2"),
-      width: 200,
+      width: 220,
       renderCell: ({ value }) => (
         <Tooltip title={t("ui.click_to_copy")}>
           <Typography
@@ -48,6 +48,8 @@ const useCustomersColumns = (setSelectedCustomer) => {
             onClick={() => navigator.clipboard.writeText(value)}
             sx={{
               cursor: "pointer",
+              display: "block",
+              maxWidth: "100%",
               color: "primary.main",
               textDecoration: "underline",
               overflow: "hidden",

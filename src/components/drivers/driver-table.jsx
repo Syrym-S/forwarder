@@ -131,7 +131,6 @@ const DriversTable = ({ drivers, setSelectedDriver, handleBanDriver }) => {
           row.in_black_list === true ? "driver-blocked" : ""
         }
         columns={columns}
-        checkboxSelection
         sx={{
           border: 0,
           boxShadow: 0,

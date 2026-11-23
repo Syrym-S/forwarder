@@ -14,7 +14,6 @@ const ForwardersTenderTable = (tenders) => {
         rows={tenders.tenders}
         getRowId={(row) => row.id}
         columns={columns}
-        checkboxSelection
         localeText={{
           noRowsLabel: t("ui.add_auction_empty_hint"),
         }}

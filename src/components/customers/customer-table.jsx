@@ -8,17 +8,35 @@ const CustomersTable = ({ customers, setSelectedCustomer }) => {
   const columns = useCustomersColumns(setSelectedCustomer);
 
   return (
-    <Paper sx={{ my: "10px" }}>
+    <Paper
+      variant="outlined"
+      sx={{
+        width: "100%",
+        minWidth: 0,
+        height: { xs: "min(560px, 70dvh)", md: "min(720px, 75dvh)" },
+        minHeight: 320,
+        borderRadius: 3,
+        overflow: "hidden",
+      }}
+    >
       <DataGrid
         hideFooter
         rows={customers}
         getRowId={(row) => row.id}
         columns={columns}
-        checkboxSelection
+        columnHeaderHeight={44}
+        rowHeight={56}
+        disableRowSelectionOnClick
         sx={{
           border: 0,
           boxShadow: 0,
-          minHeight: "80vh",
+          minWidth: 0,
+          "& .MuiDataGrid-columnHeader": {
+            bgcolor: "background.default",
+            fontSize: 12,
+          },
+          "& .MuiDataGrid-columnHeaderTitle": { fontWeight: 600 },
+          "& .MuiDataGrid-cell": { fontSize: 13 },
           "& .MuiDataGrid-row:nth-of-type(even)": {
             backgroundColor: "#f5f7fa",
           },

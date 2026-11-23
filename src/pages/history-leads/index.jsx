@@ -5,7 +5,7 @@ import ViewTabs from "../../shared/ui/view-tabs";
 import LeadListContainer from "../../components/leads/lead-list-container";
 import LeadsExportButton from "../../components/leads/leads-export-button";
 import { useEffect, useState } from "react";
-import { Box, Paper, Typography, useMediaQuery } from "@mui/material";
+import { Box, Paper, Typography } from "@mui/material";
 import { VIEWS } from "../../shared/const/leads";
 import { useLeadsStore } from "../../app/store/leads/leads-store";
 import { HISTORY_LEAD_STATUS_OPTIONS } from "../../shared/const/tenders";
@@ -46,9 +46,7 @@ const HistoryLeads = () => {
   const [search, setSearch] = useState("");
 
   const [page, setPage] = useState(1);
-  const [selectedView, setSelectedView] = useState(null);
-  const isCompactScreen = useMediaQuery((theme) => theme.breakpoints.down("md"));
-  const view = selectedView ?? (isCompactScreen ? VIEWS.cards : VIEWS.table);
+  const [view, setSelectedView] = useState(VIEWS.table);
 
   const clearCurrentLead = useLeadsStore((state) => state.clearCurrentLead);
   const historyLeads = useLeadsStore((state) => state.historyLeads);

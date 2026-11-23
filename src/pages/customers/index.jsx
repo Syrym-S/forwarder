@@ -60,13 +60,22 @@ const Customers = () => {
   }, [searchValue, loadCustomers]);
 
   return (
-    <RootLayout withoutDataCheck>
+    <RootLayout
+      withoutDataCheck
+      sx={{
+        width: "100%",
+        minWidth: 0,
+        p: { xs: 1.5, sm: 3 },
+        pl: { sm: "calc(20vw + 24px)" },
+      }}
+    >
       <Box>
         <Typography
+          component="h1"
           sx={{
             fontWeight: 600,
-            fontSize: "1.5rem",
-            сolor: "font_color.heading",
+            fontSize: { xs: 22, sm: 24 },
+            color: "font_color.heading",
           }}
         >{t("ui.customers")}</Typography>
 
@@ -76,17 +85,17 @@ const Customers = () => {
       <Box
         sx={{
           mx: "auto",
+          mt: 2,
+          mb: 2,
+          minWidth: 0,
           width: {
             xs: "100%",
             sm: isCardsView ? "60%" : "100%",
           },
           display: "flex",
           alignItems: "center",
-          flexDirection: {
-            xs: "column",
-            sm: "row",
-          },
-          gap: 1,
+          flexWrap: "wrap",
+          gap: 1.5,
           justifyContent: "space-between",
         }}
       >
@@ -96,7 +105,23 @@ const Customers = () => {
           setView={setView}
           handleOpenForm={handleOpenForm}
           buttonText={t("ui.invite_customer")}
-          sx={{ width: { xs: "100%", sm: "auto" }, flex: { sm: 1 }, minWidth: 0, mx: 0, gap: 2 }}
+          sx={{
+            width: "100%",
+            flex: "1 1 320px",
+            minWidth: 0,
+            mx: 0,
+            gap: 1.5,
+            flexWrap: "wrap",
+            "& .MuiButton-root": {
+              minHeight: 36,
+              px: 1.5,
+              py: 0.75,
+              fontSize: 13,
+              fontWeight: 500,
+              flexShrink: 0,
+            },
+            "& .MuiToggleButtonGroup-root": { alignSelf: "center" },
+          }}
         />
 
         {open && <AddCustomerForm open={open} handleClose={handleCloseForm} />}
@@ -116,12 +141,11 @@ const Customers = () => {
           fullWidth
           size="small"
           sx={{
-            width: { xs: "100%", sm: 300 },
-            maxWidth: { sm: 300 },
+            width: "100%",
+            maxWidth: { md: 300 },
             minWidth: 0,
-            flexShrink: 1,
-            ml: { sm: "auto" },
-            my: 1,
+            flex: "1 1 240px",
+            ml: "auto",
           }}
         />
       </Box>
