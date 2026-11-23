@@ -20,6 +20,9 @@ const LeadsTable = ({ leads, responsive = false }) => {
         width: "100%",
         minWidth: 0,
         ...(responsive ? {
+          border: "1px solid",
+          borderColor: "divider",
+          borderRadius: 3,
           height: { xs: "min(560px, 70dvh)", md: "min(720px, 75dvh)" },
           minHeight: 320,
           overflow: "hidden",
@@ -33,11 +36,22 @@ const LeadsTable = ({ leads, responsive = false }) => {
         getRowClassName={({ row }) => (isDraftLead(row) ? "lead-draft" : "")}
         columns={columns}
         checkboxSelection
+        columnHeaderHeight={responsive ? 48 : undefined}
+        rowHeight={responsive ? 60 : undefined}
         sx={{
           border: 0,
           boxShadow: 0,
           minWidth: 0,
           minHeight: responsive ? 0 : "80vh",
+          ...(responsive ? {
+            "& .MuiDataGrid-columnHeader": {
+              bgcolor: "background.default",
+              fontSize: 12,
+              color: "text.secondary",
+            },
+            "& .MuiDataGrid-columnHeaderTitle": { fontWeight: 600 },
+            "& .MuiDataGrid-cell": { fontSize: 13 },
+          } : {}),
           "& .MuiDataGrid-row:nth-of-type(even)": {
             backgroundColor: "#f5f7fa",
           },

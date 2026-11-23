@@ -1,4 +1,5 @@
 import LeadCard from "./lead-card";
+import CompactLeadCard from "./compact-lead-card";
 import LeadsTable from "./leads-table";
 import LeadKanbanTable from "./lead-kanban-table";
 import TableSkeleton from "../../shared/ui/table-skeleton";
@@ -19,21 +20,24 @@ const LeadListContainer = ({
   isLoading,
   handlePageChange,
   responsive = false,
+  compactCards = false,
 }) => {
   const { t } = useTranslation();
 
   const isSmallScreen = useMediaQuery((theme) => theme.breakpoints.down("sm"));
 
-  const PAGE_COUNT = Math.ceil(count / perPage);
+  const PAGE_COUNT = Math.max(1, Math.ceil(count / Math.max(perPage, 1)));
   const isCardsView = view === VIEWS.cards;
   const isTableView = view === VIEWS.table;
   const isKanbanView = view === VIEWS.kanban;
+  const CardComponent = compactCards ? CompactLeadCard : LeadCard;
   const cardsLayout = {
     width: { xs: "100%", sm: "60%" },
     mx: "auto",
     display: "grid",
     my: "10px",
-    gridTemplateColumns: "1fr",
+    gridTemplateColumns: "minmax(0, 1fr)",
+    gap: compactCards ? 1.5 : 3,
   };
 
   if (isLoading && isTableView) return <TableSkeleton />;
@@ -42,7 +46,7 @@ const LeadListContainer = ({
 
   return (
     <>
-      {!isLoading && isLeadsEmpty && filterStatus && (
+      {!isLoading && isLeadsEmpty && (
         <Alert
           severity="info"
           sx={{
@@ -55,34 +59,23 @@ const LeadListContainer = ({
             my: 1,
           }}
         >
-          {t("active_leads.empty_status", { status: t(filterStatus.label) })}
+          {filterStatus
+            ? t("active_leads.empty_status", { status: t(filterStatus.label) })
+            : t("active_leads.empty_list")}
         </Alert>
       )}
 
-      {isCardsView && (
+      {isCardsView && !isLeadsEmpty && (
         <Box sx={cardsLayout}>
-          {isLeadsEmpty ? (
-            <Alert
-              severity="info"
-              sx={{
-                width: responsive
-                  ? "100%"
-                  : {
-                      xs: "100%",
-                      sm: "60%",
-                    },
-                my: 1,
-              }}
-            >
-              {t("active_leads.empty_list")}
-            </Alert>
-          ) : (
-            leads.map((lead) => <LeadCard key={lead.id} lead={lead} />)
-          )}
+          {leads.map((lead) => (
+            <CardComponent key={lead.id} lead={lead} />
+          ))}
         </Box>
       )}
 
-      {isTableView && <LeadsTable leads={leads} responsive={responsive} />}
+      {isTableView && !isLeadsEmpty && (
+        <LeadsTable leads={leads} responsive={responsive} />
+      )}
 
       {isKanbanView && <LeadKanbanTable leads={leads} />}
 
@@ -111,6 +104,9 @@ const LeadListContainer = ({
             "& .MuiPaginationItem-root": {
               color: "#1F2937",
               fontWeight: 500,
+              ...(responsive
+                ? { minWidth: { xs: 36, sm: 40 }, height: { xs: 44, sm: 40 } }
+                : {}),
             },
 
             "& .MuiPaginationItem-root.Mui-selected": {
