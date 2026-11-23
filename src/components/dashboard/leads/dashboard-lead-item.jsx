@@ -146,9 +146,11 @@ const DashboardLeadItem = ({
         <Box
           sx={{
             display: "flex",
+            flexWrap: "wrap",
             justifyContent: "space-between",
             alignItems: "center",
             gap: 1,
+            "& .MuiTypography-root": { overflowWrap: "anywhere" },
           }}
         >
           <Typography
@@ -188,6 +190,7 @@ const DashboardLeadItem = ({
           }}
           sx={{
             alignSelf: "flex-start",
+            minHeight: 44,
             textTransform: "none",
             borderRadius: 2,
           }}

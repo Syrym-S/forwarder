@@ -14,7 +14,6 @@ import {
   Typography,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { useNotificationsStore } from "../../app/store/notifications/noti-store";
 import NotificationsBlock from "./notifications/notifications-block";
 import { useProfileStore } from "../../app/store/profile/profile-store";
 import logo from "../../../assets/logo.png";
@@ -29,9 +28,6 @@ const Header = ({ openMenu, setOpenMenu }) => {
 
   const profileData = useProfileStore((state) => state.profileData);
   const getProfileData = useProfileStore((state) => state.getProfileData);
-  const getNotifications = useNotificationsStore(
-    (state) => state.getNotifications,
-  );
   const getLanguages = useOptionsStore((state) => state.getLanguages);
 
   const [profileAnchorEl, setProfileAnchorEl] = useState(null);
@@ -69,10 +65,9 @@ const Header = ({ openMenu, setOpenMenu }) => {
   };
 
   useEffect(() => {
-    getNotifications();
     getProfileData();
     getLanguages();
-  }, [getNotifications, getProfileData, getLanguages]);
+  }, [getProfileData, getLanguages]);
 
   useEffect(() => {
     if (!profileAnchorEl) return;

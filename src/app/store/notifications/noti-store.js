@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { createNotificationsState } from "./notifications-state.js";
 import {
   getNotificationDetailsApi,
   getNotificationsApi,
@@ -37,7 +38,7 @@ const readTokenFields = (response) => {
   };
 };
 
-export const connectNotifications = (onNotification, onError) => {
+export const connectNotifications = (onNotification, onError, onConnected) => {
   const connection = (window[connectionKey] ??= {
     echo: null,
     pending: null,
@@ -46,7 +47,7 @@ export const connectNotifications = (onNotification, onError) => {
     retryAttempt: 0,
     authRetries: 0,
   });
-  const subscriber = { onNotification, onError };
+  const subscriber = { onNotification, onError, onConnected };
   connection.subscribers.add(subscriber);
 
   const reportError = (error) => {
@@ -154,6 +155,7 @@ export const connectNotifications = (onNotification, onError) => {
           if (!isActive()) return;
           connection.authRetries = 0;
           connection.retryAttempt = 0;
+          connection.subscribers.forEach((item) => item.onConnected?.());
         })
         .error((error) => {
           if (!isActive()) return;
@@ -195,114 +197,12 @@ export const connectNotifications = (onNotification, onError) => {
   };
 };
 
-export const useNotificationsStore = create((set, get) => ({
-  notifications: [],
-  newNotification: null,
-  shownNotificationIds: new Set(),
-  notificationDetails: null,
-
-  isLoading: false,
-  isNotificationDetailsLoading: false,
-
-  error: null,
-  total: 0,
-  perPage: 1,
-
-  getNotifications: async (params, { showSnackbar = false } = {}) => {
-    try {
-      set({ isLoading: true, error: null });
-
-      const response = await getNotificationsApi(params);
-
-      const newNotification = response.data.results[0];
-
-      set((state) => {
-        const shouldShow =
-          showSnackbar &&
-          newNotification &&
-          !newNotification.is_viewed &&
-          !state.shownNotificationIds.has(newNotification.id);
-
-        return {
-          notifications: response.data.results,
-          ...(shouldShow && {
-            newNotification,
-            shownNotificationIds: new Set(state.shownNotificationIds).add(
-              newNotification.id,
-            ),
-          }),
-          isLoading: false,
-          total: response.data.total,
-          perPage: response.data.per_page,
-        };
-      });
-    } catch (e) {
-      set({
-        error: e.message,
-        isLoading: false,
-      });
-    }
-  },
-
-  clearNewNotificationValue: () => {
-    set({ newNotification: null });
-  },
-
-  getNotificationDetails: async (id) => {
-    try {
-      set({
-        isNotificationDetailsLoading: true,
-        notificationDetails: null,
-        error: null,
-      });
-
-      const response = await getNotificationDetailsApi(id);
-
-      set({
-        notificationDetails: response.data,
-        isNotificationDetailsLoading: false,
-      });
-    } catch (e) {
-      set({
-        error: e.message,
-        isNotificationDetailsLoading: false,
-      });
-    }
-  },
-
-  getNotificationsToken: async () => {
-    try {
-      return await getNotificationsTokenApi();
-    } catch (e) {
-      set({
-        error: e.message,
-        isLoading: false,
-      });
-    }
-  },
-
-  markAllAsRead: async () => {
-    try {
-      set({ isLoading: true, error: null });
-
-      await markAllAsReadApi();
-
-      set({ isLoading: false, error: null });
-    } catch (e) {
-      console.error(e);
-      set({
-        error: e.message,
-        isLoading: false,
-      });
-    }
-  },
-
-  connectNotifications: () =>
-    connectNotifications(
-      () => get().getNotifications(undefined, { showSnackbar: true }),
-      (error) => {
-        set({ error: error.message });
-        console.error("Не удалось подключить уведомления", error);
-      },
-    ),
-}));
+export const useNotificationsStore = create(
+  createNotificationsState({
+    getNotificationsApi,
+    getNotificationDetailsApi,
+    getNotificationsTokenApi,
+    markAllAsReadApi,
+    connectNotifications,
+  }),
+);

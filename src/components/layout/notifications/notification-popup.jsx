@@ -22,7 +22,10 @@ import { parserNotificationType } from "../../../shared/helpers/notifications/pa
 import { NOTIFICATION_TYPE } from "../../../shared/const/notification-types";
 import { LeadDocumentCard } from "../../leads/documents/LeadDocumentCard";
 import NotificationLoader from "../../../shared/ui/loaders/notification-loader";
-import { getNotificationMessage, getNotificationTheme } from "../../../shared/helpers/notifications/get-notification-message";
+import {
+  getNotificationMessage,
+  getNotificationTheme,
+} from "../../../shared/helpers/notifications/get-notification-message";
 import NotificationTime from "./notification-time";
 
 const NotificationPopup = ({
@@ -42,7 +45,7 @@ const NotificationPopup = ({
     getNotificationDetails,
     getNotifications,
     isNotificationDetailsLoading,
-    error,
+    notificationDetailsError,
   } = useNotificationsStore();
   const { id, notification_type } = parserNotificationType(
     selectedNotification?.type || "",
@@ -120,8 +123,10 @@ const NotificationPopup = ({
       <DialogContent sx={{ p: 3, "&.MuiDialogContent-root": { pt: 3 } }}>
         {isNotificationDetailsLoading ? (
           <NotificationLoader />
-        ) : error ? (
-          <Alert severity="error">{t("ui.notification_load_failed_retry")}</Alert>
+        ) : notificationDetailsError ? (
+          <Alert severity="error">
+            {t("ui.notification_load_failed_retry")}
+          </Alert>
         ) : (
           <>
             <Box
@@ -179,7 +184,9 @@ const NotificationPopup = ({
                     fontSize: 14,
                     color: "font_color.heading",
                   }}
-                >{t("ui.documents")}</Typography>
+                >
+                  {t("ui.documents")}
+                </Typography>
                 <Box
                   sx={{
                     display: "grid",
@@ -214,9 +221,11 @@ const NotificationPopup = ({
         <Button
           onClick={handleClose}
           sx={{ textTransform: "none", borderRadius: 2 }}
-        >{t("ui.close")}</Button>
+        >
+          {t("ui.close")}
+        </Button>
         {!isNotificationDetailsLoading &&
-          !error &&
+          !notificationDetailsError &&
           notificationDetails?.link && (
             <Button
               component={RouterLink}
@@ -226,7 +235,9 @@ const NotificationPopup = ({
               disableElevation
               endIcon={<ArrowForwardRoundedIcon />}
               sx={{ textTransform: "none", borderRadius: 2 }}
-            >{t("ui.go_to")}</Button>
+            >
+              {t("ui.go_to")}
+            </Button>
           )}
       </DialogActions>
     </Dialog>

@@ -1,11 +1,10 @@
 import { useTranslation } from "react-i18next";
-import { useState, useEffect } from "react";
-import { Alert, Box, Container, Typography } from "@mui/material";
+import { useState, useEffect, useRef } from "react";
+import { Alert, Box, Container, Typography, useMediaQuery } from "@mui/material";
 
 import RootLayout from "../../components/layout/root-layout";
-import Map from "../../components/dashboard/map";
+import DashboardMapPanel from "../../components/dashboard/dashboard-map-panel";
 import DashboardLeadsList from "../../components/dashboard/leads/dashboard-leads-list";
-import LeadMapStatusFilter from "../../components/dashboard/lead-map-status-filter";
 
 import { useLeadsStore } from "../../app/store/leads/leads-store";
 import TendersMainContainer from "../../components/dashboard/tenders/tenders-main-container";
@@ -19,6 +18,10 @@ import { DEFAULT_LEAD_MAP_STATUSES } from "../../shared/const/lead-map-statuses"
 
 const Dashboard = () => {
   const { t } = useTranslation();
+  const mapPanelRef = useRef(null);
+  const isMobile = useMediaQuery(
+    (theme) => `${theme.breakpoints.down("sm")}, (max-height: 500px) and (pointer: coarse)`,
+  );
   const stats = useStatsStore((state) => state.stats);
   const leads = useLeadsStore((state) => state.leads);
   const factorings = useFactoringStore((state) => state.factorings);
@@ -67,6 +70,7 @@ const Dashboard = () => {
 
   const handleSelectLead = (leadId) => {
     setSelectedLeadId(leadId);
+    setHoveredLeadId(null);
   };
 
   const handleHoverLead = (leadId) => {
@@ -85,10 +89,18 @@ const Dashboard = () => {
     if (showFactoringTable) {
       getFactorings();
     }
-  }, [getFactorings]);
+  }, [getFactorings, showFactoringTable]);
 
   return (
-    <RootLayout withoutDataCheck>
+    <RootLayout
+      withoutDataCheck
+      sx={{
+        width: "100%",
+        minWidth: 0,
+        p: { xs: 1.5, sm: "30px" },
+        pl: { sm: "22vw" },
+      }}
+    >
       <Container
         maxWidth={false}
         sx={{
@@ -114,45 +126,20 @@ const Dashboard = () => {
             alignItems: "stretch",
           }}
         >
-          <Box
-            sx={{
-              border: "1px solid",
-              borderColor: "divider",
-              bgcolor: "background.paper",
-              borderRadius: 3,
-              overflow: "hidden",
-              minWidth: 0,
-            }}
-          >
-            <Box
-              sx={{ p: 2, borderBottom: "1px solid", borderColor: "divider" }}
-            >
-              <Typography
-                component="h2"
-                sx={{
-                  fontSize: 16,
-                  fontWeight: 600,
-                  color: "font_color.heading",
-                }}
-              >
-                {t("dashboard.lead_map")}
-              </Typography>
-              <Typography
-                sx={{ mt: 0.5, fontSize: 13, color: "text.secondary" }}
-              >
-                {t("dashboard.active_lead_routes")}
-              </Typography>
-              <LeadMapStatusFilter
-                selectedStatuses={selectedStatuses}
-                onChange={handleStatusChange}
-              />
-            </Box>
-            <Map
+          <Box ref={mapPanelRef} sx={{ minWidth: 0, scrollMarginTop: "72px" }}>
+            <DashboardMapPanel
               leads={leads}
               isLoading={isLoading}
               selectedLeadId={visibleSelectedLeadId}
               highlightedLeadId={highlightedLeadId}
               onSelectLead={handleSelectLead}
+              selectedStatuses={selectedStatuses}
+              onStatusChange={handleStatusChange}
+              onResetStatuses={() => {
+                setSelectedStatuses([...DEFAULT_LEAD_MAP_STATUSES]);
+                setSelectedLeadId(null);
+                setHoveredLeadId(null);
+              }}
             />
           </Box>
 
@@ -162,7 +149,17 @@ const Dashboard = () => {
             emptyMessage={t("active_leads.table.noResultsOverlayLabel")}
             selectedLeadId={visibleSelectedLeadId}
             hoveredLeadId={visibleHoveredLeadId}
-            onSelectLead={handleSelectLead}
+            onSelectLead={(leadId) => {
+              handleSelectLead(leadId);
+              if (isMobile) {
+                mapPanelRef.current?.scrollIntoView({
+                  behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches
+                    ? "instant"
+                    : "smooth",
+                  block: "start",
+                });
+              }
+            }}
             onHoverLead={handleHoverLead}
             onLeaveLead={handleLeaveLead}
           />
