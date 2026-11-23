@@ -39,7 +39,6 @@ const VerificationItem = ({ label, verified, date }) => { const { t } = useTrans
 
 const FactoringPurchaseCard = ({ data }) => {
   const { t } = useTranslation();
-  console.log(data);
 
   return (
     <Card>

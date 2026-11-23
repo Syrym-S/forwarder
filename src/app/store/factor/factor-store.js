@@ -48,7 +48,7 @@ export const useFactorStore = create((set) => ({
       set({ factoringLineDetails: response.data, isLoading: false });
       return true;
     } catch (e) {
-      console.log(e);
+      console.error(e);
       set({ isLoading: false });
       return false;
     }
@@ -81,7 +81,7 @@ export const useFactorStore = create((set) => ({
       set({ isApproveLoading: false });
       return response;
     } catch (e) {
-      console.log(e);
+      console.error(e);
       set({ isApproveLoading: false });
     }
   },

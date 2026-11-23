@@ -160,7 +160,7 @@ const TenderForm = ({
       }
       handleCloseForm();
     } catch (e) {
-      console.log(e);
+      console.error(e);
     }
 
     setIsSubmitLoading(false);

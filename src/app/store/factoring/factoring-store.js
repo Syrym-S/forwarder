@@ -211,7 +211,6 @@ export const useFactoringStore = create((set) => ({
         isCreateLoading: false,
       });
 
-      console.error("Payload:", payload);
       console.error("Response:", e.response?.data);
       throw e;
     }

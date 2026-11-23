@@ -146,8 +146,6 @@ export const connectNotifications = (onNotification, onError) => {
         .private(channel)
         .listen(event.startsWith(".") ? event : `.${event}`, (payload) => {
           if (!isActive()) return;
-          if (config.debug)
-            console.log("[NotificationWS reverb message]", payload);
           connection.subscribers.forEach((item) =>
             item.onNotification?.(payload),
           );
@@ -156,8 +154,6 @@ export const connectNotifications = (onNotification, onError) => {
           if (!isActive()) return;
           connection.authRetries = 0;
           connection.retryAttempt = 0;
-          if (config.debug)
-            console.log("[NotificationWS reverb subscribed]", channel, event);
         })
         .error((error) => {
           if (!isActive()) return;
@@ -293,7 +289,7 @@ export const useNotificationsStore = create((set, get) => ({
 
       set({ isLoading: false, error: null });
     } catch (e) {
-      console.log(e);
+      console.error(e);
       set({
         error: e.message,
         isLoading: false,

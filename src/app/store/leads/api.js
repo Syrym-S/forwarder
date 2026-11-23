@@ -99,8 +99,6 @@ export const getLeadFilesApi = async (leadId) => {
 export const uploadLeadFileApi = async (leadId, payload) => {
   const formData = new FormData();
 
-  console.log("payload", payload);
-
   formData.append("file", payload.file);
   formData.append("name", payload.name);
   formData.append("context", payload.context || "");

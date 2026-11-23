@@ -19,7 +19,6 @@ export function CustomerMapView({
   routePoints = [],
   routes = [],
   route = null,
-  handleMarkerClick,
   onMapClick,
   onMarkerDragEnd,
   focusView = null,
@@ -76,13 +75,19 @@ export function CustomerMapView({
             >
               <Tooltip sticky>
                 <div>
-                  <b>{t("ui.lead_number", { value1: mapRoute.lead?.num ?? mapRoute.lead?.id })}</b>
+                  <b>
+                    {t("ui.lead_number", {
+                      value1: mapRoute.lead?.num ?? mapRoute.lead?.id,
+                    })}
+                  </b>
                   <br />
                   {mapRoute.lead?.from_location} → {mapRoute.lead?.to_location}
                   {mapRoute.route?.distanceMeters && (
                     <>
                       <br />
-                      {(mapRoute.route.distanceMeters / 1000).toFixed(1)}{t("dashboard.kilometers")}</>
+                      {(mapRoute.route.distanceMeters / 1000).toFixed(1)}
+                      {t("dashboard.kilometers")}
+                    </>
                   )}
                 </div>
               </Tooltip>
@@ -91,18 +96,24 @@ export function CustomerMapView({
             <Marker position={startPoint}>
               <Popup>
                 <strong>{t("lead_form.origin_point")}</strong>
-                <br />{t("lead_form.lead_prefix")}{mapRoute.lead?.num ?? mapRoute.lead?.id}
                 <br />
-                {mapRoute.lead?.from_location || t("lead_form.origin_not_specified")}
+                {t("lead_form.lead_prefix")}
+                {mapRoute.lead?.num ?? mapRoute.lead?.id}
+                <br />
+                {mapRoute.lead?.from_location ||
+                  t("lead_form.origin_not_specified")}
               </Popup>
             </Marker>
 
             <Marker position={endPoint}>
               <Popup>
                 <strong>{t("lead_form.destination_point")}</strong>
-                <br />{t("lead_form.lead_prefix")}{mapRoute.lead?.num ?? mapRoute.lead?.id}
                 <br />
-                {mapRoute.lead?.to_location || t("lead_form.destination_not_specified")}
+                {t("lead_form.lead_prefix")}
+                {mapRoute.lead?.num ?? mapRoute.lead?.id}
+                <br />
+                {mapRoute.lead?.to_location ||
+                  t("lead_form.destination_not_specified")}
               </Popup>
             </Marker>
           </Fragment>
@@ -124,13 +135,17 @@ export function CustomerMapView({
               {route?.distanceMeters && (
                 <>
                   <br />
-                  {(route.distanceMeters / 1000).toFixed(1)}{t("dashboard.kilometers")}</>
+                  {(route.distanceMeters / 1000).toFixed(1)}
+                  {t("dashboard.kilometers")}
+                </>
               )}
 
               {route?.duration && (
                 <>
                   <br />
-                  {Math.round(parseInt(route.duration, 10) / 60)}{t("dashboard.minutes")}</>
+                  {Math.round(parseInt(route.duration, 10) / 60)}
+                  {t("dashboard.minutes")}
+                </>
               )}
             </div>
           </Tooltip>
@@ -143,7 +158,6 @@ export function CustomerMapView({
           position={marker.position}
           draggable={Boolean(marker.draggable)}
           eventHandlers={{
-            click: () => handleMarkerClick(marker),
             dragend: (event) => {
               if (!onMarkerDragEnd) {
                 return;
@@ -259,7 +273,6 @@ CustomerMapView.propTypes = {
   routePoints: PropTypes.array,
   route: PropTypes.object,
   routes: PropTypes.array,
-  handleMarkerClick: PropTypes.func.isRequired,
   onMapClick: PropTypes.func,
   onMarkerDragEnd: PropTypes.func,
   focusView: PropTypes.shape({

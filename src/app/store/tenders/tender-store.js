@@ -59,7 +59,7 @@ export const useTendersStore = create((set) => ({
         tenders: response.data.data,
       });
     } catch (e) {
-      console.log(e);
+      console.error(e);
     }
   },
   getTenderDetails: async (id) => {
@@ -73,7 +73,7 @@ export const useTendersStore = create((set) => ({
         currentTender: response.data,
       });
     } catch (e) {
-      console.log(e);
+      console.error(e);
     }
   },
   createTender: async (payload) => {
@@ -89,7 +89,7 @@ export const useTendersStore = create((set) => ({
 
       return response;
     } catch (e) {
-      console.log(e);
+      console.error(e);
     }
   },
   updateTender: async (tender_id, payload) => {
@@ -105,7 +105,7 @@ export const useTendersStore = create((set) => ({
       });
       return response;
     } catch (e) {
-      console.log(e);
+      console.error(e);
     }
   },
   deleteTender: async (tender_id) => {
@@ -121,7 +121,7 @@ export const useTendersStore = create((set) => ({
 
       return data;
     } catch (e) {
-      console.log(e);
+      console.error(e);
       set({
         isLoading: false,
       });
@@ -158,7 +158,7 @@ export const useTendersStore = create((set) => ({
       });
       return response;
     } catch (e) {
-      console.log(e);
+      console.error(e);
       set({
         isLoading: false,
       });
@@ -176,7 +176,7 @@ export const useTendersStore = create((set) => ({
       });
       return response;
     } catch (e) {
-      console.log(e);
+      console.error(e);
       set({
         isLoading: false,
       });
@@ -193,7 +193,7 @@ export const useTendersStore = create((set) => ({
     } catch (e) {
       set({ isAddingLoading: false });
 
-      console.log(e);
+      console.error(e);
     }
   },
   deleteParticipant: async (tender_id, participant_id) => {
@@ -207,7 +207,7 @@ export const useTendersStore = create((set) => ({
     } catch (e) {
       set({ isLoading: false });
 
-      console.log(e);
+      console.error(e);
     }
   },
   acceptBet: async (tender_id, bet_index) => {
@@ -221,7 +221,7 @@ export const useTendersStore = create((set) => ({
     } catch (e) {
       set({ isLoading: false });
 
-      console.log(e);
+      console.error(e);
     }
   },
 
@@ -239,7 +239,7 @@ export const useTendersStore = create((set) => ({
         customerTenders: response.data.data,
       });
     } catch (e) {
-      console.log(e);
+      console.error(e);
     }
   },
   getCustomerTenderDetails: async (id) => {
@@ -250,7 +250,7 @@ export const useTendersStore = create((set) => ({
 
       set({ isLoading: false, customerCurrentTender: response.data });
     } catch (e) {
-      console.log(e);
+      console.error(e);
     }
   },
   makeBet: async (tender_id, payload) => {
@@ -265,7 +265,7 @@ export const useTendersStore = create((set) => ({
       });
       return response;
     } catch (e) {
-      console.log(e);
+      console.error(e);
     }
   },
   cancelBet: async (tender_id, bet_index) => {
@@ -279,7 +279,7 @@ export const useTendersStore = create((set) => ({
     } catch (e) {
       set({ isLoading: false });
 
-      console.log(e);
+      console.error(e);
     }
   },
 
@@ -290,8 +290,6 @@ export const useTendersStore = create((set) => ({
 
       const response = await getTendersHistoryApi(params);
 
-      console.log(response);
-
       set({
         isLoading: false,
         historyCount: response.data.total,
@@ -299,7 +297,7 @@ export const useTendersStore = create((set) => ({
         tendersHistory: response.data.data,
       });
     } catch (e) {
-      console.log(e);
+      console.error(e);
     }
   },
 }));

@@ -186,7 +186,6 @@ const EditDocumentDetails = ({
                   type="file"
                   accept=".pdf,.jpg,.jpeg,.png"
                   onChange={(event) => {
-                    console.log(event.target.files);
                     setRegistrationDocumentsToUpload(event.target.files);
                   }}
                 />
@@ -323,7 +322,6 @@ const EditDocumentDetails = ({
                   type="file"
                   accept=".pdf,.jpg,.jpeg,.png"
                   onChange={(event) => {
-                    console.log("event", event.target.files);
                     setEmployerDocumentToUpload(event.target.files);
                   }}
                 />

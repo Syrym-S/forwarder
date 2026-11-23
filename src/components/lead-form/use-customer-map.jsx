@@ -15,15 +15,10 @@ export function useCustomerMap() {
 
   const routePoints = [];
 
-  function handleMarkerClick(marker) {
-    console.log("marker click:", marker);
-  }
-
   return {
     center,
     zoom,
     markers,
     routePoints,
-    handleMarkerClick,
   };
 }

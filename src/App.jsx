@@ -18,7 +18,7 @@ function App() {
 
       setIsContractSigned(data.signed);
     } catch (e) {
-      console.log(e);
+      console.error(e);
     }
   };
 

@@ -70,7 +70,6 @@ const useChatEcho = (leadId, messageType) => {
             readMessages(event.message);
           });
 
-        console.log("Echo connected");
       } catch (error) {
         console.error("Echo error:", error);
       }

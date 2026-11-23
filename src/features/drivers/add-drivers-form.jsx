@@ -127,7 +127,6 @@ const AddDriverForm = ({ open, onClose, setSavedData }) => {
       const response = await createDriver(formData);
       const credentials = response.data.credentials;
 
-      console.log(response);
       await getDrivers();
 
       setSavedData({
@@ -139,7 +138,7 @@ const AddDriverForm = ({ open, onClose, setSavedData }) => {
 
       onClose();
     } catch (e) {
-      console.log(e);
+      console.error(e);
     }
   };
 
@@ -1055,7 +1054,6 @@ const AddDriverForm = ({ open, onClose, setSavedData }) => {
                             type="file"
                             accept=".pdf,.jpg,.jpeg,.png"
                             onChange={(event) => {
-                              console.log("event", event.target.files);
                               setEmployerDocumentToUpload(event.target.files);
                             }}
                           />

@@ -263,7 +263,6 @@ export const useLeadsStore = create((set, get) => ({
         isLoading: false,
       });
 
-      console.error("Payload:", payload);
       console.error("Response:", e.response?.data);
       throw e;
     }
@@ -326,7 +325,6 @@ export const useLeadsStore = create((set, get) => ({
         isLoading: false,
       });
 
-      console.error("Payload:", payload);
       console.error("Response:", e.response?.data);
       throw e;
     }
@@ -349,7 +347,6 @@ export const useLeadsStore = create((set, get) => ({
         isLoading: false,
       });
 
-      // console.error("Payload:", payload);
       console.error("Response:", e.response?.data);
       throw e;
     }
@@ -372,7 +369,6 @@ export const useLeadsStore = create((set, get) => ({
         isLoadLoading: false,
       });
 
-      // console.error("Payload:", payload);
       console.error("Response:", e.response?.data);
       throw e;
     }
@@ -395,7 +391,6 @@ export const useLeadsStore = create((set, get) => ({
         isLoadLoading: false,
       });
 
-      // console.error("Payload:", payload);
       console.error("Response:", e.response?.data);
       throw e;
     }
@@ -418,7 +413,6 @@ export const useLeadsStore = create((set, get) => ({
         isUnloadLoading: false,
       });
 
-      // console.error("Payload:", payload);
       console.error("Response:", e.response?.data);
       throw e;
     }
@@ -441,7 +435,6 @@ export const useLeadsStore = create((set, get) => ({
         isUnloadLoading: false,
       });
 
-      // console.error("Payload:", payload);
       console.error("Response:", e.response?.data);
       throw e;
     }
@@ -464,7 +457,6 @@ export const useLeadsStore = create((set, get) => ({
         isConfirmLoading: false,
       });
 
-      // console.error("Payload:", payload);
       console.error("Response:", e.response?.data);
       throw e;
     }
@@ -487,7 +479,6 @@ export const useLeadsStore = create((set, get) => ({
         isDriverDetachLoading: false,
       });
 
-      // console.error("Payload:", payload);
       console.error("Response:", e.response?.data);
       throw e;
     }
@@ -510,7 +501,6 @@ export const useLeadsStore = create((set, get) => ({
         isCustomerDetachLoading: false,
       });
 
-      // console.error("Payload:", payload);
       console.error("Response:", e.response?.data);
       throw e;
     }
@@ -531,7 +521,6 @@ export const useLeadsStore = create((set, get) => ({
         isCargoDeleteLoading: false,
       });
 
-      // console.error("Payload:", payload);
       console.error("Response:", e.response?.data);
       throw e;
     }
@@ -798,7 +787,7 @@ export const useLeadsStore = create((set, get) => ({
 
       return response;
     } catch (e) {
-      console.log(e);
+      console.error(e);
 
       set({
         isAvrLoading: false,
@@ -819,7 +808,7 @@ export const useLeadsStore = create((set, get) => ({
 
       return response;
     } catch (e) {
-      console.log(e);
+      console.error(e);
       set({
         isAvrLoading: false,
       });
@@ -834,7 +823,7 @@ export const useLeadsStore = create((set, get) => ({
 
       set({ isSentEmergencyLoading: false });
     } catch (e) {
-      console.log(e);
+      console.error(e);
     }
   },
 
@@ -846,7 +835,7 @@ export const useLeadsStore = create((set, get) => ({
 
       set({ isFinishEmergencyLoading: false });
     } catch (e) {
-      console.log(e);
+      console.error(e);
     }
   },
 }));

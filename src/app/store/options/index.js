@@ -46,7 +46,7 @@ export const useOptionsStore = create((set, get) => ({
         isLanguagesLoading: false,
       });
     } catch (e) {
-      console.log(e);
+      console.error(e);
     }
   },
 
@@ -137,7 +137,6 @@ export const useOptionsStore = create((set, get) => ({
       const response = await getTNVEDApi(params);
       if (requestId !== tnvedRequestId) return;
 
-      console.log(response);
       set({
         tnvedOptions: response.data,
         isTNVEDLoading: false,

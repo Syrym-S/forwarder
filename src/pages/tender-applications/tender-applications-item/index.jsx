@@ -73,8 +73,6 @@ const TenderApplicationsItem = () => {
     }
   }, [newNotification]);
 
-  console.log("customerCurrentTender", customerCurrentTender);
-
   if (!customerCurrentTender)
     return (
       <RootLayout withoutDataCheck>

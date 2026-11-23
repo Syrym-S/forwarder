@@ -353,7 +353,6 @@ const RouteStep = ({ control, form, setValue, isEdit = false }) => {
           focusView={mapFocus}
           markers={routeMarkers}
           routePoints={routePoints}
-          handleMarkerClick={map.handleMarkerClick}
           onMapClick={handleRouteMapClick}
           onMarkerDragEnd={handleRouteMarkerDragEnd}
         />
