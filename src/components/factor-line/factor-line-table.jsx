@@ -26,13 +26,22 @@ const FactorLineTable = ({ lines }) => {
         rows={lines}
         columns={columns}
         getRowHeight={getRowHeight}
-        getEstimatedRowHeight={() => 104}
-        checkboxSelection
+        getEstimatedRowHeight={() => 64}
+        columnHeaderHeight={44}
         disableRowSelectionOnClick
         sx={{
           border: 0,
           minWidth: 0,
-          "& .MuiDataGrid-cell": { py: 1.5 },
+          "& .MuiDataGrid-cell": {
+            display: "flex",
+            alignItems: "center",
+            px: 1,
+            py: 0.5,
+            lineHeight: 1.3,
+          },
+          "& .MuiDataGrid-cell--textRight": { justifyContent: "flex-end" },
+          "& .MuiDataGrid-cell--textCenter": { justifyContent: "center" },
+          "& .MuiDataGrid-columnHeader": { px: 1 },
           "& .MuiDataGrid-row:nth-of-type(even)": { bgcolor: "background.slate" },
         }}
         localeText={{ noRowsLabel: t("ui.list_empty") }}

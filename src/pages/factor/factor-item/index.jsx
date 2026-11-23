@@ -204,7 +204,14 @@ const FactorItem = () => {
         icon={<RememberMeOutlinedIcon color="primary" />}
         title={t("ui.factor_details")}
       >
-        <FactorDataTable factor={factoringLineDetails?.factor} />
+        <Box
+          sx={{
+            "& .MuiTable-root": { tableLayout: { xs: "fixed", sm: "auto" } },
+            "& .MuiTableCell-root": { overflowWrap: "anywhere" },
+          }}
+        >
+          <FactorDataTable factor={factoringLineDetails?.factor} />
+        </Box>
       </Section>
 
       {canBeApproved && (
@@ -265,6 +272,8 @@ const FactorItem = () => {
             sx={{
               display: "flex",
               justifyContent: "space-between",
+              flexWrap: "wrap",
+              gap: 2,
             }}
           >
             <Stack spacing={1}>

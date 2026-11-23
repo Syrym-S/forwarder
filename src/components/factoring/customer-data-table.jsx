@@ -29,6 +29,16 @@ const CustomerDataTable = ({ customer, verified_customer }) => {
           }
           variant="outlined"
           color={verified_customer ? "success" : "error"}
+          sx={{
+            maxWidth: "100%",
+            height: "auto",
+            minHeight: 32,
+            "& .MuiChip-label": {
+              whiteSpace: "normal",
+              overflowWrap: "anywhere",
+              py: 0.5,
+            },
+          }}
         />
       ),
     },

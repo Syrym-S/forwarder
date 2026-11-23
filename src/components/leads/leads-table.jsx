@@ -35,7 +35,6 @@ const LeadsTable = ({ leads, responsive = false }) => {
         getRowId={(row) => row.id}
         getRowClassName={({ row }) => (isDraftLead(row) ? "lead-draft" : "")}
         columns={columns}
-        checkboxSelection
         columnHeaderHeight={responsive ? 48 : undefined}
         rowHeight={responsive ? 60 : undefined}
         sx={{

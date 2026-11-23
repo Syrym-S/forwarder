@@ -15,7 +15,6 @@ import {
   InputAdornment,
   Paper,
   Typography,
-  useMediaQuery,
 } from "@mui/material";
 import AddRounded from "@mui/icons-material/AddRounded";
 import SearchRounded from "@mui/icons-material/SearchRounded";
@@ -32,9 +31,7 @@ const ActiveLeads = () => {
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const [openForm, setOpenForm] = useState(false);
-  const [selectedView, setSelectedView] = useState(null);
-  const isCompactScreen = useMediaQuery((theme) => theme.breakpoints.down("md"));
-  const view = selectedView ?? (isCompactScreen ? VIEWS.cards : VIEWS.table);
+  const [view, setSelectedView] = useState(VIEWS.table);
 
   const leads = useLeadsStore((state) => state.leads);
   const fetchLeads = useLeadsStore((state) => state.fetchLeads);

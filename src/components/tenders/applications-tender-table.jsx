@@ -12,7 +12,6 @@ const ApplicationsTenderTable = (tenders) => {
         rows={tenders.tenders}
         getRowId={(row) => row.id}
         columns={columns}
-        checkboxSelection
         sx={{
           border: 0,
           boxShadow: 0,
