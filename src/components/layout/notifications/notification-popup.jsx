@@ -45,7 +45,7 @@ const NotificationPopup = ({
     getNotificationDetails,
     getNotifications,
     isNotificationDetailsLoading,
-    error,
+    notificationDetailsError,
   } = useNotificationsStore();
   const { id, notification_type } = parserNotificationType(
     selectedNotification?.type || "",
@@ -123,7 +123,7 @@ const NotificationPopup = ({
       <DialogContent sx={{ p: 3, "&.MuiDialogContent-root": { pt: 3 } }}>
         {isNotificationDetailsLoading ? (
           <NotificationLoader />
-        ) : error ? (
+        ) : notificationDetailsError ? (
           <Alert severity="error">
             {t("ui.notification_load_failed_retry")}
           </Alert>
@@ -225,7 +225,7 @@ const NotificationPopup = ({
           {t("ui.close")}
         </Button>
         {!isNotificationDetailsLoading &&
-          !error &&
+          !notificationDetailsError &&
           notificationDetails?.link && (
             <Button
               component={RouterLink}

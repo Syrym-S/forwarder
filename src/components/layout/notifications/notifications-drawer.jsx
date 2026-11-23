@@ -30,6 +30,8 @@ const NotificationsDrawer = ({
     getNotifications,
     isLoading,
     markAllAsRead,
+    isMarkingAllAsRead,
+    markAllAsReadError,
     error,
   } = useNotificationsStore();
   const pageCount = Math.ceil(total / Math.max(perPage, 1));
@@ -39,9 +41,9 @@ const NotificationsDrawer = ({
   }, [page, openNotificationsDrawer, getNotifications]);
 
   const handleReadAll = async () => {
-    await markAllAsRead();
-    if (!useNotificationsStore.getState().error)
+    if (await markAllAsRead()) {
       await getNotifications({ page });
+    }
   };
 
   return (
@@ -89,10 +91,13 @@ const NotificationsDrawer = ({
         <Typography sx={{ mt: 0.5, fontSize: 13, color: "text.secondary" }}>{t("ui.notifications_description")}</Typography>
         <Button
           onClick={handleReadAll}
-          disabled={isLoading || !total}
+          disabled={isLoading || isMarkingAllAsRead || !total}
           startIcon={<DoneAllRoundedIcon />}
           sx={{ mt: 2, textTransform: "none", borderRadius: 2 }}
         >{t("ui.mark_all_read")}</Button>
+        {markAllAsReadError && (
+          <Alert severity="error" sx={{ mt: 1 }}>{t("ui.action_failed_retry")}</Alert>
+        )}
       </Box>
       <Box sx={{ flex: 1, minHeight: 0, overflowY: "auto" }}>
         {error ? (

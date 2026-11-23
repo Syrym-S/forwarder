@@ -44,9 +44,12 @@ const DashboardLeadsList = ({
   };
 
   useEffect(() => {
+    const selectedIndex = leads.findIndex(
+      (lead) => String(lead.id) === String(selectedLeadId),
+    );
     // eslint-disable-next-line react-hooks/set-state-in-effect
-    setPage(1);
-  }, [leads]);
+    setPage(selectedIndex < 0 ? 1 : Math.floor(selectedIndex / DASHBOARD_LEADS_PER_PAGE) + 1);
+  }, [leads, selectedLeadId]);
 
   return (
     <Paper
@@ -92,7 +95,7 @@ const DashboardLeadsList = ({
         sx={{
           flex: 1,
           minHeight: 0,
-          maxHeight: { xs: 480, lg: "none" },
+          maxHeight: { xs: "none", sm: 480, lg: "none" },
           overflowY: "auto",
           pr: 0.5,
         }}
@@ -138,6 +141,7 @@ const DashboardLeadsList = ({
           color="primary"
           shape="rounded"
           size="small"
+          siblingCount={0}
           page={page}
           count={pageCount}
           onChange={handlePageChange}

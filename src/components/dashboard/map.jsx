@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import { useState, useEffect, useMemo, Fragment } from "react";
+import { useState, useEffect, useMemo, useCallback, Fragment } from "react";
 import {
   MapContainer,
   Marker,
@@ -8,7 +8,10 @@ import {
   Tooltip,
   useMap,
 } from "react-leaflet";
-import { Box, CircularProgress, Typography } from "@mui/material";
+import { Box, CircularProgress, IconButton, Paper, Typography, useMediaQuery } from "@mui/material";
+import AddRounded from "@mui/icons-material/AddRounded";
+import RemoveRounded from "@mui/icons-material/RemoveRounded";
+import CenterFocusStrongRounded from "@mui/icons-material/CenterFocusStrongRounded";
 import "leaflet/dist/leaflet.css";
 import { useLeadsStore } from "../../app/store/leads/leads-store";
 import L from "leaflet";
@@ -89,18 +92,11 @@ const formatDuration = (duration, t) => {
   return `${Math.round(Number(duration) / 60)} ${t("dashboard.minutes")}`;
 };
 
-const MapTooltip = ({ route, open, setOpen }) => {
+const MapTooltip = ({ route }) => {
   const { t } = useTranslation();
 
   return (
-    <Tooltip
-      sticky
-      open={open}
-      onClose={() => setOpen(false)}
-      disableHoverListener
-      disableFocusListener
-      disableTouchListener
-    >
+    <Tooltip sticky>
       <RenderStatus status={route.lead.status} />
       <Box sx={{ maxWidth: 350, width: 200 }}>
         <Box
@@ -155,21 +151,77 @@ const MapTooltip = ({ route, open, setOpen }) => {
   );
 };
 
-const FitSelectedRouteBounds = ({ route }) => {
+const MapViewport = ({ route, routes, onSelectLead }) => {
+  const { t } = useTranslation();
   const map = useMap();
+  const [zoom, setZoom] = useState(() => map.getZoom());
+  const bindControls = useCallback((element) => {
+    if (!element) return;
+    L.DomEvent.disableClickPropagation(element);
+    L.DomEvent.disableScrollPropagation(element);
+  }, []);
+  const allBounds = useMemo(
+    () => L.latLngBounds(routes.flatMap((item) => item.coordinates)),
+    [routes],
+  );
+  const selectedBounds = useMemo(
+    () => route ? L.latLngBounds(route.coordinates) : allBounds,
+    [route, allBounds],
+  );
+
+  const fitBounds = useCallback((bounds) => {
+    if (!bounds.isValid()) return;
+    map.stop();
+    map.fitBounds(bounds, { paddingTopLeft: [36, 36], paddingBottomRight: [84, 36], maxZoom: 13, animate: false });
+  }, [map]);
 
   useEffect(() => {
-    if (!route?.coordinates?.length) {
-      return;
-    }
+    fitBounds(selectedBounds);
+  }, [fitBounds, selectedBounds]);
 
-    map.fitBounds(route.coordinates, {
-      padding: [40, 40],
-      maxZoom: 13,
+  useEffect(() => {
+    let frame;
+    const observer = new ResizeObserver(() => {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(() => {
+        map.invalidateSize({ pan: false });
+        fitBounds(selectedBounds);
+      });
     });
-  }, [map, route]);
+    observer.observe(map.getContainer());
+    return () => {
+      observer.disconnect();
+      cancelAnimationFrame(frame);
+    };
+  }, [map, fitBounds, selectedBounds]);
 
-  return null;
+  useEffect(() => {
+    const updateZoom = () => setZoom(map.getZoom());
+    map.on("zoomend", updateZoom);
+    return () => map.off("zoomend", updateZoom);
+  }, [map]);
+
+  return (
+    <Paper
+      ref={bindControls}
+      elevation={0}
+      onPointerDown={(event) => event.stopPropagation()}
+      onClick={(event) => event.stopPropagation()}
+      onDoubleClick={(event) => event.stopPropagation()}
+      onWheel={(event) => event.stopPropagation()}
+      sx={{
+        position: "absolute", right: 12, top: 12, zIndex: 800,
+        display: "flex", flexDirection: "column", p: 0.5, borderRadius: 3,
+        border: "1px solid", borderColor: "divider", boxShadow: "0 4px 20px rgba(22, 36, 62, 0.12)",
+        "& .MuiIconButton-root": { width: 44, height: 44, borderRadius: 2, color: "font_color.heading" },
+      }}
+    >
+      <IconButton aria-label={t("dashboard.zoom_in")} disabled={zoom >= map.getMaxZoom()} onClick={() => map.zoomIn()}><AddRounded /></IconButton>
+      <IconButton aria-label={t("dashboard.zoom_out")} disabled={zoom <= map.getMinZoom()} onClick={() => map.zoomOut()}><RemoveRounded /></IconButton>
+      <Box sx={{ borderTop: "1px solid", borderColor: "divider", my: 0.5 }} />
+      <IconButton aria-label={t("dashboard.fit_all_routes")} disabled={!allBounds.isValid()} onClick={() => { onSelectLead?.(null); fitBounds(allBounds); }}><CenterFocusStrongRounded /></IconButton>
+    </Paper>
+  );
 };
 
 const Map = ({
@@ -178,16 +230,21 @@ const Map = ({
   selectedLeadId,
   highlightedLeadId,
   onSelectLead,
+  expanded = false,
 }) => {
   const { t } = useTranslation();
+  const isMobile = useMediaQuery(
+    (theme) => `${theme.breakpoints.down("sm")}, (max-height: 500px) and (pointer: coarse)`,
+  );
   const storeIsLoading = useLeadsStore((state) => state.isLoading);
   const isLoading = isLoadingProp ?? storeIsLoading;
   const storeLeads = useLeadsStore((state) => state.leads);
 
   const leads = leadsProp || storeLeads;
 
-  const [routes, setRoutes] = useState([]);
-  const [open, setOpen] = useState(false);
+  const [routeResult, setRouteResult] = useState({ leads: null, routes: [], error: false });
+  const routes = useMemo(() => routeResult.leads === leads ? routeResult.routes : [], [routeResult, leads]);
+  const isRoutesLoading = routeResult.leads !== leads;
   const [tracking, setTracking] = useState(null);
   const selectedTracking =
     tracking && String(tracking.leadId) === String(selectedLeadId)
@@ -232,10 +289,10 @@ const Map = ({
             },
           ];
         });
-        setRoutes(result);
+        setRouteResult({ leads, routes: result, error: false });
       } catch (error) {
         if (isMounted) {
-          setRoutes([]);
+          setRouteResult({ leads, routes: [], error: true });
           console.error("Failed to load route polylines", error);
         }
       }
@@ -421,16 +478,26 @@ const Map = ({
     <Box
       sx={{
         position: "relative",
+        isolation: "isolate",
+        flex: 1,
+        minHeight: expanded ? 0 : { xs: "clamp(340px, 55svh, 520px)", sm: 500 },
+        height: expanded ? "100%" : { xs: "clamp(340px, 55svh, 520px)", sm: 500 },
+        bgcolor: "#e8eef2",
+        "& .leaflet-container": { height: "100%", width: "100%", fontFamily: "inherit" },
+        "& .leaflet-control-attribution": { maxWidth: "calc(100% - 12px)", fontSize: 9, borderRadius: "6px 0 0 0" },
       }}
     >
-      {isLoading && (
+      {(isLoading || isRoutesLoading) && (
         <Box
+          role="status"
+          aria-live="polite"
+          aria-busy="true"
           sx={{
             position: "absolute",
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
-            zIndex: 1,
+            zIndex: 2,
             top: 0,
             left: 0,
             width: "100%",
@@ -459,12 +526,25 @@ const Map = ({
           </Box>
         </Box>
       )}
+      {!isLoading && !isRoutesLoading && !routes.length && (
+        <Paper role="status" elevation={0} sx={{ position: "absolute", top: 12, left: 12, right: 80, zIndex: 1, p: 1.5, borderRadius: 2.5, bgcolor: "background.paper" }}>
+          <Typography sx={{ fontSize: 12, color: routeResult.error ? "error.main" : "text.secondary" }}>
+            {t(routeResult.error ? "dashboard.route_loading_error" : leads.length ? "dashboard.no_routes_on_map" : "dashboard.no_active_leads_yet")}
+          </Typography>
+        </Paper>
+      )}
       <MapContainer
-        center={[43.238949, 76.889709]}
-        zoom={13}
+        center={[48.0196, 66.9237]}
+        zoom={4}
+        minZoom={2}
+        zoomControl={false}
+        scrollWheelZoom={false}
+        className="dashboard-route-map"
         style={{
+          position: "absolute",
+          inset: 0,
           zIndex: 0,
-          height: "500px",
+          height: "100%",
           width: "100%",
         }}
       >
@@ -473,7 +553,7 @@ const Map = ({
           url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png?key=cb1_33bl_1_e67a46f1e67e6cbad8143c4e"
         />
 
-        <FitSelectedRouteBounds route={selectedRoute} />
+        <MapViewport route={selectedRoute} routes={routes} onSelectLead={onSelectLead} />
 
         {routes.map((route) => {
           const routeColor = getLeadMapStatusColor(route.lead.status);
@@ -486,7 +566,9 @@ const Map = ({
                 key={`from-${route.id}`}
                 position={route.start}
                 icon={createMarkerIcon("A", `#${route.lead.num}`, routeColor)}
+                zIndexOffset={isHighlighted ? 1000 : 0}
                 opacity={isDimmed ? 0.3 : 1}
+                title={`${t("dashboard.origin")}: ${route.from}`}
                 eventHandlers={{
                   click: () => onSelectLead?.(route.id),
                 }}
@@ -498,6 +580,9 @@ const Map = ({
                   <Marker
                     key={index}
                     position={position}
+                    opacity={isDimmed ? 0.3 : 1}
+                    zIndexOffset={isHighlighted ? 1000 : 0}
+                    eventHandlers={{ click: () => onSelectLead?.(route.id) }}
                     icon={createMarkerIcon(
                       `P#${index + 1}`,
                       `#${route.lead.num}`,
@@ -508,11 +593,18 @@ const Map = ({
               })}
               <Marker
                 position={route.end}
+                zIndexOffset={isHighlighted ? 1000 : 0}
+                title={`${t("dashboard.destination")}: ${route.to}`}
                 opacity={isDimmed ? 0.3 : 1}
                 eventHandlers={{
                   click: () => onSelectLead?.(route.id),
                 }}
                 icon={createMarkerIcon("B", `#${route.lead.num}`, routeColor)}
+              />
+              <Polyline
+                positions={route.coordinates}
+                pathOptions={{ color: routeColor, weight: isMobile ? 20 : 12, opacity: 0 }}
+                eventHandlers={{ click: () => onSelectLead?.(route.id) }}
               />
               <Polyline
                 positions={route.coordinates}
@@ -525,7 +617,7 @@ const Map = ({
                   click: () => onSelectLead?.(route.id),
                 }}
               >
-                <MapTooltip route={route} open={open} setOpen={setOpen} />
+                {!isMobile && <MapTooltip route={route} />}
               </Polyline>
             </Fragment>
           );
