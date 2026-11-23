@@ -77,6 +77,8 @@ const CustomerStep = ({ control, errors, setValue }) => {
                     variant="filled"
                     color="primary"
                     label={value.name || t("lead_form.untitled")}
+                    title={value.name}
+                    sx={{ "& .MuiChip-label": { display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden", py: 0.5 } }}
                   />
                 );
               }}
@@ -219,7 +221,7 @@ const CustomerStep = ({ control, errors, setValue }) => {
               renderInput={(params) => (
                 <TextField
                   {...params}
-                  placeholder={t("lead_form.select_customer")}
+                  placeholder={hasCustomer(field.value) ? undefined : t("lead_form.select_customer")}
                   error={Boolean(errors.customer)}
                   helperText={errors.customer?.message}
                   sx={{
