@@ -33,3 +33,5 @@ dist-android
 .env.*
 !.env.example
 .env.ftp.example
+
+upload-keystore.jks

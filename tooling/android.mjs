@@ -9,8 +9,8 @@ const android = join(root, "android");
 const tools = join(root, ".android-tools");
 const command = process.argv[2];
 const releaseApk = command === "apk" && process.argv.includes("--release");
-if (!["open", "run", "apk"].includes(command)) {
-  throw new Error("Usage: node tooling/android.mjs open|run|apk");
+if (!["open", "run", "apk", "aab"].includes(command)) {
+  throw new Error("Usage: node tooling/android.mjs open|run|apk|aab");
 }
 
 const gradleJavaConfig = join(android, ".gradle", "config.properties");
@@ -70,10 +70,10 @@ const env = {
   GRADLE_USER_HOME: gradleCache,
 };
 console.log(`JDK 21: ${javaHome}\nAndroid SDK: ${sdk}`);
-const apkTask = releaseApk ? "assembleRelease" : "assembleDebug";
-const result = command === "apk"
+const buildTask = command === "aab" ? "bundleRelease" : releaseApk ? "assembleRelease" : "assembleDebug";
+const result = command === "apk" || command === "aab"
   ? spawnSync(process.platform === "win32" ? "cmd.exe" : "./gradlew",
-    process.platform === "win32" ? ["/d", "/s", "/c", `gradlew.bat ${apkTask}`] : [apkTask],
+    process.platform === "win32" ? ["/d", "/s", "/c", `gradlew.bat ${buildTask}`] : [buildTask],
     { cwd: android, env, stdio: "inherit" })
   : spawnSync(process.execPath, [join(root, "node_modules", "@capacitor", "cli", "bin", "capacitor"),
     command, "android", ...(command === "run" ? ["--no-sync"] : []), ...process.argv.slice(3)],

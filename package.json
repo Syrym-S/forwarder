@@ -17,6 +17,7 @@
     "android:run:prod": "npm run android:sync:prod && node tooling/android.mjs run",
     "android:apk": "npm run android:sync && node tooling/android.mjs apk",
     "android:apk:prod": "npm run android:sync:prod && node tooling/android.mjs apk --release",
+    "android:aab:prod": "npm run android:sync:prod && node tooling/android.mjs aab",
     "dev:shared": "vite --config vite.shared-lead.config.js",
     "build:shared": "vite build --config vite.shared-lead.config.js",
     "lint": "eslint .",
