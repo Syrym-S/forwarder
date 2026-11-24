@@ -1313,6 +1313,7 @@
     "invalid_chat_list_response": "استجابة قائمة الدردشة غير صالحة"
   },
   "lead_form": {
+    "address_search_history": "سجل البحث",
     "mobile_add_driver": "أضف سائقًا",
     "mobile_driver_details_hint": "بعد الاختيار، ستظهر هنا بيانات الاتصال بالسائق ومعلومات المركبة.",
     "mobile_add_customer": "أضف عميلًا",

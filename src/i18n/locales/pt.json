@@ -1307,6 +1307,7 @@
     "invalid_chat_list_response": "Resposta inválida da lista de bate-papo"
   },
   "lead_form": {
+    "address_search_history": "Histórico de pesquisa",
     "mobile_add_driver": "Adicione um motorista",
     "mobile_driver_details_hint": "Após a seleção, os dados de contato do motorista e as informações do veículo aparecerão aqui.",
     "mobile_add_customer": "Adicione um cliente",

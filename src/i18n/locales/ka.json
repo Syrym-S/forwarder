@@ -1307,6 +1307,7 @@
     "invalid_chat_list_response": "ჩეთის სიის არასწორი პასუხი"
   },
   "lead_form": {
+    "address_search_history": "ძიების ისტორია",
     "mobile_add_driver": "დაამატეთ მძღოლი",
     "mobile_driver_details_hint": "არჩევის შემდეგ აქ გამოჩნდება მძღოლის საკონტაქტო ინფორმაცია და ავტომობილის მონაცემები.",
     "mobile_add_customer": "დაამატეთ მომხმარებელი",

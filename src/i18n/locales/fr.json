@@ -1307,6 +1307,7 @@
     "invalid_chat_list_response": "Réponse de liste de discussion invalide"
   },
   "lead_form": {
+    "address_search_history": "Historique de recherche",
     "mobile_add_driver": "Ajoutez un chauffeur",
     "mobile_driver_details_hint": "Après la sélection, les coordonnées du chauffeur et les informations du véhicule apparaîtront ici.",
     "mobile_add_customer": "Ajoutez un client",

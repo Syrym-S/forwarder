@@ -1346,6 +1346,7 @@
     "invalid_chat_list_response": "Некоректна відповідь зі списком чатів"
   },
   "lead_form": {
+    "address_search_history": "Історія пошуку",
     "mobile_add_driver": "Додайте водія",
     "mobile_driver_details_hint": "Після вибору тут з’являться контакти водія та дані автомобіля.",
     "mobile_add_customer": "Додайте замовника",

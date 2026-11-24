@@ -1307,6 +1307,7 @@
     "invalid_chat_list_response": "Ҷавоби рӯйхати чатҳо нодуруст"
   },
   "lead_form": {
+    "address_search_history": "Таърихи ҷустуҷӯ",
     "mobile_add_driver": "Ронандаро илова кунед",
     "mobile_driver_details_hint": "Пас аз интихоб, дар ин ҷо маълумоти тамоси ронанда ва маълумоти воситаи нақлиёт пайдо мешаванд.",
     "mobile_add_customer": "Муштариро илова кунед",

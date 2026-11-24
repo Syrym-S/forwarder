@@ -1307,6 +1307,7 @@
     "invalid_chat_list_response": "无效的聊天列表响应"
   },
   "lead_form": {
+    "address_search_history": "搜索记录",
     "mobile_add_driver": "添加司机",
     "mobile_driver_details_hint": "选择后，此处将显示司机的联系方式和车辆信息。",
     "mobile_add_customer": "添加客户",
