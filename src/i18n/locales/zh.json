@@ -1307,6 +1307,13 @@
     "invalid_chat_list_response": "无效的聊天列表响应"
   },
   "lead_form": {
+    "mobile_add_driver": "添加司机",
+    "mobile_driver_details_hint": "选择后，此处将显示司机的联系方式和车辆信息。",
+    "mobile_add_customer": "添加客户",
+    "mobile_customer_details_hint": "选择后，此处将显示客户信息。",
+    "mobile_documents_hint": "为运输任务添加文件。如有需要，可填写文件名称和说明。",
+    "mobile_documents_empty": "暂无文件",
+    "mobile_documents_empty_hint": "在上方选择文件，添加的文件将显示在此处。",
     "map_city": "哈萨克斯坦的城市",
     "map_address": "街道和建筑物号码",
     "map_address_placeholder": "街道名称和门牌号",

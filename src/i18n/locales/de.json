@@ -1346,6 +1346,13 @@
     "invalid_chat_list_response": "Ungültige Antwort der Chatliste"
   },
   "lead_form": {
+    "mobile_add_driver": "Fügen Sie einen Fahrer hinzu",
+    "mobile_driver_details_hint": "Nach der Auswahl werden hier die Kontaktdaten des Fahrers und die Fahrzeugdaten angezeigt.",
+    "mobile_add_customer": "Fügen Sie einen Kunden hinzu",
+    "mobile_customer_details_hint": "Nach der Auswahl werden hier die Kundendaten angezeigt.",
+    "mobile_documents_hint": "Fügen Sie der Sendung Dokumente bei. Bei Bedarf können Sie einen Dateinamen und eine Beschreibung angeben.",
+    "mobile_documents_empty": "Noch keine Dokumente",
+    "mobile_documents_empty_hint": "Wählen Sie oben eine Datei aus — die hinzugefügten Dokumente werden hier angezeigt.",
     "map_city": "Stadt in Kasachstan",
     "map_address": "Straße und Gebäudenummer",
     "map_address_placeholder": "Straßenname und Gebäudenummer",

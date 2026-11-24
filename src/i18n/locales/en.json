@@ -1348,6 +1348,13 @@
     "invalid_chat_list_response": "Invalid chat list response"
   },
   "lead_form": {
+    "mobile_add_driver": "Add a driver",
+    "mobile_driver_details_hint": "The driver's contact and vehicle details will appear here after selection.",
+    "mobile_add_customer": "Add a customer",
+    "mobile_customer_details_hint": "The customer's details will appear here after selection.",
+    "mobile_documents_hint": "Attach documents to the shipment. You can add a file name and description.",
+    "mobile_documents_empty": "No documents yet",
+    "mobile_documents_empty_hint": "Choose a file above. Your attached documents will appear here.",
     "map_city": "City in Kazakhstan",
     "map_address": "Street and building number",
     "map_address_placeholder": "Street name and building number",
