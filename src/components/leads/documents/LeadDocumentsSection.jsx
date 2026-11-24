@@ -71,17 +71,25 @@ export function LeadDocumentsSection({
       <Stack spacing={2}>
         {!readOnly && leadStatus !== STATUS.finished && leadStatus !== STATUS.deleted && (
           <Box
+            className="lead-documents-form"
             component="form"
             onSubmit={handleSubmit}
-            sx={{
+            sx={theme => ({
               display: "grid",
               gridTemplateColumns: {
                 xs: "1fr",
-                md: "1fr 1fr auto",
+                md: "1fr 1fr auto"
               },
               gap: 1,
               alignItems: "flex-start",
-            }}
+              [theme.breakpoints.down("sm")]: {
+                ".lead-details-page &": {
+                  "& > .MuiButton-root": {
+                    width: "100%"
+                  }
+                }
+              }
+            })}
           >
             <FormInput
               name="name"

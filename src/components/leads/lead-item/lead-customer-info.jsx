@@ -75,20 +75,50 @@ const LeadCustomerInfo = ({ leadData, canDetach = false }) => {
         />
       )}
       <Box
-        sx={{
+        className="lead-party-fields"
+        sx={theme => ({
           py: 1,
           display: "grid",
           gap: 1.5,
           gridTemplateColumns: {
             xs: "repeat(1, 1fr)",
-            sm: "repeat(2, minmax(0, 1fr))",
+            sm: "repeat(2, minmax(0, 1fr))"
           },
-        }}
+          [theme.breakpoints.down("sm")]: {
+            ".lead-details-page &": {
+              gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
+              gap: "8px",
+              padding: "0"
+            }
+          }
+        })}
       >
-        <InfoItem label={t("ui.name")} value={customer.name} />
+        <InfoItem
+          className="lead-field-wide"
+          label={t("ui.name")}
+          value={customer.name}
+          sx={theme => ({
+            [theme.breakpoints.down("sm")]: {
+              ".lead-details-page &": {
+                gridColumn: "1 / -1"
+              }
+            }
+          })}
+        />
         <InfoItem label={t("ui.phone")} value={customer.tel} />
         <InfoItem label={t("ui.bin")} value={customer.bin} />
-        <InfoItem label={t("ui.contact_person")} value={customer.contact_person} />
+        <InfoItem
+          className="lead-field-wide"
+          label={t("ui.contact_person")}
+          value={customer.contact_person}
+          sx={theme => ({
+            [theme.breakpoints.down("sm")]: {
+              ".lead-details-page &": {
+                gridColumn: "1 / -1"
+              }
+            }
+          })}
+        />
       </Box>
     </Section>
   );

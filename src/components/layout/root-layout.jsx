@@ -1,12 +1,10 @@
-import { useTranslation } from "react-i18next";
-import { Alert, AlertTitle, Box, Breadcrumbs, Typography } from "@mui/material";
-import React, { useEffect } from "react";
-import Skeleton from "@mui/material/Skeleton";
-import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
-import ArrowBackIosNewRoundedIcon from "@mui/icons-material/ArrowBackIosNewRounded";
-import { Link, useLocation } from "react-router-dom";
-import { usePageRoutesStore } from "../../app/store/page-routes/use-page-routes-store";
 import AppBreadcrumbs from "./app-breadcrumbs";
+
+import { useTranslation } from "react-i18next";
+import { Alert, AlertTitle, Box, Typography } from "@mui/material";
+import { useEffect } from "react";
+import { useLocation } from "react-router-dom";
+import { usePageRoutesStore } from "../../app/store/page-routes/use-page-routes-store";
 
 const RootLayout = ({
   data = null,
@@ -27,11 +25,14 @@ const RootLayout = ({
     return (
       <Box
         sx={{
-          padding: "30px",
+          padding: {
+            xs: "5px",
+            sm: "30px",
+          },
           zIndex: 0,
           paddingLeft: {
             xs: "10vw",
-            md: "22vw",
+            sm: "calc(20vw + 30px)",
           },
         }}
       >
@@ -42,7 +43,9 @@ const RootLayout = ({
           }}
         >
           <AlertTitle>{t("ui.empty_exclamation")}</AlertTitle>
-          <Typography color="text.secondary">{t("ui.data_temporarily_unavailable")}</Typography>
+          <Typography color="text.secondary">
+            {t("ui.data_temporarily_unavailable")}
+          </Typography>
         </Alert>
       </Box>
     );
@@ -52,11 +55,14 @@ const RootLayout = ({
     <Box
       sx={{
         width: "100%",
-        padding: "30px",
+        padding: {
+          xs: "10px",
+          sm: "30px",
+        },
         zIndex: 0,
         paddingLeft: {
-          sm: "22vw",
-          md: "22vw",
+          xs: "10px",
+          sm: "calc(20vw + 30px)",
         },
       }}
       {...props}

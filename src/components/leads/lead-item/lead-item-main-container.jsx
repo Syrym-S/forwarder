@@ -320,13 +320,21 @@ const LeadItemMainContainer = ({
       {deliveryError && <Alert severity="error">{deliveryError}</Alert>}
 
       <Box
-        sx={{
+        className="lead-detail-map"
+        sx={theme => ({
           border: "1px solid",
           borderColor: "divider",
           borderRadius: 3,
           overflow: "hidden",
           my: 1,
-        }}
+          [theme.breakpoints.down("sm")]: {
+            ".lead-details-page &": {
+              "--lead-detail-map-height": "clamp(220px, 34dvh, 280px)",
+              margin: "0 0 12px",
+              borderRadius: "18px"
+            }
+          }
+        })}
       >
         <LeadMap
           waypoints={waypoints}
@@ -396,16 +404,33 @@ const LeadItemMainContainer = ({
       <LeadTransportationInfo leadData={leadData} />
 
       <Box
-        sx={{
+        className="lead-detail-participants"
+        sx={theme => ({
           minHeight: "250px",
           display: "grid",
           gridTemplateColumns: {
             xs: "minmax(0, 1fr)",
-            xl: "repeat(2, minmax(0, 1fr))",
+            xl: "repeat(2, minmax(0, 1fr))"
           },
           gap: 2,
           alignItems: "stretch",
-        }}
+          [theme.breakpoints.down("sm")]: {
+            ".lead-details-page &": {
+              minHeight: "0",
+              gap: "0",
+              "& > .lead-detail-section": {
+                display: "flex",
+                flexDirection: "column"
+              },
+              "& > .lead-detail-section > .MuiButton-root": {
+                order: "1",
+                alignSelf: "flex-start",
+                minHeight: "36px",
+                marginTop: "10px"
+              }
+            }
+          }
+        })}
       >
         <LeadCustomerInfo leadData={leadData} canDetach />
 

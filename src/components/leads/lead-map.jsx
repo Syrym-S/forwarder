@@ -356,10 +356,11 @@ export default function LeadMap({
   }, [leadId, trackingToken, trackingUrl]);
 
   return (
-    <MapContainer
+    <Box
+      component={MapContainer}
       center={routePoints[0] || [43.241141, 76.871399]}
       zoom={13}
-      style={{ height: "400px", width: "100%", zIndex: 0 }}
+      sx={{ height: "var(--lead-detail-map-height, 400px)", width: "100%", zIndex: 0 }}
     >
       {isRouteLoading && (
         <Box
@@ -494,6 +495,6 @@ export default function LeadMap({
           />
         </Marker>
       )}
-    </MapContainer>
+    </Box>
   );
 }
