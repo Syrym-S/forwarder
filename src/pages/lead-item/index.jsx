@@ -141,13 +141,43 @@ const LeadItem = () => {
 
   if (!leadData)
     return (
-      <RootLayout withoutDataCheck>
+      <Box
+        component={RootLayout}
+        withoutDataCheck
+        className="lead-details-page"
+        sx={theme => ({
+          [theme.breakpoints.down("sm")]: {
+            "&.MuiBox-root": {
+              padding: "12px",
+              paddingBottom: "calc(16px + env(safe-area-inset-bottom, 0px))"
+            },
+            "& > .MuiBox-root:first-of-type": {
+              marginBottom: "12px"
+            }
+          }
+        })}
+      >
         <LeadDetailsSkeleton />
-      </RootLayout>
+      </Box>
     );
 
   return (
-    <RootLayout data={leadData}>
+    <Box
+      component={RootLayout}
+      data={leadData}
+      className="lead-details-page"
+      sx={theme => ({
+        [theme.breakpoints.down("sm")]: {
+          "&.MuiBox-root": {
+            padding: "12px",
+            paddingBottom: "calc(16px + env(safe-area-inset-bottom, 0px))"
+          },
+          "& > .MuiBox-root:first-of-type": {
+            marginBottom: "12px"
+          }
+        }
+      })}
+    >
       <Box
         sx={{
           maxWidth: 1440,
@@ -169,7 +199,8 @@ const LeadItem = () => {
         )}
 
         <Box
-          sx={{
+          className="lead-details-navigation"
+          sx={theme => ({
             p: 1,
             gap: 1.5,
             borderBottom: isDraft ? "none" : "1px solid",
@@ -179,14 +210,42 @@ const LeadItem = () => {
             display: "flex",
             flexDirection: {
               xs: "column",
-              md: "row",
+              md: "row"
             },
             justifyContent: "space-between",
             alignItems: {
               xs: "start",
-              md: "center",
+              md: "center"
             },
-          }}
+            [theme.breakpoints.down("sm")]: {
+              ".lead-details-page &": {
+                flexDirection: "row",
+                alignItems: "center",
+                gap: "6px",
+                padding: "5px",
+                marginBottom: "12px",
+                border: "1px solid #e2e8f0",
+                borderRadius: "14px",
+                background: "#fff",
+                "& > .MuiTabs-root": {
+                  flex: "1",
+                  minWidth: "0",
+                  minHeight: "40px"
+                },
+                "& .MuiTab-root": {
+                  minHeight: "40px",
+                  padding: "8px 10px",
+                  fontSize: "12px",
+                  borderRadius: "10px",
+                  whiteSpace: "nowrap"
+                },
+                "& .MuiTabs-scrollButtons": {
+                  display: "inline-flex",
+                  width: "22px"
+                }
+              }
+            }
+          })}
         >
           <Tabs
             value={currentTab}
@@ -238,10 +297,19 @@ const LeadItem = () => {
           </Tabs>
 
           <Box
-            sx={{
+            className="lead-details-actions"
+            sx={theme => ({
               display: "flex",
               gap: 1,
-            }}
+              [theme.breakpoints.down("sm")]: {
+                ".lead-details-page &": {
+                  flexShrink: "0",
+                  gap: "4px",
+                  paddingInlineStart: "4px",
+                  borderInlineStart: "1px solid #e2e8f0"
+                }
+              }
+            })}
           >
             {showEmergencyButton && (
               <Tooltip title={t("ui.report_emergency")} arrow>
@@ -315,13 +383,21 @@ const LeadItem = () => {
         </Box>
 
         <Box
-          sx={{
+          className="lead-details-emergency"
+          sx={theme => ({
             py: 1,
             width: {
               xs: "100%",
-              sm: "50%",
+              sm: "50%"
             },
-          }}
+            [theme.breakpoints.down("sm")]: {
+              ".lead-details-page &": {
+                "&:empty": {
+                  display: "none"
+                }
+              }
+            }
+          })}
         >
           {leadData.emergency_situation_comment && (
             <InfoItem
@@ -403,7 +479,7 @@ const LeadItem = () => {
           <ChatFirstVertion messageType={"factoring"} />
         )}
       </Box>
-    </RootLayout>
+    </Box>
   );
 };
 

@@ -37,16 +37,48 @@ const LeadHeading = ({ leadData, openEditForm, readOnly = false }) => {
 
   return (
     <Box
-      sx={{
+      className="lead-detail-heading"
+      sx={theme => ({
         display: "flex",
         alignItems: "center",
         justifyContent: "space-between",
         flexWrap: "wrap",
         gap: 2,
         mb: 2,
-      }}
+        [theme.breakpoints.down("sm")]: {
+          ".lead-details-page &": {
+            padding: "14px",
+            gap: "12px",
+            marginBottom: "12px",
+            border: "1px solid #e2e8f0",
+            borderRadius: "18px",
+            background: "#fff"
+          }
+        }
+      })}
     >
-      <Stack spacing={0.5}>
+      <Stack
+        spacing={0.5}
+        className="lead-detail-heading-copy"
+        sx={theme => ({
+          [theme.breakpoints.down("sm")]: {
+            ".lead-details-page &": {
+              minWidth: "0",
+              width: "100%",
+              "& h1": {
+                fontSize: "21px",
+                fontWeight: "700",
+                lineHeight: "1.3",
+                overflowWrap: "anywhere"
+              },
+              "& > p": {
+                fontSize: "12px",
+                lineHeight: "1.45"
+              }
+            }
+          }
+        })}
+      >
         <Typography
           component="h1"
           sx={{
@@ -58,15 +90,30 @@ const LeadHeading = ({ leadData, openEditForm, readOnly = false }) => {
         <Typography sx={{ fontSize: 14, color: "text.secondary" }}>{t("ui.lead_overview_description")}</Typography>
       </Stack>
       <Box
-        sx={{
+        className="lead-detail-heading-actions"
+        sx={theme => ({
           display: "flex",
           alignItems: "center",
           gap: 1.5,
           flexWrap: "wrap",
-        }}
+          [theme.breakpoints.down("sm")]: {
+            ".lead-details-page &": {
+              width: "100%",
+              justifyContent: "space-between",
+              gap: "8px",
+              "& > .MuiButton-root": {
+                height: "36px",
+                padding: "6px 10px",
+                fontSize: "12px",
+                borderRadius: "10px"
+              }
+            }
+          }
+        })}
       >
         <Box
-          sx={{
+          className="lead-detail-status"
+          sx={theme => ({
             display: "flex",
             alignItems: "center",
             gap: 1,
@@ -76,7 +123,15 @@ const LeadHeading = ({ leadData, openEditForm, readOnly = false }) => {
             border: "1px solid",
             borderColor: "divider",
             borderRadius: 2,
-          }}
+            [theme.breakpoints.down("sm")]: {
+              ".lead-details-page &": {
+                minWidth: "0",
+                padding: "7px 10px",
+                borderRadius: "10px",
+                background: "#f8fafc"
+              }
+            }
+          })}
         >
           {isLoading && <CircularProgress size={14} />}
           <LeadStatus lead={leadData} />

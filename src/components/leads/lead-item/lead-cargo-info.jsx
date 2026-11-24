@@ -37,13 +37,29 @@ const CargoCard = ({
 
   return (
     <Box
-      sx={{
+      className="lead-cargo-card"
+      sx={theme => ({
         p: 2,
         border: "1px solid",
         borderColor: "divider",
         borderRadius: 2.5,
         backgroundColor: "background.default",
-      }}
+        [theme.breakpoints.down("sm")]: {
+          ".lead-details-page &": {
+            padding: "0",
+            border: "0",
+            background: "transparent",
+            "& > .MuiTypography-root": {
+              marginBottom: "10px",
+              fontSize: "13px"
+            }
+          },
+          ".lead-details-page & + .lead-cargo-card": {
+            paddingTop: "14px",
+            borderTop: "1px solid #e2e8f0"
+          }
+        }
+      })}
     >
       <Typography
         sx={{
@@ -54,18 +70,36 @@ const CargoCard = ({
       >{t("ui.cargo_number_label", { value1: index + 1 })}</Typography>
 
       <Box
-        sx={{
+        className="lead-cargo-fields"
+        sx={theme => ({
           display: "grid",
           gridTemplateColumns: {
             xs: "1fr",
             sm: "repeat(2, 1fr)",
-            md: "repeat(4, minmax(0, 1fr))",
+            md: "repeat(4, minmax(0, 1fr))"
           },
           gap: 1.2,
           mb: 1.2,
-        }}
+          [theme.breakpoints.down("sm")]: {
+            ".lead-details-page &": {
+              gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
+              gap: "8px"
+            }
+          }
+        })}
       >
-        <InfoItem label={t("ui.item_name")} value={cargo?.name} />
+        <InfoItem
+          className="lead-field-wide"
+          label={t("ui.item_name")}
+          value={cargo?.name}
+          sx={theme => ({
+            [theme.breakpoints.down("sm")]: {
+              ".lead-details-page &": {
+                gridColumn: "1 / -1"
+              }
+            }
+          })}
+        />
 
         <InfoItem label={t("ui.type")} value={cargo?.type} />
 
@@ -95,6 +129,7 @@ const CargoCard = ({
         )}
         {(cargo?.height_cm || cargo?.width_cm || cargo?.length_cm) && (
           <InfoItem
+            className="lead-field-wide"
             label={t("ui.dimensions")}
             value={[
               cargo.length_cm && t("ui.length_centimeters", { value1: cargo.length_cm }),
@@ -103,6 +138,13 @@ const CargoCard = ({
             ]
               .filter(Boolean)
               .join(" × ")}
+            sx={theme => ({
+              [theme.breakpoints.down("sm")]: {
+                ".lead-details-page &": {
+                  gridColumn: "1 / -1"
+                }
+              }
+            })}
           />
         )}
       </Box>

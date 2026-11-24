@@ -112,23 +112,44 @@ const LeadDriverInfo = ({
         />
       )}
       <Box
-        sx={{
+        className="lead-party-fields"
+        sx={theme => ({
           py: 1,
           display: "grid",
           gridTemplateColumns: {
             xs: "1fr",
-            sm: "repeat(2, minmax(0, 1fr))",
+            sm: "repeat(2, minmax(0, 1fr))"
           },
           gap: 1.5,
-        }}
+          [theme.breakpoints.down("sm")]: {
+            ".lead-details-page &": {
+              gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
+              gap: "8px",
+              padding: "0"
+            }
+          }
+        })}
       >
         <InfoItem label={t("ui.driver_id")} value={driver.id} />
-        <InfoItem label={t("ui.full_name")} value={driver.fio} />
+        <InfoItem
+          className="lead-field-wide lead-driver-name"
+          label={t("ui.full_name")}
+          value={driver.fio}
+          sx={theme => ({
+            [theme.breakpoints.down("sm")]: {
+              ".lead-details-page &": {
+                gridColumn: "1 / -1",
+                order: "-2"
+              }
+            }
+          })}
+        />
         <InfoItem
           label={t("ui.vehicle_number")}
           value={driver.vehicle_number || null}
         />
         <InfoItem
+          className="lead-field-wide lead-driver-rating"
           label={t("ui.your_rating")}
           value={
             hasDriverRate ? (
@@ -156,12 +177,43 @@ const LeadDriverInfo = ({
               t("ui.no_ratings_yet_2")
             )
           }
+          sx={theme => ({
+            [theme.breakpoints.down("sm")]: {
+              ".lead-details-page &": {
+                gridColumn: "1 / -1",
+                order: "1"
+              }
+            }
+          })}
         />
         {driver.phone && (
-          <InfoItem label={t("ui.phone")} value={driver.phone} />
+          <InfoItem
+            className="lead-field-wide lead-driver-phone"
+            label={t("ui.phone")}
+            value={driver.phone}
+            sx={theme => ({
+              [theme.breakpoints.down("sm")]: {
+                ".lead-details-page &": {
+                  gridColumn: "1 / -1",
+                  order: "-1"
+                }
+              }
+            })}
+          />
         )}
         {leadData?.driver_rate_comment?.trim() && (
-          <Box sx={{ gridColumn: "1 / -1", minWidth: 0 }}>
+          <Box
+            className="lead-driver-comment"
+            sx={theme => ({
+              gridColumn: "1 / -1",
+              minWidth: 0,
+              [theme.breakpoints.down("sm")]: {
+                ".lead-details-page &": {
+                  order: "2"
+                }
+              }
+            })}
+          >
             <InfoItem
               label={t("ui.forwarder_comment")}
               value={

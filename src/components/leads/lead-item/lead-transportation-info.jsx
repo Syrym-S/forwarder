@@ -23,12 +23,27 @@ export default function LeadTransportationInfo({ leadData, hidePrices = false })
       icon={<PaymentsOutlinedIcon color="primary" />}
     >
       {!hidePrices && <Box
-        sx={{
+        className="lead-price-grid"
+        sx={theme => ({
           display: "grid",
-          gridTemplateColumns: { xs: "minmax(0, 1fr)", sm: "repeat(2, minmax(0, 1fr))" },
+          gridTemplateColumns: {
+            xs: "minmax(0, 1fr)",
+            sm: "repeat(2, minmax(0, 1fr))"
+          },
           gap: 1.5,
           mb: 2,
-        }}
+          [theme.breakpoints.down("sm")]: {
+            ".lead-details-page &": {
+              gap: "8px",
+              marginBottom: "12px"
+            }
+          },
+          [theme.breakpoints.between(380, "sm")]: {
+            ".lead-details-page &": {
+              gridTemplateColumns: "repeat(2, minmax(0, 1fr))"
+            }
+          }
+        })}
       >
         {prices.map(({ name, label, color }) => {
           const value = leadData?.[name];
@@ -36,15 +51,44 @@ export default function LeadTransportationInfo({ leadData, hidePrices = false })
 
           return (
             <Box
+              className="lead-price-card"
               key={name}
-              sx={{
+              sx={theme => ({
                 minWidth: 0,
-                p: { xs: 2, sm: 2.5 },
+                p: {
+                  xs: 2,
+                  sm: 2.5
+                },
                 borderRadius: 2.5,
                 border: "1px solid",
-                borderColor: (theme) => alpha(theme.palette[color].main, 0.2),
-                bgcolor: (theme) => alpha(theme.palette[color].main, 0.05),
-              }}
+                borderColor: theme => alpha(theme.palette[color].main, 0.2),
+                bgcolor: theme => alpha(theme.palette[color].main, 0.05),
+                [theme.breakpoints.down("sm")]: {
+                  ".lead-details-page &": {
+                    padding: "12px",
+                    borderRadius: "12px",
+                    "& > .MuiTypography-root": {
+                      marginBottom: "6px",
+                      fontSize: "11px"
+                    },
+                    "& > .MuiBox-root > .MuiTypography-root:first-of-type": {
+                      fontSize: "22px"
+                    },
+                    "& > .MuiBox-root > .MuiTypography-root:last-of-type:not(:first-of-type)": {
+                      fontSize: "12px"
+                    }
+                  }
+                },
+                [theme.breakpoints.between(380, "sm")]: {
+                  ".lead-details-page &": {
+                    "& > .MuiBox-root": {
+                      flexDirection: "column",
+                      alignItems: "flex-start",
+                      gap: "4px"
+                    }
+                  }
+                }
+              })}
             >
               <Typography sx={{ fontSize: 13, color: "text.secondary", mb: 1 }}>
                 {label}
@@ -73,15 +117,22 @@ export default function LeadTransportationInfo({ leadData, hidePrices = false })
       </Box>}
 
       <Box
-        sx={{
+        className="lead-transport-fields"
+        sx={theme => ({
           display: "grid",
           gridTemplateColumns: {
             xs: "minmax(0, 1fr)",
             sm: "repeat(2, minmax(0, 1fr))",
-            md: "repeat(4, minmax(0, 1fr))",
+            md: "repeat(4, minmax(0, 1fr))"
           },
           gap: 1.5,
-        }}
+          [theme.breakpoints.down("sm")]: {
+            ".lead-details-page &": {
+              gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
+              gap: "8px"
+            }
+          }
+        })}
       >
         {transportationParameters.map(({ name, label }) => (
           <InfoItem
