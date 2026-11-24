@@ -1307,6 +1307,13 @@
     "invalid_chat_list_response": "چیٹ لسٹ کا غلط جواب"
   },
   "lead_form": {
+    "mobile_add_driver": "ڈرائیور شامل کریں",
+    "mobile_driver_details_hint": "انتخاب کے بعد یہاں ڈرائیور کی رابطے کی معلومات اور گاڑی کی تفصیلات ظاہر ہوں گی۔",
+    "mobile_add_customer": "کسٹمر شامل کریں",
+    "mobile_customer_details_hint": "انتخاب کے بعد یہاں کسٹمر کی تفصیلات ظاہر ہوں گی۔",
+    "mobile_documents_hint": "شپمنٹ کے ساتھ دستاویزات منسلک کریں۔ ضرورت ہو تو فائل کا نام اور تفصیل بھی درج کریں۔",
+    "mobile_documents_empty": "ابھی کوئی دستاویز نہیں ہے",
+    "mobile_documents_empty_hint": "اوپر سے فائل منتخب کریں — منسلک دستاویزات یہاں ظاہر ہوں گی۔",
     "map_city": "قازقستان میں شہر",
     "map_address": "گلی اور عمارت کا نمبر",
     "map_address_placeholder": "گلی کا نام اور عمارت کا نمبر",

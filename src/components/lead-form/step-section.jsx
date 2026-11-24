@@ -8,7 +8,10 @@ export function StepSection({ title, children }) {
         minWidth: 0,
         border: "1px solid",
         borderColor: "divider",
-        borderRadius: 3,
+        borderRadius: {
+          xs: 0,
+          sm: 3,
+        },
         backgroundColor: "background.paper",
       }}
     >

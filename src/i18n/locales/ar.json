@@ -1313,6 +1313,13 @@
     "invalid_chat_list_response": "استجابة قائمة الدردشة غير صالحة"
   },
   "lead_form": {
+    "mobile_add_driver": "أضف سائقًا",
+    "mobile_driver_details_hint": "بعد الاختيار، ستظهر هنا بيانات الاتصال بالسائق ومعلومات المركبة.",
+    "mobile_add_customer": "أضف عميلًا",
+    "mobile_customer_details_hint": "بعد الاختيار، ستظهر بيانات العميل هنا.",
+    "mobile_documents_hint": "أرفق مستندات الشحنة. يمكنك إضافة اسم الملف ووصفه عند الحاجة.",
+    "mobile_documents_empty": "لا توجد مستندات بعد",
+    "mobile_documents_empty_hint": "اختر ملفًا أعلاه — ستظهر المستندات المرفقة هنا.",
     "map_city": "مدينة في كازاخستان",
     "map_address": "رقم الشارع والمبنى",
     "map_address_placeholder": "اسم الشارع ورقم المبنى",

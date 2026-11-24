@@ -13,6 +13,8 @@ import { StepSection } from "../step-section";
 import { InfoBadge } from "../info-badge";
 import { useDriverStore } from "../../../app/store/drivers/driver-store";
 import { useEffect, useState } from "react";
+import LocalShippingOutlinedIcon from "@mui/icons-material/LocalShippingOutlined";
+import MobileStepEmptyState from "../mobile-step-empty-state";
 
 const DriverStep = ({ control, errors, setValue }) => {
   const { t } = useTranslation();
@@ -117,6 +119,15 @@ const DriverStep = ({ control, errors, setValue }) => {
 
             {selectedDriver?.in_black_list === true && (
               <Alert severity="error">{t("ui.driver_blocked")}</Alert>
+            )}
+
+            {!selectedDriver && (
+              <MobileStepEmptyState
+                icon={<LocalShippingOutlinedIcon />}
+                title={t("lead_form.mobile_add_driver")}
+                description={t("lead_form.select_driver_description")}
+                detail={t("lead_form.mobile_driver_details_hint")}
+              />
             )}
 
             {selectedDriver && (

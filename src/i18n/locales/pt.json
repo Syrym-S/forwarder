@@ -1307,6 +1307,13 @@
     "invalid_chat_list_response": "Resposta inválida da lista de bate-papo"
   },
   "lead_form": {
+    "mobile_add_driver": "Adicione um motorista",
+    "mobile_driver_details_hint": "Após a seleção, os dados de contato do motorista e as informações do veículo aparecerão aqui.",
+    "mobile_add_customer": "Adicione um cliente",
+    "mobile_customer_details_hint": "Após a seleção, os dados do cliente aparecerão aqui.",
+    "mobile_documents_hint": "Anexe documentos ao transporte. Se necessário, informe o nome e a descrição do arquivo.",
+    "mobile_documents_empty": "Ainda não há documentos",
+    "mobile_documents_empty_hint": "Selecione um arquivo acima — os documentos anexados aparecerão aqui.",
     "map_city": "Cidade no Cazaquistão",
     "map_address": "Rua e número do prédio",
     "map_address_placeholder": "Nome da rua e número do prédio",

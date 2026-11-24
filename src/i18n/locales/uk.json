@@ -1346,6 +1346,13 @@
     "invalid_chat_list_response": "Некоректна відповідь зі списком чатів"
   },
   "lead_form": {
+    "mobile_add_driver": "Додайте водія",
+    "mobile_driver_details_hint": "Після вибору тут з’являться контакти водія та дані автомобіля.",
+    "mobile_add_customer": "Додайте замовника",
+    "mobile_customer_details_hint": "Після вибору тут з’являться дані замовника.",
+    "mobile_documents_hint": "Прикріпіть документи до перевезення. За потреби вкажіть назву та опис файлу.",
+    "mobile_documents_empty": "Документів поки немає",
+    "mobile_documents_empty_hint": "Виберіть файл вище — додані документи з’являться тут.",
     "map_city": "Місто в Казахстані",
     "map_address": "Вулиця та номер будинку",
     "map_address_placeholder": "Назва вулиці та номер будинку",

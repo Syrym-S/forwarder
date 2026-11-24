@@ -1307,6 +1307,13 @@
     "invalid_chat_list_response": "Chat roʻyxati notoʻgʻri javob"
   },
   "lead_form": {
+    "mobile_add_driver": "Haydovchini qo‘shing",
+    "mobile_driver_details_hint": "Tanlangandan so‘ng bu yerda haydovchining aloqa ma’lumotlari va avtomobil ma’lumotlari ko‘rsatiladi.",
+    "mobile_add_customer": "Mijozni qo‘shing",
+    "mobile_customer_details_hint": "Tanlangandan so‘ng bu yerda mijoz ma’lumotlari ko‘rsatiladi.",
+    "mobile_documents_hint": "Tashishga hujjatlarni biriktiring. Zarur bo‘lsa, fayl nomi va tavsifini kiriting.",
+    "mobile_documents_empty": "Hozircha hujjatlar yo‘q",
+    "mobile_documents_empty_hint": "Yuqoridan faylni tanlang — biriktirilgan hujjatlar shu yerda ko‘rsatiladi.",
     "map_city": "Qozog'istondagi shahar",
     "map_address": "Ko'cha va bino raqami",
     "map_address_placeholder": "Ko'cha nomi va bino raqami",

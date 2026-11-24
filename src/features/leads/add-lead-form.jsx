@@ -84,8 +84,10 @@ const AddLeadForm = ({
   onSaved,
 }) => {
   const { t } = useTranslation();
+  const isMobileScreen = useMediaQuery((theme) => theme.breakpoints.down("sm"));
   const isCompactScreen = useMediaQuery(
-    (theme) => `${theme.breakpoints.down("sm")}, (max-height: 500px) and (pointer: coarse)`,
+    (theme) =>
+      `${theme.breakpoints.down("sm")}, (max-height: 500px) and (pointer: coarse)`,
   );
   const titleId = useId();
   const panelId = useId();
@@ -139,6 +141,7 @@ const AddLeadForm = ({
   const formValues = useWatch({ control });
 
   const currentStepId = visibleSteps[activeStep - 1]?.contentId;
+  const isMobileRoute = isMobileScreen && currentStepId === 1;
   const isLastStep = activeStep === visibleSteps.length;
 
   useEffect(() => {
@@ -298,7 +301,15 @@ const AddLeadForm = ({
         );
       case 2:
         return (
-          <Box sx={{ display: "grid", gap: 2 }}>
+          <Box
+            sx={{
+              display: "grid",
+              gap: {
+                xs: 0,
+                sm: 2,
+              },
+            }}
+          >
             <TransportationParameters control={control} />
             <CargoStep
               control={control}
@@ -329,7 +340,13 @@ const AddLeadForm = ({
         );
 
       case 7:
-        return <LastStep form={formValues} isEdit={isEdit} withoutDriver={withoutDriver} />;
+        return (
+          <LastStep
+            form={formValues}
+            isEdit={isEdit}
+            withoutDriver={withoutDriver}
+          />
+        );
     }
   };
 
@@ -408,35 +425,64 @@ const AddLeadForm = ({
           onClose={handleClose}
           disabled={isSubmitting}
         />
+
         <DialogContent
           ref={contentRef}
           id={panelId}
           sx={{
-            p: { xs: 1.5, sm: 3 },
+            p: { xs: 0, sm: 3 },
+            display: isMobileRoute ? "flex" : undefined,
+            flexDirection: isMobileRoute ? "column" : undefined,
+            overflow: isMobileRoute ? "hidden" : undefined,
             minWidth: 0,
             minHeight: 0,
             bgcolor: "background.default",
             overscrollBehavior: "contain",
-            "& .MuiBox-root, & .MuiFormControl-root, & .MuiAutocomplete-root": { minWidth: 0 },
-            "& .MuiFormControl-root, & .MuiAutocomplete-root": { maxWidth: "100%" },
-            "& .MuiInputBase-input": { minWidth: 0, fontSize: { xs: 16, sm: 14 } },
-            "& input[type=date]": { boxSizing: "border-box", width: "100%", height: "auto", minHeight: 40 },
-            "& .MuiTypography-root, & .MuiFormHelperText-root": { overflowWrap: "anywhere" },
-            "& .MuiAutocomplete-root .MuiChip-root": { maxWidth: "100%", height: "auto", minHeight: 28 },
-            "& .MuiAutocomplete-root .MuiChip-label": { whiteSpace: "normal", overflowWrap: "anywhere" },
+            "& .MuiBox-root, & .MuiFormControl-root, & .MuiAutocomplete-root": {
+              minWidth: 0,
+            },
+            "& .MuiFormControl-root, & .MuiAutocomplete-root": {
+              maxWidth: "100%",
+            },
+            "& .MuiInputBase-input": {
+              minWidth: 0,
+              fontSize: { xs: 16, sm: 14 },
+            },
+            "& input[type=date]": {
+              boxSizing: "border-box",
+              width: "100%",
+              height: "auto",
+              minHeight: 40,
+            },
+            "& .MuiTypography-root, & .MuiFormHelperText-root": {
+              overflowWrap: "anywhere",
+            },
+            "& .MuiAutocomplete-root .MuiChip-root": {
+              maxWidth: "100%",
+              height: "auto",
+              minHeight: 28,
+            },
+            "& .MuiAutocomplete-root .MuiChip-label": {
+              whiteSpace: "normal",
+              overflowWrap: "anywhere",
+            },
           }}
         >
-          {isEditingDraft && (
-            <Alert severity="warning" sx={{ mb: 2 }}>
-              {t("lead_form.draft_description")}
-            </Alert>
-          )}
-          <LeadFormTabs
-            steps={visibleSteps}
-            activeStep={activeStep}
-            setActiveStep={setActiveStep}
-            isEdit={isEdit}
-          />
+          <Box sx={{ flexShrink: 0 }}>
+            {isEditingDraft && (
+              <Alert severity="warning" sx={{ mb: 2 }}>
+                {t("lead_form.draft_description")}
+              </Alert>
+            )}
+
+            <LeadFormTabs
+              steps={visibleSteps}
+              activeStep={activeStep}
+              setActiveStep={setActiveStep}
+              isEdit={isEdit}
+            />
+          </Box>
+
           {renderContent(currentStepId)}
         </DialogContent>
         <FormNavButtons

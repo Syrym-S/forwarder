@@ -12,6 +12,7 @@ import {
   Snackbar,
   Stack,
   Typography,
+  useMediaQuery,
 } from "@mui/material";
 import { StepSection } from "../step-section";
 import { useCustomerMap } from "../use-customer-map";
@@ -27,6 +28,7 @@ import CustomSelect from "../../../shared/ui/input/custom-select";
 import { KAZAKHSTAN_MAP_CITIES } from "../model/kazakhstan-map-cities";
 import MapAddressSearch from "../map-address-search";
 import RouteAddressInput from "../route-address-input";
+import MobileRouteStep from "./mobile-route-step";
 
 // Temporarily hide the city selector and address search above the map.
 const SHOW_MAP_ADDRESS_SEARCH = false;
@@ -57,6 +59,7 @@ const waypointTypes = [
 
 const RouteStep = ({ control, form, setValue, isEdit = false }) => {
   const { t, i18n } = useTranslation();
+  const isMobile = useMediaQuery((theme) => theme.breakpoints.down("sm"));
   const [selectedMapCityId, setSelectedMapCityId] = useState("");
   const [mapFocus, setMapFocus] = useState(null);
   const selectedMapCity =
@@ -202,500 +205,500 @@ const RouteStep = ({ control, form, setValue, isEdit = false }) => {
 
   const toScheduleIndex = fields.length + 1;
 
-  return (
-    <StepSection title={t("ui.route")}>
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          gap: 1,
-          mb: 2,
-          flexWrap: "wrap",
-          "& .MuiButton-root": { minHeight: 36, fontSize: 12, whiteSpace: "normal" },
+  const routePointControls = (
+    <Box
+      sx={{
+        display: "flex",
+        gap: 1,
+        flexWrap: "wrap",
+      }}
+    >
+      <PrimaryButton
+        size="small"
+        variant={activeMapPoint === "from" ? "contained" : "outlined"}
+        onClick={() => {
+          setActiveMapPoint("from");
+          setCount(0);
         }}
-      >
-        <Box
-          sx={{
-            display: "flex",
-            gap: 1,
-            flexWrap: "wrap",
+        text={t("ui.origin")}
+      />
+
+      {fields.map((field, index) => (
+        <PrimaryButton
+          key={field.id}
+          size="small"
+          disabled={currentLead && !canEditStatus}
+          variant={
+            activeMapPoint === `cross.${index}` ? "contained" : "outlined"
+          }
+          onClick={() => {
+            setActiveMapPoint(`cross.${index}`);
+            setCount(index);
           }}
-        >
-          <PrimaryButton
-            size="small"
-            variant={activeMapPoint === "from" ? "contained" : "outlined"}
-            onClick={() => {
-              setActiveMapPoint("from");
-              setCount(0);
-            }}
-            text={t("ui.origin")}
-          />
-
-          {fields.map((field, index) => (
-            <PrimaryButton
-              key={field.id}
-              size="small"
-              disabled={currentLead && !canEditStatus}
-              variant={
-                activeMapPoint === `cross.${index}` ? "contained" : "outlined"
-              }
-              onClick={() => {
-                setActiveMapPoint(`cross.${index}`);
-                setCount(index);
-              }}
-              sx={{
-                py: 0,
-              }}
-              text={t("lead_form.route_point_number", { value1: index + 1 })}
-            />
-          ))}
-
-          <PrimaryButton
-            size="small"
-            variant={activeMapPoint === "to" ? "contained" : "outlined"}
-            disabled={currentLead && !canEditStatus}
-            onClick={() => setActiveMapPoint("to")}
-            sx={{
-              py: 0,
-            }}
-            text={t("ui.destination")}
-          />
-        </Box>
-
-        <Box
           sx={{
-            display: "flex",
-            gap: 1,
-            flexWrap: "wrap",
-            width: { xs: "100%", sm: "auto" },
+            py: 0,
           }}
-        >
-          <PrimaryButton
-            size="small"
-            color="primary"
-            variant="outlined"
-            onClick={handleShowFiled}
-            disabled={currentLead && !canEditStatus}
-            text={t("lead_form.add_crossing_point")}
-          />
+          text={t("lead_form.route_point_number", { value1: index + 1 })}
+        />
+      ))}
 
-          <PrimaryButton
-            size="small"
-            color="error"
-            variant="outlined"
-            onClick={handleClearRoute}
-            disabled={isClearDisabled || (currentLead && !canEditStatus)}
-            text={t("lead_form.clear_route")}
-            sx={{
-              p: 0,
-              px: 1,
-            }}
-          />
-        </Box>
-      </Box>
-
-      {SHOW_MAP_ADDRESS_SEARCH && (
-        <Box
-          sx={{
-            display: "flex",
-            flexWrap: "wrap",
-            alignItems: "flex-start",
-            gap: 2,
-            mb: 2,
-          }}
-        >
-          <CustomSelect
-            id="lead-map-city"
-            label={t("lead_form.map_city")}
-            value={selectedMapCityId}
-            options={[
-              { value: "", label: t("lead_form.select_map_city") },
-              ...mapCityOptions,
-            ]}
-            onChange={(event) => {
-              const cityId = event.target.value;
-              setSelectedMapCityId(cityId);
-              setMapFocus(
-                KAZAKHSTAN_MAP_CITIES.find((city) => city.id === cityId) ??
-                  null,
-              );
-            }}
-            helperText={t("lead_form.map_city_hint")}
-            sx={{ width: { xs: "100%", sm: 280 }, flexShrink: 0 }}
-            slotProps={{
-              select: {
-                MenuProps: { slotProps: { paper: { sx: { maxHeight: 430 } } } },
-              },
-            }}
-          />
-          <MapAddressSearch
-            key={selectedMapCityId}
-            city={selectedMapCity}
-            onSelect={setMapFocus}
-          />
-        </Box>
-      )}
-
-      <Box
+      <PrimaryButton
+        size="small"
+        variant={activeMapPoint === "to" ? "contained" : "outlined"}
+        disabled={currentLead && !canEditStatus}
+        onClick={() => setActiveMapPoint("to")}
         sx={{
-          height: {
-            xs: 200,
-            sm: 280,
+          py: 0,
+        }}
+        text={t("ui.destination")}
+      />
+    </Box>
+  );
+
+  const routeActions = (
+    <Box
+      sx={{
+        display: "flex",
+        gap: 1,
+        flexWrap: "wrap",
+        width: { xs: "100%", sm: "auto" },
+      }}
+    >
+      <PrimaryButton
+        size="small"
+        color="primary"
+        variant="outlined"
+        onClick={handleShowFiled}
+        disabled={currentLead && !canEditStatus}
+        text={t("lead_form.add_crossing_point")}
+      />
+
+      <PrimaryButton
+        size="small"
+        color="error"
+        variant="outlined"
+        onClick={handleClearRoute}
+        disabled={isClearDisabled || (currentLead && !canEditStatus)}
+        text={t("lead_form.clear_route")}
+        sx={{
+          p: 0,
+          px: 1,
+        }}
+      />
+    </Box>
+  );
+
+  const routeControls = (
+    <Box
+      sx={{
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        gap: 1,
+        mb: 2,
+        flexWrap: "wrap",
+        "& .MuiButton-root": {
+          minHeight: 36,
+          fontSize: 12,
+          whiteSpace: "normal",
+        },
+      }}
+    >
+      {routePointControls}
+      {routeActions}
+    </Box>
+  );
+
+  const mapSearch = SHOW_MAP_ADDRESS_SEARCH && (
+    <Box
+      sx={{
+        display: "flex",
+        flexWrap: "wrap",
+        alignItems: "flex-start",
+        gap: 2,
+        mb: 2,
+      }}
+    >
+      <CustomSelect
+        id="lead-map-city"
+        label={t("lead_form.map_city")}
+        value={selectedMapCityId}
+        options={[
+          { value: "", label: t("lead_form.select_map_city") },
+          ...mapCityOptions,
+        ]}
+        onChange={(event) => {
+          const cityId = event.target.value;
+          setSelectedMapCityId(cityId);
+          setMapFocus(
+            KAZAKHSTAN_MAP_CITIES.find((city) => city.id === cityId) ?? null,
+          );
+        }}
+        helperText={t("lead_form.map_city_hint")}
+        sx={{ width: { xs: "100%", sm: 280 }, flexShrink: 0 }}
+        slotProps={{
+          select: {
+            MenuProps: { slotProps: { paper: { sx: { maxHeight: 430 } } } },
           },
-          border: "1px solid",
-          borderColor: "divider",
-          borderRadius: 3,
-          overflow: "hidden",
-          mb: 2,
+        }}
+      />
+      <MapAddressSearch
+        key={selectedMapCityId}
+        city={selectedMapCity}
+        onSelect={setMapFocus}
+      />
+    </Box>
+  );
+
+  const mapView = (
+    <CustomerMapView
+      center={map.center}
+      zoom={map.zoom}
+      focusView={mapFocus}
+      markers={routeMarkers}
+      routePoints={routePoints}
+      handleMarkerClick={map.handleMarkerClick}
+      onMapClick={handleRouteMapClick}
+      onMarkerDragEnd={handleRouteMarkerDragEnd}
+    />
+  );
+
+  const editRestriction = currentLead && !canEditStatus && (
+    <Box
+      sx={{
+        display: "flex",
+        alignItems: "center",
+        gap: 1,
+        px: 2,
+        py: 1.5,
+        my: 1,
+        borderRadius: 2,
+        border: "1px solid",
+        borderColor: "divider",
+      }}
+    >
+      <LockOutlinedIcon color="error" fontSize="small" />
+
+      <Typography variant="body2" color="error">
+        {t("lead_form.route_edit_status_restriction")}
+      </Typography>
+    </Box>
+  );
+
+  const routeFields = (
+    <Box
+      sx={{
+        display: "grid",
+        gridTemplateColumns: "1fr",
+        gap: 2,
+      }}
+    >
+      <Box
+        sx={{
+          display: "grid",
+          gridTemplateColumns: {
+            xs: "repeat(2, minmax(0, 1fr))",
+            sm: "repeat(2, minmax(0, 1fr))",
+            md: "minmax(0, 2fr) repeat(2, minmax(0, 1fr))",
+          },
+          "& > .MuiAutocomplete-root": {
+            gridColumn: { xs: "1 / -1", md: "auto" },
+          },
+          gap: 1,
         }}
       >
-        <CustomerMapView
-          center={map.center}
-          zoom={map.zoom}
-          focusView={mapFocus}
-          markers={routeMarkers}
-          routePoints={routePoints}
-          onMapClick={handleRouteMapClick}
-          onMarkerDragEnd={handleRouteMarkerDragEnd}
+        <RouteAddressInput
+          name="from_location.address"
+          control={control}
+          label={t("ui.origin")}
+          disabled={Boolean(currentLead && !canEditStatus)}
+          center={mapFocus?.center ?? map.center}
+          onFocus={() => handleAddressFocus("from")}
+          onEdit={() => setRouteAddress("from")}
+          onSelect={(address) => handleAddressSelect("from", address)}
+          rules={{
+            required: t("lead_form.enter_origin"),
+            minLength: {
+              value: 3,
+              message: t("lead_form.minimum_three_characters"),
+            },
+          }}
+        />
+
+        <FormControllerInput
+          name="point_schedules[0].start_at"
+          control={control}
+          rules={{
+            required: t("lead_form.start_date_required"),
+
+            validate: (value) => validateStartDate(value, 0),
+          }}
+          label={t("lead_form.origin_start")}
+          type="date"
+          fullWidth
+          size="small"
+          onChange={() => {
+            setValue("point_schedules[0].point_index", 0);
+          }}
+          slotProps={{
+            htmlInput: {
+              min: today,
+            },
+          }}
+        />
+
+        <FormControllerInput
+          name="point_schedules[0].end_at"
+          control={control}
+          rules={{
+            required: t("lead_form.end_date_required"),
+
+            validate: (value) => validateEndDate(value, 0),
+          }}
+          label={t("lead_form.origin_end")}
+          type="date"
+          fullWidth
+          size="small"
+          onChange={() => {
+            setValue("point_schedules[0].point_index", 0);
+          }}
+          slotProps={{
+            htmlInput: {
+              min: getMinDate(pointSchedules?.[0]?.start_at),
+            },
+          }}
         />
       </Box>
 
-      {currentLead && !canEditStatus && (
+      {fields.length > 0 && (
         <Box
           sx={{
-            display: "flex",
-            alignItems: "center",
-            gap: 1,
-            px: 2,
-            py: 1.5,
-            my: 1,
-            borderRadius: 2,
             border: "1px solid",
             borderColor: "divider",
+            borderRadius: 3,
+            p: { xs: 1.25, sm: 2 },
+            display: "flex",
+            flexDirection: "column",
+            gap: 2,
           }}
         >
-          <LockOutlinedIcon color="error" fontSize="small" />
-
-          <Typography variant="body2" color="error">
-            {t("lead_form.route_edit_status_restriction")}
+          <Typography
+            sx={{
+              fontSize: "0.9rem",
+              fontWeight: 600,
+              color: "font_color.heading",
+            }}
+          >
+            {t("lead_form.waypoints")}
           </Typography>
+
+          {fields.map((crossField, index) => {
+            const scheduleIndex = index + 1;
+
+            const previousEndAt = pointSchedules?.[scheduleIndex - 1]?.end_at;
+
+            const currentStartAt = pointSchedules?.[scheduleIndex]?.start_at;
+
+            return (
+              <Box
+                key={crossField.id}
+                sx={{
+                  display: "grid",
+                  gridTemplateColumns: {
+                    xs: "repeat(2, minmax(0, 1fr))",
+                    sm: "repeat(2, minmax(0, 1fr))",
+                  },
+                  gap: 1.5,
+                  alignItems: "flex-start",
+                  "& > .MuiAutocomplete-root": { gridColumn: "1 / -1" },
+                }}
+              >
+                <RouteAddressInput
+                  name={`waypoints[${index}].address`}
+                  control={control}
+                  label={t("ui.waypoint_number", { value1: index + 1 })}
+                  disabled={Boolean(currentLead && !canEditStatus)}
+                  center={mapFocus?.center ?? map.center}
+                  onFocus={() => handleAddressFocus(`cross.${index}`)}
+                  onEdit={() => setRouteAddress(`cross.${index}`)}
+                  onSelect={(address) =>
+                    handleAddressSelect(`cross.${index}`, address)
+                  }
+                />
+
+                <FormControllerSelect
+                  name={`waypoints[${index}].type`}
+                  control={control}
+                  defaultValue="check_passes"
+                  options={waypointTypes}
+                  label={t("ui.type")}
+                  sx={{ gridColumn: "1 / -1" }}
+                  fullWidth
+                  size="small"
+                  disabled={currentLead && !canEditStatus}
+                />
+
+                <FormControllerInput
+                  name={`point_schedules[${scheduleIndex}].start_at`}
+                  control={control}
+                  rules={{
+                    required: t("lead_form.start_date_required"),
+
+                    validate: (value) =>
+                      validateStartDate(value, scheduleIndex),
+                  }}
+                  label={t("lead_form.waypoint_start", { value1: index + 1 })}
+                  type="date"
+                  fullWidth
+                  size="small"
+                  onChange={() => {
+                    setValue(
+                      `point_schedules[${scheduleIndex}].point_index`,
+                      scheduleIndex,
+                    );
+                  }}
+                  slotProps={{
+                    htmlInput: {
+                      min: getMinDate(previousEndAt),
+                    },
+                  }}
+                />
+
+                <FormControllerInput
+                  name={`point_schedules[${scheduleIndex}].end_at`}
+                  control={control}
+                  rules={{
+                    required: t("lead_form.end_date_required"),
+
+                    validate: (value) => validateEndDate(value, scheduleIndex),
+                  }}
+                  label={t("lead_form.waypoint_end", { value1: index + 1 })}
+                  type="date"
+                  fullWidth
+                  size="small"
+                  onChange={() => {
+                    setValue(
+                      `point_schedules[${scheduleIndex}].point_index`,
+                      scheduleIndex,
+                    );
+                  }}
+                  slotProps={{
+                    htmlInput: {
+                      min: getMinDate(currentStartAt),
+                    },
+                  }}
+                />
+
+                <PrimaryButton
+                  size="small"
+                  sx={{
+                    gridColumn: "1 / -1",
+                    justifySelf: "end",
+                    minHeight: 36,
+                  }}
+                  disabled={currentLead && !canEditStatus}
+                  onClick={() => handleRemoveWaypoint(index)}
+                  color="error"
+                  variant="outlined"
+                  text={t("lead_form.remove")}
+                />
+              </Box>
+            );
+          })}
         </Box>
       )}
 
       <Box
         sx={{
           display: "grid",
-          gridTemplateColumns: "1fr",
-          gap: 2,
+          gridTemplateColumns: {
+            xs: "repeat(2, minmax(0, 1fr))",
+            sm: "repeat(2, minmax(0, 1fr))",
+            md: "minmax(0, 2fr) repeat(2, minmax(0, 1fr))",
+          },
+          "& > .MuiAutocomplete-root": {
+            gridColumn: { xs: "1 / -1", md: "auto" },
+          },
+          gap: 1,
         }}
       >
-        <Box
-          sx={{
-            display: "grid",
-            gridTemplateColumns: {
-              xs: "minmax(0, 1fr)",
-              sm: "repeat(2, minmax(0, 1fr))",
-              md: "minmax(0, 2fr) repeat(2, minmax(0, 1fr))",
+        <RouteAddressInput
+          name="to_location.address"
+          control={control}
+          label={t("ui.destination")}
+          disabled={Boolean(currentLead && !canEditStatus)}
+          center={mapFocus?.center ?? map.center}
+          onFocus={() => handleAddressFocus("to")}
+          onEdit={() => setRouteAddress("to")}
+          onSelect={(address) => handleAddressSelect("to", address)}
+          rules={{
+            required: t("lead_form.enter_destination"),
+            minLength: {
+              value: 3,
+              message: t("lead_form.minimum_three_characters"),
             },
-            "& > .MuiAutocomplete-root": { gridColumn: { sm: "1 / -1", md: "auto" } },
-            gap: 1,
           }}
-        >
-          <RouteAddressInput
-            name="from_location.address"
-            control={control}
-            label={t("ui.origin")}
-            disabled={Boolean(currentLead && !canEditStatus)}
-            center={mapFocus?.center ?? map.center}
-            onFocus={() => handleAddressFocus("from")}
-            onEdit={() => setRouteAddress("from")}
-            onSelect={(address) => handleAddressSelect("from", address)}
-            rules={{
-              required: t("lead_form.enter_origin"),
-              minLength: {
-                value: 3,
-                message: t("lead_form.minimum_three_characters"),
-              },
-            }}
-          />
+        />
 
-          <FormControllerInput
-            name="point_schedules[0].start_at"
-            control={control}
-            rules={{
-              required: t("lead_form.start_date_required"),
+        {/* TO START */}
 
-              validate: (value) => validateStartDate(value, 0),
-            }}
-            label={t("lead_form.origin_start")}
-            type="date"
-            fullWidth
-            size="small"
-            onChange={() => {
-              setValue("point_schedules[0].point_index", 0);
-            }}
-            slotProps={{
-              htmlInput: {
-                min: today,
-              },
-            }}
-          />
+        <FormControllerInput
+          name={`point_schedules[${toScheduleIndex}].start_at`}
+          control={control}
+          rules={{
+            required: t("lead_form.start_date_required"),
 
-          <FormControllerInput
-            name="point_schedules[0].end_at"
-            control={control}
-            rules={{
-              required: t("lead_form.end_date_required"),
-
-              validate: (value) => validateEndDate(value, 0),
-            }}
-            label={t("lead_form.origin_end")}
-            type="date"
-            fullWidth
-            size="small"
-            onChange={() => {
-              setValue("point_schedules[0].point_index", 0);
-            }}
-            slotProps={{
-              htmlInput: {
-                min: getMinDate(pointSchedules?.[0]?.start_at),
-              },
-            }}
-          />
-        </Box>
-
-        {fields.length > 0 && (
-          <Box
-            sx={{
-              border: "1px solid",
-              borderColor: "divider",
-              borderRadius: 3,
-              p: { xs: 1.25, sm: 2 },
-              display: "flex",
-              flexDirection: "column",
-              gap: 2,
-            }}
-          >
-            <Typography
-              sx={{
-                fontSize: "0.9rem",
-                fontWeight: 600,
-                color: "font_color.heading",
-              }}
-            >
-              {t("lead_form.waypoints")}
-            </Typography>
-
-            {fields.map((crossField, index) => {
-              const scheduleIndex = index + 1;
-
-              const previousEndAt = pointSchedules?.[scheduleIndex - 1]?.end_at;
-
-              const currentStartAt = pointSchedules?.[scheduleIndex]?.start_at;
-
-              return (
-                <Box
-                  key={crossField.id}
-                  sx={{
-                    display: "grid",
-                    gridTemplateColumns: { xs: "minmax(0, 1fr)", sm: "repeat(2, minmax(0, 1fr))" },
-                    gap: 1.5,
-                    alignItems: "flex-start",
-                    "& > .MuiAutocomplete-root": { gridColumn: "1 / -1" },
-                  }}
-                >
-                  <RouteAddressInput
-                    name={`waypoints[${index}].address`}
-                    control={control}
-                    label={t("ui.waypoint_number", { value1: index + 1 })}
-                    disabled={Boolean(currentLead && !canEditStatus)}
-                    center={mapFocus?.center ?? map.center}
-                    onFocus={() => handleAddressFocus(`cross.${index}`)}
-                    onEdit={() => setRouteAddress(`cross.${index}`)}
-                    onSelect={(address) =>
-                      handleAddressSelect(`cross.${index}`, address)
-                    }
-                  />
-
-                  <FormControllerSelect
-                    name={`waypoints[${index}].type`}
-                    control={control}
-                    defaultValue="check_passes"
-                    options={waypointTypes}
-                    label={t("ui.type")}
-                    sx={{ gridColumn: "1 / -1" }}
-                    fullWidth
-                    size="small"
-                    disabled={currentLead && !canEditStatus}
-                  />
-
-                  <FormControllerInput
-                    name={`point_schedules[${scheduleIndex}].start_at`}
-                    control={control}
-                    rules={{
-                      required: t("lead_form.start_date_required"),
-
-                      validate: (value) =>
-                        validateStartDate(value, scheduleIndex),
-                    }}
-                    label={t("lead_form.waypoint_start", { value1: index + 1 })}
-                    type="date"
-                    fullWidth
-                    size="small"
-                    onChange={() => {
-                      setValue(
-                        `point_schedules[${scheduleIndex}].point_index`,
-                        scheduleIndex,
-                      );
-                    }}
-                    slotProps={{
-                      htmlInput: {
-                        min: getMinDate(previousEndAt),
-                      },
-                    }}
-                  />
-
-                  <FormControllerInput
-                    name={`point_schedules[${scheduleIndex}].end_at`}
-                    control={control}
-                    rules={{
-                      required: t("lead_form.end_date_required"),
-
-                      validate: (value) =>
-                        validateEndDate(value, scheduleIndex),
-                    }}
-                    label={t("lead_form.waypoint_end", { value1: index + 1 })}
-                    type="date"
-                    fullWidth
-                    size="small"
-                    onChange={() => {
-                      setValue(
-                        `point_schedules[${scheduleIndex}].point_index`,
-                        scheduleIndex,
-                      );
-                    }}
-                    slotProps={{
-                      htmlInput: {
-                        min: getMinDate(currentStartAt),
-                      },
-                    }}
-                  />
-
-                  <PrimaryButton
-                    size="small"
-                    sx={{ gridColumn: "1 / -1", justifySelf: "end", minHeight: 36 }}
-                    disabled={currentLead && !canEditStatus}
-                    onClick={() => handleRemoveWaypoint(index)}
-                    color="error"
-                    variant="outlined"
-                    text={t("lead_form.remove")}
-                  />
-                </Box>
-              );
-            })}
-          </Box>
-        )}
-
-        <Box
-          sx={{
-            display: "grid",
-            gridTemplateColumns: {
-              xs: "minmax(0, 1fr)",
-              sm: "repeat(2, minmax(0, 1fr))",
-              md: "minmax(0, 2fr) repeat(2, minmax(0, 1fr))",
+            validate: (value) => validateStartDate(value, toScheduleIndex),
+          }}
+          label={t("lead_form.destination_start")}
+          type="date"
+          fullWidth
+          size="small"
+          onChange={() => {
+            setValue(
+              `point_schedules[${toScheduleIndex}].point_index`,
+              toScheduleIndex,
+            );
+          }}
+          slotProps={{
+            htmlInput: {
+              min: getMinDate(pointSchedules?.[toScheduleIndex - 1]?.end_at),
             },
-            "& > .MuiAutocomplete-root": { gridColumn: { sm: "1 / -1", md: "auto" } },
-            gap: 1,
           }}
-        >
-          <RouteAddressInput
-            name="to_location.address"
-            control={control}
-            label={t("ui.destination")}
-            disabled={Boolean(currentLead && !canEditStatus)}
-            center={mapFocus?.center ?? map.center}
-            onFocus={() => handleAddressFocus("to")}
-            onEdit={() => setRouteAddress("to")}
-            onSelect={(address) => handleAddressSelect("to", address)}
-            rules={{
-              required: t("lead_form.enter_destination"),
-              minLength: {
-                value: 3,
-                message: t("lead_form.minimum_three_characters"),
-              },
-            }}
-          />
+        />
 
-          {/* TO START */}
+        {/* TO END */}
 
-          <FormControllerInput
-            name={`point_schedules[${toScheduleIndex}].start_at`}
-            control={control}
-            rules={{
-              required: t("lead_form.start_date_required"),
+        <FormControllerInput
+          name={`point_schedules[${toScheduleIndex}].end_at`}
+          control={control}
+          rules={{
+            required: t("lead_form.end_date_required"),
 
-              validate: (value) => validateStartDate(value, toScheduleIndex),
-            }}
-            label={t("lead_form.destination_start")}
-            type="date"
-            fullWidth
-            size="small"
-            onChange={() => {
-              setValue(
-                `point_schedules[${toScheduleIndex}].point_index`,
-                toScheduleIndex,
-              );
-            }}
-            slotProps={{
-              htmlInput: {
-                min: getMinDate(pointSchedules?.[toScheduleIndex - 1]?.end_at),
-              },
-            }}
-          />
-
-          {/* TO END */}
-
-          <FormControllerInput
-            name={`point_schedules[${toScheduleIndex}].end_at`}
-            control={control}
-            rules={{
-              required: t("lead_form.end_date_required"),
-
-              validate: (value) => validateEndDate(value, toScheduleIndex),
-            }}
-            label={t("lead_form.destination_end")}
-            type="date"
-            fullWidth
-            size="small"
-            onChange={() => {
-              setValue(
-                `point_schedules[${toScheduleIndex}].point_index`,
-                toScheduleIndex,
-              );
-            }}
-            slotProps={{
-              htmlInput: {
-                min: getMinDate(pointSchedules?.[toScheduleIndex]?.start_at),
-              },
-            }}
-          />
-        </Box>
+            validate: (value) => validateEndDate(value, toScheduleIndex),
+          }}
+          label={t("lead_form.destination_end")}
+          type="date"
+          fullWidth
+          size="small"
+          onChange={() => {
+            setValue(
+              `point_schedules[${toScheduleIndex}].point_index`,
+              toScheduleIndex,
+            );
+          }}
+          slotProps={{
+            htmlInput: {
+              min: getMinDate(pointSchedules?.[toScheduleIndex]?.start_at),
+            },
+          }}
+        />
       </Box>
+    </Box>
+  );
 
-      <Snackbar
-        open={hasFromCityError || hasToCityError || hasCrossPointCityError}
-        autoHideDuration={1000}
-        anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "right",
-        }}
-      >
-        <Alert severity="error" variant="filled" sx={{ width: "100%" }}>
-          {t("lead_form.invalid_city_parameters")}
-        </Alert>
-      </Snackbar>
-
+  const routeOptions = (
+    <>
       <Box
         sx={{
           mt: 2,
@@ -795,7 +798,59 @@ const RouteStep = ({ control, form, setValue, isEdit = false }) => {
           </Stack>
         )}
       />
-    </StepSection>
+    </>
+  );
+
+  return (
+    <>
+      {isMobile ? (
+        <MobileRouteStep
+          mapView={mapView}
+          pointControls={routePointControls}
+          actions={routeActions}
+          mapSearch={mapSearch}
+          restriction={editRestriction}
+          options={routeOptions}
+        >
+          {routeFields}
+        </MobileRouteStep>
+      ) : (
+        <StepSection title={t("ui.route")}>
+          {routeControls}
+          {mapSearch}
+          <Box
+            sx={{
+              height: {
+                xs: 200,
+                sm: 280,
+              },
+              border: "1px solid",
+              borderColor: "divider",
+              borderRadius: 3,
+              overflow: "hidden",
+              mb: 2,
+            }}
+          >
+            {mapView}
+          </Box>
+          {editRestriction}
+          {routeFields}
+          {routeOptions}
+        </StepSection>
+      )}
+      <Snackbar
+        open={hasFromCityError || hasToCityError || hasCrossPointCityError}
+        autoHideDuration={1000}
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "right",
+        }}
+      >
+        <Alert severity="error" variant="filled" sx={{ width: "100%" }}>
+          {t("lead_form.invalid_city_parameters")}
+        </Alert>
+      </Snackbar>
+    </>
   );
 };
 

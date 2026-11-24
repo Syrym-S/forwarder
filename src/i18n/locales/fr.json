@@ -1307,6 +1307,13 @@
     "invalid_chat_list_response": "Réponse de liste de discussion invalide"
   },
   "lead_form": {
+    "mobile_add_driver": "Ajoutez un chauffeur",
+    "mobile_driver_details_hint": "Après la sélection, les coordonnées du chauffeur et les informations du véhicule apparaîtront ici.",
+    "mobile_add_customer": "Ajoutez un client",
+    "mobile_customer_details_hint": "Après la sélection, les informations du client apparaîtront ici.",
+    "mobile_documents_hint": "Joignez des documents au transport. Vous pouvez préciser le nom et la description du fichier si nécessaire.",
+    "mobile_documents_empty": "Aucun document pour le moment",
+    "mobile_documents_empty_hint": "Sélectionnez un fichier ci-dessus — les documents ajoutés apparaîtront ici.",
     "map_city": "Ville du Kazakhstan",
     "map_address": "Rue et numéro du bâtiment",
     "map_address_placeholder": "Nom de la rue et numéro du bâtiment",

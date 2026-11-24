@@ -5,8 +5,8 @@ import {
   Button,
   CircularProgress,
   Stack,
-  TextField,
   Typography,
+  useMediaQuery,
 } from "@mui/material";
 import UploadFileOutlinedIcon from "@mui/icons-material/UploadFileOutlined";
 import InsertDriveFileOutlinedIcon from "@mui/icons-material/InsertDriveFileOutlined";
@@ -15,9 +15,13 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useLeadsStore } from "../../../app/store/leads/leads-store";
 import FormInput from "../../../shared/ui/input/form-input";
+import { StepSection } from "../step-section";
+import MobileStepEmptyState from "../mobile-step-empty-state";
 
 const DocumentUpload = ({ setValue, uploadedFiles, setUploadedFiles }) => {
   const { t } = useTranslation();
+  const isMobile = useMediaQuery((theme) => theme.breakpoints.down("sm"));
+  const UploadContainer = isMobile ? StepSection : Box;
   const { id } = useParams();
   const [fileName, setFileName] = useState(null);
   const [fileContext, setFileContext] = useState(null);
@@ -75,16 +79,29 @@ const DocumentUpload = ({ setValue, uploadedFiles, setUploadedFiles }) => {
   }, [uploadedFiles, setValue]);
 
   return (
-    <Box sx={{ display: "grid", gap: 2 }}>
+    <UploadContainer
+      title={isMobile ? t("ui.documents") : undefined}
+      sx={{ display: "grid", gap: 2 }}
+    >
       <Stack spacing={2}>
+        {isMobile && (
+          <Typography sx={{ fontSize: 13, lineHeight: 1.6, color: "text.secondary" }}>
+            {t("lead_form.mobile_documents_hint")}
+          </Typography>
+        )}
         <Box
           sx={{
+            p: { xs: 1.5, sm: 0 },
+            border: { xs: "1px solid", sm: "none" },
+            borderColor: "divider",
+            borderRadius: { xs: 2, sm: 0 },
+            bgcolor: { xs: "background.default", sm: "transparent" },
             display: "grid",
             gridTemplateColumns: {
               xs: "minmax(0, 1fr)",
               md: "minmax(0, 1fr) minmax(0, 1fr) auto",
             },
-            gap: 1,
+            gap: { xs: 1.5, sm: 1 },
             alignItems: "flex-start",
           }}
         >
@@ -110,10 +127,10 @@ const DocumentUpload = ({ setValue, uploadedFiles, setUploadedFiles }) => {
               title={t("ui.choose_file")}
               aria-label={t("ui.choose_file")}
               component="label"
-              variant={"outlined"}
+              variant={isMobile ? "contained" : "outlined"}
               startIcon={<UploadFileOutlinedIcon />}
               sx={{
-                minHeight: 40,
+                minHeight: { xs: 48, sm: 40 },
                 width: {
                   xs: "100%",
                   md: "auto",
@@ -137,8 +154,9 @@ const DocumentUpload = ({ setValue, uploadedFiles, setUploadedFiles }) => {
         <Typography
           sx={{
             mt: 0.5,
-            fontSize: 11,
-            lineHeight: 1.3,
+            fontSize: { xs: 13, sm: 11 },
+            fontWeight: { xs: 600, sm: 400 },
+            lineHeight: { xs: 1.5, sm: 1.3 },
             color: "text.secondary",
             maxWidth: {
               xs: "100%",
@@ -149,7 +167,26 @@ const DocumentUpload = ({ setValue, uploadedFiles, setUploadedFiles }) => {
             whiteSpace: "nowrap",
           }}
           title={t("ui.file")}
-        >{t("lead_form.files")}</Typography>
+        >
+          {t("lead_form.files")}
+          {isMobile && (
+            <Box
+              component="span"
+              sx={{ ml: 1, px: 0.75, py: 0.25, borderRadius: 1, bgcolor: "action.hover", color: "text.primary", fontSize: 11 }}
+            >
+              {uploadedFiles.length + (id ? files.length : 0)}
+            </Box>
+          )}
+        </Typography>
+
+        {isMobile && !isLoading && !uploadedFiles.length && (!id || !files.length) && (
+          <MobileStepEmptyState
+            icon={<InsertDriveFileOutlinedIcon />}
+            title={t("lead_form.mobile_documents_empty")}
+            description={t("lead_form.mobile_documents_empty_hint")}
+            detail="PDF, Excel, JPG, PNG, MP4, MPEG, MOV, AVI, MKV"
+          />
+        )}
 
         {isLoading ? (
           <CircularProgress />
@@ -322,7 +359,7 @@ const DocumentUpload = ({ setValue, uploadedFiles, setUploadedFiles }) => {
           </Box>
         ))}
       </Stack>
-    </Box>
+    </UploadContainer>
   );
 };
 

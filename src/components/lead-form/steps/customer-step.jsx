@@ -12,6 +12,8 @@ import { StepSection } from "../step-section";
 import { InfoBadge } from "../info-badge";
 import { useCustomerStore } from "../../../app/store/customers/customers-store";
 import { useEffect, useState } from "react";
+import BusinessOutlinedIcon from "@mui/icons-material/BusinessOutlined";
+import MobileStepEmptyState from "../mobile-step-empty-state";
 
 const hasCustomer = (customer) =>
   Boolean(customer?.id || customer?.name?.trim());
@@ -232,6 +234,15 @@ const CustomerStep = ({ control, errors, setValue }) => {
                 />
               )}
             />
+
+            {!hasCustomer(selectedCustomer) && (
+              <MobileStepEmptyState
+                icon={<BusinessOutlinedIcon />}
+                title={t("lead_form.mobile_add_customer")}
+                description={t("lead_form.select_customer_description")}
+                detail={t("lead_form.mobile_customer_details_hint")}
+              />
+            )}
 
             {hasCustomer(selectedCustomer) && (
               <Box

@@ -1307,6 +1307,13 @@
     "invalid_chat_list_response": "Geçersiz sohbet listesi yanıtı"
   },
   "lead_form": {
+    "mobile_add_driver": "Sürücü ekleyin",
+    "mobile_driver_details_hint": "Seçimden sonra sürücünün iletişim bilgileri ve araç bilgileri burada görünecektir.",
+    "mobile_add_customer": "Müşteri ekleyin",
+    "mobile_customer_details_hint": "Seçimden sonra müşterinin bilgileri burada görünecektir.",
+    "mobile_documents_hint": "Taşımaya belge ekleyin. Gerekirse dosya adı ve açıklama belirtebilirsiniz.",
+    "mobile_documents_empty": "Henüz belge yok",
+    "mobile_documents_empty_hint": "Yukarıdan bir dosya seçin — eklenen belgeler burada görünecektir.",
     "map_city": "Kazakistan'da Şehir",
     "map_address": "Sokak ve bina numarası",
     "map_address_placeholder": "Sokak adı ve bina numarası",
