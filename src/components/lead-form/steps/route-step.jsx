@@ -199,7 +199,7 @@ const RouteStep = ({ control, form, setValue, isEdit = false }) => {
   };
 
   const handleAddressSelect = (point, address) => {
-    setRouteAddress(point, address.location);
+    setRouteAddress(point, address.location, address.zoom);
     setMapFocus(address);
   };
 

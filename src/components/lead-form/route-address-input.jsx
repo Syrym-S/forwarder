@@ -1,9 +1,13 @@
+import HistoryRoundedIcon from "@mui/icons-material/HistoryRounded";
+import FormInput from "../../shared/ui/input/form-input";
+
 import { useEffect, useState } from "react";
 import { Controller } from "react-hook-form";
 import { Autocomplete, CircularProgress } from "@mui/material";
 import { useTranslation } from "react-i18next";
-import FormInput from "../../shared/ui/input/form-input";
 import { searchRouteAddresses } from "./api/route-address-search.api";
+import { getRouteAddressOptions } from "./lib/route-address-history.js";
+import { useRouteAddressHistory } from "./use-route-address-history.js";
 
 const emptySuggestions = {
   query: "",
@@ -27,6 +31,7 @@ function AddressInput({
   const value = field.value || "";
   const [request, setRequest] = useState(null);
   const [suggestions, setSuggestions] = useState(emptySuggestions);
+  const history = useRouteAddressHistory();
   const lat = center?.[0];
   const lon = center?.[1];
   const language = i18n.resolvedLanguage;
@@ -68,12 +73,15 @@ function AddressInput({
   }, [request, value, lat, lon, language, disabled]);
 
   const current = suggestions.query === value ? suggestions : emptySuggestions;
+  const options = getRouteAddressOptions(history, current.options, value);
+  const hasHistory = options.some((option) => option.fromHistory);
+  const hasSearchError = current.error && !hasHistory;
   const helperText =
     fieldState.error?.message ||
     t(
-      current.error
+      hasSearchError
         ? "addressAutocomplete.failed"
-        : current.searched && !current.options.length
+        : current.searched && !options.length
           ? "addressAutocomplete.empty"
           : "addressAutocomplete.hint",
     );
@@ -87,7 +95,32 @@ function AddressInput({
       disabled={disabled}
       value={null}
       inputValue={value}
-      options={current.options}
+      options={options}
+      groupBy={(option) =>
+        t(
+          option.fromHistory
+            ? "lead_form.address_search_history"
+            : "lead_form.map_address_results",
+        )
+      }
+      renderOption={(props, option) => {
+        const { key, ...optionProps } = props;
+        return (
+          <li key={key} {...optionProps}>
+            {option.fromHistory && (
+              <HistoryRoundedIcon
+                sx={{
+                  mr: 1,
+                  flexShrink: 0,
+                  fontSize: 18,
+                  color: "text.secondary",
+                }}
+              />
+            )}
+            {option.label}
+          </li>
+        );
+      }}
       filterOptions={(options) => options}
       getOptionLabel={(option) =>
         typeof option === "string" ? option : option.label
@@ -117,6 +150,7 @@ function AddressInput({
       }}
       onChange={(_, address) => {
         if (!address || typeof address === "string") return;
+        if (address.fromHistory && address.expiresAt <= Date.now()) return;
         setRequest(null);
         setSuggestions(emptySuggestions);
         field.onChange(address.label);
@@ -131,7 +165,7 @@ function AddressInput({
           label={label}
           placeholder={t("addressAutocomplete.placeholder")}
           size="small"
-          error={Boolean(fieldState.error) || current.error}
+          error={Boolean(fieldState.error) || hasSearchError}
           helperText={helperText}
           slotProps={{
             ...params.slotProps,

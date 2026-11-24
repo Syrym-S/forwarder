@@ -1328,6 +1328,7 @@
     "invalid_chat_list_response": "Чаттар тізімінің жауабы жарамсыз"
   },
   "lead_form": {
+    "address_search_history": "Іздеу тарихы",
     "mobile_add_driver": "Жүргізушіні қосыңыз",
     "mobile_driver_details_hint": "Таңдағаннан кейін мұнда жүргізушінің байланыс ақпараты мен көлік деректері көрсетіледі.",
     "mobile_add_customer": "Тапсырыс берушіні қосыңыз",

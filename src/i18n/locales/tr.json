@@ -1307,6 +1307,7 @@
     "invalid_chat_list_response": "Geçersiz sohbet listesi yanıtı"
   },
   "lead_form": {
+    "address_search_history": "Arama geçmişi",
     "mobile_add_driver": "Sürücü ekleyin",
     "mobile_driver_details_hint": "Seçimden sonra sürücünün iletişim bilgileri ve araç bilgileri burada görünecektir.",
     "mobile_add_customer": "Müşteri ekleyin",

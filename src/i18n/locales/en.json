@@ -1348,6 +1348,7 @@
     "invalid_chat_list_response": "Invalid chat list response"
   },
   "lead_form": {
+    "address_search_history": "Search history",
     "mobile_add_driver": "Add a driver",
     "mobile_driver_details_hint": "The driver's contact and vehicle details will appear here after selection.",
     "mobile_add_customer": "Add a customer",

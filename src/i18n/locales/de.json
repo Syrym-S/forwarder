@@ -1346,6 +1346,7 @@
     "invalid_chat_list_response": "Ungültige Antwort der Chatliste"
   },
   "lead_form": {
+    "address_search_history": "Suchverlauf",
     "mobile_add_driver": "Fügen Sie einen Fahrer hinzu",
     "mobile_driver_details_hint": "Nach der Auswahl werden hier die Kontaktdaten des Fahrers und die Fahrzeugdaten angezeigt.",
     "mobile_add_customer": "Fügen Sie einen Kunden hinzu",

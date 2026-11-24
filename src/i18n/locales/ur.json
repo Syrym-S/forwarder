@@ -1307,6 +1307,7 @@
     "invalid_chat_list_response": "چیٹ لسٹ کا غلط جواب"
   },
   "lead_form": {
+    "address_search_history": "تلاش کی سرگزشت",
     "mobile_add_driver": "ڈرائیور شامل کریں",
     "mobile_driver_details_hint": "انتخاب کے بعد یہاں ڈرائیور کی رابطے کی معلومات اور گاڑی کی تفصیلات ظاہر ہوں گی۔",
     "mobile_add_customer": "کسٹمر شامل کریں",

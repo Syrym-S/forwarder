@@ -1307,6 +1307,7 @@
     "invalid_chat_list_response": "Чат тизмеси туура эмес жооп"
   },
   "lead_form": {
+    "address_search_history": "Издөө тарыхы",
     "mobile_add_driver": "Айдоочуну кошуңуз",
     "mobile_driver_details_hint": "Тандагандан кийин бул жерде айдоочунун байланыш маалыматы жана унаанын маалыматтары көрсөтүлөт.",
     "mobile_add_customer": "Кардарды кошуңуз",

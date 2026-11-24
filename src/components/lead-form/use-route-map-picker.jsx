@@ -9,6 +9,7 @@ import { reverseGeocode } from "./api/geocoding.api";
 import { useLeadsStore } from "../../app/store/leads/leads-store";
 import { STATUS } from "../../shared/const/tenders";
 import { getRouteAddressFields } from "./lib/route-address-fields";
+import { rememberRouteAddress } from "./lib/route-address-history.js";
 
 const setValueOptions = {
   shouldDirty: true,
@@ -51,7 +52,7 @@ export function useRouteMapPicker({ form, fields, setValue }) {
       return;
     }
 
-    if (!locationInfo.address.city) {
+    if (!locationInfo.address?.city) {
       setHasFromCityError(true);
       clearFromPoint();
       return;
@@ -67,6 +68,7 @@ export function useRouteMapPicker({ form, fields, setValue }) {
     };
 
     setValue("from_location", from_location, setValueOptions);
+    rememberRouteAddress(from_location);
     setHasFromCityError(false);
   }
 
@@ -80,7 +82,7 @@ export function useRouteMapPicker({ form, fields, setValue }) {
       return;
     }
 
-    if (!locationInfo.address.city) {
+    if (!locationInfo.address?.city) {
       setHasCrossPointCityError(true);
       setActiveMapPoint(`cross.${index}`);
       setCount(index);
@@ -97,6 +99,7 @@ export function useRouteMapPicker({ form, fields, setValue }) {
     };
 
     setValue(`waypoints[${index}]`, cross_location, setValueOptions);
+    rememberRouteAddress(cross_location);
     setHasCrossPointCityError(false);
   }
 
@@ -110,7 +113,7 @@ export function useRouteMapPicker({ form, fields, setValue }) {
       return;
     }
 
-    if (!locationInfo.address.city) {
+    if (!locationInfo.address?.city) {
       setHasToCityError(true);
       clearToPoint();
       return;
@@ -126,6 +129,7 @@ export function useRouteMapPicker({ form, fields, setValue }) {
     };
 
     setValue("to_location", to_location, setValueOptions);
+    rememberRouteAddress(to_location);
     setHasToCityError(false);
   }
 
@@ -143,7 +147,7 @@ export function useRouteMapPicker({ form, fields, setValue }) {
     }
   }
 
-  function setRouteAddress(point, location) {
+  function setRouteAddress(point, location, zoom) {
     if (currentLead && !canEditStatus) return;
 
     abortReverseGeocode(point);
@@ -152,6 +156,7 @@ export function useRouteMapPicker({ form, fields, setValue }) {
     for (const [name, value] of getRouteAddressFields(point, location)) {
       setValue(name, value, setValueOptions);
     }
+    if (location) rememberRouteAddress(location, { zoom });
 
     if (point === "from") setHasFromCityError(false);
     else if (point === "to") setHasToCityError(false);
