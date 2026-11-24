@@ -97,17 +97,37 @@ const StatCard = ({
             ?.label || "",
         );
 
+  const comparisonAction = canBeFiltered && filterKey === "leads" && (
+    <PrimaryButton
+      size="small"
+      text={isComparing ? t("dashboard.back_to_statistics") : t("dashboard.compare")}
+      startIcon={<BarChartOutlined sx={{ fontSize: 18 }} />}
+      variant={isComparing ? "contained" : "outlined"}
+      disableElevation
+      aria-pressed={isComparing}
+      onClick={() => setIsComparing((previous) => !previous)}
+      sx={{
+        minHeight: 36,
+        px: 1,
+        py: 0.5,
+        fontSize: 12,
+        flexShrink: 0,
+        borderRadius: 2,
+        textTransform: "none",
+      }}
+    />
+  );
+
   return (
     <Box
       aria-busy={!isComparing && isLoading}
       sx={{
         minWidth: 0,
-        minHeight: canBeFiltered ? 200 : 170,
-        p: { xs: 2, md: 2.5 },
+        p: { xs: 1.5, sm: 1.75 },
         bgcolor: "background.paper",
         border: "1px solid",
         borderColor: "divider",
-        borderRadius: 3,
+        borderRadius: 2.5,
         boxShadow: "none",
         boxSizing: "border-box",
         display: "flex",
@@ -120,33 +140,34 @@ const StatCard = ({
           justifyContent: "space-between",
           gap: 1,
           alignItems: "center",
-          mb: 2.5,
+          mb: 1,
         }}
       >
         <Box
-          sx={{ display: "flex", alignItems: "center", gap: 1.5, minWidth: 0 }}
+          sx={{ display: "flex", alignItems: "center", gap: 1, minWidth: 0 }}
         >
           <Box
             sx={{
               display: "grid",
               placeItems: "center",
-              width: 42,
-              height: 42,
+              width: 32,
+              height: 32,
               flexShrink: 0,
-              borderRadius: 2.5,
+              borderRadius: 2,
               bgcolor: "background.main",
               color: "primary.main",
             }}
           >
-            <Box component={Icon} sx={{ fontSize: 23 }} />
+            <Box component={Icon} sx={{ fontSize: 19 }} />
           </Box>
           <Typography
             title={title}
             sx={{
-              fontSize: "0.95rem",
+              fontSize: 13,
               fontWeight: 600,
               color: "font_color.heading",
-              lineHeight: 1.4,
+              lineHeight: 1.35,
+              overflowWrap: "anywhere",
             }}
           >
             {title}
@@ -165,8 +186,8 @@ const StatCard = ({
               }}
               sx={{
                 flexShrink: 0,
-                width: 40,
-                height: 40,
+                width: 36,
+                height: 36,
                 borderRadius: 2,
                 border: "1px solid",
                 borderColor: isCalendarOpen ? "primary.main" : "#E3E8EF",
@@ -180,7 +201,7 @@ const StatCard = ({
                 },
               }}
             >
-              <CalendarMonthOutlined sx={{ fontSize: 21 }} />
+              <CalendarMonthOutlined sx={{ fontSize: 18 }} />
             </IconButton>
           </Tooltip>
         )}
@@ -306,70 +327,36 @@ const StatCard = ({
         </Popover>
       )}
 
-      {canBeFiltered && filterKey === "leads" && (
-        <PrimaryButton
-          size="small"
-          text={
-            isComparing
-              ? t("dashboard.back_to_statistics")
-              : t("dashboard.compare")
-          }
-          startIcon={<BarChartOutlined />}
-          variant={isComparing ? "contained" : "outlined"}
-          disableElevation
-          aria-pressed={isComparing}
-          onClick={() => setIsComparing((previous) => !previous)}
-          sx={{
-            alignSelf: "flex-start",
-            mb: 2,
-            borderRadius: 2,
-            textTransform: "none",
-          }}
-        />
-      )}
-
       {isComparing ? (
-        <StatsComparison
-          metric={filterKey}
-          title={title}
-          countLabelKey={countLabelKey}
-        />
+        <>
+          <Box sx={{ mb: 1.5 }}>{comparisonAction}</Box>
+          <StatsComparison
+            metric={filterKey}
+            title={title}
+            countLabelKey={countLabelKey}
+          />
+        </>
       ) : (
         <>
-          {canBeFiltered && (
-            <Typography
-              sx={{
-                order: 3,
-                display: "flex",
-                alignItems: "center",
-                gap: 0.75,
-                fontSize: 12,
-                color: "text.secondary",
-                mt: 2,
-              }}
-            >
-              <CalendarMonthOutlined sx={{ fontSize: 16, flexShrink: 0 }} />
-              {t("dashboard.for_period")}: {periodLabel}
-            </Typography>
-          )}
-
           <Box
             sx={{
               display: "flex",
               alignItems: "baseline",
-              gap: 1,
-              mb: 1.5,
+              gap: 0.75,
+              mb: 0.75,
               flexWrap: "wrap",
             }}
           >
             <Typography
               sx={{
-                fontSize: 32,
+                fontSize: 26,
                 lineHeight: 1.1,
                 letterSpacing: "-0.035em",
                 fontVariantNumeric: "tabular-nums",
                 fontWeight: 700,
                 color: "font_color.heading",
+                maxWidth: "100%",
+                overflowWrap: "anywhere",
               }}
             >
               {isLoading ? <Skeleton width={50} /> : count}
@@ -377,7 +364,7 @@ const StatCard = ({
 
             <Typography
               sx={{
-                fontSize: 13,
+                fontSize: 12,
                 color: "text.secondary",
               }}
             >
@@ -402,16 +389,17 @@ const StatCard = ({
                   <Typography
                     key={item.currency}
                     sx={{
-                      fontSize: 14,
+                      fontSize: 12,
                       fontWeight: 600,
                       color: "color.slate_2",
                       bgcolor: "background.default",
                       borderRadius: 1.5,
-                      px: 1,
-                      py: 0.5,
+                      px: 0.75,
+                      py: 0.25,
+                      maxWidth: "100%",
                       overflowWrap: "anywhere",
                       fontVariantNumeric: "tabular-nums",
-                      lineHeight: 1.5,
+                      lineHeight: 1.4,
                     }}
                   >
                     {formatMoney(value, i18n.resolvedLanguage)} {item.currency}
@@ -423,13 +411,44 @@ const StatCard = ({
             emptyText && (
               <Typography
                 sx={{
-                  fontSize: 14,
+                  fontSize: 12,
                   color: "text.secondary",
                 }}
               >
                 {emptyText}
               </Typography>
             )
+          )}
+
+          {canBeFiltered && (
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                flexWrap: "wrap",
+                gap: 0.75,
+                mt: 1,
+              }}
+            >
+              <Typography
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  flex: "1 1 120px",
+                  minWidth: 0,
+                  gap: 0.5,
+                  fontSize: 11,
+                  lineHeight: 1.4,
+                  color: "text.secondary",
+                  overflowWrap: "anywhere",
+                }}
+              >
+                <CalendarMonthOutlined sx={{ fontSize: 14, flexShrink: 0 }} />
+                {t("dashboard.for_period")}: {periodLabel}
+              </Typography>
+              {comparisonAction}
+            </Box>
           )}
         </>
       )}
@@ -534,13 +553,13 @@ const DashboardStats = ({ data }) => {
       )}
 
       {/* За выбранный период */}
-      <Box sx={{ mt: 2.5 }}>
+      <Box sx={{ mt: 1.5 }}>
         <Typography
           sx={{
-            fontSize: 13,
+            fontSize: 12,
             color: "color.slate_2",
             fontWeight: 600,
-            mb: 1.5,
+            mb: 1,
           }}
         >
           {t("dashboard.for_selected_period")}
@@ -553,7 +572,7 @@ const DashboardStats = ({ data }) => {
               xs: "1fr",
               sm: `repeat(${periodCards.length}, minmax(0, 1fr))`,
             },
-            gap: 2,
+            gap: 1.25,
           }}
         >
           {periodCards.map((card) => (
@@ -574,13 +593,13 @@ const DashboardStats = ({ data }) => {
         </Box>
       </Box>
 
-      <Box sx={{ mt: 2.5 }}>
+      <Box sx={{ mt: 1.5 }}>
         <Typography
           sx={{
-            fontSize: 13,
+            fontSize: 12,
             color: "color.slate_2",
             fontWeight: 600,
-            mb: 1.5,
+            mb: 1,
           }}
         >
           {t("dashboard.active_section")}
@@ -594,7 +613,7 @@ const DashboardStats = ({ data }) => {
               sm: `repeat(${Math.min(2, activeCards.length)}, minmax(0, 1fr))`,
               md: `repeat(${activeCards.length}, minmax(0, 1fr))`,
             },
-            gap: 2,
+            gap: 1.25,
           }}
         >
           {activeCards.map((card) => (

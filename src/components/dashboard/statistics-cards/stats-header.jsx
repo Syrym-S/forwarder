@@ -9,7 +9,8 @@ const StatsHeader = () => {
       <Typography
         component="h2"
         sx={{
-          fontSize: { xs: "1.5rem", md: "1.75rem" },
+          fontSize: { xs: 18, sm: 20 },
+          lineHeight: 1.3,
           fontWeight: 600,
           color: "font_color.heading",
           letterSpacing: "-0.025em",
@@ -17,7 +18,7 @@ const StatsHeader = () => {
       >
         {t("dashboard.statistics")}
       </Typography>
-      <Typography sx={{ mt: 0.5, fontSize: 14, color: "text.secondary" }}>
+      <Typography sx={{ mt: 0.25, fontSize: 12, lineHeight: 1.4, color: "text.secondary" }}>
         {t("dashboard.statistics_description")}
       </Typography>
     </Box>
