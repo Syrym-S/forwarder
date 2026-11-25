@@ -22,6 +22,7 @@ import { api, isStaging } from "../../app/client";
 import { generateLeadRoute } from "../../shared/api/routing";
 import { createDriverIcon } from "../../shared/ui/driver-marker-icon";
 import { loadLeadTracking } from "../../shared/lib/lead-tracking";
+import { normalizePlannedRoute } from "../../shared/lib/planned-route";
 import {
   getDriverMarkerDirection,
   getNextLeadRoutePoint,
@@ -137,11 +138,23 @@ export default function LeadMap({
     getLocationPoint(getNextLeadRoutePoint(leadData)),
   );
   const hasProvidedRoute = routeCoordinates !== undefined;
+  const hasFallbackRoutes = Array.isArray(fallbackRoutes);
+  const fallbackRoute = useMemo(() => {
+    if (!fallbackRoutes?.length) return [];
+    try {
+      return normalizePlannedRoute({ routes: fallbackRoutes }).coordinates;
+    } catch (error) {
+      console.error("Ошибка чтения переданного маршрута:", error);
+      return [];
+    }
+  }, [fallbackRoutes]);
   const route = hasProvidedRoute
     ? (routeCoordinates ?? [])
-    : routeData?.coordinates === coordinates && routeData?.leadId === leadId
-      ? routeData.points
-      : [];
+    : hasFallbackRoutes
+      ? fallbackRoute
+      : routeData?.coordinates === coordinates && routeData?.leadId === leadId
+        ? routeData.points
+        : [];
   const showFullRoute =
     activeMapTab === MapViewOptions.both ||
     activeMapTab === MapViewOptions.full_route;
@@ -159,7 +172,7 @@ export default function LeadMap({
   };
 
   useEffect(() => {
-    if (hasProvidedRoute || !leadId) return;
+    if (hasFallbackRoutes || hasProvidedRoute || !leadId) return;
     let cancelled = false;
     const load = async () => {
       try {
@@ -182,10 +195,11 @@ export default function LeadMap({
     return () => {
       cancelled = true;
     };
-  }, [coordinates, leadId, hasProvidedRoute, fallbackRoutes]);
+  }, [coordinates, leadId, hasProvidedRoute, fallbackRoutes, hasFallbackRoutes]);
 
   useEffect(() => {
     if (!leadId && !(trackingToken && trackingUrl)) return;
+    if (hasFallbackRoutes && !(trackingToken && trackingUrl)) return;
 
     const controller = new AbortController();
     let isActive = true;
@@ -201,6 +215,8 @@ export default function LeadMap({
           tracking: { token: trackingToken, url: trackingUrl },
           signal: controller.signal,
           requestToken: async () => {
+            if (hasFallbackRoutes)
+              throw new Error("Запрос токена геотрекинга отключён");
             if (!leadId) throw new Error("Не указан ID лида для геотрекинга");
             const result = await fetch(BASE_URL, {
               method: "POST",
@@ -353,7 +369,7 @@ export default function LeadMap({
       controller.abort();
       echo?.disconnect();
     };
-  }, [leadId, trackingToken, trackingUrl]);
+  }, [leadId, trackingToken, trackingUrl, hasFallbackRoutes]);
 
   return (
     <Box
@@ -362,7 +378,7 @@ export default function LeadMap({
       zoom={13}
       sx={{ height: "var(--lead-detail-map-height, 400px)", width: "100%", zIndex: 0 }}
     >
-      {isRouteLoading && (
+      {isRouteLoading && !hasProvidedRoute && !hasFallbackRoutes && (
         <Box
           sx={{
             position: "absolute",

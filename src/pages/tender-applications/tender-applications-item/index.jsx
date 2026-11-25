@@ -1,4 +1,3 @@
-import { useTranslation } from "react-i18next";
 import RootLayout from "../../../components/layout/root-layout";
 import LocalShippingOutlinedIcon from "@mui/icons-material/LocalShippingOutlined";
 import LeadMap from "../../../components/leads/lead-map";
@@ -11,6 +10,9 @@ import MakeBetBlock from "../../../components/tenders/make-bet-block";
 import CancelledBets from "../../../components/tenders/cancelled-bets";
 import PageLoader from "../../../shared/ui/loaders/page-loader";
 import LeadCargoInfo from "../../../components/leads/lead-item/lead-cargo-info";
+import LeadRouteInfo from "../../../components/leads/lead-item/lead-route-info";
+import LeadTransportationInfo from "../../../components/leads/lead-item/lead-transportation-info";
+
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useTendersStore } from "../../../app/store/tenders/tender-store";
@@ -19,8 +21,7 @@ import { STATUS } from "../../../shared/const/tenders";
 import { useNotificationsStore } from "../../../app/store/notifications/noti-store";
 import { parserNotificationType } from "../../../shared/helpers/notifications/parse-notification-type";
 import { NOTIFICATION_TYPE } from "../../../shared/const/notification-types";
-import LeadRouteInfo from "../../../components/leads/lead-item/lead-route-info";
-import LeadTransportationInfo from "../../../components/leads/lead-item/lead-transportation-info";
+import { useTranslation } from "react-i18next";
 
 const TenderApplicationsItem = () => {
   const { t } = useTranslation();
@@ -130,7 +131,10 @@ const TenderApplicationsItem = () => {
           </Box>
         </Section>
 
-        <LeadDocuments tender={customerCurrentTender} />
+        <LeadDocuments
+          tender={customerCurrentTender}
+          fallBackFiles={customerCurrentTender?.lead?.files}
+        />
 
         <Box
           sx={{
