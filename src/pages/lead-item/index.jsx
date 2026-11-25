@@ -1,5 +1,4 @@
 import appI18n from "../../i18n/index.js";
-import { useTranslation } from "react-i18next";
 import Tooltip from "../../shared/ui/action-tooltip";
 import RootLayout from "../../components/layout/root-layout";
 import AddLeadForm from "../../features/leads/add-lead-form";
@@ -15,6 +14,8 @@ import ConfirmModal from "../../shared/ui/confirm-modal";
 import WarningModal from "../../components/leads/lead-item/warning-modal";
 import DoNotDisturbOnOutlinedIcon from "@mui/icons-material/DoNotDisturbOnOutlined";
 import InfoItem from "../../shared/ui/info-item";
+
+import { useTranslation } from "react-i18next";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Box, IconButton, Tab, Tabs } from "@mui/material";
@@ -145,16 +146,16 @@ const LeadItem = () => {
         component={RootLayout}
         withoutDataCheck
         className="lead-details-page"
-        sx={theme => ({
+        sx={(theme) => ({
           [theme.breakpoints.down("sm")]: {
             "&.MuiBox-root": {
               padding: "12px",
-              paddingBottom: "calc(16px + env(safe-area-inset-bottom, 0px))"
+              paddingBottom: "calc(16px + env(safe-area-inset-bottom, 0px))",
             },
             "& > .MuiBox-root:first-of-type": {
-              marginBottom: "12px"
-            }
-          }
+              marginBottom: "12px",
+            },
+          },
         })}
       >
         <LeadDetailsSkeleton />
@@ -166,16 +167,16 @@ const LeadItem = () => {
       component={RootLayout}
       data={leadData}
       className="lead-details-page"
-      sx={theme => ({
+      sx={(theme) => ({
         [theme.breakpoints.down("sm")]: {
           "&.MuiBox-root": {
             padding: "12px",
-            paddingBottom: "calc(16px + env(safe-area-inset-bottom, 0px))"
+            paddingBottom: "calc(16px + env(safe-area-inset-bottom, 0px))",
           },
           "& > .MuiBox-root:first-of-type": {
-            marginBottom: "12px"
-          }
-        }
+            marginBottom: "12px",
+          },
+        },
       })}
     >
       <Box
@@ -199,8 +200,7 @@ const LeadItem = () => {
         )}
 
         <Box
-          className="lead-details-navigation"
-          sx={theme => ({
+          sx={(theme) => ({
             p: 1,
             gap: 1.5,
             borderBottom: isDraft ? "none" : "1px solid",
@@ -210,12 +210,12 @@ const LeadItem = () => {
             display: "flex",
             flexDirection: {
               xs: "column",
-              md: "row"
+              md: "row",
             },
             justifyContent: "space-between",
             alignItems: {
               xs: "start",
-              md: "center"
+              md: "center",
             },
             [theme.breakpoints.down("sm")]: {
               ".lead-details-page &": {
@@ -230,21 +230,21 @@ const LeadItem = () => {
                 "& > .MuiTabs-root": {
                   flex: "1",
                   minWidth: "0",
-                  minHeight: "40px"
+                  minHeight: "40px",
                 },
                 "& .MuiTab-root": {
                   minHeight: "40px",
                   padding: "8px 10px",
                   fontSize: "12px",
                   borderRadius: "10px",
-                  whiteSpace: "nowrap"
+                  whiteSpace: "nowrap",
                 },
                 "& .MuiTabs-scrollButtons": {
                   display: "inline-flex",
-                  width: "22px"
-                }
-              }
-            }
+                  width: "22px",
+                },
+              },
+            },
           })}
         >
           <Tabs
@@ -298,7 +298,7 @@ const LeadItem = () => {
 
           <Box
             className="lead-details-actions"
-            sx={theme => ({
+            sx={(theme) => ({
               display: "flex",
               gap: 1,
               [theme.breakpoints.down("sm")]: {
@@ -306,9 +306,9 @@ const LeadItem = () => {
                   flexShrink: "0",
                   gap: "4px",
                   paddingInlineStart: "4px",
-                  borderInlineStart: "1px solid #e2e8f0"
-                }
-              }
+                  borderInlineStart: "1px solid #e2e8f0",
+                },
+              },
             })}
           >
             {showEmergencyButton && (
@@ -384,19 +384,19 @@ const LeadItem = () => {
 
         <Box
           className="lead-details-emergency"
-          sx={theme => ({
+          sx={(theme) => ({
             py: 1,
             width: {
               xs: "100%",
-              sm: "50%"
+              sm: "50%",
             },
             [theme.breakpoints.down("sm")]: {
               ".lead-details-page &": {
                 "&:empty": {
-                  display: "none"
-                }
-              }
-            }
+                  display: "none",
+                },
+              },
+            },
           })}
         >
           {leadData.emergency_situation_comment && (

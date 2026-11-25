@@ -7,22 +7,23 @@ import { Box, CircularProgress } from "@mui/material";
 import FileModal from "./file-modal";
 import { useLeadsStore } from "../../app/store/leads/leads-store";
 
-const LeadDocuments = ({ tender }) => {
+const LeadDocuments = ({ tender, fallBackFiles }) => {
   const { t } = useTranslation();
   const [currentFile, setCurrentFile] = useState(null);
   const files = useLeadsStore((state) => state.files);
 
   const getLeadFiles = useLeadsStore((state) => state.getLeadFiles);
 
-  const isEmpty = files.length === 0;
+  const fileList = files?.length ? files : (fallBackFiles ?? []);
+  const isEmpty = fileList.length === 0;
 
   useEffect(() => {
-    if (tender?.lead?.id) {
+    if (tender?.lead?.id && !fallBackFiles) {
       getLeadFiles(tender?.lead?.id);
     }
-  }, [tender?.lead?.id]);
+  }, [tender?.lead?.id, getLeadFiles, fallBackFiles]);
 
-  if (!files)
+  if (!files && !fallBackFiles)
     return (
       <Section
         title={t("ui.lead_documents")}
@@ -58,7 +59,7 @@ const LeadDocuments = ({ tender }) => {
       >
         {isEmpty && t("ui.list_empty_2")}
         {!isEmpty &&
-          files.map((file) => (
+          fileList.map((file) => (
             <LeadDocumentCard
               isFileReadOnly
               key={file.path}
