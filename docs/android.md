@@ -1,7 +1,7 @@
 # Android: Capacitor
 
 В проект добавлен Capacitor 8. Android-проект находится в `android/`, идентификатор
-приложения — `kz.logistics360.forwarder`, название — Forwarder.
+приложения — `kz.logistics.forwarder`, название — Forwarder.
 Включён встроенный `CapacitorHttp`: Axios/XHR и fetch используют нативный
 HTTP-транспорт, поэтому запросы к API не блокируются браузерным CORS.
 
@@ -141,7 +141,8 @@ Android-вариант `release` без отладки. Логи Capacitor и о
 
 Вход, серверные перенаправления, ЭЦП, загрузка документов и push-уведомления
 требуют отдельного тестирования с сервером и учётной записью.
-Нативный Firebase push-плагин и `google-services.json` пока не подключены.
+Нативный Firebase push-плагин и обработчик data-only сообщений подключены.
+Настройка Firebase и проверки: [Android push](android-push.md).
 
 Документация: [Capacitor Android](https://capacitorjs.com/docs/android),
 [CapacitorHttp](https://capacitorjs.com/docs/apis/http).

@@ -1,6 +1,7 @@
 import axios from "axios";
 import { getNotificationsTokenApi } from "../app/store/notifications/api.js";
 import { atWebPushStage } from "./web-push-errors.js";
+import { Capacitor } from "@capacitor/core";
 
 export function waitForPageConfig() {
   return document.readyState === "loading"
@@ -10,7 +11,7 @@ export function waitForPageConfig() {
 
 async function pushAuthorization() {
   await waitForPageConfig();
-  const config = window.NotifWS_Config || window.NotificationWS_Config || {};
+  const config = window.NotifWS_Config || window.NotificationWS_Config || window.APP_DATA?.notificationConfig || {};
   if (!config.push) throw new Error("web_push_endpoint_missing");
   const url = new URL(config.push, window.location.origin);
   if (url.protocol !== "https:" && !(url.origin === window.location.origin && window.isSecureContext)) {
@@ -32,7 +33,7 @@ export async function savePushToken(token) {
   const { url, role, headers } = await pushAuthorization();
   // Separate client: never send WordPress cookies or its nonce to the notification service.
   const response = await atWebPushStage("push-register", () =>
-    axios.post(url, { role, token, device: "web" }, { headers, timeout: 15000 }));
+    axios.post(url, { role, token, device: Capacitor.getPlatform() === "android" ? "android" : "web" }, { headers, timeout: 15000 }));
   return response.data;
 }
 

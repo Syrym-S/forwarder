@@ -2,7 +2,7 @@ import { Alert, Box, Button, Checkbox, CircularProgress, FormControlLabel, Typog
 import { useTranslation } from "react-i18next";
 import { useProfileStore } from "../../app/store/profile/profile-store.js";
 import { useWebPushStore } from "../../app/store/notifications/web-push-store.js";
-import { getWebPushPermission } from "../../services/firebase.js";
+import { getWebPushPermission, isNativePush } from "../../services/push-notifications.js";
 
 export default function WebPushSettings() {
   const { t } = useTranslation();
@@ -14,11 +14,11 @@ export default function WebPushSettings() {
     <Box>
       <FormControlLabel
         control={<Checkbox checked={enabled} onChange={toggle} disabled={busy || !initialized} />}
-        label={t("webPush.label")}
+        label={t(isNativePush ? "webPush.nativeLabel" : "webPush.label")}
       />
       {busy && <CircularProgress size={16} aria-label={t("webPush.saving")} />}
-      <Typography variant="body2" color="text.secondary">{t("webPush.description")}</Typography>
-      {blocked && <Alert severity="warning" sx={{ mt: 1 }}>{t("webPush.blocked")}</Alert>}
+      <Typography variant="body2" color="text.secondary">{t(isNativePush ? "webPush.nativeDescription" : "webPush.description")}</Typography>
+      {blocked && <Alert severity="warning" sx={{ mt: 1 }}>{t(isNativePush ? "webPush.nativeBlocked" : "webPush.blocked")}</Alert>}
       {error && (
         <Alert severity="error" sx={{ mt: 1 }}>
           {t(`webPush.errors.${error}`, { defaultValue: t("webPush.failed") })}

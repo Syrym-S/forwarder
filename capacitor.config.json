@@ -1,5 +1,5 @@
 {
-  "appId": "kz.logistics360.forwarder",
+  "appId": "kz.logistics.forwarder",
   "appName": "Forwarder",
   "webDir": "dist-android",
   "loggingBehavior": "none",

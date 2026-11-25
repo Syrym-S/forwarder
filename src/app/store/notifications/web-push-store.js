@@ -3,7 +3,8 @@ import { useProfileStore } from "../profile/profile-store.js";
 import { editProfileApi } from "../profile/api.js";
 import {
   forgetWebPushToken, getSavedWebPushToken, getWebPushPermission, registerWebPush,
-} from "../../../services/firebase.js";
+  refreshPushPermission, setPushDeliveryEnabled,
+} from "../../../services/push-notifications.js";
 import { removePushToken, savePushToken, waitForPageConfig } from "../../../services/web-push-api.js";
 import { createWebPushManager } from "../../../services/web-push-manager.js";
 import { atWebPushStage, describeWebPushError } from "../../../services/web-push-errors.js";
@@ -15,8 +16,10 @@ const manager = createWebPushManager({
   permission: getWebPushPermission,
   savedToken: getSavedWebPushToken,
   forgetToken: forgetWebPushToken,
+  setDeliveryEnabled: setPushDeliveryEnabled,
   readProfile: async () => {
     await waitForPageConfig();
+    await refreshPushPermission();
     return atWebPushStage("profile-load", () => useProfileStore.getState().getProfileData());
   },
   updateProfile: async (pushEnabled) => {

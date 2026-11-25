@@ -9,8 +9,8 @@ const android = join(root, "android");
 const tools = join(root, ".android-tools");
 const command = process.argv[2];
 const releaseApk = command === "apk" && process.argv.includes("--release");
-if (!["open", "run", "apk", "aab"].includes(command)) {
-  throw new Error("Usage: node tooling/android.mjs open|run|apk|aab");
+if (!["open", "run", "apk", "aab", "test-push"].includes(command)) {
+  throw new Error("Usage: node tooling/android.mjs open|run|apk|aab|test-push");
 }
 
 const gradleJavaConfig = join(android, ".gradle", "config.properties");
@@ -70,8 +70,10 @@ const env = {
   GRADLE_USER_HOME: gradleCache,
 };
 console.log(`JDK 21: ${javaHome}\nAndroid SDK: ${sdk}`);
-const buildTask = command === "aab" ? "bundleRelease" : releaseApk ? "assembleRelease" : "assembleDebug";
-const result = command === "apk" || command === "aab"
+const buildTask = command === "test-push"
+  ? ":app:connectedDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.class=kz.logistics360.forwarder.ForwarderPushTest --console=plain"
+  : command === "aab" ? "bundleRelease" : releaseApk ? "assembleRelease" : "assembleDebug";
+const result = command === "apk" || command === "aab" || command === "test-push"
   ? spawnSync(process.platform === "win32" ? "cmd.exe" : "./gradlew",
     process.platform === "win32" ? ["/d", "/s", "/c", `gradlew.bat ${buildTask}`] : [buildTask],
     { cwd: android, env, stdio: "inherit" })

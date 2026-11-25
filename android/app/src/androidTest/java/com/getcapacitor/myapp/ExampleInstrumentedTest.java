@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
 
-        assertEquals("kz.logistics360.forwarder", appContext.getPackageName());
+        assertEquals("kz.logistics.forwarder", appContext.getPackageName());
     }
 }

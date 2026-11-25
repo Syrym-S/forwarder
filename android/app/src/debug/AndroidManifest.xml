@@ -1,0 +1,7 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <application>
+        <!-- Only adb/shell can invoke this receiver; it does not exist in release APKs. -->
+        <receiver android:name="kz.logistics360.forwarder.DebugPushReceiver"
+            android:exported="true" android:permission="android.permission.DUMP" />
+    </application>
+</manifest>

@@ -16,6 +16,8 @@
     "android:run": "npm run android:sync && node tooling/android.mjs run",
     "android:run:prod": "npm run android:sync:prod && node tooling/android.mjs run",
     "android:apk": "npm run android:sync && node tooling/android.mjs apk",
+    "android:test:push": "npm run android:sync && node tooling/android.mjs test-push",
+    "android:push:demo": "node tooling/android-push-demo.mjs",
     "android:apk:prod": "npm run android:sync:prod && node tooling/android.mjs apk --release",
     "android:aab:prod": "npm run android:sync:prod && node tooling/android.mjs aab",
     "dev:shared": "vite --config vite.shared-lead.config.js",
@@ -30,6 +32,7 @@
   "dependencies": {
     "@capacitor/android": "8.6.2",
     "@capacitor/core": "8.6.2",
+    "@capacitor/push-notifications": "^8.1.3",
     "@emotion/cache": "^11.14.0",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",

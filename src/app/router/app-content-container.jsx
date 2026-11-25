@@ -4,33 +4,45 @@ import SideBar from "../../components/layout/menu";
 import NotificationPopup from "../../components/layout/notifications/notification-popup";
 import RenderNotificationIcon from "../../shared/ui/render-notification-icon";
 import { useEffect, useState } from "react";
-import { Outlet, useMatches } from "react-router-dom";
+import { Outlet, useMatches, useNavigate } from "react-router-dom";
 import { Box, Slide, Snackbar, Typography } from "@mui/material";
 import { useNotificationsStore } from "../store/notifications/noti-store";
 import { useLeadsStore } from "../store/leads/leads-store";
 import { getNotificationMessage, getNotificationTheme } from "../../shared/helpers/notifications/get-notification-message";
 import { useWebPushStore } from "../store/notifications/web-push-store";
-import { listenWebPush } from "../../services/firebase";
+import { isNativePush, listenWebPush } from "../../services/push-notifications";
+import { nativePushPath } from "../../services/native-push-navigation.js";
 import { waitForPageConfig } from "../../services/web-push-api";
 
 const AppContentContainer = () => {
   const { t, i18n } = useTranslation();
   const [openMenu, setOpenMenu] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     useWebPushStore.getState().initialize();
     let disposed = false;
     let unsubscribe;
     // WebSocket already displays foreground messages; consume FCM without another popup.
-    waitForPageConfig().then(() => listenWebPush()).then((stop) => {
+    waitForPageConfig().then(() => listenWebPush((notification) => {
+      if (isNativePush) {
+        const path = nativePushPath(notification.data?.link, import.meta.env.VITE_API_URL, window.APP_DATA?.mode === "staging");
+        navigate(path.replace(/^\/(?:staging\/)?forwarder/, "") || "/");
+      }
+    })).then((stop) => {
       if (disposed) stop();
       else unsubscribe = stop;
     }).catch((error) => useWebPushStore.setState({ error: error.message }));
+    const restore = () => {
+      if (isNativePush && document.visibilityState === "visible") useWebPushStore.getState().retry();
+    };
+    document.addEventListener("visibilitychange", restore);
     return () => {
       disposed = true;
       unsubscribe?.();
+      document.removeEventListener("visibilitychange", restore);
     };
-  }, []);
+  }, [navigate]);
 
   const connectNotifications = useNotificationsStore(
     (state) => state.connectNotifications,

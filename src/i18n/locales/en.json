@@ -54,6 +54,9 @@
     "clear": "Clear address"
   },
   "webPush": {
+    "nativeLabel": "Push notifications",
+    "nativeDescription": "Receive notifications while the app is in the background or closed. Disabling applies to all your devices.",
+    "nativeBlocked": "Notifications are blocked. Allow them in Android Settings → Apps → Forwarder → Notifications.",
     "label": "Browser push notifications",
     "description": "Receive notifications while the site tab is inactive. Disabling applies to all your devices.",
     "saving": "Saving notification settings",

@@ -1,14 +1,18 @@
 // Keep the backend ordering explicit and testable without browser/Firebase credentials.
 export function createWebPushManager({
   register, saveToken, removeToken, readProfile, updateProfile,
-  permission, savedToken, forgetToken,
+  permission, savedToken, forgetToken, setDeliveryEnabled = async () => {},
 }) {
   return {
     async restore() {
       const profile = await readProfile();
+      if (profile.pushEnabled !== true) await setDeliveryEnabled(false);
       if (profile.pushEnabled === true && permission() === "granted") {
         const token = await register({ requestPermission: false });
-        if (token) await saveToken(token);
+        if (token) {
+          await saveToken(token);
+          await setDeliveryEnabled(true);
+        }
       }
       return profile;
     },
@@ -19,6 +23,7 @@ export function createWebPushManager({
       // Only commit the preference after the notification service has accepted the token.
       try {
         await updateProfile(true);
+        await setDeliveryEnabled(true);
       } catch (error) {
         // Avoid deliveries for a preference that could not be saved. Keep the cached
         // token if rollback fails so logout can still try removing this device.
@@ -29,6 +34,7 @@ export function createWebPushManager({
     async disable() {
       // Backend removes all devices atomically; a 502 must leave the checkbox unchanged.
       await updateProfile(false);
+      await setDeliveryEnabled(false);
       forgetToken();
     },
     async logout() {
@@ -38,6 +44,7 @@ export function createWebPushManager({
         if (profile.pushEnabled === true) token = await register({ requestPermission: false });
       }
       if (token) await removeToken(token);
+      await setDeliveryEnabled(false);
       forgetToken();
     },
   };

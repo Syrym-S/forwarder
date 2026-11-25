@@ -80,7 +80,7 @@ export const connectNotifications = (onNotification, onError, onConnected) => {
 
       // WordPress inserts the configuration in the footer after the app script.
       const config =
-        window.NotifWS_Config || window.NotificationWS_Config || {};
+        window.NotifWS_Config || window.NotificationWS_Config || window.APP_DATA?.notificationConfig || {};
       const host = String(config.reverb_host || config.reverbHost || "").trim();
       const key = String(config.reverb_key || config.reverbKey || "").trim();
       if (!host || !key) {
