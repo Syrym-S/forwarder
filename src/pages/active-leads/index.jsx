@@ -78,7 +78,9 @@ const ActiveLeads = () => {
       () => {
         fetchLeads({
           page,
-          ...(showDrafts ? { is_draft: 1 } : { status: filterStatus?.value }),
+          ...(showDrafts
+            ? { is_draft: 0 }
+            : { status: filterStatus?.value, is_draft: 0 }),
           ...(search.trim() ? { q: search.trim() } : {}),
         });
       },
@@ -99,14 +101,39 @@ const ActiveLeads = () => {
       }}
     >
       <Box sx={{ mb: 2.5 }}>
-        <Box sx={{ display: "flex", alignItems: "center", flexWrap: "wrap", gap: 1, mb: 0.5 }}>
-          <Typography component="h1" sx={{ fontSize: { xs: 22, sm: 24 }, fontWeight: 700, color: "font_color.heading" }}>
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            flexWrap: "wrap",
+            gap: 1,
+            mb: 0.5,
+          }}
+        >
+          <Typography
+            component="h1"
+            sx={{
+              fontSize: { xs: 22, sm: 24 },
+              fontWeight: 700,
+              color: "font_color.heading",
+            }}
+          >
             {t(showDrafts ? "active_leads.drafts_title" : "active_leads.title")}
           </Typography>
           <Chip
             size="small"
-            label={isLoading ? "—" : `${Number(count).toLocaleString(i18n.resolvedLanguage)} ${t("dashboard.lead_count", { count: Number(count) })}`}
-            sx={{ bgcolor: "background.main", color: "primary.main", fontSize: 11, fontWeight: 600, maxWidth: "100%" }}
+            label={
+              isLoading
+                ? "—"
+                : `${Number(count).toLocaleString(i18n.resolvedLanguage)} ${t("dashboard.lead_count", { count: Number(count) })}`
+            }
+            sx={{
+              bgcolor: "background.main",
+              color: "primary.main",
+              fontSize: 11,
+              fontWeight: 600,
+              maxWidth: "100%",
+            }}
           />
         </Box>
         <Typography sx={{ fontSize: 13, color: "text.secondary" }}>
@@ -131,11 +158,20 @@ const ActiveLeads = () => {
           minWidth: 0,
         }}
       >
-        <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 1.5, mb: 2 }}>
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            flexWrap: "wrap",
+            gap: 1.5,
+            mb: 2,
+          }}
+        >
           <ViewTabs
             view={view}
             withoutKanban
-            withoutDataAdd
+            handleOpenForm={handleOpenForm}
             setView={setSelectedView}
             sx={{
               width: "auto",
@@ -143,22 +179,25 @@ const ActiveLeads = () => {
               "& .MuiToggleButton-root": { minWidth: 44, minHeight: 44 },
             }}
           />
-          <Button
-            variant="contained"
-            size="small"
-            disableElevation
-            startIcon={<AddRounded />}
-            onClick={handleOpenForm}
-            sx={{ minHeight: 36, borderRadius: 2, textTransform: "none", px: 1.5, fontSize: 13, fontWeight: 500 }}
-          >
-            {t("common.add")}
-          </Button>
         </Box>
 
-        <Box sx={{ display: "grid", gridTemplateColumns: { xs: "minmax(0, 1fr)", sm: "minmax(0, 1fr) minmax(0, .75fr)" }, gap: 2 }}>
+        <Box
+          sx={{
+            display: "grid",
+            gridTemplateColumns: {
+              xs: "minmax(0, 1fr)",
+              sm: "minmax(0, 1fr) minmax(0, .75fr)",
+            },
+            gap: 2,
+          }}
+        >
           <FormInput
             id="active-leads-search"
-            label={t(showDrafts ? "active_leads.search_drafts" : "active_leads.search_leads")}
+            label={t(
+              showDrafts
+                ? "active_leads.search_drafts"
+                : "active_leads.search_leads",
+            )}
             type="search"
             value={search}
             onChange={(event) => {
@@ -171,7 +210,9 @@ const ActiveLeads = () => {
               input: {
                 startAdornment: (
                   <InputAdornment position="start">
-                    <SearchRounded sx={{ fontSize: 20, color: "text.secondary" }} />
+                    <SearchRounded
+                      sx={{ fontSize: 20, color: "text.secondary" }}
+                    />
                   </InputAdornment>
                 ),
               },
@@ -196,9 +237,8 @@ const ActiveLeads = () => {
             value={filterStatus?.value ?? ""}
             onChange={(event) => {
               const value = event.target.value;
-              const selected = STATUS_OPTIONS.find(
-                (option) => option.value === value,
-              ) ?? null;
+              const selected =
+                STATUS_OPTIONS.find((option) => option.value === value) ?? null;
 
               setFilterStatus(selected);
               setPage(1);
@@ -227,7 +267,6 @@ const ActiveLeads = () => {
 
       <LeadListContainer
         responsive
-        compactCards
         leads={leads}
         view={view}
         isLeadsEmpty={isLeadsEmpty}

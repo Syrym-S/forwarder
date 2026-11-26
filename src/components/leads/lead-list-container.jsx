@@ -1,5 +1,4 @@
 import LeadCard from "./lead-card";
-import CompactLeadCard from "./compact-lead-card";
 import LeadsTable from "./leads-table";
 import LeadKanbanTable from "./lead-kanban-table";
 import TableSkeleton from "../../shared/ui/table-skeleton";
@@ -20,7 +19,6 @@ const LeadListContainer = ({
   isLoading,
   handlePageChange,
   responsive = false,
-  compactCards = false,
 }) => {
   const { t } = useTranslation();
 
@@ -30,14 +28,13 @@ const LeadListContainer = ({
   const isCardsView = view === VIEWS.cards;
   const isTableView = view === VIEWS.table;
   const isKanbanView = view === VIEWS.kanban;
-  const CardComponent = compactCards ? CompactLeadCard : LeadCard;
   const cardsLayout = {
     width: { xs: "100%", sm: "60%" },
     mx: "auto",
     display: "grid",
     my: "10px",
     gridTemplateColumns: "minmax(0, 1fr)",
-    gap: compactCards ? 1.5 : 3,
+    gap: 1.5,
   };
 
   if (isLoading && isTableView) return <TableSkeleton />;
@@ -68,7 +65,7 @@ const LeadListContainer = ({
       {isCardsView && !isLeadsEmpty && (
         <Box sx={cardsLayout}>
           {leads.map((lead) => (
-            <CardComponent key={lead.id} lead={lead} />
+            <LeadCard key={lead.id} lead={lead} />
           ))}
         </Box>
       )}
