@@ -1,188 +1,230 @@
-import TripOriginIcon from "@mui/icons-material/TripOrigin";
-import ArrowDownwardRoundedIcon from "@mui/icons-material/ArrowDownwardRounded";
-import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
-import LeadStatus from "../../shared/ui/lead-status";
-import InfoItem from "../../shared/ui/info-item";
-
-import { moneySpacingFormat } from "../../shared/helpers/money-spacing";
-import { Typography, Box, Stack } from "@mui/material";
-import { useNavigate } from "react-router-dom";
-import { isDraftLead } from "../../shared/lib/lead-draft";
+import { Box, Paper, Typography } from "@mui/material";
+import BusinessOutlined from "@mui/icons-material/BusinessOutlined";
+import ChevronRightRounded from "@mui/icons-material/ChevronRightRounded";
+import LocalShippingOutlined from "@mui/icons-material/LocalShippingOutlined";
+import PersonOutlineRounded from "@mui/icons-material/PersonOutlineRounded";
+import { Link as RouterLink } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import LeadStatus from "../../shared/ui/lead-status";
+import { isDraftLead } from "../../shared/lib/lead-draft";
+import { moneySpacingFormat } from "../../shared/helpers/money-spacing";
 
 const LeadCard = ({ lead }) => {
   const { t } = useTranslation();
+  const isDraft = isDraftLead(lead);
+  const points = [
+    { label: "active_leads.origin", location: lead.from_location, fallback: lead.from },
+    { label: "active_leads.destination", location: lead.to_location, fallback: lead.to },
+  ];
+  const participants = [
+    {
+      label: "active_leads.driver",
+      name: lead.driver?.fio,
+      icon: PersonOutlineRounded,
+      vehicle: lead.driver?.vehicle_number,
+    },
+    {
+      label: "active_leads.customer",
+      name: lead.customer?.name,
+      icon: BusinessOutlined,
+    },
+  ];
 
-  const navigate = useNavigate();
-
-  const navigateToLeadItem = () => {
-    navigate(`/leads/${lead.id}`);
+  const formatPrice = (value) => {
+    if (value == null || String(value).trim() === "") return "—";
+    return [moneySpacingFormat(value), lead.currency].filter(Boolean).join(" ");
   };
 
   return (
-    <Box
-      onClick={navigateToLeadItem}
-      tabIndex={0}
+    <Paper
+      component={RouterLink}
+      to={`/leads/${lead.id}`}
+      variant="outlined"
       sx={{
-        p: { xs: 2, sm: 3 },
+        display: "flex",
+        flexDirection: "column",
         minWidth: 0,
-        maxWidth: "100%",
-        border: "2px solid",
-        borderColor: isDraftLead(lead) ? "warning.main" : "divider",
-        borderRadius: 4,
-        backgroundColor: "background.paper",
-        boxShadow: "0 2px 8px rgba(0, 0, 0, 0.06)",
-        transition: "0.2s ease",
-        cursor: "pointer",
-        "& .MuiTypography-root": { overflowWrap: "anywhere" },
+        p: 2,
+        borderRadius: 3,
+        textDecoration: "none",
+        color: "font_color.heading",
+        borderColor: isDraft ? "warning.light" : "divider",
+        bgcolor: "background.paper",
+        boxShadow: "0 2px 8px rgba(22, 36, 62, 0.03)",
+        transition: "border-color 150ms, box-shadow 150ms",
         "&:hover": {
           borderColor: "primary.main",
-          boxShadow: "0 8px 24px rgba(33, 150, 243, 0.12)",
+          boxShadow: "0 4px 16px rgba(22, 36, 62, 0.08)",
         },
+        "&:focus-visible": {
+          outline: "2px solid",
+          outlineColor: "primary.main",
+          outlineOffset: 3,
+        },
+        "& .MuiTypography-root": { overflowWrap: "anywhere" },
+        "@media (prefers-reduced-motion: reduce)": { transition: "none" },
       }}
     >
-      <Stack spacing={1}>
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "flex-start",
-            flexWrap: "wrap",
-            gap: 1.5,
-          }}
-        >
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          flexWrap: "wrap",
+          gap: 1,
+          mb: 2,
+        }}
+      >
+        <Box sx={{ display: "flex", alignItems: "center", gap: 0.75, minWidth: 0 }}>
+          <LocalShippingOutlined sx={{ fontSize: 19, color: "primary.main", flexShrink: 0 }} />
           <Typography
-            sx={{
-              fontSize: { xs: 16, sm: 20 },
-              flex: "1 1 180px",
-              minWidth: 0,
-            }}
+            component="span"
+            aria-label={t("ui.lead_number", { value1: lead.num ?? "—" })}
+            sx={{ fontSize: 14, fontWeight: 700, color: "primary.main" }}
           >
-            {t("active_leads.customer")}:{" "}
-            {lead?.customer?.name || t("active_leads.not_specified")}
+            #{lead.num ?? "—"}
           </Typography>
-
-          <Stack
-            direction="row"
-            flexWrap="wrap"
-            useFlexGap
-            sx={{
-              flexDirection: {
-                xs: "column",
-                sm: "row",
-              },
-              justifyContent: {
-                xs: "flex-start",
-                sm: "flex-end",
-              },
-              gap: 2,
-              maxWidth: "100%",
-            }}
-          >
-            <Typography
-              sx={{
-                fontSize: { xs: 16, sm: 20 },
-              }}
-            >
-              #{lead.num || "—"}
-            </Typography>
-
-            <LeadStatus lead={lead} />
-          </Stack>
         </Box>
+        <LeadStatus lead={lead} />
+      </Box>
 
-        <Box
-          sx={{
-            display: "grid",
-            gridTemplateColumns: {
-              xs: "minmax(0, 1fr)",
-              sm: "minmax(0, 1fr) auto minmax(0, 1fr)",
-            },
-            alignItems: "center",
-            gap: 1.5,
-            "& > .MuiBox-root": { minWidth: 0 },
-          }}
-        >
-          <Box>
-            <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-              <TripOriginIcon sx={{ fontSize: 12, color: "primary.main" }} />
-              <Typography
+      <Box
+        sx={{
+          position: "relative",
+          display: "grid",
+          gap: 1.5,
+          paddingInlineStart: "22px",
+          mb: 2,
+          "&::before": {
+            content: '""',
+            position: "absolute",
+            insetInlineStart: "4px",
+            top: 8,
+            bottom: 18,
+            borderInlineStart: "1px dashed",
+            borderColor: "divider",
+          },
+        }}
+      >
+        {points.map(({ label, location, fallback }, index) => {
+          const address = location?.address ||
+            (typeof fallback === "string" ? fallback : "") ||
+            location?.city || t("ui.address_not_specified");
+
+          return (
+            <Box key={label} sx={{ position: "relative", minWidth: 0 }}>
+              <Box
+                aria-hidden="true"
                 sx={{
-                  fontSize: 12,
+                  position: "absolute",
+                  insetInlineStart: "-22px",
+                  top: 4,
+                  width: 9,
+                  height: 9,
+                  boxSizing: "border-box",
+                  border: "2px solid",
+                  borderColor: "primary.main",
+                  borderRadius: index ? 1 : "50%",
+                  bgcolor: index ? "primary.main" : "background.paper",
                 }}
-              >
-                {t("active_leads.origin")}
-              </Typography>
-            </Box>
-
-            <Typography
-              fontWeight={500}
-              sx={{
-                fontSize: 14,
-                lineHeight: 1.35,
-              }}
-            >
-              {lead?.from_location?.address ||
-                lead?.from ||
-                t("active_leads.not_specified")}
-            </Typography>
-          </Box>
-
-          <ArrowDownwardRoundedIcon
-            sx={{
-              color: "text.secondary",
-              fontSize: 17,
-              justifySelf: { xs: "start", sm: "center" },
-              transform: {
-                xs: "none",
-                sm: "rotate(-90deg)",
-              },
-            }}
-          />
-
-          <Box>
-            <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-              <LocationOnOutlinedIcon
-                sx={{ fontSize: 12, color: "primary.main" }}
               />
+              <Typography sx={{ fontSize: 11, color: "text.secondary", mb: 0.25 }}>
+                {t(label)}
+              </Typography>
               <Typography
+                title={address}
                 sx={{
-                  fontSize: 12,
+                  fontSize: 13,
+                  fontWeight: 600,
+                  lineHeight: 1.45,
+                  display: "-webkit-box",
+                  WebkitLineClamp: 2,
+                  WebkitBoxOrient: "vertical",
+                  overflow: "hidden",
                 }}
               >
-                {t("active_leads.destination")}
+                {address}
               </Typography>
             </Box>
+          );
+        })}
+      </Box>
 
-            <Typography
-              sx={{
-                fontSize: 14,
-                lineHeight: 1.35,
-              }}
-            >
-              {lead?.to_location?.address ||
-                lead?.to ||
-                t("active_leads.not_specified")}
+      <Box
+        sx={{
+          display: "grid",
+          gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
+          gap: 1.5,
+          pt: 1.5,
+          borderTop: "1px solid",
+          borderColor: "divider",
+          mb: 1.5,
+        }}
+      >
+        {participants.map((participant) => {
+          const { label, name, icon: Icon, vehicle } = participant;
+          return (
+            <Box key={label} sx={{ minWidth: 0 }}>
+              <Box sx={{ display: "flex", alignItems: "center", gap: 0.5, mb: 0.5 }}>
+                <Icon sx={{ fontSize: 15, color: "text.secondary", flexShrink: 0 }} />
+                <Typography sx={{ fontSize: 11, color: "text.secondary" }}>
+                  {t(label)}
+                </Typography>
+              </Box>
+              <Typography
+                title={name || undefined}
+                sx={{ fontSize: 12, fontWeight: 500, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}
+              >
+                {name || t("active_leads.not_specified")}
+              </Typography>
+              {vehicle && (
+                <Typography
+                  component="bdi"
+                  dir="auto"
+                  aria-label={`${t("ui.vehicle_number")}: ${vehicle}`}
+                  sx={{ display: "inline-block", mt: 0.5, px: 0.75, py: 0.125, borderRadius: 1, bgcolor: "background.default", fontSize: 10, fontWeight: 600 }}
+                >
+                  {vehicle}
+                </Typography>
+              )}
+            </Box>
+          );
+        })}
+      </Box>
+
+      <Box
+        sx={{
+          display: "grid",
+          gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
+          gap: 1.5,
+          p: 1.25,
+          mt: "auto",
+          borderRadius: 2,
+          bgcolor: "background.default",
+        }}
+      >
+        {[
+          ["active_leads.customer_price", lead.price],
+          ["active_leads.your_lead_price", lead.transportation_price],
+        ].map(([label, value]) => (
+          <Box key={label} sx={{ minWidth: 0 }}>
+            <Typography sx={{ fontSize: 10, color: "text.secondary", mb: 0.5, lineHeight: 1.4 }}>
+              {t(label)}
+            </Typography>
+            <Typography component="bdi" dir="auto" sx={{ display: "block", fontSize: 13, fontWeight: 700, fontVariantNumeric: "tabular-nums" }}>
+              {formatPrice(value)}
             </Typography>
           </Box>
-        </Box>
+        ))}
+      </Box>
 
-        <InfoItem
-          label={t("ui.vehicle_number")}
-          value={lead?.driver?.vehicle_number || null}
-        />
-
-        <InfoItem
-          label={t("active_leads.customer_price")}
-          value={`${moneySpacingFormat(lead?.price)} ${lead?.currency}`}
-        />
-
-        <InfoItem
-          label={t("active_leads.your_lead_price")}
-          value={`${moneySpacingFormat(lead?.transportation_price)} ${lead?.currency}`}
-        />
-      </Stack>
-    </Box>
+      <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 1, pt: 1.25, color: "primary.main" }}>
+        <Typography component="span" sx={{ fontSize: 12, fontWeight: 600 }}>
+          {t("dashboard.lead_details_link")}
+        </Typography>
+        <ChevronRightRounded sx={{ fontSize: 18, flexShrink: 0, transform: (theme) => theme.direction === "rtl" ? "rotate(180deg)" : "none" }} />
+      </Box>
+    </Paper>
   );
 };
 
