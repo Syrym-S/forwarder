@@ -17,6 +17,8 @@ export default defineConfig(({ command, mode }) => ({
     ),
   },
   build: {
+    outDir: "dist",
+    assetsDir: "app",
     minify: "terser",
 
     terserOptions: {
@@ -27,13 +29,6 @@ export default defineConfig(({ command, mode }) => ({
       format: {
         comments: false,
       },
-    },
-    lib: {
-      entry: "src/main.jsx",
-      formats: ["iife"],
-      name: "ForwarderApp",
-      fileName: () => "index.js",
-      cssFileName: "index",
     },
   },
 }));
