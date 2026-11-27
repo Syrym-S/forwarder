@@ -74,6 +74,7 @@ const ActiveLeads = () => {
   }, [newNotification, notification_type, fetchLeads, leadParams]);
 
   useEffect(() => {
+    const value = search.trim();
     const timer = setTimeout(
       () => {
         fetchLeads({
@@ -81,10 +82,10 @@ const ActiveLeads = () => {
           ...(showDrafts
             ? { is_draft: 0 }
             : { status: filterStatus?.value, is_draft: 0 }),
-          ...(search.trim() ? { q: search.trim() } : {}),
+          ...(value ? { [/^\d+$/.test(value) ? "num" : "q"]: value } : {}),
         });
       },
-      search.trim() ? 300 : 0,
+      value ? 300 : 0,
     );
 
     return () => clearTimeout(timer);
@@ -158,28 +159,18 @@ const ActiveLeads = () => {
           minWidth: 0,
         }}
       >
-        <Box
+        <ViewTabs
+          view={view}
+          withoutKanban
+          handleOpenForm={handleOpenForm}
+          setView={setSelectedView}
           sx={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            flexWrap: "wrap",
-            gap: 1.5,
-            mb: 2,
+            width: "auto",
+            mx: 0,
+            pb: 2,
+            "& .MuiToggleButton-root": { minWidth: 44, minHeight: 44 },
           }}
-        >
-          <ViewTabs
-            view={view}
-            withoutKanban
-            handleOpenForm={handleOpenForm}
-            setView={setSelectedView}
-            sx={{
-              width: "auto",
-              mx: 0,
-              "& .MuiToggleButton-root": { minWidth: 44, minHeight: 44 },
-            }}
-          />
-        </Box>
+        />
 
         <Box
           sx={{

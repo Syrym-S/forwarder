@@ -103,7 +103,9 @@ export const useLeadsStore = create((set, get) => ({
         return;
       }
 
-      const requestLeads = requestParams.q ? searchLeadsApi : getLeads;
+      const requestLeads = requestParams.q || requestParams.num
+        ? searchLeadsApi
+        : getLeads;
       const response = await requestLeads(requestParams);
       if (get().leadsParams !== requestParams) return;
 
